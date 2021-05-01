@@ -32,3 +32,33 @@ services:
         arguments: [ ~, App\Entity\Category, ~ ]
         tags:
             - { name: sonata.admin, manager_type: orm, group: Контент, label: Категорії }
+
+    admin.product:
+        class: App\Admin\ProductAdmin
+        arguments: [ ~, App\Entity\Product, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Контент, label: Товари }
+
+    admin.product_image:
+        class: App\Admin\ProductImageAdmin
+        arguments: [ ~, App\Entity\ProductImage, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Контент, label: Картинки }
+
+    admin.filter_parameter_value:
+        class: App\Admin\FilterParameterValueAdmin
+        arguments: [ ~, App\Entity\FilterParameterValue, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Контент, label: Фільтри }
+
+    admin.filter_parameter:
+        class: App\Admin\FilterParameterAdmin
+        arguments: [ ~, App\Entity\FilterParameter, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Контент, label: Параметри фільтрів }
+
+    admin.slider:
+        class: App\Admin\SliderAdmin
+        arguments: [ ~, App\Entity\Slider, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Слайдер, label: Слайдер }

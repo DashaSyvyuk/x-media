@@ -192,6 +192,9 @@
             "config/packages/sonata_form.yaml"
         ]
     },
+    "sonata-project/intl-bundle": {
+        "version": "2.10.1"
+    },
     "sonata-project/twig-extensions": {
         "version": "1.5.1"
     },
@@ -489,6 +492,9 @@
     "symfony/string": {
         "version": "v5.2.6"
     },
+    "symfony/templating": {
+        "version": "v4.4.20"
+    },
     "symfony/test-pack": {
         "version": "v1.0.7"
     },
@@ -562,6 +568,28 @@
             "config/packages/dev/web_profiler.yaml",
             "config/packages/test/web_profiler.yaml",
             "config/routes/dev/web_profiler.yaml"
+        ]
+    },
+    "symfony/webpack-encore-bundle": {
+        "version": "1.9",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.9",
+            "ref": "9399a0bfc6ee7a0c019f952bca46d6a6045dd451"
+        },
+        "files": [
+            "assets/app.js",
+            "assets/bootstrap.js",
+            "assets/controllers.json",
+            "assets/controllers/hello_controller.js",
+            "assets/styles/app.css",
+            "config/packages/assets.yaml",
+            "config/packages/prod/webpack_encore.yaml",
+            "config/packages/test/webpack_encore.yaml",
+            "config/packages/webpack_encore.yaml",
+            "package.json",
+            "webpack.config.js"
         ]
     },
     "symfony/yaml": {

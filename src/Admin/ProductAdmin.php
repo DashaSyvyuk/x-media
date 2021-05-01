@@ -14,17 +14,17 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class ProductAdmin extends AbstractAdmin
 {
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
-        $formMapper
+        $form
             ->add('title', TextType::class, [
                 'label' => 'Назва',
                 'required' => true
             ])
             ->add('status', ChoiceType::class, [
                 'choices' => [
-                    'ACTIVE'   => 'ACTIVE',
-                    'DISABLED' => 'DISABLED'
+                    'Активний' => 'ACTIVE',
+                    'Заблокований' => 'DISABLED'
                 ],
                 'label' => 'Статус'
             ])
@@ -36,14 +36,14 @@ final class ProductAdmin extends AbstractAdmin
         ;
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper->add('title');
+        $filter->add('title');
     }
 
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('title', null, ['label' => 'Назва'])
             ->add('status', null, ['label' => 'Статус'])
             ->add('category', null, ['label' => 'Категорія'])

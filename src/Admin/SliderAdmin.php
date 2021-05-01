@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class SliderAdmin extends AbstractAdmin
 {
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
         $slider = $this->getSubject();
 
@@ -25,7 +25,7 @@ final class SliderAdmin extends AbstractAdmin
             $fileFormOptions['help_html'] = true;
         }
 
-        $formMapper
+        $form
             ->add('title', TextType::class, [
                 'label' => 'Заголовок',
                 'required' => false
@@ -36,14 +36,14 @@ final class SliderAdmin extends AbstractAdmin
         ;
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper->add('title');
+        $filter->add('title');
     }
 
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('title', null, ['label' => 'Заголовок'])
             ->add('url', null, ['label' => 'Посилання'])
             ->add('priority', null, ['label' => 'Пріоритет'])

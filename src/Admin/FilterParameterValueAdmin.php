@@ -11,9 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class FilterParameterValueAdmin extends AbstractAdmin
 {
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
-        $formMapper
+        $form
             ->add('value', TextType::class, [
                 'label' => 'Значення',
                 'required' => true
@@ -27,14 +27,14 @@ final class FilterParameterValueAdmin extends AbstractAdmin
         ;
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper->add('value');
+        $filter->add('value');
     }
 
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('value', null, ['label' => 'Назва'])
             ->add('product', null, ['label' => 'Статус'])
             ->add('filterParameter', null, ['label' => 'Категорія'])

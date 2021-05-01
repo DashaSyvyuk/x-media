@@ -12,8 +12,9 @@
         "doctrine/orm": "^2.8",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
-        "sonata-project/admin-bundle": "^3.98",
+        "sonata-project/admin-bundle": "3.98.0",
         "sonata-project/doctrine-orm-admin-bundle": "^3.33",
+        "sonata-project/intl-bundle": "^2.10",
         "symfony/asset": "4.4.*",
         "symfony/console": "4.4.*",
         "symfony/dotenv": "4.4.*",
@@ -35,6 +36,7 @@
         "symfony/twig-bundle": "^4.4",
         "symfony/validator": "4.4.*",
         "symfony/web-link": "4.4.*",
+        "symfony/webpack-encore-bundle": "^1.11",
         "symfony/yaml": "4.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"

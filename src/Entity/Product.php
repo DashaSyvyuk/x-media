@@ -33,19 +33,19 @@ class Product
      * @var string
      * @ORM\Column(type="string")
      */
-    private $status;
+    private $status = "";
 
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $title;
+    private $title = "";
 
     /**
      * @var string
      * @ORM\Column(type="text")
      */
-    private $description;
+    private $description = "";
 
     /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)

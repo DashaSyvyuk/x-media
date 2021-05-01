@@ -11,18 +11,18 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class ProductImageAdmin extends AbstractAdmin
 {
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('id')
             ->add('imageUrl')
             ->add('position')
         ;
     }
 
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->add('id')
             ->add('imageUrl')
             ->add('position')
@@ -36,9 +36,9 @@ class ProductImageAdmin extends AbstractAdmin
         ;
     }
 
-    protected function configureFormFields(FormMapper $formMapper):void
+    protected function configureFormFields(FormMapper $form):void
     {
-        $formMapper
+        $form
             ->add('imageUrl', FileUploadType::class, [
                 'required' => true,
                 'label'    => 'Upload Image',

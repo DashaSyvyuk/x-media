@@ -33,25 +33,25 @@ class Category
      * @var string
      * @ORM\Column(type="string")
      */
-    private $title;
+    private $title = "";
 
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $slug;
+    private $slug = "";
 
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $status;
+    private $status = "";
 
     /**
      * @var integer
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
-    private $position;
+    private $position = 0;
 
     /**
      * @ORM\Column(type="datetime")
@@ -106,7 +106,7 @@ class Category
     /**
      * @return string
      */
-    public function getStatus():string
+    public function getStatus(): string
     {
         return $this->status;
     }

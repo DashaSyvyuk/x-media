@@ -29,7 +29,7 @@ class FilterParameter
      * @var string
      * @ORM\Column(type="string")
      */
-    private $title;
+    private $title = "";
 
     /**
      * @ORM\Column(type="datetime")

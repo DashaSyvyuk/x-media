@@ -29,13 +29,13 @@ class ProductImage
      * @var string
      * @ORM\Column(type="text")
      */
-    private $imageUrl;
+    private $imageUrl = "";
 
     /**
      * @var integer
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
-    private $position;
+    private $position = 0;
 
     /**
      * @var Product

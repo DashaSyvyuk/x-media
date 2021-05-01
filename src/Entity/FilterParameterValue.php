@@ -29,7 +29,7 @@ class FilterParameterValue
      * @var string
      * @ORM\Column(type="string")
      */
-    private $value;
+    private $value = "";
 
     /**
      * @var FilterParameter
