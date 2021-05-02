@@ -1,4 +1,5 @@
 import './styles/app.css';
+import './styles/checkout.css';
 
 import './bootstrap';
 
