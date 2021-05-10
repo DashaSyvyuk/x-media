@@ -1,8 +1,17 @@
 import './styles/app.css';
-import './styles/checkout.css';
 
 import './bootstrap';
 
+import 'slick-carousel'
 import $ from 'jquery';
 
-console.log('Hello Webpack Encore! Edit me in assets/app.js');
+$("#slider").slick({
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    dots: true,
+    arrows: false,
+    pauseOnHover: false
+});

@@ -47,6 +47,12 @@ final class SliderAdmin extends AbstractAdmin
             ->addIdentifier('title', null, ['label' => 'Заголовок'])
             ->add('url', null, ['label' => 'Посилання'])
             ->add('priority', null, ['label' => 'Пріоритет'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                ]
+            ])
         ;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,36 +23,32 @@ class Product
     use DateStorageTrait;
 
     /**
-     * @var int
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
-    private $id;
+    private int $id;
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
-    private $status = "";
+    private string $status = "";
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
-    private $title = "";
+    private ?string $title = "";
 
     /**
-     * @var string
      * @ORM\Column(type="text")
      */
-    private $description = "";
+    private ?string $description = "";
 
     /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      * @ORM\ManyToOne(targetEntity="App\Entity\Category")
      */
-    private $category;
+    private Category $category;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\FilterParameterValue", mappedBy="product", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
@@ -59,7 +56,6 @@ class Product
     private $filterParameterValues;
 
     /**
-     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="App\Entity\ProductImage", mappedBy="product", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
      */
     private $images;
@@ -67,12 +63,12 @@ class Product
     /**
      * @ORM\Column(type="datetime")
      */
-    public $createdAt;
+    public DateTime $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    public $updatedAt;
+    public DateTime $updatedAt;
 
     public function __construct()
     {
@@ -80,74 +76,47 @@ class Product
         $this->images = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @param string $status
-     */
-    public function setStatus(string $status)
+    public function setStatus(string $status): void
     {
         $this->status = $status;
     }
 
-    /**
-     * @param string $title
-     */
-    public function setTitle(string $title)
+    public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $description
-     */
-    public function setDescription(string $description)
+    public function setDescription(?string $description)
     {
         $this->description = $description;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param ?Category $category
-     */
-    public function setCategory(?Category $category)
+    public function setCategory(Category $category): void
     {
         $this->category = $category;
     }
 
-    /**
-     * @return Category|null
-     */
-    public function getCategory(): ?Category
+    public function getCategory(): Category
     {
         return $this->category;
     }
@@ -172,14 +141,11 @@ class Product
         return $this->filterParameterValues->removeElement($filterParameterValue);
     }
 
-    public function getFilterParameterValues(): ArrayCollection
+    public function getFilterParameterValues()
     {
         return $this->filterParameterValues;
     }
 
-    /**
-     * @return array
-     */
     public function getImages()
     {
         return $this->images;
@@ -205,22 +171,22 @@ class Product
         }
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
     }

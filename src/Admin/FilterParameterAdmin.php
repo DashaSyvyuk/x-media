@@ -29,6 +29,12 @@ final class FilterParameterAdmin extends AbstractAdmin
     {
         $list
             ->addIdentifier('title', null, ['label' => 'Назва параметру'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                ]
+            ])
         ;
     }
 }

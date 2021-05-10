@@ -1,3 +1,51 @@
-body {
-    background-color: greenyellow;
+body, html {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+#slider {
+    width: 100vw;
+    height: 100vh;
+}
+
+#slider .item {
+    position: relative;
+}
+
+#slider .item .link {
+    position: absolute;
+    right: 60px;
+    bottom: 60px;
+    color: #808080;
+    background-color: rgba(0,0,0,.1);
+    padding: 15px 40px;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+#slider .item .link:hover {
+    color: #484848;
+    background-color: rgba(0,0,0,.3);
+}
+
+#slider .item .background {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    min-width: 320px;
+}
+
+#slider .item .background img {
+    width: 100%;
+    margin: -10% 0 0 0
+}
+
+#slider .slick-dots {
+    bottom: 30px;
+}
+
+#slider .slick-dots li button:before {
+    font-size: 12px;
 }

@@ -7,7 +7,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
-use Sonata\AdminBundle\Form\Type\CollectionType;
+use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -32,7 +32,6 @@ final class ProductAdmin extends AbstractAdmin
                 'placeholder' => 'Оберіть категорію',
             ])
             ->add('description', TextareaType::class)
-            ->add('images', CollectionType::class)
         ;
     }
 
@@ -47,6 +46,12 @@ final class ProductAdmin extends AbstractAdmin
             ->addIdentifier('title', null, ['label' => 'Назва'])
             ->add('status', null, ['label' => 'Статус'])
             ->add('category', null, ['label' => 'Категорія'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                ]
+            ])
         ;
     }
 }

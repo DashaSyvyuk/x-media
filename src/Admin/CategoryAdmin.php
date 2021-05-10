@@ -45,6 +45,12 @@ final class CategoryAdmin extends AbstractAdmin
             ->add('slug', null, ['label' => 'Slug'])
             ->add('status', null, ['label' => 'Статус'])
             ->add('position', null, ['label' => 'Пріоритет'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                ]
+            ])
         ;
     }
 }

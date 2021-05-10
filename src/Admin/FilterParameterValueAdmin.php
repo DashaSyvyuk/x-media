@@ -35,9 +35,15 @@ final class FilterParameterValueAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->addIdentifier('value', null, ['label' => 'Назва'])
-            ->add('product', null, ['label' => 'Статус'])
-            ->add('filterParameter', null, ['label' => 'Категорія'])
+            ->addIdentifier('value', null, ['label' => 'Значення'])
+            ->add('product', null, ['label' => 'Товар'])
+            ->add('filterParameter', null, ['label' => 'Параметр'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                ]
+            ])
         ;
     }
 }
