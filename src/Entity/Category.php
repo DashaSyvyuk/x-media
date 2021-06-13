@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use \DateTime;
 use App\Traits\DateStorageTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
@@ -50,6 +51,11 @@ class Category
     private int $position = 0;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+     */
+    private $products;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -58,6 +64,11 @@ class Category
      * @ORM\Column(type="datetime")
      */
     public DateTime $updatedAt;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -102,6 +113,31 @@ class Category
     public function getPosition(): int
     {
         return $this->position;
+    }
+
+    /**
+     * @param Product $product
+     */
+    public function addProduct(Product $product)
+    {
+        $product->setCategory($this);
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+        }
+    }
+
+    /**
+     * @param Product $product
+     * @return bool
+     */
+    public function removeProduct(Product $product): bool
+    {
+        return $this->products->removeElement($product);
+    }
+
+    public function getProducts()
+    {
+        return $this->products;
     }
 
     public function getCreatedAt(): DateTime

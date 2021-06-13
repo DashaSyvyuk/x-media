@@ -1,3 +1,7 @@
 index:
     path: /
     controller: App\Controller\HomePageController::index
+
+category:
+    path: /categories/{slug}
+    controller: App\Controller\CategoryPageController::get

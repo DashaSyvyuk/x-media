@@ -1,0 +1,19 @@
+<div id="menu">
+    <div id="logo"><a href="/">X-media</a></div>
+    <div id="categories">
+        <ul>
+            {% for category in categories %}
+                <li>
+                    <a href="/categories/{{ category.slug }}">{{ category.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="search">
+        <form>
+            <input type="text" name="search" autocomplete="off">
+            <button type="submit"><img src="/images/search.png" /></button>
+        </form>
+    </div>
+    <div id="cart"></div>
+</div>

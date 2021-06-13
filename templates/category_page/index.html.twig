@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('home') }}
+{% endblock %}
+
+{% block body %}
+
+    <header>
+        {% include 'partials/header.html.twig' %}
+    </header>
+
+    <section class="category">
+        <div class="category-title">{{ category.title }}</div>
+
+        <div class="breadcrumb">
+            <a href="/">Головна</a> <span>/</span> <a href="" class="selected">{{ category.title }}</a>
+        </div>
+
+        <div id="filters">
+
+        </div>
+
+        <div id="products">
+            {% for product in category.getProducts() %}
+                {% include 'partials/product-item.html.twig' %}
+            {% endfor %}
+        </div>
+    </section>
+
+{% endblock %}

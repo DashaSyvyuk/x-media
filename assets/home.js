@@ -1,7 +1,5 @@
 import './styles/app.css';
-
 import './bootstrap';
-
 import 'slick-carousel'
 import $ from 'jquery';
 
