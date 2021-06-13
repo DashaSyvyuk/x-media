@@ -15,3 +15,14 @@ $("#slider").slick({
     arrows: false,
     pauseOnHover: false
 });
+
+$("#new-products").slick({
+    infinite: true,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    dots: true,
+    arrows: false,
+    pauseOnHover: false
+});
