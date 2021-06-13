@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
@@ -32,6 +33,12 @@ class FilterParameter
     private $title = "";
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\FilterParameterValue",
+     *     mappedBy="filterParameter", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+     */
+    private $values;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public $createdAt;
@@ -40,6 +47,11 @@ class FilterParameter
      * @ORM\Column(type="datetime")
      */
     public $updatedAt;
+
+    public function __construct()
+    {
+        $this->values = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -63,6 +75,31 @@ class FilterParameter
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    /**
+     * @param FilterParameterValue $value
+     */
+    public function addValue(FilterParameterValue $value)
+    {
+        $value->setFilterParameter($this);
+        if (!$this->values->contains($value)) {
+            $this->values[] = $value;
+        }
+    }
+
+    /**
+     * @param FilterParameterValue $value
+     * @return bool
+     */
+    public function removeValue(FilterParameterValue $value): bool
+    {
+        return $this->values->removeElement($value);
+    }
+
+    public function getValues()
+    {
+        return $this->values;
     }
 
     public function getCreatedAt()

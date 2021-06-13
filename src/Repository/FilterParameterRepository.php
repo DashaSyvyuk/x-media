@@ -18,4 +18,16 @@ class FilterParameterRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, FilterParameter::class);
     }
+
+    public function findByCategory(string $slug)
+    {
+        return $this->createQueryBuilder('fp')
+            ->leftJoin('fp.values', 'values')
+            ->leftJoin('values.product', 'product')
+            ->leftJoin('product.category', 'category')
+            ->andWhere('category.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getResult();
+    }
 }

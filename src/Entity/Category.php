@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use \DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
@@ -22,135 +23,103 @@ class Category
     use DateStorageTrait;
 
     /**
-     * @var int
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
-    private $id;
+    private int $id;
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
-    private $title = "";
+    private string $title = "";
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
-    private $slug = "";
+    private string $slug = "";
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
-    private $status = "";
+    private string $status = "";
 
     /**
-     * @var integer
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
-    private $position = 0;
+    private int $position = 0;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    public $createdAt;
+    public DateTime $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    public $updatedAt;
+    public DateTime $updatedAt;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param string $title
-     */
     public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $slug
-     */
     public function setSlug(string $slug): void
     {
         $this->slug = $slug;
     }
 
-    /**
-     * @return string
-     */
     public function getSlug(): string
     {
         return $this->slug;
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @param string $status
-     */
     public function setStatus(string $status): void
     {
         $this->status = $status;
     }
 
-    /**
-     * @param int $position
-     */
     public function setPosition(int $position)
     {
         $this->position = $position;
     }
 
-    /**
-     * @return string
-     */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
     }

@@ -3,52 +3,56 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
+use App\Repository\FilterParameterRepository;
 use App\Repository\ProductRepository;
-use App\Repository\SliderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class HomePageController extends AbstractController
+class CategoryPageController extends AbstractController
 {
-    private SliderRepository $sliderRepository;
-
     private CategoryRepository $categoryRepository;
 
     private ProductRepository $productRepository;
 
+    private FilterParameterRepository $filterParameterRepository;
+
     /**
-     * @param SliderRepository $sliderRepository
      * @param CategoryRepository $categoryRepository
      * @param ProductRepository $productRepository
+     * @param FilterParameterRepository $filterParameterRepository
      */
     public function __construct(
-        SliderRepository $sliderRepository,
         CategoryRepository $categoryRepository,
-        ProductRepository $productRepository
+        ProductRepository $productRepository,
+        FilterParameterRepository $filterParameterRepository
     ) {
-        $this->sliderRepository = $sliderRepository;
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
+        $this->filterParameterRepository = $filterParameterRepository;
     }
 
-    public function index(): Response
+    public function get(string $slug): Response
     {
-        $sliders = $this->sliderRepository->findBy([], ['priority' => 'DESC']);
+        $category = $this->categoryRepository->findOneBy([
+            'slug' => $slug
+        ]);
+
+        if (!$category) {
+            $this->render('/not-found.html.twig');
+        }
+
         $categories = $this->categoryRepository->findBy([
             'status' => 'ACTIVE'
         ], [
             'position' => 'ASC'
         ]);
-        $products = $this->productRepository->findBy([
-            'status' => 'ACTIVE'
-        ], [
-            'createdAt' => 'DESC'
-        ], 10);
 
-        return $this->render('home_page/index.html.twig', [
-            'sliders' => $sliders,
+        $filters = $this->filterParameterRepository->findByCategory($slug);
+
+        return $this->render('category_page/index.html.twig', [
+            'category' => $category,
             'categories' => $categories,
-            'products' => $products
+            'filters' => $filters
         ]);
     }
 }

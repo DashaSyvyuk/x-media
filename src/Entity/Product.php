@@ -35,6 +35,11 @@ class Product
     private string $status = "";
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private int $price = 0;
+
+    /**
      * @ORM\Column(type="string")
      */
     private ?string $title = "";
@@ -89,6 +94,16 @@ class Product
     public function setStatus(string $status): void
     {
         $this->status = $status;
+    }
+
+    public function getPrice(): int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): void
+    {
+        $this->price = $price;
     }
 
     public function setTitle(?string $title): void
