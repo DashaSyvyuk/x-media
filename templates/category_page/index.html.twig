@@ -18,7 +18,17 @@
         </div>
 
         <div id="filters">
-
+            {% for filter in filters %}
+                <div class="filter">
+                    <p class="filter-title">{{ filter.title }}</p>
+                    {% for value in filter.getValues() %}
+                        <label class="container">{{ value.value }}
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    {% endfor %}
+                </div>
+            {% endfor %}
         </div>
 
         <div id="products">

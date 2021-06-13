@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
 
 /**
  * @ORM\Table("filter_parameter_value", indexes={
@@ -39,11 +41,13 @@ class FilterParameterValue
     private $filterParameter;
 
     /**
-     * @var Product|null
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Product")
+     * @JoinTable(name="product_filter_parameter_value",
+     *      joinColumns={@JoinColumn(name="filter_parameter_value_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE")}
+     *      )
      */
-    private $product;
+    private $products;
 
     /**
      * @ORM\Column(type="datetime")
@@ -129,5 +133,10 @@ class FilterParameterValue
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function __toString(): string
+    {
+        return '' . $this->value;
     }
 }

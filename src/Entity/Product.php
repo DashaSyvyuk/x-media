@@ -7,6 +7,8 @@ use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
 
 /**
  * @ORM\Table("product", indexes={
@@ -56,7 +58,11 @@ class Product
     private Category $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\FilterParameterValue", mappedBy="product", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="App\Entity\FilterParameterValue")
+     * @JoinTable(name="product_filter_parameter_value",
+     *      joinColumns={@JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@JoinColumn(name="filter_parameter_value_id", referencedColumnName="id", onDelete="CASCADE")}
+     *      )
      */
     private $filterParameterValues;
 

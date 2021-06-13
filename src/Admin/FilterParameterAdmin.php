@@ -17,12 +17,15 @@ final class FilterParameterAdmin extends AbstractAdmin
                 'label' => 'Назва параметру',
                 'required' => true
             ])
+            ->add('values')
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $filter->add('title');
+        $filter
+            ->add('title')
+        ;
     }
 
     protected function configureListFields(ListMapper $list): void

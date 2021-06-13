@@ -36,7 +36,7 @@ final class FilterParameterValueAdmin extends AbstractAdmin
     {
         $list
             ->addIdentifier('value', null, ['label' => 'Значення'])
-            ->add('product', null, ['label' => 'Товар'])
+            ->add('products', null, ['label' => 'Товар'])
             ->add('filterParameter', null, ['label' => 'Параметр'])
             ->add('_action', 'actions', [
                 'actions' => [

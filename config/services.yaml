@@ -45,12 +45,6 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: Контент, label: Картинки }
 
-    admin.filter_parameter_value:
-        class: App\Admin\FilterParameterValueAdmin
-        arguments: [ ~, App\Entity\FilterParameterValue, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Контент, label: Фільтри }
-
     admin.filter_parameter:
         class: App\Admin\FilterParameterAdmin
         arguments: [ ~, App\Entity\FilterParameter, ~ ]
