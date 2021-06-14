@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Repository\CategoryRepository;
 use App\Repository\FilterParameterRepository;
-use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -12,22 +11,17 @@ class CategoryPageController extends AbstractController
 {
     private CategoryRepository $categoryRepository;
 
-    private ProductRepository $productRepository;
-
     private FilterParameterRepository $filterParameterRepository;
 
     /**
      * @param CategoryRepository $categoryRepository
-     * @param ProductRepository $productRepository
      * @param FilterParameterRepository $filterParameterRepository
      */
     public function __construct(
         CategoryRepository $categoryRepository,
-        ProductRepository $productRepository,
         FilterParameterRepository $filterParameterRepository
     ) {
         $this->categoryRepository = $categoryRepository;
-        $this->productRepository = $productRepository;
         $this->filterParameterRepository = $filterParameterRepository;
     }
 

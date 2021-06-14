@@ -2,6 +2,10 @@ index:
     path: /
     controller: App\Controller\HomePageController::index
 
-category:
+categories:
     path: /categories/{slug}
     controller: App\Controller\CategoryPageController::get
+
+product:
+    path: /products/{id}
+    controller: App\Controller\ProductPageController::get
