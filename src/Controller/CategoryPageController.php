@@ -31,15 +31,17 @@ class CategoryPageController extends AbstractController
             'slug' => $slug
         ]);
 
-        if (!$category) {
-            $this->render('/not-found.html.twig');
-        }
-
         $categories = $this->categoryRepository->findBy([
             'status' => 'ACTIVE'
         ], [
             'position' => 'ASC'
         ]);
+
+        if (!$category) {
+            $this->render('bundles/TwigBundle/Exception/error404.html.twig', [
+                'categories' => $categories
+            ]);
+        }
 
         $filters = $this->filterParameterRepository->findByCategory($slug);
 

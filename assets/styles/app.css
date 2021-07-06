@@ -265,3 +265,13 @@ section .title {
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
+
+.not-found {
+    text-align: center;
+}
+
+.not-found img {
+    width: 200px;
+    height: auto;
+    margin-top: 50px;
+}
