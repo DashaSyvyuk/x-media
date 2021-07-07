@@ -18,7 +18,7 @@ $("#new-products").slick({
     infinite: true,
     slidesToShow: 4,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: false,
     autoplaySpeed: 3000,
     dots: true,
     arrows: false,
@@ -33,4 +33,12 @@ $('.product .inner img').on('mouseover', (e) => {
 $('.product .inner img').on('mouseout', (e) => {
     const first = $(e.currentTarget).data('first');
     $(e.currentTarget).attr('src', first);
+});
+
+$('.product .inner .add2cart img').on('mouseover', (e) => {
+    $(e.currentTarget).attr('src', '/images/cart_active.png');
+});
+
+$('.product .inner .add2cart img').on('mouseout', (e) => {
+    $(e.currentTarget).attr('src', '/images/cart.png');
 });
