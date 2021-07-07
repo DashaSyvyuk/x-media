@@ -18,12 +18,10 @@ final class FilterAttributeAdmin extends AbstractAdmin
                 'label' => 'Значення',
                 'required' => true
             ])
-            ->add('product', ModelType::class,  [
-                'placeholder' => 'Оберіть товар',
-            ])
             ->add('filter', ModelType::class,  [
                 'placeholder' => 'Оберіть параметр',
             ])
+            ->add('products')
         ;
     }
 
@@ -36,7 +34,6 @@ final class FilterAttributeAdmin extends AbstractAdmin
     {
         $list
             ->addIdentifier('value', null, ['label' => 'Значення'])
-            ->add('product', null, ['label' => 'Товар'])
             ->add('filter', null, ['label' => 'Параметр'])
             ->add('_action', 'actions', [
                 'actions' => [

@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\ManyToMany;
 
 /**
  * @ORM\Table("filter_attributes", indexes={
@@ -39,11 +41,13 @@ class FilterAttribute
     private $filter;
 
     /**
-     * @var Product
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product")
+     * @ManyToMany(targetEntity="App\Entity\Product")
+     * @ORM\JoinTable(name="product_filter_attribute",
+     *      joinColumns={@ORM\JoinColumn(name="filter_attribute_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")}
+     *      )
      */
-    private $product;
+    private $products;
 
     /**
      * @ORM\Column(type="datetime")
@@ -54,6 +58,11 @@ class FilterAttribute
      * @ORM\Column(type="datetime")
      */
     public $updatedAt;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -80,22 +89,6 @@ class FilterAttribute
     }
 
     /**
-     * @param ?Product $product
-     */
-    public function setProduct(?Product $product)
-    {
-        $this->product = $product;
-    }
-
-    /**
-     * @return Product|null
-     */
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    /**
      * @param ?Filter $filter
      */
     public function setFilter(?Filter $filter)
@@ -109,6 +102,35 @@ class FilterAttribute
     public function getFilter(): ?Filter
     {
         return $this->filter;
+    }
+
+    /**
+     * @param Product $product
+     */
+    public function addProduct(Product $product)
+    {
+        if ($this->products->contains($product)) {
+            return;
+        }
+
+        $this->products->add($product);
+    }
+
+    /**
+     * @param Product $product
+     */
+    public function removeProduct(Product $product)
+    {
+        if (!$this->products->contains($product)) {
+            return;
+        }
+
+        $this->products->removeElement($product);
+    }
+
+    public function getProducts()
+    {
+        return $this->products;
     }
 
     public function getCreatedAt()
