@@ -1,7 +1,7 @@
 <div class="product">
     <div class="inner">
         <a href="/products/{{ product.id }}"><img src="/{{ product.images[0].imageUrl }}"></a>
-        <div class="product-title"><a href="/">{{ product.title }}</a></div>
+        <div class="product-title"><a href="/products/{{ product.id }}">{{ product.title }}</a></div>
         <div class="price">{{ product.price }} грн</div>
         <div class="add2cart"></div>
     </div>

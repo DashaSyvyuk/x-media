@@ -1,0 +1,9 @@
+<div>
+    {% for product in pagination %}
+        {% include 'partials/product-item.html.twig' %}
+    {% endfor %}
+</div>
+
+<div class="navigation">
+    {{ knp_pagination_render(pagination) }}
+</div>

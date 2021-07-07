@@ -199,11 +199,37 @@ section .title {
 .category #products {
     width: calc(100% - 300px);
     float: left;
+    display: flex;
+    flex-direction: column;
 }
 
 .category #products .product {
     width: 33%;
     float: left;
+}
+
+.category #products .navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.category #products .navigation span {
+    padding: 5px;
+}
+
+.category #products .navigation span.current {
+    font-weight: bold;
+}
+
+.category #products .navigation span a {
+    text-decoration: none;
+    color: dimgray;
+}
+
+.category #products .navigation span a:hover {
+    text-decoration: underline;
 }
 
 .container {

@@ -1,0 +1,13 @@
+<form id="filter-form">
+    {% for filter in filters %}
+        <div class="filter">
+            <p class="filter-title">{{ filter.title }}</p>
+            {% for attribute in filter.getAttributes() %}
+                <label class="container">{{ attribute.value }}
+                    <input type="checkbox" name="{{ attribute.id }}" {% if attribute.id in query %}checked{% endif %}>
+                    <span class="checkmark"></span>
+                </label>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</form>

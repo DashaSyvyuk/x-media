@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('home') }}
+    {{ encore_entry_script_tags('category') }}
 {% endblock %}
 
 {% block body %}
@@ -18,23 +18,11 @@
         </div>
 
         <div id="filters">
-            {% for filter in filters %}
-                <div class="filter">
-                    <p class="filter-title">{{ filter.title }}</p>
-                    {% for attribute in filter.getAttributes() %}
-                        <label class="container">{{ attribute.value }}
-                            <input type="checkbox">
-                            <span class="checkmark"></span>
-                        </label>
-                    {% endfor %}
-                </div>
-            {% endfor %}
+            {% include 'partials/filters.html.twig' %}
         </div>
 
         <div id="products">
-            {% for product in category.getProducts() %}
-                {% include 'partials/product-item.html.twig' %}
-            {% endfor %}
+            {% include 'partials/product-list.html.twig' %}
         </div>
     </section>
 

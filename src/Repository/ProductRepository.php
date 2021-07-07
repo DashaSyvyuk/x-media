@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,5 +18,22 @@ class ProductRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
+    }
+
+    public function findByCategoryAndAttributes(Category $category, array $attributes)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->leftJoin('p.category', 'category')
+            ->andWhere('category = :category')
+            ->setParameter('category', $category);
+
+        if ($attributes) {
+            $query
+                ->leftJoin('p.filterAttributes', 'attributes')
+                ->andWhere('attributes.id IN (:ids)')
+                ->setParameter('ids', $attributes);
+        }
+
+        return $query;
     }
 }

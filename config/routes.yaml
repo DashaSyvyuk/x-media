@@ -4,7 +4,7 @@ index:
 
 categories:
     path: /categories/{slug}
-    controller: App\Controller\CategoryPageController::get
+    controller: App\Controller\CategoryPageController::getCategory
 
 product:
     path: /products/{id}

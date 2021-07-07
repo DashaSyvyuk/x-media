@@ -7,6 +7,7 @@ use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\ManyToMany;
 
 /**
  * @ORM\Table("product", indexes={
@@ -61,6 +62,15 @@ class Product
     private $images;
 
     /**
+     * @ManyToMany(targetEntity="App\Entity\FilterAttribute")
+     * @ORM\JoinTable(name="product_filter_attribute",
+     *      joinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="filter_attribute_id", referencedColumnName="id")}
+     *      )
+     */
+    private $filterAttributes;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -73,6 +83,7 @@ class Product
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->filterAttributes = new ArrayCollection();
     }
 
     public function getId(): int
@@ -152,6 +163,35 @@ class Product
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
         }
+    }
+
+    /**
+     * @param FilterAttribute $filterAttribute
+     */
+    public function addFilterAttribute(FilterAttribute $filterAttribute)
+    {
+        if ($this->filterAttributes->contains($filterAttribute)) {
+            return;
+        }
+
+        $this->filterAttributes->add($filterAttribute);
+    }
+
+    /**
+     * @param FilterAttribute $filterAttribute
+     */
+    public function removeFilterAttribute(FilterAttribute $filterAttribute)
+    {
+        if (!$this->filterAttributes->contains($filterAttribute)) {
+            return;
+        }
+
+        $this->filterAttributes->removeElement($filterAttribute);
+    }
+
+    public function getFilterAttributes()
+    {
+        return $this->filterAttributes;
     }
 
     public function getCreatedAt(): DateTime
