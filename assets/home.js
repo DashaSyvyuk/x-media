@@ -24,3 +24,13 @@ $("#new-products").slick({
     arrows: false,
     pauseOnHover: false
 });
+
+$('.product .inner img').on('mouseover', (e) => {
+    const next = $(e.currentTarget).data('next');
+    $(e.currentTarget).attr('src', next);
+});
+
+$('.product .inner img').on('mouseout', (e) => {
+    const first = $(e.currentTarget).data('first');
+    $(e.currentTarget).attr('src', first);
+});

@@ -2,7 +2,7 @@ import './styles/app.css';
 import './bootstrap';
 import $ from 'jquery';
 
-$('#filters input[type=checkbox]').on('change', (e) => {
+$('#filters input[type=checkbox]').on('change', () => {
     const url = window.location.pathname;
     const form = $('#filter-form').serialize();
     const query = form.split('&');
