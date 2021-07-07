@@ -8,13 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
 /**
- * @ORM\Table("filter_parameter", indexes={
+ * @ORM\Table("filters", indexes={
  *     @Index(columns={"title"})
  * })
- * @ORM\Entity(repositoryClass="App\Repository\FilterParameterRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\FilterRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class FilterParameter
+class Filter
 {
     use DateStorageTrait;
 
@@ -33,10 +33,10 @@ class FilterParameter
     private $title = "";
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\FilterParameterValue",
-     *     mappedBy="filterParameter", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\FilterAttribute",
+     *     mappedBy="filter", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
      */
-    private $values;
+    private $attributes;
 
     /**
      * @ORM\Column(type="datetime")
@@ -50,7 +50,7 @@ class FilterParameter
 
     public function __construct()
     {
-        $this->values = new ArrayCollection();
+        $this->attributes = new ArrayCollection();
     }
 
     /**
@@ -78,28 +78,28 @@ class FilterParameter
     }
 
     /**
-     * @param FilterParameterValue $value
+     * @param FilterAttribute $attribute
      */
-    public function addValue(FilterParameterValue $value)
+    public function addAttribute(FilterAttribute $attribute)
     {
-        $value->setFilterParameter($this);
-        if (!$this->values->contains($value)) {
-            $this->values[] = $value;
+        $attribute->setFilter($this);
+        if (!$this->attributes->contains($attribute)) {
+            $this->attributes[] = $attribute;
         }
     }
 
     /**
-     * @param FilterParameterValue $value
+     * @param FilterAttribute $attribute
      * @return bool
      */
-    public function removeValue(FilterParameterValue $value): bool
+    public function removeAttribute(FilterAttribute $attribute): bool
     {
-        return $this->values->removeElement($value);
+        return $this->attributes->removeElement($attribute);
     }
 
-    public function getValues()
+    public function getAttributes()
     {
-        return $this->values;
+        return $this->attributes;
     }
 
     public function getCreatedAt()

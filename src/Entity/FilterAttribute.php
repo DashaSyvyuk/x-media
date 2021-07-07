@@ -5,17 +5,15 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\JoinTable;
 
 /**
- * @ORM\Table("filter_parameter_value", indexes={
+ * @ORM\Table("filter_attributes", indexes={
  *     @Index(columns={"value"})
  * })
- * @ORM\Entity(repositoryClass="App\Repository\FilterParameterValueRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\FilterAttributeRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class FilterParameterValue
+class FilterAttribute
 {
     use DateStorageTrait;
 
@@ -34,20 +32,18 @@ class FilterParameterValue
     private $value = "";
 
     /**
-     * @var FilterParameter
+     * @var Filter
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\FilterParameter")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Filter")
      */
-    private $filterParameter;
+    private $filter;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Product")
-     * @JoinTable(name="product_filter_parameter_value",
-     *      joinColumns={@JoinColumn(name="filter_parameter_value_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE")}
-     *      )
+     * @var Product
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product")
      */
-    private $products;
+    private $product;
 
     /**
      * @ORM\Column(type="datetime")
@@ -100,19 +96,19 @@ class FilterParameterValue
     }
 
     /**
-     * @param ?FilterParameter $filterParameter
+     * @param ?Filter $filter
      */
-    public function setFilterParameter(?FilterParameter $filterParameter)
+    public function setFilter(?Filter $filter)
     {
-        $this->filterParameter = $filterParameter;
+        $this->filter = $filter;
     }
 
     /**
-     * @return FilterParameter|null
+     * @return Filter|null
      */
-    public function getFilterParameter(): ?FilterParameter
+    public function getFilter(): ?Filter
     {
-        return $this->filterParameter;
+        return $this->filter;
     }
 
     public function getCreatedAt()

@@ -45,14 +45,20 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: Контент, label: Картинки }
 
-    admin.filter_parameter:
-        class: App\Admin\FilterParameterAdmin
-        arguments: [ ~, App\Entity\FilterParameter, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Контент, label: Параметри фільтрів }
-
     admin.slider:
         class: App\Admin\SliderAdmin
         arguments: [ ~, App\Entity\Slider, ~ ]
         tags:
             - { name: sonata.admin, manager_type: orm, group: Слайдер, label: Слайдер }
+
+    admin.filter:
+        class: App\Admin\FilterAdmin
+        arguments: [ ~, App\Entity\Filter, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Фільтри, label: Фільтри }
+
+    admin.filter_attribute:
+        class: App\Admin\FilterAttributeAdmin
+        arguments: [ ~, App\Entity\FilterAttribute, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Фільтри, label: Параметри фільтрів }

@@ -21,8 +21,8 @@
             {% for filter in filters %}
                 <div class="filter">
                     <p class="filter-title">{{ filter.title }}</p>
-                    {% for value in filter.getValues() %}
-                        <label class="container">{{ value.value }}
+                    {% for attribute in filter.getAttributes() %}
+                        <label class="container">{{ attribute.value }}
                             <input type="checkbox">
                             <span class="checkmark"></span>
                         </label>

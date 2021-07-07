@@ -32,7 +32,6 @@ final class ProductAdmin extends AbstractAdmin
                 'placeholder' => 'Оберіть категорію',
             ])
             ->add('description', TextareaType::class)
-            ->add('filterParameterValues')
         ;
     }
 

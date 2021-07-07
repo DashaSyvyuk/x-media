@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
-use App\Repository\FilterParameterRepository;
+use App\Repository\FilterRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,18 +11,18 @@ class CategoryPageController extends AbstractController
 {
     private CategoryRepository $categoryRepository;
 
-    private FilterParameterRepository $filterParameterRepository;
+    private FilterRepository $filterRepository;
 
     /**
      * @param CategoryRepository $categoryRepository
-     * @param FilterParameterRepository $filterParameterRepository
+     * @param FilterRepository $filterRepository
      */
     public function __construct(
         CategoryRepository $categoryRepository,
-        FilterParameterRepository $filterParameterRepository
+        FilterRepository $filterRepository
     ) {
         $this->categoryRepository = $categoryRepository;
-        $this->filterParameterRepository = $filterParameterRepository;
+        $this->filterRepository = $filterRepository;
     }
 
     public function get(string $slug): Response
@@ -43,7 +43,7 @@ class CategoryPageController extends AbstractController
             ]);
         }
 
-        $filters = $this->filterParameterRepository->findByCategory($slug);
+        $filters = $this->filterRepository->findByCategory($slug);
 
         return $this->render('category_page/index.html.twig', [
             'category' => $category,

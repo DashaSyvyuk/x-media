@@ -7,8 +7,6 @@ use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\JoinTable;
 
 /**
  * @ORM\Table("product", indexes={
@@ -58,15 +56,6 @@ class Product
     private Category $category;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\FilterParameterValue")
-     * @JoinTable(name="product_filter_parameter_value",
-     *      joinColumns={@JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@JoinColumn(name="filter_parameter_value_id", referencedColumnName="id", onDelete="CASCADE")}
-     *      )
-     */
-    private $filterParameterValues;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProductImage", mappedBy="product", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
      */
     private $images;
@@ -83,7 +72,6 @@ class Product
 
     public function __construct()
     {
-        $this->filterParameterValues = new ArrayCollection();
         $this->images = new ArrayCollection();
     }
 
@@ -142,31 +130,6 @@ class Product
         return $this->category;
     }
 
-    /**
-     * @param FilterParameterValue $filterParameterValue
-     */
-    public function addFilterParameterValue(FilterParameterValue $filterParameterValue)
-    {
-        $filterParameterValue->setProduct($this);
-        if (!$this->filterParameterValues->contains($filterParameterValue)) {
-            $this->filterParameterValues[] = $filterParameterValue;
-        }
-    }
-
-    /**
-     * @param FilterParameterValue $filterParameterValue
-     * @return bool
-     */
-    public function removeFilterParameterValue(FilterParameterValue $filterParameterValue): bool
-    {
-        return $this->filterParameterValues->removeElement($filterParameterValue);
-    }
-
-    public function getFilterParameterValues()
-    {
-        return $this->filterParameterValues;
-    }
-
     public function getImages()
     {
         return $this->images;
@@ -174,7 +137,6 @@ class Product
 
     /**
      * @param ProductImage $image
-     * @return Product
      */
     public function addImage(ProductImage $image)
     {
