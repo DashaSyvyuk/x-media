@@ -25,20 +25,20 @@ $("#new-products").slick({
     pauseOnHover: false
 });
 
-$('.product .inner img').on('mouseover', (e) => {
+$(document).on('mouseover', '.product .inner img', (e) => {
     const next = $(e.currentTarget).data('next');
     $(e.currentTarget).attr('src', next);
 });
 
-$('.product .inner img').on('mouseout', (e) => {
+$(document).on('mouseout', '.product .inner img', (e) => {
     const first = $(e.currentTarget).data('first');
     $(e.currentTarget).attr('src', first);
 });
 
-$('.add2cart img').on('mouseover', (e) => {
+$(document).on('mouseover', '.add2cart img', (e) => {
     $(e.currentTarget).attr('src', '/images/cart_active.png');
 });
 
-$('.add2cart img').on('mouseout', (e) => {
+$(document).on('mouseout', '.add2cart img', (e) => {
     $(e.currentTarget).attr('src', '/images/cart.png');
 });
