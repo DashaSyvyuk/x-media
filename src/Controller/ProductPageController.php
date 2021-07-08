@@ -44,7 +44,7 @@ class ProductPageController extends AbstractController
         return $this->render('product_page/index.html.twig', [
             'product' => $product,
             'categories' => $categories,
-            'totalCount' => $_COOKIE['totalCount']
+            'totalCount' => $_COOKIE['totalCount'] ?? 0
         ]);
     }
 }

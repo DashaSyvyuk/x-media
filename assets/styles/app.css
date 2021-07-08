@@ -418,3 +418,74 @@ section .title {
     padding-top: 50px;
     line-height: 2;
 }
+
+#cart-popup {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,.6);
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+#cart-popup #cart-block {
+    background-color: #fff;
+    width: 60%;
+    margin: 10% auto 0;
+    height: auto;
+    padding: 15px;
+}
+
+#cart-popup #cart-block #close-cart {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#cart-popup #cart-block #close-cart img {
+    width: 20px;
+    cursor: pointer;
+}
+
+#cart-popup #cart-block table {
+    width: 100%;
+}
+
+#cart-popup #cart-block table td {
+    padding: 15px 5px;
+}
+
+#cart-popup #cart-block table td input {
+    width: 30px;
+    text-align: center;
+    border-radius: unset;
+    border: 1px solid #000;
+    padding: 3px;
+}
+
+#cart-popup #cart-block table td img {
+    width: 20px;
+    cursor: pointer;
+}
+
+#cart-popup #go-to-order {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#cart-popup #go-to-order a {
+    color: #fff;
+    text-decoration: none;
+    background-color: #00e765;
+    padding: 5px 15px;
+}
+
+#cart-popup #go-to-order a:hover {
+    text-decoration: underline;
+}
+
+#cart-block p {
+    text-align: center;
+}

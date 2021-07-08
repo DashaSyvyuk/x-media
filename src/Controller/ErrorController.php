@@ -29,7 +29,7 @@ class ErrorController extends AbstractController
 
         return $this->render('bundles/TwigBundle/Exception/error404.html.twig', [
             'categories' => $categories,
-            'totalCount' => $_COOKIE['totalCount']
+            'totalCount' => $_COOKIE['totalCount'] ?? 0
         ]);
     }
 }

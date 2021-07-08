@@ -9,3 +9,7 @@ categories:
 product:
     path: /products/{id}
     controller: App\Controller\ProductPageController::get
+
+cart:
+    path: /cart
+    controller: App\Controller\CartController::getCart

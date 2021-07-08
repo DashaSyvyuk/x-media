@@ -1,0 +1,17 @@
+<div id="cart-block">
+    <div id="close-cart"><img src="/images/close.png"></div>
+    {% if products|length > 0 %}
+        <table>
+        {% for product in products %}
+            <tr data-id="{{ product.id }}" data-name="{{ product.name }}">
+                <td>{{ product.name }}</td>
+                <td><input type="text" name="count" value="{{ product.count }}" pattern="\d+"></td>
+                <td><img class="delete" src="/images/delete.png"></td>
+            </tr>
+        {% endfor %}
+        </table>
+        <div id="go-to-order"><a href="">Перейти до оформлення замовлення</a></div>
+    {% else %}
+        <p>Ви ще не додали товари в корзину</p>
+    {% endif %}
+</div>

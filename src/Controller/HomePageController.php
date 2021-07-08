@@ -49,7 +49,7 @@ class HomePageController extends AbstractController
             'sliders' => $sliders,
             'categories' => $categories,
             'products' => $products,
-            'totalCount' => $_COOKIE['totalCount']
+            'totalCount' => $_COOKIE['totalCount'] ?? 0
         ]);
     }
 }
