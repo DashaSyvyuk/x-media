@@ -2,6 +2,7 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('home') }}
+    {{ encore_entry_script_tags('product') }}
 {% endblock %}
 
 {% block body %}
@@ -10,18 +11,46 @@
         {% include 'partials/header.html.twig' %}
     </header>
 
-    <section class="category">
+    <section class="category product-page">
         <div class="category-title">{{ product.title }}</div>
 
         <div class="breadcrumb">
             <a href="/">Головна</a>
             <span>/</span>
-            <a href="/categories/{{ product.getCategory().slug }}">{{ product.getCategory().title }}</a>
+            <a href="/categories/{{ product.getCategory().slug }}">&nbsp{{ product.getCategory().title }}</a>
             <span>/</span>
             <a href="" class="selected">{{ product.title }}</a>
         </div>
 
+        <div class="images">
+            <div class="list">
+                {% for image in product.getImages() %}
+                    <img src="/{{ image.imageUrl }}">
+                {% endfor %}
+            </div>
+            <div class="main">
+                <img src="/{{ product.getImages()[0].imageUrl }}">
+            </div>
+        </div>
 
+        <div class="detail">
+            <div class="attributes">
+                {% for attribute in product.getFilterAttributes() %}
+                    <div class="attribute">
+                        <div class="title">{{ attribute.getFilter().getTitle() }}</div>
+                        <div class="value">{{ attribute.getValue() }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="price">{{ product.getPrice() }} грн</div>
+            <div class="add2cart">
+                <img src="/images/cart.png">
+            </div>
+        </div>
+
+        <div class="description">
+            {{ product.getDescription() }}
+        </div>
     </section>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 import './styles/app.css';
 import './bootstrap';
-import 'slick-carousel'
+import 'slick-carousel';
 import $ from 'jquery';
 
 $("#slider").slick({
@@ -35,10 +35,10 @@ $('.product .inner img').on('mouseout', (e) => {
     $(e.currentTarget).attr('src', first);
 });
 
-$('.product .inner .add2cart img').on('mouseover', (e) => {
+$('.add2cart img').on('mouseover', (e) => {
     $(e.currentTarget).attr('src', '/images/cart_active.png');
 });
 
-$('.product .inner .add2cart img').on('mouseout', (e) => {
+$('.add2cart img').on('mouseout', (e) => {
     $(e.currentTarget).attr('src', '/images/cart.png');
 });
