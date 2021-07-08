@@ -49,6 +49,7 @@ class CategoryPageController extends AbstractController
 
         if (!$category) {
             return $this->render('bundles/TwigBundle/Exception/error404.html.twig', [
+                'totalCount' => $_COOKIE['totalCount'],
                 'categories' => $categories
             ]);
         }
@@ -75,7 +76,8 @@ class CategoryPageController extends AbstractController
                 'categories' => $categories,
                 'filters' => $filters,
                 'pagination' => $pagination,
-                'query' => $query
+                'query' => $query,
+                'totalCount' => $_COOKIE['totalCount'],
             ]);
         }
     }

@@ -15,5 +15,12 @@
             <button type="submit"><img src="/images/search.png" /></button>
         </form>
     </div>
-    <div id="cart"></div>
+    <div id="cart">
+        <img src="/images/cart_active.png">
+        <div id="cart-count" {% if totalCount > 0 %}style="display: block"{% endif %}/>
+            {% if totalCount > 0 %}
+                {{ totalCount }}
+            {% endif %}
+        </div>
+    </div>
 </div>

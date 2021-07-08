@@ -63,6 +63,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-around;
+    padding: 5px;
 }
 
 #menu #logo a {
@@ -108,6 +109,24 @@ header {
 
 #menu #search img {
     width: 27px;
+}
+
+#menu #cart {
+    position: relative;
+}
+
+#menu #cart-count {
+    background-color: #00e765;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: none;
+}
+
+#menu #cart img {
+    width: 50px;
+    cursor: pointer;
 }
 
 section {

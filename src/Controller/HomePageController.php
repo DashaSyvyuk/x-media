@@ -48,7 +48,8 @@ class HomePageController extends AbstractController
         return $this->render('home_page/index.html.twig', [
             'sliders' => $sliders,
             'categories' => $categories,
-            'products' => $products
+            'products' => $products,
+            'totalCount' => $_COOKIE['totalCount']
         ]);
     }
 }
