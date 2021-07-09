@@ -7,6 +7,7 @@ $(document).on('click', '.add2cart img', (e) => {
     let count = 1;
     const id = $(e.currentTarget).data('id');
     const name = $(e.currentTarget).data('name');
+    const price = $(e.currentTarget).data('price');
 
     if (cart.length > 0) {
         cart.map((item) => {
@@ -18,7 +19,7 @@ $(document).on('click', '.add2cart img', (e) => {
         });
     }
 
-    addProduct(id, name, count);
+    addProduct(id, name, count, price);
     showCart();
 });
 
@@ -32,8 +33,9 @@ $(document).on('change', '#cart-block input', (e) => {
     const count = parseInt($(e.currentTarget).val());
     const id = $(e.currentTarget).closest('tr').data('id');
     const name = $(e.currentTarget).closest('tr').data('name');
+    const price = $(e.currentTarget).closest('tr').data('price');
 
-    addProduct(id, name, count);
+    addProduct(id, name, count, price);
 });
 
 $(document).on('click', '#close-cart', () => {
@@ -99,7 +101,7 @@ function removeProduct(id) {
     setCookie('totalCount', getTotalCount(result), {secure: true, 'max-age': 3600 * 24});
 }
 
-function addProduct(id, name, count) {
+function addProduct(id, name, count, price) {
     let cart = JSON.parse(getCookie('cart') !== undefined ? getCookie('cart') : '[]');
     let alreadyExists = 0;
 
@@ -120,7 +122,8 @@ function addProduct(id, name, count) {
             {
                 name,
                 id,
-                count
+                count,
+                price
             }
         ]
     }

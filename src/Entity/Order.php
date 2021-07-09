@@ -68,6 +68,11 @@ class Order
     private int $total = 0;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderItem", mappedBy="order", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+     */
+    private $items;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -170,6 +175,30 @@ class Order
     public function getTotal(): int
     {
         return $this->total;
+    }
+
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param OrderItem $item
+     */
+    public function addItem(OrderItem $item)
+    {
+        $item->setOrder($this);
+        $this->items[] = $item;
+    }
+
+    /**
+     * @param OrderItem $item
+     */
+    public function removeItem(OrderItem $item)
+    {
+        if ($this->items->contains($item)) {
+            $this->items->removeElement($item);
+        }
     }
 
     public function getCreatedAt(): DateTime

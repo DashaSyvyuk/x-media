@@ -18,4 +18,11 @@ class OrderItemRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, OrderItem::class);
     }
+
+    public function create(OrderItem $orderItem)
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($orderItem);
+        $entityManager->flush();
+    }
 }

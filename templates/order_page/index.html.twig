@@ -1,0 +1,66 @@
+{% extends "base.html.twig" %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('home') }}
+    {{ encore_entry_script_tags('cart') }}
+{% endblock %}
+
+{% block body %}
+
+    <header>
+        {% include 'partials/header.html.twig' %}
+    </header>
+
+    <section class="category">
+        <div class="category-title">Оформлення замовлення</div>
+
+        <div class="breadcrumb">
+            <a href="/">Головна</a>
+            <span>/</span>
+            <a href="" class="selected">Оформлення замовлення</a>
+        </div>
+
+        <div class="order-place">
+            <form method="POST" action="/order">
+                <div class="input">
+                    <p>Ім'я <span class="required">*</span></p>
+                    <input type="text" name="name" autocomplete="off" required>
+                </div>
+                <div class="input">
+                    <p>Прізвище <span class="required">*</span></p>
+                    <input type="text" name="surname" autocomplete="off" required>
+                </div>
+                <div class="input">
+                    <p>Номер телефону <span class="required">*</span></p>
+                    <input type="text" name="phone" autocomplete="off" required>
+                </div>
+                <div class="input">
+                    <p>E-mail</p>
+                    <input type="text" name="email" autocomplete="off">
+                </div>
+                <div class="input">
+                    <p>Адреса <span class="required">*</span></p>
+                    <textarea name="address" required></textarea>
+                </div>
+                <div class="input">
+                    <p>Спосіб оплати</p>
+                    <select name="paytype">
+                        <option>Готівкою при отриманні</option>
+                        <option>Оплата на карту</option>
+                    </select>
+                </div>
+                <div class="input">
+                    <p>Коментар</p>
+                    <textarea name="comment"></textarea>
+                </div>
+                <div class="input">
+                    <p class="total-price">Загальна вартість: <span>{{ totalPrice }} грн</span></p>
+                </div>
+                <div class="input">
+                    <input type="submit" value="Створити">
+                </div>
+            </form>
+        </div>
+    </section>
+
+{% endblock %}

@@ -460,8 +460,9 @@ section .title {
     width: 30px;
     text-align: center;
     border-radius: unset;
-    border: 1px solid #000;
+    border: 1px solid #ccc;
     padding: 3px;
+    outline: none;
 }
 
 #cart-popup #cart-block table td img {
@@ -488,4 +489,74 @@ section .title {
 
 #cart-block p {
     text-align: center;
+}
+
+.order-place {
+    width: 40%;
+    margin: 0 auto;
+}
+
+.order-place input, .order-place select, .order-place textarea {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: none;
+    outline: none;
+}
+
+.order-place .required {
+    color: #ff0000;
+}
+
+.order-place input[type=submit] {
+    background-color: #00e765;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.order-place .total-price {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.order-place .total-price span {
+    color: #00e765;
+}
+
+.order-detail {
+    width: 40%;
+    margin: 50px auto 0;
+}
+
+.order-detail .products td {
+    padding: 10px;
+}
+
+.order-detail .products td a {
+    color: #000;
+    text-decoration: none;
+}
+
+.order-detail .products td a:hover {
+    text-decoration: underline;
+}
+
+.order-detail p span {
+    font-weight: bold;
+    color: #00e765;
+}
+
+.order-detail .products img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+}
+
+.order-detail .thanks {
+    text-align: center;
+    margin-bottom: 30px;
 }

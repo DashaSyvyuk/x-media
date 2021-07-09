@@ -34,6 +34,12 @@ class OrderItem
     private Product $product;
 
     /**
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="orderItems")
+     */
+    private Order $order;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private DateTime $createdAt;
@@ -59,6 +65,19 @@ class OrderItem
     public function setProduct(Product $product)
     {
         $this->product = $product;
+    }
+
+    public function getOrder(): Order
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function setOrder(Order $order)
+    {
+        $this->order = $order;
     }
 
     /**

@@ -13,3 +13,12 @@ product:
 cart:
     path: /cart
     controller: App\Controller\CartController::getCart
+
+order:
+    path: /order-create
+    controller: App\Controller\OrderPageController::create
+
+post_order:
+    path: /order
+    controller: App\Controller\OrderPageController::post
+    methods: POST
