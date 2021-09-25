@@ -21,6 +21,7 @@ final class FilterAttributeAdmin extends AbstractAdmin
             ->add('filter', ModelType::class,  [
                 'placeholder' => 'Оберіть параметр',
             ])
+            ->add('priority')
             ->add('products')
         ;
     }

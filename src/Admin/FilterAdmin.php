@@ -17,6 +17,7 @@ final class FilterAdmin extends AbstractAdmin
                 'label' => 'Назва параметру',
                 'required' => true
             ])
+            ->add('priority')
         ;
     }
 
