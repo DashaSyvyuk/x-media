@@ -46,7 +46,7 @@ body, html {
 
 .home-page #menu {
     position: absolute;
-    top: 30%;
+    top: 10%;
     background-color: rgba(255, 255, 255, .8);
     box-shadow: 0 0 15px rgba(0, 0, 0, .3);
 }
@@ -125,7 +125,7 @@ header {
 }
 
 #menu #cart img {
-    width: 50px;
+    width: 30px;
     cursor: pointer;
 }
 
@@ -149,6 +149,10 @@ section .title {
     box-shadow: 0 0 15px rgba(0, 0, 0, .3);
     display: flex;
     flex-wrap: wrap;
+}
+
+.product .product-image {
+    width: 100%;
 }
 
 .product img {
@@ -191,7 +195,7 @@ section .title {
 }
 
 .product .add2cart img {
-    width: 40px;
+    width: 30px;
     height: auto;
     cursor: pointer;
 }
@@ -407,7 +411,7 @@ section .title {
 }
 
 .product-page .detail .add2cart img {
-    width: 60px;
+    width: 40px;
     cursor: pointer;
 }
 
