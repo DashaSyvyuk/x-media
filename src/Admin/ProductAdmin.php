@@ -10,28 +10,42 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Sonata\Form\Type\CollectionType;
 
 final class ProductAdmin extends AbstractAdmin
 {
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('title', TextType::class, [
-                'label' => 'Назва',
-                'required' => true
-            ])
-            ->add('status', ChoiceType::class, [
-                'choices' => [
-                    'Активний' => 'ACTIVE',
-                    'Заблокований' => 'DISABLED'
-                ],
-                'label' => 'Статус'
-            ])
-            ->add('price')
-            ->add('category', ModelType::class,  [
-                'placeholder' => 'Оберіть категорію',
-            ])
-            ->add('description', TextareaType::class)
+            ->with('Загальна інформація')
+                ->add('title', TextType::class, [
+                    'label' => 'Назва',
+                    'required' => true
+                ])
+                ->add('status', ChoiceType::class, [
+                    'choices' => [
+                        'Активний' => 'ACTIVE',
+                        'Заблокований' => 'DISABLED'
+                    ],
+                    'label' => 'Статус'
+                ])
+                ->add('price')
+                ->add('category', ModelType::class,  [
+                    'placeholder' => 'Оберіть категорію',
+                ])
+                ->add('description', TextareaType::class)
+            ->end()
+            ->with('Зображення')
+                ->add('images', CollectionType::class, [
+                    'type_options' => [
+                        'delete' => true
+                    ]
+                ], [
+                        'edit' => 'inline',
+                        'inline' => 'table'
+                    ]
+                )
+            ->end()
         ;
     }
 

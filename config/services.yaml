@@ -43,7 +43,7 @@ services:
         class: App\Admin\ProductImageAdmin
         arguments: [ ~, App\Entity\ProductImage, ~ ]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Контент, label: Картинки }
+            - { name: sonata.admin, manager_type: orm, group: Контент, label: Картинки, show_in_dashboard: false }
 
     admin.slider:
         class: App\Admin\SliderAdmin

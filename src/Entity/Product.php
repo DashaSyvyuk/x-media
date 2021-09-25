@@ -57,7 +57,7 @@ class Product
     private Category $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductImage", mappedBy="product", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductImage", mappedBy="product", cascade={"all"}, orphanRemoval=true)
      */
     private $images;
 
@@ -146,6 +146,16 @@ class Product
         return $this->images;
     }
 
+    public function setImages($images)
+    {
+        if (count($images) > 0) {
+            foreach ($images as $image) {
+                $this->addImage($image);
+            }
+        }
+
+    }
+
     /**
      * @param ProductImage $image
      */
@@ -158,7 +168,7 @@ class Product
     /**
      * @param ProductImage $image
      */
-    public function removeImage($image)
+    public function removeImage(ProductImage $image)
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);

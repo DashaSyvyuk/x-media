@@ -27,7 +27,6 @@ class ProductImageAdmin extends AbstractAdmin
         $form
             ->add('file', FileType::class, $fileFormOptions)
             ->add('position', null, ['label' => 'Пріоритет'])
-            ->add('product')
         ;
     }
 
