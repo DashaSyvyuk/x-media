@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
@@ -24,13 +25,13 @@ class Filter
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $title = "";
+    private string $title = "";
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\FilterAttribute",
@@ -39,14 +40,20 @@ class Filter
     private $attributes;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @var int
+     * @ORM\Column(type="integer")
      */
-    public $createdAt;
+    private int $priority = 0;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    public $updatedAt;
+    public DateTime $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    public DateTime $updatedAt;
 
     public function __construct()
     {
@@ -100,6 +107,22 @@ class Filter
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param int $priority
+     */
+    public function setPriority(int $priority)
+    {
+        $this->priority = $priority;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 
     public function getCreatedAt()

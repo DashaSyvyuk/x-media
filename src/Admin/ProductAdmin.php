@@ -39,12 +39,23 @@ final class ProductAdmin extends AbstractAdmin
                 ->add('images', CollectionType::class, [
                     'type_options' => [
                         'delete' => true
-                    ]
+                    ],
+                    'label' => 'Зображення'
                 ], [
-                        'edit' => 'inline',
-                        'inline' => 'table'
-                    ]
-                )
+                    'edit' => 'inline',
+                    'inline' => 'table'
+                ])
+            ->end()
+            ->with('Характеристики')
+                ->add('characteristics', CollectionType::class, [
+                    'type_options' => [
+                        'delete' => true
+                    ],
+                    'label' => 'Характеристики'
+                ], [
+                    'edit' => 'inline',
+                    'inline' => 'table'
+                ])
             ->end()
         ;
     }

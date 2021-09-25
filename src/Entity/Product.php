@@ -62,6 +62,11 @@ class Product
     private $images;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductCharacteristic", mappedBy="product", cascade={"all"}, orphanRemoval=true)
+     */
+    private $characteristics;
+
+    /**
      * @ManyToMany(targetEntity="App\Entity\FilterAttribute")
      * @ORM\JoinTable(name="product_filter_attribute",
      *      joinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")},
@@ -84,6 +89,7 @@ class Product
     {
         $this->images = new ArrayCollection();
         $this->filterAttributes = new ArrayCollection();
+        $this->characteristics = new ArrayCollection();
     }
 
     public function getId(): int
@@ -153,7 +159,6 @@ class Product
                 $this->addImage($image);
             }
         }
-
     }
 
     /**
@@ -172,6 +177,39 @@ class Product
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
+        }
+    }
+
+    public function getCharacteristics()
+    {
+        return $this->characteristics;
+    }
+
+    public function setCharacteristics($characteristics)
+    {
+        if (count($characteristics) > 0) {
+            foreach ($characteristics as $characteristic) {
+                $this->addCharacteristic($characteristic);
+            }
+        }
+    }
+
+    /**
+     * @param ProductCharacteristic $characteristic
+     */
+    public function addCharacteristic(ProductCharacteristic $characteristic)
+    {
+        $characteristic->setProduct($this);
+        $this->characteristics[] = $characteristic;
+    }
+
+    /**
+     * @param ProductCharacteristic $characteristic
+     */
+    public function removeCharacteristic(ProductCharacteristic $characteristic)
+    {
+        if ($this->characteristics->contains($characteristic)) {
+            $this->characteristics->removeElement($characteristic);
         }
     }
 
