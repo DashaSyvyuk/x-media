@@ -18,30 +18,12 @@ final class FilterAttributeAdmin extends AbstractAdmin
                 'label' => 'Значення',
                 'required' => true
             ])
-            ->add('filter', ModelType::class,  [
-                'placeholder' => 'Оберіть параметр',
-            ])
             ->add('priority')
-            ->add('products')
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('value');
-    }
-
-    protected function configureListFields(ListMapper $list): void
-    {
-        $list
-            ->addIdentifier('value', null, ['label' => 'Значення'])
-            ->add('filter', null, ['label' => 'Параметр'])
-            ->add('_action', 'actions', [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                ]
-            ])
-        ;
     }
 }

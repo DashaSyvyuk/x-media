@@ -61,7 +61,7 @@ services:
         class: App\Admin\FilterAttributeAdmin
         arguments: [ ~, App\Entity\FilterAttribute, ~ ]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Фільтри, label: Параметри фільтрів }
+            - { name: sonata.admin, manager_type: orm, group: Фільтри, label: Параметри фільтрів, show_in_dashboard: false }
 
     admin.product_characteristic:
         class: App\Admin\ProductCharacteristicAdmin
