@@ -38,6 +38,16 @@ class Category
     /**
      * @ORM\Column(type="string")
      */
+    private ?string $metaKeyword = "";
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private ?string $metaDescription = "";
+
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $slug = "";
 
     /**
@@ -83,6 +93,26 @@ class Category
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setMetaKeyword(?string $metaKeyword): void
+    {
+        $this->metaKeyword = $metaKeyword;
+    }
+
+    public function getMetaKeyword(): ?string
+    {
+        return $this->metaKeyword;
+    }
+
+    public function setMetaDescription(?string $metaDescription): void
+    {
+        $this->metaDescription = $metaDescription;
+    }
+
+    public function getMetaDescription(): ?string
+    {
+        return $this->metaDescription;
     }
 
     public function setSlug(string $slug): void

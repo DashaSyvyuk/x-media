@@ -29,6 +29,14 @@ final class CategoryAdmin extends AbstractAdmin
                 ],
                 'label' => 'Статус'
             ])
+            ->add('metaKeyword', TextType::class, [
+                'label' => 'Ключові слова',
+                'required' => true
+            ])
+            ->add('metaDescription', TextType::class, [
+                'label' => 'Опис',
+                'required' => true
+            ])
             ->add('position', null, ['label' => 'Пріоритет'])
         ;
     }

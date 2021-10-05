@@ -51,6 +51,16 @@ class Product
     private ?string $description = "";
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private ?string $metaKeyword = "";
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private ?string $metaDescription = "";
+
+    /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      * @ORM\ManyToOne(targetEntity="App\Entity\Category")
      */
@@ -125,6 +135,26 @@ class Product
     public function getTitle(): ?string
     {
         return $this->title;
+    }
+
+    public function setMetaKeyword(?string $metaKeyword): void
+    {
+        $this->metaKeyword = $metaKeyword;
+    }
+
+    public function getMetaKeyword(): ?string
+    {
+        return $this->metaKeyword;
+    }
+
+    public function setMetaDescription(?string $metaDescription): void
+    {
+        $this->metaDescription = $metaDescription;
+    }
+
+    public function getMetaDescription(): ?string
+    {
+        return $this->metaDescription;
     }
 
     public function setDescription(?string $description)

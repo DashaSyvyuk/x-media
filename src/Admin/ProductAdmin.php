@@ -57,6 +57,16 @@ final class ProductAdmin extends AbstractAdmin
                     'inline' => 'table'
                 ])
             ->end()
+            ->with('Мета теги')
+                ->add('metaKeyword', TextType::class, [
+                    'label' => 'Ключові слова',
+                    'required' => true
+                ])
+                ->add('metaDescription', TextType::class, [
+                    'label' => 'Опис',
+                    'required' => true
+                ])
+            ->end()
         ;
     }
 
