@@ -41,6 +41,16 @@ class Product
     private int $price = 0;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private int $purchasePrice = 0;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private int $deliveryCost = 0;
+
+    /**
      * @ORM\Column(type="string")
      */
     private ?string $title = "";
@@ -49,6 +59,11 @@ class Product
      * @ORM\Column(type="text")
      */
     private ?string $description = "";
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private ?string $note = "";
 
     /**
      * @ORM\Column(type="string")
@@ -65,6 +80,12 @@ class Product
      * @ORM\ManyToOne(targetEntity="App\Entity\Category")
      */
     private Category $category;
+
+    /**
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Currency")
+     */
+    private Currency $currency;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProductImage", mappedBy="product", cascade={"all"}, orphanRemoval=true)
@@ -127,6 +148,26 @@ class Product
         $this->price = $price;
     }
 
+    public function getPurchasePrice(): int
+    {
+        return $this->purchasePrice;
+    }
+
+    public function setPurchasePrice(int $purchasePrice): void
+    {
+        $this->purchasePrice = $purchasePrice;
+    }
+
+    public function getDeliveryCost(): int
+    {
+        return $this->deliveryCost;
+    }
+
+    public function setDeliveryCost(int $deliveryCost): void
+    {
+        $this->deliveryCost = $deliveryCost;
+    }
+
     public function setTitle(?string $title): void
     {
         $this->title = $title;
@@ -167,6 +208,16 @@ class Product
         return $this->description;
     }
 
+    public function setNote(?string $note)
+    {
+        $this->note = $note;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
     public function setCategory(Category $category): void
     {
         $this->category = $category;
@@ -175,6 +226,16 @@ class Product
     public function getCategory(): Category
     {
         return $this->category;
+    }
+
+    public function setCurrency(Currency $currency): void
+    {
+        $this->currency = $currency;
+    }
+
+    public function getCurrency(): Currency
+    {
+        return $this->currency;
     }
 
     public function getImages()
@@ -290,6 +351,26 @@ class Product
     public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getPurchasePriceUAH()
+    {
+        return $this->purchasePrice * $this->currency->getExchangeRate();
+    }
+
+    public function getTotalPrice()
+    {
+        return $this->getPurchasePriceUAH() + $this->deliveryCost;
+    }
+
+    public function getMarge()
+    {
+        return $this->price - $this->getTotalPrice();
+    }
+
+    public function getMargePercentage()
+    {
+        return ($this->getMarge() * 100) / $this->price;
     }
 
     public function __toString():string

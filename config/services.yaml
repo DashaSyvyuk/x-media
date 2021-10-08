@@ -74,3 +74,9 @@ services:
         arguments: [ ~, App\Entity\Setting, ~ ]
         tags:
             - { name: sonata.admin, manager_type: orm, group: Налаштування, label: Налаштування, show_in_dashboard: true }
+
+    admin.currency:
+        class: App\Admin\CurrencyAdmin
+        arguments: [ ~, App\Entity\Currency, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Налаштування, label: Курс валют, show_in_dashboard: true }

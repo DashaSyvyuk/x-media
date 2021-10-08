@@ -7,6 +7,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,7 +18,7 @@ final class ProductAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->with('Загальна інформація')
+            ->with('Загальна інформація', ['class' => 'col-md-6'])
                 ->add('title', TextType::class, [
                     'label' => 'Назва',
                     'required' => true
@@ -29,11 +30,39 @@ final class ProductAdmin extends AbstractAdmin
                     ],
                     'label' => 'Статус'
                 ])
-                ->add('price')
                 ->add('category', ModelType::class,  [
                     'placeholder' => 'Оберіть категорію',
                 ])
-                ->add('description', TextareaType::class)
+                ->add('description', TextareaType::class, ['label' => 'Опис'])
+                ->add('note', TextareaType::class, ['label' => 'Нотатки'])
+            ->end()
+            ->with('Ціни', ['class' => 'col-md-6'])
+                ->add('currency', ModelType::class, [
+                    'placeholder' => 'Оберіть валюту'
+                ])
+                ->add('purchasePrice', null, ['label' => 'Ціна (zl)'])
+                ->add('purchasePriceUAH', NumberType::class, [
+                    'disabled' => true,
+                    'required' => false,
+                    'label' => 'Ціна (UAH)'
+                ])
+                ->add('deliveryCost', null, ['label' => 'Витрати на доставку'])
+                ->add('totalPrice', NumberType::class, [
+                    'label' => 'Загальна вартість товару',
+                    'disabled' => true,
+                    'required' => false
+                ])
+                ->add('price', null, ['label' => 'Ціна'])
+                ->add('marge', NumberType::class, [
+                    'label' => 'Marge(UAH)',
+                    'disabled' => true,
+                    'required' => false
+                ])
+                ->add('margePercentage', NumberType::class, [
+                    'label' => 'Marge(%)',
+                    'disabled' => true,
+                    'required' => false
+                ])
             ->end()
             ->with('Зображення')
                 ->add('images', CollectionType::class, [
