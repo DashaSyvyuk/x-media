@@ -22,9 +22,7 @@ class FilterRepository extends ServiceEntityRepository
     public function findByCategory(string $slug)
     {
         return $this->createQueryBuilder('fp')
-            ->leftJoin('fp.attributes', 'attributes')
-            ->leftJoin('attributes.products', 'products')
-            ->leftJoin('products.category', 'category')
+            ->leftJoin('fp.category', 'category')
             ->andWhere('category.slug = :slug')
             ->setParameter('slug', $slug)
             ->getQuery()
