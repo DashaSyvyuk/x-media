@@ -7,7 +7,6 @@ use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
-use Doctrine\ORM\Mapping\ManyToMany;
 
 /**
  * @ORM\Table("product", indexes={
@@ -61,7 +60,7 @@ class Product
     private ?string $description = "";
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private ?string $note = "";
 
@@ -98,11 +97,7 @@ class Product
     private $characteristics;
 
     /**
-     * @ManyToMany(targetEntity="App\Entity\FilterAttribute")
-     * @ORM\JoinTable(name="product_filter_attribute",
-     *      joinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="filter_attribute_id", referencedColumnName="id")}
-     *      )
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductFilterAttribute", mappedBy="product", cascade={"all"}, orphanRemoval=true)
      */
     private $filterAttributes;
 
@@ -305,21 +300,22 @@ class Product
     }
 
     /**
-     * @param FilterAttribute $filterAttribute
+     * @param ProductFilterAttribute $filterAttribute
      */
-    public function addFilterAttribute(FilterAttribute $filterAttribute)
+    public function addFilterAttribute(ProductFilterAttribute $filterAttribute)
     {
         if ($this->filterAttributes->contains($filterAttribute)) {
             return;
         }
 
+        $filterAttribute->setProduct($this);
         $this->filterAttributes->add($filterAttribute);
     }
 
     /**
-     * @param FilterAttribute $filterAttribute
+     * @param ProductFilterAttribute $filterAttribute
      */
-    public function removeFilterAttribute(FilterAttribute $filterAttribute)
+    public function removeFilterAttribute(ProductFilterAttribute $filterAttribute)
     {
         if (!$this->filterAttributes->contains($filterAttribute)) {
             return;

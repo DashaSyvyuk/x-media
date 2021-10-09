@@ -89,6 +89,17 @@ final class ProductAdmin extends AbstractAdmin
                     'inline' => 'table'
                 ])
             ->end()
+            ->with('Фільтри')
+                ->add('filterAttributes', CollectionType::class, [
+                    'type_options' => [
+                        'delete' => true
+                    ],
+                    'label' => 'Фільтри'
+                ], [
+                    'edit' => 'inline',
+                    'inline' => 'table'
+                ])
+            ->end()
             ->with('Мета теги')
                 ->add('metaKeyword', TextType::class, [
                     'label' => 'Ключові слова',
@@ -98,8 +109,7 @@ final class ProductAdmin extends AbstractAdmin
                     'label' => 'Опис',
                     'required' => true
                 ])
-            ->end()
-        ;
+            ->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void

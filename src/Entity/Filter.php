@@ -46,6 +46,12 @@ class Filter
     private int $priority = 0;
 
     /**
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category")
+     */
+    private Category $category;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -82,6 +88,22 @@ class Filter
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function setCategory(Category $category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCategory(): Category
+    {
+        return $this->category;
     }
 
     /**

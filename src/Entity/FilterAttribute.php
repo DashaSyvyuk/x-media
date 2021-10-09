@@ -4,10 +4,8 @@ namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
-use Doctrine\ORM\Mapping\ManyToMany;
 
 /**
  * @ORM\Table("filter_attributes", indexes={
@@ -42,15 +40,6 @@ class FilterAttribute
     private $filter;
 
     /**
-     * @ManyToMany(targetEntity="App\Entity\Product")
-     * @ORM\JoinTable(name="product_filter_attribute",
-     *      joinColumns={@ORM\JoinColumn(name="filter_attribute_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")}
-     *      )
-     */
-    private $products;
-
-    /**
      * @var int
      * @ORM\Column(type="integer")
      */
@@ -65,11 +54,6 @@ class FilterAttribute
      * @ORM\Column(type="datetime")
      */
     public DateTime $updatedAt;
-
-    public function __construct()
-    {
-        $this->products = new ArrayCollection();
-    }
 
     /**
      * @return int
@@ -109,35 +93,6 @@ class FilterAttribute
     public function getFilter(): ?Filter
     {
         return $this->filter;
-    }
-
-    /**
-     * @param Product $product
-     */
-    public function addProduct(Product $product)
-    {
-        if ($this->products->contains($product)) {
-            return;
-        }
-
-        $this->products->add($product);
-    }
-
-    /**
-     * @param Product $product
-     */
-    public function removeProduct(Product $product)
-    {
-        if (!$this->products->contains($product)) {
-            return;
-        }
-
-        $this->products->removeElement($product);
-    }
-
-    public function getProducts()
-    {
-        return $this->products;
     }
 
     /**
