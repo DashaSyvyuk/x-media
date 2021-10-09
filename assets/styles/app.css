@@ -236,6 +236,14 @@ section .title {
     float: left;
 }
 
+.category #filters .filter-title {
+    font-weight: bold;
+}
+
+.category #filters .filter {
+    margin-top: 40px;
+}
+
 .category #products {
     width: calc(100% - 300px);
     float: left;

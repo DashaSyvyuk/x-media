@@ -139,12 +139,15 @@ class ProductImage
             return;
         }
 
+        $safeFilename = md5(date('Y-m-d H:i:s:u'));
+        $fileName = $safeFilename . '.' . $this->getFile()->guessExtension();
+
         $this->getFile()->move(
             self::SERVER_PATH_TO_IMAGE_FOLDER,
-            $this->getFile()->getClientOriginalName()
+            $fileName
         );
 
-        $this->imageUrl = 'images/products/' . $this->getFile()->getClientOriginalName();
+        $this->imageUrl = 'images/products/' . $fileName;
 
         $this->setFile(null);
     }
