@@ -76,7 +76,7 @@ class Product
 
     /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="products)
      */
     private Category $category;
 

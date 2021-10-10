@@ -29,8 +29,9 @@ class ProductRepository extends ServiceEntityRepository
 
         if ($attributes) {
             $query
-                ->leftJoin('p.filterAttributes', 'attributes')
-                ->andWhere('attributes.id IN (:ids)')
+                ->leftJoin('p.filterAttributes', 'productFilterAttribute')
+                ->leftJoin('productFilterAttribute.filterAttribute', 'filterAttribute')
+                ->andWhere('filterAttribute.id IN (:ids)')
                 ->setParameter('ids', $attributes);
         }
 

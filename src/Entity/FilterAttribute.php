@@ -35,7 +35,7 @@ class FilterAttribute
     /**
      * @var Filter
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Filter")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Filter", inversedBy="attributes")
      */
     private $filter;
 
