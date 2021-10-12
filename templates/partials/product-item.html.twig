@@ -1,7 +1,7 @@
 <div class="product">
     <div class="inner">
         <a href="/products/{{ product.id }}" class="product-image">
-            <img src="{% if product.images %}/{{ product.images[0].imageUrl }}{% endif %}">
+            <img src="/{{ product.images[0].imageUrl }}" data-first="/{{ product.images[0].imageUrl }}" data-next="/{{ product.images[1].imageUrl }}">
         </a>
         <div class="product-title"><a href="/products/{{ product.id }}">{{ product.title }}</a></div>
         <div class="price">{{ product.price }} грн</div>

@@ -32,3 +32,13 @@ $(document).on('mouseover', '.add2cart img', (e) => {
 $(document).on('mouseout', '.add2cart img', (e) => {
     $(e.currentTarget).attr('src', '/images/cart.png');
 });
+
+$(document).on('mouseover', '.product .inner img', (e) => {
+    const next = $(e.currentTarget).data('next');
+    $(e.currentTarget).attr('src', next);
+});
+
+$(document).on('mouseout', '.product .inner img', (e) => {
+    const first = $(e.currentTarget).data('first');
+    $(e.currentTarget).attr('src', first);
+});
