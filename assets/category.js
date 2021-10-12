@@ -3,6 +3,13 @@ import './bootstrap';
 import $ from 'jquery';
 
 $('#filters input[type=checkbox]').on('change', () => {
+    const height = $('#products .products').height();
+    const width = $('#products .products').width();
+    $('#products .loader').css({
+        'display': 'block',
+        'height': height + 'px',
+        'width': width + 'px'
+    });
     const url = window.location.pathname;
     const form = $('#filter-form').serialize();
     const query = form.split('&');
@@ -19,6 +26,7 @@ $('#filters input[type=checkbox]').on('change', () => {
     $.get(newUrl, (data) => {
         const obj = JSON.parse(data);
 
-       $('#products').html(obj.products);
+       $('#products .products').html(obj.products);
     });
+    $('#products .loader').css('display', 'none');
 });
