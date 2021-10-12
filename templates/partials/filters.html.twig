@@ -1,13 +1,22 @@
 <form id="filter-form">
-    {% for filter in filters %}
+    {% for key, filter in filters %}
+        {% if filter.getAttributes()|length > filterCount  %}
+            {% set height = 32 * filterCount  %}
+        {% else %}
+            {% set height = 0  %}
+        {% endif %}
         <div class="filter">
             <p class="filter-title">{{ filter.title }}:</p>
-            {% for attribute in filter.getAttributes() %}
-                <label class="container">{{ attribute.value }}
-                    <input type="checkbox" name="{{ attribute.id }}" {% if attribute.id in query %}checked{% endif %}>
-                    <span class="checkmark"></span>
-                </label>
-            {% endfor %}
+            <div class="outer" {% if height > 0 %}style="height: {{ height }}px"{% endif %}>
+                <div class="inner">
+                    {% for attribute in filter.getAttributes() %}
+                        <label class="container">{{ attribute.value }}
+                            <input type="checkbox" name="{{ attribute.id }}" {% if attribute.id in query %}checked{% endif %}>
+                            <span class="checkmark"></span>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     {% endfor %}
 </form>

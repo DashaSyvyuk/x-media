@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\CategoryRepository;
 use App\Repository\FilterRepository;
 use App\Repository\ProductRepository;
+use App\Repository\SettingRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,19 +19,24 @@ class CategoryPageController extends AbstractController
 
     private ProductRepository $productRepository;
 
+    private SettingRepository $settingRepository;
+
     /**
      * @param CategoryRepository $categoryRepository
      * @param FilterRepository $filterRepository
      * @param ProductRepository $productRepository
+     * @param SettingRepository $settingRepository
      */
     public function __construct(
         CategoryRepository $categoryRepository,
         FilterRepository $filterRepository,
-        ProductRepository $productRepository
+        ProductRepository $productRepository,
+        SettingRepository $settingRepository
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->filterRepository = $filterRepository;
         $this->productRepository = $productRepository;
+        $this->settingRepository = $settingRepository;
     }
 
     public function getCategory(string $slug, PaginatorInterface $paginator, Request $request): Response
@@ -53,6 +59,10 @@ class CategoryPageController extends AbstractController
                 'categories' => $categories
             ]);
         }
+
+        $filterSetting = $this->settingRepository->findOneBy([
+            'slug' => 'filter_attribute_count'
+        ]);
 
         $filters = $this->filterRepository->findByCategory($slug);
 
@@ -78,6 +88,7 @@ class CategoryPageController extends AbstractController
                 'pagination' => $pagination,
                 'query' => $query,
                 'totalCount' => $_COOKIE['totalCount'] ?? 0,
+                'filterCount' => $filterSetting ? $filterSetting->getValue() : null
             ]);
         }
     }
