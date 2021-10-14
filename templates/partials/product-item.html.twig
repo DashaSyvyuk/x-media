@@ -4,6 +4,15 @@
             <img src="/{{ product.images[0].imageUrl }}" data-first="/{{ product.images[0].imageUrl }}" data-next="/{{ product.images[1].imageUrl }}">
         </a>
         <div class="product-title"><a href="/products/{{ product.id }}">{{ product.title }}</a></div>
+        <div class="filter-attributes">
+            {% for attribute in product.getFilterAttributes %}
+                <span>{{ attribute.getFilter().getTitle() }}: {{ attribute.getFilterAttribute().getValue() }}</span>
+                {% if loop.last %}
+                {% else %}
+                    <span> | </span>
+                {% endif %}
+            {% endfor %}
+        </div>
         <div class="price">{{ product.price }} грн</div>
         <div class="add2cart">
             <img src="/images/cart.png" data-id="{{ product.id }}" data-name="{{ product.title }}" data-price="{{ product.price }}">
