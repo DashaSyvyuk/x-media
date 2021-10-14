@@ -285,6 +285,19 @@ section .title {
     margin-bottom: 40px;
 }
 
+.category #products .order-by {
+    text-align: end;
+}
+
+.category #products .order-by select {
+    border: 1px solid #ccc;
+    border-radius: 0;
+    height: 30px;
+    padding: 0 10px;
+    font-family: "Gill Sans", sans-serif;
+    outline: none;
+}
+
 .category #products .loader {
     display: none;
     position: absolute;
@@ -324,6 +337,25 @@ section .title {
 
 .category #products .navigation span a:hover {
     text-decoration: underline;
+}
+
+.filter .price-filter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.filter .price-filter input {
+    width: 50px;
+    height: 25px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    outline: none;
+}
+
+.filter .price-filter span {
+    margin-right: 10px;
 }
 
 .container {

@@ -20,8 +20,14 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    public function findByCategoryAndAttributes(Category $category, array $attributes)
-    {
+    public function findByCategoryAndAttributes(
+        Category $category,
+        array $attributes,
+        ?string $order,
+        ?string $direction,
+        ?int $priceFrom,
+        ?int $priceTo
+    ) {
         $query = $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'category')
             ->andWhere('category = :category')
@@ -33,6 +39,22 @@ class ProductRepository extends ServiceEntityRepository
                 ->leftJoin('productFilterAttribute.filterAttribute', 'filterAttribute')
                 ->andWhere('filterAttribute.id IN (:ids)')
                 ->setParameter('ids', $attributes);
+        }
+
+        if ($priceFrom) {
+            $query
+                ->andWhere('p.price >= :from')
+                ->setParameter('from', $priceFrom);
+        }
+
+        if ($priceTo) {
+            $query
+                ->andWhere('p.price <= :to')
+                ->setParameter('to', $priceTo);
+        }
+
+        if ($order && $direction) {
+            $query->orderBy('p.' . $order, $direction);
         }
 
         return $query;

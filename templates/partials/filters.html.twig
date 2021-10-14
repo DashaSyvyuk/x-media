@@ -1,4 +1,13 @@
 <form id="filter-form">
+    <div class="filter">
+        <p class="filter-title">Ціна:</p>
+        <div class="price-filter">
+            <span>від: </span>
+            <input type="text" name="price_from" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            <span>до: </span>
+            <input type="text" name="price_to" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+        </div>
+    </div>
     {% for key, filter in filters %}
         {% if filter.getAttributes()|length > filterCount  %}
             {% set height = 32 * filterCount  %}

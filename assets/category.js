@@ -3,30 +3,112 @@ import './bootstrap';
 import $ from 'jquery';
 
 $('#filters input[type=checkbox]').on('change', () => {
-    const height = $('#products .products').height();
-    const width = $('#products .products').width();
-    $('#products .loader').css({
-        'display': 'block',
-        'height': height + 'px',
-        'width': width + 'px'
-    });
     const url = window.location.pathname;
-    const form = $('#filter-form').serialize();
-    const query = form.split('&');
-    const attributes = query.map((attribute) => {
-        let item = attribute.split('=');
+    const newUrl = url + getUrl();
 
-        return item[0];
-    });
-
-    const newUrl = url + (attributes.length > 0 ? '?filters=' + attributes.join(';') : '');
+    getProducts(newUrl);
 
     window.history.pushState('', '', newUrl);
+});
 
-    $.get(newUrl, (data) => {
+$('#products .order-by select').on('change', () => {
+    const url = window.location.pathname;
+    const newUrl = url + getUrl();
+
+    getProducts(newUrl);
+
+    window.history.pushState('', '', newUrl);
+});
+
+$('#filters input[name=price_from]').on('change', () => {
+    const url = window.location.pathname;
+    const newUrl = url + getUrl();
+
+    getProducts(newUrl);
+
+    window.history.pushState('', '', newUrl);
+});
+
+$('#filters input[name=price_to]').on('change', () => {
+    const url = window.location.pathname;
+    const newUrl = url + getUrl();
+
+    getProducts(newUrl);
+
+    window.history.pushState('', '', newUrl);
+});
+
+function getUrl() {
+    const filter = getFilter();
+    const orderBy = getOrderBy();
+    const priceFrom = getPriceFrom();
+    const priceTo = getPriceTo();
+
+    return '?' + (filter.length ? filter : '') + (orderBy.length ? '&' + orderBy : '')
+        + (priceFrom.length ? '&' + priceFrom : '') + (priceTo.length ? '&' + priceTo : '');
+}
+
+function getOrderBy() {
+    const option = $('#products .order-by select').children("option:selected");
+    const value = option.val();
+    const direction = option.data('direction');
+
+    if (value.length && direction.length) {
+        return 'order=' + value + '&direction=' + direction;
+    }
+
+    return '';
+}
+
+function getFilter() {
+    const form = $('#filter-form').serialize();
+    const query = form.split('&');
+    let attributes = query.map((attribute) => {
+        let item = attribute.split('=');
+        return item[0];
+    });
+    attributes = attributes.filter((attribute) => {
+        let item = attribute.split('=');
+        if (item[0] !== 'price_from' && item[0] !== 'price_to') {
+            return item[0];
+        }
+    });
+
+    return (attributes.length > 0 ? 'filters=' + attributes.join(';') : '') || '';
+}
+
+function getPriceFrom() {
+    const target = $('#filters input[name=price_from]');
+    const value = target.val();
+
+    if (value.length) {
+        return 'price_from=' + value;
+    }
+
+    return '';
+}
+
+function getPriceTo() {
+    const target = $('#filters input[name=price_to]');
+    const value = target.val();
+
+    if (value.length) {
+        return 'price_to=' + value;
+    }
+
+    return '';
+}
+
+function getProducts(url) {
+    $('#products .loader').css({
+        'display': 'block',
+        'height': $('#products .products').height() + 'px',
+        'width': $('#products .products').width() + 'px'
+    });
+    $.get(url, (data) => {
         const obj = JSON.parse(data);
 
-       $('#products .products').html(obj.products);
+        $('#products .products').html(obj.products);
     });
     $('#products .loader').css('display', 'none');
-});
+}

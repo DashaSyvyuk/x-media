@@ -24,6 +24,19 @@
         </div>
 
         <div id="products">
+            <div class="order-by">
+                <select name="order">
+                    <option value="price" data-direction="asc" {% if order is defined and order=='price' and direction is defined and direction=='asc' %}selected{% endif %}>
+                        Від дешевих до дорогих
+                    </option>
+                    <option value="price" data-direction="desc" {% if order is defined and order=='price' and direction is defined and direction=='desc' %}selected{% endif %}>
+                        Від дорогих до дешевих
+                    </option>
+                    <option value="createdAt" data-direction="desc" {% if order is defined and order=='createdAt' and direction is defined and direction=='desc' %}selected{% endif %}>
+                        Новинки
+                    </option>
+                </select>
+            </div>
             <div class="products">
                 {% include 'partials/product-list.html.twig' %}
             </div>

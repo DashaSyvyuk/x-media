@@ -42,6 +42,10 @@ class CategoryPageController extends AbstractController
     public function getCategory(string $slug, PaginatorInterface $paginator, Request $request): Response
     {
         $query = $this->getFilters($request->query->get('filters'));
+        $order = $request->query->get('order');
+        $direction = $request->query->get('direction');
+        $priceFrom = $request->query->get('price_from');
+        $priceTo = $request->query->get('price_to');
 
         $category = $this->categoryRepository->findOneBy(['slug' => $slug]);
 
@@ -58,7 +62,9 @@ class CategoryPageController extends AbstractController
             'slug' => 'filter_attribute_count'
         ]);
 
-        $products = $this->productRepository->findByCategoryAndAttributes($category, $query);
+        $products = $this->productRepository->findByCategoryAndAttributes(
+            $category, $query, $order, $direction, $priceFrom, $priceTo
+        );
 
         $pagination = $paginator->paginate(
             $products,
@@ -82,7 +88,9 @@ class CategoryPageController extends AbstractController
                 'totalCount' => $_COOKIE['totalCount'] ?? 0,
                 'filterCount' => $filterSetting ? $filterSetting->getValue() : null,
                 'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-                'emails' => $this->settingRepository->findBy(['slug' => 'email'])
+                'emails' => $this->settingRepository->findBy(['slug' => 'email']),
+                'order' => $order,
+                'direction' => $direction
             ]);
         }
     }
