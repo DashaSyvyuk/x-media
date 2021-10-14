@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('category') }}
+    {{ encore_entry_script_tags('home') }}
+    {{ encore_entry_script_tags('cart') }}
+{% endblock %}
+
+{% block body %}
+
+    <header>
+        {% include 'partials/header.html.twig' %}
+    </header>
+
+    <section class="category">
+        <div class="category-title">Результати пошуку за запитом: "{{ searchString }}"</div>
+
+        <div class="breadcrumb">
+            <a href="/">Головна</a> <span>/</span> <a href="" class="selected">Пошук</a>
+        </div>
+
+        <div id="filters"></div>
+
+        <div id="products">
+            <div class="products">
+                {% include 'partials/product-list.html.twig' %}
+            </div>
+            <div class="loader"></div>
+        </div>
+    </section>
+
+{% endblock %}

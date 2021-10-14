@@ -8,6 +8,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\OrderItemRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
+use App\Repository\SettingRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,22 +23,27 @@ class OrderPageController extends AbstractController
 
     private OrderItemRepository $orderItemRepository;
 
+    private SettingRepository $settingRepository;
+
     /**
      * @param CategoryRepository $categoryRepository
      * @param OrderRepository $orderRepository
      * @param ProductRepository $productRepository
      * @param OrderItemRepository $orderItemRepository
+     * @param SettingRepository $settingRepository
      */
     public function __construct(
         CategoryRepository $categoryRepository,
         OrderRepository $orderRepository,
         ProductRepository $productRepository,
-        OrderItemRepository $orderItemRepository
+        OrderItemRepository $orderItemRepository,
+        SettingRepository $settingRepository
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;
         $this->orderItemRepository = $orderItemRepository;
+        $this->settingRepository = $settingRepository;
     }
 
     public function create(): Response
@@ -51,7 +57,9 @@ class OrderPageController extends AbstractController
         return $this->render('order_page/index.html.twig', [
             'totalPrice' => $this->getTotal(),
             'categories' => $categories,
-            'totalCount' => $_COOKIE['totalCount'] ?? 0
+            'totalCount' => $_COOKIE['totalCount'] ?? 0,
+            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
+            'emails'       => $this->settingRepository->findBy(['slug' => 'email'])
         ]);
     }
 
@@ -94,7 +102,9 @@ class OrderPageController extends AbstractController
             return $this->render('thank_page/index.html.twig', [
                 'order' => $order,
                 'categories' => $categories,
-                'totalCount' => 0
+                'totalCount' => 0,
+                'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
+                'emails'       => $this->settingRepository->findBy(['slug' => 'email'])
             ]);
         }
     }

@@ -10,9 +10,9 @@
         </ul>
     </div>
     <div id="search">
-        <form>
-            <input type="text" name="search" autocomplete="off">
-            <button type="submit"><img src="/images/search.png" /></button>
+        <form action="/search" method="GET">
+            <input type="text" name="search" autocomplete="off" value="{% if searchString is defined %}{{ searchString }}{% endif %}">
+            <button type="submit"><img src="/images/search.svg" /></button>
         </form>
     </div>
     <div id="cart">

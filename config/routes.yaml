@@ -22,3 +22,7 @@ post_order:
     path: /order
     controller: App\Controller\OrderPageController::post
     methods: POST
+
+search:
+    path: /search
+    controller: App\Controller\SearchPageController::getSearch
