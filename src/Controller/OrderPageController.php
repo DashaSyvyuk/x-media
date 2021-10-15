@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Repository\CategoryRepository;
-use App\Repository\OrderItemRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
@@ -21,28 +20,23 @@ class OrderPageController extends AbstractController
 
     private ProductRepository $productRepository;
 
-    private OrderItemRepository $orderItemRepository;
-
     private SettingRepository $settingRepository;
 
     /**
      * @param CategoryRepository $categoryRepository
      * @param OrderRepository $orderRepository
      * @param ProductRepository $productRepository
-     * @param OrderItemRepository $orderItemRepository
      * @param SettingRepository $settingRepository
      */
     public function __construct(
         CategoryRepository $categoryRepository,
         OrderRepository $orderRepository,
         ProductRepository $productRepository,
-        OrderItemRepository $orderItemRepository,
         SettingRepository $settingRepository
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;
-        $this->orderItemRepository = $orderItemRepository;
         $this->settingRepository = $settingRepository;
     }
 
