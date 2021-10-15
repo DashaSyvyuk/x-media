@@ -139,7 +139,7 @@ class ProductImage
             return;
         }
 
-        $safeFilename = md5(date('Y-m-d H:i:s:u'));
+        $safeFilename = md5(date('Y-m-d H:i:s:u')) . rand(200, 999);
         $fileName = $safeFilename . '.' . $this->getFile()->guessExtension();
 
         $this->getFile()->move(

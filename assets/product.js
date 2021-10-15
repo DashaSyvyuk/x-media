@@ -8,3 +8,19 @@ $('.product-page .images .list img').on('mouseover', (e) => {
     $(e.currentTarget).addClass('active');
 });
 
+$('.images .main').on('click', () => {
+    $("#product-preview .products").slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: false,
+        dots: true,
+        arrows: true,
+        pauseOnHover: false
+    });
+   $('#product-preview').show();
+});
+
+$('#product-preview #background').on('click', () => {
+    $('#product-preview').hide();
+});
+
