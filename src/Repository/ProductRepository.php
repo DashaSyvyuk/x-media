@@ -31,7 +31,9 @@ class ProductRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'category')
             ->andWhere('category = :category')
-            ->setParameter('category', $category);
+            ->andWhere('p.status = :status')
+            ->setParameter('category', $category)
+            ->setParameter('status', 'ACTIVE');
 
         if ($attributes) {
             $query

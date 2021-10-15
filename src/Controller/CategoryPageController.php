@@ -47,7 +47,7 @@ class CategoryPageController extends AbstractController
         $priceFrom = $request->query->get('price_from');
         $priceTo = $request->query->get('price_to');
 
-        $category = $this->categoryRepository->findOneBy(['slug' => $slug]);
+        $category = $this->categoryRepository->findOneBy(['slug' => $slug, 'status' => 'ACTIVE']);
 
         $categories = $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']);
 
