@@ -14,10 +14,7 @@ final class FilterAttributeAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('value', TextType::class, [
-                'label' => 'Значення',
-                'required' => true
-            ])
+            ->add('value', TextType::class, ['label' => 'Значення', 'required' => true])
             ->add('priority')
         ;
     }

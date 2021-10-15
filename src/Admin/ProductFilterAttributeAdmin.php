@@ -18,6 +18,5 @@ class ProductFilterAttributeAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-
     }
 }

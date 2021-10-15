@@ -14,14 +14,8 @@ final class CategoryAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('title', TextType::class, [
-                'label' => 'Назва',
-                'required' => true
-            ])
-            ->add('slug', TextType::class, [
-                'label' => 'Slug',
-                'required' => true
-            ])
+            ->add('title', TextType::class, ['label' => 'Назва', 'required' => true])
+            ->add('slug', TextType::class, ['label' => 'Slug', 'required' => true])
             ->add('status', ChoiceType::class, [
                 'choices' => [
                     'Активний' => 'ACTIVE',
@@ -29,15 +23,9 @@ final class CategoryAdmin extends AbstractAdmin
                 ],
                 'label' => 'Статус'
             ])
-            ->add('metaKeyword', TextType::class, [
-                'label' => 'Ключові слова',
-                'required' => true
-            ])
-            ->add('metaDescription', TextType::class, [
-                'label' => 'Опис',
-                'required' => true
-            ])
-            ->add('position', null, ['label' => 'Пріоритет'])
+            ->add('metaKeyword', TextType::class, ['label' => 'Ключові слова', 'required' => true])
+            ->add('metaDescription', TextType::class, ['label' => 'Опис', 'required' => true])
+            ->add('position', null, ['label' => 'Пріоритет', 'required' => true])
         ;
     }
 

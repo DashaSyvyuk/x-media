@@ -14,14 +14,8 @@ final class CurrencyAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('title', TextType::class, [
-                'label' => 'Назва',
-                'required' => true
-            ])
-            ->add('code', TextType::class, [
-                'label' => 'Код',
-                'required' => true
-            ])
+            ->add('title', TextType::class, ['label' => 'Назва', 'required' => true])
+            ->add('code', TextType::class, ['label' => 'Код', 'required' => true])
             ->add('exchangeRate', NumberType::class)
         ;
     }

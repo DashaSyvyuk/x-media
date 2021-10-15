@@ -32,7 +32,6 @@ class ProductImageAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-
     }
 
     protected function configureListFields(ListMapper $list): void
