@@ -11,8 +11,8 @@ class ProductFilterAttributeAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('filter', null, ['label' => 'Фільтр'])
-            ->add('filterAttribute', null, ['label' => 'Параметр'])
+            ->add('filter', null, ['label' => 'Фільтр', 'required' => true])
+            ->add('filterAttribute', null, ['label' => 'Параметр', 'required' => true])
         ;
     }
 

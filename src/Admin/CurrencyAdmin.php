@@ -16,7 +16,7 @@ final class CurrencyAdmin extends AbstractAdmin
         $form
             ->add('title', TextType::class, ['label' => 'Назва', 'required' => true])
             ->add('code', TextType::class, ['label' => 'Код', 'required' => true])
-            ->add('exchangeRate', NumberType::class)
+            ->add('exchangeRate', NumberType::class, ['required' => true])
         ;
     }
 

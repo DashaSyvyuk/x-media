@@ -18,9 +18,9 @@ class CommentAdmin extends AbstractAdmin
                 ],
                 'label' => 'Статус'
             ])
-            ->add('author', null, ['label' => 'Автор'])
-            ->add('email', null, ['label' => 'Email'])
-            ->add('comment', null, ['label' => 'Коментар'])
+            ->add('author', null, ['label' => 'Автор', 'required' => true])
+            ->add('email', null, ['label' => 'Email', 'required' => true])
+            ->add('comment', null, ['label' => 'Коментар', 'required' => true])
             ->add('answer', null, ['label' => 'Відповідь'])
         ;
     }

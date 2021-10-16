@@ -11,9 +11,9 @@ class ProductCharacteristicAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('title', null, ['label' => 'Назва'])
-            ->add('value', null, ['label' => 'Значення'])
-            ->add('position', null, ['label' => 'Пріоритет'])
+            ->add('title', null, ['label' => 'Назва', 'required' => true])
+            ->add('value', null, ['label' => 'Значення', 'required' => true])
+            ->add('position', null, ['label' => 'Пріоритет', 'required' => true])
         ;
     }
 

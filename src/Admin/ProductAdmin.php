@@ -36,17 +36,17 @@ final class ProductAdmin extends AbstractAdmin
                 ->add('purchasePriceUAH', NumberType::class, [
                     'disabled' => true,
                     'required' => false,
-                    'label' => 'Ціна (UAH)'
+                    'label' => 'Ціна (грн)'
                 ])
-                ->add('deliveryCost', null, ['label' => 'Витрати на доставку', 'required' => true])
+                ->add('deliveryCost', null, ['label' => 'Витрати на доставку (грн)', 'required' => true])
                 ->add('totalPrice', NumberType::class, [
-                    'label' => 'Загальна вартість товару',
+                    'label' => 'Загальна вартість товару (грн)',
                     'disabled' => true,
                     'required' => false
                 ])
-                ->add('price', null, ['label' => 'Ціна', 'required' => true])
+                ->add('price', null, ['label' => 'Ціна (грн)', 'required' => true])
                 ->add('marge', NumberType::class, [
-                    'label' => 'Marge(UAH)',
+                    'label' => 'Marge (грн)',
                     'disabled' => true,
                     'required' => false
                 ])

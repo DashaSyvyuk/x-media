@@ -390,22 +390,22 @@ class Product
 
     public function getPurchasePriceUAH()
     {
-        return $this->purchasePrice * $this->currency->getExchangeRate();
+        return round($this->purchasePrice * $this->currency->getExchangeRate());
     }
 
     public function getTotalPrice()
     {
-        return $this->getPurchasePriceUAH() + $this->deliveryCost;
+        return round($this->getPurchasePriceUAH() + $this->deliveryCost);
     }
 
     public function getMarge()
     {
-        return $this->price - $this->getTotalPrice();
+        return round($this->price - $this->getTotalPrice());
     }
 
     public function getMargePercentage()
     {
-        return ($this->getMarge() * 100) / $this->price;
+        return round(($this->getMarge() * 100) / $this->price);
     }
 
     public function __toString():string
