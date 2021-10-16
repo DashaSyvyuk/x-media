@@ -72,6 +72,8 @@ class CategoryPageController extends AbstractController
             9
         );
 
+        $prices = $this->productRepository->getMinAndMaxPriceInCategory($category, $query, $priceFrom, $priceTo);
+
         if ($request->isXmlHttpRequest()) {
             return new Response(json_encode([
                 'products' => $this->renderView('partials/product-list.html.twig', [
@@ -90,7 +92,9 @@ class CategoryPageController extends AbstractController
                 'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
                 'emails' => $this->settingRepository->findBy(['slug' => 'email']),
                 'order' => $order,
-                'direction' => $direction
+                'direction' => $direction,
+                'minPrice' => $prices['min_price'],
+                'maxPrice' => $prices['max_price']
             ]);
         }
     }

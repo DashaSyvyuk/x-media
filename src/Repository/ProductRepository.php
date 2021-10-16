@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -27,7 +28,41 @@ class ProductRepository extends ServiceEntityRepository
         ?string $direction,
         ?int $priceFrom,
         ?int $priceTo
-    ) {
+    ): QueryBuilder
+    {
+        $query = $this->prepareQuery($category, $attributes, $priceFrom, $priceTo);
+
+        if ($order && $direction) {
+            $query->orderBy('p.' . $order, $direction);
+        }
+
+        return $query;
+    }
+
+    public function findBySearch(string $search)
+    {
+        $search = explode(' ', $search);
+
+        $query = $this->createQueryBuilder('p');
+
+        foreach ($search as $value) {
+            $query
+                ->orWhere('p.title LIKE :title')
+                ->orWhere('p.description LIKE :description')
+                ->setParameter('title', '%' . $value . '%')
+                ->setParameter('description', '%' . $value . '%');
+        }
+
+        return $query;
+    }
+
+    private function prepareQuery(
+        Category $category,
+        array $attributes,
+        ?int $priceFrom,
+        ?int $priceTo
+    ): QueryBuilder
+    {
         $query = $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'category')
             ->andWhere('category = :category')
@@ -55,27 +90,20 @@ class ProductRepository extends ServiceEntityRepository
                 ->setParameter('to', $priceTo);
         }
 
-        if ($order && $direction) {
-            $query->orderBy('p.' . $order, $direction);
-        }
-
         return $query;
     }
 
-    public function findBySearch(string $search)
+    public function getMinAndMaxPriceInCategory(
+        Category $category,
+        array $attributes,
+        ?int $priceFrom,
+        ?int $priceTo
+    ): array
     {
-        $search = explode(' ', $search);
+        $query = $this->prepareQuery($category, $attributes, $priceFrom, $priceTo);
 
-        $query = $this->createQueryBuilder('p');
+        $query->select('MIN(p.price) AS min_price, MAX(p.price) AS max_price');
 
-        foreach ($search as $value) {
-            $query
-                ->orWhere('p.title LIKE :title')
-                ->orWhere('p.description LIKE :description')
-                ->setParameter('title', '%' . $value . '%')
-                ->setParameter('description', '%' . $value . '%');
-        }
-
-        return $query;
+        return $query->getQuery()->getArrayResult()[0];
     }
 }
