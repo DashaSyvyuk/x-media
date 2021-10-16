@@ -287,6 +287,9 @@ section .title {
 
 .category #products .order-by {
     text-align: end;
+    margin-bottom: 20px;
+    padding-right: 10px;
+    box-sizing: border-box;
 }
 
 .category #products .order-by select {
@@ -296,6 +299,7 @@ section .title {
     padding: 0 10px;
     font-family: "Gill Sans", sans-serif;
     outline: none;
+    font-size: 15px;
 }
 
 .category #products .loader {
@@ -311,7 +315,7 @@ section .title {
 }
 
 .category #products .product {
-    width: 33%;
+    width: 33.33%;
     float: left;
 }
 

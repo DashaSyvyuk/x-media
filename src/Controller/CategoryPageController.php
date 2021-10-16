@@ -69,7 +69,7 @@ class CategoryPageController extends AbstractController
         $pagination = $paginator->paginate(
             $products,
             $request->query->getInt('page', 1),
-            20
+            9
         );
 
         if ($request->isXmlHttpRequest()) {

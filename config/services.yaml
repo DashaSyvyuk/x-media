@@ -98,3 +98,9 @@ services:
         arguments: [ ~, App\Entity\OrderItem, ~ ]
         tags:
             - { name: sonata.admin, manager_type: orm, group: Замовлення, label: Товари, show_in_dashboard: false }
+
+    admin.comment:
+        class: App\Admin\CommentAdmin
+        arguments: [ ~, App\Entity\Comment, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Коментарі, label: Коментарі, show_in_dashboard: false }

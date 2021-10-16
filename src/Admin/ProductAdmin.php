@@ -99,6 +99,17 @@ final class ProductAdmin extends AbstractAdmin
                     'label' => 'Опис',
                     'required' => true
                 ])
+            ->end()
+            ->with('Відгуки')
+                ->add('comments', CollectionType::class, [
+                    'type_options' => [
+                        'delete' => true
+                    ],
+                    'label' => 'Відгуки'
+                ], [
+                    'edit' => 'inline',
+                    'inline' => 'table'
+                ])
             ->end();
     }
 

@@ -76,30 +76,35 @@ class Product
 
     /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
      */
     private Category $category;
 
     /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Currency")
+     * @ORM\ManyToOne(targetEntity="Currency")
      */
     private Currency $currency;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductImage", mappedBy="product", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="ProductImage", mappedBy="product", cascade={"all"}, orphanRemoval=true)
      */
     private $images;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductCharacteristic", mappedBy="product", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="ProductCharacteristic", mappedBy="product", cascade={"all"}, orphanRemoval=true)
      */
     private $characteristics;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductFilterAttribute", mappedBy="product", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="ProductFilterAttribute", mappedBy="product", cascade={"all"}, orphanRemoval=true)
      */
     private $filterAttributes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="product", cascade={"all"}, orphanRemoval=true)
+     */
+    private $comments;
 
     /**
      * @ORM\Column(type="datetime")
@@ -116,6 +121,7 @@ class Product
         $this->images = new ArrayCollection();
         $this->filterAttributes = new ArrayCollection();
         $this->characteristics = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): int
@@ -263,6 +269,39 @@ class Product
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
+        }
+    }
+
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    public function setComments($comments)
+    {
+        if (count($comments) > 0) {
+            foreach ($comments as $comment) {
+                $this->addComment($comment);
+            }
+        }
+    }
+
+    /**
+     * @param Comment $comment
+     */
+    public function addComment(Comment $comment)
+    {
+        $comment->setProduct($this);
+        $this->comments[] = $comment;
+    }
+
+    /**
+     * @param Comment $comment
+     */
+    public function removeComment(Comment $comment)
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
         }
     }
 
