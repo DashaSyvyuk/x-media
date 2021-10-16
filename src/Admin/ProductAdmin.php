@@ -28,7 +28,6 @@ final class ProductAdmin extends AbstractAdmin
                     'label' => 'Статус'
                 ])
                 ->add('category', ModelType::class,  ['placeholder' => 'Оберіть категорію', 'required' => true])
-                ->add('description', TextareaType::class, ['label' => 'Опис', 'required' => true])
                 ->add('note', TextareaType::class, ['label' => 'Нотатки', 'required' => false])
             ->end()
             ->with('Ціни', ['class' => 'col-md-6'])
@@ -55,6 +54,15 @@ final class ProductAdmin extends AbstractAdmin
                     'label' => 'Marge(%)',
                     'disabled' => true,
                     'required' => false
+                ])
+            ->end()
+            ->with('Опис')
+                ->add('description', TextareaType::class, [
+                    'label' => 'Опис',
+                    'required' => true,
+                    'attr' => [
+                        'class' => 'tinymce'
+                    ]
                 ])
             ->end()
             ->with('Зображення')

@@ -16,6 +16,7 @@
         "sonata-project/admin-bundle": "3.98.0",
         "sonata-project/doctrine-orm-admin-bundle": "^3.33",
         "sonata-project/intl-bundle": "^2.10",
+        "stfalcon/tinymce-bundle": "2.4.0",
         "symfony/asset": "4.4.*",
         "symfony/console": "4.4.*",
         "symfony/dotenv": "4.4.*",
@@ -40,7 +41,7 @@
         "symfony/webpack-encore-bundle": "^1.11",
         "symfony/yaml": "4.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "~2.0"
     },
     "require-dev": {
         "symfony/browser-kit": "^4.4",
