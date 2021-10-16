@@ -51,8 +51,26 @@
             </div>
         </div>
 
-        <div class="description">
-            {{ product.getDescription() }}
+        <div class="tabs-place">
+            <div class="tabs">
+                <div class="tab active" data-tab="description">Опис товару</div>
+                <div class="tab" data-tab="characteristics">Характеристики</div>
+                <div class="tab" data-tab="reviews">Відгуки</div>
+            </div>
+            <div class="content">
+                <div class="content-tab active" id="description">{{ product.getDescription()|raw }}</div>
+                <div class="content-tab" id="characteristics">
+                    <table>
+                        {% for characteristic in product.getCharacteristics() %}
+                        <tr>
+                            <td>{{ characteristic.getTitle() }}</td>
+                            <td>{{ characteristic.getValue() }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div class="content-tab" id="reviews">Відгуки</div>
+            </div>
         </div>
     </section>
 

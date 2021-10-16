@@ -778,3 +778,52 @@ footer .copywrite {
 #product-preview .slick-dots {
     bottom: 30px;
 }
+
+.product-page .tabs-place {
+    width: 100%;
+    clear: both;
+    padding-top: 50px;
+}
+
+.product-page .tabs-place .tabs {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-bottom: 1px solid #eee;
+}
+
+.product-page .tabs-place .tabs .tab {
+    padding: 10px 40px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.product-page .tabs-place .tabs .tab.active {
+    background-color: #eee;
+}
+
+.product-page .tabs-place .content {
+    width: 100%;
+}
+
+.product-page .tabs-place .content .content-tab {
+    display: none;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.product-page .tabs-place .content .content-tab.active {
+    display: block;
+}
+
+.product-page .tabs-place .content .content-tab table {
+    width: 70%;
+}
+
+.product-page .tabs-place .content .content-tab table tr:nth-child(odd) {
+    background-color: #eee;
+}
+
+.product-page .tabs-place .content .content-tab table td {
+    padding: 10px;
+}

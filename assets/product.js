@@ -24,3 +24,11 @@ $('#product-preview #background').on('click', () => {
     $('#product-preview').hide();
 });
 
+$('.product-page .tabs-place .tabs .tab').on('click', (e) => {
+    $('.product-page .tabs-place .tabs .tab').removeClass('active');
+    $('.product-page .tabs-place .content .content-tab').removeClass('active');
+    const tab = $(e.currentTarget).data('tab');
+    $(e.currentTarget).addClass('active');
+    $('#' + tab).addClass('active');
+});
+
