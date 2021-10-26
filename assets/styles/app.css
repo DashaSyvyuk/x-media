@@ -1,7 +1,7 @@
 body, html {
     padding: 0;
     margin: 0;
-    font-family: "Gill Sans", sans-serif;
+    font-family: Verdana, Geneva, sans-serif;
 }
 
 .button {
@@ -34,6 +34,7 @@ body, html {
     position: absolute;
     right: 60px;
     bottom: 60px;
+    font-size: 15px;
 }
 
 #slider .slick-dots {
@@ -83,7 +84,7 @@ header {
     text-decoration: none;
     color: #000;
     padding: 5px 15px;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 #menu #categories ul li a:hover {
@@ -175,12 +176,12 @@ section .title {
 .product .filter-attributes {
     width: 100%;
     height: 30px;
-    font-size: 12px;
+    font-size: 10px;
     color: #aaa;
 }
 
 .product .product-title a {
-    font-size: 16px;
+    font-size: 14px;
     color: #000;
     text-decoration: none;
 }
@@ -191,8 +192,9 @@ section .title {
 
 .product .price {
     width: 50%;
+    font-weight: bold;
     color: #00e765;
-    font-size: 20px;
+    font-size: 18px;
     margin-top: 20px;
     float: left;
 }
@@ -218,12 +220,13 @@ section .title {
 }
 
 .category .category-title {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .category .breadcrumb {
     margin-top: 30px;
     display: flex;
+    font-size: 14px;
 }
 
 .category .breadcrumb a {
@@ -249,6 +252,7 @@ section .title {
 
 .category #filters .filter-title {
     font-weight: bold;
+    font-size: 14px;
 }
 
 .category #filters .filter {
@@ -295,11 +299,11 @@ section .title {
 .category #products .order-by select {
     border: 1px solid #ccc;
     border-radius: 0;
-    height: 30px;
+    height: 26px;
     padding: 0 10px;
-    font-family: "Gill Sans", sans-serif;
+    font-family: Verdana, Geneva, sans-serif;
     outline: none;
-    font-size: 15px;
+    font-size: 12px;
 }
 
 .category #products .loader {
@@ -347,6 +351,7 @@ section .title {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    font-size: 12px;
 }
 
 .filter .price-filter input {
@@ -370,7 +375,7 @@ section .title {
     height: 23px;
     margin-bottom: 12px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -794,7 +799,7 @@ footer .copywrite {
 
 .product-page .tabs-place .tabs .tab {
     padding: 10px 40px;
-    font-size: 20px;
+    font-size: 16px;
     cursor: pointer;
 }
 

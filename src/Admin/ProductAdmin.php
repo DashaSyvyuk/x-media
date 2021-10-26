@@ -61,7 +61,8 @@ final class ProductAdmin extends AbstractAdmin
                     'label' => 'Опис',
                     'required' => true,
                     'attr' => [
-                        'class' => 'tinymce'
+                        'class' => 'tinymce',
+                        'data-theme' => "advanced"
                     ]
                 ])
             ->end()
