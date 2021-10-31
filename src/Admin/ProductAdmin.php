@@ -32,7 +32,8 @@ final class ProductAdmin extends AbstractAdmin
             ->end()
             ->with('Ціни', ['class' => 'col-md-6'])
                 ->add('currency', ModelType::class, ['placeholder' => 'Оберіть валюту', 'required' => true])
-                ->add('purchasePrice', null, ['label' => 'Ціна (zl)', 'required' => true])
+                ->add('priceWithVAT', NumberType::class, ['label' => 'Ціна з ПДВ (zl)', 'required' => true])
+                ->add('priceWithoutVAT', NumberType::class, ['label' => 'Ціна без ПДВ (zl)', 'required' => false, 'disabled' => true])
                 ->add('purchasePriceUAH', NumberType::class, [
                     'disabled' => true,
                     'required' => false,

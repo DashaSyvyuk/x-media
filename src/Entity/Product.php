@@ -42,7 +42,7 @@ class Product
     /**
      * @ORM\Column(type="integer")
      */
-    private int $purchasePrice = 0;
+    private int $priceWithVAT = 0;
 
     /**
      * @ORM\Column(type="integer")
@@ -149,14 +149,14 @@ class Product
         $this->price = $price;
     }
 
-    public function getPurchasePrice(): int
+    public function getPriceWithVAT(): int
     {
-        return $this->purchasePrice;
+        return $this->priceWithVAT;
     }
 
-    public function setPurchasePrice(int $purchasePrice): void
+    public function setPriceWithVAT(int $priceWithVAT): void
     {
-        $this->purchasePrice = $purchasePrice;
+        $this->priceWithVAT = $priceWithVAT;
     }
 
     public function getDeliveryCost(): int
@@ -388,9 +388,14 @@ class Product
         $this->updatedAt = $updatedAt;
     }
 
+    public function getPriceWithoutVAT()
+    {
+        return $this->priceWithVAT / 1.23;
+    }
+
     public function getPurchasePriceUAH()
     {
-        return round($this->purchasePrice * $this->currency->getExchangeRate());
+        return round($this->getPriceWithoutVAT() * $this->currency->getExchangeRate());
     }
 
     public function getTotalPrice()
