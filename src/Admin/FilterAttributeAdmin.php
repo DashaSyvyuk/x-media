@@ -15,7 +15,7 @@ final class FilterAttributeAdmin extends AbstractAdmin
     {
         $form
             ->add('value', TextType::class, ['label' => 'Значення', 'required' => true])
-            ->add('priority', ['required' => true])
+            ->add('priority', null, ['required' => true])
         ;
     }
 

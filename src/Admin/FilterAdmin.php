@@ -18,7 +18,7 @@ final class FilterAdmin extends AbstractAdmin
             ->with('Фільтр')
                 ->add('title', TextType::class, ['label' => 'Назва параметру', 'required' => true])
                 ->add('category', ModelType::class,  ['placeholder' => 'Оберіть категорію', 'required' => true])
-                ->add('priority', ['required' => true])
+                ->add('priority', null, ['required' => true])
             ->end()
             ->with('Параметри')
                 ->add('attributes', CollectionType::class, [
