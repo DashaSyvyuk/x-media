@@ -54,7 +54,7 @@
                     <textarea name="comment"></textarea>
                 </div>
                 <div class="input">
-                    <p class="total-price">Загальна вартість: <span>{{ totalPrice }} грн</span></p>
+                    <p class="total-price">Загальна вартість: <span>{{ totalPrice|number_format(0, '.', ' ') }} грн</span></p>
                 </div>
                 <div class="input">
                     <input type="submit" value="Створити">

@@ -5,7 +5,7 @@
         {% for product in products %}
             <tr data-id="{{ product.id }}" data-name="{{ product.name }}">
                 <td>{{ product.name }}</td>
-                <td>{{ product.price }} грн</td>
+                <td>{{ product.price|number_format(0, '.', ' ') }} грн</td>
                 <td><input type="text" name="count" value="{{ product.count }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" autocomplete="off"></td>
                 <td><img class="delete" src="/images/delete.png"></td>
             </tr>

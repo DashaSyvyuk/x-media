@@ -45,7 +45,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="price">{{ product.getPrice() }} грн</div>
+            <div class="price">{{ product.getPrice()|number_format(0, '.', ' ') }} грн</div>
             <div class="add2cart">
                 <img src="/images/cart.png">
             </div>

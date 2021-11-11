@@ -13,7 +13,7 @@
                 {% endif %}
             {% endfor %}
         </div>
-        <div class="price">{{ product.price }} грн</div>
+        <div class="price">{{ product.price|number_format(0, '.', ' ') }} грн</div>
         <div class="add2cart">
             <img src="/images/cart.png" data-id="{{ product.id }}" data-name="{{ product.title }}" data-price="{{ product.price }}">
         </div>
