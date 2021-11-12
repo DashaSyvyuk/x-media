@@ -63,9 +63,9 @@ function setCookie(name, value, options = {}) {
         ...options
     };
 
-    if (options.expires instanceof Date) {
-        options.expires = options.expires.toUTCString();
-    }
+    let date = new Date;
+    date.setDate(date.getDate() + 100);
+    options.expires = date.toUTCString();
 
     let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
 
@@ -97,8 +97,8 @@ function removeProduct(id) {
 
     const result = cart.filter((product) => parseInt(product.id) !== parseInt(id));
 
-    setCookie('cart', JSON.stringify(result), {secure: true, 'max-age': 3600 * 24});
-    setCookie('totalCount', getTotalCount(result), {secure: true, 'max-age': 3600 * 24});
+    setCookie('cart', JSON.stringify(result), {'max-age': 3600 * 24});
+    setCookie('totalCount', getTotalCount(result), {'max-age': 3600 * 24});
 }
 
 function addProduct(id, name, count, price) {
@@ -128,8 +128,8 @@ function addProduct(id, name, count, price) {
         ]
     }
 
-    setCookie('cart', JSON.stringify(cart), {secure: true, 'max-age': 3600 * 24});
-    setCookie('totalCount', getTotalCount(cart), {secure: true, 'max-age': 3600 * 24});
+    setCookie('cart', JSON.stringify(cart), {'max-age': 3600 * 24});
+    setCookie('totalCount', getTotalCount(cart), {'max-age': 3600 * 24});
 }
 
 function showCart() {

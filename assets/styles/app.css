@@ -123,9 +123,11 @@ header {
     background-color: #00e765;
     padding: 5px;
     position: absolute;
-    right: 0;
-    bottom: 0;
+    left: 19px;
+    top: 8px;
+    border-radius: 10px;
     display: none;
+    cursor: pointer;
 }
 
 #menu #cart img {
@@ -328,6 +330,7 @@ section .title {
     align-items: center;
     justify-content: center;
     padding: 20px;
+    width: 100%;
 }
 
 .category #products .navigation span {
@@ -605,7 +608,7 @@ section .title {
 }
 
 #cart-popup #go-to-order a {
-    color: #fff;
+    color: #000;
     text-decoration: none;
     background-color: #00e765;
     padding: 5px 15px;
@@ -639,11 +642,12 @@ section .title {
 
 .order-place input[type=submit] {
     background-color: #00e765;
-    color: #fff;
+    color: #000;
     font-weight: bold;
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
+    border: none;
 }
 
 .order-place .total-price {
