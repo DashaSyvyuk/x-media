@@ -22,6 +22,7 @@ $('.images .main').on('click', () => {
 
 $('#product-preview #background').on('click', () => {
     $('#product-preview').hide();
+    $("#product-preview .products").slick('unslick');
 });
 
 $('.product-page .tabs-place .tabs .tab').on('click', (e) => {
