@@ -17,3 +17,6 @@ framework:
         log: true
 
     error_controller: App\Controller\ErrorController::show
+    templating:
+        engines:
+            twig
