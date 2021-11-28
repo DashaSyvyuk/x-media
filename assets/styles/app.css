@@ -1,7 +1,7 @@
 body, html {
     padding: 0;
     margin: 0;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: 'Rubik', sans-serif;
 }
 
 .button {
@@ -196,7 +196,7 @@ section .title {
     width: 50%;
     font-weight: bold;
     color: #00e765;
-    font-size: 18px;
+    font-size: 22px;
     margin-top: 20px;
     float: left;
 }
@@ -303,7 +303,7 @@ section .title {
     border-radius: 0;
     height: 26px;
     padding: 0 10px;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: 'Rubik', sans-serif;
     outline: none;
     font-size: 12px;
 }
@@ -525,7 +525,7 @@ section .title {
 
 .product-page .detail .price {
     color: #00e765;
-    font-size: 25px;
+    font-size: 30px;
     text-align: right;
     font-weight: bold;
     margin-top: 30px;
