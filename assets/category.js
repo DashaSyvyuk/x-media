@@ -82,7 +82,7 @@ function getPriceFrom() {
     const value = target.val();
 
     if (value.length) {
-        return 'price_from=' + value;
+        return 'price_from=' + value.replace(' ', '');
     }
 
     return '';
@@ -93,7 +93,7 @@ function getPriceTo() {
     const value = target.val();
 
     if (value.length) {
-        return 'price_to=' + value;
+        return 'price_to=' + value.replace(' ', '');
     }
 
     return '';

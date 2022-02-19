@@ -55,7 +55,6 @@
             <div class="tabs">
                 <div class="tab active" data-tab="description">Опис товару</div>
                 <div class="tab" data-tab="characteristics">Характеристики</div>
-                <div class="tab" data-tab="reviews">Відгуки</div>
             </div>
             <div class="content">
                 <div class="content-tab active" id="description">{{ product.getDescription()|raw }}</div>
@@ -69,7 +68,6 @@
                         {% endfor %}
                     </table>
                 </div>
-                <div class="content-tab" id="reviews">Відгуки</div>
             </div>
         </div>
     </section>
