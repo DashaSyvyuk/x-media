@@ -288,7 +288,7 @@ section .title {
     display: flex;
     flex-direction: column;
     position: relative;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
 }
 
 .category #products .order-by {
@@ -858,4 +858,30 @@ footer .copywrite {
 
 .product-page .tabs-place .content .content-tab table td {
     padding: 10px;
+}
+
+.delivery-pay {
+    width: 100%;
+    padding: 0 15%;
+    box-sizing: border-box;
+    clear: both;
+}
+
+.delivery-pay .delivery h3 {
+    font-size: 16px;
+    text-align: center;
+}
+
+.delivery-pay .delivery div {
+    width: 50%;
+    float: left;
+    padding: 15px;
+    box-sizing: border-box;
+    text-align: justify;
+}
+
+.delivery-pay .delivery div img {
+    height: 150px;
+    margin: 40px auto;
+    display: block;
 }
