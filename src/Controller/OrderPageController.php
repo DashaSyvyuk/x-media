@@ -67,7 +67,8 @@ class OrderPageController extends AbstractController
             $order->setPhone($request->request->get('phone'));
             $order->setEmail($request->request->get('email') ?? '');
             $order->setPaytype($request->request->get('paytype'));
-            $order->setStatus('Новий');
+            $order->setStatus('NEW');
+            $order->setPaymentStatus(false);
             $order->setComment($request->request->get('comment') ?? '');
             $order->setTotal($this->getTotal());
 

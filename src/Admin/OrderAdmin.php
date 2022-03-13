@@ -7,6 +7,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -45,16 +46,26 @@ final class OrderAdmin extends AbstractAdmin
                 ])
                 ->add('status', ChoiceType::class, [
                     'choices' => [
-                        'Новий' => 'Новий',
-                        'В обробці' => 'В обробці',
-                        'Очікує відправлення' => 'Очікує відправлення',
-                        'В дорозі' => 'В дорозі',
-                        'Доставлено' => 'Доставлено'
+                        'Новий' => 'NEW',
+                        'Очікує підтвердження' => 'NOT_CONFIRMED',
+                        'В обробці' => 'IN_PROGRESS',
+                        'Скасовано' => 'CANCELLED',
+                        'Замовлення у постачальника' => 'ORDERED_IN_SUPPLIER',
+                        'В дорозі' => 'ON_THE_WAY',
+                        'Відправлено Новою Поштою' => 'SENT_BY_NP',
+                        'Відправлено нашою доставкою' => 'SENT_BY_OUR_DELIVERY',
+                        'Завершено' => 'COMPLETED'
                     ],
                     'label' => 'Статус',
                     'required' => true
                 ])
-                ->add('total')
+                ->add('paymentStatus', CheckboxType::class, [
+                    'label'    => 'Статус оплати',
+                    'required' => false,
+                ])
+                ->add('total', null, [
+                    'label' => 'Загальна вартість'
+                ])
             ->end()
             ->with('Товари')
                 ->add('items', CollectionType::class, [

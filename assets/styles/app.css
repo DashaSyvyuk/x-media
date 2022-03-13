@@ -121,11 +121,11 @@ header {
 
 #menu #cart-count {
     background-color: #00e765;
-    padding: 5px;
+    padding: 0px 5px;
     position: absolute;
     left: 19px;
-    top: 8px;
-    border-radius: 10px;
+    top: -3px;
+    border-radius: 50%;
     display: none;
     cursor: pointer;
 }
@@ -333,21 +333,37 @@ section .title {
     width: 100%;
 }
 
-.category #products .navigation span {
-    padding: 5px;
+.category #products .navigation span a {
+    padding: 10px 5px 5px;
+    border: 1px solid #eaeaea;
+    width: 25px;
+    height: 22px;
+    margin-right: 3px;
+    display: block;
+    float: left;
+    text-align: center;
+    font-size: 14px;
+    text-decoration: none;
+    color: #a3a3a3;
 }
 
 .category #products .navigation span.current {
-    font-weight: bold;
-}
-
-.category #products .navigation span a {
+    padding: 10px 5px 5px;
+    width: 25px;
+    height: 22px;
+    margin-right: 3px;
+    display: block;
+    float: left;
+    text-align: center;
+    font-size: 14px;
     text-decoration: none;
-    color: dimgray;
+    background-color: #0f0f0f;
+    color: #fff;
+    border: 1px solid #000;
 }
 
 .category #products .navigation span a:hover {
-    text-decoration: underline;
+    background-color: #eaeaea;
 }
 
 .filter .price-filter {
@@ -611,7 +627,7 @@ section .title {
     color: #000;
     text-decoration: none;
     background-color: #00e765;
-    padding: 5px 15px;
+    padding: 10px 20px;
 }
 
 #cart-popup #go-to-order a:hover {
@@ -627,10 +643,15 @@ section .title {
     margin: 0 auto;
 }
 
+.order-place p {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
 .order-place input, .order-place select, .order-place textarea {
     width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
+    padding: 6px;
+    border: 1px solid #E0E0E0;
     box-sizing: border-box;
     resize: none;
     outline: none;

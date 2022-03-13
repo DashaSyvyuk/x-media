@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use \DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -58,9 +57,14 @@ class Order
     private string $status = "";
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $paymentStatus;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private string $comment = "";
+    private ?string $comment = "";
 
     /**
      * @ORM\Column(type="integer")
@@ -75,12 +79,12 @@ class Order
     /**
      * @ORM\Column(type="datetime")
      */
-    public DateTime $createdAt;
+    public $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    public DateTime $updatedAt;
+    public $updatedAt;
 
     public function getId(): int
     {
@@ -157,12 +161,22 @@ class Order
         $this->status = $status;
     }
 
-    public function setComment(string $comment): void
+    public function getPaymentStatus(): bool
+    {
+        return $this->paymentStatus;
+    }
+
+    public function setPaymentStatus(bool $paymentStatus): void
+    {
+        $this->paymentStatus = $paymentStatus;
+    }
+
+    public function setComment(?string $comment): void
     {
         $this->comment = $comment;
     }
 
-    public function getComment(): string
+    public function getComment(): ?string
     {
         return $this->comment;
     }
@@ -201,22 +215,22 @@ class Order
         }
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
     }
