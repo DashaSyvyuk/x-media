@@ -55,6 +55,7 @@
             <div class="tabs">
                 <div class="tab active" data-tab="description">Опис товару</div>
                 <div class="tab" data-tab="characteristics">Характеристики</div>
+                <div class="tab" data-tab="reviews">Відгуки</div>
             </div>
             <div class="content">
                 <div class="content-tab active" id="description">{{ product.getDescription()|raw }}</div>
@@ -67,6 +68,25 @@
                         </tr>
                         {% endfor %}
                     </table>
+                </div>
+                <div class="content-tab" id="reviews">
+                    <form method="post" id="add-review">
+                        <p>Залишити відгук про товар:</p>
+                        <div class="rating"></div>
+                        <label>
+                            <span class="field">Ім'я:<span class="required">*</span></span>
+                            <input type="text" name="author" id="author">
+                        </label>
+                        <label>
+                            <span class="field">Email:</span>
+                            <input type="text" name="email" id="email">
+                        </label>
+                        <label>
+                            <span class="field">Коментар:<span class="required">*</span></span>
+                            <textarea name="text" id="comment"></textarea>
+                        </label>
+                        <input type="submit" value="Відправити">
+                    </form>
                 </div>
             </div>
         </div>

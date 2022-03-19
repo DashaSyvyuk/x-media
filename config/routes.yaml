@@ -38,3 +38,8 @@ search:
 delivery_and_pay:
     path: /delivery-and-pay
     controller: App\Controller\DeliveryAndPayController::index
+
+post_comment:
+    path: /comment
+    controller: App\Controller\CommentController::post
+    methods: POST
