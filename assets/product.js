@@ -3,6 +3,12 @@ import './bootstrap';
 import $ from 'jquery';
 import './star-rating';
 
+function validateEmail(email) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+    return regex.test(email);
+}
+
 $('.product-page .images .list img').on('mouseover', (e) => {
     $('.product-page .images .list img').removeClass('active');
     $('.product-page .images .main img').attr('src', $(e.currentTarget).attr('src'));
@@ -53,6 +59,7 @@ $('#add-review').on('submit', (e) => {
     const email = $('#email').val();
     const comment = $('#comment').val();
     const rating = $('.rating').starRating('getRating');
+    const product = $('#product').val();
 
     if (!author) {
         $('#author').addClass('red');
@@ -66,9 +73,28 @@ $('#add-review').on('submit', (e) => {
         $('#comment').removeClass('red');
     }
 
-    if (!author || !comment) {
+    if (email && !validateEmail(email)) {
+        $('#email').addClass('red');
+    } else {
+        $('#email').removeClass('red');
+    }
+
+    if (!author || !comment || (email && !validateEmail(email))) {
         return false;
     } else {
+        $.post( '/comment', { author, email, comment, rating, product }, (data) => {
+            if (data) {
+                $('#comment-popup').show();
+                $('#author').val('');
+                $('#email').val('');
+                $('#comment').val('');
+            }
+        });
 
+        return false;
     }
+});
+
+$('#comment-popup').on('click', (e) => {
+    $(e.currentTarget).hide();
 });

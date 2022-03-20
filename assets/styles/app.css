@@ -971,3 +971,22 @@ footer .copywrite {
     filter: drop-shadow( -2px -2px 2px #888 );
 }
 
+#comment-popup {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,.6);
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+#comment-popup div {
+    background-color: #fff;
+    width: 50%;
+    margin: 15% auto auto;
+    height: auto;
+    padding: 30px;
+    text-align: center;
+    line-height: 2;
+}

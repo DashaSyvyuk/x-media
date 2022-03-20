@@ -9,6 +9,7 @@ use App\Repository\ProductRatingRepository;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CommentController extends AbstractController
 {
@@ -33,7 +34,7 @@ class CommentController extends AbstractController
         $this->productRepository = $productRepository;
     }
 
-    public function post(Request $request): array
+    public function post(Request $request): Response
     {
         $product = $this->productRepository->findOneBy(['id' => $request->request->get('product')]);
 
@@ -51,8 +52,8 @@ class CommentController extends AbstractController
         $this->productRatingRepository->create($rating);
         $this->commentRepository->create($comment);
 
-        return [
+        return new Response(json_encode([
             'success' => true
-        ];
+        ]));
     }
 }

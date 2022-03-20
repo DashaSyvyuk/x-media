@@ -46,7 +46,6 @@ $(document).on('click', '#menu #cart', () => showCart());
 
 $(window).click((e) => {
     if(!$('#cart-block').has(e.target)) {
-        //$('#cart-popup').hide();
     }
 });
 

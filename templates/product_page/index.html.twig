@@ -85,8 +85,12 @@
                             <span class="field">Коментар:<span class="required">*</span></span>
                             <textarea name="text" id="comment"></textarea>
                         </label>
+                        <input type="hidden" name="product" value="{{ product.id }}" id="product">
                         <input type="submit" value="Відправити">
                     </form>
+                </div>
+                <div id="comment-popup">
+                    <div>Дякуємо за відгук!<br>Відправлено на опрацювання модератором</div>
                 </div>
             </div>
         </div>
