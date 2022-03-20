@@ -33,9 +33,9 @@ class Comment
     private string $status = "";
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
-    private string $email = "";
+    private ?string $email = "";
 
     /**
      * @ORM\Column(type="text")
@@ -93,12 +93,12 @@ class Comment
         return $this->status;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail(?string $email): void
     {
         $this->email = $email;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
