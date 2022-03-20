@@ -107,6 +107,11 @@ class Product
     private $comments;
 
     /**
+     * @ORM\OneToMany(targetEntity="ProductRating", mappedBy="product", cascade={"all"}, orphanRemoval=true)
+     */
+    private $ratings;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -122,6 +127,7 @@ class Product
         $this->filterAttributes = new ArrayCollection();
         $this->characteristics = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     public function getId(): int
@@ -411,6 +417,51 @@ class Product
     public function getMargePercentage()
     {
         return round(($this->getMarge() * 100) / $this->price);
+    }
+
+    public function getRatings()
+    {
+        return $this->ratings;
+    }
+
+    public function setRatings($ratings)
+    {
+        if (count($ratings) > 0) {
+            foreach ($ratings as $rating) {
+                $this->addRating($rating);
+            }
+        }
+    }
+
+    /**
+     * @param ProductRating $rating
+     */
+    public function addRating(ProductRating $rating)
+    {
+        $rating->setProduct($this);
+        $this->ratings[] = $rating;
+    }
+
+    /**
+     * @param ProductRating $rating
+     */
+    public function removeRating(ProductRating $rating)
+    {
+        if ($this->ratings->contains($rating)) {
+            $this->ratings->removeElement($rating);
+        }
+    }
+
+    public function getAverageRating()
+    {
+        $total = 0;
+        $count = 0;
+        foreach ($this->ratings as $rating) {
+            $total += $rating->getValue();
+            $count++;
+        }
+
+        return $count > 0 ? $total/$count : 0;
     }
 
     public function __toString():string

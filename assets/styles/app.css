@@ -215,6 +215,11 @@ section .title {
     cursor: pointer;
 }
 
+.product .rating {
+    align-items: center;
+    display: flex;
+}
+
 .category {
     width: 100%;
     padding: 40px;
@@ -564,6 +569,12 @@ section .title {
     font-size: 18px;
     padding-top: 50px;
     line-height: 2;
+}
+
+.product-page .readonly-rating {
+    align-items: center;
+    display: flex;
+    margin-top: 15px;
 }
 
 #cart-popup {

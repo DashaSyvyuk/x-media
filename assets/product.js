@@ -44,7 +44,6 @@ $('.rating').starRating({
     emptyColor: '#eee',
     initialRating: 5,
     strokeColor: '#00e765',
-    strokeWidth: 10,
     starSize: 25,
     activeColor: '#00e765',
     hoverColor: '#00e765',
@@ -52,6 +51,21 @@ $('.rating').starRating({
         start: '#00e765',
         end: '#00e765'
     },
+});
+
+$('.readonly-rating').each(function() {
+    const value = $(this).find('.value').data('value');
+
+    $(this).find('.star-rating').starRating({
+         emptyColor: '#eee',
+         initialRating: value,
+         strokeColor: '#00e765',
+         starSize: 25,
+         activeColor: '#00e765',
+         hoverColor: '#00e765',
+         useGradient: false,
+         readOnly: true
+    });
 });
 
 $('#add-review').on('submit', (e) => {

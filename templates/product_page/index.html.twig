@@ -23,6 +23,13 @@
             <a href="" class="selected">{{ product.title }}</a>
         </div>
 
+        <div class="readonly-rating">
+            <span class="star-rating"></span>
+            <span class="value" data-value="{{ product.getAverageRating()|round(2) }}">
+                ({{ product.getAverageRating()|round(2) }})
+            </span>
+        </div>
+
         <div class="images">
             <div class="list">
                 <div class="inner">

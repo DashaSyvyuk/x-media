@@ -1,6 +1,7 @@
 import './styles/app.css';
 import './bootstrap';
 import $ from 'jquery';
+import './star-rating';
 
 $('#filters input[type=checkbox]').on('change', () => {
     const url = window.location.pathname;
@@ -112,3 +113,18 @@ function getProducts(url) {
     });
     $('#products .loader').css('display', 'none');
 }
+
+$('.rating').each(function() {
+    const value = $(this).find('.value').data('value');
+
+    $(this).find('.star-rating').starRating({
+         emptyColor: '#eee',
+         initialRating: value,
+         strokeColor: '#00e765',
+         starSize: 25,
+         activeColor: '#00e765',
+         hoverColor: '#00e765',
+         useGradient: false,
+         readOnly: true
+    });
+});

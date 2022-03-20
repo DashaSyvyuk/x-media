@@ -2,6 +2,7 @@ import './styles/app.css';
 import './bootstrap';
 import 'slick-carousel';
 import $ from 'jquery';
+import './star-rating';
 
 $("#slider").slick({
     infinite: true,
@@ -43,4 +44,19 @@ $(document).on('mouseout', '.product .inner img', (e) => {
     const first = $(e.currentTarget).data('first');
 
     $(e.currentTarget).attr('src', first);
+});
+
+$('.rating').each(function() {
+    const value = $(this).find('.value').data('value');
+
+    $(this).find('.star-rating').starRating({
+         emptyColor: '#eee',
+         initialRating: value,
+         strokeColor: '#00e765',
+         starSize: 25,
+         activeColor: '#00e765',
+         hoverColor: '#00e765',
+         useGradient: false,
+         readOnly: true
+    });
 });
