@@ -897,53 +897,6 @@ footer .copywrite {
     display: block;
 }
 
-#add-review {
-    width: 100%;
-    font-size: 14px;
-}
-
-#add-review p {
-    font-weight: 500;
-    margin-bottom: 30px;
-}
-
-#add-review label {
-    display: block;
-    margin: 10px 0;
-    width: 450px;
-}
-
-#add-review input[type=text], #add-review textarea {
-    border: 1px solid #eee;
-    padding: 5px;
-    width: 300px;
-    resize: none;
-}
-
-#add-review input[type=text].red, #add-review textarea.red {
-    border: 1px solid red;
-}
-
-#add-review label .field {
-    display: block;
-    float: left;
-    width: 100px;
-}
-
-#add-review label .required {
-    color: red;
-}
-
-#add-review input[type=submit] {
-    background-color: #00e765;
-    border: none;
-    padding: 10px 30px;
-    font-size: 14px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-}
-
 .jq-stars {
     display: inline-block;
 }
@@ -1000,4 +953,109 @@ footer .copywrite {
     padding: 30px;
     text-align: center;
     line-height: 2;
+}
+
+#reviews {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
+#reviews #add-review {
+    width: 550px;
+    font-size: 14px;
+}
+
+#reviews #add-review p {
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+#reviews #add-review label {
+    display: block;
+    margin: 10px 0;
+    width: 450px;
+}
+
+#reviews #add-review input[type=text], #add-review textarea {
+    border: 1px solid #eee;
+    padding: 5px;
+    width: 300px;
+    resize: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#reviews #add-review input[type=text].red, #add-review textarea.red {
+    border: 1px solid red;
+}
+
+#reviews #add-review label .field {
+    display: block;
+    float: left;
+    width: 100px;
+}
+
+#reviews #add-review label .required {
+    color: red;
+}
+
+#reviews #add-review input[type=submit] {
+    background-color: #00e765;
+    border: none;
+    padding: 10px 30px;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+#comment-list {
+    width: calc(100% - 500px);
+}
+#comment-list h4 {
+    font-weight: 550;
+    font-size: 14px;
+}
+
+#comment-list p {
+    font-weight: 400;
+    font-size: 13px;
+}
+
+#comment-list #list .comment {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    border: 1px solid #eee;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+#comment-list #list .comment .author {
+    color: #00e765;
+    font-weight: 600;
+}
+
+#comment-list #list .comment .date {
+    font-weight: 600;
+    text-align: right;
+    color: #bebebe;
+}
+
+#comment-list #list .comment .author, #comment-list #list .comment .date {
+    float: left;
+    width: 50%;
+    margin-bottom: 15px;
+}
+
+#comment-list #list .comment .text {
+    width: 100%;
+}
+
+#comment-list #list .answer {
+    width: calc(100% - 50px);
+    display: flex;
+    flex-direction: column;
+    margin-left: 50px;
+    margin-top: 25px;
 }

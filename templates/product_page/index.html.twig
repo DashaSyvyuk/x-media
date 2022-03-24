@@ -95,6 +95,25 @@
                         <input type="hidden" name="product" value="{{ product.id }}" id="product">
                         <input type="submit" value="Відправити">
                     </form>
+                    <div id="comment-list">
+                        <h4>Відгуки про товар:</h4>
+                        {% if product.getComments()|length %}
+                            <div id="list">
+                            {% for comment in product.getComments() %}
+                                <div class="comment">
+                                    <div class="author">{{ comment.author }}</div>
+                                    <div class="date">{{ comment.createdAt.format('Y-m-d H:i:s') }}</div>
+                                    <div class="text">{{ comment.comment }}</div>
+                                    <div class="answer">
+                                        <div class="text">{{ comment.answer }}</div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            </div>
+                        {% else %}
+                            <p>На даний момент відгуків про даний товар ще немає, у тебе є шанс додати перший :)</p>
+                        {% endif %}
+                    </div>
                 </div>
                 <div id="comment-popup">
                     <div>Дякуємо за відгук!<br>Відправлено на опрацювання модератором</div>
