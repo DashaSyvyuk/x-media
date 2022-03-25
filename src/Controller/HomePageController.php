@@ -40,7 +40,7 @@ class HomePageController extends AbstractController
     public function index(): Response
     {
         return $this->render('home_page/index.html.twig', [
-            'sliders'      => $this->sliderRepository->findBy([], ['priority' => 'DESC']),
+            'sliders'      => $this->sliderRepository->findBy([], ['priority' => 'ASC']),
             'categories'   => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
             'products'     => $this->productRepository->findBy(['status' => 'ACTIVE'], ['createdAt' => 'DESC'], 10),
             'totalCount'   => $_COOKIE['totalCount'] ?? 0,
