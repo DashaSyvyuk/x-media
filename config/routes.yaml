@@ -43,3 +43,7 @@ post_comment:
     path: /comment
     controller: App\Controller\CommentController::post
     methods: POST
+
+about_us:
+    path: /about-us
+    controller: App\Controller\AboutUsController::index

@@ -1067,3 +1067,20 @@ footer .copywrite {
     margin-left: 50px;
     margin-top: 25px;
 }
+
+.about-us {
+    width: 70%;
+    margin: 60px auto 0;
+    line-height: 2;
+}
+
+.about-us #logo {
+    text-align: center;
+    font-size: 35px;
+    margin-top: 50px;
+}
+
+.about-us span {
+    color: #00e765;
+    font-weight: 600;
+}
