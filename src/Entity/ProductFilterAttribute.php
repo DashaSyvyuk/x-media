@@ -33,6 +33,7 @@ class ProductFilterAttribute
     private $filter;
 
     /**
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * @ORM\ManyToOne(targetEntity=FilterAttribute::class)
      * @ORM\JoinColumn(nullable=false)
      */

@@ -89,7 +89,7 @@ header {
 }
 
 #menu #categories ul li a:hover {
-    background-color: rgba(200,200,200,.3);
+    background-color: rgba(200,200,200,.7);
 }
 
 #menu #search {
