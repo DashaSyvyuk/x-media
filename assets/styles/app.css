@@ -100,13 +100,21 @@ header {
 #menu #search input {
     width: 200px;
     height: 25px;
+    border-radius: 15px;
+    border: 1px solid #bbb;
+    outline: none;
+    padding-left: 10px;
+}
+
+#menu #search input:focus {
+    box-shadow: 0 0 10px rgba(0,0,0,.2);
 }
 
 #menu #search button {
     border: none;
     position: absolute;
-    right: 2px;
-    top: 2px;
+    right: 12px;
+    top: 1px;
     cursor: pointer;
     height: 25px;
     background-color: #fff;
@@ -122,13 +130,14 @@ header {
 
 #menu #cart-count {
     background-color: #119E00;
-    padding: 0px 5px;
+    padding: 0px 7px;
     position: absolute;
     left: 19px;
     top: -3px;
     border-radius: 50%;
     display: none;
     cursor: pointer;
+    color: #fff;
 }
 
 #menu #cart img {
@@ -223,7 +232,7 @@ section .title {
 
 .category {
     width: 100%;
-    padding: 40px;
+    padding: 20px 40px;
     box-sizing: border-box;
 }
 
@@ -233,7 +242,7 @@ section .title {
 }
 
 .category .breadcrumb {
-    margin-top: 30px;
+    margin-top: 15px;
     display: flex;
     font-size: 14px;
 }
@@ -265,7 +274,7 @@ section .title {
 }
 
 .category #filters .filter {
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
 .category #filters .filter .outer {
@@ -306,8 +315,8 @@ section .title {
 }
 
 .category #products .order-by select {
-    border: 1px solid #ccc;
-    border-radius: 0;
+    border: 1px solid #bbb;
+    border-radius: 15px;
     height: 26px;
     padding: 0 10px;
     font-family: 'Montserrat', sans-serif;
@@ -471,7 +480,7 @@ section .title {
 
 .product-page .images {
     float: left;
-    margin-top: 50px;
+    margin-top: 20px;
     width: 60%;
     height: 500px;
     margin-right: 5%;
@@ -517,12 +526,13 @@ section .title {
 .product-page .images .main img {
     width: 100%;
     object-fit: contain;
+    max-height: 500px;
 }
 
 .product-page .detail {
     width: 35%;
     float: left;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 .product-page .detail .attributes {
@@ -643,14 +653,11 @@ section .title {
 }
 
 #cart-popup #go-to-order a {
-    color: #000;
+    color: #fff;
     text-decoration: none;
     background-color: #119E00;
     padding: 10px 20px;
-}
-
-#cart-popup #go-to-order a:hover {
-    text-decoration: underline;
+    border-radius: 20px;
 }
 
 #cart-block p {
@@ -682,12 +689,13 @@ section .title {
 
 .order-place input[type=submit] {
     background-color: #119E00;
-    color: #000;
-    font-weight: bold;
+    color: #fff;
+    font-weight: 500;
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
     border: none;
+    border-radius: 20px;
 }
 
 .order-place .total-price {
@@ -1016,6 +1024,8 @@ footer .copywrite {
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
     cursor: pointer;
+    color: #fff;
+    border-radius: 20px;
 }
 
 #comment-list {
