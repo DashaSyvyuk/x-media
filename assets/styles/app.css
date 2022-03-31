@@ -71,6 +71,7 @@ header {
     font-size: 30px;
     color: #000;
     text-decoration: none;
+    font-weight: 500;
 }
 
 #menu #categories ul {
@@ -120,7 +121,7 @@ header {
 }
 
 #menu #cart-count {
-    background-color: #00e765;
+    background-color: #119E00;
     padding: 0px 5px;
     position: absolute;
     left: 19px;
@@ -195,7 +196,7 @@ section .title {
 .product .price {
     width: 50%;
     font-weight: bold;
-    color: #00e765;
+    color: #119E00;
     font-size: 22px;
     margin-top: 20px;
     float: left;
@@ -228,6 +229,7 @@ section .title {
 
 .category .category-title {
     font-size: 20px;
+    font-weight: 600;
 }
 
 .category .breadcrumb {
@@ -551,7 +553,7 @@ section .title {
 }
 
 .product-page .detail .price {
-    color: #00e765;
+    color: #119E00;
     font-size: 30px;
     text-align: right;
     font-weight: bold;
@@ -643,7 +645,7 @@ section .title {
 #cart-popup #go-to-order a {
     color: #000;
     text-decoration: none;
-    background-color: #00e765;
+    background-color: #119E00;
     padding: 10px 20px;
 }
 
@@ -679,7 +681,7 @@ section .title {
 }
 
 .order-place input[type=submit] {
-    background-color: #00e765;
+    background-color: #119E00;
     color: #000;
     font-weight: bold;
     padding: 10px;
@@ -694,7 +696,7 @@ section .title {
 }
 
 .order-place .total-price span {
-    color: #00e765;
+    color: #119E00;
 }
 
 .order-detail {
@@ -717,7 +719,7 @@ section .title {
 
 .order-detail p span {
     font-weight: bold;
-    color: #00e765;
+    color: #119E00;
 }
 
 .order-detail .products img {
@@ -1007,7 +1009,7 @@ footer .copywrite {
 }
 
 #reviews #add-review input[type=submit] {
-    background-color: #00e765;
+    background-color: #119E00;
     border: none;
     padding: 10px 30px;
     font-size: 14px;
@@ -1040,7 +1042,7 @@ footer .copywrite {
 }
 
 #comment-list #list .comment .author {
-    color: #00e765;
+    color: #119E00;
     font-weight: 600;
 }
 
@@ -1075,6 +1077,6 @@ footer .copywrite {
 }
 
 .about-us span {
-    color: #00e765;
+    color: #119E00;
     font-weight: 600;
 }
