@@ -471,7 +471,7 @@ section .title {
 .product-page .images {
     float: left;
     margin-top: 50px;
-    width: 70%;
+    width: 60%;
     height: 500px;
     margin-right: 5%;
 }
@@ -482,6 +482,7 @@ section .title {
     float: left;
     overflow: hidden;
     border: 1px solid #eee;
+    margin-right: 15px;
 }
 
 .product-page .images .list .inner {
@@ -514,12 +515,11 @@ section .title {
 
 .product-page .images .main img {
     width: 100%;
-    height: 500px;
     object-fit: contain;
 }
 
 .product-page .detail {
-    width: 25%;
+    width: 35%;
     float: left;
     margin-top: 50px;
 }
@@ -581,7 +581,7 @@ section .title {
 .product-page .readonly-rating {
     align-items: center;
     display: flex;
-    margin-top: 15px;
+    margin: 10px 0;
 }
 
 #cart-popup {

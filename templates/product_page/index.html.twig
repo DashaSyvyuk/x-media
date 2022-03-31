@@ -13,21 +13,10 @@
     </header>
 
     <section class="category product-page">
-        <div class="category-title">{{ product.title }}</div>
-
         <div class="breadcrumb">
             <a href="/">Головна</a>
-            <span>/</span>
+            <span> > </span>
             <a href="/categories/{{ product.getCategory().slug }}">&nbsp{{ product.getCategory().title }}</a>
-            <span>/</span>
-            <a href="" class="selected">{{ product.title }}</a>
-        </div>
-
-        <div class="readonly-rating">
-            <span class="star-rating"></span>
-            <span class="value" data-value="{{ product.getAverageRating()|round(2) }}">
-                ({{ product.getAverageRating()|round(2) }})
-            </span>
         </div>
 
         <div class="images">
@@ -44,6 +33,13 @@
         </div>
 
         <div class="detail">
+            <div class="category-title">{{ product.title }}</div>
+            <div class="readonly-rating">
+                <span class="star-rating"></span>
+                <span class="value" data-value="{{ product.getAverageRating()|round(2) }}">
+                ({{ product.getAverageRating()|round(2) }})
+                </span>
+            </div>
             <div class="attributes">
                 {% for attribute in product.getFilterAttributes() %}
                     <div class="attribute">
