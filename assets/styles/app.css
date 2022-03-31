@@ -97,7 +97,6 @@ header {
 }
 
 #menu #search input {
-    outline: none;
     width: 200px;
     height: 25px;
 }
@@ -105,10 +104,10 @@ header {
 #menu #search button {
     border: none;
     position: absolute;
-    right: 1px;
-    top: 1px;
+    right: 2px;
+    top: 2px;
     cursor: pointer;
-    height: 29px;
+    height: 25px;
     background-color: #fff;
 }
 
