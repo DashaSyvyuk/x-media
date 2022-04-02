@@ -247,15 +247,14 @@ class Product
 
     public function getImages()
     {
-        $images = [];
+        $images = $this->images->toArray();
 
-        foreach ($this->images as $image) {
-            $images[$image->getPosition()] = $image;
-        }
+        usort($images, function($a, $b)
+        {
+            return strcmp($a->getPosition(), $b->getPosition());
+        });
 
-        ksort($images);
-
-        return array_values($images);
+        return $images;
     }
 
     public function setImages($images)

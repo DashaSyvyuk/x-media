@@ -25,6 +25,7 @@ class FilterRepository extends ServiceEntityRepository
             ->leftJoin('fp.category', 'category')
             ->andWhere('category.slug = :slug')
             ->setParameter('slug', $slug)
+            ->addOrderBy('fp.priority', 'DESC')
             ->getQuery()
             ->getResult();
     }
