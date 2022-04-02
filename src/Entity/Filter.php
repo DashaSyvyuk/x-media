@@ -46,6 +46,12 @@ class Filter
     private int $priority = 0;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private bool $isOpened = true;
+
+    /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      * @ORM\ManyToOne(targetEntity="App\Entity\Category")
      */
@@ -152,6 +158,22 @@ class Filter
     public function getPriority(): int
     {
         return $this->priority;
+    }
+
+    /**
+     * @param bool $isOpened
+     */
+    public function setIsOpened(bool $isOpened)
+    {
+        $this->isOpened = $isOpened;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsOpened(): bool
+    {
+        return $this->isOpened;
     }
 
     public function getCreatedAt()
