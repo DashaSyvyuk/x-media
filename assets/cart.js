@@ -2,12 +2,12 @@ import './styles/app.css';
 import './bootstrap';
 import $ from 'jquery';
 
-$(document).on('click', '.add2cart img', (e) => {
+$(document).on('click', '.add2cart div', (e) => {
     let cart = JSON.parse(getCookie('cart') !== undefined ? getCookie('cart') : '[]');
     let count = 1;
-    const id = $(e.currentTarget).data('id');
-    const name = $(e.currentTarget).data('name');
-    const price = $(e.currentTarget).data('price');
+    const id = $(e.currentTarget).find('img').data('id');
+    const name = $(e.currentTarget).find('img').data('name');
+    const price = $(e.currentTarget).find('img').data('price');
 
     if (cart.length > 0) {
         cart.map((item) => {

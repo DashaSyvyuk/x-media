@@ -107,7 +107,7 @@ header {
 }
 
 #menu #search input:focus {
-    box-shadow: 0 0 10px rgba(0,0,0,.2);
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
 #menu #search button {
@@ -130,14 +130,18 @@ header {
 
 #menu #cart-count {
     background-color: #119E00;
-    padding: 0px 7px;
+    color: #fff;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    padding: 1px;
     position: absolute;
     left: 19px;
     top: -3px;
-    border-radius: 50%;
-    display: none;
-    cursor: pointer;
-    color: #fff;
+    width: 16px;
+    height: 16px;
 }
 
 #menu #cart img {
@@ -223,6 +227,13 @@ section .title {
     width: 30px;
     height: auto;
     cursor: pointer;
+    background-color: #119E00;
+    padding: 2px 25px;
+    border-radius: 20px;
+}
+
+.product .add2cart img:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
 .product .rating {
@@ -575,6 +586,23 @@ section .title {
     justify-content: flex-end;
 }
 
+.product-page .detail .add2cart div {
+    background-color: #119E00;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 35px;
+    border-radius: 25px;
+    font-weight: 600;
+    width: 120px;
+}
+
+.product-page .detail .add2cart div:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+    cursor: pointer;
+}
+
 .product-page .detail .add2cart img {
     width: 40px;
     cursor: pointer;
@@ -659,6 +687,10 @@ section .title {
     border-radius: 20px;
 }
 
+#cart-popup #go-to-order a:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+}
+
 #cart-block p {
     text-align: center;
 }
@@ -675,11 +707,16 @@ section .title {
 
 .order-place input, .order-place select, .order-place textarea {
     width: 100%;
-    padding: 6px;
+    padding: 6px 10px;
     border: 1px solid #E0E0E0;
     box-sizing: border-box;
     resize: none;
     outline: none;
+    border-radius: 15px;
+}
+
+.order-place input:focus, .order-place select:focus, .order-place textarea:focus {
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
 .order-place .required {
@@ -695,6 +732,10 @@ section .title {
     cursor: pointer;
     border: none;
     border-radius: 20px;
+}
+
+.order-place input[type=submit]:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
 .order-place .total-price {
@@ -1033,6 +1074,10 @@ footer .copywrite {
     cursor: pointer;
     color: #fff;
     border-radius: 20px;
+}
+
+#reviews #add-review input[type=submit]:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
 #comment-list {

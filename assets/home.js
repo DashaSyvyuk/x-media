@@ -26,14 +26,6 @@ $("#new-products").slick({
     pauseOnHover: false
 });
 
-$(document).on('mouseover', '.add2cart img', (e) => {
-    $(e.currentTarget).attr('src', '/images/cart_active.png');
-});
-
-$(document).on('mouseout', '.add2cart img', (e) => {
-    $(e.currentTarget).attr('src', '/images/cart.png');
-});
-
 $(document).on('mouseover', '.product .inner img', (e) => {
     const next = $(e.currentTarget).data('next');
 

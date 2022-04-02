@@ -20,6 +20,8 @@
         <div id="cart-count" {% if totalCount > 0 %}style="display: block"{% endif %}/>
             {% if totalCount > 0 %}
                 {{ totalCount }}
+            {% else %}
+                0
             {% endif %}
         </div>
     </div>
