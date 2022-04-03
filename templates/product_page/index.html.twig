@@ -100,12 +100,15 @@
                             <div id="list">
                             {% for comment in product.getComments() %}
                                 <div class="comment">
-                                    <div class="author">{{ comment.author }}</div>
+                                    <div class="author">{{ comment.author }}:</div>
                                     <div class="date">{{ comment.createdAt.format('Y-m-d H:i:s') }}</div>
                                     <div class="text">{{ comment.comment }}</div>
+                                    {% if comment.answer|length >0 %}
                                     <div class="answer">
+                                        <div class="author">X-media:</div>
                                         <div class="text">{{ comment.answer }}</div>
                                     </div>
+                                    {% endif %}
                                 </div>
                             {% endfor %}
                             </div>
