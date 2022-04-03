@@ -69,8 +69,8 @@
                     <table>
                         {% for characteristic in product.getCharacteristics() %}
                         <tr>
-                            <td>{{ characteristic.getTitle() }}</td>
-                            <td>{{ characteristic.getValue() }}</td>
+                            <td>{{ characteristic.getTitle()|raw }}</td>
+                            <td>{{ characteristic.getValue()|raw }}</td>
                         </tr>
                         {% endfor %}
                     </table>
