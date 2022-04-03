@@ -85,7 +85,7 @@ function getTotalCount(cart) {
     }, 0);
 
     if (total > 0) {
-        $('#cart-count').text(total).show();
+        $('#cart-count').text(total);
     }
 
     return total;
