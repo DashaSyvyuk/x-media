@@ -249,8 +249,7 @@ class Product
     {
         $images = $this->images->toArray();
 
-        usort($images, function($a, $b)
-        {
+        usort($images, function($a, $b) {
             return strcmp($a->getPosition(), $b->getPosition());
         });
 

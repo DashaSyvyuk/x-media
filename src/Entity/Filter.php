@@ -134,14 +134,7 @@ class Filter
 
     public function getAttributes()
     {
-        $attributes = $this->attributes->toArray();
-
-        usort($attributes, function($a, $b)
-        {
-            return strcmp($a->getPriority(), $b->getPriority());
-        });
-
-        return $attributes;
+        return $this->attributes;
     }
 
     /**
