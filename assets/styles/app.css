@@ -260,8 +260,12 @@ section .title {
 }
 
 .category .category-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 5px;
+    text-overflow: ellipsis;
 }
 
 .category .breadcrumb {
@@ -901,7 +905,7 @@ footer .copywrite {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #119E00;
 }
 
 .product-page .tabs-place .tabs .tab {
@@ -910,8 +914,13 @@ footer .copywrite {
     cursor: pointer;
 }
 
-.product-page .tabs-place .tabs .tab.active {
+.product-page .tabs-place .tabs .tab:hover {
     background-color: #eee;
+}
+
+.product-page .tabs-place .tabs .tab.active {
+    background-color: #119E00;
+    color: #fff;
 }
 
 .product-page .tabs-place .content {
@@ -1052,6 +1061,12 @@ footer .copywrite {
     margin-bottom: 20px;
 }
 
+#reviews #add-review .inner {
+    background-color: #eee;
+    width: 415px;
+    padding: 15px;
+}
+
 #reviews #add-review p {
     font-weight: 500;
     margin-bottom: 30px;
@@ -1069,6 +1084,11 @@ footer .copywrite {
     width: 300px;
     resize: none;
     font-family: 'Montserrat', sans-serif;
+    outline: none;
+}
+
+#reviews #add-review input[type=text]:focus, #add-review textarea:focus {
+    box-shadow: 0 0 10px rgba(0,0,0,.3);
 }
 
 #reviews #add-review input[type=text].red, #add-review textarea.red {

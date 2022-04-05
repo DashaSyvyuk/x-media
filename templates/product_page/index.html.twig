@@ -77,22 +77,24 @@
                 </div>
                 <div class="content-tab" id="reviews">
                     <form method="post" id="add-review">
-                        <p>Залишити відгук про товар:</p>
-                        <div class="rating"></div>
-                        <label>
-                            <span class="field">Ім'я:<span class="required">*</span></span>
-                            <input type="text" name="author" id="author">
-                        </label>
-                        <label>
-                            <span class="field">Email:</span>
-                            <input type="text" name="email" id="email">
-                        </label>
-                        <label>
-                            <span class="field">Коментар:<span class="required">*</span></span>
-                            <textarea name="text" id="comment"></textarea>
-                        </label>
-                        <input type="hidden" name="product" value="{{ product.id }}" id="product">
-                        <input type="submit" value="Відправити">
+                        <div class="inner">
+                            <p>Залишити відгук про товар:</p>
+                            <div class="rating"></div>
+                            <label>
+                                <span class="field">Ім'я:<span class="required">*</span></span>
+                                <input type="text" name="author" id="author">
+                            </label>
+                            <label>
+                                <span class="field">Email:</span>
+                                <input type="text" name="email" id="email">
+                            </label>
+                            <label>
+                                <span class="field">Коментар:<span class="required">*</span></span>
+                                <textarea name="text" id="comment"></textarea>
+                            </label>
+                            <input type="hidden" name="product" value="{{ product.id }}" id="product">
+                            <input type="submit" value="Відправити">
+                        </div>
                     </form>
                     <div id="comment-list">
                         <h4>Відгуки про товар:</h4>
