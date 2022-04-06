@@ -19,11 +19,13 @@
                 {% endif %}
             {% endfor %}
         </div>
-        <div class="price">{{ product.price|number_format(0, '.', ' ') }} грн</div>
-        <div class="add2cart">
-            <div>
-                <span>Купити</span>
-                <img src="/images/cart_white.png" data-id="{{ product.id }}" data-name="{{ product.title }}" data-price="{{ product.price }}">
+        <div class="price-add2cart">
+            <div class="price">{{ product.price|number_format(0, '.', ' ') }} грн</div>
+            <div class="add2cart">
+                <div>
+                    <span>Купити</span>
+                    <img src="/images/cart_white.png" data-id="{{ product.id }}" data-name="{{ product.title }}" data-price="{{ product.price }}">
+                </div>
             </div>
         </div>
     </div>

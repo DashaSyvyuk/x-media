@@ -11,7 +11,7 @@
     </div>
     <div id="search">
         <form action="/search" method="GET">
-            <input type="text" name="search" autocomplete="off" value="{% if searchString is defined %}{{ searchString }}{% endif %}">
+            <input type="text" name="search" placeholder="Пошук..." autocomplete="off" value="{% if searchString is defined %}{{ searchString }}{% endif %}">
             <button type="submit"><img src="/images/search.svg" /></button>
         </form>
     </div>

@@ -100,7 +100,6 @@ header {
 #menu #search input {
     width: 200px;
     height: 25px;
-    border-radius: 15px;
     border: 1px solid #bbb;
     outline: none;
     padding-left: 10px;
@@ -113,7 +112,7 @@ header {
 #menu #search button {
     border: none;
     position: absolute;
-    right: 12px;
+    right: 1px;
     top: 1px;
     cursor: pointer;
     height: 25px;
@@ -183,7 +182,6 @@ section .title {
 }
 
 .product .product-title {
-    margin-top: 20px;
     height: 40px;
     width: 100%;
     overflow: hidden;
@@ -191,9 +189,10 @@ section .title {
 
 .product .filter-attributes {
     width: 100%;
-    height: 30px;
+    height: 50px;
     font-size: 10px;
-    color: #aaa;
+    color: #666;
+    margin-top: 10px;
 }
 
 .product .product-title a {
@@ -211,12 +210,10 @@ section .title {
     font-weight: bold;
     color: #333;
     font-size: 22px;
-    margin-top: 20px;
     float: left;
 }
 
 .product .add2cart {
-    margin-top: 10px;
     width: 50%;
     text-align: right;
     display: flex;
@@ -231,17 +228,24 @@ section .title {
 .product .add2cart div {
     align-items: center;
     background-color: #119e00;
-    border-radius: 24px;
     color: #fff;
     cursor: pointer;
     display: flex;
     font-weight: 500;
     justify-content: space-between;
-    padding: 1px 11px;
-    width: 110px;
+    padding: 1px 15px;
+    width: 130px;
     height: 30px;
     font-size: 14px;
     box-sizing: border-box;
+}
+
+.product .price-add2cart {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30px;
 }
 
 .product .add2cart div:hover {
@@ -343,7 +347,6 @@ section .title {
 
 .category #products .order-by select {
     border: 1px solid #bbb;
-    border-radius: 15px;
     height: 26px;
     padding: 0 10px;
     font-family: 'Montserrat', sans-serif;
@@ -609,7 +612,6 @@ section .title {
     align-items: center;
     justify-content: space-between;
     padding: 7px 35px;
-    border-radius: 25px;
     font-weight: 500;
     width: 120px;
 }
@@ -700,7 +702,6 @@ section .title {
     text-decoration: none;
     background-color: #119E00;
     padding: 10px 20px;
-    border-radius: 20px;
 }
 
 #cart-popup #go-to-order a:hover {
@@ -728,7 +729,6 @@ section .title {
     box-sizing: border-box;
     resize: none;
     outline: none;
-    border-radius: 15px;
 }
 
 .order-place input:focus, .order-place select:focus, .order-place textarea:focus {
@@ -747,7 +747,6 @@ section .title {
     font-size: 16px;
     cursor: pointer;
     border: none;
-    border-radius: 20px;
 }
 
 .order-place input[type=submit]:hover {
@@ -1114,7 +1113,6 @@ footer .copywrite {
     font-weight: 500;
     cursor: pointer;
     color: #fff;
-    border-radius: 20px;
 }
 
 #reviews #add-review input[type=submit]:hover {

@@ -45,7 +45,7 @@ $('.rating').each(function() {
          emptyColor: '#eee',
          initialRating: value,
          strokeColor: '#00e765',
-         starSize: 25,
+         starSize: 20,
          activeColor: '#00e765',
          hoverColor: '#00e765',
          useGradient: false,

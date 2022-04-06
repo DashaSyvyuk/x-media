@@ -43,7 +43,7 @@
             <div class="attributes">
                 {% for attribute in product.getFilterAttributes() %}
                     <div class="attribute">
-                        <div class="title">{{ attribute.getFilter().getTitle() }}</div>
+                        <div class="title">{{ attribute.getFilter().getTitle() }}:</div>
                         <div class="value">{{ attribute.getFilterAttribute().getValue() }}</div>
                     </div>
                 {% endfor %}
