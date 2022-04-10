@@ -3,13 +3,29 @@ import './bootstrap';
 import $ from 'jquery';
 import './star-rating';
 
-$('#filters input[type=checkbox]').on('change', () => {
+$('#filters input[type=checkbox]').on('change', (e) => {
     const url = window.location.pathname;
     const newUrl = url + getUrl();
+    const filter = $(e.currentTarget).attr('name');
 
     getProducts(newUrl);
 
     window.history.pushState('', '', newUrl);
+
+    if ($(e.currentTarget).is(':checked')) {
+        const title = $(e.currentTarget).parent().text();
+        const html = '<div class="item" data-filter-id="'+filter+'"><span class="attribute-title">'+title+'</span><img src="/images/close.png"></div>';
+        $('.selected-filters').append(html);
+    } else {
+        $('.selected-filters div[data-filter-id='+filter+']').remove();
+    }
+});
+
+$(document).on('click', '#filter-form .selected-filters .item', (e) => {
+    const filter = $(e.currentTarget).data('filter-id');
+
+    $('#filters input[name='+filter+']').trigger('click');
+    $(e.currentTarget).remove();
 });
 
 $('#products .order-by select').on('change', () => {
@@ -106,11 +122,15 @@ function getProducts(url) {
         'height': $('#products .products').height() + 'px',
         'width': $('#products .products').width() + 'px'
     });
+
     $.get(url, (data) => {
         const obj = JSON.parse(data);
 
         $('#products .products').html(obj.products);
+        $('#price_from').attr('placeholder', obj.minPrice);
+        $('#price_to').attr('placeholder', obj.maxPrice);
     });
+
     $('#products .loader').css('display', 'none');
 }
 
@@ -127,4 +147,44 @@ $('.rating').each(function() {
          useGradient: false,
          readOnly: true
     });
+});
+
+$('#filters .filter-title img, #filters .show-all img').on('mouseover', (e) => {
+    if ($(e.currentTarget).attr('src') == '/images/arrow_down_gray.png') {
+        $(e.currentTarget).attr('src', '/images/arrow_down_black.png');
+    } else if ($(e.currentTarget).attr('src') == '/images/arrow_up_gray.png') {
+        $(e.currentTarget).attr('src', '/images/arrow_up_black.png');
+    }
+});
+
+$('#filters .filter-title img, #filters .show-all img').on('mouseout', (e) => {
+    if ($(e.currentTarget).attr('src') == '/images/arrow_down_black.png') {
+        $(e.currentTarget).attr('src', '/images/arrow_down_gray.png');
+    } else if ($(e.currentTarget).attr('src') == '/images/arrow_up_black.png') {
+        $(e.currentTarget).attr('src', '/images/arrow_up_gray.png');
+    }
+});
+
+$('#filters .filter-title img').on('click', (e) => {
+    if ($(e.currentTarget).parent().parent().find('.outer').hasClass('active')) {
+        $(e.currentTarget).parent().parent().find('.outer').removeClass('active');
+        $(e.currentTarget).parent().parent().find('.outer').slideUp();
+        $(e.currentTarget).attr('src', '/images/arrow_down_gray.png');
+    } else {
+        $(e.currentTarget).parent().parent().find('.outer').slideDown();
+        $(e.currentTarget).attr('src', '/images/arrow_up_gray.png');
+        $(e.currentTarget).parent().parent().find('.outer').addClass('active');
+    }
+});
+
+$('#filters .show-all img').on('click', (e) => {
+    if ($(e.currentTarget).parent().parent().find('.hidden-part').hasClass('active')) {
+        $(e.currentTarget).parent().parent().find('.hidden-part').removeClass('active');
+        $(e.currentTarget).parent().parent().find('.hidden-part').slideUp();
+        $(e.currentTarget).attr('src', '/images/arrow_down_gray.png');
+    } else {
+        $(e.currentTarget).parent().parent().find('.hidden-part').slideDown();
+        $(e.currentTarget).parent().parent().find('.hidden-part').addClass('active');
+        $(e.currentTarget).attr('src', '/images/arrow_up_gray.png');
+    }
 });

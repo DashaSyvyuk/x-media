@@ -58,6 +58,12 @@ class Filter
     private Category $category;
 
     /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private int $openedCount = 0;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -154,6 +160,22 @@ class Filter
     }
 
     /**
+     * @param int $openedCount
+     */
+    public function setOpenedCount(int $openedCount)
+    {
+        $this->openedCount = $openedCount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOpenedCount(): int
+    {
+        return $this->openedCount;
+    }
+
+    /**
      * @param bool $isOpened
      */
     public function setIsOpened(bool $isOpened)
@@ -187,6 +209,17 @@ class Filter
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getFilterAttributes()
+    {
+        $attributes = $this->attributes->toArray();
+
+        usort($attributes, function($a, $b) {
+            return strcmp($a->getPriority(), $b->getPriority());
+        });
+
+        return $attributes;
     }
 
     public function __toString():string

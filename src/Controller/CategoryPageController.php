@@ -78,7 +78,9 @@ class CategoryPageController extends AbstractController
             return new Response(json_encode([
                 'products' => $this->renderView('partials/product-list.html.twig', [
                     'pagination' => $pagination
-                ])
+                ]),
+                'minPrice' => $prices['min_price'],
+                'maxPrice' => $prices['max_price']
             ]));
         } else {
             return $this->render('category_page/index.html.twig', [
