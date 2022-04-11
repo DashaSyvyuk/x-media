@@ -19,7 +19,7 @@
     </div>
     {% for key, filter in filters %}
         <div class="filter">
-            <p class="filter-title"><span>{{ filter.title }}</span> {% if filter.isOpened %}<img src="/images/arrow_down_gray.png">{% endif %}</p>
+            <p class="filter-title"><span>{{ filter.title }}</span> {% if filter.isOpened %}<img src="/images/arrow_down_gray.png">{% else %}<img src="/images/arrow_up_gray.png">{% endif %}</p>
             <div class="outer {% if filter.isOpened %}hidden{% endif %}">
                 <div class="inner">
                     {% for attribute in filter.getFilterAttributes() %}

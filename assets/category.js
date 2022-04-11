@@ -149,42 +149,42 @@ $('.rating').each(function() {
     });
 });
 
-$('#filters .filter-title img, #filters .show-all img').on('mouseover', (e) => {
-    if ($(e.currentTarget).attr('src') == '/images/arrow_down_gray.png') {
-        $(e.currentTarget).attr('src', '/images/arrow_down_black.png');
-    } else if ($(e.currentTarget).attr('src') == '/images/arrow_up_gray.png') {
-        $(e.currentTarget).attr('src', '/images/arrow_up_black.png');
+$('#filters .filter-title, #filters .show-all').on('mouseover', (e) => {
+    if ($(e.currentTarget).find('img').attr('src') == '/images/arrow_down_gray.png') {
+        $(e.currentTarget).find('img').attr('src', '/images/arrow_down_black.png');
+    } else if ($(e.currentTarget).find('img').attr('src') == '/images/arrow_up_gray.png') {
+        $(e.currentTarget).find('img').attr('src', '/images/arrow_up_black.png');
     }
 });
 
-$('#filters .filter-title img, #filters .show-all img').on('mouseout', (e) => {
-    if ($(e.currentTarget).attr('src') == '/images/arrow_down_black.png') {
-        $(e.currentTarget).attr('src', '/images/arrow_down_gray.png');
-    } else if ($(e.currentTarget).attr('src') == '/images/arrow_up_black.png') {
-        $(e.currentTarget).attr('src', '/images/arrow_up_gray.png');
+$('#filters .filter-title, #filters .show-all').on('mouseout', (e) => {
+    if ($(e.currentTarget).find('img').attr('src') == '/images/arrow_down_black.png') {
+        $(e.currentTarget).find('img').attr('src', '/images/arrow_down_gray.png');
+    } else if ($(e.currentTarget).find('img').attr('src') == '/images/arrow_up_black.png') {
+        $(e.currentTarget).find('img').attr('src', '/images/arrow_up_gray.png');
     }
 });
 
-$('#filters .filter-title img').on('click', (e) => {
-    if ($(e.currentTarget).parent().parent().find('.outer').hasClass('active')) {
-        $(e.currentTarget).parent().parent().find('.outer').removeClass('active');
-        $(e.currentTarget).parent().parent().find('.outer').slideUp();
-        $(e.currentTarget).attr('src', '/images/arrow_down_gray.png');
+$('#filters .filter-title').on('click', (e) => {
+    if ($(e.currentTarget).parent().find('.outer').hasClass('active') || $(e.currentTarget).parent().find('.outer').css('display') == 'block') {
+        $(e.currentTarget).parent().find('.outer').removeClass('active');
+        $(e.currentTarget).parent().find('.outer').slideUp();
+        $(e.currentTarget).find('img').attr('src', '/images/arrow_down_gray.png');
     } else {
-        $(e.currentTarget).parent().parent().find('.outer').slideDown();
-        $(e.currentTarget).attr('src', '/images/arrow_up_gray.png');
-        $(e.currentTarget).parent().parent().find('.outer').addClass('active');
+        $(e.currentTarget).parent().find('.outer').slideDown();
+        $(e.currentTarget).find('img').attr('src', '/images/arrow_up_gray.png');
+        $(e.currentTarget).parent().find('.outer').addClass('active');
     }
 });
 
-$('#filters .show-all img').on('click', (e) => {
-    if ($(e.currentTarget).parent().parent().find('.hidden-part').hasClass('active')) {
-        $(e.currentTarget).parent().parent().find('.hidden-part').removeClass('active');
-        $(e.currentTarget).parent().parent().find('.hidden-part').slideUp();
-        $(e.currentTarget).attr('src', '/images/arrow_down_gray.png');
+$('#filters .show-all').on('click', (e) => {
+    if ($(e.currentTarget).parent().find('.hidden-part').hasClass('active')) {
+        $(e.currentTarget).parent().find('.hidden-part').removeClass('active');
+        $(e.currentTarget).parent().find('.hidden-part').slideUp();
+        $(e.currentTarget).find('img').attr('src', '/images/arrow_down_gray.png');
     } else {
-        $(e.currentTarget).parent().parent().find('.hidden-part').slideDown();
-        $(e.currentTarget).parent().parent().find('.hidden-part').addClass('active');
-        $(e.currentTarget).attr('src', '/images/arrow_up_gray.png');
+        $(e.currentTarget).parent().find('.hidden-part').slideDown();
+        $(e.currentTarget).parent().find('.hidden-part').addClass('active');
+        $(e.currentTarget).find('img').attr('src', '/images/arrow_up_gray.png');
     }
 });

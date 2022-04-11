@@ -46,6 +46,7 @@ class CategoryPageController extends AbstractController
         $direction = $request->query->get('direction');
         $priceFrom = $request->query->get('price_from');
         $priceTo = $request->query->get('price_to');
+        $limit = $this->settingRepository->findOneBy(['slug' => 'pagination_limit']);
 
         $category = $this->categoryRepository->findOneBy(['slug' => $slug, 'status' => 'ACTIVE']);
 
@@ -69,7 +70,7 @@ class CategoryPageController extends AbstractController
         $pagination = $paginator->paginate(
             $products,
             $request->query->getInt('page', 1),
-            9
+            $limit->getValue()
         );
 
         $prices = $this->productRepository->getMinAndMaxPriceInCategory($category, $query, $priceFrom, $priceTo);

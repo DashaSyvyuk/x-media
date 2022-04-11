@@ -184,7 +184,11 @@ section .title {
 .product .product-title {
     height: 40px;
     width: 100%;
+    text-overflow: ellipsis;
     overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 .product .filter-attributes {
@@ -266,10 +270,7 @@ section .title {
 .category .category-title {
     font-size: 18px;
     font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
     padding: 5px;
-    text-overflow: ellipsis;
 }
 
 .category .breadcrumb {
@@ -307,21 +308,22 @@ section .title {
     justify-content: space-between;
     padding: 0 10px;
     box-sizing: border-box;
+    cursor: pointer;
 }
 
 .category #filters .show-all {
     font-weight: 500;
-    font-size: 14px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 10px;
     box-sizing: border-box;
+    cursor: pointer;
 }
 
 .category #filters .show-all img {
-    width: 15px;
-    cursor: pointer;
+    width: 12px;
     margin-left: 15px;
 }
 
@@ -333,7 +335,6 @@ section .title {
 .category #filters .filter-title img {
     width: 15px;
     margin-left: 10px;
-    cursor: pointer;
 }
 
 .category #filters .filter {
@@ -1169,6 +1170,13 @@ footer .copywrite {
 
 #reviews #add-review input[type=submit]:hover {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+
+#reviews #add-review .detail {
+    font-size: 12px;
+    font-weight: 500;
+    width: 100%;
+    margin: 40px 0 20px;
 }
 
 #comment-list {

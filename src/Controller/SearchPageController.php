@@ -36,6 +36,7 @@ class SearchPageController extends AbstractController
     public function getSearch(PaginatorInterface $paginator, Request $request): Response
     {
         $categories = $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']);
+        $limit = $this->settingRepository->findOneBy(['slug' => 'pagination_limit']);
 
         $query = $request->query->get('search');
 
@@ -44,7 +45,7 @@ class SearchPageController extends AbstractController
         $pagination = $paginator->paginate(
             $products,
             $request->query->getInt('page', 1),
-            20
+            $limit->getValue()
         );
 
         if ($request->isXmlHttpRequest()) {

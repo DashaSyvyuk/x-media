@@ -20,7 +20,7 @@ final class FilterAdmin extends AbstractAdmin
                 ->add('category', ModelType::class,  ['placeholder' => 'Оберіть категорію', 'required' => true])
                 ->add('priority', null, ['required' => true])
                 ->add('openedCount', null, ['label' => 'Кількість відкритих параметрів'])
-                ->add('isOpened')
+                ->add('isOpened', null, ['label' => 'Закритий'])
             ->end()
             ->with('Параметри')
                 ->add('attributes', CollectionType::class, [
