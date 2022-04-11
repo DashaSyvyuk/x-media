@@ -1245,3 +1245,21 @@ footer .copywrite {
     color: #119E00;
     font-weight: 600;
 }
+
+#scroll-top {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background-color: rgba(204, 204, 204, .5);
+    padding: 20px;
+    cursor: pointer;
+    display: none;
+}
+
+#scroll-top:hover {
+    background-color: rgba(180, 180, 180, .5);
+}
+
+#scroll-top img {
+    width: 45px;
+}
