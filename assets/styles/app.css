@@ -1251,7 +1251,7 @@ footer .copywrite {
     bottom: 40px;
     right: 40px;
     background-color: rgba(204, 204, 204, .5);
-    padding: 20px;
+    padding: 15px;
     cursor: pointer;
     display: none;
 }
@@ -1261,5 +1261,17 @@ footer .copywrite {
 }
 
 #scroll-top img {
-    width: 45px;
+    width: 30px;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

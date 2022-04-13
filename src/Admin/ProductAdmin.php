@@ -137,7 +137,7 @@ final class ProductAdmin extends AbstractAdmin
             ->add('_action', 'actions', [
                 'actions' => [
                     'show' => [],
-                    'edit' => [],
+                    'edit' => []
                 ]
             ])
         ;
