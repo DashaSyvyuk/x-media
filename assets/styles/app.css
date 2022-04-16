@@ -1251,7 +1251,7 @@ footer .copywrite {
     bottom: 40px;
     right: 40px;
     background-color: rgba(204, 204, 204, .5);
-    padding: 15px;
+    padding: 20px 15px;
     cursor: pointer;
     display: none;
 }

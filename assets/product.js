@@ -112,3 +112,23 @@ $('#add-review').on('submit', (e) => {
 $('#comment-popup').on('click', (e) => {
     $(e.currentTarget).hide();
 });
+
+$(document).on('mouseover', '#scroll-top', (e) => {
+    $(e.currentTarget).find('img').attr('src', '/images/arrow_up_black.png');
+});
+
+$(document).on('mouseout', '#scroll-top', (e) => {
+    $(e.currentTarget).find('img').attr('src', '/images/arrow_up_gray.png');
+});
+
+$(document).on('click', '#scroll-top', (e) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+});
+
+$(window).on('scroll', (e) => {
+    if (window.scrollY > 0) {
+        $('#scroll-top').show();
+    } else {
+        $('#scroll-top').hide();
+    }
+});

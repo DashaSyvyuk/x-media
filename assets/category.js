@@ -122,6 +122,7 @@ function getProducts(url) {
         'height': $('#products .products').height() + 'px',
         'width': $('#products .products').width() + 'px'
     });
+    $('#filters input').attr('disabled', 'disabled');
 
     $.get(url, (data) => {
         const obj = JSON.parse(data);
@@ -129,9 +130,9 @@ function getProducts(url) {
         $('#products .products').html(obj.products);
         $('#price_from').attr('placeholder', obj.minPrice);
         $('#price_to').attr('placeholder', obj.maxPrice);
+        $('#products .loader').css('display', 'none');
+        $('#filters input').attr('disabled', false);
     });
-
-    $('#products .loader').css('display', 'none');
 }
 
 $('.rating').each(function() {
