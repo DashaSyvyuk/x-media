@@ -118,10 +118,9 @@ function getPriceTo() {
 
 function getProducts(url) {
     $('#products .loader').css({
-        'display': 'block',
-        'height': $('#products .products').height() + 'px',
-        'width': $('#products .products').width() + 'px'
+        'display': 'block'
     });
+
     $('#filters input').attr('disabled', 'disabled');
 
     $.get(url, (data) => {
