@@ -75,6 +75,9 @@ class CategoryPageController extends AbstractController
 
         $prices = $this->productRepository->getMinAndMaxPriceInCategory($category, $query, $priceFrom, $priceTo);
 
+        $query['price_from'] = $priceFrom;
+        $query['price_to'] = $priceTo;
+
         if ($request->isXmlHttpRequest()) {
             return new Response(json_encode([
                 'products' => $this->renderView('partials/product-list.html.twig', [

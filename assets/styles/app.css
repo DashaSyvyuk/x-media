@@ -390,8 +390,7 @@ section .title {
     min-height: 400px;
     background-color: rgba(255,255,255, .7);
     background-size: 100px;
-    background-position-x: center;
-    background-position-y: 300px;
+    background-position: center center;
     background-repeat: no-repeat;
     background-image: url('/public/images/loader.gif');
 }

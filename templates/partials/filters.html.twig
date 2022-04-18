@@ -7,14 +7,32 @@
                 {% endif %}
             {% endfor %}
         {% endfor %}
+        {% if query.price_from %}
+            <div class="item" data-filter-id="price_from"><span class="attribute-title">від {{ query.price_from }}</span><img src="/images/close.png"></div>
+        {% endif %}
+        {% if query.price_to %}
+            <div class="item" data-filter-id="price_to"><span class="attribute-title">до {{ query.price_to }}</span><img src="/images/close.png"></div>
+        {% endif %}
     </div>
     <div class="filter">
         <p class="filter-title">Ціна:</p>
         <div class="price-filter">
             <span>від: </span>
-            <input type="text" id="price_from" name="price_from" placeholder="{% if minPrice is defined %}{{ minPrice|number_format(0, '.', ' ') }}{% endif %}" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            <input
+                type="text"
+                id="price_from"
+                name="price_from"
+                value="{% if query.price_from %}{{ query.price_from }}{% endif %}"
+                placeholder="{% if minPrice is defined %}{{ minPrice|number_format(0, '.', ' ') }}{% endif %}"
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             <span>до: </span>
-            <input type="text" id="price_to" name="price_to" placeholder="{% if maxPrice is defined %}{{ maxPrice|number_format(0, '.', ' ') }}{% endif %}" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            <input
+                type="text"
+                id="price_to"
+                name="price_to"
+                value="{% if query.price_to %}{{ query.price_to }}{% endif %}"
+                placeholder="{% if maxPrice is defined %}{{ maxPrice|number_format(0, '.', ' ') }}{% endif %}"
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
         </div>
     </div>
     {% for key, filter in filters %}

@@ -24,7 +24,14 @@ $('#filters input[type=checkbox]').on('change', (e) => {
 $(document).on('click', '#filter-form .selected-filters .item', (e) => {
     const filter = $(e.currentTarget).data('filter-id');
 
-    $('#filters input[name='+filter+']').trigger('click');
+    if (filter == 'price_to') {
+        $('#price_to').val('').trigger('change');
+    } else if (filter == 'price_from') {
+        $('#price_from').val('').trigger('change');
+    } else {
+        $('#filters input[name='+filter+']').trigger('click');
+    }
+
     $(e.currentTarget).remove();
 });
 
@@ -37,22 +44,40 @@ $('#products .order-by select').on('change', () => {
     window.history.pushState('', '', newUrl);
 });
 
-$('#filters input[name=price_from]').on('change', () => {
+$('#filters input[name=price_from]').on('change', (e) => {
     const url = window.location.pathname;
     const newUrl = url + getUrl();
 
     getProducts(newUrl);
 
     window.history.pushState('', '', newUrl);
+
+    const value = $(e.currentTarget).val();
+
+    $('#filters div[data-filter-id=price_from]').remove();
+
+    if (value) {
+        const html = '<div class="item" data-filter-id="price_from"><span class="attribute-title">від '+value+'</span><img src="/images/close.png"></div>';
+        $('.selected-filters').append(html);
+    }
 });
 
-$('#filters input[name=price_to]').on('change', () => {
+$('#filters input[name=price_to]').on('change', (e) => {
     const url = window.location.pathname;
     const newUrl = url + getUrl();
 
     getProducts(newUrl);
 
     window.history.pushState('', '', newUrl);
+
+    const value = $(e.currentTarget).val();
+
+    $('#filters div[data-filter-id=price_to]').remove();
+
+    if (value) {
+        const html = '<div class="item" data-filter-id="price_to"><span class="attribute-title">до '+value+'</span><img src="/images/close.png"></div>';
+        $('.selected-filters').append(html);
+    }
 });
 
 function getUrl() {
