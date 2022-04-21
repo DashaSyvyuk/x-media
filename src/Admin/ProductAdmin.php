@@ -30,6 +30,7 @@ final class ProductAdmin extends AbstractAdmin
                 ])
                 ->add('category', ModelType::class,  ['placeholder' => 'Оберіть категорію', 'required' => true])
                 ->add('note', TextareaType::class, ['label' => 'Нотатки', 'required' => false])
+                ->add('productCode')
             ->end()
             ->with('Ціни', ['class' => 'col-md-6'])
                 ->add('currency', ModelType::class, ['placeholder' => 'Оберіть валюту', 'required' => true])

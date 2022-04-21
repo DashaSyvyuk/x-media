@@ -34,6 +34,9 @@
 
         <div class="detail">
             <div class="category-title">{{ product.title }}</div>
+            {% if product.productCode %}
+                <div class="product-code">Код товару: {{ product.productCode }}</div>
+            {% endif %}
             <div class="readonly-rating">
                 <span class="star-rating"></span>
                 <span class="value" data-value="{{ product.getAverageRating()|round(2) }}">
@@ -67,6 +70,12 @@
                 <div class="content-tab active" id="description">{{ product.getDescription()|raw }}</div>
                 <div class="content-tab" id="characteristics">
                     <table>
+                        {% if product.productCode %}
+                            <tr>
+                                <td>Код товару</td>
+                                <td>{{ product.productCode }}</td>
+                            </tr>
+                        {% endif %}
                         {% for characteristic in product.getCharacteristics() %}
                         <tr>
                             <td>{{ characteristic.getTitle()|raw }}</td>

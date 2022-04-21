@@ -112,6 +112,11 @@ class Product
     private $ratings;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private ?string $productCode = "";
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -398,6 +403,16 @@ class Product
     public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function setProductCode(?string $productCode): void
+    {
+        $this->productCode = $productCode;
+    }
+
+    public function getProductCode(): ?string
+    {
+        return $this->productCode;
     }
 
     public function getPriceWithoutVAT()

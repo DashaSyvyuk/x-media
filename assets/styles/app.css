@@ -273,6 +273,15 @@ section .title {
     padding: 5px;
 }
 
+.category .detail .category-title {
+    padding-left: 0;
+}
+
+.category .detail .product-code {
+    color: #bbb;
+    font-size: 14px;
+}
+
 .category .breadcrumb {
     margin-top: 15px;
     display: flex;
