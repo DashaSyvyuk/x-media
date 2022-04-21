@@ -7,6 +7,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -137,9 +138,20 @@ final class ProductAdmin extends AbstractAdmin
             ->add('_action', 'actions', [
                 'actions' => [
                     'show' => [],
-                    'edit' => []
+                    'edit' => [],
+                    'clone' => [
+                        'template' => 'Admin/CRUD/list__action_clone.html.twig',
+                    ]
                 ]
             ])
         ;
+    }
+
+    /**
+     * @param RouteCollection $collection
+     */
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('clone', $this->getRouterIdParameter() . '/clone');
     }
 }
