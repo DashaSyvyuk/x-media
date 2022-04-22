@@ -55,4 +55,21 @@ final class SliderAdmin extends AbstractAdmin
             ])
         ;
     }
+
+    public function prePersist($slider): void
+    {
+        $this->manageFileUpload($slider);
+    }
+
+    public function preUpdate($slider): void
+    {
+        $this->manageFileUpload($slider);
+    }
+
+    private function manageFileUpload(object $slider): void
+    {
+        if ($slider->getFile()) {
+            $slider->refreshUpdated();
+        }
+    }
 }

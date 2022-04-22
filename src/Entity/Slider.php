@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SliderRepository;
+use App\Traits\DateStorageTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -13,6 +15,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class Slider
 {
+    use DateStorageTrait;
+
     const SERVER_PATH_TO_IMAGE_FOLDER = '../public/images/slider';
 
     /**
@@ -43,6 +47,16 @@ class Slider
      * @ORM\Column(type="integer", nullable=true)
      */
     private $priority;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    public DateTime $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    public DateTime $updatedAt;
 
     public function getId(): ?int
     {
@@ -99,6 +113,26 @@ class Slider
         return $this->file;
     }
 
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getUpdatedAt(): DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(DateTime $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
     public function upload()
     {
         if ($this->getFile() == null) {
@@ -129,5 +163,10 @@ class Slider
     public function onPreUpdate()
     {
         $this->upload();
+    }
+
+    public function refreshUpdated(): void
+    {
+        $this->setUpdatedAt(new DateTime());
     }
 }
