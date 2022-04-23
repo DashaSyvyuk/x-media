@@ -1,16 +1,25 @@
 <div id="cart-block">
     <div id="close-cart"><img src="/images/close.png"></div>
     {% if products|length > 0 %}
+        <p class="title">Кошик (<span>{{ totalCount }}</span>)</p>
         <table>
         {% for product in products %}
-            <tr data-id="{{ product.id }}" data-name="{{ product.name }}">
-                <td>{{ product.name }}</td>
-                <td>{{ product.price|number_format(0, '.', ' ') }} грн</td>
-                <td><input type="text" name="count" value="{{ product.count }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" autocomplete="off"></td>
+            <tr data-id="{{ product.id }}" data-name="{{ product.title }}">
+                <td><img src="/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}" /></td>
+                <td>{{ product.title }}</td>
+                <td class="price"><span>{{ product.price|number_format(0, '.', ' ') }}</span> грн</td>
+                <td>
+                    <div class="count">
+                        <span class="minus">-</span>
+                        <input type="text" name="count" value="{{ product.count }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" autocomplete="off">
+                        <span class="plus">+</span>
+                    </div>
+                </td>
                 <td><img class="delete" src="/images/delete.png"></td>
             </tr>
         {% endfor %}
         </table>
+        <p class="total-price">Загальна вартість: <span>{{ totalPrice|number_format(0, '.', ' ') }} грн</span></p>
         <div id="go-to-order"><a href="/order-create">Перейти до оформлення замовлення</a></div>
     {% else %}
         <p>Ви ще не додали товари в корзину</p>

@@ -53,9 +53,9 @@
             </div>
             <div class="price">{{ product.getPrice()|number_format(0, '.', ' ') }} грн</div>
             <div class="add2cart">
-                <div>
+                <div data-id="{{ product.id }}">
                     <span>Купити</span>
-                    <img src="/images/cart_white.png" data-id="{{ product.id }}" data-name="{{ product.title }}" data-price="{{ product.price }}">
+                    <img src="/images/cart_white.png" data-id="{{ product.id }}">
                 </div>
             </div>
         </div>
