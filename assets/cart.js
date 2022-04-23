@@ -113,7 +113,7 @@ function getTotalCount(cart) {
         return accumulator + currentValue.count;
     }, 0);
 
-    if (total > 0) {
+    if (total >= 0) {
         $('#cart-count').text(total);
     }
 
