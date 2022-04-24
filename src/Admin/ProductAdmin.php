@@ -155,4 +155,25 @@ final class ProductAdmin extends AbstractAdmin
     {
         $collection->add('clone', $this->getRouterIdParameter() . '/clone');
     }
+
+    public function prePersist($product): void
+    {
+        $this->manageFileUpload($product);
+    }
+
+    public function preUpdate($product): void
+    {
+        $this->manageFileUpload($product);
+    }
+
+    private function manageFileUpload(object $product): void
+    {
+        if ($product->getImages()) {
+            foreach ($product->getImages() as $image) {
+                if ($image->getFile()) {
+                    $image->refreshUpdated();
+                }
+            }
+        }
+    }
 }

@@ -170,4 +170,9 @@ class ProductImage
         $this->upload();
         $this->updatedAt = new DateTime('now');
     }
+
+    public function refreshUpdated(): void
+    {
+        $this->setUpdatedAt(new DateTime());
+    }
 }

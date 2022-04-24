@@ -5,6 +5,7 @@ namespace App\Admin\Controller;
 use App\Entity\Product;
 use App\Entity\ProductCharacteristic;
 use App\Entity\ProductFilterAttribute;
+use App\Entity\ProductImage;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -44,6 +45,16 @@ class ProductController extends CRUDController
                 $productFilterAttribute->setFilterAttribute($filterAttribute->getFilterAttribute());
 
                 $clonedObject->addFilterAttribute($productFilterAttribute);
+            }
+        }
+
+        if ($object->getImages()) {
+            foreach ($object->getImages() as $image) {
+                $productImage = new ProductImage();
+                $productImage->setImageUrl($image->getImageUrl());
+                $productImage->setPosition($image->getPosition());
+
+                $clonedObject->addImage($productImage);
             }
         }
 
