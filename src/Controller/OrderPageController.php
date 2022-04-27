@@ -42,24 +42,33 @@ class OrderPageController extends AbstractController
 
     public function create(): Response
     {
-        $categories = $this->categoryRepository->findBy([
-            'status' => 'ACTIVE'
-        ], [
-            'position' => 'ASC'
-        ]);
+        if (!empty($_COOKIE['cart'])) {
+            $categories = $this->categoryRepository->findBy([
+                'status' => 'ACTIVE'
+            ], [
+                'position' => 'ASC'
+            ]);
 
-        return $this->render('order_page/index.html.twig', [
-            'totalPrice' => $this->getTotal(),
-            'categories' => $categories,
-            'totalCount' => $_COOKIE['totalCount'] ?? 0,
-            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-            'emails'       => $this->settingRepository->findBy(['slug' => 'email'])
-        ]);
+            $totalCart = $this->getTotalCart($_COOKIE['cart']);
+
+            return $this->render('order_page/index.html.twig', [
+                'totalPrice' => $totalCart['totalPrice'],
+                'categories' => $categories,
+                'totalCount' => $totalCart['totalCount'],
+                'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
+                'emails' => $this->settingRepository->findBy(['slug' => 'email']),
+                'products' => $totalCart['products']
+            ]);
+        } else {
+            return $this->redirectToRoute('homepage');
+        }
     }
 
     public function post(Request $request): Response
     {
-        if (isset($_COOKIE['cart']) && $cart = json_decode($_COOKIE['cart'])) {
+        if (isset($_COOKIE['cart'])) {
+            $totalCart = $this->getTotalCart($_COOKIE['cart']);
+
             $order = new Order();
             $order->setName($request->request->get('name'));
             $order->setSurname($request->request->get('surname'));
@@ -70,13 +79,13 @@ class OrderPageController extends AbstractController
             $order->setStatus('NEW');
             $order->setPaymentStatus(false);
             $order->setComment($request->request->get('comment') ?? '');
-            $order->setTotal($this->getTotal());
+            $order->setTotal($totalCart['totalPrice']);
 
-            foreach ($cart as $item) {
+            foreach ($totalCart['products'] as $item) {
                 $orderItem = new OrderItem();
                 $orderItem->setOrder($order);
                 $orderItem->setCount($item->count);
-                $orderItem->setProduct($this->productRepository->findOneBy(['id' => $item->id]));
+                $orderItem->setProduct($this->productRepository->findOneBy(['id' => $item->getId()]));
 
                 $order->addItem($orderItem);
             }
@@ -104,16 +113,28 @@ class OrderPageController extends AbstractController
         }
     }
 
-    private function getTotal()
-    {
-        $total = 0;
+    private function getTotalCart($cart) {
+        $products = [];
+        $totalCount = 0;
+        $totalPrice = 0;
 
-        $cart = json_decode($_COOKIE['cart']);
+        foreach (json_decode($_COOKIE['cart']) as $item) {
+            if ($item->id && $item->id > 0 && $item->count && $item->count > 0) {
+                $product = $this->productRepository->findOneBy(['id' => $item->id]);
 
-        foreach ($cart as $item) {
-            $total += $item->price * $item->count;
+                if ($product) {
+                    $product->count = $item->count;
+                    $totalCount += $item->count;
+                    $totalPrice += $product->getPrice() * $item->count;
+                    $products[] = $product;
+                }
+            }
         }
 
-        return $total;
+        return [
+            'products' => $products,
+            'totalPrice' => $totalPrice,
+            'totalCount' => $totalCount
+        ];
     }
 }

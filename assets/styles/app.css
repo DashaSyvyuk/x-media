@@ -840,6 +840,7 @@ section .title {
     box-sizing: border-box;
     resize: none;
     outline: none;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .order-place input:focus, .order-place select:focus, .order-place textarea:focus {
@@ -878,6 +879,10 @@ section .title {
     margin: 50px auto 0;
 }
 
+.order-detail .products {
+    width: 100%;
+}
+
 .order-detail .products td {
     padding: 10px;
 }
@@ -892,13 +897,13 @@ section .title {
 }
 
 .order-detail p span {
-    font-weight: bold;
+    font-weight: 400;
     color: #119E00;
 }
 
 .order-detail .products img {
-    width: 70px;
-    height: 70px;
+    width: 100px;
+    height: auto;
     object-fit: contain;
 }
 
