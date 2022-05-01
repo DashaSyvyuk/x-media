@@ -2,57 +2,69 @@
 
 namespace App\Controller;
 
+use App\Entity\Feedback;
 use App\Repository\CategoryRepository;
 use App\Repository\FeedbackRepository;
-use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
-use App\Repository\SliderRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class HomePageController extends AbstractController
+class FeedbackPageController extends AbstractController
 {
-    private SliderRepository $sliderRepository;
-
     private CategoryRepository $categoryRepository;
-
-    private ProductRepository $productRepository;
 
     private SettingRepository $settingRepository;
 
     private FeedbackRepository $feedbackRepository;
 
     /**
-     * @param SliderRepository $sliderRepository
      * @param CategoryRepository $categoryRepository
-     * @param ProductRepository $productRepository
      * @param SettingRepository $settingRepository
      * @param FeedbackRepository $feedbackRepository
      */
     public function __construct(
-        SliderRepository $sliderRepository,
         CategoryRepository $categoryRepository,
-        ProductRepository $productRepository,
         SettingRepository $settingRepository,
         FeedbackRepository $feedbackRepository
     ) {
-        $this->sliderRepository = $sliderRepository;
         $this->categoryRepository = $categoryRepository;
-        $this->productRepository = $productRepository;
         $this->settingRepository = $settingRepository;
         $this->feedbackRepository = $feedbackRepository;
     }
 
-    public function index(): Response
+    public function index(PaginatorInterface $paginator, Request $request): Response
     {
-        return $this->render('home_page/index.html.twig', [
-            'sliders' => $this->sliderRepository->findBy([], ['priority' => 'ASC']),
+        $feedbacks = $this->feedbackRepository->findActiveFeedbacks();
+
+        $pagination = $paginator->paginate(
+            $feedbacks,
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        return $this->render('feedback_page/index.html.twig', [
             'categories' => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
-            'products' => $this->productRepository->findBy(['status' => 'ACTIVE'], ['createdAt' => 'DESC'], 10),
             'totalCount' => $_COOKIE['totalCount'] ?? 0,
             'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-            'emails'  => $this->settingRepository->findBy(['slug' => 'email']),
-            'feedbacks' => $this->feedbackRepository->findBy(['status' => 'CONFIRMED'], ['createdAt' => 'DESC'])
+            'emails' => $this->settingRepository->findBy(['slug' => 'email']),
+            'pagination' => $pagination
         ]);
+    }
+
+    public function post(Request $request): Response
+    {
+        $feedback = new Feedback();
+        $feedback->setAuthor($request->request->get('author'));
+        $feedback->setEmail($request->request->get('email'));
+        $feedback->setComment($request->request->get('comment'));
+        $feedback->setStatus('NEW');
+
+        $this->feedbackRepository->create($feedback);
+
+        return new Response(json_encode([
+            'success' => true
+        ]));
     }
 }

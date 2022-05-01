@@ -29,6 +29,7 @@ Encore
     .addEntry('product', './assets/product.js')
     .addEntry('cart', './assets/cart.js')
     .addEntry('star-rating', './assets/star-rating.js')
+    .addEntry('feedback', './assets/feedback.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

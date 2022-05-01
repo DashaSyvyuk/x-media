@@ -26,5 +26,32 @@
                 {% endfor %}
             </div>
         </section>
+
+        {% if feedbacks|length > 0 %}
+        <section>
+            <p class="title">Відгуки про магазин</p>
+            <div id="feedbacks">
+                {% for feedback in feedbacks %}
+                    <div class="feedback">
+                        <div class="inner">
+                            <div class="author">{{ feedback.author }}:</div>
+                            <div class="date">{{ feedback.createdAt.format('Y-m-d H:i:s') }}</div>
+                            <div class="text">{{ feedback.comment }}</div>
+                            {% if feedback.answer|length > 0 %}
+                                <div class="answer">
+                                    <div class="author">X-media:</div>
+                                    <div class="text">{{ feedback.answer }}</div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div id="feedback-buttons">
+                <a href="/feedbacks#add">Додати відгук</a>
+                <a href="/feedbacks">Переглянути відгуки</a>
+            </div>
+        </section>
+        {% endif %}
     </div>
 {% endblock %}

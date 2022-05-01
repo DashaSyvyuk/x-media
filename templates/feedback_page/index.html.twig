@@ -1,0 +1,74 @@
+{% extends "base.html.twig" %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('feedback') }}
+    {{ encore_entry_script_tags('cart') }}
+{% endblock %}
+
+{% block body %}
+
+    <header>
+        {% include 'partials/header.html.twig' %}
+    </header>
+
+    <section class="category">
+        <div class="category-title">Відгуки про магазин</div>
+
+        <div class="breadcrumb">
+            X-media&nbsp&nbsp;>&nbsp;&nbsp;<a href="/">Головна</a>
+            <span> > </span>
+            <a href="" class="selected">Відгуки про магазин</a>
+        </div>
+
+        <div class="feedbacks">
+            {% for feedback in pagination %}
+                <div class="feedback">
+                    <div class="inner">
+                        <div class="author">{{ feedback.author }}:</div>
+                        <div class="date">{{ feedback.createdAt.format('Y-m-d H:i:s') }}</div>
+                        <div class="text">{{ feedback.comment }}</div>
+                        {% if feedback.answer|length > 0 %}
+                            <div class="answer">
+                                <div class="author">X-media:</div>
+                                <div class="text">{{ feedback.answer }}</div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+
+            <form method="post" id="add-feedback">
+                <div class="inner" id="add">
+                    <p>Залишити відгук про магазин:</p>
+                    <label>
+                        <span class="field">Ім'я:<span class="required">*</span></span>
+                        <input type="text" name="author" id="author">
+                    </label>
+                    <label>
+                        <span class="field">Email:</span>
+                        <input type="text" name="email" id="email">
+                    </label>
+                    <label>
+                        <span class="field">Коментар:<span class="required">*</span></span>
+                        <textarea name="text" id="comment"></textarea>
+                    </label>
+                    <input type="submit" value="Відправити">
+                    <p class="detail">
+                        Ви можете залишити відгук, коментар чи запитання до нас.
+                        Ваш запит буде оброблено і з'явиться на сайті одразу після підтвердження
+                        його нашим менеджером.
+                    </p>
+                </div>
+            </form>
+
+            <div id="feedback-popup">
+                <div>Дякуємо за відгук!<br>Відправлено на опрацювання модератором</div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

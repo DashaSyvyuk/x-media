@@ -409,7 +409,7 @@ section .title {
     float: left;
 }
 
-.category #products .navigation {
+.category #products .navigation, .feedbacks .navigation {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -417,7 +417,7 @@ section .title {
     width: 100%;
 }
 
-.category #products .navigation span a {
+.category #products .navigation span a, .feedbacks .navigation span a {
     padding: 10px 5px 5px;
     border: 1px solid #eaeaea;
     width: 25px;
@@ -431,7 +431,7 @@ section .title {
     color: #a3a3a3;
 }
 
-.category #products .navigation span.current {
+.category #products .navigation span.current, .feedbacks .navigation span.current {
     padding: 10px 5px 5px;
     width: 25px;
     height: 22px;
@@ -446,7 +446,7 @@ section .title {
     border: 1px solid #000;
 }
 
-.category #products .navigation span a:hover {
+.category #products .navigation span a:hover, .feedbacks .navigation span a:hover {
     background-color: #eaeaea;
 }
 
@@ -1144,7 +1144,7 @@ footer .copywrite {
     filter: drop-shadow( -2px -2px 2px #888 );
 }
 
-#comment-popup {
+#comment-popup, #feedback-popup {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -1154,7 +1154,7 @@ footer .copywrite {
     display: none;
 }
 
-#comment-popup div {
+#comment-popup div, #feedback-popup div {
     background-color: #fff;
     width: 50%;
     margin: 15% auto auto;
@@ -1169,31 +1169,31 @@ footer .copywrite {
     margin-bottom: 20px;
 }
 
-#reviews #add-review {
+#reviews #add-review, #add-feedback {
     width: 500px;
     font-size: 14px;
     float: left;
     margin-bottom: 20px;
 }
 
-#reviews #add-review .inner {
+#reviews #add-review .inner, #add-feedback .inner {
     background-color: #eee;
     width: 415px;
     padding: 15px;
 }
 
-#reviews #add-review p {
+#reviews #add-review p, #add-feedback p {
     font-weight: 500;
     margin-bottom: 30px;
 }
 
-#reviews #add-review label {
+#reviews #add-review label, #add-feedback label {
     display: block;
     margin: 10px 0;
     width: 450px;
 }
 
-#reviews #add-review input[type=text], #add-review textarea {
+#reviews #add-review input[type=text], #add-review textarea, #add-feedback input[type=text], #add-feedback textarea {
     border: 1px solid #eee;
     padding: 5px;
     width: 300px;
@@ -1202,25 +1202,25 @@ footer .copywrite {
     outline: none;
 }
 
-#reviews #add-review input[type=text]:focus, #add-review textarea:focus {
+#reviews #add-review input[type=text]:focus, #add-review textarea:focus, #add-feedback input[type=text]:focus, #add-feedback textarea:focus {
     box-shadow: 0 0 10px rgba(0,0,0,.3);
 }
 
-#reviews #add-review input[type=text].red, #add-review textarea.red {
+#reviews #add-review input[type=text].red, #add-review textarea.red, #add-feedback input[type=text].red, #add-feedback textarea.red {
     border: 1px solid red;
 }
 
-#reviews #add-review label .field {
+#reviews #add-review label .field, #add-feedback label .field {
     display: block;
     float: left;
     width: 100px;
 }
 
-#reviews #add-review label .required {
+#reviews #add-review label .required, #add-feedback label .required {
     color: red;
 }
 
-#reviews #add-review input[type=submit] {
+#reviews #add-review input[type=submit], #add-feedback input[type=submit] {
     background-color: #119E00;
     border: none;
     padding: 10px 30px;
@@ -1231,11 +1231,11 @@ footer .copywrite {
     color: #fff;
 }
 
-#reviews #add-review input[type=submit]:hover {
+#reviews #add-review input[type=submit]:hover, #add-feedback input[type=submit]:hover {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
-#reviews #add-review .detail {
+#reviews #add-review .detail, #reviews #add-feedback .detail {
     font-size: 12px;
     font-weight: 500;
     width: 100%;
@@ -1256,7 +1256,7 @@ footer .copywrite {
     font-size: 13px;
 }
 
-#comment-list #list .comment {
+#comment-list #list .comment, #feedbacks .feedback .inner {
     display: flex;
     flex-wrap: wrap;
     padding: 20px;
@@ -1265,12 +1265,12 @@ footer .copywrite {
     font-size: 14px;
 }
 
-#comment-list #list .comment .author {
+#comment-list #list .comment .author, #feedbacks .feedback .author, .category .feedbacks .author {
     color: #119E00;
     font-weight: 600;
 }
 
-#comment-list #list .comment .date {
+#comment-list #list .comment .date, #feedbacks .feedback .date, .category .feedbacks .feedback .date {
     font-weight: 600;
     text-align: right;
     color: #bebebe;
@@ -1282,11 +1282,11 @@ footer .copywrite {
     margin-bottom: 15px;
 }
 
-#comment-list #list .comment .answer .author {
+#comment-list #list .comment .answer .author, #feedbacks .feedback .answer .author, .category .feedbacks .answer .author {
     color: darkorchid;
 }
 
-#comment-list #list .comment .text {
+#comment-list #list .comment .text, #feedbacks .feedback .text, .category .feedbacks .text {
     width: 100%;
 }
 
@@ -1296,6 +1296,100 @@ footer .copywrite {
     flex-direction: column;
     margin-left: 50px;
     margin-top: 25px;
+}
+
+#feedbacks .feedback .author, #feedbacks .feedback .date, .category .feedbacks .author, .category .feedbacks .date {
+    width: 50%;
+    margin-bottom: 15px;
+}
+
+.category .feedbacks .author, .category .feedbacks .date {
+    float: left;
+}
+
+#feedbacks .feedback .answer, .category .feedbacks .answer {
+    padding-top: 10px;
+    padding-left: 50px;
+    box-sizing: border-box;
+}
+
+.category .feedbacks .answer .author {
+    width: 100%;
+}
+
+#feedbacks {
+    width: calc(100% - 120px);
+    margin: 0 auto;
+}
+
+#feedbacks .feedback {
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+#feedbacks .slick-prev:hover, #feedbacks .slick-next:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, .3);;
+}
+
+#feedbacks .slick-prev:before, #feedbacks .slick-next:before {
+    font-size: 30px;
+    opacity: 1;
+    font-family: inherit;
+    background-color: #119E00;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    display: block;
+    line-height: 1.2;
+}
+
+#feedbacks .slick-prev, #feedbacks .slick-next {
+    width: 40px;
+    height: 40px;
+}
+
+#feedbacks .slick-prev {
+    left: -48px;
+}
+
+#feedbacks .slick-next {
+    right: -48px;
+}
+
+#feedback-buttons {
+    width: calc(100% - 120px);
+    margin: 20px auto 0;
+    text-align: right;
+}
+
+#feedback-buttons a {
+    background-color: #119E00;
+    color: #fff;
+    padding: 7px 35px;
+    width: 120px;
+    text-decoration: none;
+}
+
+#feedback-buttons a:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+    cursor: pointer;
+}
+
+#feedbacks .feedback .inner {
+    border: 1px solid #eee;
+}
+
+.category .feedbacks {
+    width: 100%;
+    padding: 40px 20%;
+    box-sizing: border-box;
+}
+
+.category .feedbacks .feedback {
+    border: 1px solid #eee;
+    padding: 15px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
 }
 
 .about-us {

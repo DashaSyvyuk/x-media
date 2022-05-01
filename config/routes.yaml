@@ -47,3 +47,13 @@ post_comment:
 about_us:
     path: /about-us
     controller: App\Controller\AboutUsController::index
+
+feedback:
+    path: /feedbacks
+    controller: App\Controller\FeedbackPageController::index
+    methods: GET
+
+post_feedback:
+    path: /feedbacks
+    controller: App\Controller\FeedbackPageController::post
+    methods: POST
