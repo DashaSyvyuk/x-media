@@ -1169,10 +1169,16 @@ footer .copywrite {
     margin-bottom: 20px;
 }
 
-#reviews #add-review, #add-feedback {
+#reviews #add-review {
     width: 500px;
     font-size: 14px;
     float: left;
+    margin-bottom: 20px;
+}
+
+#add-feedback {
+    width: 500px;
+    font-size: 14px;
     margin-bottom: 20px;
 }
 
@@ -1327,35 +1333,6 @@ footer .copywrite {
     padding: 5px;
 }
 
-#feedbacks .slick-prev:hover, #feedbacks .slick-next:hover {
-    box-shadow: 0 0 15px rgba(0, 0, 0, .3);;
-}
-
-#feedbacks .slick-prev:before, #feedbacks .slick-next:before {
-    font-size: 30px;
-    opacity: 1;
-    font-family: inherit;
-    background-color: #119E00;
-    color: #fff;
-    width: 40px;
-    height: 40px;
-    display: block;
-    line-height: 1.2;
-}
-
-#feedbacks .slick-prev, #feedbacks .slick-next {
-    width: 40px;
-    height: 40px;
-}
-
-#feedbacks .slick-prev {
-    left: -48px;
-}
-
-#feedbacks .slick-next {
-    right: -48px;
-}
-
 #feedback-buttons {
     width: calc(100% - 120px);
     margin: 20px auto 0;
@@ -1377,6 +1354,34 @@ footer .copywrite {
 
 #feedbacks .feedback .inner {
     border: 1px solid #eee;
+}
+
+#feedbacks .slick-prev, #feedbacks .slick-next {
+    height: 100%;
+    width: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#feedbacks .slick-prev:hover, #feedbacks .slick-next:hover {
+    background-color: rgba(200, 200, 200, .5);
+}
+
+#feedbacks .slick-prev:before, #feedbacks .slick-next:before {
+    display: none;
+}
+
+#feedbacks .slick-prev {
+    left: -64px;
+}
+
+#feedbacks .slick-next {
+    right: -60px;
+}
+
+#feedbacks .slick-prev img, #feedbacks .slick-next img {
+    height: 100px;
 }
 
 .category .feedbacks {

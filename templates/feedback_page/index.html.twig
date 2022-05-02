@@ -21,26 +21,6 @@
         </div>
 
         <div class="feedbacks">
-            {% for feedback in pagination %}
-                <div class="feedback">
-                    <div class="inner">
-                        <div class="author">{{ feedback.author }}:</div>
-                        <div class="date">{{ feedback.createdAt.format('Y-m-d H:i:s') }}</div>
-                        <div class="text">{{ feedback.comment }}</div>
-                        {% if feedback.answer|length > 0 %}
-                            <div class="answer">
-                                <div class="author">X-media:</div>
-                                <div class="text">{{ feedback.answer }}</div>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
-
-            <div class="navigation">
-                {{ knp_pagination_render(pagination) }}
-            </div>
-
             <form method="post" id="add-feedback">
                 <div class="inner" id="add">
                     <p>Залишити відгук про магазин:</p>
@@ -67,6 +47,26 @@
 
             <div id="feedback-popup">
                 <div>Дякуємо за відгук!<br>Відправлено на опрацювання модератором</div>
+            </div>
+
+            {% for feedback in pagination %}
+                <div class="feedback">
+                    <div class="inner">
+                        <div class="author">{{ feedback.author }}:</div>
+                        <div class="date">{{ feedback.createdAt.format('Y-m-d H:i:s') }}</div>
+                        <div class="text">{{ feedback.comment }}</div>
+                        {% if feedback.answer|length > 0 %}
+                            <div class="answer">
+                                <div class="author">X-media:</div>
+                                <div class="text">{{ feedback.answer }}</div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
             </div>
         </div>
     </section>

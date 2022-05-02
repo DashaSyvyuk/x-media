@@ -60,5 +60,7 @@ $("#feedbacks").slick({
     autoplay: true,
     autoplaySpeed: 3000,
     arrows: true,
-    pauseOnHover: false
+    pauseOnHover: false,
+    prevArrow: '<div class="slick-prev"><img src="/images/arrow_left.png"></div>',
+    nextArrow: '<div class="slick-next"><img src="/images/arrow_right.png"></div>'
 });
