@@ -22,9 +22,9 @@ $(document).on('click', '.add2cart div', (e) => {
 });
 
 $(document).on('click', '#cart-block .delete', (e) => {
+    $(e.currentTarget).closest('tr').remove();
     const id = $(e.currentTarget).closest('tr').data('id');
     removeProduct(id);
-    $(e.currentTarget).closest('tr').remove();
 });
 
 $(document).on('change', '#cart-block input', (e) => {
@@ -46,7 +46,6 @@ $(document).on('click', '#cart-block .plus', (e) => {
     total++;
 
     $(e.currentTarget).closest('td').find('input').val(count);
-    $("#cart-block .title span").text(total);
     addProduct(id, count);
 });
 
@@ -64,7 +63,6 @@ $(document).on('click', '#cart-block .minus', (e) => {
         $(e.currentTarget).closest('td').find('input').val(count);
         addProduct(id, count);
     }
-    $("#cart-block .title span").text(total);
 });
 
 $(document).on('click', '#close-cart', () => {
@@ -115,6 +113,7 @@ function getTotalCount(cart) {
 
     if (total >= 0) {
         $('#cart-count').text(total);
+        $("#cart-block .title span").text(total);
     }
 
     return total;
@@ -126,9 +125,10 @@ function removeProduct(id) {
     const result = cart.filter((product) => parseInt(product.id) !== parseInt(id));
     const totalCount = getTotalCount(result);
 
+    getTotalPrice();
+
     setCookie('cart', JSON.stringify(result), {'max-age': 3600 * 24});
     setCookie('totalCount', totalCount, {'max-age': 3600 * 24});
-    getTotalPrice();
 
     if (totalCount <= 0) {
         $("#cart-block").html('<div id="close-cart"><img src="/images/close.png"></div><p>Ви ще не додали товари в корзину</p>');
