@@ -1,5 +1,5 @@
 <footer>
-    <div class="col">
+    <div>
         <p class="title">Корисна інформація:</p>
         <div class="items">
             <a href="">Новинки</a>
@@ -8,7 +8,7 @@
             <a href="/feedbacks">Відгуки про магазин</a>
         </div>
     </div>
-    <div class="col">
+    <div>
         <p class="title">Контакти:</p>
         <div class="items">
             {% for email in emails %}
@@ -19,7 +19,7 @@
             {% endfor %}
         </div>
     </div>
-    <div class="col">
+    <div>
         <a href="/" class="logo">X-media</a>
     </div>
     <p class="copywrite">&#169; X-media {{ 'now' | date('Y') }}</p>

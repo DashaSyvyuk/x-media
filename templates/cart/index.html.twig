@@ -22,7 +22,7 @@
             </table>
         </div>
         <p class="total-price">Загальна вартість: <span>{{ totalPrice|number_format(0, '.', ' ') }} грн</span></p>
-        <div id="go-to-order"><a href="/order-create">Перейти до оформлення замовлення</a></div>
+        <div id="go-to-order"><a class="green-button" href="/order-create">Перейти до оформлення замовлення</a></div>
     {% else %}
         <p>Ви ще не додали товари в корзину</p>
     {% endif %}

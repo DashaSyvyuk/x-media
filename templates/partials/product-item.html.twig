@@ -1,10 +1,12 @@
-<div class="product">
+<div class="product" data-controller="product">
     <div class="inner">
         <a href="/products/{{ product.id }}" class="product-image">
             <img
                 src="/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}"
                 data-first="/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}"
-                data-next="/{% if product.images|length > 0 %}{{ product.images[1].imageUrl }}{% endif %}">
+                data-next="/{% if product.images|length > 0 %}{{ product.images[1].imageUrl }}{% endif %}"
+                data-action="mouseover->product#nextImage mouseout->product#prevImage"
+            >
         </a>
         <div class="product-title"><a href="/products/{{ product.id }}">{{ product.title }}</a></div>
         <div class="rating">

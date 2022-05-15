@@ -1,7 +1,6 @@
 {% extends "base.html.twig" %}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('home') }}
     {{ encore_entry_script_tags('product') }}
     {{ encore_entry_script_tags('cart') }}
 {% endblock %}
@@ -12,9 +11,11 @@
         {% include 'partials/header.html.twig' %}
     </header>
 
-    <section class="category product-page">
+    <section class="product-page">
         <div class="breadcrumb">
-            X-media&nbsp;&nbsp;>&nbsp;&nbsp;<a href="/">Головна</a>
+            <a>X-media</a>
+            <span> > </span>
+            <a href="/">Головна</a>
             <span> > </span>
             <a href="/categories/{{ product.getCategory().slug }}">&nbsp{{ product.getCategory().title }}</a>
         </div>
@@ -33,7 +34,7 @@
         </div>
 
         <div class="detail">
-            <div class="category-title">{{ product.title }}</div>
+            <div class="product-title">{{ product.title }}</div>
             {% if product.productCode %}
                 <div class="product-code">Код товару: {{ product.productCode }}</div>
             {% endif %}
@@ -85,7 +86,7 @@
                     </table>
                 </div>
                 <div class="content-tab" id="reviews">
-                    <form method="post" id="add-review">
+                    <form method="post" id="add-review" class="add-comment">
                         <div class="inner">
                             <p>Залишити відгук про товар:</p>
                             <div class="rating"></div>
@@ -102,7 +103,7 @@
                                 <textarea name="text" id="comment"></textarea>
                             </label>
                             <input type="hidden" name="product" value="{{ product.id }}" id="product">
-                            <input type="submit" value="Відправити">
+                            <input class="green-button" type="submit" value="Відправити">
                             <p class="detail">
                                 Ви можете залишити відгук, коментар чи запитання до поточного товару.
                                 Ваш запит буде оброблено і з'явиться на сайті одразу після підтвердження
@@ -116,15 +117,7 @@
                             <div id="list">
                             {% for comment in product.getComments() %}
                                 <div class="comment">
-                                    <div class="author">{{ comment.author }}:</div>
-                                    <div class="date">{{ comment.createdAt.format('Y-m-d H:i:s') }}</div>
-                                    <div class="text">{{ comment.comment }}</div>
-                                    {% if comment.answer|length >0 %}
-                                    <div class="answer">
-                                        <div class="author">X-media:</div>
-                                        <div class="text">{{ comment.answer }}</div>
-                                    </div>
-                                    {% endif %}
+                                    {% include 'partials/comment.html.twig' %}
                                 </div>
                             {% endfor %}
                             </div>

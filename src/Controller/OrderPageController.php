@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\NovaPoshtaCity;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Repository\CategoryRepository;
+use App\Repository\DeliveryTypeRepository;
+use App\Repository\NovaPoshtaCityRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
@@ -22,32 +25,38 @@ class OrderPageController extends AbstractController
 
     private SettingRepository $settingRepository;
 
+    private DeliveryTypeRepository $deliveryTypeRepository;
+
+    private NovaPoshtaCityRepository $novaPoshtaCityRepository;
+
     /**
      * @param CategoryRepository $categoryRepository
      * @param OrderRepository $orderRepository
      * @param ProductRepository $productRepository
      * @param SettingRepository $settingRepository
+     * @param DeliveryTypeRepository $deliveryTypeRepository
+     * @param NovaPoshtaCityRepository $novaPoshtaCityRepository
      */
     public function __construct(
         CategoryRepository $categoryRepository,
         OrderRepository $orderRepository,
         ProductRepository $productRepository,
-        SettingRepository $settingRepository
+        SettingRepository $settingRepository,
+        DeliveryTypeRepository $deliveryTypeRepository,
+        NovaPoshtaCityRepository $novaPoshtaCityRepository
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;
         $this->settingRepository = $settingRepository;
+        $this->deliveryTypeRepository = $deliveryTypeRepository;
+        $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
     }
 
-    public function create(): Response
+    public function index(): Response
     {
         if (!empty($_COOKIE['cart'])) {
-            $categories = $this->categoryRepository->findBy([
-                'status' => 'ACTIVE'
-            ], [
-                'position' => 'ASC'
-            ]);
+            $categories = $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']);
 
             $totalCart = $this->getTotalCart($_COOKIE['cart']);
 
@@ -57,7 +66,9 @@ class OrderPageController extends AbstractController
                 'totalCount' => $totalCart['totalCount'],
                 'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
                 'emails' => $this->settingRepository->findBy(['slug' => 'email']),
-                'products' => $totalCart['products']
+                'products' => $totalCart['products'],
+                'deliveryTypes' => $this->deliveryTypeRepository->findAll(),
+                'cities' => $this->novaPoshtaCityRepository->findAll()
             ]);
         } else {
             return $this->redirectToRoute('homepage');
@@ -118,7 +129,7 @@ class OrderPageController extends AbstractController
         $totalCount = 0;
         $totalPrice = 0;
 
-        foreach (json_decode($_COOKIE['cart']) as $item) {
+        foreach (json_decode($cart) as $item) {
             if ($item->id && $item->id > 0 && $item->count && $item->count > 0) {
                 $product = $this->productRepository->findOneBy(['id' => $item->id]);
 

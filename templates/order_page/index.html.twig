@@ -1,8 +1,8 @@
 {% extends "base.html.twig" %}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('home') }}
     {{ encore_entry_script_tags('cart') }}
+    {{ encore_entry_script_tags('order') }}
 {% endblock %}
 
 {% block body %}
@@ -11,53 +11,101 @@
         {% include 'partials/header.html.twig' %}
     </header>
 
-    <section class="category">
-        <div class="category-title">Оформлення замовлення</div>
+    <section>
+        <div class="title">Оформлення замовлення</div>
 
         <div class="breadcrumb">
-            X-media&nbsp;&nbsp;>&nbsp;&nbsp;<a href="/">Головна</a>
+            <a>X-media</a>
             <span> > </span>
-            <a href="" class="selected">Оформлення замовлення</a>
+            <a href="/">Головна</a>
+            <span> > </span>
+            <a class="selected">Оформлення замовлення</a>
         </div>
 
         <div class="order-place">
             <form method="POST" action="/order">
-                <div class="input">
-                    <p>Ім'я <span class="required">*</span></p>
+                <div>
+                    <p>Ім'я: <span class="required">*</span></p>
                     <input type="text" name="name" autocomplete="off" required>
                 </div>
-                <div class="input">
-                    <p>Прізвище <span class="required">*</span></p>
+                <div>
+                    <p>Прізвище: <span class="required">*</span></p>
                     <input type="text" name="surname" autocomplete="off" required>
                 </div>
-                <div class="input">
-                    <p>Номер телефону <span class="required">*</span></p>
+                <div>
+                    <p>Номер телефону: <span class="required">*</span></p>
                     <input type="text" name="phone" autocomplete="off" required>
                 </div>
-                <div class="input">
-                    <p>E-mail</p>
+                <div>
+                    <p>E-mail:</p>
                     <input type="text" name="email" autocomplete="off">
                 </div>
-                <div class="input">
-                    <p>Адреса <span class="required">*</span></p>
-                    <textarea name="address" required></textarea>
-                </div>
-                <div class="input">
-                    <p>Спосіб оплати</p>
-                    <select name="paytype">
-                        <option>Готівкою при отриманні</option>
-                        <option>Оплата на карту</option>
+                <div>
+                    <p>Спосіб доставки:</p>
+                    <select name="deltype">
+                        {% for deliveryType in deliveryTypes %}
+                            <option data-deltype-id="{{ deliveryType.id }}">{{ deliveryType.title }}</option>
+                        {% endfor %}
                     </select>
                 </div>
-                <div class="input">
-                    <p>Коментар</p>
+                {% for deliveryType in deliveryTypes %}
+                    {% if deliveryType.id == 1 %}
+                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info active">
+                            <div class="payment">
+                                <p>Спосіб оплати:</p>
+                                <select name="paytype">
+                                    {% for paymentType in deliveryType.getPaymentTypes() %}
+                                        <option>{{ paymentType.title }}</option>
+                                    {% endfor%}
+                                </select>
+                            </div>
+                        </span>
+                    {% elseif deliveryType.id == 2 %}
+                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info">
+                            <div class="payment">
+                                <p>Спосіб оплати:</p>
+                                <select name="paytype">
+                                    {% for paymentType in deliveryType.getPaymentTypes() %}
+                                        <option>{{ paymentType.title }}</option>
+                                    {% endfor%}
+                                </select>
+                            </div>
+                            <div>
+                                <p>Адреса:</p>
+                                <textarea name="address"></textarea>
+                            </div>
+                        </span>
+                    {% elseif deliveryType.id == 3 %}
+                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info">
+                            <div>
+                                <p>Спосіб оплати:</p>
+                                <select name="paytype">
+                                    {% for paymentType in deliveryType.getPaymentTypes() %}
+                                        <option>{{ paymentType.title }}</option>
+                                    {% endfor%}
+                                </select>
+                            </div>
+                            <div>
+                                <p>Місто:</p>
+                                <select name="city" id="nova-poshta-city">
+                                    {% for city in cities %}
+                                        <option value="{{ city.ref }}">{{ city.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div id="nova-poshta-office"></div>
+                        </span>
+                    {% endif %}
+                {% endfor %}
+                <div>
+                    <p>Коментар:</p>
                     <textarea name="comment"></textarea>
                 </div>
-                <div class="input">
+                <div>
                     <p class="total-price">Загальна вартість: <span>{{ totalPrice|number_format(0, '.', ' ') }} грн</span></p>
                 </div>
-                <div class="input">
-                    <input type="submit" value="Створити">
+                <div>
+                    <input class="green-button" type="submit" value="Створити">
                 </div>
             </form>
         </div>

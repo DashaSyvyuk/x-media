@@ -3,15 +3,26 @@
         {% for key, filter in filters %}
             {% for attribute in filter.getFilterAttributes() %}
                 {% if attribute.id in query %}
-                    <div class="item" data-filter-id="{{ attribute.id }}"><span class="attribute-title">{{ attribute.value }}</span><img src="/images/close.png"></div>
+                    <div class="item" data-filter-id="{{ attribute.id }}">
+                        <span class="attribute-title">{{ attribute.value }}</span>
+                        <img src="/images/close.png">
+                    </div>
                 {% endif %}
             {% endfor %}
         {% endfor %}
+
         {% if query.price_from %}
-            <div class="item" data-filter-id="price_from"><span class="attribute-title">від {{ query.price_from }}</span><img src="/images/close.png"></div>
+            <div class="item" data-filter-id="price_from">
+                <span class="attribute-title">від {{ query.price_from }}</span>
+                <img src="/images/close.png">
+            </div>
         {% endif %}
+
         {% if query.price_to %}
-            <div class="item" data-filter-id="price_to"><span class="attribute-title">до {{ query.price_to }}</span><img src="/images/close.png"></div>
+            <div class="item" data-filter-id="price_to">
+                <span class="attribute-title">до {{ query.price_to }}</span>
+                <img src="/images/close.png">
+            </div>
         {% endif %}
     </div>
     <div class="filter">
@@ -24,7 +35,8 @@
                 name="price_from"
                 value="{% if query.price_from %}{{ query.price_from }}{% endif %}"
                 placeholder="{% if minPrice is defined %}{{ minPrice|number_format(0, '.', ' ') }}{% endif %}"
-                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+            >
             <span>до: </span>
             <input
                 type="text"
@@ -32,22 +44,32 @@
                 name="price_to"
                 value="{% if query.price_to %}{{ query.price_to }}{% endif %}"
                 placeholder="{% if maxPrice is defined %}{{ maxPrice|number_format(0, '.', ' ') }}{% endif %}"
-                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+            >
         </div>
     </div>
     {% for key, filter in filters %}
         <div class="filter">
-            <p class="filter-title"><span>{{ filter.title }}</span> {% if filter.isOpened %}<img src="/images/arrow_down_gray.png">{% else %}<img src="/images/arrow_up_gray.png">{% endif %}</p>
+            <p class="filter-title">
+                <span>{{ filter.title }}</span>
+                {% if filter.isOpened %}<img src="/images/arrow_down_gray.png">{% else %}
+                <img src="/images/arrow_up_gray.png">{% endif %}
+            </p>
             <div class="outer {% if filter.isOpened %}hidden{% endif %}">
                 <div class="inner">
                     {% for attribute in filter.getFilterAttributes() %}
                         {% if filter.openedCount > 0 and filter.openedCount == (loop.index - 1) %}<div class="hidden-part">{% endif %}
                         <label class="container">{{ attribute.value }}
-                            <input type="checkbox" name="{{ attribute.id }}" {% if attribute.id in query %}checked{% endif %}>
+                            <input
+                                type="checkbox"
+                                name="{{ attribute.id }}"
+                                {% if attribute.id in query %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         {% if filter.openedCount > 0 and loop.last %}</div>
-                            <p class="show-all"><span>Показати всі</span> <img src="/images/arrow_down_gray.png"></p>
+                            <p class="show-all">
+                                <span>Показати всі</span> <img src="/images/arrow_down_gray.png">
+                            </p>
                         {% endif %}
                     {% endfor %}
                 </div>

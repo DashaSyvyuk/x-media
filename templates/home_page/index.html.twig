@@ -1,13 +1,12 @@
-{% extends "base.html.twig" %}
+{% extends 'base.html.twig' %}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('home') }}
     {{ encore_entry_script_tags('cart') }}
 {% endblock %}
 
 {% block body %}
-    <div class="home-page">
-        <div id="slider">
+    <div class='home-page' data-controller='slider'>
+        <div id='slider'>
             {% for slider in sliders %}
                 <div class="item">
                     <div class="background"><img src="{{ slider.imageUrl }}"></div>
@@ -18,7 +17,7 @@
 
         {% include 'partials/header.html.twig' %}
 
-        <section>
+        <section data-controller='new_product'>
             <p class="title">Новинки</p>
             <div id="new-products">
                 {% for product in products %}
@@ -30,26 +29,16 @@
         {% if feedbacks|length > 0 %}
         <section>
             <p class="title">Відгуки про магазин</p>
-            <div id="feedbacks">
-                {% for feedback in feedbacks %}
-                    <div class="feedback">
-                        <div class="inner">
-                            <div class="author">{{ feedback.author }}:</div>
-                            <div class="date">{{ feedback.createdAt.format('Y-m-d H:i:s') }}</div>
-                            <div class="text">{{ feedback.comment }}</div>
-                            {% if feedback.answer|length > 0 %}
-                                <div class="answer">
-                                    <div class="author">X-media:</div>
-                                    <div class="text">{{ feedback.answer }}</div>
-                                </div>
-                            {% endif %}
-                        </div>
+            <div id="feedbacks" data-controller="feedback">
+                {% for comment in feedbacks %}
+                    <div class="comment">
+                        {% include 'partials/comment.html.twig' %}
                     </div>
                 {% endfor %}
             </div>
             <div id="feedback-buttons">
-                <a href="/feedbacks#add">Додати відгук</a>
-                <a href="/feedbacks">Переглянути відгуки</a>
+                <a href="/feedbacks#add" class="green-button">Додати відгук</a>
+                <a href="/feedbacks" class="green-button">Переглянути відгуки</a>
             </div>
         </section>
         {% endif %}

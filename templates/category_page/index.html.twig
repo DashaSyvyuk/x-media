@@ -1,9 +1,8 @@
 {% extends "base.html.twig" %}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('category') }}
-    {{ encore_entry_script_tags('home') }}
     {{ encore_entry_script_tags('cart') }}
+    {{ encore_entry_script_tags('category') }}
 {% endblock %}
 
 {% block body %}
@@ -12,11 +11,15 @@
         {% include 'partials/header.html.twig' %}
     </header>
 
-    <section class="category">
-        <div class="category-title">{{ category.title }}</div>
+    <section>
+        <div class="title">{{ category.title }}</div>
 
         <div class="breadcrumb">
-            X-media&nbsp;&nbsp;>&nbsp;&nbsp;<a href="/">Головна</a> <span> > </span> <a href="" class="selected">{{ category.title }}</a>
+            <a>X-media</a>
+            <span> > </span>
+            <a href="/">Головна</a>
+            <span> > </span>
+            <a href="" class="selected">{{ category.title }}</a>
         </div>
 
         <div id="filters">
@@ -24,8 +27,8 @@
         </div>
 
         <div id="products">
-            <div class="order-by">
-                <select name="order">
+            <div class="order-by" data-controller="filter">
+                <select name="order" data-action="change->filter#changeOrder">
                     <option value="price" data-direction="asc" {% if order is defined and order=='price' and direction is defined and direction=='asc' %}selected{% endif %}>
                         Від дешевих до дорогих
                     </option>
