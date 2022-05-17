@@ -1,6 +1,7 @@
 {
     "devDependencies": {
-        "@symfony/stimulus-bridge": "^2.0.0",
+        "@hotwired/stimulus": "^3.0.1",
+        "@symfony/stimulus-bridge": "^3.1.0",
         "@symfony/webpack-encore": "^1.8.2",
         "bootstrap": "^4.6.0",
         "core-js": "^3.0.0",
@@ -18,7 +19,9 @@
     },
     "dependencies": {
         "jquery": "^3.6.0",
+        "select2": "^4.1.0-rc.0",
         "slick-carousel": "^1.8.1",
-        "slick-slider": "^1.8.2"
+        "slick-slider": "^1.8.2",
+        "stimulus-use": "^0.50.0"
     }
 }

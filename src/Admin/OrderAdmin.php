@@ -44,6 +44,10 @@ final class OrderAdmin extends AbstractAdmin
                     'label' => 'Спосіб оплати',
                     'required' => true
                 ])
+                ->add('deltype', TextType::class, [
+                    'label' => 'Спосіб доставки',
+                    'required' => true
+                ])
                 ->add('status', ChoiceType::class, [
                     'choices' => [
                         'Новий' => 'NEW',

@@ -118,20 +118,20 @@ class SyncNovaPoshtaDataCommand extends Command
             $data = json_decode($response->getBody()->__toString(), true);
 
             foreach ($data['data'] as $item) {
-                $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $item['CityRef']]);
+                if (strpos($item['Description'], 'Поштомат') === false) {
+                    $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $item['CityRef']]);
 
-                if ($city) {
-                    $output->writeln('Sync office:' . $city->getTitle());
-
-                    if ($office = $this->novaPoshtaOfficeRepository->findOneBy(['ref' => $item['Ref']])) {
-                        $office->setTitle($item['Description']);
-                        $this->novaPoshtaOfficeRepository->update($office);
-                    } else {
-                        $office = new NovaPoshtaOffice();
-                        $office->setRef($item['Ref']);
-                        $office->setTitle($item['Description']);
-                        $office->setCity($city);
-                        $this->novaPoshtaOfficeRepository->create($office);
+                    if ($city) {
+                        if ($office = $this->novaPoshtaOfficeRepository->findOneBy(['ref' => $item['Ref']])) {
+                            $office->setTitle($item['Description']);
+                            $this->novaPoshtaOfficeRepository->update($office);
+                        } else {
+                            $office = new NovaPoshtaOffice();
+                            $office->setRef($item['Ref']);
+                            $office->setTitle($item['Description']);
+                            $office->setCity($city);
+                            $this->novaPoshtaOfficeRepository->create($office);
+                        }
                     }
                 }
             }

@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\NovaPoshtaCity;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Repository\CategoryRepository;
 use App\Repository\DeliveryTypeRepository;
 use App\Repository\NovaPoshtaCityRepository;
+use App\Repository\NovaPoshtaOfficeRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
@@ -29,6 +29,8 @@ class OrderPageController extends AbstractController
 
     private NovaPoshtaCityRepository $novaPoshtaCityRepository;
 
+    private NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository;
+
     /**
      * @param CategoryRepository $categoryRepository
      * @param OrderRepository $orderRepository
@@ -36,6 +38,7 @@ class OrderPageController extends AbstractController
      * @param SettingRepository $settingRepository
      * @param DeliveryTypeRepository $deliveryTypeRepository
      * @param NovaPoshtaCityRepository $novaPoshtaCityRepository
+     * @param NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
      */
     public function __construct(
         CategoryRepository $categoryRepository,
@@ -43,7 +46,8 @@ class OrderPageController extends AbstractController
         ProductRepository $productRepository,
         SettingRepository $settingRepository,
         DeliveryTypeRepository $deliveryTypeRepository,
-        NovaPoshtaCityRepository $novaPoshtaCityRepository
+        NovaPoshtaCityRepository $novaPoshtaCityRepository,
+        NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->orderRepository = $orderRepository;
@@ -51,6 +55,7 @@ class OrderPageController extends AbstractController
         $this->settingRepository = $settingRepository;
         $this->deliveryTypeRepository = $deliveryTypeRepository;
         $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
+        $this->novaPoshtaOfficeRepository = $novaPoshtaOfficeRepository;
     }
 
     public function index(): Response
@@ -68,7 +73,7 @@ class OrderPageController extends AbstractController
                 'emails' => $this->settingRepository->findBy(['slug' => 'email']),
                 'products' => $totalCart['products'],
                 'deliveryTypes' => $this->deliveryTypeRepository->findAll(),
-                'cities' => $this->novaPoshtaCityRepository->findAll()
+                'cities' => $this->novaPoshtaCityRepository->getCitiesWithOffices()
             ]);
         } else {
             return $this->redirectToRoute('homepage');
@@ -83,10 +88,11 @@ class OrderPageController extends AbstractController
             $order = new Order();
             $order->setName($request->request->get('name'));
             $order->setSurname($request->request->get('surname'));
-            $order->setAddress($request->request->get('address'));
+            $order->setAddress($this->getAddress($request->request));
             $order->setPhone($request->request->get('phone'));
             $order->setEmail($request->request->get('email') ?? '');
             $order->setPaytype($request->request->get('paytype'));
+            $order->setDeltype($request->request->get('deltype'));
             $order->setStatus('NEW');
             $order->setPaymentStatus(false);
             $order->setComment($request->request->get('comment') ?? '');
@@ -104,22 +110,17 @@ class OrderPageController extends AbstractController
             $this->orderRepository->create($order);
 
             unset($_COOKIE['cart']);
-            setcookie('cart', null, -1, '/');
             unset($_COOKIE['totalCount']);
-            setcookie('totalCount', null, -1, '/');
 
-            $categories = $this->categoryRepository->findBy([
-                'status' => 'ACTIVE'
-            ], [
-                'position' => 'ASC'
-            ]);
+            setcookie('cart', null, -1, '/');
+            setcookie('totalCount', null, -1, '/');
 
             return $this->render('thank_page/index.html.twig', [
                 'order' => $order,
-                'categories' => $categories,
+                'categories' => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
                 'totalCount' => 0,
                 'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-                'emails'       => $this->settingRepository->findBy(['slug' => 'email'])
+                'emails' => $this->settingRepository->findBy(['slug' => 'email'])
             ]);
         }
     }
@@ -147,5 +148,14 @@ class OrderPageController extends AbstractController
             'totalPrice' => $totalPrice,
             'totalCount' => $totalCount
         ];
+    }
+
+    private function getAddress($data): string
+    {
+        $address = $data->get('address');
+        $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $data->get('city')]);
+        $office = $this->novaPoshtaOfficeRepository->findOneBy(['ref' => $data->get('office')]);
+
+        return $city ? $city . ', ' . $office : $address;
     }
 }

@@ -24,7 +24,7 @@ cart:
 
 order:
     path: /order-create
-    controller: App\Controller\OrderPageController::create
+    controller: App\Controller\OrderPageController::index
 
 post_order:
     path: /order
@@ -57,3 +57,7 @@ post_feedback:
     path: /feedbacks
     controller: App\Controller\FeedbackPageController::post
     methods: POST
+
+nova_poshta_office:
+    path: /nova-poshta-office
+    controller: App\Controller\NovaPoshtaOfficeController::index

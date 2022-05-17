@@ -32,4 +32,13 @@ class NovaPoshtaCityRepository extends ServiceEntityRepository
         $entityManager->merge($city);
         $entityManager->flush();
     }
+
+    public function getCitiesWithOffices()
+    {
+        return $this->createQueryBuilder('city')
+            ->innerJoin('city.offices', 'offices')
+            ->groupBy('city.id')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

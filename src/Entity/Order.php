@@ -54,6 +54,11 @@ class Order
     /**
      * @ORM\Column(type="string")
      */
+    private string $deltype = "";
+
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $status = "";
 
     /**
@@ -149,6 +154,16 @@ class Order
     public function getPaytype(): string
     {
         return $this->paytype;
+    }
+
+    public function setDeltype(string $deltype): void
+    {
+        $this->deltype = $deltype;
+    }
+
+    public function getDeltype(): string
+    {
+        return $this->deltype;
     }
 
     public function getStatus(): string

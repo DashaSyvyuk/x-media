@@ -110,3 +110,15 @@ services:
         arguments: [ ~, App\Entity\Feedback, ~ ]
         tags:
             - { name: sonata.admin, manager_type: orm, group: Відгуки про магазин, label: Відгуки про магазин, show_in_dashboard: true }
+
+    admin.delivery_type:
+        class: App\Admin\DeliveryTypeAdmin
+        arguments: [ ~, App\Entity\DeliveryType, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Замовлення, label: Способи доставки, show_in_dashboard: true }
+
+    admin.payment_type:
+        class: App\Admin\PaymentTypeAdmin
+        arguments: [ ~, App\Entity\PaymentType, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Замовлення, label: Способи оплати, show_in_dashboard: true }
