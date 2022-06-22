@@ -7,14 +7,11 @@ use App\Repository\FeedbackRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use App\Repository\SliderRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class HomePageController extends AbstractController
+class HomePageController extends BaseController
 {
     private SliderRepository $sliderRepository;
-
-    private CategoryRepository $categoryRepository;
 
     private ProductRepository $productRepository;
 
@@ -36,8 +33,8 @@ class HomePageController extends AbstractController
         SettingRepository $settingRepository,
         FeedbackRepository $feedbackRepository
     ) {
+        parent::__construct($categoryRepository);
         $this->sliderRepository = $sliderRepository;
-        $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
         $this->settingRepository = $settingRepository;
         $this->feedbackRepository = $feedbackRepository;
@@ -45,9 +42,8 @@ class HomePageController extends AbstractController
 
     public function index(): Response
     {
-        return $this->render('home_page/index.html.twig', [
+        return $this->renderTemplate('home_page/index.html.twig', [
             'sliders' => $this->sliderRepository->findBy([], ['priority' => 'ASC']),
-            'categories' => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
             'products' => $this->productRepository->findBy(['status' => 'ACTIVE'], ['createdAt' => 'DESC'], 10),
             'totalCount' => $_COOKIE['totalCount'] ?? 0,
             'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),

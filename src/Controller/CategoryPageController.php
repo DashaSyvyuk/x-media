@@ -7,11 +7,10 @@ use App\Repository\FilterRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-class CategoryPageController extends AbstractController
+class CategoryPageController extends BaseController
 {
     private CategoryRepository $categoryRepository;
 
@@ -33,6 +32,7 @@ class CategoryPageController extends AbstractController
         ProductRepository $productRepository,
         SettingRepository $settingRepository
     ) {
+        parent::__construct($categoryRepository);
         $this->categoryRepository = $categoryRepository;
         $this->filterRepository = $filterRepository;
         $this->productRepository = $productRepository;
@@ -50,13 +50,8 @@ class CategoryPageController extends AbstractController
 
         $category = $this->categoryRepository->findOneBy(['slug' => $slug, 'status' => 'ACTIVE']);
 
-        $categories = $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']);
-
         if (!$category) {
-            return $this->render('bundles/TwigBundle/Exception/error404.html.twig', [
-                'totalCount' => $_COOKIE['totalCount'] ?? 0,
-                'categories' => $categories
-            ]);
+            return $this->renderTemplate('bundles/TwigBundle/Exception/error404.html.twig', []);
         }
 
         $filterSetting = $this->settingRepository->findOneBy([
@@ -87,13 +82,11 @@ class CategoryPageController extends AbstractController
                 'maxPrice' => $prices['max_price']
             ]));
         } else {
-            return $this->render('category_page/index.html.twig', [
+            return $this->renderTemplate('category_page/index.html.twig', [
                 'category' => $category,
-                'categories' => $categories,
                 'filters' => $this->filterRepository->findByCategory($slug),
                 'pagination' => $pagination,
                 'query' => $query,
-                'totalCount' => $_COOKIE['totalCount'] ?? 0,
                 'filterCount' => $filterSetting ? $filterSetting->getValue() : null,
                 'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
                 'emails' => $this->settingRepository->findBy(['slug' => 'email']),

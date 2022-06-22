@@ -7,14 +7,11 @@ use App\Repository\CategoryRepository;
 use App\Repository\FeedbackRepository;
 use App\Repository\SettingRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class FeedbackPageController extends AbstractController
+class FeedbackPageController extends BaseController
 {
-    private CategoryRepository $categoryRepository;
-
     private SettingRepository $settingRepository;
 
     private FeedbackRepository $feedbackRepository;
@@ -29,7 +26,7 @@ class FeedbackPageController extends AbstractController
         SettingRepository $settingRepository,
         FeedbackRepository $feedbackRepository
     ) {
-        $this->categoryRepository = $categoryRepository;
+        parent::__construct($categoryRepository);
         $this->settingRepository = $settingRepository;
         $this->feedbackRepository = $feedbackRepository;
     }
@@ -45,8 +42,6 @@ class FeedbackPageController extends AbstractController
         );
 
         return $this->render('feedback_page/index.html.twig', [
-            'categories' => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
-            'totalCount' => $_COOKIE['totalCount'] ?? 0,
             'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
             'emails' => $this->settingRepository->findBy(['slug' => 'email']),
             'pagination' => $pagination

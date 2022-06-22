@@ -11,14 +11,11 @@ use App\Repository\NovaPoshtaOfficeRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrderPageController extends AbstractController
+class OrderPageController extends BaseController
 {
-    private CategoryRepository $categoryRepository;
-
     private OrderRepository $orderRepository;
 
     private ProductRepository $productRepository;
@@ -49,7 +46,7 @@ class OrderPageController extends AbstractController
         NovaPoshtaCityRepository $novaPoshtaCityRepository,
         NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
     ) {
-        $this->categoryRepository = $categoryRepository;
+        parent::__construct($categoryRepository);
         $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;
         $this->settingRepository = $settingRepository;
@@ -61,14 +58,10 @@ class OrderPageController extends AbstractController
     public function index(): Response
     {
         if (!empty($_COOKIE['cart'])) {
-            $categories = $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']);
-
             $totalCart = $this->getTotalCart($_COOKIE['cart']);
 
-            return $this->render('order_page/index.html.twig', [
+            return $this->renderTemplate('order_page/index.html.twig', [
                 'totalPrice' => $totalCart['totalPrice'],
-                'categories' => $categories,
-                'totalCount' => $totalCart['totalCount'],
                 'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
                 'emails' => $this->settingRepository->findBy(['slug' => 'email']),
                 'products' => $totalCart['products'],
@@ -115,10 +108,8 @@ class OrderPageController extends AbstractController
             setcookie('cart', null, -1, '/');
             setcookie('totalCount', null, -1, '/');
 
-            return $this->render('thank_page/index.html.twig', [
+            return $this->renderTemplate('thank_page/index.html.twig', [
                 'order' => $order,
-                'categories' => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
-                'totalCount' => 0,
                 'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
                 'emails' => $this->settingRepository->findBy(['slug' => 'email'])
             ]);

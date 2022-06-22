@@ -5,13 +5,10 @@ namespace App\Controller;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProductPageController extends AbstractController
+class ProductPageController extends BaseController
 {
-    private CategoryRepository $categoryRepository;
-
     private ProductRepository $productRepository;
 
     private SettingRepository $settingRepository;
@@ -26,7 +23,7 @@ class ProductPageController extends AbstractController
         ProductRepository $productRepository,
         SettingRepository $settingRepository
     ) {
-        $this->categoryRepository = $categoryRepository;
+        parent::__construct($categoryRepository);
         $this->productRepository = $productRepository;
         $this->settingRepository = $settingRepository;
     }
@@ -41,8 +38,6 @@ class ProductPageController extends AbstractController
 
         return $this->render('product_page/index.html.twig', [
             'product' => $product,
-            'categories' => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
-            'totalCount' => $_COOKIE['totalCount'] ?? 0,
             'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
             'emails' => $this->settingRepository->findBy(['slug' => 'email'])
         ]);

@@ -6,14 +6,11 @@ use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-class SearchPageController extends AbstractController
+class SearchPageController extends BaseController
 {
-    private CategoryRepository $categoryRepository;
-
     private ProductRepository $productRepository;
 
     private SettingRepository $settingRepository;
@@ -28,14 +25,13 @@ class SearchPageController extends AbstractController
         ProductRepository $productRepository,
         SettingRepository $settingRepository
     ) {
-        $this->categoryRepository = $categoryRepository;
+        parent::__construct($categoryRepository);
         $this->productRepository = $productRepository;
         $this->settingRepository = $settingRepository;
     }
 
     public function getSearch(PaginatorInterface $paginator, Request $request): Response
     {
-        $categories = $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']);
         $limit = $this->settingRepository->findOneBy(['slug' => 'pagination_limit']);
 
         $query = $request->query->get('search');
@@ -55,10 +51,8 @@ class SearchPageController extends AbstractController
                 ])
             ]));
         } else {
-            return $this->render('search_page/index.html.twig', [
-                'categories' => $categories,
+            return $this->renderTemplate('search_page/index.html.twig', [
                 'pagination' => $pagination,
-                'totalCount' => $_COOKIE['totalCount'] ?? 0,
                 'searchString' => $query,
                 'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
                 'emails' => $this->settingRepository->findBy(['slug' => 'email'])
