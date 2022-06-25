@@ -12,8 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FeedbackPageController extends BaseController
 {
-    private SettingRepository $settingRepository;
-
     private FeedbackRepository $feedbackRepository;
 
     /**
@@ -26,8 +24,7 @@ class FeedbackPageController extends BaseController
         SettingRepository $settingRepository,
         FeedbackRepository $feedbackRepository
     ) {
-        parent::__construct($categoryRepository);
-        $this->settingRepository = $settingRepository;
+        parent::__construct($categoryRepository, $settingRepository);
         $this->feedbackRepository = $feedbackRepository;
     }
 
@@ -42,8 +39,6 @@ class FeedbackPageController extends BaseController
         );
 
         return $this->render('feedback_page/index.html.twig', [
-            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-            'emails' => $this->settingRepository->findBy(['slug' => 'email']),
             'pagination' => $pagination
         ]);
     }

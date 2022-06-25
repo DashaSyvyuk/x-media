@@ -82,6 +82,12 @@ class Order
     private $items;
 
     /**
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     */
+    private ?User $user;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public $createdAt;
@@ -228,6 +234,16 @@ class Order
         if ($this->items->contains($item)) {
             $this->items->removeElement($item);
         }
+    }
+
+    public function setUser(?User $user)
+    {
+        $this->user = $user;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
     }
 
     public function getCreatedAt()

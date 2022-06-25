@@ -25,7 +25,7 @@ class SearchPageController extends BaseController
         ProductRepository $productRepository,
         SettingRepository $settingRepository
     ) {
-        parent::__construct($categoryRepository);
+        parent::__construct($categoryRepository, $settingRepository);
         $this->productRepository = $productRepository;
         $this->settingRepository = $settingRepository;
     }
@@ -53,9 +53,7 @@ class SearchPageController extends BaseController
         } else {
             return $this->renderTemplate('search_page/index.html.twig', [
                 'pagination' => $pagination,
-                'searchString' => $query,
-                'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-                'emails' => $this->settingRepository->findBy(['slug' => 'email'])
+                'searchString' => $query
             ]);
         }
     }

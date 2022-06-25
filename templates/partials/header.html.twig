@@ -16,7 +16,7 @@
         </form>
     </div>
     <div id="cart">
-        <img src="/images/cart.png">
+        <img class="cart" src="/images/cart.png">
         <div id="cart-count"/>
             {% if totalCount > 0 %}
                 {{ totalCount }}
@@ -24,5 +24,6 @@
                 0
             {% endif %}
         </div>
+        <a href="{% if app.session.get('user') %}/account{% else %}/sign-up{% endif %}"><img id="account" src="/images/account.png"></a>
     </div>
 </div>

@@ -20,8 +20,6 @@ class OrderPageController extends BaseController
 
     private ProductRepository $productRepository;
 
-    private SettingRepository $settingRepository;
-
     private DeliveryTypeRepository $deliveryTypeRepository;
 
     private NovaPoshtaCityRepository $novaPoshtaCityRepository;
@@ -46,10 +44,9 @@ class OrderPageController extends BaseController
         NovaPoshtaCityRepository $novaPoshtaCityRepository,
         NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
     ) {
-        parent::__construct($categoryRepository);
+        parent::__construct($categoryRepository, $settingRepository);
         $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;
-        $this->settingRepository = $settingRepository;
         $this->deliveryTypeRepository = $deliveryTypeRepository;
         $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
         $this->novaPoshtaOfficeRepository = $novaPoshtaOfficeRepository;
@@ -62,8 +59,6 @@ class OrderPageController extends BaseController
 
             return $this->renderTemplate('order_page/index.html.twig', [
                 'totalPrice' => $totalCart['totalPrice'],
-                'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-                'emails' => $this->settingRepository->findBy(['slug' => 'email']),
                 'products' => $totalCart['products'],
                 'deliveryTypes' => $this->deliveryTypeRepository->findAll(),
                 'cities' => $this->novaPoshtaCityRepository->getCitiesWithOffices()
@@ -109,9 +104,7 @@ class OrderPageController extends BaseController
             setcookie('totalCount', null, -1, '/');
 
             return $this->renderTemplate('thank_page/index.html.twig', [
-                'order' => $order,
-                'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-                'emails' => $this->settingRepository->findBy(['slug' => 'email'])
+                'order' => $order
             ]);
         }
     }

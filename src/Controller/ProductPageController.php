@@ -11,8 +11,6 @@ class ProductPageController extends BaseController
 {
     private ProductRepository $productRepository;
 
-    private SettingRepository $settingRepository;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param ProductRepository $productRepository
@@ -23,9 +21,8 @@ class ProductPageController extends BaseController
         ProductRepository $productRepository,
         SettingRepository $settingRepository
     ) {
-        parent::__construct($categoryRepository);
+        parent::__construct($categoryRepository, $settingRepository);
         $this->productRepository = $productRepository;
-        $this->settingRepository = $settingRepository;
     }
 
     public function get(string $id): Response
@@ -37,9 +34,7 @@ class ProductPageController extends BaseController
         }
 
         return $this->render('product_page/index.html.twig', [
-            'product' => $product,
-            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-            'emails' => $this->settingRepository->findBy(['slug' => 'email'])
+            'product' => $product
         ]);
     }
 }

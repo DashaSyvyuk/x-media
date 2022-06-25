@@ -15,8 +15,6 @@ class HomePageController extends BaseController
 
     private ProductRepository $productRepository;
 
-    private SettingRepository $settingRepository;
-
     private FeedbackRepository $feedbackRepository;
 
     /**
@@ -33,10 +31,9 @@ class HomePageController extends BaseController
         SettingRepository $settingRepository,
         FeedbackRepository $feedbackRepository
     ) {
-        parent::__construct($categoryRepository);
+        parent::__construct($categoryRepository, $settingRepository);
         $this->sliderRepository = $sliderRepository;
         $this->productRepository = $productRepository;
-        $this->settingRepository = $settingRepository;
         $this->feedbackRepository = $feedbackRepository;
     }
 
@@ -46,8 +43,6 @@ class HomePageController extends BaseController
             'sliders' => $this->sliderRepository->findBy([], ['priority' => 'ASC']),
             'products' => $this->productRepository->findBy(['status' => 'ACTIVE'], ['createdAt' => 'DESC'], 10),
             'totalCount' => $_COOKIE['totalCount'] ?? 0,
-            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-            'emails'  => $this->settingRepository->findBy(['slug' => 'email']),
             'feedbacks' => $this->feedbackRepository->findBy(['status' => 'CONFIRMED'], ['createdAt' => 'DESC'])
         ]);
     }

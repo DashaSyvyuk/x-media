@@ -61,3 +61,18 @@ post_feedback:
 nova_poshta_office:
     path: /nova-poshta-office
     controller: App\Controller\NovaPoshtaOfficeController::index
+
+sign_up:
+    path: /sign-up
+    controller: App\Controller\SignUpController::index
+    methods: GET
+
+post_sign_up:
+    path: /sign-up
+    controller: App\Controller\SignUpController::post
+    methods: POST
+
+account:
+    path: /account
+    controller: App\Controller\AccountController::index
+    methods: GET

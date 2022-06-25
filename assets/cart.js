@@ -69,7 +69,7 @@ $(document).on('click', '#close-cart', () => {
     $('#cart-popup').hide();
 });
 
-$(document).on('click', '#menu #cart', () => showCart());
+$(document).on('click', '#menu #cart .cart', () => showCart());
 
 $(window).click((e) => {
     if(!$('#cart-block').has(e.target)) {

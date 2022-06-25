@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ErrorController extends BaseController
 {
-    private SettingRepository $settingRepository;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
@@ -18,15 +16,11 @@ class ErrorController extends BaseController
         CategoryRepository $categoryRepository,
         SettingRepository $settingRepository
     ) {
-        parent::__construct($categoryRepository);
-        $this->settingRepository = $settingRepository;
+        parent::__construct($categoryRepository, $settingRepository);
     }
 
     public function show(): Response
     {
-        return $this->renderTemplate('bundles/TwigBundle/Exception/error404.html.twig', [
-            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-            'emails' => $this->settingRepository->findBy(['slug' => 'email'])
-        ]);
+        return $this->renderTemplate('bundles/TwigBundle/Exception/error404.html.twig', []);
     }
 }

@@ -32,7 +32,7 @@ class CategoryPageController extends BaseController
         ProductRepository $productRepository,
         SettingRepository $settingRepository
     ) {
-        parent::__construct($categoryRepository);
+        parent::__construct($categoryRepository, $settingRepository);
         $this->categoryRepository = $categoryRepository;
         $this->filterRepository = $filterRepository;
         $this->productRepository = $productRepository;
@@ -88,8 +88,6 @@ class CategoryPageController extends BaseController
                 'pagination' => $pagination,
                 'query' => $query,
                 'filterCount' => $filterSetting ? $filterSetting->getValue() : null,
-                'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-                'emails' => $this->settingRepository->findBy(['slug' => 'email']),
                 'order' => $order,
                 'direction' => $direction,
                 'minPrice' => $prices['min_price'],

@@ -8,6 +8,7 @@ framework:
     # Remove or comment this section to explicitly disable session support.
     session:
         handler_id: null
+        # improves the security of the cookies used for sessions
         cookie_secure: auto
         cookie_samesite: lax
 

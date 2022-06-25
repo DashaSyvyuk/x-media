@@ -366,6 +366,10 @@ header {
     cursor: pointer;
 }
 
+#menu #account {
+    margin-left: 30px;
+}
+
 #filters {
     width: 300px;
     float: left;
@@ -1072,8 +1076,13 @@ section .feedbacks {
     box-shadow: 0 0 10px rgba(0,0,0,.3);
 }
 
-.add-comment input[type=text].red, .add-comment textarea.red {
-    border: 1px solid red;
+.add-comment input[type=text].red, .add-comment textarea.red, #sign_up input.red {
+    border: 1px solid red !important;
+}
+
+#sign_up .error {
+    color: red;
+    font-size: 12px;
 }
 
 .add-comment label .field {
@@ -1256,17 +1265,17 @@ section .feedbacks {
     text-align: center;
 }
 
-.order-place {
+.order-place, #sign_up {
     width: 40%;
     margin: 0 auto;
 }
 
-.order-place p {
+.order-place p, #sign_up p {
     font-size: 14px;
     margin-bottom: 4px;
 }
 
-.order-place input[type=text], .order-place select, .order-place textarea {
+.order-place input[type=text], .order-place select, .order-place textarea, #sign_up input[type=text], #sign_up input[type=password] {
     width: 100%;
     padding: 6px 10px;
     border: 1px solid #E0E0E0;
@@ -1276,15 +1285,15 @@ section .feedbacks {
     font-family: 'Montserrat', sans-serif;
 }
 
-.order-place input[type=submit] {
+.order-place input[type=submit], #sign_up input[type=submit] {
     width: 100%;
 }
 
-.order-place input[type=text]:focus, .order-place select:focus, .order-place textarea:focus {
+.order-place input[type=text]:focus, .order-place select:focus, .order-place textarea:focus, #sign_up input:focus {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
-.order-place .required {
+.order-place .required, #sign_up .required {
     color: #ff0000;
 }
 
@@ -1303,6 +1312,10 @@ section .feedbacks {
 
 .order-place .delivery-info.active {
     display: block;
+}
+
+#sign_up input[type=submit] {
+    margin-top: 20px;
 }
 
 .order-detail {

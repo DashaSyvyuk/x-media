@@ -6,7 +6,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\SettingRepository;
 use Symfony\Component\HttpFoundation\Response;
 
-class DeliveryAndPayController extends BaseController
+class AccountController extends BaseController
 {
     /**
      * @param CategoryRepository $categoryRepository
@@ -21,6 +21,6 @@ class DeliveryAndPayController extends BaseController
 
     public function index(): Response
     {
-        return $this->renderTemplate('delivery_and_pay_page/index.html.twig', []);
+        return $this->renderTemplate('account/index.html.twig', []);
     }
 }

@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AboutUsController extends BaseController
 {
-    private SettingRepository $settingRepository;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
@@ -18,15 +16,11 @@ class AboutUsController extends BaseController
         CategoryRepository $categoryRepository,
         SettingRepository $settingRepository
     ) {
-        parent::__construct($categoryRepository);
-        $this->settingRepository = $settingRepository;
+        parent::__construct($categoryRepository, $settingRepository);
     }
 
     public function index(): Response
     {
-        return $this->renderTemplate('about_us_page/index.html.twig', [
-            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-            'emails' => $this->settingRepository->findBy(['slug' => 'email'])
-        ]);
+        return $this->renderTemplate('about_us_page/index.html.twig', []);
     }
 }
