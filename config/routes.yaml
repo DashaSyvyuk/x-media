@@ -76,3 +76,13 @@ account:
     path: /account
     controller: App\Controller\AccountController::index
     methods: GET
+
+login:
+    path: /login
+    controller: App\Controller\LoginController::index
+    methods: GET
+
+post_login:
+    path: /login
+    controller: App\Controller\LoginController::post
+    methods: POST

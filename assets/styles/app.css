@@ -1080,7 +1080,7 @@ section .feedbacks {
     border: 1px solid red !important;
 }
 
-#sign_up .error {
+#sign_up .error, #login .error {
     color: red;
     font-size: 12px;
 }
@@ -1265,17 +1265,19 @@ section .feedbacks {
     text-align: center;
 }
 
-.order-place, #sign_up {
+.order-place, #sign_up, #login {
     width: 40%;
     margin: 0 auto;
 }
 
-.order-place p, #sign_up p {
+.order-place p, #sign_up p, #login p {
     font-size: 14px;
     margin-bottom: 4px;
 }
 
-.order-place input[type=text], .order-place select, .order-place textarea, #sign_up input[type=text], #sign_up input[type=password] {
+.order-place input[type=text], .order-place select, .order-place textarea,
+#sign_up input[type=text], #sign_up input[type=password],
+#login input[type=text], #login input[type=password] {
     width: 100%;
     padding: 6px 10px;
     border: 1px solid #E0E0E0;
@@ -1285,11 +1287,11 @@ section .feedbacks {
     font-family: 'Montserrat', sans-serif;
 }
 
-.order-place input[type=submit], #sign_up input[type=submit] {
+.order-place input[type=submit], #sign_up input[type=submit], #login input[type=submit] {
     width: 100%;
 }
 
-.order-place input[type=text]:focus, .order-place select:focus, .order-place textarea:focus, #sign_up input:focus {
+.order-place input[type=text]:focus, .order-place select:focus, .order-place textarea:focus, #sign_up input:focus, #login input:focus {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
@@ -1314,7 +1316,7 @@ section .feedbacks {
     display: block;
 }
 
-#sign_up input[type=submit] {
+#sign_up input[type=submit], #login input[type=submit] {
     margin-top: 20px;
 }
 

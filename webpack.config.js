@@ -31,6 +31,8 @@ Encore
     .addEntry('feedback', './assets/feedback.js')
     .addEntry('order', './assets/order.js')
     .addEntry('sign_up', './assets/sign_up.js')
+    .addEntry('login', './assets/login.js')
+    .addEntry('account', './assets/account.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
