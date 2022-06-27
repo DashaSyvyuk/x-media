@@ -9,7 +9,7 @@ use App\Repository\SettingRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AccountController extends BaseController
+class UserController extends BaseController
 {
     private NovaPoshtaCityRepository $novaPoshtaCityRepository;
 
@@ -32,7 +32,7 @@ class AccountController extends BaseController
         $this->userRepository = $userRepository;
     }
 
-    public function index(Request $request): Response
+    public function post(Request $request): Response
     {
         $session = $request->getSession();
 
@@ -40,19 +40,34 @@ class AccountController extends BaseController
 
         $user = $this->userRepository->findOneBy(['email' => $email]);
 
-        if (!$user) {
-            return $this->redirectToRoute('index');
+        $password = $request->request->get('password');
+
+        $passwordConfirm = $request->request->get('passwordConfirm');
+
+        if ($password && !password_verify($password, $user->getPassword())) {
+            if ($password != $passwordConfirm) {
+                return new Response(json_encode([
+                    'error' => 'Паролі не співпадають'
+                ]));
+            }
+
+            if (strlen($password)) {
+                return new Response(json_encode([
+                    'error' => 'Мінімальна довжина пароля 6 символів'
+                ]));
+            }
         }
 
-        $city = null;
-        if ($user->getNovaPoshtaCity()) {
-            $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $user->getNovaPoshtaCity()]);
-        }
+        $user->setName($request->request->get('name'));
+        $user->setSurname($request->request->get('surname'));
+        $user->setPassword($password);
+        $user->setNovaPoshtaCity($request->request->get('city'));
+        $user->setNovaPoshtaOffice($request->request->get('office'));
 
-        return $this->renderTemplate('account/index.html.twig', [
-            'cities' => $this->novaPoshtaCityRepository->getCitiesWithOffices(),
-            'offices' => $user->getNovaPoshtaCity() && $city ? $city->getOffices() : null,
-            'user' => $user
-        ]);
+        $this->userRepository->update($user);
+
+        return new Response(json_encode([
+            'success' => true
+        ]));
     }
 }

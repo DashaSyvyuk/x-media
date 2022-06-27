@@ -86,3 +86,8 @@ post_login:
     path: /login
     controller: App\Controller\LoginController::post
     methods: POST
+
+post_user:
+    path: /user
+    controller: App\Controller\UserController::post
+    methods: POST

@@ -3,7 +3,9 @@ body, html {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
 }
-
+.green {
+    color: #119e00;
+}
 .green-button {
     background-color: #119e00;
     color: #fff;
@@ -1080,7 +1082,7 @@ section .feedbacks {
     border: 1px solid red !important;
 }
 
-#sign_up .error, #login .error {
+#sign_up .error, #login .error, #user .error {
     color: red;
     font-size: 12px;
 }
@@ -1270,14 +1272,15 @@ section .feedbacks {
     margin: 0 auto;
 }
 
-.order-place p, #sign_up p, #login p {
+.order-place p, #sign_up p, #login p, #user p {
     font-size: 14px;
     margin-bottom: 4px;
 }
 
 .order-place input[type=text], .order-place select, .order-place textarea,
 #sign_up input[type=text], #sign_up input[type=password],
-#login input[type=text], #login input[type=password] {
+#login input[type=text], #login input[type=password],
+#user input[type=text], #user select, #user input[type=password] {
     width: 100%;
     padding: 6px 10px;
     border: 1px solid #E0E0E0;
@@ -1287,15 +1290,17 @@ section .feedbacks {
     font-family: 'Montserrat', sans-serif;
 }
 
-.order-place input[type=submit], #sign_up input[type=submit], #login input[type=submit] {
+.order-place input[type=submit], #sign_up input[type=submit], #login input[type=submit], #user input[type=submit] {
     width: 100%;
 }
 
-.order-place input[type=text]:focus, .order-place select:focus, .order-place textarea:focus, #sign_up input:focus, #login input:focus {
+.order-place input[type=text]:focus, .order-place select:focus,
+.order-place textarea:focus, #sign_up input:focus, #login input:focus,
+#user input[type=text]:focus, #user select:focus {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
-.order-place .required, #sign_up .required {
+.order-place .required, #sign_up .required, #user .required {
     color: #ff0000;
 }
 
@@ -1316,7 +1321,7 @@ section .feedbacks {
     display: block;
 }
 
-#sign_up input[type=submit], #login input[type=submit] {
+#sign_up input[type=submit], #login input[type=submit], #user input[type=submit] {
     margin-top: 20px;
 }
 
@@ -1413,7 +1418,8 @@ section .feedbacks {
     width: 30px;
 }
 
-.order-place .select2-container--default .select2-selection--single {
+.order-place .select2-container--default .select2-selection--single,
+.account .select2-container--default .select2-selection--single{
     background-color: #fff;
     border-radius: 0;
     border: 1px solid #e0e0e0;
@@ -1430,4 +1436,34 @@ section .feedbacks {
 
 .select2-container--default .select2-results__option--selectable {
     font-size: 14px;
+}
+.account {
+    width: 80%;
+    margin: 40px auto 0;
+    display: flex;
+}
+.account .left-side {
+    width: 300px;
+    list-style-type: none;
+}
+.account .left-side li img {
+    width: 25px;
+    margin-right: 10px;
+}
+.account .left-side li a {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    width: 200px;
+    text-decoration: none;
+    color: #000;
+}
+.account .left-side li a:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+
+.main-part {
+    width: calc(100% - 600px);
+    max-width: 500px;
 }

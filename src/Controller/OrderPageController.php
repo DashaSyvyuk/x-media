@@ -64,7 +64,7 @@ class OrderPageController extends BaseController
                 'cities' => $this->novaPoshtaCityRepository->getCitiesWithOffices()
             ]);
         } else {
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('index');
         }
     }
 

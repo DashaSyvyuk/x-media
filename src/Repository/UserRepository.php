@@ -25,4 +25,11 @@ class UserRepository extends ServiceEntityRepository
         $entityManager->persist($user);
         $entityManager->flush();
     }
+
+    public function update(User $user)
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->merge($user);
+        $entityManager->flush();
+    }
 }
