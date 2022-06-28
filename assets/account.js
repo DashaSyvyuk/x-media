@@ -46,3 +46,13 @@ $('#nova-poshta-city').on('change', (e) => {
         $('#nova-poshta-office select').select2();
     });
 });
+
+$('#logout').on('click', (e) => {
+    e.preventDefault();
+
+    $.post( '/logout', {}, (data) => {
+        if (data) {
+            location.reload();
+        }
+    });
+});

@@ -91,3 +91,8 @@ post_user:
     path: /user
     controller: App\Controller\UserController::post
     methods: POST
+
+logout:
+    path: /logout
+    controller: App\Controller\LogoutController::post
+    methods: POST
