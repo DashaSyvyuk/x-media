@@ -30,10 +30,10 @@ class ProductPageController extends BaseController
         $product = $this->productRepository->findOneBy(['id' => $id]);
 
         if (!$product) {
-            $this->render('/not-found.html.twig');
+            return $this->redirectToRoute('index');
         }
 
-        return $this->render('product_page/index.html.twig', [
+        return $this->renderTemplate('product_page/index.html.twig', [
             'product' => $product
         ]);
     }
