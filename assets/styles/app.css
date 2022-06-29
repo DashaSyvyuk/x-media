@@ -1284,7 +1284,7 @@ section .feedbacks {
 .order-place input[type=text], .order-place select, .order-place textarea,
 #sign_up input[type=text], #sign_up input[type=password],
 #login input[type=text], #login input[type=password],
-#user input[type=text], #user select, #user input[type=password] {
+#user input[type=text], #user select, #user input[type=password], #user textarea {
     width: 100%;
     padding: 6px 10px;
     border: 1px solid #E0E0E0;

@@ -56,13 +56,15 @@ class UserController extends BaseController
                     'error' => 'Мінімальна довжина пароля 6 символів'
                 ]));
             }
+
+            $user->setPassword($password);
         }
 
         $user->setName($request->request->get('name'));
         $user->setSurname($request->request->get('surname'));
-        $user->setPassword($password);
         $user->setNovaPoshtaCity($request->request->get('city'));
         $user->setNovaPoshtaOffice($request->request->get('office'));
+        $user->setAddress($request->request->get('address'));
 
         $this->userRepository->update($user);
 

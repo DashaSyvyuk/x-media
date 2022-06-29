@@ -10,8 +10,9 @@ $('#user').on('submit', (e) => {
     const passwordConfirm = $('#user input[name=password_confirm]').val();
     const city = $('#user select[name=city]').val();
     const office = $('#user select[name=office]').val();
+    const address = $('#user textarea[name=address]').val();
 
-    $.post( '/user', { name, surname, password, passwordConfirm, city, office }, (data) => {
+    $.post( '/user', { name, surname, password, passwordConfirm, city, office, address }, (data) => {
         const response = JSON.parse(data);
 
         if (response.error) {
