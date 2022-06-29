@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Order;
-use App\Entity\OrderItem;
 use App\Repository\CategoryRepository;
 use App\Repository\DeliveryTypeRepository;
 use App\Repository\NovaPoshtaCityRepository;
@@ -11,6 +9,7 @@ use App\Repository\NovaPoshtaOfficeRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,6 +25,8 @@ class OrderPageController extends BaseController
 
     private NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository;
 
+    private UserRepository $userRepository;
+
     /**
      * @param CategoryRepository $categoryRepository
      * @param OrderRepository $orderRepository
@@ -34,6 +35,7 @@ class OrderPageController extends BaseController
      * @param DeliveryTypeRepository $deliveryTypeRepository
      * @param NovaPoshtaCityRepository $novaPoshtaCityRepository
      * @param NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
+     * @param UserRepository $userRepository
      */
     public function __construct(
         CategoryRepository $categoryRepository,
@@ -42,7 +44,8 @@ class OrderPageController extends BaseController
         SettingRepository $settingRepository,
         DeliveryTypeRepository $deliveryTypeRepository,
         NovaPoshtaCityRepository $novaPoshtaCityRepository,
-        NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
+        NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository,
+        UserRepository $userRepository
     ) {
         parent::__construct($categoryRepository, $settingRepository);
         $this->orderRepository = $orderRepository;
@@ -50,6 +53,7 @@ class OrderPageController extends BaseController
         $this->deliveryTypeRepository = $deliveryTypeRepository;
         $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
         $this->novaPoshtaOfficeRepository = $novaPoshtaOfficeRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function index(): Response
@@ -71,34 +75,26 @@ class OrderPageController extends BaseController
     public function post(Request $request): Response
     {
         if (isset($_COOKIE['cart'])) {
-            $totalCart = $this->getTotalCart($_COOKIE['cart']);
-
-            $order = new Order();
-            $order->setName($request->request->get('name'));
-            $order->setSurname($request->request->get('surname'));
-            $order->setAddress($this->getAddress($request->request));
-            $order->setPhone($request->request->get('phone'));
-            $order->setEmail($request->request->get('email') ?? '');
-            $order->setPaytype($request->request->get('paytype'));
-            $order->setDeltype($request->request->get('deltype'));
-            $order->setStatus('NEW');
-            $order->setPaymentStatus(false);
-            $order->setComment($request->request->get('comment') ?? '');
-            $order->setTotal($totalCart['totalPrice']);
-
-            foreach ($totalCart['products'] as $item) {
-                $orderItem = new OrderItem();
-                $orderItem->setOrder($order);
-                $orderItem->setCount($item->count);
-                $orderItem->setProduct($this->productRepository->findOneBy(['id' => $item->getId()]));
-
-                $order->addItem($orderItem);
+            $user = null;
+            if ($email = $request->request->get('email')) {
+                $user = $this->userRepository->findOneBy(['email' => $email]);
             }
 
-            $this->orderRepository->create($order);
+            $totalCart = $this->getTotalCart($_COOKIE['cart']);
 
-            unset($_COOKIE['cart']);
-            unset($_COOKIE['totalCount']);
+            $order = $this->orderRepository->create([
+                'name' => $request->request->get('name'),
+                'surname' => $request->request->get('surname'),
+                'address' => $this->getAddress($request->request),
+                'phone' => $request->request->get('phone'),
+                'email' => $request->request->get('email') ?? '',
+                'paytype' => $request->request->get('paytype'),
+                'deltype' => $request->request->get('deltype'),
+                'comment' => $request->request->get('comment') ?? '',
+                'total' => $totalCart['totalPrice'],
+                'products' => $totalCart['products'],
+                'user' => $user
+            ]);
 
             setcookie('cart', null, -1, '/');
             setcookie('totalCount', null, -1, '/');
