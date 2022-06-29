@@ -2,6 +2,10 @@ body, html {
     padding: 0;
     margin: 0;
     font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+}
+.main-section {
+    min-height: calc(100vh - 205px);
 }
 .green {
     color: #119e00;
