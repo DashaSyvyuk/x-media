@@ -26,19 +26,19 @@
             <form method="POST" action="/order">
                 <div>
                     <p>Ім'я: <span class="required">*</span></p>
-                    <input type="text" name="name" autocomplete="off" required>
+                    <input type="text" name="name" autocomplete="off" value="{% if user %}{{ user.name }}{% endif %}" required>
                 </div>
                 <div>
                     <p>Прізвище: <span class="required">*</span></p>
-                    <input type="text" name="surname" autocomplete="off" required>
+                    <input type="text" name="surname" autocomplete="off" value="{% if user %}{{ user.surname }}{% endif %}" required>
                 </div>
                 <div>
                     <p>Номер телефону: <span class="required">*</span></p>
-                    <input type="text" name="phone" autocomplete="off" required>
+                    <input type="text" name="phone" autocomplete="off" value="{% if user %}{{ user.phone }}{% endif %}" required>
                 </div>
                 <div>
                     <p>E-mail:</p>
-                    <input type="text" name="email" autocomplete="off">
+                    <input type="text" name="email" autocomplete="off" value="{% if user %}{{ user.email }}{% endif %}">
                 </div>
                 <div>
                     <p>Спосіб доставки:</p>
@@ -72,7 +72,7 @@
                             </div>
                             <div>
                                 <p>Адреса:</p>
-                                <textarea name="address"></textarea>
+                                <textarea name="address">{% if user %}{{ user.name }}{% endif %}</textarea>
                             </div>
                         </span>
                     {% elseif deliveryType.id == 3 %}
@@ -89,11 +89,26 @@
                                 <p>Місто:</p>
                                 <select name="city" id="nova-poshta-city">
                                     {% for city in cities %}
-                                        <option value="{{ city.ref }}">{{ city.title }}</option>
+                                        <option value="{{ city.ref }}" {% if user and city.ref == user.novaPoshtaCity %}selected{% endif %}>
+                                            {{ city.title }}
+                                        </option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div id="nova-poshta-office"></div>
+                            {% if offices|length > 0 %}
+                                <div id="nova-poshta-office">
+                                    <p>Відділення:</p>
+                                    <select name="office" id="nova-poshta-office">
+                                        {% for office in offices %}
+                                            <option value="{{ office.ref }}" {% if office.ref == user.novaPoshtaOffice %}selected{% endif %}>
+                                                {{ office.title }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% else %}
+                                <div id="nova-poshta-office"></div>
+                            {% endif %}
                         </span>
                     {% endif %}
                 {% endfor %}

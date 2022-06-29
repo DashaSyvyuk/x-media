@@ -59,4 +59,11 @@ class OrderRepository extends ServiceEntityRepository
 
         return $order;
     }
+
+    public function update(Order $order)
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->merge($order);
+        $entityManager->flush();
+    }
 }

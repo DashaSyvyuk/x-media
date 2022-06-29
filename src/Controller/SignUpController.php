@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Repository\CategoryRepository;
+use App\Repository\OrderRepository;
 use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,18 +13,23 @@ class SignUpController extends BaseController
 {
     private UserRepository $userRepository;
 
+    private OrderRepository $orderRepository;
+
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
      * @param UserRepository $userRepository
+     * @param OrderRepository $orderRepository
      */
     public function __construct(
         CategoryRepository $categoryRepository,
         SettingRepository $settingRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        OrderRepository $orderRepository
     ) {
         parent::__construct($categoryRepository, $settingRepository);
         $this->userRepository = $userRepository;
+        $this->orderRepository = $orderRepository;
     }
 
     public function index(): Response
@@ -40,15 +45,20 @@ class SignUpController extends BaseController
             ]));
         }
 
-        $user = new User();
-        $user->setEmail($request->request->get('email'));
-        $user->setName($request->request->get('name'));
-        $user->setSurname($request->request->get('surname'));
-        $user->setPhone($request->request->get('phone'));
-        $user->setPassword($request->request->get('password'));
-        $user->setConfirmed(false);
+        $user = $this->userRepository->create([
+            'email' => $request->request->get('email'),
+            'name' => $request->request->get('name'),
+            'surname' => $request->request->get('surname'),
+            'phone' => $request->request->get('phone'),
+            'password' => $request->request->get('password')
+        ]);
 
-        $this->userRepository->create($user);
+        $orders = $this->orderRepository->findBy(['email' => $request->request->get('email')]);
+
+        foreach ($orders as $order) {
+            $order->setUser($user);
+            $this->orderRepository->update($order);
+        }
 
         $session = $request->getSession();
 

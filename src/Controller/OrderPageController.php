@@ -56,16 +56,30 @@ class OrderPageController extends BaseController
         $this->userRepository = $userRepository;
     }
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
         if (!empty($_COOKIE['cart'])) {
+            $city = null;
+
+            $session = $request->getSession();
+
+            if ($email = $session->get('user')) {
+                $user = $this->userRepository->findOneBy(['email' => $email]);
+
+                if ($user->getNovaPoshtaCity()) {
+                    $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $user->getNovaPoshtaCity()]);
+                }
+            }
+
             $totalCart = $this->getTotalCart($_COOKIE['cart']);
 
             return $this->renderTemplate('order_page/index.html.twig', [
                 'totalPrice' => $totalCart['totalPrice'],
                 'products' => $totalCart['products'],
                 'deliveryTypes' => $this->deliveryTypeRepository->findAll(),
-                'cities' => $this->novaPoshtaCityRepository->getCitiesWithOffices()
+                'cities' => $this->novaPoshtaCityRepository->getCitiesWithOffices(),
+                'offices' => $city ? $city->getOffices() : null,
+                'user' => $user ?? null
             ]);
         } else {
             return $this->redirectToRoute('index');
