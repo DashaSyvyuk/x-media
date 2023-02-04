@@ -11,7 +11,7 @@
                     <td class="remove bold">Видалити</td>
                 </tr>
                 {% for product in products %}
-                    <tr data-id="{{ product.id }}" data-name="{{ product.title }}">
+                    <tr data-id="{{ product.id }}" data-name="{{ product.title }}" class="product-row">
                         <td class="product-name">
                             <div class="product-title">
                                 <img src="/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}" />

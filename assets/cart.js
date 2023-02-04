@@ -178,9 +178,9 @@ function showCart() {
 function getTotalPrice() {
     let total = 0;
 
-    $("#cart-block table tr").each(function() {
+    $("#cart-block table tr.product-row").each(function() {
         const price = $(this).find(".price span").text().replace(/ /g, '');
-        const quantity = $(this).find(".count input").val();
+        const quantity = $(this).find('.count input').val();
 
         total += price * quantity;
     });
