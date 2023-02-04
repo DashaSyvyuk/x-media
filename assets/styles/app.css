@@ -4,6 +4,9 @@ body, html {
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
 }
+.bold {
+    font-weight: bold;
+}
 .main-section {
     min-height: calc(100vh - 205px);
 }
@@ -22,7 +25,6 @@ body, html {
     font-family: 'Montserrat', sans-serif;
     border: none;
 }
-
 .green-button:hover {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
@@ -1194,12 +1196,8 @@ section .feedbacks {
     box-sizing: border-box;
 }
 
-#cart-popup #cart-block table td.image {
-    width: 124px;
-}
-
 #cart-popup #cart-block table td.remove {
-    width: 32px;
+    width: 90px;
 }
 
 #cart-popup #cart-block table td.total-count {
@@ -1216,7 +1214,7 @@ section .feedbacks {
 }
 
 #cart-popup #cart-block table td .delete {
-    width: 18px;
+    width: 15px;
     cursor: pointer;
 }
 
@@ -1231,7 +1229,7 @@ section .feedbacks {
 
 #cart-popup #cart-block table td .minus, #cart-popup #cart-block table td .plus {
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 300;
     width: 20px;
     text-align: center;
     cursor: pointer;
@@ -1259,6 +1257,15 @@ section .feedbacks {
 
 #cart-popup #cart-block .total-price span {
     color: #119E00;
+}
+
+#cart-popup #cart-block .product-name .product-title {
+    display: flex;
+    align-items: center;
+}
+
+#cart-popup #cart-block .product-name .product-title div {
+    padding-left: 10px;
 }
 
 #cart-popup #go-to-order {
@@ -1451,7 +1458,7 @@ section .feedbacks {
     list-style-type: none;
 }
 .account .left-side li img {
-    width: 25px;
+    width: 20px;
     margin-right: 10px;
 }
 .account .left-side li a {
@@ -1462,6 +1469,7 @@ section .feedbacks {
     width: 200px;
     text-decoration: none;
     color: #000;
+    font-size: 14px;
 }
 .account .left-side li a:hover {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
@@ -1470,4 +1478,18 @@ section .feedbacks {
 .main-part {
     width: calc(100% - 600px);
     max-width: 500px;
+}
+
+.my-orders {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.my-orders .products {
+    width: 100%;
+}
+
+.my-orders .products img {
+    width: 60px;
 }

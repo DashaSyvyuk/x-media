@@ -2,10 +2,12 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('cart') }}
+    {{ encore_entry_script_tags('home') }}
+    {{ encore_entry_script_tags('app') }}
 {% endblock %}
 
 {% block body %}
-    <div class='home-page' data-controller='slider'>
+    <div class='home-page'>
         <div id='slider'>
             {% for slider in sliders %}
                 <div class="item">
@@ -17,7 +19,7 @@
 
         {% include 'partials/header.html.twig' %}
 
-        <section data-controller='new_product'>
+        <section>
             <p class="title">Новинки</p>
             <div id="new-products">
                 {% for product in products %}
@@ -29,7 +31,7 @@
         {% if feedbacks|length > 0 %}
         <section>
             <p class="title">Відгуки про магазин</p>
-            <div id="feedbacks" data-controller="feedback">
+            <div id="feedbacks">
                 {% for comment in feedbacks %}
                     <div class="comment">
                         {% include 'partials/comment.html.twig' %}

@@ -25,10 +25,10 @@ class BaseController extends AbstractController
     public function renderTemplate(string $view, array $parameters): Response
     {
         return $this->render($view, array_merge($parameters, [
-            'categories' => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
-            'totalCount' => $_COOKIE['totalCount'] ?? 0,
+            'categories'   => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
+            'totalCount'   => $_COOKIE['totalCount'] ?? 0,
             'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-            'emails' => $this->settingRepository->findBy(['slug' => 'email'])
+            'emails'       => $this->settingRepository->findBy(['slug' => 'email'])
         ]));
     }
 }

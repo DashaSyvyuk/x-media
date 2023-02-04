@@ -96,3 +96,8 @@ logout:
     path: /logout
     controller: App\Controller\LogoutController::post
     methods: POST
+
+orders:
+    path: /orders
+    controller: App\Controller\MyOrderController::index
+    methods: GET

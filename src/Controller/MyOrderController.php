@@ -8,7 +8,7 @@ use App\Repository\SettingRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class MyOrderPageController extends BaseController
+class MyOrderController extends BaseController
 {
     private UserRepository $userRepository;
 

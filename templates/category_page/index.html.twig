@@ -3,6 +3,7 @@
 {% block javascripts %}
     {{ encore_entry_script_tags('cart') }}
     {{ encore_entry_script_tags('category') }}
+    {{ encore_entry_script_tags('app') }}
 {% endblock %}
 
 {% block body %}
@@ -27,8 +28,8 @@
         </div>
 
         <div id="products">
-            <div class="order-by" data-controller="filter">
-                <select name="order" data-action="change->filter#changeOrder">
+            <div class="order-by">
+                <select name="order">
                     <option value="price" data-direction="asc" {% if order is defined and order=='price' and direction is defined and direction=='asc' %}selected{% endif %}>
                         Від дешевих до дорогих
                     </option>

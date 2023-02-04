@@ -1,0 +1,50 @@
+{% extends "base.html.twig" %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('cart') }}
+    {{ encore_entry_script_tags('account') }}
+{% endblock %}
+
+{% block body %}
+
+    <header>
+        {% include 'partials/header.html.twig' %}
+    </header>
+
+    <section>
+        <div class="title">Особистий кабінет</div>
+
+        <div class="account">
+            <ul class="left-side">
+                <li><a href="/"><img src="/images/home.png"><span>Головна сторінка</span></a></li>
+                <li><a href="/account"><img src="/images/setting.png"><span>Контактні дані</span></a></li>
+                <li><a href="/orders"><img src="/images/list.png">Мої замовлення</a></li>
+                <li><a id="logout"><img src="/images/log_out.png">Вийти</a></li>
+            </ul>
+            <div class="main-part">
+                <h4>Мої замовлення:</h4>
+
+                <ul class="my-orders">
+                    {% for order in user.getOrders() %}
+                        <li>
+                            <div class="detail">
+                                <p>Дата: {{ order.createdAt.format('Y-m-d H:i:s') }}</p>
+                                <p>Статус: {{ order.status }}</p>
+                            </div>
+                            <table class="products">
+                                {% for item in order.items %}
+                                    <tr>
+                                        <td><a href="/products/{{ item.product.id }}"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
+                                        <td><a href="/products/{{ item.product.id }}">{{ item.product.title }}</a></td>
+                                        <td>{{ item.count }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

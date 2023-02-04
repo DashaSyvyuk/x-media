@@ -38,7 +38,7 @@ class FeedbackPageController extends BaseController
             10
         );
 
-        return $this->render('feedback_page/index.html.twig', [
+        return $this->renderTemplate('feedback_page/index.html.twig', [
             'pagination' => $pagination
         ]);
     }
