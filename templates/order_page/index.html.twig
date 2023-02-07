@@ -44,7 +44,7 @@
                     <p>Спосіб доставки:</p>
                     <select name="deltype">
                         {% for deliveryType in deliveryTypes %}
-                            <option data-deltype-id="{{ deliveryType.id }}">{{ deliveryType.title }}</option>
+                            <option data-deltype-id="{{ deliveryType.id }}">{{ deliveryType.title }} - {{ deliveryType.cost }}</option>
                         {% endfor %}
                     </select>
                 </div>
