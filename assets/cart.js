@@ -34,7 +34,7 @@ $(document).on('change', '#cart-block input', (e) => {
     if (count <= 0) {
         removeProduct(id);
     } else {
-        addProduct(id, price);
+        addProduct(id, count);
     }
 });
 
@@ -62,6 +62,14 @@ $(document).on('click', '#cart-block .minus', (e) => {
     } else {
         $(e.currentTarget).closest('td').find('input').val(count);
         addProduct(id, count);
+    }
+});
+
+$(document).mouseup((e) => {
+    const container = $('#cart-block');
+
+    if (!container.is(e.target) && container.has(e.target).length === 0) {
+        $('#cart-popup').hide();
     }
 });
 
