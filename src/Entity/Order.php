@@ -32,9 +32,9 @@ class Order
     private string $surname = "";
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
-    private string $address = "";
+    private ?string $address = "";
 
     /**
      * @ORM\Column(type="string")
@@ -122,12 +122,12 @@ class Order
         return $this->surname;
     }
 
-    public function setAddress(string $address): void
+    public function setAddress(?string $address): void
     {
         $this->address = $address;
     }
 
-    public function getAddress(): string
+    public function getAddress(): ?string
     {
         return $this->address;
     }

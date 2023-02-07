@@ -97,25 +97,29 @@ class OrderPageController extends BaseController
             $totalCart = $this->getTotalCart($_COOKIE['cart']);
 
             $order = $this->orderRepository->create([
-                'name' => $request->request->get('name'),
-                'surname' => $request->request->get('surname'),
-                'address' => $this->getAddress($request->request),
-                'phone' => $request->request->get('phone'),
-                'email' => $request->request->get('email') ?? '',
-                'paytype' => $request->request->get('paytype'),
-                'deltype' => $request->request->get('deltype'),
-                'comment' => $request->request->get('comment') ?? '',
-                'total' => $totalCart['totalPrice'],
+                'name'     => $request->request->get('name'),
+                'surname'  => $request->request->get('surname'),
+                'address'  => $this->getAddress($request->request),
+                'phone'    => $request->request->get('phone'),
+                'email'    => $request->request->get('email') ?? '',
+                'paytype'  => $request->request->get('paytype'),
+                'deltype'  => $request->request->get('deltype'),
+                'comment'  => $request->request->get('comment') ?? '',
+                'total'    => $totalCart['totalPrice'],
                 'products' => $totalCart['products'],
-                'user' => $user
+                'user'     => $user
             ]);
 
+            unset($_COOKIE['cart']);
+            unset($_COOKIE['totalCount']);
             setcookie('cart', null, -1, '/');
             setcookie('totalCount', null, -1, '/');
 
             return $this->renderTemplate('thank_page/index.html.twig', [
                 'order' => $order
             ]);
+        } else {
+            return $this->redirectToRoute('index');
         }
     }
 
@@ -144,8 +148,12 @@ class OrderPageController extends BaseController
         ];
     }
 
-    private function getAddress($data): string
+    private function getAddress($data): ?string
     {
+        if (!$data->get('address') && !$data->get('city') && !$data->get('city')) {
+            return null;
+        }
+
         $address = $data->get('address');
         $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $data->get('city')]);
         $office = $this->novaPoshtaOfficeRepository->findOneBy(['ref' => $data->get('office')]);
