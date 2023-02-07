@@ -97,17 +97,18 @@ class OrderPageController extends BaseController
             $totalCart = $this->getTotalCart($_COOKIE['cart']);
 
             $order = $this->orderRepository->create([
-                'name'     => $request->request->get('name'),
-                'surname'  => $request->request->get('surname'),
-                'address'  => $this->getAddress($request->request),
-                'phone'    => $request->request->get('phone'),
-                'email'    => $request->request->get('email') ?? '',
-                'paytype'  => $request->request->get('paytype'),
-                'deltype'  => $request->request->get('deltype'),
-                'comment'  => $request->request->get('comment') ?? '',
-                'total'    => $totalCart['totalPrice'],
-                'products' => $totalCart['products'],
-                'user'     => $user
+                'orderNumber' => $this->generateOrderNumber(),
+                'name'        => $request->request->get('name'),
+                'surname'     => $request->request->get('surname'),
+                'address'     => $this->getAddress($request->request),
+                'phone'       => $request->request->get('phone'),
+                'email'       => $request->request->get('email') ?? '',
+                'paytype'     => $request->request->get('paytype'),
+                'deltype'     => $request->request->get('deltype'),
+                'comment'     => $request->request->get('comment') ?? '',
+                'total'       => $totalCart['totalPrice'],
+                'products'    => $totalCart['products'],
+                'user'        => $user
             ]);
 
             unset($_COOKIE['cart']);
@@ -159,5 +160,13 @@ class OrderPageController extends BaseController
         $office = $this->novaPoshtaOfficeRepository->findOneBy(['ref' => $data->get('office')]);
 
         return $city ? $city . ', ' . $office : $address;
+    }
+
+    private function generateOrderNumber(): string
+    {
+        $today = date('Ymd');
+        $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
+
+        return sprintf('%s-%s', $today, $rand);
     }
 }

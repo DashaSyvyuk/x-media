@@ -24,6 +24,11 @@ class Order
     /**
      * @ORM\Column(type="string")
      */
+    private string $orderNumber = "";
+
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $name = "";
 
     /**
@@ -100,6 +105,16 @@ class Order
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setOrderNumber(string $orderNumber): void
+    {
+        $this->orderNumber = $orderNumber;
+    }
+
+    public function getOrderNumber(): string
+    {
+        return $this->orderNumber;
     }
 
     public function setName(string $name): void

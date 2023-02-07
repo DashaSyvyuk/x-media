@@ -44,6 +44,7 @@ class OrderRepository extends ServiceEntityRepository
         $order->setComment($data['comment']);
         $order->setTotal($data['total']);
         $order->setUser($data['user']);
+        $order->setOrderNumber($data['orderNumber']);
 
         foreach ($data['products'] as $item) {
             $orderItem = new OrderItem();

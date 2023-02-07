@@ -17,6 +17,10 @@ final class OrderAdmin extends AbstractAdmin
     {
         $form
             ->with('Контактна інформація', ['class' => 'col-md-6'])
+                ->add('orderNumber', TextType::class, [
+                    'label' => 'Номер замовлення',
+                    'required' => true
+                ])
                 ->add('name', TextType::class, [
                     'label' => 'Ім\'я',
                     'required' => true
@@ -88,6 +92,7 @@ final class OrderAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
+            ->add('orderNumber')
             ->add('name')
             ->add('surname')
             ->add('email')
@@ -98,7 +103,8 @@ final class OrderAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->addIdentifier('name', TextType::class, ['label' => 'Ім\'я'])
+            ->addIdentifier('orderNumber', TextType::class, ['label' => 'Номер замовлення'])
+            ->add('name', TextType::class, ['label' => 'Ім\'я'])
             ->add('surname', TextType::class, ['label' => 'Прізвище'])
             ->add('email', TextType::class, ['label' => 'Email'])
             ->add('phone', TextType::class, ['label' => 'Номер телефону'])
