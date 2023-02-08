@@ -1337,16 +1337,36 @@ section .feedbacks {
 }
 
 .order-detail {
-    width: 40%;
+    width: 65%;
     margin: 50px auto 0;
 }
 
+.order-detail .thanks {
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #119E00;
+    line-height: 1.5;
+}
+
 .order-detail .products {
-    width: 100%;
+    width: 80%;
+    margin: 0 auto;
 }
 
 .order-detail .products td {
     padding: 10px;
+    font-size: 13px;
+    background-color: #eee;
+}
+
+.order-detail .products td.image {
+    width: 150px;
+}
+
+.order-detail .products td.count {
+    width: 50px;
+    text-align: center;
 }
 
 .order-detail .products td a {
@@ -1358,20 +1378,18 @@ section .feedbacks {
     text-decoration: underline;
 }
 
+.order-detail p {
+    font-size: 13px;
+}
 .order-detail p span {
-    font-weight: 400;
+    font-weight: 600;
     color: #119E00;
 }
 
 .order-detail .products img {
-    width: 100px;
+    width: 150px;
     height: auto;
     object-fit: contain;
-}
-
-.order-detail .thanks {
-    text-align: center;
-    margin-bottom: 30px;
 }
 
 .delivery-pay {

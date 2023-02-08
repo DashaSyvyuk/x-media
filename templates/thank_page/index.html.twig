@@ -22,20 +22,19 @@
         </div>
 
         <div class="order-detail">
-            <p class="thanks">Дякуємо за замовлення у нашому магазині, ми найближчим часом з вами зв'яжемося для уточнення деталей</p>
-            <p><span>Деталі замовлення:</span></p>
+            <p class="thanks">Номер вашого замовлення <b>{{ order.orderNumber }}</b><br>Найближчим часом ми з вами зв'яжемося для уточнення деталей</p>
             <table class="products">
                 {% for item in order.items %}
                     <tr>
-                        <td><a href="/products/{{ item.product.id }}"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
+                        <td class="image"><a href="/products/{{ item.product.id }}"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
                         <td><a href="/products/{{ item.product.id }}">{{ item.product.title }}</a></td>
-                        <td>{{ item.count }}</td>
+                        <td class="count">{{ item.count }}</td>
                     </tr>
                 {% endfor %}
             </table>
             <p><span>Спосіб оплати: </span>{{ order.paytype }}</p>
             <p><span>Спосіб доставки: </span>{{ order.deltype }}</p>
-            <p><span>Адреса: </span>{{ order.address }}</p>
+            {% if order.address %}<p><span>Адреса: </span></span>{{ order.address }}</p>{% endif %}
             <p><span>Загальна вартість: </span>{{ order.total|number_format(0, '.', ' ') }} грн</p>
         </div>
     </section>
