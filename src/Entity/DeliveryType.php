@@ -34,6 +34,11 @@ class DeliveryType
     private string $cost = "";
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $enabled = true;
+
+    /**
      * @ORM\ManyToMany(targetEntity="PaymentType")
      * @ORM\JoinTable(name="delivery_payment",
      *      joinColumns={@ORM\JoinColumn(name="delivery_type_id", referencedColumnName="id")},
@@ -85,6 +90,16 @@ class DeliveryType
     public function getCost(): string
     {
         return $this->cost;
+    }
+
+    public function setEnabled(bool $enabled): void
+    {
+        $this->enabled = $enabled;
+    }
+
+    public function getEnabled(): bool
+    {
+        return $this->enabled;
     }
 
     public function getCreatedAt(): DateTime

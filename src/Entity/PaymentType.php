@@ -28,6 +28,11 @@ class PaymentType
     private string $title = "";
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $enabled = true;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private DateTime $createdAt;
@@ -55,6 +60,16 @@ class PaymentType
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setEnabled(bool $enabled): void
+    {
+        $this->enabled = $enabled;
+    }
+
+    public function getEnabled(): bool
+    {
+        return $this->enabled;
     }
 
     public function getCreatedAt(): DateTime

@@ -55,7 +55,9 @@
                                 <p>Спосіб оплати:</p>
                                 <select name="paytype">
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
-                                        <option>{{ paymentType.title }}</option>
+                                        {% if paymentType.enabled %}
+                                            <option>{{ paymentType.title }}</option>
+                                        {% endif %}
                                     {% endfor%}
                                 </select>
                             </div>
@@ -66,7 +68,9 @@
                                 <p>Спосіб оплати:</p>
                                 <select name="paytype">
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
-                                        <option>{{ paymentType.title }}</option>
+                                        {% if paymentType.enabled %}
+                                            <option>{{ paymentType.title }}</option>
+                                        {% endif %}
                                     {% endfor%}
                                 </select>
                             </div>
@@ -81,7 +85,9 @@
                                 <p>Спосіб оплати:</p>
                                 <select name="paytype">
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
-                                        <option>{{ paymentType.title }}</option>
+                                        {% if paymentType.enabled %}
+                                            <option>{{ paymentType.title }}</option>
+                                        {% endif %}
                                     {% endfor%}
                                 </select>
                             </div>

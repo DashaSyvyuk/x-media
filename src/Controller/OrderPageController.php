@@ -76,7 +76,7 @@ class OrderPageController extends BaseController
             return $this->renderTemplate('order_page/index.html.twig', [
                 'totalPrice' => $totalCart['totalPrice'],
                 'products' => $totalCart['products'],
-                'deliveryTypes' => $this->deliveryTypeRepository->findAll(),
+                'deliveryTypes' => $this->deliveryTypeRepository->findBy(['enabled' => true]),
                 'cities' => $this->novaPoshtaCityRepository->getCitiesWithOffices(),
                 'offices' => $city ? $city->getOffices() : null,
                 'user' => $user ?? null
