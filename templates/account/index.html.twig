@@ -35,7 +35,7 @@
                         <table class="products">
                             {% for item in order.items %}
                                 <tr>
-                                    <td width="120"><a href="/products/{{ item.product.id }}" target="_blank"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
+                                    <td width="90"><a href="/products/{{ item.product.id }}" target="_blank"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
                                     <td><a href="/products/{{ item.product.id }}" target="_blank">{{ item.product.title }}</a></td>
                                     <td>{{ item.count }}</td>
                                 </tr>

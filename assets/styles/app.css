@@ -1509,6 +1509,11 @@ section .feedbacks {
     font-size: 12px;
 }
 
+.my-orders .products td {
+    background-color: #eee;
+    padding: 10px;
+}
+
 .my-orders .products {
     width: 100%;
 }
