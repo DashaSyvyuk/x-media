@@ -8,17 +8,7 @@ $('#filters input[type=checkbox]').on('change', (e) => {
     const newUrl = url + getUrl();
     const filter = $(e.currentTarget).attr('name');
 
-    getProducts(newUrl);
-
-    window.history.pushState('', '', newUrl);
-
-    if ($(e.currentTarget).is(':checked')) {
-        const title = $(e.currentTarget).parent().text();
-        const html = '<div class="item" data-filter-id="'+filter+'"><span class="attribute-title">'+title+'</span><img src="/images/close.png"></div>';
-        $('.selected-filters').append(html);
-    } else {
-        $('.selected-filters div[data-filter-id='+filter+']').remove();
-    }
+    window.location.replace(newUrl);
 });
 
 $(document).on('click', '#filter-form .selected-filters .item', (e) => {
@@ -41,43 +31,21 @@ $('#products .order-by select').on('change', () => {
 
     getProducts(newUrl);
 
-    window.history.pushState('', '', newUrl);
+    window.location.replace(newUrl);
 });
 
 $('#filters input[name=price_from]').on('change', (e) => {
     const url = window.location.pathname;
     const newUrl = url + getUrl();
 
-    getProducts(newUrl);
-
-    window.history.pushState('', '', newUrl);
-
-    const value = $(e.currentTarget).val();
-
-    $('#filters div[data-filter-id=price_from]').remove();
-
-    if (value) {
-        const html = '<div class="item" data-filter-id="price_from"><span class="attribute-title">від '+value+'</span><img src="/images/close.png"></div>';
-        $('.selected-filters').append(html);
-    }
+    window.location.replace(newUrl);
 });
 
 $('#filters input[name=price_to]').on('change', (e) => {
     const url = window.location.pathname;
     const newUrl = url + getUrl();
 
-    getProducts(newUrl);
-
-    window.history.pushState('', '', newUrl);
-
-    const value = $(e.currentTarget).val();
-
-    $('#filters div[data-filter-id=price_to]').remove();
-
-    if (value) {
-        const html = '<div class="item" data-filter-id="price_to"><span class="attribute-title">до '+value+'</span><img src="/images/close.png"></div>';
-        $('.selected-filters').append(html);
-    }
+    window.location.replace(newUrl);
 });
 
 function getUrl() {
