@@ -16,9 +16,9 @@
 
         <div class="account">
             <ul class="left-side">
-                <li><a href="/"><img src="/images/home.png"><span>Головна сторінка</span></a></li>
-                <li><a href="/account"><img src="/images/setting.png"><span>Контактні дані</span></a></li>
-                <li><a href="/orders"><img src="/images/list.png">Мої замовлення</a></li>
+                <li><a href="/account"><img src="/images/home.png"><span>Головна сторінка</span></a></li>
+                <li><a href="/account/contacts"><img src="/images/setting.png"><span>Контактні дані</span></a></li>
+                <li><a href="/account/orders"><img src="/images/list.png"><b><span>Мої замовлення</span></b></a></li>
                 <li><a id="logout"><img src="/images/log_out.png">Вийти</a></li>
             </ul>
             <div class="main-part">
@@ -28,14 +28,14 @@
                     {% for order in user.getOrders() %}
                         <li>
                             <div class="detail">
-                                <p>Дата: {{ order.createdAt.format('Y-m-d H:i:s') }}</p>
-                                <p>Статус: {{ order.status }}</p>
+                                <p><b>Дата:</b> {{ order.createdAt.format('Y-m-d H:i:s') }}</p>
+                                <p><b>Статус:</b> {{ order.status }}</p>
                             </div>
                             <table class="products">
                                 {% for item in order.items %}
                                     <tr>
-                                        <td><a href="/products/{{ item.product.id }}"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
-                                        <td><a href="/products/{{ item.product.id }}">{{ item.product.title }}</a></td>
+                                        <td width="120"><a href="/products/{{ item.product.id }}" target="_blank"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
+                                        <td><a href="/products/{{ item.product.id }}" target="_blank">{{ item.product.title }}</a></td>
                                         <td>{{ item.count }}</td>
                                     </tr>
                                 {% endfor %}

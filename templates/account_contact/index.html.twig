@@ -1,0 +1,88 @@
+{% extends "base.html.twig" %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('cart') }}
+    {{ encore_entry_script_tags('account') }}
+{% endblock %}
+
+{% block body %}
+
+    <header>
+        {% include 'partials/header.html.twig' %}
+    </header>
+
+    <section>
+        <div class="title">Особистий кабінет</div>
+
+        <div class="account">
+            <ul class="left-side">
+                <li><a href="/account"><img src="/images/home.png"><span>Головна сторінка</span></a></li>
+                <li><a href="/account/contacts"><img src="/images/setting.png"><b><span>Контактні дані</span></b></a></li>
+                <li><a href="/account/orders"><img src="/images/list.png">Мої замовлення</a></li>
+                <li><a id="logout"><img src="/images/log_out.png">Вийти</a></li>
+            </ul>
+            <div class="main-part">
+                <h4>Контактні дані:</h4>
+
+                <form method="POST" action="/user" id="user">
+                    <div>
+                        <p>Ім'я: <span class="required">*</span></p>
+                        <input type="text" name="name" value="{{ user.name }}" autocomplete="off" required>
+                    </div>
+                    <div>
+                        <p>Прізвище:</p>
+                        <input type="text" name="surname" value="{{ user.surname }}" autocomplete="off">
+                    </div>
+                    <div>
+                        <p>Номер телефону:</p>
+                        <input type="text" name="phone" value="{{ user.phone }}" readonly>
+                    </div>
+                    <div class="email">
+                        <p>E-mail:</p>
+                        <input type="text" name="email" value="{{ user.email }}" readonly>
+                        <p class="error"></p>
+                    </div>
+                    <div class="password">
+                        <p>Пароль:</p>
+                        <input type="password" name="password" autocomplete="off">
+                        <p class="error"></p>
+                    </div>
+                    <div class="password_confirm">
+                        <p>Повторіть пароль:</p>
+                        <input type="password" name="password_confirm" autocomplete="off">
+                        <p class="error"></p>
+                    </div>
+                    <div>
+                        <p>Місто:</p>
+                        <select name="city" id="nova-poshta-city">
+                            {% for city in cities %}
+                                <option value="{{ city.ref }}" {% if city.ref == user.novaPoshtaCity %}selected{% endif %}>
+                                    {{ city.title }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div id="nova-poshta-office">
+                        <p>Відділення:</p>
+                        <select name="office" id="nova-poshta-office">
+                            {% for office in offices %}
+                                <option value="{{ office.ref }}" {% if office.ref == user.novaPoshtaOffice %}selected{% endif %}>
+                                    {{ office.title }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <p>Адреса:</p>
+                        <textarea name="address">{{ user.address }}</textarea>
+                    </div>
+
+                    <div>
+                        <input class="green-button" type="submit" value="Зберегти зміни">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

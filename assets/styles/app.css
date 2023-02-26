@@ -1493,14 +1493,20 @@ section .feedbacks {
 }
 
 .main-part {
-    width: calc(100% - 600px);
+    width: calc(100% - 500px);
     max-width: 500px;
+}
+
+.my-orders h5 {
+    font-size: 13px;
 }
 
 .my-orders {
     list-style-type: none;
     display: flex;
     flex-direction: column;
+    padding-left: 0;
+    font-size: 12px;
 }
 
 .my-orders .products {
@@ -1508,5 +1514,10 @@ section .feedbacks {
 }
 
 .my-orders .products img {
-    width: 60px;
+    width: 90px;
+}
+
+.my-orders .products a {
+    color: #119E00;
+    text-align: left;
 }

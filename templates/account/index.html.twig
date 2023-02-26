@@ -16,71 +16,36 @@
 
         <div class="account">
             <ul class="left-side">
-                <li><a href="/"><img src="/images/home.png"><span>Головна сторінка</span></a></li>
-                <li><a href="/account"><img src="/images/setting.png"><span>Контактні дані</span></a></li>
-                <li><a href="/orders"><img src="/images/list.png">Мої замовлення</a></li>
+                <li><a href="/account"><img src="/images/home.png"><span><b>Головна сторінка</b></span></a></li>
+                <li><a href="/account/contacts"><img src="/images/setting.png"><span>Контактні дані</span></a></li>
+                <li><a href="/account/orders"><img src="/images/list.png">Мої замовлення</a></li>
                 <li><a id="logout"><img src="/images/log_out.png">Вийти</a></li>
             </ul>
             <div class="main-part">
-                <h4>Контактні дані:</h4>
+                <h4>Головна сторінка:</h4>
 
-                <form method="POST" action="/user" id="user">
-                    <div>
-                        <p>Ім'я: <span class="required">*</span></p>
-                        <input type="text" name="name" value="{{ user.name }}" autocomplete="off" required>
-                    </div>
-                    <div>
-                        <p>Прізвище:</p>
-                        <input type="text" name="surname" value="{{ user.surname }}" autocomplete="off">
-                    </div>
-                    <div>
-                        <p>Номер телефону:</p>
-                        <input type="text" name="phone" value="{{ user.phone }}" readonly>
-                    </div>
-                    <div class="email">
-                        <p>E-mail:</p>
-                        <input type="text" name="email" value="{{ user.email }}" readonly>
-                        <p class="error"></p>
-                    </div>
-                    <div class="password">
-                        <p>Пароль:</p>
-                        <input type="password" name="password" autocomplete="off">
-                        <p class="error"></p>
-                    </div>
-                    <div class="password_confirm">
-                        <p>Повторіть пароль:</p>
-                        <input type="password" name="password_confirm" autocomplete="off">
-                        <p class="error"></p>
-                    </div>
-                    <div>
-                        <p>Місто:</p>
-                        <select name="city" id="nova-poshta-city">
-                            {% for city in cities %}
-                                <option value="{{ city.ref }}" {% if city.ref == user.novaPoshtaCity %}selected{% endif %}>
-                                    {{ city.title }}
-                                </option>
+                <ul class="my-orders">
+                    {% if order %}
+                    <h5>Останнє активне замовлення:</h5>
+                    <li>
+                        <div class="detail">
+                            <p><b>Дата:</b> {{ order.createdAt.format('Y-m-d H:i:s') }}</p>
+                            <p><b>Статус:</b> {{ order.status }}</p>
+                        </div>
+                        <table class="products">
+                            {% for item in order.items %}
+                                <tr>
+                                    <td width="120"><a href="/products/{{ item.product.id }}" target="_blank"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
+                                    <td><a href="/products/{{ item.product.id }}" target="_blank">{{ item.product.title }}</a></td>
+                                    <td>{{ item.count }}</td>
+                                </tr>
                             {% endfor %}
-                        </select>
-                    </div>
-                    <div id="nova-poshta-office">
-                        <p>Відділення:</p>
-                        <select name="office" id="nova-poshta-office">
-                            {% for office in offices %}
-                                <option value="{{ office.ref }}" {% if office.ref == user.novaPoshtaOffice %}selected{% endif %}>
-                                    {{ office.title }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <p>Адреса:</p>
-                        <textarea name="address">{{ user.address }}</textarea>
-                    </div>
-
-                    <div>
-                        <input class="green-button" type="submit" value="Зберегти зміни">
-                    </div>
-                </form>
+                        </table>
+                    </li>
+                    {% else %}
+                        <p>{{ noOrder.getValue() }}</p>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </section>

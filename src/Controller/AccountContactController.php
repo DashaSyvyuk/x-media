@@ -3,36 +3,33 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
-use App\Repository\OrderRepository;
+use App\Repository\NovaPoshtaCityRepository;
 use App\Repository\UserRepository;
 use App\Repository\SettingRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AccountController extends BaseController
+class AccountContactController extends BaseController
 {
+    private NovaPoshtaCityRepository $novaPoshtaCityRepository;
+
     private UserRepository $userRepository;
-
-    private OrderRepository $orderRepository;
-
-    private SettingRepository $settingRepository;
 
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
+     * @param NovaPoshtaCityRepository $novaPoshtaCityRepository
      * @param UserRepository $userRepository
-     * @param OrderRepository $orderRepository
      */
     public function __construct(
         CategoryRepository $categoryRepository,
         SettingRepository $settingRepository,
-        UserRepository $userRepository,
-        OrderRepository $orderRepository
+        NovaPoshtaCityRepository $novaPoshtaCityRepository,
+        UserRepository $userRepository
     ) {
         parent::__construct($categoryRepository, $settingRepository);
-        $this->settingRepository = $settingRepository;
+        $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
         $this->userRepository = $userRepository;
-        $this->orderRepository = $orderRepository;
     }
 
     public function index(Request $request): Response
@@ -47,14 +44,15 @@ class AccountController extends BaseController
             return $this->redirectToRoute('index');
         }
 
-        $order = $this->orderRepository->findOneBy(['user' => $user, 'status' => 'NEW'], ['createdAt' => 'DESC']);
+        $city = null;
+        if ($user->getNovaPoshtaCity()) {
+            $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $user->getNovaPoshtaCity()]);
+        }
 
-        $text = $this->settingRepository->findOneBy(['slug' => 'there_is_no_active_order']);
-
-        return $this->renderTemplate('account/index.html.twig', [
-            'user' => $user,
-            'order' => $order,
-            'noOrder' => $text
+        return $this->renderTemplate('account_contact/index.html.twig', [
+            'cities' => $this->novaPoshtaCityRepository->getCitiesWithOffices(),
+            'offices' => $user->getNovaPoshtaCity() && $city ? $city->getOffices() : null,
+            'user' => $user
         ]);
     }
 }
