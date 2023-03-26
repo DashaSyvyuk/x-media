@@ -106,3 +106,23 @@ orders:
     path: /account/orders
     controller: App\Controller\MyOrderController::index
     methods: GET
+
+restore_password:
+    path: /restore-password
+    controller: App\Controller\RestorePasswordController::index
+    methods: GET
+
+post_restore_password:
+    path: /restore-password
+    controller: App\Controller\RestorePasswordController::post
+    methods: POST
+
+update_password:
+    path: /update-password
+    controller: App\Controller\UpdatePasswordController::index
+    methods: GET
+
+post_update_password:
+    path: /update-password
+    controller: App\Controller\UpdatePasswordController::post
+    methods: POST

@@ -1088,7 +1088,7 @@ section .feedbacks {
     border: 1px solid red !important;
 }
 
-#sign_up .error, #login .error, #user .error {
+#sign_up .error, #login .error, #user .error, #restore-password .error, #update-password .error {
     color: red;
     font-size: 12px;
 }
@@ -1278,12 +1278,12 @@ section .feedbacks {
     text-align: center;
 }
 
-.order-place, #sign_up, #login {
+.order-place, #sign_up, #login, #restore-password, #update-password {
     width: 40%;
     margin: 0 auto;
 }
 
-.order-place p, #sign_up p, #login p, #user p {
+.order-place p, #sign_up p, #login p, #user p, #restore-password p, #update-password p {
     font-size: 14px;
     margin-bottom: 4px;
 }
@@ -1291,6 +1291,8 @@ section .feedbacks {
 .order-place input[type=text], .order-place select, .order-place textarea,
 #sign_up input[type=text], #sign_up input[type=password],
 #login input[type=text], #login input[type=password],
+#restore-password input[type=text],
+#update-password input[type=password],
 #user input[type=text], #user select, #user input[type=password], #user textarea {
     width: 100%;
     padding: 6px 10px;
@@ -1301,13 +1303,20 @@ section .feedbacks {
     font-family: 'Montserrat', sans-serif;
 }
 
-.order-place input[type=submit], #sign_up input[type=submit], #login input[type=submit], #user input[type=submit] {
+.order-place input[type=submit],
+#sign_up input[type=submit],
+#login input[type=submit],
+#user input[type=submit],
+#restore-password input[type=submit],
+#update-password input[type=submit]{
     width: 100%;
 }
 
 .order-place input[type=text]:focus, .order-place select:focus,
 .order-place textarea:focus, #sign_up input:focus, #login input:focus,
-#user input[type=text]:focus, #user select:focus {
+#user input[type=text]:focus, #user select:focus,
+#restore-password input:focus,
+#update-password input:focus {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
@@ -1332,7 +1341,8 @@ section .feedbacks {
     display: block;
 }
 
-#sign_up input[type=submit], #login input[type=submit], #user input[type=submit] {
+#sign_up input[type=submit], #login input[type=submit], #user input[type=submit],
+#restore-password input[type=submit], #update-password input[type=submit] {
     margin-top: 20px;
 }
 

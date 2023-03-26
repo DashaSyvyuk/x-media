@@ -20,53 +20,59 @@ class User
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $surname;
+    private string $surname;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $phone;
+    private string $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $email;
+    private string $email;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $address;
+    private ?string $address;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $novaPoshtaCity;
+    private ?string $novaPoshtaCity;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $novaPoshtaOffice;
+    private ?string $novaPoshtaOffice;
 
     /**
      * @var bool
      * @ORM\Column(type="boolean")
      */
     private bool $confirmed = false;
+
+    /**
+     * @var string|null
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $hash;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="user", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
@@ -82,6 +88,11 @@ class User
      * @ORM\Column(type="datetime")
      */
     public DateTime $updatedAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    public ?DateTime $expiredAt;
 
     public function getId(): ?int
     {
@@ -183,6 +194,16 @@ class User
         $this->confirmed = $confirmed;
     }
 
+    public function getHash(): ?string
+    {
+        return $this->hash;
+    }
+
+    public function setHash(?string $hash): void
+    {
+        $this->hash = $hash;
+    }
+
     public function getOrders()
     {
         return $this->orders;
@@ -221,5 +242,15 @@ class User
     public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getExpiredAt(): DateTime
+    {
+        return $this->expiredAt;
+    }
+
+    public function setExpiredAt(DateTime $expiredAt): void
+    {
+        $this->expiredAt = $expiredAt;
     }
 }
