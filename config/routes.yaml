@@ -126,3 +126,8 @@ post_update_password:
     path: /update-password
     controller: App\Controller\UpdatePasswordController::post
     methods: POST
+
+confirm_email:
+    path: /confirm-email
+    controller: App\Controller\ConfirmEmailController::index
+    methods: GET

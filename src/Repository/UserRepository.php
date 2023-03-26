@@ -27,7 +27,9 @@ class UserRepository extends ServiceEntityRepository
         $user->setSurname($data['surname']);
         $user->setPhone($data['phone']);
         $user->setPassword($data['password']);
-        $user->setConfirmed(false);
+        $user->setConfirmed($data['confirmed']);
+        $user->setHash($data['hash']);
+        $user->setExpiredAt($data['expiredAt']);
 
         $entityManager = $this->getEntityManager();
         $entityManager->persist($user);

@@ -55,7 +55,7 @@ $('#sign_up').on('submit', (e) => {
                 $('#sign_up input[name=email]').addClass('red');
                 $('#sign_up .email .error').text('Даний email вже існує');
             } else {
-                window.location.href = '/account';
+                $('#sign_up').html('<p style="text-align: center; margin-top: 50px; line-height: 2;">Інструкція для підтвердження email<br> відправлена вам на пошту</p>')
             }
         });
 

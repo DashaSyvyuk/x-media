@@ -35,7 +35,11 @@ class LoginController extends BaseController
     public function post(Request $request): Response
     {
         $password = $request->request->get('password');
-        $user = $this->userRepository->findOneBy(['email' => $request->request->get('email')]);
+
+        $user = $this->userRepository->findOneBy([
+            'email' => $request->request->get('email'),
+            'confirmed' => true
+        ]);
 
         if (!$user) {
             return new Response(json_encode([

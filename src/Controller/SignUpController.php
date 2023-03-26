@@ -6,6 +6,9 @@ use App\Repository\CategoryRepository;
 use App\Repository\OrderRepository;
 use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
+use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
+use Swift_Mailer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,7 +40,7 @@ class SignUpController extends BaseController
         return $this->renderTemplate('sign_up/index.html.twig', []);
     }
 
-    public function post(Request $request): Response
+    public function post(Request $request, Swift_Mailer $mailer): Response
     {
         if ($this->userRepository->findOneBy(['email' => $request->request->get('email')])) {
             return new Response(json_encode([
@@ -45,12 +48,17 @@ class SignUpController extends BaseController
             ]));
         }
 
+        $uuid = Uuid::uuid4()->toString();
+
         $user = $this->userRepository->create([
             'email' => $request->request->get('email'),
             'name' => $request->request->get('name'),
             'surname' => $request->request->get('surname'),
             'phone' => $request->request->get('phone'),
-            'password' => $request->request->get('password')
+            'password' => $request->request->get('password'),
+            'confirmed' => false,
+            'hash' => $uuid,
+            'expiredAt' => Carbon::now()->addHour(),
         ]);
 
         $orders = $this->orderRepository->findBy(['email' => $request->request->get('email')]);
@@ -60,9 +68,21 @@ class SignUpController extends BaseController
             $this->orderRepository->update($order);
         }
 
-        $session = $request->getSession();
+        $link = sprintf('%s/confirm-email?hash=%s', $request->getHost(), $uuid);
 
-        $session->set('user', $request->request->get('email'));
+        $message = (new \Swift_Message('Підтвердження email'))
+            ->setFrom('x-media@x-media.com.ua')
+            ->setTo($request->request->get('email'))
+            ->setBody(
+                $this->renderView(
+                    'emails/confirm-email.html.twig',
+                    ['link' => $link]
+                ),
+                'text/html'
+            )
+        ;
+
+        $mailer->send($message);
 
         return new Response(json_encode([
             'success' => true

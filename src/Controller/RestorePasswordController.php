@@ -37,7 +37,10 @@ class RestorePasswordController extends BaseController
     public function post(Request $request, Swift_Mailer $mailer): Response
     {
         $email = $request->request->get('email');
-        $user = $this->userRepository->findOneBy(['email' => $email]);
+        $user = $this->userRepository->findOneBy([
+            'email' => $email,
+            'confirmed' => true
+        ]);
 
         if (!$user) {
             return new Response(json_encode([

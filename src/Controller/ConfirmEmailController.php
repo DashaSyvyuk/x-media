@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UpdatePasswordController extends BaseController
+class ConfirmEmailController extends BaseController
 {
     private UserRepository $userRepository;
 
@@ -34,29 +34,10 @@ class UpdatePasswordController extends BaseController
 
         if (!$user || $user->getExpiredAt() < Carbon::now()) {
             return $this->redirectToRoute('index');
+        } else {
+            $user->setConfirmed(true);
+            $this->userRepository->update($user);
+            return $this->redirectToRoute('login');
         }
-
-        return $this->renderTemplate('update_password/index.html.twig', []);
-    }
-
-    public function post(Request $request): Response
-    {
-        $password = $request->request->get('password');
-        $hash = $request->request->get('hash');
-
-        $user = $this->userRepository->findOneBy(['hash' => $hash]);
-
-        if (!$user || $user->getExpiredAt() < Carbon::now()) {
-            return new Response(json_encode([
-                'error' => 'Для зміни паролю потрібно згенерувати нове посилання'
-            ]));
-        }
-
-        $user->setPassword($password);
-        $this->userRepository->update($user);
-
-        return new Response(json_encode([
-            'success' => true
-        ]));
     }
 }
