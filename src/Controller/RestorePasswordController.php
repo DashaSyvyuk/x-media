@@ -54,7 +54,7 @@ class RestorePasswordController extends BaseController
         $user->setExpiredAt(Carbon::now()->addHour());
         $this->userRepository->update($user);
 
-        $link = sprintf('%s/update-password?hash=%s', $request->getHost(), $uuid);
+        $link = sprintf('%s%s/update-password?hash=%s', 'https://', $request->getHost(), $uuid);
 
         $message = (new \Swift_Message('Відновлення паролю'))
             ->setFrom('x-media@x-media.com.ua')

@@ -1,0 +1,39 @@
+<p>Доброго дня, {{ order.surname }} {{ order.name }}</p>
+<p>Ми отримали Ваше замовлення в нашому магазині. Про наступні його етапи ми повідомимо Вам по електронній пошті.</p>
+<p>Ви можете перевірити статус свого замовлення в будь-який час. Це можна зробити в <a href="{{ mainUrl }}account">особистому кабінеті</a>.</p>
+<br>
+<p><b>Номер замовлення:</b> {{ order.orderNumber }} </p>
+<p>Деталі доставки ми повідомимо в наступному повідомленні.</p>
+<p><b>Оплата:</b> {{ order.paytype }}</p>
+<p>Деталі замовлення:</p>
+<table>
+    {% for item in order.items %}
+        <tr>
+            <td style="padding: 20px; background-color: #eee">
+                <a style="color: #000; text-decoration: none;" href="{{ mainUrl }}products/{{ item.product.id }}">
+                    <img src="{{ mainUrl }}{{ item.product.getImages()[0].imageUrl }}" width="100" style="margin-right: 10px;" />
+                </a>
+            </td>
+            <td style="padding: 20px; background-color: #eee">
+                <a style="color: #000; text-decoration: none;" href="{{ mainUrl }}products/{{ item.product.id }}">
+                    <span class="height: 10px;">{{ item.product.title }}</span>
+                </a>
+            </td>
+            <td style="padding: 20px; background-color: #eee; text-align: center;"><span>{{ item.product.price|number_format(0, '.', ' ') }}</span> грн</td>
+            <td style="padding: 20px; background-color: #eee; text-align: center;"><span>{{ item.count }}</span></td>
+        </tr>
+    {% endfor %}
+</table>
+<br>
+<p><b>Загальна вартість: </b>{{ order.total|number_format(0, '.', ' ') }} грн</p>
+<br>
+<p>З повагою</p>
+<p>X-media</p>
+<p><b>Контакти</b></p>
+<p>Є питання? Ви також можете зв’язатися з нами електронною поштою, по телефону.</p>
+{% for email in emails %}
+    <p style="display: flex; align-items: center;"><img src="{{ mainUrl }}/images/email.png" width="20" style="margin-right: 5px;"><span>{{ email.getValue() }}</span></p>
+{% endfor %}
+{% for phone in phoneNumbers %}
+    <p style="display: flex; align-items: center;"><img src="{{ mainUrl }}/images/phone.png" width="20" style="margin-right: 5px;"><span>{{ phone.getValue() }}</span></p>
+{% endfor %}

@@ -10,11 +10,14 @@ use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
+use Swift_Mailer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderPageController extends BaseController
 {
+    private SettingRepository $settingRepository;
+
     private OrderRepository $orderRepository;
 
     private ProductRepository $productRepository;
@@ -48,6 +51,7 @@ class OrderPageController extends BaseController
         UserRepository $userRepository
     ) {
         parent::__construct($categoryRepository, $settingRepository);
+        $this->settingRepository = $settingRepository;
         $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;
         $this->deliveryTypeRepository = $deliveryTypeRepository;
@@ -86,7 +90,7 @@ class OrderPageController extends BaseController
         }
     }
 
-    public function post(Request $request): Response
+    public function post(Request $request, Swift_Mailer $mailer): Response
     {
         if (isset($_COOKIE['cart'])) {
             $user = null;
@@ -115,6 +119,27 @@ class OrderPageController extends BaseController
             unset($_COOKIE['totalCount']);
             setcookie('cart', null, -1, '/');
             setcookie('totalCount', null, -1, '/');
+
+            $mainUrl = sprintf('%s%s/', 'https://', $request->getHost());
+
+            $message = (new \Swift_Message(sprintf('Нове замовлення %s', $order->getOrderNumber())))
+                ->setFrom('x-media@x-media.com.ua')
+                ->setTo($order->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'emails/client-orders.html.twig',
+                        [
+                            'order' => $order,
+                            'mainUrl' => $mainUrl,
+                            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
+                            'emails' => $this->settingRepository->findBy(['slug' => 'email'])
+                        ]
+                    ),
+                    'text/html'
+                )
+            ;
+
+            $mailer->send($message);
 
             return $this->renderTemplate('thank_page/index.html.twig', [
                 'order' => $order
