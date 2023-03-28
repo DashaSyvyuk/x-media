@@ -14,6 +14,28 @@ class Order
 {
     use DateStorageTrait;
 
+    const NEW = 'Новий';
+    const NOT_CONFIRMED = 'Очікує підтвердження';
+    const IN_PROGRESS = 'В обробці';
+    const CANCELLED = 'Скасовано';
+    const ORDERED_IN_SUPPLIER = 'Замовлення у постачальника';
+    const ON_THE_WAY = 'В дорозі';
+    const SENT_BY_NP = 'Відправлено Новою Поштою';
+    const SENT_BY_OUR_DELIVERY = 'Відправлено нашою доставкою';
+    const COMPLETED = 'Завершено';
+
+    const STATUSES = [
+        self::NEW => self::NEW,
+        self::NOT_CONFIRMED => self::NOT_CONFIRMED,
+        self::IN_PROGRESS => self::IN_PROGRESS,
+        self::CANCELLED => self::CANCELLED,
+        self::ORDERED_IN_SUPPLIER => self::ORDERED_IN_SUPPLIER,
+        self::ON_THE_WAY => self::ON_THE_WAY,
+        self::SENT_BY_NP => self::SENT_BY_NP,
+        self::SENT_BY_OUR_DELIVERY => self::SENT_BY_OUR_DELIVERY,
+        self::COMPLETED => self::COMPLETED,
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

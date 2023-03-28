@@ -76,6 +76,10 @@ section {
     box-sizing: border-box;
 }
 
+section#shadow-host-companion {
+    padding: 0;
+}
+
 section .title {
     font-size: 18px;
     font-weight: 600;
@@ -1481,7 +1485,7 @@ section .feedbacks {
     display: flex;
 }
 .account .left-side {
-    width: 300px;
+    width: 320px;
     list-style-type: none;
 }
 .account .left-side li img {
@@ -1503,8 +1507,8 @@ section .feedbacks {
 }
 
 .main-part {
-    width: calc(100% - 500px);
-    max-width: 500px;
+    width: calc(100% - 300px);
+    max-width: 700px;
 }
 
 .my-orders h5 {
@@ -1513,26 +1517,58 @@ section .feedbacks {
 
 .my-orders {
     list-style-type: none;
-    display: flex;
-    flex-direction: column;
     padding-left: 0;
-    font-size: 12px;
+}
+
+.my-orders li {
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    display: flex;
+    font-size: 10px;
+    margin-bottom: 15px;
+}
+
+.my-orders li .detail {
+    width: 200px;
+    background-color: #eee;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 0.5;
+    padding: 10px 17px;
+}
+
+.my-orders li .detail .gray {
+    color: #585858;
+}
+
+.my-orders li .detail .margin-bottom-2 {
+    margin-bottom: 2px;
 }
 
 .my-orders .products td {
-    background-color: #eee;
     padding: 10px;
 }
 
+.my-orders .products td.image {
+    width: 50px;
+    padding: 15px;
+}
+
 .my-orders .products {
-    width: 100%;
+    width: calc(100% - 200px);
 }
 
 .my-orders .products img {
-    width: 90px;
+    width: 50px;
 }
 
 .my-orders .products a {
-    color: #119E00;
+    color: #000;
     text-align: left;
+    text-decoration: none;
+}
+
+.my-orders .products a:hover {
+    text-decoration: underline;
 }

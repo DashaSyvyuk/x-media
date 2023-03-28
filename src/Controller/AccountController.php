@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Repository\CategoryRepository;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
@@ -47,14 +48,22 @@ class AccountController extends BaseController
             return $this->redirectToRoute('index');
         }
 
-        $order = $this->orderRepository->findOneBy(['user' => $user, 'status' => 'NEW'], ['createdAt' => 'DESC']);
+        $order = $this->orderRepository->findOneBy(['user' => $user, 'status' => [
+            Order::NEW,
+            Order::NOT_CONFIRMED,
+            Order::IN_PROGRESS,
+            Order::ORDERED_IN_SUPPLIER,
+            Order::ON_THE_WAY,
+            Order::SENT_BY_NP,
+            Order::SENT_BY_OUR_DELIVERY
+        ]], ['createdAt' => 'DESC']);
 
         $text = $this->settingRepository->findOneBy(['slug' => 'there_is_no_active_order']);
 
         return $this->renderTemplate('account/index.html.twig', [
             'user' => $user,
             'order' => $order,
-            'noOrder' => $text
+            'noOrder' => $text,
         ]);
     }
 }

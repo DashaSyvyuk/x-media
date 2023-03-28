@@ -53,7 +53,7 @@ $('#logout').on('click', (e) => {
 
     $.post( '/logout', {}, (data) => {
         if (data) {
-            location.reload();
+            window.location.href = '/login';
         }
     });
 });

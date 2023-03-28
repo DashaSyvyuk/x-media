@@ -39,7 +39,7 @@ class OrderRepository extends ServiceEntityRepository
         $order->setEmail($data['email']);
         $order->setPaytype($data['paytype']);
         $order->setDeltype($data['deltype']);
-        $order->setStatus('NEW');
+        $order->setStatus(Order::NEW);
         $order->setPaymentStatus(false);
         $order->setComment($data['comment']);
         $order->setTotal($data['total']);

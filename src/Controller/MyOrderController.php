@@ -15,6 +15,8 @@ class MyOrderController extends BaseController
 
     private OrderRepository $orderRepository;
 
+    private SettingRepository $settingRepository;
+
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
@@ -28,6 +30,7 @@ class MyOrderController extends BaseController
         OrderRepository $orderRepository
     ) {
         parent::__construct($categoryRepository, $settingRepository);
+        $this->settingRepository = $settingRepository;
         $this->userRepository = $userRepository;
         $this->orderRepository = $orderRepository;
     }
@@ -42,13 +45,16 @@ class MyOrderController extends BaseController
 
         $orders = $this->orderRepository->findBy(['user' => $user], ['createdAt' => 'DESC']);
 
+        $text = $this->settingRepository->findOneBy(['slug' => 'there_is_no_active_order']);
+
         if (!$user) {
             return $this->redirectToRoute('index');
         }
 
         return $this->renderTemplate('my_order/index.html.twig', [
             'user' => $user,
-            'orders' => $orders
+            'orders' => $orders,
+            'noOrder' => $text,
         ]);
     }
 }

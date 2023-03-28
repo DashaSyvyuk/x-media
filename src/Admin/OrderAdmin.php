@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\Order;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -53,17 +54,7 @@ final class OrderAdmin extends AbstractAdmin
                     'required' => true
                 ])
                 ->add('status', ChoiceType::class, [
-                    'choices' => [
-                        'Новий' => 'NEW',
-                        'Очікує підтвердження' => 'NOT_CONFIRMED',
-                        'В обробці' => 'IN_PROGRESS',
-                        'Скасовано' => 'CANCELLED',
-                        'Замовлення у постачальника' => 'ORDERED_IN_SUPPLIER',
-                        'В дорозі' => 'ON_THE_WAY',
-                        'Відправлено Новою Поштою' => 'SENT_BY_NP',
-                        'Відправлено нашою доставкою' => 'SENT_BY_OUR_DELIVERY',
-                        'Завершено' => 'COMPLETED'
-                    ],
+                    'choices' => Order::STATUSES,
                     'label' => 'Статус',
                     'required' => true
                 ])
