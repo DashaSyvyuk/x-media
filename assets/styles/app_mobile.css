@@ -499,7 +499,7 @@ footer .copywrite {
     color: #fff;
     cursor: pointer;
     font-weight: 500;
-    padding: 7px 20px;
+    padding: 20px;
     font-size: 14px;
     box-sizing: border-box;
     text-decoration: none;
@@ -508,6 +508,9 @@ footer .copywrite {
 }
 .green-button:hover {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+.green {
+    color: #119e00;
 }
 #feedbacks {
     width: calc(100% - 60px);
@@ -594,4 +597,142 @@ section .breadcrumb a:hover {
 .about-us span {
     color: #119E00;
     font-weight: 600;
+}
+.account {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.account .left-side {
+    width: 100%;
+    list-style-type: none;
+    display: flex;
+    padding-left: 0;
+}
+.account .left-side li {
+    width: 25%;
+    text-align: center;
+    padding: 5px;
+}
+.account .left-side li img {
+    height: 25px;
+}
+.account .left-side li a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    color: #000;
+    font-size: 12px;
+}
+.account .left-side li span {
+    margin-top: 5px;
+}
+.account .left-side li.open {
+    background-color: #eee;
+}
+.main-part {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+.my-orders h5 {
+    font-size: 14px;
+}
+.my-orders {
+    list-style-type: none;
+    padding-left: 0;
+}
+.my-orders li {
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    font-size: 10px;
+    margin-bottom: 15px;
+}
+.my-orders li .detail {
+    width: 100%;
+    background-color: #eee;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 0.5;
+    padding: 10px 17px;
+    box-sizing: border-box;
+}
+.my-orders li .detail .gray {
+    color: #585858;
+}
+.my-orders li .detail .margin-bottom-2 {
+    margin-bottom: 2px;
+}
+.my-orders .products td {
+    padding: 10px;
+}
+.my-orders .products td.image {
+    width: 90px;
+    padding: 15px;
+}
+.my-orders .products {
+    width: 100%;
+}
+.my-orders .products img {
+    width: 90px;
+}
+.my-orders .products a {
+    color: #000;
+    text-align: left;
+    text-decoration: none;
+}
+.my-orders .products a:hover {
+    text-decoration: underline;
+}
+#login, #sign_up, #restore-password, #update-password {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin-top: 30px;
+}
+#user .error, #login .error, #sign_up .error, #restore-password .error, #update-password .error {
+    color: red;
+    font-size: 12px;
+}
+#user p, #login p, #sign_up p, #restore-password p, #update-password p {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+#user input[type=text], #user select, #user input[type=password], #user textarea,
+#sign_up input[type=text], #sign_up input[type=password],
+#restore-password input[type=text],
+#update-password input[type=password],
+#login input[type=text], #login input[type=password] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #E0E0E0;
+    box-sizing: border-box;
+    resize: none;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+}
+#user input[type=submit], #login input[type=submit], #sign_up input[type=submit],
+#update-password input[type=submit],
+#restore-password input[type=submit] {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    font-size: 16px;
+    box-sizing: border-box;
+    border-radius: 0;
+}
+#user input[type=text]:focus, #user select:focus, #login input:focus,
+#update-password input:focus,
+#sign_up input:focus, #restore-password input:focus {
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+#user .required, #sign_up .required {
+    color: #ff0000;
+}
+#user .red, #login .red, #sign_up .red, #restore-password .red, #update-password .red {
+    border: 1px solid red !important;
 }

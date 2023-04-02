@@ -8,6 +8,26 @@
 
 {% block body %}
 
-    <p>restore password mobile</p>
+<section>
+    <div class="breadcrumb">
+        <a>X-media</a>
+        <span> > </span>
+        <a href="/">Головна</a>
+        <span> > </span>
+        <a class="selected">Відновлення пароля</a>
+    </div>
+
+    <form method="POST" action="/restore-password" id="restore-password">
+        <div class="email">
+            <p>Email:</p>
+            <input type="text" name="email" autocomplete="off" required>
+            <p class="error"></p>
+        </div>
+
+        <div>
+            <input class="green-button" type="submit" value="Відправити">
+        </div>
+    </form>
+</section>
 
 {% endblock %}

@@ -8,6 +8,43 @@
 
 {% block body %}
 
-    <p>my orders mobile</p>
+<section>
+    <div class="account">
+        <ul class="left-side">
+            <li><a href="/account"><img src="/images/home.png"><span>Головна сторінка</span></a></li>
+            <li><a href="/account/contacts"><img src="/images/setting.png"><span>Контактні дані</span></a></li>
+            <li class="open"><a href="/account/orders"><img src="/images/list.png"><span>Мої замовлення</span></a></li>
+            <li><a id="logout"><img src="/images/log_out.png"><span>Вийти</span></a></li>
+        </ul>
+        <div class="main-part">
+            <h4>Мої замовлення:</h4>
+
+            <ul class="my-orders">
+                {% if orders|length > 0 %}
+                    {% for order in orders %}
+                        <li>
+                            <div class="detail">
+                                <p><b class="gray">{{ order.status }}</b></p><br>
+                                <p class="gray margin-bottom-2">{{ order.createdAt.format('Y-m-d H:i:s') }}</p>
+                                <p class="gray">{{ order.orderNumber }}</p><br>
+                                <p><b>{{ order.total }} грн</b></p>
+                            </div>
+                            <table class="products">
+                                {% for item in order.items %}
+                                    <tr>
+                                        <td class="image"><a href="/products/{{ item.product.id }}" target="_blank"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
+                                        <td><a href="/products/{{ item.product.id }}" target="_blank">{{ item.product.title }}</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <p>{{ noOrder.getValue() }}</p>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

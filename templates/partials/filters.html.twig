@@ -58,7 +58,7 @@
             <div class="outer {% if filter.isOpened %}hidden{% endif %}">
                 <div class="inner">
                     {% for attribute in filter.getFilterAttributes() %}
-                        {% if filter.openedCount > 0 and filter.openedCount == (loop.index - 1) %}<div class="hidden-part">{% endif %}
+                        {% if filter.openedCount > 0 and filter.openedCount == (loop.index + 1) %}<div class="hidden-part">{% endif %}
                         <label class="container">{{ attribute.value }}
                             <input
                                 type="checkbox"
