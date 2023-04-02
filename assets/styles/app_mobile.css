@@ -584,3 +584,14 @@ section .breadcrumb a:hover {
     margin: 20px auto;
     display: block;
 }
+.about-us {
+    width: 100%;
+    padding: 0 10px;
+    line-height: 1.5;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.about-us span {
+    color: #119E00;
+    font-weight: 600;
+}
