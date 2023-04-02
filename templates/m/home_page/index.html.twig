@@ -8,6 +8,46 @@
 
 {% block body %}
 
+<div id="search">
+    <form action="/search" method="GET">
+        <input type="text" name="search" placeholder="Пошук..." autocomplete="off" value="{% if searchString is defined %}{{ searchString }}{% endif %}">
+        <button type="submit"><img src="/images/search.svg" /></button>
+    </form>
+</div>
 
+<div id="slider">
+    {% for slider in sliders %}
+        <div class="item">
+            <div class="background"><img src="{{ slider.imageUrl }}"></div>
+            <a class="link button" href="{{ slider.url }}">{{ slider.title }}&nbsp;&nbsp;&nbsp;&#8594;</a>
+        </div>
+    {% endfor %}
+</div>
+
+<section>
+    <p class="title">Новинки</p>
+    <div id="new-products">
+        {% for product in products %}
+            {% include 'm/partials/product-item.html.twig' %}
+        {% endfor %}
+    </div>
+</section>
+
+{% if feedbacks|length > 0 %}
+    <section>
+        <p class="title">Відгуки про магазин</p>
+        <div id="feedbacks">
+            {% for comment in feedbacks %}
+                <div class="comment">
+                    {% include 'm/partials/comment.html.twig' %}
+                </div>
+            {% endfor %}
+        </div>
+        <div id="feedback-buttons">
+            <a href="/feedbacks#add" class="green-button">Додати відгук</a>
+            <a href="/feedbacks" class="green-button">Переглянути відгуки</a>
+        </div>
+    </section>
+{% endif %}
 
 {% endblock %}

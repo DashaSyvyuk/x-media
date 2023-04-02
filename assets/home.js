@@ -22,7 +22,32 @@ $("#new-products").slick({
     autoplaySpeed: 3000,
     dots: true,
     arrows: false,
-    pauseOnHover: false
+    pauseOnHover: false,
+    responsive: [
+        {
+            breakpoint: 1400,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+                infinite: true,
+                dots: true
+            }
+        },
+        {
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2
+            }
+        },
+        {
+            breakpoint: 650,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1
+            }
+        }
+    ]
 });
 
 $("#feedbacks").slick({
@@ -34,5 +59,14 @@ $("#feedbacks").slick({
     arrows: true,
     pauseOnHover: false,
     prevArrow: '<div class="slick-prev"><img src="/images/arrow_left.png"></div>',
-    nextArrow: '<div class="slick-next"><img src="/images/arrow_right.png"></div>'
+    nextArrow: '<div class="slick-next"><img src="/images/arrow_right.png"></div>',
+    responsive: [
+        {
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1
+            }
+        }
+    ]
 });

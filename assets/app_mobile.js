@@ -8,6 +8,7 @@ $(document).ready(function () {
     const menu = $('#menu-body');
 
     $(hamburger).click(function (e) {
+        console.log('click');
         menu.toggleClass('open');
         hamburger.toggleClass('open');
     });

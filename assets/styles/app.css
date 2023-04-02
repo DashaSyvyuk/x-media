@@ -28,7 +28,6 @@ body, html {
 .green-button:hover {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
-
 .navigation {
     display: flex;
     align-items: center;
@@ -233,15 +232,6 @@ footer {
 
 footer .title {
     font-weight: bold;
-}
-
-footer .logo {
-    font-size: 40px;
-    color: #000000;
-    text-decoration: none;
-    display: block;
-    margin-top: 40px;
-    font-weight: 500;
 }
 
 footer .items {
