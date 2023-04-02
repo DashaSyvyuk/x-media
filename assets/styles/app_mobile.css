@@ -543,3 +543,44 @@ footer .copywrite {
 #feedbacks .slick-prev img, #feedbacks .slick-next img {
     height: 50px;
 }
+section .title {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 5px;
+}
+section .breadcrumb {
+    margin-top: 15px;
+    display: flex;
+    font-size: 14px;
+}
+section .breadcrumb a {
+    color: #000;
+    text-decoration: none;
+    margin: 0 5px;
+}
+section .breadcrumb a.selected {
+    font-weight: bold;
+}
+section .breadcrumb a:hover {
+    text-decoration: underline;
+}
+.delivery-pay {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    clear: both;
+    font-size: 14px;
+}
+.delivery-pay .delivery h3 {
+    text-align: center;
+}
+.delivery-pay .delivery div {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: justify;
+}
+.delivery-pay .delivery div img {
+    height: 100px;
+    margin: 20px auto;
+    display: block;
+}
