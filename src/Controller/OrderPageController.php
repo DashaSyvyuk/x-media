@@ -77,7 +77,7 @@ class OrderPageController extends BaseController
 
             $totalCart = $this->getTotalCart($_COOKIE['cart']);
 
-            return $this->renderTemplate('order_page/index.html.twig', [
+            return $this->renderTemplate($request, 'order_page/index.html.twig', [
                 'totalPrice' => $totalCart['totalPrice'],
                 'products' => $totalCart['products'],
                 'deliveryTypes' => $this->deliveryTypeRepository->findBy(['enabled' => true]),
@@ -141,7 +141,7 @@ class OrderPageController extends BaseController
 
             $mailer->send($message);
 
-            return $this->renderTemplate('thank_page/index.html.twig', [
+            return $this->renderTemplate($request, 'thank_page/index.html.twig', [
                 'order' => $order
             ]);
         } else {

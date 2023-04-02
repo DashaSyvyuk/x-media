@@ -24,6 +24,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
+    .addEntry('app_mobile', './assets/app_mobile.js')
     .addEntry('product', './assets/product.js')
     .addEntry('category', './assets/category.js')
     .addEntry('cart', './assets/cart.js')

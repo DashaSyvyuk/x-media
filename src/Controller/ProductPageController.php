@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductPageController extends BaseController
@@ -25,7 +26,7 @@ class ProductPageController extends BaseController
         $this->productRepository = $productRepository;
     }
 
-    public function get(string $id): Response
+    public function getProduct(string $id, Request $request): Response
     {
         $product = $this->productRepository->findOneBy(['id' => $id]);
 
@@ -33,7 +34,7 @@ class ProductPageController extends BaseController
             return $this->redirectToRoute('index');
         }
 
-        return $this->renderTemplate('product_page/index.html.twig', [
+        return $this->renderTemplate($request, 'product_page/index.html.twig', [
             'product' => $product
         ]);
     }

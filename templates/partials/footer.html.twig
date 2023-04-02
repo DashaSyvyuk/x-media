@@ -17,10 +17,12 @@
             {% for phone in phoneNumbers %}
                 <p><img src="/images/phone.png"> {{ phone.getValue() }}</p>
             {% endfor %}
+            <br>
         </div>
     </div>
     <div>
-        <a href="/" class="logo">X-media</a>
+        {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+        <a href="{{ currentPath }}?page-type=mobile" id="switch-version"><img src="/images/phone_version.png"><span>Мобільна версія</span></a>
     </div>
     <p class="copywrite">&#169; X-media {{ 'now' | date('Y') }}</p>
 </footer>

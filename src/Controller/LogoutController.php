@@ -9,9 +9,9 @@ class LogoutController extends BaseController
 {
     public function post(Request $request): Response
     {
-        //$session = $request->getSession();
+        $session = $request->getSession();
 
-        //$session->clear();
+        $session->clear();
 
         return new Response(json_encode([
             'success' => true

@@ -35,9 +35,9 @@ class SignUpController extends BaseController
         $this->orderRepository = $orderRepository;
     }
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return $this->renderTemplate('sign_up/index.html.twig', []);
+        return $this->renderTemplate($request, 'sign_up/index.html.twig', []);
     }
 
     public function post(Request $request, Swift_Mailer $mailer): Response

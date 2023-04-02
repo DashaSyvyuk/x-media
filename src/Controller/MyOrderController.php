@@ -51,7 +51,7 @@ class MyOrderController extends BaseController
             return $this->redirectToRoute('index');
         }
 
-        return $this->renderTemplate('my_order/index.html.twig', [
+        return $this->renderTemplate($request, 'my_order/index.html.twig', [
             'user' => $user,
             'orders' => $orders,
             'noOrder' => $text,

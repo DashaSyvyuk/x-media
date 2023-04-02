@@ -51,7 +51,7 @@ class SearchPageController extends BaseController
                 ])
             ]));
         } else {
-            return $this->renderTemplate('search_page/index.html.twig', [
+            return $this->renderTemplate($request, 'search_page/index.html.twig', [
                 'pagination' => $pagination,
                 'searchString' => $query
             ]);

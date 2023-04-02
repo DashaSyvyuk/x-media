@@ -1,0 +1,228 @@
+body, html {
+    padding: 0;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+header {
+    width: 100%;
+    height: 50px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, .3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+header #logo {
+    width: calc(100% - 150px);
+    text-align: center;
+}
+header #logo a {
+    font-size: 18px;
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+}
+header #cart {
+    position: relative;
+    width: 50px;
+}
+header #cart-count {
+    background-color: #119E00;
+    color: #fff;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    padding: 1px;
+    position: absolute;
+    left: 19px;
+    top: -3px;
+    width: 16px;
+    height: 16px;
+}
+header #cart img {
+    width: 30px;
+    cursor: pointer;
+}
+header #account {
+    width: 50px;
+}
+header #account img {
+    width: 30px;
+    cursor: pointer;
+}
+header #menu-open {
+    width: 50px;
+}
+.hamburger {
+    width: 33px;
+    height: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    cursor: pointer;
+    transition: 0.5s all ease-in;
+    z-index: 5555;
+}
+.hamburger::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: #A0A0A0;
+    transform: scale(0);
+    transition: 0.5s all ease-in;
+    z-index: 1;
+}
+.hamburger .line {
+    height: 4px;
+    width: 100%;
+    background: #000;
+    display: flex;
+    transition: 0.5s all ease-in;
+    position: relative;
+    z-index: 2;
+}
+.hamburger .line::after {
+    content: "";
+    position: absolute;
+    height: 100%;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: white;
+    width: 0;
+    transition: 0.5s all ease-in-out;
+    z-index: 1;
+}
+.hamburger:hover::after {
+    transform: scale(1.4);
+}
+.hamburger:hover .line::after {
+    width: 100%
+}
+.hamburger.open .line {
+    background: white;
+}
+.hamburger.open .line:nth-of-type(1) {
+    transform: rotate(45deg);
+    margin-top: 12px;
+}
+.hamburger.open .line:nth-of-type(2) {
+    transform: rotate(-45deg);
+    margin-top: -13px;
+}
+.hamburger.open .line:nth-of-type(3) {
+    visibility: hidden;
+    opacity: 0;
+}
+.menu_body {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    background: rgba(0, 0, 0, 0.7);
+    transform: translateX(-100%);
+    transition: 0.5s all ease;
+}
+.menu_body.open {
+    transform: translateX(0);
+}
+.menu_body .menu_body__item_wrapper {
+    padding: 40px 40px 40px 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+}
+.menu_body .menu_list {
+    list-style: none;
+    width: 100%;
+    padding: 0 0 0 0;
+}
+.menu_body .menu_list li {
+    margin-bottom: 30px;
+    position: relative;
+    padding-left: 55px;
+}
+.menu_body .menu_list li img {
+    width: 20px;
+    margin-right: 10px;
+}
+.menu_body .menu_list li:last-child {
+    margin-bottom: 0;
+}
+.menu_body .menu_list li a {
+    color: white;
+    font-weight: 400;
+    font-size: 16px;
+    text-decoration: none;
+    position: relative;
+    transition: 0.5s all ease;
+}
+.menu_body .menu_list li a div {
+    display: flex;
+    align-items: center;
+}
+.menu_body .menu_list li a::after {
+    content: "";
+    position: absolute;
+    height: 1px;
+    left: 0;
+    width: 0;
+    bottom: 0;
+    background: #A0A0A0;
+    transition: 0.5s all ease;
+}
+.menu_body .menu_list li a:hover:after {
+    width: 100%;
+}
+.menu_body .menu_list li.has_child {
+    position: relative;
+}
+.menu_body .menu_list li.has_child a {
+    position: relative;
+}
+.menu_body .menu_list li.has_child a::after {
+    content: "+";
+    color: white;
+    left: calc(100% + 25px);
+    position: absolute;
+    top: 0;
+    width: 0;
+}
+.menu_body .menu_list li.has_child .sub-menu {
+    position: relative;
+    background: transparent;
+    list-style: none;
+    padding: 0;
+    left: unset;
+    top: unset;
+    right: unset;
+    min-width: auto;
+    opacity: 1;
+    visibility: visible;
+    margin-top: 15px;
+    padding-left: 25px;
+    display: none;
+}
+.menu_body .menu_list li.has_child .sub-menu li {
+    padding-left: 0;
+    margin-bottom: 15px;
+}
+.menu_body .menu_list li.has_child .sub-menu li a:after {
+    display: none;
+}
+.menu_body .menu_list li.has_child:hover .sub-menu {
+    opacity: 1;
+    visibility: visible;
+}

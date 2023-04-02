@@ -60,7 +60,7 @@ class AccountController extends BaseController
 
         $text = $this->settingRepository->findOneBy(['slug' => 'there_is_no_active_order']);
 
-        return $this->renderTemplate('account/index.html.twig', [
+        return $this->renderTemplate($request, 'account/index.html.twig', [
             'user' => $user,
             'order' => $order,
             'noOrder' => $text,

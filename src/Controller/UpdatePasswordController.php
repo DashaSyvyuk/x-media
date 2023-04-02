@@ -36,7 +36,7 @@ class UpdatePasswordController extends BaseController
             return $this->redirectToRoute('index');
         }
 
-        return $this->renderTemplate('update_password/index.html.twig', []);
+        return $this->renderTemplate($request, 'update_password/index.html.twig', []);
     }
 
     public function post(Request $request): Response

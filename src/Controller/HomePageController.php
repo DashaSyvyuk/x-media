@@ -7,6 +7,7 @@ use App\Repository\FeedbackRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use App\Repository\SliderRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomePageController extends BaseController
@@ -37,9 +38,9 @@ class HomePageController extends BaseController
         $this->feedbackRepository = $feedbackRepository;
     }
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return $this->renderTemplate('home_page/index.html.twig', [
+        return $this->renderTemplate($request, 'home_page/index.html.twig', [
             'sliders' => $this->sliderRepository->findBy([], ['priority' => 'ASC']),
             'products' => $this->productRepository->findBy(['status' => 'ACTIVE'], ['createdAt' => 'DESC'], 10),
             'totalCount' => $_COOKIE['totalCount'] ?? 0,

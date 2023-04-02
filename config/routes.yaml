@@ -16,7 +16,7 @@ categories:
 
 product:
     path: /products/{id}
-    controller: App\Controller\ProductPageController::get
+    controller: App\Controller\ProductPageController::getProduct
 
 cart:
     path: /cart

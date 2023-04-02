@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Repository\CategoryRepository;
 use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
@@ -27,9 +26,9 @@ class LoginController extends BaseController
         $this->userRepository = $userRepository;
     }
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return $this->renderTemplate('login/index.html.twig', []);
+        return $this->renderTemplate($request, 'login/index.html.twig', []);
     }
 
     public function post(Request $request): Response

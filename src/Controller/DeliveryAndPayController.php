@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\CategoryRepository;
 use App\Repository\SettingRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class DeliveryAndPayController extends BaseController
@@ -19,8 +20,8 @@ class DeliveryAndPayController extends BaseController
         parent::__construct($categoryRepository, $settingRepository);
     }
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return $this->renderTemplate('delivery_and_pay_page/index.html.twig', []);
+        return $this->renderTemplate($request, 'delivery_and_pay_page/index.html.twig', []);
     }
 }

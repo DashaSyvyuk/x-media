@@ -29,9 +29,9 @@ class RestorePasswordController extends BaseController
         $this->userRepository = $userRepository;
     }
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return $this->renderTemplate('restore_password/index.html.twig', []);
+        return $this->renderTemplate($request, 'restore_password/index.html.twig', []);
     }
 
     public function post(Request $request, Swift_Mailer $mailer): Response

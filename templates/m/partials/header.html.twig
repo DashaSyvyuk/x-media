@@ -1,0 +1,41 @@
+<header>
+    <div id="menu-open">
+        <div class="hamburger" id="hamburger-menu">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </div>
+    <div id="logo"><a href="/">X-media</a></div>
+    <a id="account" href="{% if app.session.get('user') %}/account{% else %}/login{% endif %}">
+        <img src="/images/account.png">
+    </a>
+    <div id="cart">
+        <img class="cart" src="/images/cart.png">
+        <div id="cart-count">
+            {% if totalCount > 0 %}
+                {{ totalCount }}
+            {% else %}
+                0
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+
+<section class="menu_body" id="menu-body">
+    <div class="menu_body__item_wrapper">
+        <!--    menu list-->
+        <ul class="menu_list">
+            <li><a href="/">Головна</a></li>
+            {% for category in categories %}
+                <li><a href="/categories/{{ category.slug }}">{{ category.title }}</a></li>
+            {% endfor %}
+            <li><a href="/delivery-and-pay">Оплата і доставка</a></li>
+            <li><a href="/about-us">Про нас</a></li>
+            <li><a href="/feedbacks">Відгуки про магазин</a></li>
+            <li><a href="{{ currentPath }}?page-type=desktop"><div><img src="/images/desktop_version.png"><span>Повна версія сайту</span></div></a></li>
+        </ul>
+    </div>
+</section>

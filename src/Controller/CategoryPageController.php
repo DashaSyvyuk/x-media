@@ -51,7 +51,7 @@ class CategoryPageController extends BaseController
         $category = $this->categoryRepository->findOneBy(['slug' => $slug, 'status' => 'ACTIVE']);
 
         if (!$category) {
-            return $this->renderTemplate('bundles/TwigBundle/Exception/error404.html.twig', []);
+            return $this->renderTemplate($request, 'bundles/TwigBundle/Exception/error404.html.twig', []);
         }
 
         $filterSetting = $this->settingRepository->findOneBy([
@@ -82,7 +82,7 @@ class CategoryPageController extends BaseController
                 'maxPrice' => $prices['max_price']
             ]));
         } else {
-            return $this->renderTemplate('category_page/index.html.twig', [
+            return $this->renderTemplate($request, 'category_page/index.html.twig', [
                 'category' => $category,
                 'filters' => $this->filterRepository->findByCategory($slug),
                 'pagination' => $pagination,

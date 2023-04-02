@@ -49,7 +49,7 @@ class AccountContactController extends BaseController
             $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $user->getNovaPoshtaCity()]);
         }
 
-        return $this->renderTemplate('account_contact/index.html.twig', [
+        return $this->renderTemplate($request, 'account_contact/index.html.twig', [
             'cities' => $this->novaPoshtaCityRepository->getCitiesWithOffices(),
             'offices' => $user->getNovaPoshtaCity() && $city ? $city->getOffices() : null,
             'user' => $user
