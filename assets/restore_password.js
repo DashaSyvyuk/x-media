@@ -12,7 +12,7 @@ $('#restore-password').on('submit', (e) => {
             $('#restore-password input[name=email]').addClass('red');
             $('#restore-password .email .error').text(response.error);
         } else {
-            $('#restore-password').html('<p style="text-align: center; margin-top: 50px; line-height: 2;">На ваш email було відправлено<br> інструкцію з відновлення паролю</p>')
+            $('#restore-password').html('<p style="text-align: center; margin-top: 50px; line-height: 2;">На вашу електронну пошту <span style="color: #119E00;font-weight: 600;">' + email + '</span> було відправлено<br> лист з інструкцію для відновлення паролю</p>')
         }
     });
 

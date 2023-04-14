@@ -71,7 +71,7 @@ body, html {
 
 section {
     width: 100%;
-    padding: 20px 40px;
+    padding: 20px 10%;
     box-sizing: border-box;
 }
 
@@ -568,8 +568,9 @@ header {
 }
 
 .product .product-title {
-    height: 40px;
+    max-height: 40px;
     width: 100%;
+    margin-bottom: 5px;
     text-overflow: ellipsis;
     overflow: hidden;
     display: -webkit-box;
@@ -597,9 +598,9 @@ header {
 
 .product .price {
     width: 50%;
-    font-weight: bold;
+    font-weight: 600;
     color: #333;
-    font-size: 22px;
+    font-size: 18px;
     float: left;
 }
 
@@ -647,6 +648,10 @@ header {
     display: flex;
 }
 
+.product .rating span {
+    font-size: 9px;
+}
+
 .jq-stars {
     display: inline-block;
 }
@@ -692,28 +697,29 @@ header {
 .product-page .detail .product-title {
     font-size: 18px;
     width: 100%;
+    font-weight: 600;
 }
 
 .product-page .detail .product-code {
-    color: #bbb;
-    font-size: 14px;
+    color: #999;
+    font-size: 12px;
 }
 
 .product-page .images {
     float: left;
     margin-top: 20px;
-    width: 60%;
-    height: 500px;
+    width: 40%;
+    height: 350px;
     margin-right: 5%;
 }
 
 .product-page .images .list {
-    width: 115px;
-    height: 500px;
+    width: 90px;
+    height: 350px;
     float: left;
     overflow: hidden;
     border: 1px solid #eee;
-    margin-right: 15px;
+    margin-right: 35px;
 }
 
 .product-page .images .list .inner {
@@ -721,12 +727,12 @@ header {
     padding: 10px;
     box-sizing: border-box;
     height: 100%;
-    width: 115px;
+    width: 90px;
 }
 
 .product-page .images .list img {
-    width: 90px;
-    height: 90px;
+    width: 65px;
+    height: 70px;
     object-fit: contain;
     margin-bottom: 10px;
     padding: 5px;
@@ -751,15 +757,21 @@ header {
 }
 
 .product-page .detail {
-    width: 35%;
+    width: 55%;
     float: left;
     margin-top: 20px;
 }
 
+.product-page .detail .attributes-buy {
+    width: 70%;
+}
+
 .product-page .detail .attributes {
+    width: 100%;
     padding: 20px;
     box-sizing: border-box;
     background-color: #eee;
+    font-size: 10px;
 }
 
 .product-page .detail .attributes .title {
@@ -772,7 +784,7 @@ header {
 }
 
 .product-page .detail .title, .product-page .detail .value {
-    font-size: 12px;
+    font-size: 10px;
     width: 50%;
 }
 
@@ -780,13 +792,52 @@ header {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    line-height: 2;
+    line-height: 1;
+}
+
+.information-block {
+    display: flex;
+    align-items: flex-start;
+}
+
+.information {
+    width: 30%;
+    border: 1px solid #eee;
+    padding: 0 20px;
+    margin-left: 20px;
+}
+
+.guarantee {
+    font-size: 12px;
+    width: 80%;
+}
+
+.information .delivery-paid-stock ul {
+    padding-left: 25px;
+}
+
+.information .delivery-paid-stock p {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    margin: 20px 0 0 0;
+}
+
+.delivery-paid-stock {
+    font-size: 12px;
+    width: 100%;
+}
+
+.price-and-buy {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .product-page .detail .price {
-    font-size: 30px;
+    font-size: 26px;
     text-align: right;
-    font-weight: bold;
+    font-weight: 500;
     margin-top: 30px;
     margin-bottom: 30px;
 }
@@ -801,7 +852,7 @@ header {
     color: #fff;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
     padding: 7px 35px;
     font-weight: 500;
     width: 120px;
@@ -828,7 +879,7 @@ header {
 .product-page .readonly-rating {
     align-items: center;
     display: flex;
-    margin: 10px 0;
+    margin: 5px 0 15px 0;
 }
 
 .product-page .tabs-place {
@@ -877,7 +928,7 @@ header {
 
 .product-page .tabs-place .content .content-tab table {
     width: 100%;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .product-page .tabs-place .content .content-tab table tr:nth-child(odd) {
@@ -945,20 +996,23 @@ header {
 }
 
 #reviews #add-review {
-    width: 500px;
+    width: 55%;
     font-size: 14px;
     float: left;
     margin-bottom: 20px;
 }
 
 #comment-list {
-    width: calc(100% - 500px);
+    width: 45%;
     float: left;
+    padding-left: 20px;
+    box-sizing: border-box;
+    font-size: 12px;
 }
 
 #comment-list h4 {
     font-weight: 550;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .comment {
@@ -1066,23 +1120,38 @@ section .feedbacks {
     box-sizing: border-box;
 }
 
+#comment {
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+.feedbacks #comment {
+    width: calc(100% - 112px);
+}
+
+.send-btn-block {
+    display: flex;
+    justify-content: end;
+}
+
 .add-comment .inner {
     background-color: #eee;
-    width: 415px;
-    padding: 15px;
-    font-size: 14px;
+    width: 100%;
+    padding: 20px;
+    font-size: 13px;
     margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
 .add-comment p {
     font-weight: 500;
-    margin-bottom: 30px;
+    margin: 0 0 30px 0;
 }
 
 .add-comment label {
     display: block;
     margin: 10px 0;
-    width: 450px;
+    width: 100%;
 }
 
 .add-comment input[type=text], .add-comment textarea {
@@ -1121,11 +1190,11 @@ section .feedbacks {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
-.add-comment .detail {
+.add-comment .comment-description {
     font-size: 12px;
     font-weight: 500;
     width: 100%;
-    margin: 40px 0 20px;
+    margin: 20px 0 20px;
 }
 
 #comment-popup, #feedback-popup {
@@ -1165,18 +1234,18 @@ section .feedbacks {
     height: auto;
     padding: 20px;
     max-height: 60%;
-    overflow: hidden;
+    overflow: scroll;
     position: relative;
 }
 
-#cart-popup #cart-block #close-cart {
+#cart-popup #cart-block .close-cart {
     width: 18px;
     display: flex;
     justify-content: flex-end;
     float: right;
 }
 
-#cart-popup #cart-block #close-cart img {
+#cart-popup #cart-block .close-cart img {
     width: 18px;
     cursor: pointer;
 }
@@ -1290,6 +1359,33 @@ section .feedbacks {
 
 #cart-popup #cart-block p {
     text-align: center;
+    font-size: 14px;
+}
+
+#cart-popup #cart-block h4 {
+    text-align: center;
+}
+
+#cart-popup #cart-block .smile {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#cart-popup #cart-block .smile img {
+    width: 25%;
+    margin: 30px 0 50px 0;
+}
+
+#cart-popup .continue-purchase {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#cart-popup .continue-purchase div {
+    text-align: center;
+    width: 230px;
 }
 
 .order-place, #sign_up, #login, #restore-password, #update-password {
@@ -1298,8 +1394,8 @@ section .feedbacks {
 }
 
 .order-place p, #sign_up p, #login p, #user p, #restore-password p, #update-password p {
-    font-size: 14px;
-    margin-bottom: 4px;
+    font-size: 12px;
+    margin: 18px 0 6px 0;
 }
 
 .order-place input[type=text], .order-place select, .order-place textarea,
@@ -1312,6 +1408,7 @@ section .feedbacks {
     padding: 6px 10px;
     border: 1px solid #E0E0E0;
     box-sizing: border-box;
+    font-size: 12px;
     resize: none;
     outline: none;
     font-family: 'Montserrat', sans-serif;
@@ -1366,8 +1463,7 @@ section .feedbacks {
 }
 
 .order-detail .thanks {
-    font-size: 25px;
-    text-align: center;
+    font-size: 14px;
     margin-bottom: 30px;
     line-height: 1.5;
 }
@@ -1375,6 +1471,7 @@ section .feedbacks {
 .order-detail .products {
     width: 80%;
     margin: 0 auto;
+    margin-bottom: 40px;
 }
 
 .order-detail .products td {
@@ -1384,7 +1481,7 @@ section .feedbacks {
 }
 
 .order-detail .products td.image {
-    width: 150px;
+    width: 70px;
 }
 
 .order-detail .products td.count {
@@ -1410,33 +1507,53 @@ section .feedbacks {
 }
 
 .order-detail .products img {
-    width: 150px;
+    width: 70px;
     height: auto;
     object-fit: contain;
 }
 
-.delivery-pay {
+.delivery-pay-wrapper {
     width: 100%;
-    padding: 0 15%;
+    padding: 0;
     box-sizing: border-box;
+    display: flex;
     clear: both;
 }
 
-.delivery-pay .delivery h3 {
-    font-size: 16px;
+.delivery-pay {
+    width: 50%;
+    margin: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: start;
+}
+
+.delivery-pay .title {
+    margin-top: 20px;
+    padding: 20px 0;
+    width: 100%;
+    text-align: center;
+    border: 2px dotted #eee;
+}
+
+.delivery-pay .option {
+    width: 47%;
+    font-size: 12px;
+    padding: 10px 30px;
+    box-sizing: border-box;
+    box-shadow: 0 0 15px rgba(0, 0, 0, .3);
+    min-height: calc(100% - 90px);
+}
+
+.delivery-pay .option h3 {
+    height: 30px;
+    font-size: 14px;
     text-align: center;
 }
 
-.delivery-pay .delivery div {
-    width: 50%;
-    float: left;
-    padding: 15px;
-    box-sizing: border-box;
-    text-align: justify;
-}
-
-.delivery-pay .delivery div img {
-    height: 150px;
+.delivery-pay .option img {
+    height: 70px;
     margin: 40px auto;
     display: block;
 }
@@ -1444,12 +1561,29 @@ section .feedbacks {
 .about-us {
     width: 70%;
     margin: 60px auto 0;
-    line-height: 2;
+    line-height: 1;
+    font-size: 12px;
+}
+
+.about-us img {
+    height: 210px;
+    width: auto;
+    float: right;
+    margin: 20px 0 20px 30px;
 }
 
 .about-us span {
     color: #119E00;
     font-weight: 600;
+}
+
+.about-us p {
+    padding-left: 10px;
+}
+
+.about-us h4 {
+    font-size: 14px;
+    margin: 40px 0 0 0;
 }
 
 #scroll-top {
@@ -1491,12 +1625,15 @@ section .feedbacks {
 }
 .account {
     width: 80%;
-    margin: 40px auto 0;
+    margin: 40px auto;
     display: flex;
 }
 .account .left-side {
-    width: 320px;
+    width: 280px;
     list-style-type: none;
+    padding-right: 30px;
+    border-right: 1px solid #eee;
+    box-sizing: border-box;
 }
 .account .left-side li img {
     width: 20px;
@@ -1510,15 +1647,19 @@ section .feedbacks {
     width: 200px;
     text-decoration: none;
     color: #000;
-    font-size: 14px;
+    font-size: 13px;
 }
 .account .left-side li a:hover {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
 .main-part {
-    width: calc(100% - 300px);
-    max-width: 700px;
+    width: 100%;
+    padding-left: 30px;
+}
+
+.main-part .last-order {
+    font-size: 13px;
 }
 
 .my-orders h5 {
@@ -1531,14 +1672,19 @@ section .feedbacks {
 }
 
 .my-orders li {
-    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    border: 1px solid #eee;
     display: flex;
     font-size: 10px;
     margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.my-orders li:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
 }
 
 .my-orders li .detail {
-    width: 200px;
+    width: 150px;
     background-color: #eee;
     display: flex;
     justify-content: center;
@@ -1549,7 +1695,7 @@ section .feedbacks {
 }
 
 .my-orders li .detail .gray {
-    color: #585858;
+    color: #333;
 }
 
 .my-orders li .detail .margin-bottom-2 {
@@ -1566,7 +1712,7 @@ section .feedbacks {
 }
 
 .my-orders .products {
-    width: calc(100% - 200px);
+    width: calc(100% - 150px);
 }
 
 .my-orders .products img {

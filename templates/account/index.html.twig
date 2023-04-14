@@ -25,7 +25,7 @@
                 <h4>Головна сторінка:</h4>
 
                 {% if order %}
-                    <h5>Останнє активне замовлення:</h5>
+                    <p class="last-order">Останнє активне замовлення:</p>
                 {% endif %}
 
                 <ul class="my-orders">
@@ -34,7 +34,7 @@
                         <div class="detail">
                             <p><b class="gray">{{ order.status }}</b></p><br>
                             <p class="gray margin-bottom-2">{{ order.createdAt.format('Y-m-d H:i:s') }}</p>
-                            <p class="gray">{{ order.orderNumber }}</p><br>
+                            <p class="green bold">{{ order.orderNumber }}</p><br>
                             <p><b>{{ order.total }} грн</b></p>
                         </div>
                         <table class="products">

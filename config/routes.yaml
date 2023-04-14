@@ -39,6 +39,10 @@ delivery_and_pay:
     path: /delivery-and-pay
     controller: App\Controller\DeliveryAndPayController::index
 
+guarantee:
+    path: /guarantee
+    controller: App\Controller\GuaranteeController::index
+
 post_comment:
     path: /comment
     controller: App\Controller\CommentController::post
@@ -106,6 +110,10 @@ orders:
     path: /account/orders
     controller: App\Controller\MyOrderController::index
     methods: GET
+
+orders_detail:
+    path: /account/orders/{id}
+    controller: App\Controller\MyOrderController::getOrder
 
 restore_password:
     path: /restore-password

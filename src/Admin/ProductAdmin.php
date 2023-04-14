@@ -63,10 +63,6 @@ final class ProductAdmin extends AbstractAdmin
                 ->add('description', TextareaType::class, [
                     'label' => 'Опис',
                     'required' => true,
-                    'attr' => [
-                        'class' => 'tinymce',
-                        'data-theme' => "advanced"
-                    ]
                 ])
             ->end()
             ->with('Зображення')

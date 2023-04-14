@@ -36,7 +36,7 @@
         <div class="detail">
             <div class="product-title">{{ product.title }}</div>
             {% if product.productCode %}
-                <div class="product-code">Код товару: {{ product.productCode }}</div>
+                <div class="product-code">Код товару: {{ product.productCode }} | Код x-media: {{ product.id }}</div>
             {% endif %}
             <div class="readonly-rating">
                 <span class="star-rating"></span>
@@ -44,19 +44,57 @@
                 ({{ product.getAverageRating()|round(2) }})
                 </span>
             </div>
-            <div class="attributes">
-                {% for attribute in product.getFilterAttributes() %}
-                    <div class="attribute">
-                        <div class="title">{{ attribute.getFilter().getTitle() }}:</div>
-                        <div class="value">{{ attribute.getFilterAttribute().getValue() }}</div>
+            <div class="information-block">
+                <div class="attributes-buy">
+                    <div class="attributes">
+                        {% for attribute in product.getFilterAttributes() %}
+                            <div class="attribute">
+                                <div class="title">{{ attribute.getFilter().getTitle() }}:</div>
+                                <div class="value">{{ attribute.getFilterAttribute().getValue() }}</div>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
-            </div>
-            <div class="price">{{ product.getPrice()|number_format(0, '.', ' ') }} грн</div>
-            <div class="add2cart">
-                <div data-id="{{ product.id }}">
-                    <span>Купити</span>
-                    <img src="/images/cart_white.png" data-id="{{ product.id }}">
+                    <div class="price-and-buy">
+                        <div class="add2cart">
+                            <div data-id="{{ product.id }}">
+                                <span>Купити</span>
+                                <img src="/images/cart_white.png" data-id="{{ product.id }}">
+                            </div>
+                        </div>
+                        <div class="price">{{ product.getPrice()|number_format(0, '.', ' ') }} грн</div>
+                    </div>
+                </div>
+                <div class="information">
+                    <div class="delivery-paid-stock">
+                        <p><span>Доставка:&nbsp;</span>
+                            <a href="/delivery-and-pay" target="_blank">
+                                <img src="/images/info.png" width="15">
+                            </a>
+                        </p>
+                        <ul>
+                            <li>по Україні - перевізником Нова пошта</li>
+                            <li>по Києву - кур'єром</li>
+                        </ul>
+                        <p>
+                            <span>Оплата:&nbsp;</span>
+                            <a href="/delivery-and-pay" target="_blank">
+                                <img src="/images/info.png" width="15">
+                            </a>
+                        </p>
+                        <ul>
+                            <li>переказом на карту</li>
+                            <li>готівкою при отриманні</li>
+                        </ul>
+                        <p>
+                            <span>Гарантія:&nbsp;</span>
+                            <a href="/delivery-and-pay" target="_blank">
+                                <img src="/images/info.png" width="15">
+                            </a>
+                        </p>
+                        <ul>
+                            <li>точний гарантійний термін вказаний в характеристиках кожного продукту</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,8 +141,10 @@
                                 <textarea name="text" id="comment"></textarea>
                             </label>
                             <input type="hidden" name="product" value="{{ product.id }}" id="product">
-                            <input class="green-button" type="submit" value="Відправити">
-                            <p class="detail">
+                            <div class="send-btn-block">
+                                <input class="green-button" type="submit" value="Відправити">
+                            </div>
+                            <p class="comment-description">
                                 Ви можете залишити відгук, коментар чи запитання до поточного товару.
                                 Ваш запит буде оброблено і з'явиться на сайті одразу після підтвердження
                                 його нашим менеджером.

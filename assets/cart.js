@@ -139,7 +139,14 @@ function removeProduct(id) {
     setCookie('totalCount', totalCount, {'max-age': 3600 * 24});
 
     if (totalCount <= 0) {
-        $("#cart-block").html('<div id="close-cart"><img src="/images/close.png"></div><p>Ви ще не додали товари в корзину</p>');
+        $("#cart-block").html('<h4>Корзина пуста</h4>' +
+            '<p>Ви ще не додали жодного товару в корзину.</p>' +
+            '<div class="smile">' +
+                '<img src="/images/not-found.png">' +
+                    '<div class="continue-purchase">' +
+                        '<div id="close-cart" class="continue-purchase green-button">Продовжити покупки</div>' +
+                    '</div>' +
+            '</div>');
     }
 }
 

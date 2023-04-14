@@ -1,5 +1,5 @@
 <div id="cart-block">
-    <div id="close-cart"><img src="/images/close.png"></div>
+    <div id="close-cart" class="close-cart"><img src="/images/close.png"></div>
     {% if products|length > 0 %}
         <p class="title">Кошик (<span>{{ totalCount }}</span>)</p>
         <div class="inner">
@@ -34,6 +34,13 @@
         <p class="total-price">Загальна вартість: <span>{{ totalPrice|number_format(0, '.', ' ') }} грн</span></p>
         <div id="go-to-order"><a class="green-button" href="/order-create">Перейти до оформлення замовлення</a></div>
     {% else %}
-        <p>Ви ще не додали товари в корзину</p>
+        <h4>Корзина пуста</h4>
+        <p>Ви ще не додали жодного товару в корзину.</p>
+        <div class="smile">
+            <img src="/images/not-found.png">
+            <div class="continue-purchase">
+                <div id="close-cart" class="continue-purchase green-button">Продовжити покупки</div>
+            </div>
+        </div>
     {% endif %}
 </div>

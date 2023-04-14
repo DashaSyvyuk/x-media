@@ -61,7 +61,7 @@ $('.readonly-rating').each(function() {
          emptyColor: '#eee',
          initialRating: value,
          strokeColor: '#119E00',
-         starSize: 25,
+         starSize: 15,
          activeColor: '#119E00',
          hoverColor: '#119E00',
          useGradient: false,
