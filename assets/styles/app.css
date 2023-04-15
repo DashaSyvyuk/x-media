@@ -807,11 +807,6 @@ header {
     margin-left: 20px;
 }
 
-.guarantee {
-    font-size: 12px;
-    width: 80%;
-}
-
 .information .delivery-paid-stock ul {
     padding-left: 25px;
 }
@@ -1558,32 +1553,42 @@ section .feedbacks {
     display: block;
 }
 
-.about-us {
+.about-us, .warranty, .contacts {
     width: 70%;
-    margin: 60px auto 0;
+    margin: 20px auto 0;
     line-height: 1;
     font-size: 12px;
 }
 
-.about-us img {
+.about-us img, .warranty img, .contacts img {
     height: 210px;
     width: auto;
     float: right;
     margin: 20px 0 20px 30px;
 }
 
-.about-us span {
+.about-us span, .warranty span, .contacts span {
     color: #119E00;
     font-weight: 600;
 }
 
-.about-us p {
+.about-us p, .warranty p, .contacts p {
     padding-left: 10px;
 }
 
-.about-us h4 {
+.about-us h4, .warranty h4, .contacts h4 {
     font-size: 14px;
     margin: 40px 0 0 0;
+}
+
+.about-us, .warranty, .contacts {
+    padding: 20px;
+    box-sizing: border-box;
+    background: #eee;
+}
+
+.about-us ul li, .warranty ul li, .contacts ul li {
+    margin-bottom: 10px;
 }
 
 #scroll-top {
