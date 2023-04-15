@@ -5,8 +5,6 @@ sonata_admin:
             - { type: sonata.admin.block.admin_list, position: left }
     options:
         legacy_twig_text_extension: false
-    templates:
-        edit: 'Admin/CRUD/edit.html.twig'
 
 sonata_block:
     blocks:

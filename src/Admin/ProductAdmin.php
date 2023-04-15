@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -60,9 +61,12 @@ final class ProductAdmin extends AbstractAdmin
                 ])
             ->end()
             ->with('Опис')
-                ->add('description', TextareaType::class, [
+                ->add('description', CKEditorType::class, [
                     'label' => 'Опис',
                     'required' => true,
+                    'config' => [
+                        'toolbar' => 'full'
+                    ]
                 ])
             ->end()
             ->with('Зображення')

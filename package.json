@@ -18,6 +18,8 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "ckeditor4": "^4.21.0",
+        "file-loader": "^6.2.0",
         "inputmask": "^5.0.7",
         "jquery": "^3.6.0",
         "select2": "^4.1.0-rc.0",
