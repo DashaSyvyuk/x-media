@@ -61,12 +61,12 @@
                                 </div>
                                 <div class="title">{{ item.product.title }}</div>
                                 <div class="quantity"><span>{{ item.count }}</span> шт</div>
-                                <div class="price"><span>{{ item.product.price*item.count|number_format(0, '.', ' ') }}</span> грн</div>
+                                <div class="price"><span>{{ (item.product.price*item.count)|number_format(0, '.', ' ') }}</span> грн</div>
                             </div>
                         {% endfor %}
                         <div class="total-price bold">
                             <div>Всього:</div>
-                            <div>{{ order.total }} грн</div>
+                            <div>{{ order.total|number_format(0, '.', ' ') }} грн</div>
                         </div>
                     </div>
                 </div>
