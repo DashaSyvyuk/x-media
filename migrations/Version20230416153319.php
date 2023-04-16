@@ -28,6 +28,8 @@ final class Version20230416153319 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-
+        $this->addSql("DELETE FROM `setting` WHERE `slug` = 'shop_name'");
+        $this->addSql("DELETE FROM `setting` WHERE `slug` = 'shop_address'");
+        $this->addSql("DELETE FROM `setting` WHERE `slug` = 'pick_up_point_address'");
     }
 }
