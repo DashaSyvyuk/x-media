@@ -52,6 +52,10 @@ about_us:
     path: /about-us
     controller: App\Controller\AboutUsController::index
 
+contact:
+    path: /contact
+    controller: App\Controller\ContactController::index
+
 feedback:
     path: /feedbacks
     controller: App\Controller\FeedbackPageController::index
