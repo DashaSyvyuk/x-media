@@ -57,4 +57,19 @@ class MyOrderController extends BaseController
             'noOrder' => $text,
         ]);
     }
+
+    public function getOrder(string $id, Request $request): Response
+    {
+        $order = $this->orderRepository->findOneBy(['id' => $id]);
+
+        if (!$order) {
+            return $this->redirectToRoute('index');
+        }
+
+        return $this->renderTemplate($request, 'my_order/detail.html.twig', [
+            'order'        => $order,
+            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
+            'emails'       => $this->settingRepository->findBy(['slug' => 'email'])
+        ]);
+    }
 }

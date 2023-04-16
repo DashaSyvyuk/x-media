@@ -39,9 +39,9 @@ delivery_and_pay:
     path: /delivery-and-pay
     controller: App\Controller\DeliveryAndPayController::index
 
-guarantee:
-    path: /guarantee
-    controller: App\Controller\GuaranteeController::index
+warranty:
+    path: /warranty
+    controller: App\Controller\WarrantyController::index
 
 post_comment:
     path: /comment

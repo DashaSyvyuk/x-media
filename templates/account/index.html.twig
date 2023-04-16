@@ -31,20 +31,22 @@
                 <ul class="my-orders">
                     {% if order %}
                     <li>
-                        <div class="detail">
-                            <p><b class="gray">{{ order.status }}</b></p><br>
-                            <p class="gray margin-bottom-2">{{ order.createdAt.format('Y-m-d H:i:s') }}</p>
-                            <p class="green bold">{{ order.orderNumber }}</p><br>
-                            <p><b>{{ order.total }} грн</b></p>
-                        </div>
-                        <table class="products">
-                            {% for item in order.items %}
-                                <tr>
-                                    <td class="image"><a href="/products/{{ item.product.id }}" target="_blank"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
-                                    <td><a href="/products/{{ item.product.id }}" target="_blank">{{ item.product.title }}</a></td>
-                                </tr>
-                            {% endfor %}
-                        </table>
+                        <a class="no-link-style" href="/account/orders/{{ order.id }}">
+                            <div class="detail">
+                                <p><b class="gray">{{ order.status }}</b></p><br>
+                                <p class="gray margin-bottom-2">{{ order.createdAt.format('Y-m-d H:i:s') }}</p>
+                                <p class="green bold">{{ order.orderNumber }}</p><br>
+                                <p><b>{{ order.total }} грн</b></p>
+                            </div>
+                            <table class="products">
+                                {% for item in order.items %}
+                                    <tr>
+                                        <td class="image"><a href="/products/{{ item.product.id }}" target="_blank"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
+                                        <td><a href="/products/{{ item.product.id }}" target="_blank">{{ item.product.title }}</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </a>
                     </li>
                     {% else %}
                         <p>{{ noOrder.getValue() }}</p>

@@ -13,6 +13,14 @@ body, html {
 .green {
     color: #119e00;
 }
+.red {
+    color: #ff0000;
+}
+.no-link-style {
+    text-decoration: none;
+    color: #000;
+    display: contents;
+}
 .green-button {
     background-color: #119e00;
     color: #fff;
@@ -661,7 +669,7 @@ header {
     display: inline-block;
     position: relative;
     vertical-align: top;
-    font-family: helvetica, arial, verdana;
+    font-family: helvetica, arial, verdana, serif;
 }
 
 .jq-star {
@@ -805,11 +813,6 @@ header {
     border: 1px solid #eee;
     padding: 0 20px;
     margin-left: 20px;
-}
-
-.guarantee {
-    font-size: 12px;
-    width: 80%;
 }
 
 .information .delivery-paid-stock ul {
@@ -1558,32 +1561,42 @@ section .feedbacks {
     display: block;
 }
 
-.about-us {
+.about-us, .warranty, .contacts {
     width: 70%;
-    margin: 60px auto 0;
+    margin: 20px auto 0;
     line-height: 1;
     font-size: 12px;
 }
 
-.about-us img {
+.about-us img, .warranty img, .contacts img {
     height: 210px;
     width: auto;
     float: right;
     margin: 20px 0 20px 30px;
 }
 
-.about-us span {
+.about-us span, .warranty span, .contacts span {
     color: #119E00;
     font-weight: 600;
 }
 
-.about-us p {
+.about-us p, .warranty p, .contacts p {
     padding-left: 10px;
 }
 
-.about-us h4 {
+.about-us h4, .warranty h4, .contacts h4 {
     font-size: 14px;
     margin: 40px 0 0 0;
+}
+
+.about-us, .warranty, .contacts {
+    padding: 20px;
+    box-sizing: border-box;
+    background: #eee;
+}
+
+.about-us ul li, .warranty ul li, .contacts ul li {
+    margin-bottom: 10px;
 }
 
 #scroll-top {
@@ -1727,4 +1740,105 @@ section .feedbacks {
 
 .my-orders .products a:hover {
     text-decoration: underline;
+}
+
+.back-button {
+    width: 200px;
+    /*background-color: #eee;*/
+    /*border: 1px solid #eee;*/
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    margin: 20px 0;
+    padding: 5px;
+}
+
+.my-order h4 {
+    font-size: 14px;
+}
+
+.my-order h5 {
+    font-size: 13px;
+}
+
+.my-order .datetime-created {
+    font-size: 12px;
+    margin: -15px 0 0 0;
+    color: #999;
+}
+
+.my-order .info {
+    background: #eee;
+    border: 1px solid #eee;
+    padding: 15px;
+    font-size: 12px;
+    min-height: calc(100% - 90px);
+}
+
+.my-order .delivery-data {
+    display: flex;
+    justify-content: space-between;
+}
+
+.my-order .delivery-option {
+    flex-basis: 48%;
+}
+
+.my-order .delivery-option .name {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.my-order .delivery-option p {
+    margin: 0;
+}
+
+.my-order .order-products {
+    margin-top: 20px;
+    font-size: 12px;
+}
+
+.my-order .order-products .order-product {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    padding: 10px 20px;
+}
+
+.my-order .order-products .order-product:first-child {
+    border-top: 1px solid #eee;
+}
+
+.my-order .order-products .order-product div {
+    flex-grow: 1;
+    flex-basis: 50px;
+    align-self: center;
+}
+
+.my-order .order-products .order-product .title {
+    flex-grow: 10;
+    font-size: 12px;
+    font-weight: normal;
+    text-align: left;
+}
+
+
+.my-order .order-products .order-product img {
+    width: 70px;
+    height: auto;
+}
+
+.my-order .order-products .order-product .quantity, .my-order .order-products .order-product .price {
+    text-align: right;
+}
+
+.my-order .order-products .total-price {
+    display: flex;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: right;
+    margin: 10px 0 20px auto;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding: 0 20px 10px 0;
+    width: 40%;
 }

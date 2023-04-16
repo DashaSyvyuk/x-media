@@ -7,7 +7,7 @@ use App\Repository\SettingRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class GuaranteeController extends BaseController
+class WarrantyController extends BaseController
 {
     /**
      * @param CategoryRepository $categoryRepository
@@ -22,6 +22,6 @@ class GuaranteeController extends BaseController
 
     public function index(Request $request): Response
     {
-        return $this->renderTemplate($request, 'guarantee_page/index.html.twig', []);
+        return $this->renderTemplate($request, 'warranty_page/index.html.twig', []);
     }
 }

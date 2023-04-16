@@ -3,7 +3,7 @@ import './bootstrap';
 import $ from 'jquery';
 import Inputmask from 'inputmask';
 
-Inputmask('(999) 999-99-99').mask('#sign_up input[name=phone]');
+Inputmask('+38 (999) 999-99-99').mask('#sign_up input[name=phone]');
 
 function validateEmail(email) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;

@@ -4,7 +4,7 @@ import $ from 'jquery';
 import 'select2';
 import Inputmask from 'inputmask';
 
-Inputmask('(999) 999-99-99').mask('.order-place input[name=phone]');
+Inputmask('+38 (999) 999-99-99').mask('.order-place input[name=phone]');
 
 $(document).on('change', 'select[name=deltype]', () => {
     const deliveryType = $('select[name=deltype] option:selected').data('deltype-id');
