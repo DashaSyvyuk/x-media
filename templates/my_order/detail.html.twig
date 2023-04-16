@@ -1,0 +1,77 @@
+{% extends "base.html.twig" %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('cart') }}
+    {{ encore_entry_script_tags('account') }}
+{% endblock %}
+
+{% block body %}
+
+    <header>
+        {% include 'partials/header.html.twig' %}
+    </header>
+
+    <section>
+        <div class="title">Особистий кабінет</div>
+
+        <div class="account">
+            <ul class="left-side">
+                <li><a href="/account"><img src="/images/home.png"><span>Головна сторінка</span></a></li>
+                <li><a href="/account/contacts"><img src="/images/setting.png"><span>Контактні дані</span></a></li>
+                <li><a href="/account/orders"><img src="/images/list.png"><b><span>Мої замовлення</span></b></a></li>
+                <li><a id="logout"><img src="/images/log_out.png">Вийти</a></li>
+            </ul>
+            <div class="main-part">
+                <div class="back-button">
+                    <a class="no-link-style" href="/account/orders">&#9668; Всі замовлення</a>
+                </div>
+                <div class="status-block"></div>
+                <div class="my-order">
+                    <p>Замовлення № <span class="bold green"> {{ order.orderNumber }} </span></p>
+                    <p class="datetime-created">Складено: {{ order.createdAt.format('Y-m-d H:i:s') }}</p>
+                    <h4>Доставка:</h4>
+                    <div class="info">{{ order.delType }}</div>
+                    <div class="delivery-data">
+                        <div class="delivery-option">
+                            <h5>Дані для отримання:</h5>
+                            <div class="info">
+                                <p class="name">x-media</p>
+                                <p>Адрес точки самовивозу: <br>м.Київ, вул. Вадима Гетьмана 27, каб. 1133<br><br></p>
+                                <p>Тел.: {% for phone in phoneNumbers %}{{ phone.getValue() }}{% endfor %}</p>
+                                <p>email: {% for email in emails %}{{ email.getValue() }}{% endfor %}</p>
+                            </div>
+                        </div>
+                        <div class="delivery-option">
+                            <h5>Реквізити отримувача:</h5>
+                            <div class="info">
+                                <p class="name">{{ order.name }} {{ order.surname }}</p>
+                                <p>Тел.: {{ order.phone }}</p>
+                                <p>email: {{ order.email }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>Оплата:</h4>
+                    <div class="info">{{ order.payType }} {% if order.paymentStatus %}<span class="green">(Оплачено)</span>{% else %}<span class="red">(Очікує на оплату)</span>{% endif %}</div>
+                    <h4>Замовлення:</h4>
+                    <div class="order-products">
+                        {% for item in order.items %}
+                            <div class="order-product">
+                                <div class="image">
+                                    <img src="/{% if item.product.images|length > 0 %}{{ item.product.images[0].imageUrl }}{% endif %}" />
+                                </div>
+                                <div class="title">{{ item.product.title }}</div>
+                                <div class="quantity"><span>{{ item.count }}</span> шт</div>
+                                <div class="price"><span>{{ item.product.price*item.count|number_format(0, '.', ' ') }}</span> грн</div>
+                            </div>
+                        {% endfor %}
+                        <div class="total-price bold">
+                            <div>Всього:</div>
+                            <div>{{ order.total }} грн</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
