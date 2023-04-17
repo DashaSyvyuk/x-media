@@ -23,9 +23,9 @@
 
         <div class="about-us">
             <h3>Наші контакти</h3>
-            <h4>Інтернет-магазин x-media.com.ua</h4>
-            <p>Телефон: {% for phone in phoneNumbers %}<span>{{ phone.getValue() }} </span>{% endfor %} </p>
-            <p>Наш email: {% for email in emails %}<span>{{ email.getValue() }}</span> {% endfor %} </p>
+            <h4>Інтернет-магазин {{ shopSite.getValue() }}</h4>
+            <p>Телефон: <span>{{ phoneNumber.getValue() }} </span></p>
+            <p>Наш email: <span>{{ email.getValue() }} </span></p>
         </div>
     </section>
 

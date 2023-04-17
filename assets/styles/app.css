@@ -1264,8 +1264,10 @@ section .feedbacks {
 }
 
 #cart-popup #cart-block .inner {
+    margin-top: 40px;
+    padding: 0;
     width: 100%;
-    max-height: 300px;
+    max-height: 500px;
     overflow: scroll;
 }
 
@@ -1276,7 +1278,7 @@ section .feedbacks {
 
 #cart-popup #cart-block table td {
     padding: 7px;
-    font-size: 14px;
+    font-size: 12px;
     background-color: #eee;
     text-align: center;
     box-sizing: border-box;
@@ -1305,7 +1307,7 @@ section .feedbacks {
 }
 
 #cart-popup #cart-block table td img {
-    width: 110px;
+    width: 50px;
 }
 
 #cart-popup #cart-block table td.price {
@@ -1336,18 +1338,19 @@ section .feedbacks {
 }
 
 #cart-popup #cart-block .total-price {
-    text-align: left;
+    text-align: right;
     padding-left: 5px;
-    font-weight: 500;
 }
 
 #cart-popup #cart-block .total-price span {
     color: #119E00;
+    font-weight: 700;
 }
 
 #cart-popup #cart-block .product-name .product-title {
     display: flex;
     align-items: center;
+    text-align: left;
 }
 
 #cart-popup #cart-block .product-name .product-title div {
@@ -1357,7 +1360,7 @@ section .feedbacks {
 #cart-popup #go-to-order {
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 #cart-popup #cart-block p {
@@ -1510,7 +1513,7 @@ section .feedbacks {
 }
 
 .order-detail .products img {
-    width: 70px;
+    width: 50px;
     height: auto;
     object-fit: contain;
 }
@@ -1564,7 +1567,7 @@ section .feedbacks {
 .about-us, .warranty, .contacts {
     width: 70%;
     margin: 20px auto 0;
-    line-height: 1;
+    line-height: 1.5;
     font-size: 12px;
 }
 
@@ -1622,7 +1625,7 @@ section .feedbacks {
     background-color: #fff;
     border-radius: 0;
     border: 1px solid #e0e0e0;
-    font-size: 14px;
+    font-size: 12px;
     outline: none;
     height: 32px;
 }
@@ -1634,7 +1637,7 @@ section .feedbacks {
 }
 
 .select2-container--default .select2-results__option--selectable {
-    font-size: 14px;
+    font-size: 12px;
 }
 .account {
     width: 80%;
@@ -1750,11 +1753,13 @@ section .feedbacks {
     font-size: 12px;
     cursor: pointer;
     margin: 20px 0;
-    padding: 5px;
+    padding: 5px 0;
 }
 
 .my-order h4 {
     font-size: 14px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
 }
 
 .my-order h5 {
@@ -1841,4 +1846,52 @@ section .feedbacks {
     border-bottom: 1px solid #eee;
     padding: 0 20px 10px 0;
     width: 40%;
+}
+
+.status-block {
+    margin: 30px 0;
+}
+
+.status-block .status-bar, .status-block .status-title, .status-block .status-title-2 {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.status-block .status-title .status, .status-block .status-title-2 .status {
+    width: 17%;
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    margin: 0 8%;
+}
+
+.status-block .status-title-2 {
+    margin-top: 10px;
+}
+
+.status-block .status-title-2 .status {
+    font-size: 10px;
+    color: black;
+}
+
+.status-block .status-title .status:first-child, .status-block .status-title-2 .status:first-child {
+    text-align: left;
+    margin: 0;
+}
+
+.status-block .status-title .status:last-child, .status-block .status-title-2 .status:last-child {
+    text-align: right;
+    margin: 0;
+}
+
+.status-block .status-bar img {
+    width: 20px;
+}
+
+.status-block .status-bar .line {
+
+    flex: 1 1 auto;
+    width: 20px;
+    margin: 0 15px;
 }

@@ -22,11 +22,133 @@
                 <li><a id="logout"><img src="/images/log_out.png">Вийти</a></li>
             </ul>
             <div class="main-part">
-                <div class="back-button">
-                    <a class="no-link-style" href="/account/orders">&#9668; Всі замовлення</a>
-                </div>
-                <div class="status-block"></div>
+
                 <div class="my-order">
+                    <div class="back-button">
+                        <a class="no-link-style" href="/account/orders">&#9668; Всі замовлення</a>
+                    </div>
+                    <div class="status-block">
+                        <h4>Статус замовлення</h4>
+                        {% if status == '1' %}
+                            <div class="status-bar">
+                                <img src="/images/status-green.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-empty.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-empty.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-empty.png">
+                            </div>
+                            <div class="status-title">
+                                <div class="status">Нове</div>
+                                <div class="status">В процесі</div>
+                                <div class="status">Відправлено</div>
+                                <div class="status">Реалізовано</div>
+                            </div>
+                            <div class="status-title-2">
+                                <div class="status">Очікує на підтвердження менеджером</div>
+                                <div class="status"></div>
+                                <div class="status"></div>
+                                <div class="status"></div>
+                            </div>
+                        {% elseif status == '2' %}
+                            <div class="status-bar">
+                                <img src="/images/status-gray.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-green.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-empty.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-empty.png">
+                            </div>
+                            <div class="status-title">
+                                <div class="status">Нове</div>
+                                <div class="status">В процесі</div>
+                                <div class="status">Відправлено</div>
+                                <div class="status">Реалізовано</div>
+                            </div>
+                            <div class="status-title-2">
+                                <div class="status"></div>
+                                <div class="status">Готується до відправлення</div>
+                                <div class="status"></div>
+                                <div class="status"></div>
+                            </div>
+                        {% elseif status == '3' %}
+                            <div class="status-bar">
+                                <img src="/images/status-gray.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-gray.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-green.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-empty.png">
+                            </div>
+                            <div class="status-title">
+                                <div class="status">Нове</div>
+                                <div class="status">В процесі</div>
+                                <div class="status">Відправлено</div>
+                                <div class="status">Реалізовано</div>
+                            </div>
+                            <div class="status-title-2">
+                                <div class="status"></div>
+                                <div class="status"></div>
+                                <div class="status">Відправлено Новою поштою ТТН № 8273429487</div>
+                                <div class="status"></div>
+                            </div>
+                        {% elseif status == '4' %}
+                            <div class="status-bar">
+                                <img src="/images/status-gray.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-gray.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-gray.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-black.png">
+                            </div>
+                            <div class="status-title">
+                                <div class="status">Нове</div>
+                                <div class="status">В процесі</div>
+                                <div class="status">Відправлено</div>
+                                <div class="status">Реалізовано</div>
+                            </div>
+                        {% elseif status == '5' %}
+                            <div class="status-bar">
+                                <img src="/images/status-gray.png">
+                                <div class="line">
+                                    <hr>
+                                </div>
+                                <img src="/images/status-black-cancel.png">
+                            </div>
+                            <div class="status-title">
+                                <div class="status">Нове</div>
+                                <div class="status red">Відмінено</div>
+                            </div>
+                        {% endif %}
+                    </div>
                     <p>Замовлення № <span class="bold green"> {{ order.orderNumber }} </span></p>
                     <p class="datetime-created">Складено: {{ order.createdAt.format('Y-m-d H:i:s') }}</p>
                     <h4>Доставка:</h4>
@@ -35,10 +157,10 @@
                         <div class="delivery-option">
                             <h5>Дані для отримання:</h5>
                             <div class="info">
-                                <p class="name">x-media</p>
-                                <p>Адрес точки самовивозу: <br>м.Київ, вул. Вадима Гетьмана 27, каб. 1133<br><br></p>
-                                <p>Тел.: {% for phone in phoneNumbers %}{{ phone.getValue() }}{% endfor %}</p>
-                                <p>email: {% for email in emails %}{{ email.getValue() }}{% endfor %}</p>
+                                <p class="name">{{ shopName.getValue() }}</p>
+                                <p>Адреса точки самовивозу: <br>{{ pickUpPointAddress.getValue() }}<br><br></p>
+                                <p>Тел.: {{ phoneNumber.getValue() }}</p>
+                                <p>email: {{ email.getValue() }}</p>
                             </div>
                         </div>
                         <div class="delivery-option">

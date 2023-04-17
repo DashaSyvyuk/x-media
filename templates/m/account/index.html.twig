@@ -30,7 +30,7 @@
                             <p><b class="gray">{{ order.status }}</b></p><br>
                             <p class="gray margin-bottom-2">{{ order.createdAt.format('Y-m-d H:i:s') }}</p>
                             <p class="gray">{{ order.orderNumber }}</p><br>
-                            <p><b>{{ order.total }} грн</b></p>
+                            <p><b>{{ order.total|number_format(0, ',', ' ') }} грн</b></p>
                         </div>
                         <table class="products">
                             {% for item in order.items %}
