@@ -1487,7 +1487,7 @@ section .feedbacks {
 }
 
 .order-detail .products td.image {
-    width: 70px;
+    width: 50px;
 }
 
 .order-detail .products td.count {
