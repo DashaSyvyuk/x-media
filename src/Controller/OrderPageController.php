@@ -131,8 +131,8 @@ class OrderPageController extends BaseController
                         [
                             'order' => $order,
                             'mainUrl' => $mainUrl,
-                            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-                            'emails' => $this->settingRepository->findBy(['slug' => 'email'])
+                            'phoneNumber' => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
+                            'email' => $this->settingRepository->findOneBy(['slug' => 'email'])
                         ]
                     ),
                     'text/html'

@@ -6,18 +6,14 @@
             <a href="/warranty">Гарантія</a>
             <a href="/feedbacks">Відгуки про магазин</a>
             <a href="/about-us">Про нас</a>
-            <a href="/">Контакти</a>
+            <a href="/contact">Контакти</a>
         </div>
     </div>
     <div>
         <p class="title">Контакти:</p>
         <div class="items">
-            {% for email in emails %}
-                <p><img src="/images/email.png"> {{ email.getValue() }}</p>
-            {% endfor %}
-            {% for phone in phoneNumbers %}
-                <p><img src="/images/phone.png"> {{ phone.getValue() }}</p>
-            {% endfor %}
+            <p><img src="/images/email.png"> {{ email.getValue() }}</p>
+            <p><img src="/images/phone.png"> {{ phoneNumber.getValue() }}</p>
             <br>
         </div>
     </div>

@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('cart') }}
+{% endblock %}
+
+{% block body %}
+
+    <header>
+        {% include 'partials/header.html.twig' %}
+    </header>
+
+    <section>
+        <div class="title">Про нас</div>
+
+        <div class="breadcrumb">
+            <a>X-media</a>
+            <span> > </span>
+            <a href="/">Головна</a>
+            <span> > </span>
+            <a class="selected">Контакти</a>
+        </div>
+
+        <div class="about-us">
+            <h3>Наші контакти</h3>
+            <h4>Інтернет-магазин {{ shopSite.getValue() }}</h4>
+            <p>Телефон: <span>{{ phoneNumber.getValue() }} </span></p>
+            <p>Наш email: <span>{{ email.getValue() }} </span></p>
+        </div>
+    </section>
+
+{% endblock %}

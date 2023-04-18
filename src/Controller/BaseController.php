@@ -29,10 +29,14 @@ class BaseController extends AbstractController
     public function renderTemplate(Request $request, string $view, array $parameters): Response
     {
         return $this->render($this->isMobile($request) ? "m/{$view}" : $view, array_merge($parameters, [
-            'categories'   => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
-            'totalCount'   => $_COOKIE['totalCount'] ?? 0,
-            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-            'emails'       => $this->settingRepository->findBy(['slug' => 'email'])
+            'categories'         => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
+            'totalCount'         => $_COOKIE['totalCount'] ?? 0,
+            'phoneNumber'       => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
+            'email'             => $this->settingRepository->findOneBy(['slug' => 'email']),
+            'shopName'           => $this->settingRepository->findOneBy(['slug' => 'shop_name']),
+            'shopSite'           => $this->settingRepository->findOneBy(['slug' => 'shop_site']),
+            'shopAddress'        => $this->settingRepository->findOneBy(['slug' => 'shop_address']),
+            'pickUpPointAddress' => $this->settingRepository->findOneBy(['slug' => 'pick_up_point_address'])
         ]));
     }
 

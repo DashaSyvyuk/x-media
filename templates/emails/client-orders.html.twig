@@ -31,9 +31,5 @@
 <p>X-media</p>
 <p><b>Контакти</b></p>
 <p>Є питання? Ви також можете зв’язатися з нами електронною поштою, по телефону.</p>
-{% for email in emails %}
-    <p style="display: flex; align-items: center;"><img src="{{ mainUrl }}/images/email.png" width="20" style="margin-right: 5px;"><span>{{ email.getValue() }}</span></p>
-{% endfor %}
-{% for phone in phoneNumbers %}
-    <p style="display: flex; align-items: center;"><img src="{{ mainUrl }}/images/phone.png" width="20" style="margin-right: 5px;"><span>{{ phone.getValue() }}</span></p>
-{% endfor %}
+<p style="display: flex; align-items: center;"><img src="{{ mainUrl }}/images/email.png" width="20" style="margin-right: 5px;"><span>{{ email.getValue() }}</span></p>
+<p style="display: flex; align-items: center;"><img src="{{ mainUrl }}/images/phone.png" width="20" style="margin-right: 5px;"><span> {{ phoneNumber.getValue() }} </span></p>

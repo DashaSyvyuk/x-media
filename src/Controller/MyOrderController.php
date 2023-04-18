@@ -68,8 +68,9 @@ class MyOrderController extends BaseController
 
         return $this->renderTemplate($request, 'my_order/detail.html.twig', [
             'order'        => $order,
-            'phoneNumbers' => $this->settingRepository->findBy(['slug' => 'phone_number']),
-            'emails'       => $this->settingRepository->findBy(['slug' => 'email'])
+            'phoneNumber'  => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
+            'email'        => $this->settingRepository->findOneBy(['slug' => 'email']),
+            'status' => 3//TODO: get status from order
         ]);
     }
 }
