@@ -25,7 +25,7 @@ $(document).on('click', '#filter-form .selected-filters .item', (e) => {
     $(e.currentTarget).remove();
 });
 
-$('#products .order-by select').on('change', () => {
+$('#products-block .order-by select').on('change', () => {
     const url = window.location.pathname;
     const newUrl = url + getUrl();
 
@@ -59,7 +59,7 @@ function getUrl() {
 }
 
 function getOrderBy() {
-    const option = $('#products .order-by select').children("option:selected");
+    const option = $('#products-block .order-by select').children("option:selected");
     const value = option.val();
     const direction = option.data('direction');
 
@@ -110,7 +110,7 @@ function getPriceTo() {
 }
 
 function getProducts(url) {
-    $('#products .loader').css({
+    $('#products-block .loader').css({
         'display': 'block'
     });
 
@@ -119,10 +119,10 @@ function getProducts(url) {
     $.get(url, (data) => {
         const obj = JSON.parse(data);
 
-        $('#products .products').html(obj.products);
+        $('#products-block .products').html(obj.products);
         $('#price_from').attr('placeholder', obj.minPrice);
         $('#price_to').attr('placeholder', obj.maxPrice);
-        $('#products .loader').css('display', 'none');
+        $('#products-block .loader').css('display', 'none');
         $('#filters input').attr('disabled', false);
     });
 }

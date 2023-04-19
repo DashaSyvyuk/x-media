@@ -27,7 +27,7 @@
             {% include 'partials/filters.html.twig' %}
         </div>
 
-        <div id="products">
+        <div id="products-block">
             <div class="order-by">
                 <select name="order">
                     <option value="price" data-direction="asc" {% if order is defined and order=='price' and direction is defined and direction=='asc' %}selected{% endif %}>
@@ -41,9 +41,7 @@
                     </option>
                 </select>
             </div>
-            <div class="products">
-                {% include 'partials/product-list.html.twig' %}
-            </div>
+            {% include 'partials/product-list.html.twig' %}
             <div class="loader"></div>
         </div>
     </section>
