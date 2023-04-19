@@ -557,11 +557,6 @@ header {
     width: calc(33.33% - 20px);
 }
 
-.product a {
-    display: block;
-    height: 100%;
-}
-
 .product {
     padding: 15px;
     box-sizing: border-box;
