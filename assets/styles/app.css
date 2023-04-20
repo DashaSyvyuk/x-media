@@ -19,7 +19,6 @@ body, html {
 .no-link-style {
     text-decoration: none;
     color: #000;
-    display: contents;
 }
 .green-button {
     background-color: #119e00;
@@ -1135,7 +1134,7 @@ section .feedbacks {
     width: calc(100% - 112px);
 }
 
-.send-btn-block {
+.send-btn-block, .main-page-btn{
     display: flex;
     justify-content: end;
 }
