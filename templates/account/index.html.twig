@@ -24,8 +24,12 @@
             <div class="main-part">
                 <h4>Головна сторінка:</h4>
 
+                <div class="account-description">
+                    <p>Привіт, <span class="green bold">{{ user.name }}</span>, ти знаходишся в особистому кабінеті, тут ти можеш переглядати деталі та вміст своїх замовлень і відслідковувати їх статус, на сторінці <a href="/account/orders">мої замовлення</a>, а також змінити свої особисті дані на сторінці <a href="/account/contacts">редагування профілю</a> і переглянути список улюблених продуктів.</p>
+                </div>
+
                 {% if order %}
-                    <p class="last-order">Останнє активне замовлення:</p>
+                    <h5 class="last-order">Останнє активне замовлення:</h5>
                 {% endif %}
 
                 <ul class="my-orders">
@@ -52,6 +56,7 @@
                         <p>{{ noOrder.getValue() }}</p>
                     {% endif %}
                 </ul>
+                <h5 class="wish-list">Улюблені продукти:</h5>
             </div>
         </div>
     </section>

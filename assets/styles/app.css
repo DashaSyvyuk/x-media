@@ -1672,13 +1672,20 @@ section .feedbacks {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
+.account-description {
+    font-size: 12px;
+    padding-left: 10px;
+}
+
 .main-part {
     width: 100%;
     padding-left: 30px;
 }
 
-.main-part .last-order {
+.main-part .last-order, .main-part .wish-list {
     font-size: 13px;
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
 }
 
 .my-orders h5 {
