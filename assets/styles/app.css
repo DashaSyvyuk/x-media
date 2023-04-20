@@ -19,6 +19,7 @@ body, html {
 .no-link-style {
     text-decoration: none;
     color: #000;
+    display: contents;
 }
 .green-button {
     background-color: #119e00;
