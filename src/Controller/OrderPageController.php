@@ -194,7 +194,7 @@ class OrderPageController extends BaseController
         $lastOrder = $this->orderRepository->findOneBy([], ['id' => 'desc']);
 
         if ($lastOrder) {
-            $lastId = $lastOrder->getId();
+            $lastId = $lastOrder->getId() + 1;
         }
 
         return sprintf('%s%s', $today, $lastId);
