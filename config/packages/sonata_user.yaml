@@ -1,4 +1,8 @@
 sonata_user:
   class:
     user: App\Entity\SonataUserUser
-    group: App\Entity\SonataUserGroup
+    # group: App\Entity\SonataUserGroup
+  resetting:
+    email:
+      address: syvyuk@ukr.net
+      sender_name: Sonata Admin (X-media)

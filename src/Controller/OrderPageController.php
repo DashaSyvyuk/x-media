@@ -10,7 +10,11 @@ use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
-use Swift_Mailer;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -90,7 +94,12 @@ class OrderPageController extends BaseController
         }
     }
 
-    public function post(Request $request, Swift_Mailer $mailer): Response
+    /**
+     * @throws OptimisticLockException
+     * @throws TransportExceptionInterface
+     * @throws ORMException
+     */
+    public function post(Request $request, MailerInterface $mailer): Response
     {
         if (isset($_COOKIE['cart'])) {
             $user = null;
@@ -122,10 +131,11 @@ class OrderPageController extends BaseController
 
             $mainUrl = sprintf('%s%s/', 'https://', $request->getHost());
 
-            $message = (new \Swift_Message(sprintf('Нове замовлення %s', $order->getOrderNumber())))
-                ->setFrom('x-media@x-media.com.ua')
-                ->setTo($order->getEmail())
-                ->setBody(
+            $message = (new Email())
+                ->subject(sprintf('Нове замовлення %s', $order->getOrderNumber()))
+                ->from('x-media@x-media.com.ua')
+                ->to($order->getEmail())
+                ->html(
                     $this->renderView(
                         'emails/client-orders.html.twig',
                         [
@@ -134,8 +144,7 @@ class OrderPageController extends BaseController
                             'phoneNumber' => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
                             'email' => $this->settingRepository->findOneBy(['slug' => 'email'])
                         ]
-                    ),
-                    'text/html'
+                    )
                 )
             ;
 

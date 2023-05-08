@@ -1,12 +1,9 @@
 fos_user:
   db_driver: orm
   firewall_name: main
-  user_class: App\Entity\SonataUserUser
-  group:
-    group_class: App\Entity\SonataUserGroup
-    group_manager: sonata.user.orm.group_manager
+  user_class: App\Entity\AdminUser
   service:
-    user_manager: sonata.user.orm.user_manager
+    mailer: mailer
   from_email:
     address: syvyuk@ukr.net
     sender_name: syvyuk@ukr.net

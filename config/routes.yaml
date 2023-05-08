@@ -1,10 +1,6 @@
-sonata_user_admin_security:
-    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
-    prefix: /admin
-
-sonata_user_admin_resetting:
-    resource: '@SonataUserBundle/Resources/config/routing/admin_resetting.xml'
-    prefix: /admin/resetting
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    prefix: /
 
 index:
     path: /
@@ -91,12 +87,12 @@ account_contact:
     methods: GET
 
 login:
-    path: /login
+    path: /log-in
     controller: App\Controller\LoginController::index
     methods: GET
 
 post_login:
-    path: /login
+    path: /log-in
     controller: App\Controller\LoginController::post
     methods: POST
 

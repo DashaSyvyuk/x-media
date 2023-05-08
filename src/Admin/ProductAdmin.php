@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -149,21 +149,21 @@ final class ProductAdmin extends AbstractAdmin
     }
 
     /**
-     * @param RouteCollection $collection
+     * @param RouteCollectionInterface $collection
      */
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('clone', $this->getRouterIdParameter() . '/clone');
     }
 
-    public function prePersist($product): void
+    public function prePersist($object): void
     {
-        $this->manageFileUpload($product);
+        $this->manageFileUpload($object);
     }
 
-    public function preUpdate($product): void
+    public function preUpdate($object): void
     {
-        $this->manageFileUpload($product);
+        $this->manageFileUpload($object);
     }
 
     private function manageFileUpload(object $product): void
