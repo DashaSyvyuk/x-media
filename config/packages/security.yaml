@@ -11,14 +11,6 @@ security:
         main:
             pattern: /admin(.*)
             context: user
-            form_login:
-                provider: fos_userbundle
-                csrf_token_generator: security.csrf.token_manager
-                login_path: /admin/login
-                check_path: /admin/login_check
-                use_forward: false
-                failure_path: /admin/login
-                default_target_path: /admin
             logout:
                 path: /admin/logout
                 target: /admin/login
@@ -30,10 +22,6 @@ security:
 
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
-
-    providers:
-        fos_userbundle:
-            id: fos_user.user_provider.username
 
     access_control:
         # Admin login page needs to be accessed without credential

@@ -27,12 +27,6 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    admin.category:
-        class: App\Admin\CategoryAdmin
-        arguments: [ ~, App\Entity\Category, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Контент, label: Категорії }
-
     admin.product:
         class: App\Admin\ProductAdmin
         arguments: [ ~, App\Entity\Product, App\Admin\Controller\ProductController ]
@@ -44,12 +38,6 @@ services:
         arguments: [ ~, App\Entity\ProductImage, ~ ]
         tags:
             - { name: sonata.admin, manager_type: orm, group: Контент, label: Картинки, show_in_dashboard: false }
-
-    admin.slider:
-        class: App\Admin\SliderAdmin
-        arguments: [ ~, App\Entity\Slider, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Слайдер, label: Слайдер }
 
     admin.filter:
         class: App\Admin\FilterAdmin
@@ -75,18 +63,6 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: Контент, label: Параметри фільтрів, show_in_dashboard: false }
 
-    admin.setting:
-        class: App\Admin\SettingAdmin
-        arguments: [ ~, App\Entity\Setting, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Налаштування, label: Налаштування, show_in_dashboard: true }
-
-    admin.currency:
-        class: App\Admin\CurrencyAdmin
-        arguments: [ ~, App\Entity\Currency, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Налаштування, label: Курс валют, show_in_dashboard: true }
-
     admin.order:
         class: App\Admin\OrderAdmin
         arguments: [ ~, App\Entity\Order, ~ ]
@@ -98,27 +74,3 @@ services:
         arguments: [ ~, App\Entity\OrderItem, ~ ]
         tags:
             - { name: sonata.admin, manager_type: orm, group: Замовлення, label: Товари, show_in_dashboard: false }
-
-    admin.comment:
-        class: App\Admin\CommentAdmin
-        arguments: [ ~, App\Entity\Comment, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Контент, label: Коментарі, show_in_dashboard: true }
-
-    admin.feedback:
-        class: App\Admin\FeedbackAdmin
-        arguments: [ ~, App\Entity\Feedback, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Відгуки про магазин, label: Відгуки про магазин, show_in_dashboard: true }
-
-    admin.delivery_type:
-        class: App\Admin\DeliveryTypeAdmin
-        arguments: [ ~, App\Entity\DeliveryType, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Замовлення, label: Способи доставки, show_in_dashboard: true }
-
-    admin.payment_type:
-        class: App\Admin\PaymentTypeAdmin
-        arguments: [ ~, App\Entity\PaymentType, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Замовлення, label: Способи оплати, show_in_dashboard: true }
