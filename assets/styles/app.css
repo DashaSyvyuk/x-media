@@ -1605,6 +1605,12 @@ section .feedbacks {
     margin-bottom: 10px;
 }
 
+.about-us .social-network img {
+    width: 20px;
+    height: auto;
+    margin: 5px;
+}
+
 #scroll-top {
     position: fixed;
     bottom: 40px;
