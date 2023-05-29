@@ -10,6 +10,7 @@ use App\Entity\Feedback;
 use App\Entity\Filter;
 use App\Entity\Order;
 use App\Entity\PaymentType;
+use App\Entity\Product;
 use App\Entity\Setting;
 use App\Entity\Slider;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -57,15 +58,10 @@ class DashboardController extends AbstractDashboardController
 
             // set this option if you prefer the page content to span the entire
             // browser width, instead of the default design which sets a max width
-            ->renderContentMaximized()
-
-            // set this option if you prefer the sidebar (which contains the main menu)
-            // to be displayed as a narrow column instead of the default expanded design
-            ->renderSidebarMinimized()
 
             // by default, all backend URLs are generated as absolute URLs. If you
             // need to generate relative URLs instead, call this method
-            ->generateRelativeUrls()
+            //->generateRelativeUrls()
             ;
     }
 
@@ -77,6 +73,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Категорії', 'fas fa-comment', Category::class),
             MenuItem::linkToCrud('Слайдер', 'fas fa-image', Slider::class),
             MenuItem::linkToCrud('Фільтри', 'fas fa-filter', Filter::class),
+            MenuItem::linkToCrud('Товари', 'fas fa-box-open', Product::class),
         ]);
 
         yield MenuItem::subMenu('Замовлення', 'fas fa-comment')->setSubItems([

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -123,6 +125,11 @@ class Order
      * @ORM\Column(type="datetime")
      */
     public $updatedAt;
+
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
 
     public function getId(): int
     {

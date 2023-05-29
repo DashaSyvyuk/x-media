@@ -179,7 +179,7 @@
                         {% for item in order.items %}
                             <div class="order-product">
                                 <div class="image">
-                                    <img src="/{% if item.product.images|length > 0 %}{{ item.product.images[0].imageUrl }}{% endif %}" />
+                                    <img src="/images/products/{% if item.product.images|length > 0 %}{{ item.product.images[0].imageUrl }}{% endif %}" />
                                 </div>
                                 <div class="title"><a class="no-link-style" href="/products/{{ item.product.id }}">{{ item.product.title }}</a></div>
                                 <div class="quantity"><span>{{ item.count }}</span> шт</div>

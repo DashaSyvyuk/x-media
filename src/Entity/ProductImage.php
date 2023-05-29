@@ -4,16 +4,17 @@ namespace App\Entity;
 
 use \DateTime;
 use App\Traits\DateStorageTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Table("product_image", indexes={
  *     @Index(columns={"product_id", "position"})
  * })
  * @ORM\Entity(repositoryClass="App\Repository\ProductImageRepository")
- * @ORM\HasLifecycleCallbacks()
+ * @Vich\Uploadable()
  */
 class ProductImage
 {
@@ -31,8 +32,11 @@ class ProductImage
     /**
      * @ORM\Column(type="text")
      */
-    private string $imageUrl = "";
+    private $imageUrl;
 
+    /**
+     * @Vich\UploadableField(mapping="images", fileNameProperty="imageUrl")
+     */
     private $file;
 
     /**
@@ -56,6 +60,11 @@ class ProductImage
      */
     private DateTime $updatedAt;
 
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -75,17 +84,17 @@ class ProductImage
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getImageUrl(): string
+    public function getImageUrl(): ?string
     {
         return $this->imageUrl;
     }
 
     /**
-     * @param string $imageUrl
+     * @param $imageUrl
      */
-    public function setImageUrl(string $imageUrl)
+    public function setImageUrl($imageUrl)
     {
         $this->imageUrl = $imageUrl;
     }
@@ -123,9 +132,12 @@ class ProductImage
         $this->updatedAt = $updatedAt;
     }
 
-    public function setFile(UploadedFile $file = null)
+    public function setFile($file)
     {
         $this->file = $file;
+        if ($file) {
+            $this->updatedAt = new DateTime();
+        }
     }
 
     public function getFile()
@@ -133,46 +145,8 @@ class ProductImage
         return $this->file;
     }
 
-    public function upload()
+    public function __toString()
     {
-        if ($this->getFile() == null) {
-            return;
-        }
-
-        $safeFilename = md5(date('Y-m-d H:i:s:u')) . rand(200, 999);
-        $fileName = $safeFilename . '.' . $this->getFile()->guessExtension();
-
-        $this->getFile()->move(
-            self::SERVER_PATH_TO_IMAGE_FOLDER,
-            $fileName
-        );
-
-        $this->imageUrl = 'images/products/' . $fileName;
-
-        $this->setFile(null);
-    }
-
-    /**
-     * @ORM\PrePersist()
-     */
-    public function onPrePersist()
-    {
-        $this->upload();
-        $this->createdAt = new DateTime('now');
-        $this->updatedAt = new DateTime('now');
-    }
-
-    /**
-     * @ORM\PreUpdate()
-     */
-    public function onPreUpdate()
-    {
-        $this->upload();
-        $this->updatedAt = new DateTime('now');
-    }
-
-    public function refreshUpdated(): void
-    {
-        $this->setUpdatedAt(new DateTime());
+        return $this->imageUrl;
     }
 }

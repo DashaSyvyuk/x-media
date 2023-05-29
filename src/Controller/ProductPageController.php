@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
@@ -28,7 +29,7 @@ class ProductPageController extends BaseController
 
     public function getProduct(string $id, Request $request): Response
     {
-        $product = $this->productRepository->findOneBy(['id' => $id]);
+        $product = $this->productRepository->findOneBy(['id' => $id, 'status' => Product::STATUS_ACTIVE]);
 
         if (!$product) {
             return $this->redirectToRoute('index');
