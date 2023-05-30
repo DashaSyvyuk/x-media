@@ -1,32 +1,35 @@
 security:
+    encoders:
+        App\Entity\AdminUser:
+            algorithm: auto
+
     firewalls:
         # Disabling the security for the web debug toolbar, the profiler and Assetic.
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        # default login area for standard users
 
-        # This firewall is used to handle the public login area
-        # This part is handled by the FOS User Bundle
         main:
-            pattern: /admin(.*)
-            context: user
+            anonymous: ~
+            guard:
+                authenticators:
+                    - App\Security\AdminAuthenticator
             logout:
-                path: /admin/logout
-                target: /admin/login
-            anonymous: true
+                path: app_logout
+                target: app_login
 
-    role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
+    password_hashers:
+        App\Entity\AdminUser:
+            algorithm: auto
 
-    encoders:
-        FOS\UserBundle\Model\UserInterface: bcrypt
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\AdminUser
+                property: email
 
     access_control:
-        # Admin login page needs to be accessed without credential
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/, role: [ ROLE_ADMIN ] }
+        - { path: ^/admin, roles: ROLE_ADMIN }

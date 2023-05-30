@@ -12,7 +12,6 @@
         "doctrine/orm": "*",
         "easycorp/easyadmin-bundle": "*",
         "friendsofsymfony/ckeditor-bundle": "^2.4",
-        "friendsofsymfony/user-bundle": "^3.1",
         "guzzlehttp/guzzle": "*",
         "knplabs/knp-paginator-bundle": "*",
         "nesbot/carbon": "*",

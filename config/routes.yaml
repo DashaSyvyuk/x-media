@@ -135,3 +135,7 @@ confirm_email:
     path: /confirm-email
     controller: App\Controller\ConfirmEmailController::index
     methods: GET
+
+# admin_login:
+    # path: /admin/login
+    # controller: App\Controller\Admin\SecurityController::login

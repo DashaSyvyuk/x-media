@@ -95,9 +95,6 @@
             "config/packages/fos_ckeditor.yaml"
         ]
     },
-    "friendsofsymfony/user-bundle": {
-        "version": "v3.1.0"
-    },
     "knplabs/knp-paginator-bundle": {
         "version": "v5.9.0"
     },
