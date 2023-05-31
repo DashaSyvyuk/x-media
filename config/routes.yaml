@@ -83,12 +83,12 @@ account_contact:
     methods: GET
 
 login:
-    path: /log-in
+    path: /login
     controller: App\Controller\LoginController::index
     methods: GET
 
 post_login:
-    path: /log-in
+    path: /login
     controller: App\Controller\LoginController::post
     methods: POST
 
