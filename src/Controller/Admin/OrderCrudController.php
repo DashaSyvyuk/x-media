@@ -26,7 +26,7 @@ class OrderCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Замовлення')
             ->setEntityLabelInPlural('Замовлення')
-            ->setSearchFields(['orderNumber', 'surname', 'phone', 'email'])
+            ->setSearchFields(['orderNumber', 'surname', 'phone', 'email', 'status'])
             ->setDefaultSort(['id' => 'DESC'])
             ->setPaginatorPageSize(10)
             ;
@@ -36,35 +36,26 @@ class OrderCrudController extends AbstractCrudController
     {
         yield FormField::addPanel('Контактна інформація');
         yield IdField::new('id')->hideOnForm();
-        yield TextField::new('orderNumber')->setLabel('Номер замовлення');
-        yield TextField::new('name')->setLabel('Ім\'я');
-        yield TextField::new('surname')->setLabel('Прізвище');
-        yield TextField::new('phone')->setLabel('Номер телефону');
-        yield TextField::new('email')->setLabel('Email');
-        yield TextField::new('comment')->setLabel('Коментар')->hideOnIndex();
+        yield TextField::new('orderNumber', 'Номер замовлення');
+        yield TextField::new('name', 'Ім\'я');
+        yield TextField::new('surname', 'Прізвище');
+        yield TextField::new('phone', 'Номер телефону');
+        yield TextField::new('email', 'Email');
+        yield TextField::new('comment', 'Коментар')->hideOnIndex();
 
         yield FormField::addPanel('Інформація про доставку');
 
-        yield TextField::new('address')->setLabel('Адреса')->hideOnIndex();
-        yield TextField::new('paytype')->setLabel('Спосіб оплати')->hideOnIndex();
-        yield TextField::new('deltype')->setLabel('Спосіб доставки')->hideOnIndex();
-        yield ChoiceField::new('status')->setChoices([
-            'Новий' => 'Новий',
-            'Очікує підтвердження' => 'Очікує підтвердження',
-            'В обробці' => 'В обробці',
-            'Скасовано' => 'Скасовано',
-            'Замовлення у постачальника' => 'Замовлення у постачальника',
-            'В дорозі' => 'В дорозі',
-            'Відправлено Новою Поштою' => 'Відправлено Новою Поштою',
-            'Відправлено нашою доставкою' => 'Відправлено нашою доставкою',
-            'Завершено' => 'Завершено'
-        ])->setLabel('Статус')->hideOnIndex();
-        yield BooleanField::new('paymentStatus')->setLabel('Статус оплати')->hideOnIndex();
-        yield NumberField::new('total')->setLabel('Загальна вартість')->hideOnIndex();
+        yield TextField::new('address', 'Адреса')->hideOnIndex();
+        yield TextField::new('paytype', 'Спосіб оплати')->hideOnIndex();
+        yield TextField::new('deltype', 'Спосіб доставки')->hideOnIndex();
+        yield ChoiceField::new('status', 'Статус')->setChoices(array_flip(Order::STATUSES));
+        yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex();
+        yield TextField::new('ttn', 'ТТН')->hideOnIndex();
+        yield NumberField::new('total', 'Загальна вартість')->hideOnIndex();
 
         yield FormField::addPanel('Товари');
 
-        yield CollectionField::new('items')
+        yield CollectionField::new('items', 'Товари')
             ->allowAdd()
             ->allowDelete()
             ->renderExpanded()

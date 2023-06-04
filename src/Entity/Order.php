@@ -3,39 +3,42 @@
 namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
+use App\Validator\OrderStatus;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table("orders")
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @OrderStatus()
  */
 class Order
 {
     use DateStorageTrait;
 
-    const NEW = 'Новий';
-    const NOT_CONFIRMED = 'Очікує підтвердження';
-    const IN_PROGRESS = 'В обробці';
-    const CANCELLED = 'Скасовано';
-    const ORDERED_IN_SUPPLIER = 'Замовлення у постачальника';
-    const ON_THE_WAY = 'В дорозі';
-    const SENT_BY_NP = 'Відправлено Новою Поштою';
-    const SENT_BY_OUR_DELIVERY = 'Відправлено нашою доставкою';
-    const COMPLETED = 'Завершено';
+    const NEW = 'new';
+    const NOT_APPROVED =  'not_approved';
+    const APPROVED = 'confirmed';
+    const PACKING = 'packing';
+    const NOVA_POSHTA_DELIVERING = 'nova_poshta_delivering';
+    const COURIER_DELIVERING = 'courier_delivering';
+    const COMPLETED = 'completed';
+    const CANCELED_NOT_CONFIRMED = 'canceled_not_confirmed';
+    const CANCELED_NO_PRODUCT = 'canceled_no_product';
+    const CANCELED_NOT_PICKED_UP = 'canceled_not_picked_up';
 
     const STATUSES = [
-        self::NEW => self::NEW,
-        self::NOT_CONFIRMED => self::NOT_CONFIRMED,
-        self::IN_PROGRESS => self::IN_PROGRESS,
-        self::CANCELLED => self::CANCELLED,
-        self::ORDERED_IN_SUPPLIER => self::ORDERED_IN_SUPPLIER,
-        self::ON_THE_WAY => self::ON_THE_WAY,
-        self::SENT_BY_NP => self::SENT_BY_NP,
-        self::SENT_BY_OUR_DELIVERY => self::SENT_BY_OUR_DELIVERY,
-        self::COMPLETED => self::COMPLETED,
+        self::NEW                    => 'Нове замовлення',
+        self::NOT_APPROVED           => 'Очікує на підтвердження',
+        self::APPROVED               => 'Підтверджено. В дорозі від постачальника',
+        self::PACKING                => 'Готується до відправлення',
+        self::NOVA_POSHTA_DELIVERING => 'Відправлено новою поштою',
+        self::COURIER_DELIVERING     => 'Відправлено кур\'єром',
+        self::COMPLETED              => 'Доставлено',
+        self::CANCELED_NOT_CONFIRMED => 'Відмінено. Не підтверджене',
+        self::CANCELED_NO_PRODUCT    => 'Відмінено. Немає продукту',
+        self::CANCELED_NOT_PICKED_UP => 'Відмінено. Не відібране',
     ];
 
     /**
@@ -94,6 +97,11 @@ class Order
      * @ORM\Column(type="boolean")
      */
     private bool $paymentStatus;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $ttn = "";
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -234,6 +242,16 @@ class Order
     public function setPaymentStatus(bool $paymentStatus): void
     {
         $this->paymentStatus = $paymentStatus;
+    }
+
+    public function getTtn(): ?string
+    {
+        return $this->ttn;
+    }
+
+    public function setTtn(?string $ttn): void
+    {
+        $this->ttn = $ttn;
     }
 
     public function setComment(?string $comment): void

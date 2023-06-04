@@ -13,6 +13,7 @@
         "easycorp/easyadmin-bundle": "*",
         "friendsofsymfony/ckeditor-bundle": "^2.4",
         "guzzlehttp/guzzle": "*",
+        "jms/serializer-bundle": "*",
         "knplabs/knp-paginator-bundle": "*",
         "nesbot/carbon": "*",
         "phpdocumentor/reflection-docblock": "*",
@@ -60,7 +61,8 @@
         "symfony/yaml": "^5.4",
         "twig/extra-bundle": "*",
         "twig/twig": "^3.0",
-        "vich/uploader-bundle": "^2.1"
+        "vich/uploader-bundle": "^2.1",
+        "winzou/state-machine-bundle": "^0.6.0"
     },
     "require-dev": {
         "symfony/browser-kit": "^5.4",

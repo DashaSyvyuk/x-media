@@ -95,6 +95,15 @@
             "config/packages/fos_ckeditor.yaml"
         ]
     },
+    "jms/serializer-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "4.0",
+            "ref": "cc04e10cf7171525b50c18b36004edf64cb478be"
+        }
+    },
     "knplabs/knp-paginator-bundle": {
         "version": "v5.9.0"
     },
@@ -442,5 +451,8 @@
     },
     "webmozart/assert": {
         "version": "1.10.0"
+    },
+    "winzou/state-machine-bundle": {
+        "version": "0.6.0"
     }
 }

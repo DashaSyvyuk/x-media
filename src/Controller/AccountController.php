@@ -48,15 +48,7 @@ class AccountController extends BaseController
             return $this->redirectToRoute('index');
         }
 
-        $order = $this->orderRepository->findOneBy(['user' => $user, 'status' => [
-            Order::NEW,
-            Order::NOT_CONFIRMED,
-            Order::IN_PROGRESS,
-            Order::ORDERED_IN_SUPPLIER,
-            Order::ON_THE_WAY,
-            Order::SENT_BY_NP,
-            Order::SENT_BY_OUR_DELIVERY
-        ]], ['createdAt' => 'DESC']);
+        $order = $this->orderRepository->findOneBy(['user' => $user], ['createdAt' => 'DESC']);
 
         $text = $this->settingRepository->findOneBy(['slug' => 'there_is_no_active_order']);
 

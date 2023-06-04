@@ -107,6 +107,7 @@ class OrderPageController extends BaseController
                 $user = $this->userRepository->findOneBy(['email' => $email]);
             }
 
+            $managerEmail = $this->settingRepository->findOneBy(['slug' => 'email']);
             $totalCart = $this->getTotalCart($_COOKIE['cart']);
 
             $order = $this->orderRepository->create([
@@ -142,13 +143,30 @@ class OrderPageController extends BaseController
                             'order' => $order,
                             'mainUrl' => $mainUrl,
                             'phoneNumber' => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
-                            'email' => $this->settingRepository->findOneBy(['slug' => 'email'])
+                            'email' => $managerEmail
                         ]
                     )
                 )
             ;
 
             $mailer->send($message);
+
+            $managerMessage = (new Email())
+                ->subject(sprintf('Нове замовлення %s', $order->getOrderNumber()))
+                ->from('x-media@x-media.com.ua')
+                ->to($managerEmail->getValue())
+                ->html(
+                    $this->renderView(
+                        'emails/manager-order.html.twig',
+                        [
+                            'mainUrl' => $mainUrl,
+                            'order' => $order
+                        ]
+                    )
+                )
+            ;
+
+            $mailer->send($managerMessage);
 
             return $this->renderTemplate($request, 'thank_page/index.html.twig', [
                 'order' => $order
