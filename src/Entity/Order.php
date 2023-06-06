@@ -41,6 +41,19 @@ class Order
         self::CANCELED_NOT_PICKED_UP => 'Відмінено. Не відібране',
     ];
 
+    const GROUPED_STATUSES = [
+        self::NEW                    => 1,
+        self::NOT_APPROVED           => 1,
+        self::APPROVED               => 2,
+        self::PACKING                => 2,
+        self::NOVA_POSHTA_DELIVERING => 3,
+        self::COURIER_DELIVERING     => 3,
+        self::COMPLETED              => 4,
+        self::CANCELED_NOT_CONFIRMED => 5,
+        self::CANCELED_NO_PRODUCT    => 5,
+        self::CANCELED_NOT_PICKED_UP => 5,
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

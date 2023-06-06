@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Repository\CategoryRepository;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
@@ -75,10 +76,10 @@ class MyOrderController extends BaseController
         }
 
         return $this->renderTemplate($request, 'my_order/detail.html.twig', [
-            'order'        => $order,
-            'phoneNumber'  => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
-            'email'        => $this->settingRepository->findOneBy(['slug' => 'email']),
-            'status' => 3//TODO: get status from order
+            'order'       => $order,
+            'phoneNumber' => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
+            'email'       => $this->settingRepository->findOneBy(['slug' => 'email']),
+            'status'      => Order::GROUPED_STATUSES[$order->getStatus()],
         ]);
     }
 }

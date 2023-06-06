@@ -29,6 +29,9 @@ winzou_state_machine:
       canceled_no_product:
         from: [ new, not_approved, canceled_no_product ]
         to: canceled_no_product
+      canceled_not_picked_up:
+        from: [new, not_approved, canceled_not_picked_up]
+        to: canceled_not_picked_up
       confirmed:
         from: [ not_approved, confirmed ]
         to: confirmed
