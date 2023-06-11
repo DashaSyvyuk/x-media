@@ -15,6 +15,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * })
  * @ORM\Entity(repositoryClass="App\Repository\ProductImageRepository")
  * @Vich\Uploadable()
+ * @ORM\HasLifecycleCallbacks()
  */
 class ProductImage
 {
@@ -27,7 +28,7 @@ class ProductImage
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
-    private int $id;
+    private int $id = 0;
 
     /**
      * @ORM\Column(type="text")
