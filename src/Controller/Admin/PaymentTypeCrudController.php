@@ -7,6 +7,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class PaymentTypeCrudController extends AbstractCrudController
@@ -30,7 +32,12 @@ class PaymentTypeCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
-        yield TextField::new('title')->setLabel('Назва');
-        yield BooleanField::new('enabled')->setLabel('Активний');
+        yield TextField::new('title', 'Назва');
+        yield NumberField::new('cost', 'Вартість');
+        yield BooleanField::new('enabled', 'Активний');
+        yield ImageField::new('icon')
+            ->setLabel('Іконка')
+            ->setUploadDir('/public/images/payment/')
+            ->setBasePath('images/payment/');
     }
 }

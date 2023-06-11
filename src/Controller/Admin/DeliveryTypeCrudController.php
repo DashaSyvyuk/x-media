@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -33,9 +34,13 @@ class DeliveryTypeCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
-        yield TextField::new('title')->setLabel('Назва');
-        yield TextField::new('cost')->setLabel('Вартість');
-        yield BooleanField::new('enabled')->setLabel('Активний');
-        yield AssociationField::new('paymentTypes')->setLabel('Способи оплати')->hideOnIndex();
+        yield TextField::new('title', 'Назва');
+        yield NumberField::new('cost', 'Вартість');
+        yield BooleanField::new('enabled', 'Активний');
+        yield AssociationField::new('paymentTypes', 'Способи оплати')->hideOnIndex();
+        yield ImageField::new('icon')
+            ->setLabel('Іконка')
+            ->setUploadDir('/public/images/delivery/')
+            ->setBasePath('images/delivery/');
     }
 }

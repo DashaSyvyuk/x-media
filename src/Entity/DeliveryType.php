@@ -30,14 +30,19 @@ class DeliveryType
     private string $title = "";
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      */
-    private string $cost = "";
+    private int $cost = 0;
 
     /**
      * @ORM\Column(type="boolean")
      */
     private bool $enabled = true;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $icon = "";
 
     /**
      * @ORM\ManyToMany(targetEntity="PaymentType")
@@ -83,12 +88,12 @@ class DeliveryType
         return $this->title;
     }
 
-    public function setCost(string $cost): void
+    public function setCost(int $cost): void
     {
         $this->cost = $cost;
     }
 
-    public function getCost(): string
+    public function getCost(): int
     {
         return $this->cost;
     }
@@ -101,6 +106,16 @@ class DeliveryType
     public function getEnabled(): bool
     {
         return $this->enabled;
+    }
+
+    public function setIcon(?string $icon): void
+    {
+        $this->icon = $icon;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
     }
 
     public function getCreatedAt(): DateTime

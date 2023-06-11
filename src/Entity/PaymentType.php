@@ -28,9 +28,19 @@ class PaymentType
     private string $title = "";
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private int $cost = 0;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private bool $enabled = true;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $icon = "";
 
     /**
      * @ORM\Column(type="datetime")
@@ -62,6 +72,16 @@ class PaymentType
         return $this->title;
     }
 
+    public function setCost(int $cost): void
+    {
+        $this->cost = $cost;
+    }
+
+    public function getCost(): int
+    {
+        return $this->cost;
+    }
+
     public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
@@ -70,6 +90,16 @@ class PaymentType
     public function getEnabled(): bool
     {
         return $this->enabled;
+    }
+
+    public function setIcon(?string $icon): void
+    {
+        $this->icon = $icon;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
     }
 
     public function getCreatedAt(): DateTime
