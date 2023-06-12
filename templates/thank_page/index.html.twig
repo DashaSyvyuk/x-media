@@ -36,6 +36,9 @@
             <p><span>Спосіб доставки: </span>{{ order.deltype }}</p>
             {% if order.address %}<p><span>Адреса: </span></span>{{ order.address }}</p>{% endif %}
             <p><span>Загальна вартість: </span>{{ order.total|number_format(0, '.', ' ') }} грн</p>
+            <div class="main-page-btn">
+                <a class="green-button" href="/">Головна сторінка</a>
+            </div>
         </div>
     </section>
 

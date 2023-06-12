@@ -508,7 +508,7 @@ header {
     margin-left: 10px;
 }
 
-#products {
+#products-block {
     width: calc(100% - 300px);
     float: left;
     display: flex;
@@ -517,14 +517,20 @@ header {
     margin-bottom: 10px;
 }
 
-#products .order-by {
+#products-block .products{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#products-block .order-by {
     text-align: end;
     margin-bottom: 20px;
     padding-right: 10px;
     box-sizing: border-box;
 }
 
-#products .order-by select {
+#products-block .order-by select {
     border: 1px solid #bbb;
     height: 26px;
     padding: 0 10px;
@@ -533,7 +539,7 @@ header {
     font-size: 12px;
 }
 
-#products .loader {
+#products-block .loader {
     display: none;
     position: absolute;
     width: 100%;
@@ -546,21 +552,17 @@ header {
     background-image: url('/public/images/loader.gif');
 }
 
-#products .product {
-    width: 33.33%;
-    float: left;
+#products-block .product {
+    margin: 10px;
+    width: calc(33.33% - 20px);
 }
 
 .product {
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-.product .inner {
     padding: 15px;
     box-sizing: border-box;
     box-shadow: 0 0 15px rgba(0, 0, 0, .3);
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
 }
 
@@ -584,6 +586,7 @@ header {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    flex: 1;
 }
 
 .product .filter-attributes {
@@ -1132,7 +1135,7 @@ section .feedbacks {
     width: calc(100% - 112px);
 }
 
-.send-btn-block {
+.send-btn-block, .main-page-btn{
     display: flex;
     justify-content: end;
 }
@@ -1602,6 +1605,12 @@ section .feedbacks {
     margin-bottom: 10px;
 }
 
+.about-us .social-network img {
+    width: 20px;
+    height: auto;
+    margin: 5px;
+}
+
 #scroll-top {
     position: fixed;
     bottom: 40px;
@@ -1669,13 +1678,20 @@ section .feedbacks {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
+.account-description {
+    font-size: 12px;
+    padding-left: 10px;
+}
+
 .main-part {
     width: 100%;
     padding-left: 30px;
 }
 
-.main-part .last-order {
+.main-part .last-order, .main-part .wish-list {
     font-size: 13px;
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
 }
 
 .my-orders h5 {
