@@ -132,24 +132,25 @@ class OrderPageController extends BaseController
 
             $mainUrl = sprintf('%s%s/', 'https://', $request->getHost());
 
-            $message = (new Email())
-                ->subject(sprintf('Нове замовлення %s', $order->getOrderNumber()))
-                ->from('x-media@x-media.com.ua')
-                ->to($order->getEmail())
-                ->html(
-                    $this->renderView(
-                        'emails/client-orders.html.twig',
-                        [
-                            'order' => $order,
-                            'mainUrl' => $mainUrl,
-                            'phoneNumber' => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
-                            'email' => $managerEmail
-                        ]
-                    )
-                )
-            ;
+            if ($order->getEmail()) {
+                $message = (new Email())
+                    ->subject(sprintf('Нове замовлення %s', $order->getOrderNumber()))
+                    ->from('x-media@x-media.com.ua')
+                    ->to($order->getEmail())
+                    ->html(
+                        $this->renderView(
+                            'emails/client-orders.html.twig',
+                            [
+                                'order' => $order,
+                                'mainUrl' => $mainUrl,
+                                'phoneNumber' => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
+                                'email' => $managerEmail
+                            ]
+                        )
+                    );
 
-            $mailer->send($message);
+                $mailer->send($message);
+            }
 
             $managerMessage = (new Email())
                 ->subject(sprintf('Нове замовлення %s', $order->getOrderNumber()))

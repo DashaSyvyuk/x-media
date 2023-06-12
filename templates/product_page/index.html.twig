@@ -36,7 +36,7 @@
         <div class="detail">
             <div class="product-title">{{ product.title }}</div>
             {% if product.productCode %}
-                <div class="product-code">Код товару: {{ product.productCode }} | Код x-media: {{ product.id }}</div>
+                <div class="product-code">Код товару: {{ product.productCode }} | Код x-media: {{ "%05d"|format(product.id) }}</div>
             {% endif %}
             <div class="readonly-rating">
                 <span class="star-rating"></span>
