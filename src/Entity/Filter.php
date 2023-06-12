@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
@@ -105,7 +106,7 @@ class Filter
     /**
      * @param Category $category
      */
-    public function setCategory(Category $category)
+    public function setCategory(Category $category): void
     {
         $this->category = $category;
     }
@@ -121,7 +122,7 @@ class Filter
     /**
      * @param FilterAttribute $attribute
      */
-    public function addAttribute(FilterAttribute $attribute)
+    public function addAttribute(FilterAttribute $attribute): void
     {
         $attribute->setFilter($this);
         if (!$this->attributes->contains($attribute)) {
@@ -146,7 +147,7 @@ class Filter
     /**
      * @param int $priority
      */
-    public function setPriority(int $priority)
+    public function setPriority(int $priority): void
     {
         $this->priority = $priority;
     }
@@ -178,7 +179,7 @@ class Filter
     /**
      * @param bool $isOpened
      */
-    public function setIsOpened(bool $isOpened)
+    public function setIsOpened(bool $isOpened): void
     {
         $this->isOpened = $isOpened;
     }
@@ -191,12 +192,12 @@ class Filter
         return $this->isOpened;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -222,8 +223,8 @@ class Filter
         return $attributes;
     }
 
-    public function __toString():string
+    public function __toString(): string
     {
-        return '' . $this->title;
+        return (string) $this->title;
     }
 }

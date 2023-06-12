@@ -8,7 +8,8 @@ use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
 use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
-use Swift_Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -40,7 +41,7 @@ class SignUpController extends BaseController
         return $this->renderTemplate($request, 'sign_up/index.html.twig', []);
     }
 
-    public function post(Request $request, Swift_Mailer $mailer): Response
+    public function post(Request $request, MailerInterface $mailer): Response
     {
         if ($this->userRepository->findOneBy(['email' => $request->request->get('email')])) {
             return new Response(json_encode([
@@ -70,15 +71,15 @@ class SignUpController extends BaseController
 
         $link = sprintf('%s/confirm-email?hash=%s', $request->getHost(), $uuid);
 
-        $message = (new \Swift_Message('Підтвердження email'))
-            ->setFrom('x-media@x-media.com.ua')
-            ->setTo($request->request->get('email'))
-            ->setBody(
+        $message = (new Email())
+            ->subject('Підтвердження email')
+            ->from('x-media@x-media.com.ua')
+            ->to($request->request->get('email'))
+            ->html(
                 $this->renderView(
                     'emails/confirm-email.html.twig',
                     ['link' => $link]
                 ),
-                'text/html'
             )
         ;
 

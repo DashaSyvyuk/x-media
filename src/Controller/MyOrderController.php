@@ -2,15 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Repository\CategoryRepository;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use App\Repository\SettingRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class MyOrderController extends BaseController
 {
+    public const PAGINATION_LIMIT = 5;
     private UserRepository $userRepository;
 
     private OrderRepository $orderRepository;
@@ -35,7 +38,7 @@ class MyOrderController extends BaseController
         $this->orderRepository = $orderRepository;
     }
 
-    public function index(Request $request): Response
+    public function index(Request $request, PaginatorInterface $paginator): Response
     {
         $session = $request->getSession();
 
@@ -43,17 +46,23 @@ class MyOrderController extends BaseController
 
         $user = $this->userRepository->findOneBy(['email' => $email]);
 
-        $orders = $this->orderRepository->findBy(['user' => $user], ['createdAt' => 'DESC']);
-
-        $text = $this->settingRepository->findOneBy(['slug' => 'there_is_no_active_order']);
-
         if (!$user) {
             return $this->redirectToRoute('index');
         }
 
+        $text = $this->settingRepository->findOneBy(['slug' => 'there_is_no_active_order']);
+
+        $orders = $this->orderRepository->findBy(['user' => $user], ['createdAt' => 'DESC']);
+
+        $pagination = $paginator->paginate(
+            $orders,
+            $request->query->getInt('page', 1),
+            self::PAGINATION_LIMIT
+        );
+
         return $this->renderTemplate($request, 'my_order/index.html.twig', [
             'user' => $user,
-            'orders' => $orders,
+            'pagination' => $pagination,
             'noOrder' => $text,
         ]);
     }
@@ -67,10 +76,10 @@ class MyOrderController extends BaseController
         }
 
         return $this->renderTemplate($request, 'my_order/detail.html.twig', [
-            'order'        => $order,
-            'phoneNumber'  => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
-            'email'        => $this->settingRepository->findOneBy(['slug' => 'email']),
-            'status' => 3//TODO: get status from order
+            'order'       => $order,
+            'phoneNumber' => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
+            'email'       => $this->settingRepository->findOneBy(['slug' => 'email']),
+            'status'      => Order::GROUPED_STATUSES[$order->getStatus()],
         ]);
     }
 }

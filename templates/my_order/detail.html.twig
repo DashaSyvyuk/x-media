@@ -110,7 +110,13 @@
                             <div class="status-title-2">
                                 <div class="status"></div>
                                 <div class="status"></div>
-                                <div class="status">Відправлено Новою поштою ТТН № 8273429487</div>
+                                <div class="status">
+                                    {% if order.status == 'nova_poshta_delivering' %}
+                                        Відправлено Новою поштою {% if order.ttn != '' %}ТТН № {{ order.ttn }}{% endif %}
+                                    {% else %}
+                                        Відправлено кур'єром
+                                    {% endif %}
+                                </div>
                                 <div class="status"></div>
                             </div>
                         {% elseif status == '4' %}
@@ -179,7 +185,7 @@
                         {% for item in order.items %}
                             <div class="order-product">
                                 <div class="image">
-                                    <img src="/{% if item.product.images|length > 0 %}{{ item.product.images[0].imageUrl }}{% endif %}" />
+                                    <img src="/images/products/{% if item.product.images|length > 0 %}{{ item.product.images[0].imageUrl }}{% endif %}" />
                                 </div>
                                 <div class="title"><a class="no-link-style" href="/products/{{ item.product.id }}">{{ item.product.title }}</a></div>
                                 <div class="quantity"><span>{{ item.count }}</span> шт</div>

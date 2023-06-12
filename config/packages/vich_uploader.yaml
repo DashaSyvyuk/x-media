@@ -1,0 +1,14 @@
+vich_uploader:
+  db_driver: orm
+
+  metadata:
+    type: annotation
+
+  mappings:
+    images:
+      uri_prefix: /images/products
+      upload_destination: '%kernel.project_dir%/public/images/products'
+      delete_on_update: true
+      delete_on_remove: true
+      namer:
+        service: Vich\UploaderBundle\Naming\Base64Namer

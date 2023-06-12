@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.1-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -21,7 +21,9 @@ RUN pecl install redis && docker-php-ext-enable redis
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd soap zip
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd soap zip intl
+
+RUN apt-get -y update && apt-get install -y libicu-dev && docker-php-ext-configure intl && docker-php-ext-install intl
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

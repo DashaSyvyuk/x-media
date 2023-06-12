@@ -37,6 +37,7 @@ Encore
     .addEntry('home', './assets/home.js')
     .addEntry('restore_password', './assets/restore_password.js')
     .addEntry('update_password', './assets/update_password.js')
+    .addEntry('admin', './assets/admin.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

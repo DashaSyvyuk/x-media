@@ -68,7 +68,7 @@ class ProductRepository extends ServiceEntityRepository
             ->andWhere('category = :category')
             ->andWhere('p.status = :status')
             ->setParameter('category', $category)
-            ->setParameter('status', 'ACTIVE');
+            ->setParameter('status', Product::STATUS_ACTIVE);
 
         if ($attributes) {
             $query

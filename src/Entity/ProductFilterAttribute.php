@@ -18,7 +18,7 @@ class ProductFilterAttribute
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
-    private int $id;
+    private int $id = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="filterAttributes")

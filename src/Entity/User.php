@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -93,6 +94,11 @@ class User
      * @ORM\Column(type="datetime", nullable=true)
      */
     public ?DateTime $expiredAt;
+
+    public function __construct()
+    {
+        $this->orders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {

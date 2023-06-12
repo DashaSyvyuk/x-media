@@ -39,7 +39,7 @@
                     <li>
                         <a class="no-link-style" href="/account/orders/{{ order.id }}">
                             <div class="detail">
-                                <p><b class="gray">{{ order.status }}</b></p><br>
+                                <p><b class="gray">{{ constant('App\\Entity\\Order::STATUSES')[order.status] }}</b></p><br>
                                 <p class="gray margin-bottom-2">{{ order.createdAt.format('Y-m-d H:i:s') }}</p>
                                 <p class="green bold">{{ order.orderNumber }}</p><br>
                                 <p><b>{{ order.total|number_format(0, '.', ' ') }} грн</b></p>
@@ -47,7 +47,7 @@
                             <table class="products">
                                 {% for item in order.items %}
                                     <tr>
-                                        <td class="image"><a href="/products/{{ item.product.id }}" target="_blank"><img src="/{{ item.product.getImages()[0].imageUrl }}"></a></td>
+                                        <td class="image"><a href="/products/{{ item.product.id }}" target="_blank"><img src="/images/products/{{ item.product.getImages()[0].imageUrl }}"></a></td>
                                         <td><a href="/products/{{ item.product.id }}" target="_blank">{{ item.product.title }}</a></td>
                                     </tr>
                                 {% endfor %}

@@ -1722,7 +1722,7 @@ section .feedbacks {
     justify-content: center;
     flex-direction: column;
     align-items: flex-start;
-    line-height: 0.5;
+    line-height: 0.9;
     padding: 10px 17px;
 }
 

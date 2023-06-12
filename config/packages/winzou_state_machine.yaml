@@ -1,0 +1,49 @@
+winzou_state_machine:
+  order:
+    class: App\Entity\Order # class of your domain object
+    property_path: status   # property of your object holding the actual state (default is "state")
+    graph: simple           # name of the graph (default is "default")
+    # list of all possible states:
+    states:
+      - new
+      - not_approved
+      - confirmed
+      - packing
+      - nova_poshta_delivering
+      - courier_delivering
+      - completed
+      - canceled_not_confirmed
+      - canceled_no_product
+      - canceled_not_picked_up
+    # list of all possible transitions:
+    transitions:
+      new:
+        from: [ new ]
+        to: new
+      not_approved:
+        from: [ new, not_approved ]
+        to: not_approved
+      canceled_not_confirmed:
+        from: [ new, not_approved, canceled_not_confirmed ]
+        to: canceled_not_confirmed
+      canceled_no_product:
+        from: [ new, not_approved, canceled_no_product ]
+        to: canceled_no_product
+      canceled_not_picked_up:
+        from: [new, not_approved, canceled_not_picked_up]
+        to: canceled_not_picked_up
+      confirmed:
+        from: [ not_approved, confirmed ]
+        to: confirmed
+      packing:
+        from: [ confirmed, packing ]
+        to: packing
+      nova_poshta_delivering:
+        from: [ packing, nova_poshta_delivering ]
+        to: nova_poshta_delivering
+      courier_delivering:
+        from: [ packing, courier_delivering ]
+        to: courier_delivering
+      completed:
+        from: [nova_poshta_delivering, courier_delivering, completed]
+        to: completed

@@ -7,7 +7,9 @@ use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
 use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
-use Swift_Mailer;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,7 +36,10 @@ class RestorePasswordController extends BaseController
         return $this->renderTemplate($request, 'restore_password/index.html.twig', []);
     }
 
-    public function post(Request $request, Swift_Mailer $mailer): Response
+    /**
+     * @throws TransportExceptionInterface
+     */
+    public function post(Request $request, MailerInterface $mailer): Response
     {
         $email = $request->request->get('email');
         $user = $this->userRepository->findOneBy([
@@ -56,15 +61,15 @@ class RestorePasswordController extends BaseController
 
         $link = sprintf('%s%s/update-password?hash=%s', 'https://', $request->getHost(), $uuid);
 
-        $message = (new \Swift_Message('Відновлення паролю'))
-            ->setFrom('x-media@x-media.com.ua')
-            ->setTo($email)
-            ->setBody(
+        $message = (new Email())
+            ->subject('Відновлення паролю')
+            ->from('x-media@x-media.com.ua')
+            ->to($email)
+            ->html(
                 $this->renderView(
                     'emails/restore-password.html.twig',
                     ['link' => $link]
-                ),
-                'text/html'
+                )
             )
         ;
 

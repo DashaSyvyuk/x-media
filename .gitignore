@@ -23,6 +23,8 @@
 /public/build/
 /public/images/products
 /public/images/slider
+/public/images/delivery
+/public/images/payment
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###

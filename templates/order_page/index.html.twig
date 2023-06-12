@@ -44,7 +44,7 @@
                     <p>Спосіб доставки:</p>
                     <select name="deltype">
                         {% for deliveryType in deliveryTypes %}
-                            <option data-deltype-id="{{ deliveryType.id }}">{{ deliveryType.title }} - {{ deliveryType.cost }}</option>
+                            <option data-deltype-id="{{ deliveryType.id }}">{{ deliveryType.title }} - {{ deliveryType.cost }} грн</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -56,7 +56,7 @@
                                 <select name="paytype">
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
                                         {% if paymentType.enabled %}
-                                            <option>{{ paymentType.title }}</option>
+                                            <option>{{ paymentType.title }} - {{ paymentType.cost }} грн</option>
                                         {% endif %}
                                     {% endfor%}
                                 </select>
@@ -69,7 +69,7 @@
                                 <select name="paytype">
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
                                         {% if paymentType.enabled %}
-                                            <option>{{ paymentType.title }}</option>
+                                            <option>{{ paymentType.title }} - {{ paymentType.cost }} грн</option>
                                         {% endif %}
                                     {% endfor%}
                                 </select>
@@ -86,7 +86,7 @@
                                 <select name="paytype">
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
                                         {% if paymentType.enabled %}
-                                            <option>{{ paymentType.title }}</option>
+                                            <option>{{ paymentType.title }} - {{ paymentType.cost }} грн</option>
                                         {% endif %}
                                     {% endfor%}
                                 </select>

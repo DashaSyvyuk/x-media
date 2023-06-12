@@ -5,6 +5,7 @@ namespace App\Entity;
 use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
@@ -20,6 +21,9 @@ use Doctrine\ORM\Mapping\Index;
  */
 class Product
 {
+    const STATUS_ACTIVE = 'Активний';
+    const STATUS_BLOCKED = 'Заблокований';
+
     use DateStorageTrait;
 
     /**
@@ -93,6 +97,7 @@ class Product
 
     /**
      * @ORM\OneToMany(targetEntity="ProductCharacteristic", mappedBy="product", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $characteristics;
 
