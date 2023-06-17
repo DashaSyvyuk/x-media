@@ -557,6 +557,23 @@ header {
     width: calc(33.33% - 20px);
 }
 
+#new-products .product {
+    margin: 10px;
+    width: calc(100% - 20px)!important;
+}
+
+#new-products .product .product-title {
+    height: 40px;
+    width: 100%;
+    margin-bottom: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    flex: 1;
+}
+
 .product {
     padding: 15px;
     box-sizing: border-box;
