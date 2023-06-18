@@ -94,6 +94,7 @@
                             <div>
                                 <p>Місто:</p>
                                 <select name="city" id="nova-poshta-city" disabled>
+                                    <option value="">Оберіть місто</option>
                                     {% for city in cities %}
                                         <option value="{{ city.ref }}" {% if user and city.ref == user.novaPoshtaCity %}selected{% endif %}>
                                             {{ city.title }}

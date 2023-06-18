@@ -10,9 +10,9 @@ $(document).on('change', 'select[name=deltype]', () => {
     const deliveryType = $('select[name=deltype] option:selected').data('deltype-id');
 
     $('.delivery-info').removeClass('active');
-    $('.delivery-info select, .delivery-info textarea').attr('disabled', true);
+    $('.delivery-info select, .delivery-info textarea').attr('disabled', true).attr('required', false);
     $('span[data-delivery='+deliveryType+']').addClass('active');
-    $('span[data-delivery='+deliveryType+'] select, span[data-delivery='+deliveryType+'] textarea').attr('disabled', false);
+    $('span[data-delivery='+deliveryType+'] select, span[data-delivery='+deliveryType+'] textarea').attr('disabled', false).attr('required', true);
 });
 
 $('#nova-poshta-city').select2({
