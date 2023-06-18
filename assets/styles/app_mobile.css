@@ -55,6 +55,9 @@ header #account img {
 header #menu-open {
     width: 50px;
 }
+.clear {
+    clear: both;
+}
 .hamburger {
     width: 33px;
     height: 28px;
@@ -419,7 +422,7 @@ footer {
     flex-direction: column;
     align-items: center;
     flex-wrap: wrap;
-    font-size: 14px;
+    font-size: 12px;
 }
 footer .title {
     font-weight: bold;
@@ -437,7 +440,7 @@ footer .items a {
     color: #000;
 }
 footer .items p {
-    margin-bottom: 0;
+    margin: 0;
 }
 footer .items img {
     width: 15px;
@@ -446,6 +449,9 @@ footer .items img {
 }
 footer .copywrite {
     text-align: center;
+}
+footer div {
+    margin-bottom: 10px;
 }
 .comment {
     padding: 5px;
@@ -754,7 +760,7 @@ section .breadcrumb a:hover {
 }
 
 .filter-buttons {
-    padding: 15px 5px 5px;
+    padding: 15px 5px 15px;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -765,12 +771,18 @@ section .breadcrumb a:hover {
     width: 49%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     font-family: 'Montserrat', sans-serif;
-    padding: 5px;
+    padding: 10px;
     box-sizing: border-box;
-    background-color: #fff;
-    border: 1px solid #000;
+    background-color: #eee;
+    border: none;
+}
+
+.filter-buttons button img {
+    margin-left: 5px;
+    width: 20px;
+    height: 20px;
 }
 
 #products-block {
@@ -826,13 +838,6 @@ section .breadcrumb a:hover {
     background-color: #eaeaea;
 }
 
-#mobile-filters {
-    width: 100%;
-    padding: 5px;
-    box-sizing: border-box;
-    display: none;
-}
-
 #mobile-filters .filter-title {
     font-weight: bold;
     font-size: 14px;
@@ -872,6 +877,10 @@ section .breadcrumb a:hover {
 #mobile-filters .filter {
     border-bottom: 1px solid #eee;
     clear: both;
+}
+
+#mobile-filters .filter:first-child {
+    margin-top: 20px;
 }
 
 #mobile-filters .filter:last-child {
@@ -1040,12 +1049,23 @@ section .breadcrumb a:hover {
     padding: 5px 0;
     box-sizing: border-box;
     border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
 }
 
-#mobile-sorting {
+#filters-mobile-form {
+    padding-bottom: 65px;
+}
+
+#mobile-sorting, #mobile-filters {
+    width: 100%;
+    height: 100%;
+    background: #fff;
     padding: 5px;
     box-sizing: border-box;
     display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 #mobile-sorting .page-title {
@@ -1056,6 +1076,10 @@ section .breadcrumb a:hover {
     padding: 15px 0;
     width: 100%;
     display: flex;
+    position: fixed;
+    background: #fff;
+    bottom: 0;
+    left: 0;
     justify-content: space-between;
     box-sizing: border-box;
 }
@@ -1076,11 +1100,6 @@ section .breadcrumb a:hover {
 
 #use-filters .cancel {
     background: #fff;
-}
-
-.selected-filters {
-    margin: 20px 0;
-    padding: 10px;
 }
 
 #filters-mobile-form .selected-filters div.item {

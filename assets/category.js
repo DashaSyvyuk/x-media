@@ -193,12 +193,16 @@ $('#show-filter').on('click', () => {
     $('.filter-buttons').hide();
     $('#mobile-filters').slideDown();
     $('#products-block').hide();
+    $('footer').hide();
+    $('header').hide();
 });
 
 $('#show-sort').on('click', () => {
     $('.filter-buttons').hide();
     $('#mobile-sorting').slideDown();
     $('#products-block').hide();
+    $('footer').hide();
+    $('header').hide();
 });
 
 $('.cancel').on('click', () => {
@@ -207,6 +211,8 @@ $('.cancel').on('click', () => {
     $('#mobile-sorting').hide();
     $('#mobile-filters').hide();
     $('#products-block').show();
+    $('footer').show();
+    $('header').show();
 });
 
 $('.use').on('click', () => {
