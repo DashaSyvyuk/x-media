@@ -517,10 +517,9 @@ header {
     margin-bottom: 10px;
 }
 
-#products-block .products{
+#products-block .products {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
 }
 
 #products-block .order-by {

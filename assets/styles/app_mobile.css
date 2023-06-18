@@ -736,3 +736,371 @@ section .breadcrumb a:hover {
 #user .red, #login .red, #sign_up .red, #restore-password .red, #update-password .red {
     border: 1px solid red !important;
 }
+.breadcrumb {
+    margin-top: 15px;
+    display: flex;
+    font-size: 14px;
+}
+.breadcrumb a {
+    color: #000;
+    text-decoration: none;
+    margin: 0 5px;
+}
+.breadcrumb a.selected {
+    font-weight: bold;
+}
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.filter-buttons {
+    padding: 15px 5px 5px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.filter-buttons button {
+    width: 49%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-family: 'Montserrat', sans-serif;
+    padding: 5px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #000;
+}
+
+#products-block {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+#products-block .product {
+    box-shadow: 0 0 15px rgba(0, 0, 0, .3);
+    margin-bottom: 10px;
+}
+
+.navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.navigation span a {
+    padding: 10px 5px 5px;
+    border: 1px solid #eaeaea;
+    width: 25px;
+    height: 22px;
+    margin-right: 3px;
+    display: block;
+    float: left;
+    text-align: center;
+    font-size: 14px;
+    text-decoration: none;
+    color: #a3a3a3;
+}
+
+.navigation span.current {
+    padding: 10px 5px 5px;
+    width: 25px;
+    height: 22px;
+    margin-right: 3px;
+    display: block;
+    float: left;
+    text-align: center;
+    font-size: 14px;
+    text-decoration: none;
+    background-color: #0f0f0f;
+    color: #fff;
+    border: 1px solid #000;
+}
+
+.navigation span a:hover {
+    background-color: #eaeaea;
+}
+
+#mobile-filters {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    display: none;
+}
+
+#mobile-filters .filter-title {
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+#mobile-filters .filter-title img {
+    width: 15px;
+    margin-left: 10px;
+}
+
+#mobile-filters .show-all {
+    font-weight: 500;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+#mobile-filters .show-all img {
+    width: 12px;
+    margin-left: 15px;
+}
+
+#mobile-filters .inner .hidden-part {
+    display: none;
+    margin-top: 12px;
+}
+
+#mobile-filters .filter {
+    border-bottom: 1px solid #eee;
+    clear: both;
+}
+
+#mobile-filters .filter:last-child {
+    border-bottom: none;
+}
+
+#mobile-filters .filter .outer {
+    padding: 5px 5px 20px 5px;
+    position: relative;
+}
+
+#mobile-filters .filter .outer.hidden {
+    display: none;
+}
+
+#mobile-filters .filter .price-filter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+#mobile-filters .filter .price-filter input {
+    width: 50px;
+    height: 25px;
+    padding: 0 10px;
+    border: 1px solid #000;
+    margin-right: 10px;
+    outline: none;
+}
+
+#mobile-filters .filter .price-filter span {
+    margin-right: 10px;
+}
+
+.container {
+    display: flex;
+    position: relative;
+    padding-left: 35px;
+    align-items: center;
+    height: 23px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 12px;
+    user-select: none;
+}
+
+.container:last-of-type {
+    margin-bottom: 0;
+}
+
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+}
+
+.container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+.container input:checked ~ .checkmark {
+    background-color: #119E00;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/* Customize the label (the container) */
+.radio-container {
+    display: flex;
+    position: relative;
+    padding-left: 35px;
+    align-items: center;
+    height: 23px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 12px;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.radio-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom radio button */
+.radio-checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio-container:hover input ~ .radio-checkmark {
+    background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio-container input:checked ~ .radio-checkmark {
+    background-color: #119E00;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.radio-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio-container input:checked ~ .radio-checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio-container .radio-checkmark:after {
+    top: 9px;
+    left: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+.page-title {
+    text-align: center;
+    padding: 5px 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid #eee;
+}
+
+#mobile-sorting {
+    padding: 5px;
+    box-sizing: border-box;
+    display: none;
+}
+
+#mobile-sorting .page-title {
+    margin-bottom: 15px;
+}
+
+#use-filters {
+    padding: 15px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+#use-filters button {
+    width: 49%;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #000;
+}
+
+#use-filters .use {
+    background: #000;
+    color: #fff;
+}
+
+#use-filters .cancel {
+    background: #fff;
+}
+
+.selected-filters {
+    margin: 20px 0;
+    padding: 10px;
+}
+
+#filters-mobile-form .selected-filters div.item {
+    background-color: #eee;
+    padding: 3px 6px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-right: 5px;
+    margin-top: 3px;
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#filters-mobile-form .selected-filters img {
+    width: 10px;
+    margin-left: 5px;
+}
+
+#filters-mobile-form .selected-filters div.item:hover {
+    background-color: #ddd;
+}
