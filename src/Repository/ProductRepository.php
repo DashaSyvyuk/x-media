@@ -71,11 +71,13 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('status', Product::STATUS_ACTIVE);
 
         if ($attributes) {
-            $query
-                ->leftJoin('p.filterAttributes', 'productFilterAttribute')
-                ->leftJoin('productFilterAttribute.filterAttribute', 'filterAttribute')
-                ->andWhere('filterAttribute.id IN (:ids)')
-                ->setParameter('ids', $attributes);
+            foreach ($attributes as $filter => $values) {
+                $query
+                    ->leftJoin('p.filterAttributes', sprintf('productFilterAttribute%d', $filter))
+                    ->leftJoin(sprintf('productFilterAttribute%d.filterAttribute', $filter), sprintf('filterAttribute%d', $filter))
+                    ->andWhere(sprintf('filterAttribute%d.id IN (:ids%d)', $filter, $filter))
+                    ->setParameter(sprintf('ids%d', $filter), $values);
+            }
         }
 
         if ($priceFrom) {
