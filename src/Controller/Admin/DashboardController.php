@@ -13,6 +13,7 @@ use App\Entity\PaymentType;
 use App\Entity\Product;
 use App\Entity\Setting;
 use App\Entity\Slider;
+use App\Entity\Supplier;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -87,6 +88,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Налаштування', 'fa fa-cog')->setSubItems([
             MenuItem::linkToCrud('Валюти', 'fas fa-comment', Currency::class),
             MenuItem::linkToCrud('Налаштування', 'fa fa-cog', Setting::class),
+        ]);
+
+        yield MenuItem::subMenu('Постачальники', 'fa fa-truck')->setSubItems([
+            MenuItem::linkToCrud('Постачальники', 'fas fa-truck', Supplier::class),
         ]);
     }
 }
