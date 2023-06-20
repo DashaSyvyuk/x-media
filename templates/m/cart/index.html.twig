@@ -1,0 +1,61 @@
+{% extends 'm.base.html.twig' %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('product') }}
+    {{ encore_entry_script_tags('cart') }}
+    {{ encore_entry_script_tags('app_mobile') }}
+{% endblock %}
+
+{% block body %}
+
+<section>
+    <div id="cart-page">
+        {% if products|length > 0 %}
+            <p class="title">Корзина (<span>{{ totalCount }}</span>)</p>
+            <div class="inner">
+                <table>
+                    <tr>
+                        <td class="product-name bold">Назва</td>
+                        <td class="price bold">Ціна</td>
+                        <td class="total-count bold">Кількість</td>
+                        <td class="remove bold">Видалити</td>
+                    </tr>
+                    {% for product in products %}
+                        <tr data-id="{{ product.id }}" data-name="{{ product.title }}" class="product-row">
+                            <td class="product-name">
+                                <div class="product-title">
+                                    <a class="no-link-style" href="/products/{{ product.id }}">
+                                        <img src="/images/products/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}" />
+                                    </a>
+                                    <div><a class="no-link-style" href="/products/{{ product.id }}">{{ product.title }}</a></div>
+                                </div>
+                            </td>
+                            <td class="price"><span>{{ product.price|number_format(0, '.', ' ') }}</span> грн</td>
+                            <td class="total-count">
+                                <div class="count">
+                                    <span class="minus">-</span>
+                                    <input type="text" name="count" value="{{ product.count }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" autocomplete="off">
+                                    <span class="plus">+</span>
+                                </div>
+                            </td>
+                            <td class="remove"><img class="delete" src="/images/delete.png"></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <p class="total-price">Загальна вартість: <span>{{ totalPrice|number_format(0, '.', ' ') }} грн</span></p>
+            <div id="go-to-order"><a class="green-button" href="/order-create">Перейти до оформлення замовлення</a></div>
+        {% else %}
+            <h4>Корзина пуста</h4>
+            <p>Ви ще не додали жодного товару в корзину.</p>
+            <div class="smile">
+                <img src="/images/not-found.png">
+            </div>
+            <div class="continue-purchase">
+                <div class="green-button">Продовжити покупки</div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

@@ -14,6 +14,10 @@ cart:
     path: /cart
     controller: App\Controller\CartController::getCart
 
+mobile_cart:
+    path: /shopping-cart
+    controller: App\Controller\CartController::getMobileCart
+
 order:
     path: /order-create
     controller: App\Controller\OrderPageController::index
