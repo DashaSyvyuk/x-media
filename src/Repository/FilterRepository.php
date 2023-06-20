@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Filter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -28,5 +29,28 @@ class FilterRepository extends ServiceEntityRepository
             ->addOrderBy('fp.priority', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findByFilterAttributes(?array $attributes): array
+    {
+        $result = [];
+
+        if (!empty($attributes)) {
+            foreach ($attributes as $attribute) {
+                $filter = $this->createQueryBuilder('fp')
+                    ->leftJoin('fp.attributes', 'attribute')
+                    ->andWhere('attribute.id = :id')
+                    ->setParameter('id', $attribute)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+
+                $result[$filter->getId()][] = $attribute;
+            }
+        }
+
+        return $result;
     }
 }

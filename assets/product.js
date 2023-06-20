@@ -54,6 +54,19 @@ $('.rating').starRating({
     },
 });
 
+$('.rating_m').starRating({
+    emptyColor: '#eee',
+    initialRating: 5,
+    strokeColor: '#119E00',
+    starSize: 10,
+    activeColor: '#119E00',
+    hoverColor: '#119E00',
+    starGradient: {
+        start: '#119E00',
+        end: '#119E00'
+    },
+});
+
 $('.readonly-rating').each(function() {
     const value = $(this).find('.value').data('value');
 

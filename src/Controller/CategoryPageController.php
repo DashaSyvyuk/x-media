@@ -3,23 +3,17 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
+use App\Repository\FilterAttributeRepository;
 use App\Repository\FilterRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 class CategoryPageController extends BaseController
 {
-    private CategoryRepository $categoryRepository;
-
-    private FilterRepository $filterRepository;
-
-    private ProductRepository $productRepository;
-
-    private SettingRepository $settingRepository;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param FilterRepository $filterRepository
@@ -27,18 +21,17 @@ class CategoryPageController extends BaseController
      * @param SettingRepository $settingRepository
      */
     public function __construct(
-        CategoryRepository $categoryRepository,
-        FilterRepository $filterRepository,
-        ProductRepository $productRepository,
-        SettingRepository $settingRepository
+        private readonly CategoryRepository $categoryRepository,
+        private readonly FilterRepository   $filterRepository,
+        private readonly ProductRepository  $productRepository,
+        private readonly SettingRepository $settingRepository
     ) {
         parent::__construct($categoryRepository, $settingRepository);
-        $this->categoryRepository = $categoryRepository;
-        $this->filterRepository = $filterRepository;
-        $this->productRepository = $productRepository;
-        $this->settingRepository = $settingRepository;
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function getCategory(string $slug, PaginatorInterface $paginator, Request $request): Response
     {
         $query = $this->getFilters($request->query->get('filters'));
@@ -47,6 +40,7 @@ class CategoryPageController extends BaseController
         $priceFrom = $request->query->get('price_from');
         $priceTo = $request->query->get('price_to');
         $limit = $this->settingRepository->findOneBy(['slug' => 'pagination_limit']);
+        $filters = $this->filterRepository->findByFilterAttributes($query);
 
         $category = $this->categoryRepository->findOneBy(['slug' => $slug, 'status' => 'ACTIVE']);
 
@@ -59,7 +53,7 @@ class CategoryPageController extends BaseController
         ]);
 
         $products = $this->productRepository->findByCategoryAndAttributes(
-            $category, $query, $order, $direction, $priceFrom, $priceTo
+            $category, $filters, $order, $direction, $priceFrom, $priceTo
         );
 
         $pagination = $paginator->paginate(
@@ -68,7 +62,7 @@ class CategoryPageController extends BaseController
             $limit->getValue()
         );
 
-        $prices = $this->productRepository->getMinAndMaxPriceInCategory($category, $query, $priceFrom, $priceTo);
+        $prices = $this->productRepository->getMinAndMaxPriceInCategory($category, $filters, $priceFrom, $priceTo);
 
         $query['price_from'] = $priceFrom;
         $query['price_to'] = $priceTo;
@@ -96,7 +90,7 @@ class CategoryPageController extends BaseController
         }
     }
 
-    private function getFilters($filters)
+    private function getFilters(?string $filters): array
     {
         $attributes = explode(';', $filters);
 
