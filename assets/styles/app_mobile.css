@@ -1812,3 +1812,128 @@ section .feedbacks {
     justify-content: center;
     border-bottom: 1px solid #eee;
 }
+
+.order-place, #sign_up, #login, #restore-password, #update-password {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.order-place p, #sign_up p, #login p, #user p, #restore-password p, #update-password p {
+    font-size: 12px;
+    margin: 18px 0 6px 0;
+}
+
+.order-place input[type=text], .order-place select, .order-place textarea,
+#sign_up input[type=text], #sign_up input[type=password],
+#login input[type=text], #login input[type=password],
+#restore-password input[type=text],
+#update-password input[type=password],
+#user input[type=text], #user select, #user input[type=password], #user textarea {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #E0E0E0;
+    box-sizing: border-box;
+    font-size: 12px;
+    resize: none;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.order-place input[type=submit],
+#sign_up input[type=submit],
+#login input[type=submit],
+#user input[type=submit],
+#restore-password input[type=submit],
+#update-password input[type=submit]{
+    width: 100%;
+}
+
+.order-place input[type=text]:focus, .order-place select:focus,
+.order-place textarea:focus, #sign_up input:focus, #login input:focus,
+#user input[type=text]:focus, #user select:focus,
+#restore-password input:focus,
+#update-password input:focus {
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+
+.order-place .required, #sign_up .required, #user .required {
+    color: #ff0000;
+}
+
+.order-place .total-price {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.order-place .total-price span {
+    color: #119E00;
+}
+
+.order-place .delivery-info {
+    display: none;
+}
+
+.order-place .delivery-info.active {
+    display: block;
+}
+
+.order-detail {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.order-detail .thanks {
+    font-size: 12px;
+    margin-bottom: 30px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.order-detail .products {
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 40px;
+}
+
+.order-detail .products td {
+    padding: 10px;
+    font-size: 13px;
+    background-color: #eee;
+}
+
+.order-detail .products td.image {
+    width: 50px;
+}
+
+.order-detail .products td.count {
+    width: 50px;
+    text-align: center;
+}
+
+.order-detail .products td a {
+    color: #000;
+    text-decoration: none;
+}
+
+.order-detail .products td a:hover {
+    text-decoration: underline;
+}
+
+.order-detail p {
+    font-size: 13px;
+    text-align: center;
+}
+.order-detail p span {
+    font-weight: 600;
+    color: #119E00;
+}
+
+.order-detail .products img {
+    width: 50px;
+    height: auto;
+    object-fit: contain;
+}
