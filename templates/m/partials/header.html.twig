@@ -10,7 +10,7 @@
     <a id="account" href="{% if app.session.get('user') %}/account{% else %}/login{% endif %}">
         <img src="/images/account.png">
     </a>
-    <div id="cart">
+    <a id="cart" href="/shopping-cart">
         <img class="cart" src="/images/cart.png">
         <div id="cart-count">
             {% if totalCount > 0 %}
@@ -19,7 +19,7 @@
                 0
             {% endif %}
         </div>
-    </div>
+    </a>
 </header>
 
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}

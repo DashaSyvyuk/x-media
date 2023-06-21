@@ -31,8 +31,8 @@ class BaseController extends AbstractController
         return $this->render($this->isMobile($request) ? "m/{$view}" : $view, array_merge($parameters, [
             'categories'         => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
             'totalCount'         => $_COOKIE['totalCount'] ?? 0,
-            'phoneNumber'       => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
-            'email'             => $this->settingRepository->findOneBy(['slug' => 'email']),
+            'phoneNumber'        => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
+            'email'              => $this->settingRepository->findOneBy(['slug' => 'email']),
             'shopName'           => $this->settingRepository->findOneBy(['slug' => 'shop_name']),
             'shopSite'           => $this->settingRepository->findOneBy(['slug' => 'shop_site']),
             'shopAddress'        => $this->settingRepository->findOneBy(['slug' => 'shop_address']),

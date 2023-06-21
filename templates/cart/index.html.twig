@@ -24,7 +24,7 @@
                         <td class="total-count">
                             <div class="count">
                                 <span class="minus">-</span>
-                                <input type="text" name="count" value="{{ product.count }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" autocomplete="off">
+                                <input type="text" name="count" id="item-amount-{{ product.id }}" value="{{ product.count }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" autocomplete="off">
                                 <span class="plus">+</span>
                             </div>
                         </td>
@@ -33,7 +33,7 @@
                 {% endfor %}
             </table>
         </div>
-        <p class="total-price">Загальна вартість: <span>{{ totalPrice|number_format(0, '.', ' ') }} грн</span></p>
+        <p class="total-price">Загальна вартість: <span id="total-price-value">{{ totalPrice|number_format(0, '.', ' ') }} грн</span></p>
         <div id="go-to-order"><a class="green-button" href="/order-create">Перейти до оформлення замовлення</a></div>
     {% else %}
         <h4>Корзина пуста</h4>

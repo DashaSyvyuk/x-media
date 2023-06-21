@@ -22,8 +22,9 @@ $(document).on('click', '.add2cart div', (e) => {
 });
 
 $(document).on('click', '#cart-block .delete', (e) => {
-    $(e.currentTarget).closest('tr').remove();
-    const id = $(e.currentTarget).closest('tr').data('id');
+    let product = $(e.currentTarget).closest('[data-id]');
+    const id = product.data('id');
+    product.remove();
     removeProduct(id);
 });
 
@@ -39,28 +40,31 @@ $(document).on('change', '#cart-block input', (e) => {
 });
 
 $(document).on('click', '#cart-block .plus', (e) => {
-    let count = parseInt($(e.currentTarget).closest('td').find('input').val());
+    const id = $(e.currentTarget).closest('[data-id]').data('id');
+    let input = $('#item-amount-' + id);
+    let count = parseInt(input.val());
     let total = $("#cart-block .title span").text();
-    const id = $(e.currentTarget).closest('tr').data('id');
     count++;
     total++;
 
-    $(e.currentTarget).closest('td').find('input').val(count);
+    input.val(count);
     addProduct(id, count);
 });
 
 $(document).on('click', '#cart-block .minus', (e) => {
-    let count = parseInt($(e.currentTarget).closest('td').find('input').val());
+    let product = $(e.currentTarget).closest('[data-id]')
+    const id = product.data('id');
+    let input = $('#item-amount-' + id);
+    let count = parseInt(input.val());
     let total = $("#cart-block .title span").text();
-    const id = $(e.currentTarget).closest('tr').data('id');
     count--;
     total--;
 
     if (count <= 0) {
         removeProduct(id);
-        $(e.currentTarget).closest('tr').remove();
+        product.remove();
     } else {
-        $(e.currentTarget).closest('td').find('input').val(count);
+        input.val(count);
         addProduct(id, count);
     }
 });
@@ -139,14 +143,20 @@ function removeProduct(id) {
     setCookie('totalCount', totalCount, {'max-age': 3600 * 24});
 
     if (totalCount <= 0) {
-        $("#cart-block").html('<h4>Корзина пуста</h4>' +
-            '<p>Ви ще не додали жодного товару в корзину.</p>' +
-            '<div class="smile">' +
-                '<img src="/images/not-found.png">' +
-                    '<div class="continue-purchase">' +
-                        '<div id="close-cart" class="continue-purchase green-button">Продовжити покупки</div>' +
-                    '</div>' +
-            '</div>');
+        $("#cart-block").html('' +
+            '<h4>Корзина пуста</h4> ' +
+            '<p>Ви ще не додали жодного товару в корзину.</p> ' +
+            '<div class="smile"> ' +
+                '<img src="/images/not-found.png"> ' +
+            '</div> ' +
+            '<div class="continue-purchase">' +
+            ($('#cart-popup').length ?
+                '<div id="close-cart" class="continue-purchase green-button">Продовжити покупки</div>'
+            :
+                '<a href="/" class="green-button">Продовжити покупки</a> '
+            ) +
+            '</div>'
+        );
     }
 }
 
@@ -193,14 +203,14 @@ function showCart() {
 function getTotalPrice() {
     let total = 0;
 
-    $("#cart-block table tr.product-row").each(function() {
+    $("#cart-block .product-row").each(function() {
         const price = $(this).find(".price span").text().replace(/ /g, '');
         const quantity = $(this).find('.count input').val();
 
         total += price * quantity;
     });
 
-    $("#cart-block .total-price span").text(formatPrice(total) + ' грн');
+    $("#total-price-value").text(formatPrice(total) + ' грн');
 }
 
 function formatPrice(nStr) {

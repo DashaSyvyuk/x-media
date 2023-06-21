@@ -24,7 +24,8 @@ header #logo a {
 }
 header #cart {
     position: relative;
-    width: 50px;
+    margin-right: 7px;
+    width: 30px;
 }
 header #cart-count {
     background-color: #119E00;
@@ -46,7 +47,8 @@ header #cart img {
     cursor: pointer;
 }
 header #account {
-    width: 50px;
+    width: 30px;
+    margin-right: 20px;
 }
 header #account img {
     width: 30px;
@@ -57,6 +59,11 @@ header #menu-open {
 }
 .clear {
     clear: both;
+}
+.no-link-style {
+    text-decoration: none;
+    color: #000;
+    display: contents;
 }
 .hamburger {
     width: 33px;
@@ -365,7 +372,7 @@ header #menu-open {
     display: flex;
     font-weight: 500;
     justify-content: space-between;
-    padding: 1px 15px;
+    padding: 1px 25px;
     width: 130px;
     height: 30px;
     font-size: 14px;
@@ -447,6 +454,9 @@ footer .items img {
     height: auto;
     margin-right: 10px;
 }
+footer .items .social-network-img {
+    width: 40px;
+}
 footer .copywrite {
     text-align: center;
 }
@@ -454,6 +464,7 @@ footer div {
     margin-bottom: 10px;
 }
 .comment {
+    padding: 5px;
     box-sizing: border-box;
 }
 .comment .inner {
@@ -505,10 +516,11 @@ footer div {
     color: #fff;
     cursor: pointer;
     font-weight: 500;
-    padding: 15px;
+    padding: 20px;
     font-size: 14px;
     box-sizing: border-box;
     text-decoration: none;
+    text-align: center;
     font-family: 'Montserrat', sans-serif;
     border: none;
 }
@@ -558,9 +570,9 @@ section .title {
     padding: 5px;
 }
 section .breadcrumb {
-    margin: 20px 0;
+    margin-top: 15px;
     display: flex;
-    font-size: 12px;
+    font-size: 14px;
 }
 section .breadcrumb a {
     color: #000;
@@ -569,9 +581,6 @@ section .breadcrumb a {
 }
 section .breadcrumb a.selected {
     font-weight: bold;
-}
-section .breadcrumb a:hover {
-    text-decoration: underline;
 }
 .delivery-pay {
     width: 100%;
@@ -1642,4 +1651,160 @@ section .feedbacks {
     padding: 30px;
     text-align: center;
     line-height: 2;
+}
+
+#cart-block {
+    width: 100%;
+    height: auto;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+#cart-block .close-cart {
+    width: 18px;
+    display: flex;
+    justify-content: flex-end;
+    float: right;
+}
+
+#cart-block .close-cart img {
+    width: 18px;
+    cursor: pointer;
+}
+
+#cart-block .inner {
+    padding: 0;
+    width: 100%;
+    max-height: 500px;
+    overflow: scroll;
+}
+
+#cart-block .product-row {
+    display: flex;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#cart-block .product-row .image {
+    height: auto;
+    padding: 10px;
+}
+
+#cart-block .product-row img {
+    width: 50px;
+    height: auto;
+}
+
+#cart-block .product-row .info {
+    width: calc(100% - 70px);
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#cart-block .product-row .row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+#cart-block .product-row .info .product_title {
+    width: calc(100% - 20px);
+    padding: 0 10px 0 0;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#cart-block .product-row .remove img {
+    width: 20px;
+    height: auto;
+}
+
+#cart-block .product-row .minus, #cart-block .product-row .plus {
+    font-size: 20px;
+    font-weight: 600;
+    width: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#cart-block .product-row .minus {
+    color: red;
+}
+
+#cart-block .product-row .plus {
+    color: #119E00;
+}
+
+#cart-block .product-row .count {
+    width: 60%;
+    display: flex;
+    align-items: center;
+}
+
+#cart-block .product-row input {
+    width: 30px;
+    margin: 0 15px;
+    text-align: center;
+    border-radius: unset;
+    border: 1px solid #ccc;
+    padding: 3px;
+    outline: none;
+}
+
+#cart-block .product-row .price {
+    width: 40%;
+    text-align: right;
+    align-self: center;
+}
+
+#cart-block .total-price {
+    margin: 20px 0 40px 0;
+}
+
+#cart-block .total-price span {
+    font-weight: bold;
+}
+
+#go-to-order {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+#cart-block p {
+    text-align: center;
+    font-size: 14px;
+}
+
+#cart-block h4 {
+    text-align: center;
+}
+
+#cart-block .smile {
+    display: flex;
+    justify-content: center;
+}
+
+#cart-block .smile img {
+    width: 25%;
+    margin: 30px auto 50px auto;
+}
+
+#cart-block .continue-purchase {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.navigate {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #eee;
 }
