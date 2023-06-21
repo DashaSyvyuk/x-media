@@ -1088,11 +1088,6 @@ header {
     width: 100%;
 }
 
-.comment .author, .comment .date {
-    width: 50%;
-    margin-bottom: 15px;
-}
-
 #feedbacks {
     width: calc(100% - 120px);
     margin: 0 auto;

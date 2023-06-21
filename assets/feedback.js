@@ -47,6 +47,6 @@ $('#add-feedback').on('submit', (e) => {
     }
 });
 
-$('#feedback-popup').on('click', (e) => {
+$('#feedback-popup, #close-feedback-popup').on('click', (e) => {
     $(e.currentTarget).hide();
 });
