@@ -8,6 +8,56 @@
 
 {% block body %}
 
-    <p>feedback page mobile</p>
+    <section>
+        <div class="breadcrumb">
+            <a>X-media</a>
+            <span> > </span>
+            <a href="/">Головна</a>
+            <span> > </span>
+            <a class="selected">Відгуки про магазин</a>
+        </div>
+
+        <div class="feedbacks">
+            <form method="post" id="add-feedback" class="add-comment">
+                <div class="inner">
+                    <p>Залишити відгук про магазин:</p>
+                    <label>
+                        <span class="field">Ім'я:<span class="required">*</span></span>
+                        <input type="text" name="author" id="author">
+                    </label>
+                    <label>
+                        <span class="field">Email:</span>
+                        <input type="text" name="email" id="email">
+                    </label>
+                    <label>
+                        <span class="field">Коментар:<span class="required">*</span></span>
+                        <textarea name="text" id="comment"></textarea>
+                    </label>
+                </div>
+                <div class="send-btn-block">
+                    <input class="green-button" type="submit" value="Відправити">
+                </div>
+            </form>
+
+            <div id="feedback-popup">
+                <div>
+                    Дякуємо за відгук!<br>Відправлено на опрацювання модератором
+                    <input id="close-feedback-popup" class="green-button" value="Зрозуміло">
+                </div>
+            </div>
+
+            <div class="feedback-title">Відгуки про магазин</div>
+
+            {% for comment in pagination %}
+                <div class="comment">
+                    {% include 'partials/comment.html.twig' %}
+                </div>
+            {% endfor %}
+
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+    </section>
 
 {% endblock %}

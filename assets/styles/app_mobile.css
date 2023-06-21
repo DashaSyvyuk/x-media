@@ -484,11 +484,6 @@ footer div {
     text-align: right;
     color: #bebebe;
 }
-.comment .author, .comment .date {
-    float: left;
-    width: 50%;
-    margin-bottom: 15px;
-}
 .comment .answer .author {
     color: darkorchid;
     width: 100%;
@@ -499,16 +494,10 @@ footer div {
     flex-direction: column;
     margin-left: 50px;
     margin-top: 25px;
-    padding-top: 10px;
-    padding-left: 50px;
     box-sizing: border-box;
 }
 .comment .text {
     width: 100%;
-}
-.comment .author, .comment .date {
-    width: 50%;
-    margin-bottom: 15px;
 }
 .green-button {
     background-color: #119e00;
@@ -523,9 +512,7 @@ footer div {
     text-align: center;
     font-family: 'Montserrat', sans-serif;
     border: none;
-}
-.green-button:hover {
-    box-shadow: 0 0 10px rgba(0,0,0,.5);
+    text-align: center;
 }
 .green {
     color: #119e00;
@@ -1445,43 +1432,6 @@ section .breadcrumb a.selected {
     margin: 10px 0 0 0;
 }
 
-.comment .author {
-    color: #119E00;
-    font-weight: 600;
-}
-
-.comment .date {
-    font-weight: 600;
-    text-align: right;
-    color: #bebebe;
-}
-
-.comment .author, .comment .date {
-    float: left;
-    width: 50%;
-    margin-bottom: 15px;
-}
-
-.comment .answer .author {
-    color: darkorchid;
-    width: 100%;
-}
-
-.comment .answer {
-    width: calc(100% - 50px);
-    display: flex;
-    flex-direction: column;
-    margin-left: 50px;
-    margin-top: 25px;
-    padding-top: 10px;
-    padding-left: 50px;
-    box-sizing: border-box;
-}
-
-.comment .text {
-    width: 100%;
-}
-
 .comment .author, .comment .date {
     width: 50%;
     margin-bottom: 15px;
@@ -1550,7 +1500,7 @@ section .breadcrumb a.selected {
 
 section .feedbacks {
     width: 100%;
-    padding: 40px 20%;
+    padding: 5px;
     box-sizing: border-box;
 }
 
@@ -1560,7 +1510,13 @@ section .feedbacks {
 }
 
 .feedbacks #comment {
-    width: calc(100% - 112px);
+    width: 100%;
+}
+
+.feedback-title {
+    text-align: center;
+    margin: 40px 0;
+    font-weight: bold;
 }
 
 .send-btn-block, .main-page-btn{
@@ -1645,12 +1601,60 @@ section .feedbacks {
 
 #comment-popup div, #feedback-popup div {
     background-color: #fff;
-    width: 50%;
+    box-sizing: border-box;
+    width: 90%;
     margin: 15% auto auto;
     height: auto;
     padding: 30px;
     text-align: center;
     line-height: 2;
+}
+
+#feedbacks {
+    width: calc(100% - 120px);
+    margin: 0 auto;
+}
+
+#feedback-buttons {
+    width: calc(100% - 120px);
+    margin: 20px auto 0;
+    text-align: right;
+}
+
+#feedbacks .feedback .inner {
+    border: 1px solid #eee;
+}
+
+#feedbacks .slick-prev, #feedbacks .slick-next {
+    height: 100%;
+    width: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#feedbacks .slick-prev {
+    left: -64px;
+}
+
+#feedbacks .slick-next {
+    right: -60px;
+}
+
+#feedbacks .slick-prev:hover, #feedbacks .slick-next:hover {
+    background-color: rgba(200, 200, 200, .5);
+}
+
+#feedbacks .slick-prev:before, #feedbacks .slick-next:before {
+    display: none;
+}
+
+#feedbacks .slick-prev img, #feedbacks .slick-next img {
+    height: 100px;
+}
+
+#close-feedback-popup {
+    margin-top: 20px;
 }
 
 #cart-block {
