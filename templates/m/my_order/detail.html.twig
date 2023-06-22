@@ -1,0 +1,74 @@
+{% extends 'm.base.html.twig' %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('cart') }}
+    {{ encore_entry_script_tags('account') }}
+    {{ encore_entry_script_tags('app_mobile') }}
+{% endblock %}
+
+{% block body %}
+
+    <section>
+        <div class="account">
+            <ul class="left-side">
+                <li><a href="/account"><img src="/images/home.png"><span>Головна сторінка</span></a></li>
+                <li><a href="/account/contacts"><img src="/images/setting.png"><span>Контактні дані</span></a></li>
+                <li class="open"><a href="/account/orders"><img src="/images/list.png"><span>Мої замовлення</span></a></li>
+                <li><a id="logout"><img src="/images/log_out.png"><span>Вийти</span></a></li>
+            </ul>
+
+            <div class="main-part">
+                <div class="order-detail-page">
+                    <div class="info">
+                        <div class="status"><span class="label">Статус</span><br>{{ order.status }}</div>
+                        <div class="datetime right"><span class="label">Дата створення</span><br>{{ order.createdAt.format('Y-m-d H:i:s') }}</div>
+                        <div class="amount"><span class="label">Кількість продуктів</span><br>{{ order.items.count }}</div>
+                        <div class="price right"><span class="label">Вартість</span><br><span class="green">{{ order.total|number_format(0, '.', ' ') }} грн</span></div>
+                    </div>
+                    <div class="delivery-payment">
+                        Спосіб доставки
+                    </div>
+                    <div class="delivery-payment-info">
+                        <img src="/images/home.png">
+                        <div>
+                            <b>{{ order.delType }}</b><br>
+                            <div class="span-text">Дані для отримання:</div>
+                            {{ shopName.getValue() }}<br>
+                            Адреса точки самовивозу: <br>{{ pickUpPointAddress.getValue() }}<br><br>
+                            Тел.: {{ phoneNumber.getValue() }}<br>
+                            email: {{ email.getValue() }}
+                        </div>
+                    </div>
+                    <div class="delivery-payment">
+                        Спосіб оплати
+                    </div>
+                    <div class="delivery-payment-info">
+                        <img src="/images/home.png">
+                        <div>
+                            <b>{{ order.payType }}</b><br><br>
+                            Статус оплати - <b>{% if order.paymentStatus %}<span class="green">Оплачено</span>{% else %}<span class="red">Очікує на оплату</span>{% endif %}</b>
+                        </div>
+                    </div>
+                    <div class="delivery-payment">
+                        Продукти
+                    </div>
+                    <div class="products">
+                        {% for item in order.items %}
+                            <div class="order-product">
+                                <div class="image">
+                                    <img src="/images/products/{% if item.product.images|length > 0 %}{{ item.product.images[0].imageUrl }}{% endif %}" />
+                                </div>
+                                <div class="product-information">
+                                    <div class="title"><a class="no-link-style" href="/products/{{ item.product.id }}">{{ item.product.title }}</a></div>
+                                    <div class="quantity">Кількість: <span>{{ item.count }}</span> шт</div>
+                                    <div class="price"><span>{{ (item.product.price*item.count)|number_format(0, '.', ' ') }}</span> грн</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
