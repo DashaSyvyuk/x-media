@@ -19,7 +19,7 @@
     {% for slider in sliders %}
         <div class="item">
             <div class="background"><img src="images/slider/{{ slider.imageUrl }}"></div>
-            <a class="link button" href="{{ slider.url }}">{{ slider.title }}&nbsp;&nbsp;&nbsp;&#8594;</a>
+            <a class="link button" href="{{ slider.url }}">{{ slider.title }}</a>
         </div>
     {% endfor %}
 </div>
@@ -31,10 +31,9 @@
             {% include 'm/partials/product-item.html.twig' %}
         {% endfor %}
     </div>
-</section>
 
-{% if feedbacks|length > 0 %}
-    <section>
+    {% if feedbacks|length > 0 %}
+    <div class="home-page">
         <p class="title">Відгуки про магазин</p>
         <div id="feedbacks">
             {% for comment in feedbacks %}
@@ -47,7 +46,8 @@
             <a href="/feedbacks#add" class="green-button">Додати відгук</a>
             <a href="/feedbacks" class="green-button">Переглянути відгуки</a>
         </div>
+    </div>
+    {% endif %}
     </section>
-{% endif %}
 
 {% endblock %}

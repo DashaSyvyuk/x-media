@@ -243,14 +243,12 @@ header #menu-open {
     width: 100%;
     padding: 25px 15px;
     box-sizing: border-box;
-    z-index: -1;
 }
 #search input {
     width: 100%;
     box-sizing: border-box;
     height: 30px;
     border: 1px solid #bbb;
-    border-radius: 15px;
     outline: none;
     font-size: 16px;
     padding-left: 10px;
@@ -283,22 +281,23 @@ header #menu-open {
     object-fit: cover;
 }
 #slider .item .link {
+    width: 100%;
+    box-sizing: border-box;
     position: absolute;
-    right: 5px;
     bottom: 5px;
     font-size: 14px;
     color: #000;
+    text-align: center;
     background-color: rgba(255, 255, 255, .8);
     box-shadow: 0 0 15px rgba(0, 0, 0, .3);
-    padding: 5px 20px;
+    padding: 15px 0;
     text-decoration: none;
-    max-width: 90vw;
 }
 #slider .item .link:hover {
     background-color: rgba(255, 255, 255, .6);
 }
 #slider .slick-dots {
-    bottom: -20px;
+    bottom: -30px;
 }
 #slider .slick-dots li button:before {
     font-size: 10px;
@@ -463,10 +462,6 @@ footer .copywrite {
 footer div {
     margin-bottom: 10px;
 }
-.comment {
-    padding: 5px;
-    box-sizing: border-box;
-}
 .comment .inner {
     display: flex;
     flex-wrap: wrap;
@@ -502,6 +497,7 @@ footer div {
 .green-button {
     background-color: #119e00;
     width: 100%;
+    margin: 5px 0;
     color: #fff;
     cursor: pointer;
     font-weight: 500;
@@ -519,14 +515,10 @@ footer div {
 .red {
     color: #ff0000;
 }
-#feedbacks {
-    width: calc(100% - 60px);
-    margin: 0 auto;
-}
 #feedback-buttons {
     width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
 }
 #feedbacks .feedback .inner {
     border: 1px solid #eee;
@@ -1453,17 +1445,6 @@ section .breadcrumb a.selected {
     margin-bottom: 15px;
 }
 
-#feedbacks {
-    width: calc(100% - 120px);
-    margin: 0 auto;
-}
-
-#feedback-buttons {
-    width: calc(100% - 120px);
-    margin: 20px auto 0;
-    text-align: right;
-}
-
 #feedbacks .feedback .inner {
     border: 1px solid #eee;
 }
@@ -1545,7 +1526,6 @@ section .feedbacks {
     width: 100%;
     padding: 20px;
     font-size: 13px;
-    margin-bottom: 20px;
     box-sizing: border-box;
 }
 
@@ -1626,15 +1606,15 @@ section .feedbacks {
     line-height: 2;
 }
 
-#feedbacks {
-    width: calc(100% - 120px);
-    margin: 0 auto;
+.home-page {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
 }
 
-#feedback-buttons {
-    width: calc(100% - 120px);
-    margin: 20px auto 0;
-    text-align: right;
+#feedbacks {
+    width: 100%;
+    margin-bottom: 30px;
 }
 
 #feedbacks .feedback .inner {
