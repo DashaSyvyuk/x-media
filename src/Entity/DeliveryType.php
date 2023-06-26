@@ -30,11 +30,6 @@ class DeliveryType
     private string $title = "";
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private int $cost = 0;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private bool $enabled = true;
@@ -86,16 +81,6 @@ class DeliveryType
     public function getTitle(): string
     {
         return $this->title;
-    }
-
-    public function setCost(int $cost): void
-    {
-        $this->cost = $cost;
-    }
-
-    public function getCost(): int
-    {
-        return $this->cost;
     }
 
     public function setEnabled(bool $enabled): void
