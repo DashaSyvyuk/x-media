@@ -9,11 +9,10 @@
 {% block body %}
 
     <div class="breadcrumb">
-        <a>X-media</a>
-        <span> > </span>
-        <a href="/">Головна</a>
-        <span> > </span>
-        <a href="" class="selected">{{ category.title }}</a>
+        <a class="image" href="/">
+            <img src="/images/arrow_navigate.png">
+        </a>
+        <span>{{ category.title }}</span>
     </div>
 
     <div class="filter-buttons">
@@ -50,7 +49,7 @@
     </div>
 
     <div id="products-block">
-        {% include 'partials/product-list.html.twig' %}
+        {% include 'm/partials/product-list.html.twig' %}
     </div>
 
 {% endblock %}

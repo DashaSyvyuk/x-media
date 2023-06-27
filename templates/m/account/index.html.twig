@@ -26,21 +26,27 @@
             <ul class="my-orders">
                 {% if order %}
                     <li>
-                        <div class="products">
-                            {% for item in order.items %}
-                                <a href="/products/{{ item.product.id }}" target="_blank">
-                                    <img src="/images/products/{{ item.product.getImages()[0].imageUrl }}">
-                                </a>
-                            {% endfor %}
-                        </div>
-                        <div class="info">
-                            <div class="status"><b class="gray">{{ constant('App\\Entity\\Order::STATUSES')[order.status] }}</b></div>
-                            <div class="number-order">№ {{ order.orderNumber }}</div>
-                            <div class="datetime-price">
-                                <div class="datetime">{{ order.createdAt.format('Y-m-d H:i:s') }}</div>
-                                <div class="price"><b>{{ order.total|number_format(0, ',', ' ') }} грн</b></div>
+                        <a class="no-link-style" href="/account/orders/{{ order.id }}">
+                            <table class="products">
+                                {% for item in order.items %}
+                                    <tr>
+                                        <td>
+                                            <a href="/products/{{ item.product.id }}" target="_blank">
+                                                <img src="/images/products/{{ item.product.getImages()[0].imageUrl }}">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            <div class="info">
+                                <div class="status"><b class="gray">{{ constant('App\\Entity\\Order::STATUSES')[order.status] }}</b></div>
+                                <div class="number-order">№ {{ order.orderNumber }}</div>
+                                <div class="datetime-price">
+                                    <div class="datetime">{{ order.createdAt.format('Y-m-d H:i:s') }}</div>
+                                    <div class="price"><b>{{ order.total|number_format(0, ',', ' ') }} грн</b></div>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </li>
                 {% else %}
                     <p>{{ noOrder.getValue() }}</p>

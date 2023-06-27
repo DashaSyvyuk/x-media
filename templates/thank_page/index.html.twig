@@ -32,8 +32,8 @@
                     </tr>
                 {% endfor %}
             </table>
-            <p><span>Спосіб оплати: </span>{{ order.paytype }}</p>
-            <p><span>Спосіб доставки: </span>{{ order.deltype }}</p>
+            <p><span>Спосіб оплати: </span>{{ order.paytype.title }}</p>
+            <p><span>Спосіб доставки: </span>{{ order.deltype.title }}</p>
             {% if order.address %}<p><span>Адреса: </span></span>{{ order.address }}</p>{% endif %}
             <p><span>Загальна вартість: </span>{{ order.total|number_format(0, '.', ' ') }} грн</p>
             <div class="main-page-btn">

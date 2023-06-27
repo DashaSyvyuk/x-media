@@ -29,9 +29,9 @@
                         Спосіб доставки
                     </div>
                     <div class="delivery-payment-info">
-                        <img src="/images/home.png">
+                        <img src="/images/delivery/{{ order.delType.icon }}">
                         <div>
-                            <b>{{ order.delType }}</b><br>
+                            <b>{{ order.delType.title }}</b><br>
                             <div class="span-text">Дані для отримання:</div>
                             {{ shopName.getValue() }}<br>
                             Адреса точки самовивозу: <br>{{ pickUpPointAddress.getValue() }}<br><br>
@@ -43,9 +43,9 @@
                         Спосіб оплати
                     </div>
                     <div class="delivery-payment-info">
-                        <img src="/images/home.png">
+                        <img src="/images/payment/{{ order.payType.icon }}">
                         <div>
-                            <b>{{ order.payType }}</b><br><br>
+                            <b>{{ order.payType.title }}</b><br><br>
                             Статус оплати - <b>{% if order.paymentStatus %}<span class="green">Оплачено</span>{% else %}<span class="red">Очікує на оплату</span>{% endif %}</b>
                         </div>
                     </div>

@@ -18,7 +18,19 @@ $(document).on('click', '.add2cart div', (e) => {
     }
 
     addProduct(id, count);
-    showCart();
+    if ($('#cart-popup').length) {
+        showCart();
+    } else {
+        location.href = '/shopping-cart';
+    }
+});
+
+$(document).on('click', '.product', (e) => {
+    const addToCartClicked = $(e.target).closest('.add2cart').length > 0;
+    if (!addToCartClicked) {
+        const productLink = $(e.currentTarget).find('.product-title a').attr('href');
+        window.location.href = productLink;
+    }
 });
 
 $(document).on('click', '#cart-block .delete', (e) => {

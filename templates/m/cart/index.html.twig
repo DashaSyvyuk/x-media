@@ -9,10 +9,15 @@
 {% block body %}
 
 <section>
+
+    <div class="breadcrumb">
+        <a class="image" href="/">
+            <img src="/images/arrow_navigate.png">
+        </a>
+        <span>Корзина (<span>{{ totalCount }}</span>)</span>
+    </div>
+
     <div id="cart-block">
-        <div class="navigate">
-            <p class="title">Корзина (<span>{{ totalCount }}</span>)</p>
-        </div>
         {% if products|length > 0 %}
             <div class="inner">
                 {% for product in products %}

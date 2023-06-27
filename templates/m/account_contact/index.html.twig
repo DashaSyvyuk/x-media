@@ -47,7 +47,7 @@
                         <input type="password" name="password_confirm" autocomplete="off">
                         <p class="error"></p>
                     </div>
-                    <div>
+                    <div class="np-block">
                         <p>Місто:</p>
                         <select name="city" id="nova-poshta-city">
                             {% for city in cities %}
@@ -57,7 +57,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div id="nova-poshta-office">
+                    <div id="nova-poshta-office" class="np-block">
                         <p>Відділення:</p>
                         <select name="office" id="nova-poshta-office">
                             {% for office in offices %}

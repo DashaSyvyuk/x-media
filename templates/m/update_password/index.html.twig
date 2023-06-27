@@ -9,12 +9,12 @@
 {% block body %}
 
     <section>
+
         <div class="breadcrumb">
-            <a>X-media</a>
-            <span> > </span>
-            <a href="/">Головна</a>
-            <span> > </span>
-            <a class="selected">Зміна паролю</a>
+            <a class="image" href="/login">
+                <img src="/images/arrow_navigate.png">
+            </a>
+            <span>Зміна паролю</span>
         </div>
 
         <form method="POST" action="/update-password" id="update-password">

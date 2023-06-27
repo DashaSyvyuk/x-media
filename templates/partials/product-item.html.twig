@@ -1,11 +1,9 @@
 <div class="product">
-    <a href="/products/{{ product.id }}" class="product-image">
-        <img
-            src="{% if product.images|length > 0 %}/images/products/{{ product.images[0].imageUrl }}{% endif %}"
-            data-first="{% if product.images|length > 0 %}/images/products/{{ product.images[0].imageUrl }}{% endif %}"
-            data-next="{% if product.images|length > 0 %}/images/products/{{ product.images[1].imageUrl }}{% endif %}"
-        >
-    </a>
+    <img
+        src="{% if product.images|length > 0 %}/images/products/{{ product.images[0].imageUrl }}{% endif %}"
+        data-first="{% if product.images|length > 0 %}/images/products/{{ product.images[0].imageUrl }}{% endif %}"
+        data-next="{% if product.images|length > 0 %}/images/products/{{ product.images[1].imageUrl }}{% endif %}"
+    >
     <div class="product-title"><a href="/products/{{ product.id }}">{{ product.title }}</a></div>
     <div class="rating">
         <span class="star-rating"></span>

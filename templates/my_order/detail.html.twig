@@ -158,7 +158,11 @@
                     <p>Замовлення № <span class="bold green"> {{ order.orderNumber }} </span></p>
                     <p class="datetime-created">Складено: {{ order.createdAt.format('Y-m-d H:i:s') }}</p>
                     <h4>Доставка:</h4>
-                    <div class="info">{{ order.delType }}</div>
+                    <div class="info">
+                        <div class="delivery-payment-block">
+                            <img src="/images/delivery/{{ order.delType.icon }}">{{ order.delType.title }}
+                        </div>
+                    </div>
                     <div class="delivery-data">
                         <div class="delivery-option">
                             <h5>Дані для отримання:</h5>
@@ -179,7 +183,11 @@
                         </div>
                     </div>
                     <h4>Оплата:</h4>
-                    <div class="info">{{ order.payType }} {% if order.paymentStatus %}<span class="green">(Оплачено)</span>{% else %}<span class="red">(Очікує на оплату)</span>{% endif %}</div>
+                    <div class="info">
+                        <div class="delivery-payment-block">
+                            <img src="/images/payment/{{ order.payType.icon }}">{{ order.payType.title }} {% if order.paymentStatus %}<span class="green">(Оплачено)</span>{% else %}<span class="red">(Очікує на оплату)</span>{% endif %}
+                        </div>
+                    </div>
                     <h4>Замовлення:</h4>
                     <div class="order-products">
                         {% for item in order.items %}

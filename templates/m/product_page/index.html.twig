@@ -9,12 +9,11 @@
 {% block body %}
 
     <section class="product-page">
+
         <div class="breadcrumb">
-            <a>X-media</a>
-            <span> > </span>
-            <a href="/">Головна</a>
-            <span> > </span>
-            <a href="/categories/{{ product.getCategory().slug }}">&nbsp{{ product.getCategory().title }}</a>
+            <a class="image" href="/categories/{{ product.getCategory().slug }}">
+                <img src="/images/arrow_navigate.png">
+            </a>
         </div>
 
         <div class="images">
