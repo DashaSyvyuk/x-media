@@ -33,7 +33,6 @@ class PaymentTypeCrudController extends AbstractCrudController
     {
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('title', 'Назва');
-        yield NumberField::new('cost', 'Вартість');
         yield BooleanField::new('enabled', 'Активний');
         yield ImageField::new('icon')
             ->setLabel('Іконка')
