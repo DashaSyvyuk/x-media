@@ -25,29 +25,29 @@
 </div>
 
 <section>
-    <p class="title">Новинки</p>
-    <div id="new-products">
-        {% for product in products %}
-            {% include 'm/partials/product-item.html.twig' %}
-        {% endfor %}
-    </div>
-
-    {% if feedbacks|length > 0 %}
     <div class="home-page">
-        <p class="title">Відгуки про магазин</p>
-        <div id="feedbacks">
-            {% for comment in feedbacks %}
-                <div class="comment">
-                    {% include 'm/partials/comment.html.twig' %}
-                </div>
+        <p class="title">Новинки</p>
+        <div id="new-products">
+            {% for product in products %}
+                {% include 'm/partials/product-item.html.twig' %}
             {% endfor %}
         </div>
-        <div id="feedback-buttons">
-            <a href="/feedbacks#add" class="green-button">Додати відгук</a>
-            <a href="/feedbacks" class="green-button">Переглянути відгуки</a>
+
+        {% if feedbacks|length > 0 %}
+            <p class="title">Відгуки про магазин</p>
+            <div id="feedbacks">
+                {% for comment in feedbacks %}
+                    <div class="comment">
+                        {% include 'm/partials/comment.html.twig' %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div id="feedback-buttons">
+                <a href="/feedbacks#add" class="green-button">Додати відгук</a>
+                <a href="/feedbacks" class="green-button">Переглянути відгуки</a>
+            </div>
+        {% endif %}
         </div>
-    </div>
-    {% endif %}
     </section>
 
 {% endblock %}

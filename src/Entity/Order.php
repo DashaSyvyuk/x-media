@@ -92,14 +92,16 @@ class Order
     private string $email = "";
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\PaymentType")
      */
-    private string $paytype = "";
+    private ?PaymentType $paytype;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\DeliveryType")
      */
-    private string $deltype = "";
+    private ?DeliveryType $deltype;
 
     /**
      * @ORM\Column(type="string")
@@ -217,22 +219,22 @@ class Order
         return $this->email;
     }
 
-    public function setPaytype(string $paytype): void
+    public function setPaytype(?PaymentType $paytype): void
     {
         $this->paytype = $paytype;
     }
 
-    public function getPaytype(): string
+    public function getPaytype(): ?PaymentType
     {
         return $this->paytype;
     }
 
-    public function setDeltype(string $deltype): void
+    public function setDeltype(?DeliveryType $deltype): void
     {
         $this->deltype = $deltype;
     }
 
-    public function getDeltype(): string
+    public function getDeltype(): ?DeliveryType
     {
         return $this->deltype;
     }

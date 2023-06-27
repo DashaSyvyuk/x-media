@@ -112,12 +112,6 @@ header #menu-open {
     transition: 0.5s all ease-in-out;
     z-index: 1;
 }
-.hamburger:hover::after {
-    transform: scale(1.4);
-}
-.hamburger:hover .line::after {
-    width: 100%
-}
 .hamburger.open .line {
     background: white;
 }
@@ -195,9 +189,6 @@ header #menu-open {
     background: #A0A0A0;
     transition: 0.5s all ease;
 }
-.menu_body .menu_list li a:hover:after {
-    width: 100%;
-}
 .menu_body .menu_list li.has_child {
     position: relative;
 }
@@ -233,10 +224,6 @@ header #menu-open {
 }
 .menu_body .menu_list li.has_child .sub-menu li a:after {
     display: none;
-}
-.menu_body .menu_list li.has_child:hover .sub-menu {
-    opacity: 1;
-    visibility: visible;
 }
 #search {
     position: relative;
@@ -293,16 +280,13 @@ header #menu-open {
     padding: 15px 0;
     text-decoration: none;
 }
-#slider .item .link:hover {
-    background-color: rgba(255, 255, 255, .6);
-}
 #slider .slick-dots {
     bottom: -30px;
 }
 #slider .slick-dots li button:before {
     font-size: 10px;
 }
-.product {
+.home-page .product {
     padding: 10px;
     box-sizing: border-box;
 }
@@ -313,14 +297,12 @@ header #menu-open {
     display: flex;
     flex-wrap: wrap;
 }
-.product .product-image {
-    width: 100%;
-}
-.product img {
+.product .inner .product-image {
     width: 100%;
     height: 250px;
     max-height: 250px;
     object-fit: contain;
+    margin-bottom: 10px;
 }
 .product .product-title {
     height: 40px;
@@ -343,49 +325,13 @@ header #menu-open {
     color: #000;
     text-decoration: none;
 }
-.product .product-title a:hover {
-    text-decoration: underline;
-}
 .product .price {
-    width: 50%;
+    width: 100%;
     font-weight: bold;
     color: #333;
-    font-size: 22px;
-    float: left;
-}
-.product .add2cart {
-    width: 50%;
+    font-size: 16px;
     text-align: right;
-    display: flex;
-    justify-content: flex-end;
-}
-.product .add2cart img {
-    width: 20px;
-    height: auto;
-}
-.product .add2cart div {
-    align-items: center;
-    background-color: #119e00;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    font-weight: 500;
-    justify-content: space-between;
-    padding: 1px 25px;
-    width: 130px;
-    height: 30px;
-    font-size: 14px;
-    box-sizing: border-box;
-}
-.product .price-add2cart {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 30px;
-}
-.product .add2cart div:hover {
-    box-shadow: 0 0 10px rgba(0,0,0,.5);
+    padding-bottom: 20px;
 }
 .product .rating {
     align-items: center;
@@ -416,6 +362,7 @@ header #menu-open {
     stroke-linejoin: round;
 }
 section .title {
+    text-align: center;
     padding: 10px;
 }
 footer {
@@ -537,9 +484,6 @@ footer div {
 #feedbacks .slick-next {
     right: -20px;
 }
-#feedbacks .slick-prev:hover, #feedbacks .slick-next:hover {
-    background-color: rgba(200, 200, 200, .5);
-}
 #feedbacks .slick-prev:before, #feedbacks .slick-next:before {
     display: none;
 }
@@ -551,38 +495,29 @@ section .title {
     font-weight: 600;
     padding: 5px;
 }
-section .breadcrumb {
-    margin-top: 15px;
+.breadcrumb {
+    height: 60px;
     display: flex;
     font-size: 14px;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    border-bottom: 1px solid #eee;
 }
-section .breadcrumb a {
-    color: #000;
-    text-decoration: none;
-    margin: 0 5px;
-}
-section .breadcrumb a.selected {
+.breadcrumb span {
+    width: 100%;
     font-weight: bold;
 }
-.delivery-pay {
-    width: 100%;
-    padding: 0 10px;
-    box-sizing: border-box;
-    clear: both;
-    font-size: 14px;
+.breadcrumb .image {
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    left: 5px;
+    top: 15px;
+    text-align: left;
 }
-.delivery-pay .delivery h3 {
-    text-align: center;
-}
-.delivery-pay .delivery div {
-    width: 100%;
-    box-sizing: border-box;
-    text-align: justify;
-}
-.delivery-pay .delivery div img {
-    height: 100px;
-    margin: 20px auto;
-    display: block;
+.breadcrumb img {
+    height: 30px;
 }
 .account {
     width: 100%;
@@ -635,19 +570,20 @@ section .breadcrumb a.selected {
     font-size: 10px;
     margin-bottom: 15px;
     display: flex;
+    min-height: 80px;
 }
 .my-orders .products {
     display: flex;
     flex-wrap: wrap;
     padding: 10px;
-    width: 80px;
+    width: 70px;
 }
 .my-orders .products a {
     width: 100%;
     margin-bottom: 5px;
 }
 .my-orders .products img {
-    width: 60px;
+    width: 50px;
 }
 .my-orders .products tbody, .my-orders .products tr, .my-orders .products td {
     border: none;
@@ -663,13 +599,13 @@ section .breadcrumb a.selected {
     font-size: 12px;
     font-weight: bold;
     color: green;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
 }
 .my-orders .number-order {
     width: 100%;
     font-size: 10px;
     font-weight: bold;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
 }
 .my-orders .datetime-price {
     width: 100%;
@@ -735,22 +671,6 @@ section .breadcrumb a.selected {
 }
 #user .red, #login .red, #sign_up .red, #restore-password .red, #update-password .red {
     border: 1px solid red !important;
-}
-.breadcrumb {
-    margin-top: 15px;
-    display: flex;
-    font-size: 14px;
-}
-.breadcrumb a {
-    color: #000;
-    text-decoration: none;
-    margin: 0 5px;
-}
-.breadcrumb a.selected {
-    font-weight: bold;
-}
-.breadcrumb a:hover {
-    text-decoration: underline;
 }
 
 .filter-buttons {
@@ -826,10 +746,6 @@ section .breadcrumb a.selected {
     background-color: #0f0f0f;
     color: #fff;
     border: 1px solid #000;
-}
-
-.navigation span a:hover {
-    background-color: #eaeaea;
 }
 
 #mobile-filters .filter-title {
@@ -944,10 +860,6 @@ section .breadcrumb a.selected {
     background-color: #eee;
 }
 
-.container:hover input ~ .checkmark {
-    background-color: #ccc;
-}
-
 .container input:checked ~ .checkmark {
     background-color: #119E00;
 }
@@ -1005,11 +917,6 @@ section .breadcrumb a.selected {
     width: 25px;
     background-color: #eee;
     border-radius: 50%;
-}
-
-/* On mouse-over, add a grey background color */
-.radio-container:hover input ~ .radio-checkmark {
-    background-color: #ccc;
 }
 
 /* When the radio button is checked, add a blue background */
@@ -1112,10 +1019,6 @@ section .breadcrumb a.selected {
 #filters-mobile-form .selected-filters img {
     width: 10px;
     margin-left: 5px;
-}
-
-#filters-mobile-form .selected-filters div.item:hover {
-    background-color: #ddd;
 }
 
 /*product page*/
@@ -1254,27 +1157,28 @@ section .breadcrumb a.selected {
 .product-page .detail .price {
     font-size: 18px;
     font-weight: 600;
-    margin: 20px;
+    margin: 20px 0;
+    text-align: right;
 }
 
-.product-page .detail .add2cart {
+.add2cart {
     width: 100%;
     display: flex;
     justify-content: flex-end;
 }
 
-.product-page .detail .add2cart div {
+.add2cart div {
     background-color: #119E00;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 7px 0;
+    padding: 10px 0;
     font-weight: 500;
     width: 100%;
 }
 
-.product-page .detail .add2cart img {
+.add2cart img {
     width: 25px;
     margin-left: 10px;
 }
@@ -1311,10 +1215,6 @@ section .breadcrumb a.selected {
     font-size: 12px;
 }
 
-.product-page .tabs-place .tabs .tab:hover {
-    background-color: #eee;
-}
-
 .product-page .tabs-place .tabs .tab.active {
     background-color: #119E00;
     color: #fff;
@@ -1341,10 +1241,6 @@ section .breadcrumb a.selected {
 
 .product-page .tabs-place .content .content-tab table tr:nth-child(odd) {
     background-color: #eee;
-}
-
-.product-page .tabs-place .content .content-tab table tr:hover {
-    background-color: #ddd;
 }
 
 .product-page .tabs-place .content .content-tab table td {
@@ -1455,10 +1351,6 @@ section .breadcrumb a.selected {
     right: -60px;
 }
 
-#feedbacks .slick-prev:hover, #feedbacks .slick-next:hover {
-    background-color: rgba(200, 200, 200, .5);
-}
-
 #feedbacks .slick-prev:before, #feedbacks .slick-next:before {
     display: none;
 }
@@ -1475,10 +1367,6 @@ section .breadcrumb a.selected {
     padding: 20px 15px;
     cursor: pointer;
     display: none;
-}
-
-#scroll-top:hover {
-    background-color: rgba(180, 180, 180, .5);
 }
 
 #scroll-top img {
@@ -1564,10 +1452,6 @@ section .feedbacks {
     color: red;
 }
 
-.add-comment input[type=submit]:hover {
-    box-shadow: 0 0 10px rgba(0,0,0,.5);
-}
-
 .add-comment .comment-description {
     font-size: 12px;
     font-weight: 500;
@@ -1625,10 +1509,6 @@ section .feedbacks {
 
 #feedbacks .slick-next {
     right: -60px;
-}
-
-#feedbacks .slick-prev:hover, #feedbacks .slick-next:hover {
-    background-color: rgba(200, 200, 200, .5);
 }
 
 #feedbacks .slick-prev:before, #feedbacks .slick-next:before {
@@ -1791,14 +1671,6 @@ section .feedbacks {
     justify-content: center;
 }
 
-.navigate {
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid #eee;
-}
-
 .order-place, #sign_up, #login, #restore-password, #update-password {
     width: 100%;
     padding: 5px;
@@ -1904,10 +1776,6 @@ section .feedbacks {
     text-decoration: none;
 }
 
-.order-detail .products td a:hover {
-    text-decoration: underline;
-}
-
 .order-detail p {
     font-size: 13px;
     text-align: center;
@@ -1968,7 +1836,7 @@ section .feedbacks {
 }
 
 .order-detail-page .delivery-payment-info img {
-    width: 40px;
+    width: 30px;
     height: fit-content;
 }
 
@@ -2011,8 +1879,9 @@ section .feedbacks {
 }
 
 .order-detail-page .products .order-product .product-information .title {
+    text-align: left;
     width: 100%;
-    font-size: 14px;
+    font-size: 12px;
     padding: 10px 0 0 0;
 }
 
@@ -2028,37 +1897,54 @@ section .feedbacks {
     text-align: right;
 }
 
-.about-us, .warranty, .contacts {
+.about-us, .warranty, .contacts, .delivery-pay {
     width: 100%;
     padding: 5px 5px 20px 5px;
     line-height: 1.5;
     font-size: 12px;
     box-sizing: border-box;
-    background: #eee;
 }
 
-.about-us span, .warranty span, .contacts span {
+.about-us h3, .warranty h3, .contacts h3, .delivery-pay h3 {
+    text-align: center;
+}
+
+.about-us span, .warranty span, .contacts span, .delivery-pay span {
     color: #119E00;
     font-weight: 600;
     white-space: nowrap;
 }
 
-.about-us p, .warranty p, .contacts p {
+.about-us p, .warranty p, .contacts p, .delivery-pay p {
     padding-left: 10px;
 }
 
-.about-us h4, .warranty h4, .contacts h4 {
+.about-us h4, .warranty h4, .contacts h4, .delivery-pay h4 {
     text-align: center;
     font-size: 14px;
-    margin: 40px 0 0 0;
+    margin: 30px 0 0 0;
 }
 
-.about-us ul li, .warranty ul li, .contacts ul li {
+.about-us ul li, .warranty ul li, .contacts ul li, .delivery-pay ul li {
     margin-bottom: 10px;
+}
+
+.about-us .image, .warranty .image, .contacts .image, .delivery-pay .image {
+    width: 100%;
+    text-align: center;
+}
+
+.about-us img, .warranty img, .contacts img, .delivery-pay img {
+    width: 30%;
 }
 
 .about-us .social-network img {
     width: 20px;
     height: auto;
     margin: 5px;
+}
+
+.np-block {
+    font-size: 12px;
+    font-weight: 500;
 }

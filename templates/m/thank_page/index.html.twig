@@ -10,11 +10,7 @@
     <section>
 
         <div class="breadcrumb">
-            <a>X-media</a>
-            <span> > </span>
-            <a href="/">Головна</a>
-            <span> > </span>
-            <a class="selected">Дякуємо за покупку</a>
+            <a>Дякуємо за покупку</a>
         </div>
 
         <div class="order-detail">
@@ -28,8 +24,8 @@
                     </tr>
                 {% endfor %}
             </table>
-            <p><span>Спосіб оплати:<br> </span>{{ order.paytype }}</p>
-            <p><span>Спосіб доставки:<br>  </span>{{ order.deltype }}</p>
+            <p><span>Спосіб оплати:<br> </span>{{ order.paytype.title }}</p>
+            <p><span>Спосіб доставки:<br>  </span>{{ order.deltype.title }}</p>
             {% if order.address %}<p><span>Адреса:<br> </span></span>{{ order.address }}</p>{% endif %}
             <p><span>Загальна вартість:<br>  </span>{{ order.total|number_format(0, '.', ' ') }} грн</p>
             <div class="main-page-btn">

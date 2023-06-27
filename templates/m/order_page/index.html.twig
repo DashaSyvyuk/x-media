@@ -10,11 +10,10 @@
 
     <section>
         <div class="breadcrumb">
-            <a>X-media</a>
-            <span> > </span>
-            <a href="/">Головна</a>
-            <span> > </span>
-            <a class="selected">Оформлення замовлення</a>
+            <a class="image" href="/cart">
+                <img src="/images/arrow_navigate.png">
+            </a>
+            <span>Оформлення замовлення</span>
         </div>
 
         <div class="order-place">
@@ -39,7 +38,7 @@
                     <p>Спосіб доставки:</p>
                     <select name="deltype">
                         {% for deliveryType in deliveryTypes %}
-                            <option data-deltype-id="{{ deliveryType.id }}">{{ deliveryType.title }}</option>
+                            <option data-deltype-id="{{ deliveryType.id }}" value="{{ deliveryType.id }}">{{ deliveryType.title }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -51,7 +50,7 @@
                                 <select name="paytype">
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
                                         {% if paymentType.enabled %}
-                                            <option>{{ paymentType.title }}</option>
+                                            <option value="{{ paymentType.id }}">{{ paymentType.title }}</option>
                                         {% endif %}
                                     {% endfor%}
                                 </select>
@@ -61,27 +60,27 @@
                         <span data-delivery="{{ deliveryType.id }}" class="delivery-info">
                             <div class="payment">
                                 <p>Спосіб оплати:</p>
-                                <select name="paytype">
+                                <select name="paytype" disabled="disabled">
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
                                         {% if paymentType.enabled %}
-                                            <option>{{ paymentType.title }}</option>
+                                            <option value="{{ paymentType.id }}">{{ paymentType.title }}</option>
                                         {% endif %}
                                     {% endfor%}
                                 </select>
                             </div>
                             <div>
                                 <p>Адреса:</p>
-                                <textarea name="address">{% if user %}{{ user.name }}{% endif %}</textarea>
+                                <textarea name="address" disabled="disabled">{% if user %}{{ user.name }}{% endif %}</textarea>
                             </div>
                         </span>
                     {% elseif deliveryType.id == 3 %}
                         <span data-delivery="{{ deliveryType.id }}" class="delivery-info">
                             <div>
                                 <p>Спосіб оплати:</p>
-                                <select name="paytype">
+                                <select name="paytype" disabled="disabled">
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
                                         {% if paymentType.enabled %}
-                                            <option>{{ paymentType.title }}</option>
+                                            <option value="{{ paymentType.id }}">{{ paymentType.title }}</option>
                                         {% endif %}
                                     {% endfor%}
                                 </select>

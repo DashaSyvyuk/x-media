@@ -18,11 +18,15 @@ use Doctrine\Persistence\ManagerRegistry;
 class OrderRepository extends ServiceEntityRepository
 {
     private ProductRepository $productRepository;
+    private PaymentTypeRepository $paymentTypeRepository;
+    private DeliveryTypeRepository $deliveryTypeRepository;
 
-    public function __construct(ManagerRegistry $registry, ProductRepository $productRepository)
+    public function __construct(ManagerRegistry $registry, ProductRepository $productRepository, PaymentTypeRepository $paymentTypeRepository, DeliveryTypeRepository $deliveryTypeRepository)
     {
         parent::__construct($registry, Order::class);
         $this->productRepository = $productRepository;
+        $this->paymentTypeRepository = $paymentTypeRepository;
+        $this->deliveryTypeRepository = $deliveryTypeRepository;
     }
 
     /**
@@ -37,8 +41,8 @@ class OrderRepository extends ServiceEntityRepository
         $order->setAddress($data['address']);
         $order->setPhone($data['phone']);
         $order->setEmail($data['email']);
-        $order->setPaytype($data['paytype']);
-        $order->setDeltype($data['deltype']);
+        $order->setPaytype($this->paymentTypeRepository->findOneBy(['id' => $data['paytype']]));
+        $order->setDeltype($this->deliveryTypeRepository->findOneBy(['id' => $data['deltype']]));
         $order->setStatus(Order::NEW);
         $order->setPaymentStatus(false);
         $order->setComment($data['comment']);
