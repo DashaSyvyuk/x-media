@@ -160,7 +160,7 @@
                     <h4>Доставка:</h4>
                     <div class="info">
                         <div class="delivery-payment-block">
-                            <img src="/images/delivery/{{ order.delType.icon }}">{{ order.delType.title }}
+                            <img src="/images/delivery/{% if order.delType %}{{ order.delType.icon }}{% endif %}">{{ order.delType.title }}
                         </div>
                     </div>
                     <div class="delivery-data">

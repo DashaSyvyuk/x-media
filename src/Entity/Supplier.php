@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
@@ -81,6 +82,11 @@ class Supplier
     private bool $active = true;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SupplierProduct", mappedBy="supplier", cascade={"all"}, orphanRemoval=true)
+     */
+    private $products;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -89,6 +95,11 @@ class Supplier
      * @ORM\Column(type="datetime")
      */
     public DateTime $updatedAt;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -240,6 +251,35 @@ class Supplier
     public function getActive(): bool
     {
         return $this->active;
+    }
+
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    public function setProducts($products): void
+    {
+        if (count($products) > 0) {
+            foreach ($products as $product) {
+                $this->addProduct($product);
+            }
+        }
+    }
+
+    public function addProduct(SupplierProduct $product): void
+    {
+        if (!$this->products->contains($product)) {
+            $product->setSupplier($this);
+            $this->products[] = $product;
+        }
+    }
+
+    public function removeProduct(SupplierProduct $product): void
+    {
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
+        }
     }
 
     public function getCreatedAt(): DateTime

@@ -3,10 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Supplier;
+use App\Form\SupplierProductType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
@@ -42,5 +44,10 @@ class SupplierCrudController extends AbstractCrudController
         yield TextField::new('bankAccount', 'Рахунок')->hideOnIndex()->setColumns(6);
         yield AssociationField::new('currency', 'Валюта')->hideOnIndex()->setColumns(6);
         yield BooleanField::new('active', 'Активний')->setColumns(6);
+        yield CollectionField::new('products', 'Товари')
+            ->setColumns(12)
+            ->setEntryType(SupplierProductType::class)
+            ->renderExpanded()
+            ->onlyOnForms();
     }
 }
