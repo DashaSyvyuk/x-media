@@ -36,7 +36,11 @@
                                     {% endfor %}
                                 </table>
                                 <div class="info">
-                                    <div class="status"><b class="gray">{{ constant('App\\Entity\\Order::STATUSES')[order.status] }}</b></div>
+                                    <div class="status">
+                                        <b style="color: {{ constant('App\\Entity\\Order::GROUPED_STATUSES')[order.status]['color'] }}">
+                                            {{ constant('App\\Entity\\Order::GROUPED_STATUSES')[order.status]['title'] }}
+                                        </b>
+                                    </div>
                                     <div class="number-order">№ {{ order.orderNumber }}</div>
                                     <div class="datetime-price">
                                         <div class="datetime">{{ order.createdAt.format('Y-m-d H:i:s') }}</div>
