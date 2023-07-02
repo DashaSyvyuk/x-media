@@ -146,4 +146,9 @@ class DeliveryType
     {
         return $this->paymentTypes;
     }
+
+    public function __toString()
+    {
+        return $this->title;
+    }
 }

@@ -6,6 +6,7 @@ use App\Entity\Order;
 use App\Form\OrderItemType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -46,8 +47,8 @@ class OrderCrudController extends AbstractCrudController
         yield FormField::addPanel('Інформація про доставку');
 
         yield TextField::new('address', 'Адреса')->hideOnIndex();
-        yield TextField::new('paytype', 'Спосіб оплати')->hideOnIndex();
-        yield TextField::new('deltype', 'Спосіб доставки')->hideOnIndex();
+        yield AssociationField::new('paytype', 'Спосіб оплати')->hideOnIndex();
+        yield AssociationField::new('deltype', 'Спосіб доставки')->hideOnIndex();
         yield ChoiceField::new('status', 'Статус')->setChoices(array_flip(Order::STATUSES));
         yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex();
         yield TextField::new('ttn', 'ТТН')->hideOnIndex();

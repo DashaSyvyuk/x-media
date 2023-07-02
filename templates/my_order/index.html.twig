@@ -30,7 +30,11 @@
                             <li>
                                 <a class="no-link-style" href="/account/orders/{{ order.id }}">
                                     <div class="detail">
-                                        <p><b class="gray">{{ constant('App\\Entity\\Order::STATUSES')[order.status] }}</b></p><br>
+                                        <p>
+                                            <b style="color: {{ constant('App\\Entity\\Order::GROUPED_STATUSES')[order.status]['color'] }}">
+                                                {{ constant('App\\Entity\\Order::GROUPED_STATUSES')[order.status]['title'] }}
+                                            </b>
+                                        </p><br>
                                         <p class="gray margin-bottom-2">{{ order.createdAt.format('Y-m-d H:i:s') }}</p>
                                         <p class="green bold">{{ order.orderNumber }}</p><br>
                                         <p><b>{{ order.total|number_format(0, '.', ' ') }} грн</b></p>

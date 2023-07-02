@@ -42,16 +42,56 @@ class Order
     ];
 
     const GROUPED_STATUSES = [
-        self::NEW                    => 1,
-        self::NOT_APPROVED           => 1,
-        self::APPROVED               => 2,
-        self::PACKING                => 2,
-        self::NOVA_POSHTA_DELIVERING => 3,
-        self::COURIER_DELIVERING     => 3,
-        self::COMPLETED              => 4,
-        self::CANCELED_NOT_CONFIRMED => 5,
-        self::CANCELED_NO_PRODUCT    => 5,
-        self::CANCELED_NOT_PICKED_UP => 5,
+        self::NEW => [
+            'id'    => 1,
+            'color' => '#119E00',
+            'title' => 'Нове'
+        ],
+        self::NOT_APPROVED => [
+            'id'    => 1,
+            'color' => '#119E00',
+            'title' => 'Нове'
+        ],
+        self::APPROVED => [
+            'id'    => 2,
+            'color' => '#FF8C00',
+            'title' => 'В процесі'
+        ],
+        self::PACKING                => [
+            'id'    => 2,
+            'color' => '#FF8C00',
+            'title' => 'В процесі'
+        ],
+        self::NOVA_POSHTA_DELIVERING => [
+            'id'    => 3,
+            'color' => '#0000FF',
+            'title' => 'Відправлено'
+        ],
+        self::COURIER_DELIVERING     => [
+            'id'    => 3,
+            'color' => '#0000FF',
+            'title' => 'Відправлено'
+        ],
+        self::COMPLETED              => [
+            'id'    => 4,
+            'color' => '#000000',
+            'title' => 'Доставлено'
+        ],
+        self::CANCELED_NOT_CONFIRMED => [
+            'id'    => 5,
+            'color' => '#808080',
+            'title' => 'Відмінено'
+        ],
+        self::CANCELED_NO_PRODUCT    => [
+            'id'    => 5,
+            'color' => '#808080',
+            'title' => 'Відмінено'
+        ],
+        self::CANCELED_NOT_PICKED_UP => [
+            'id'    => 5,
+            'color' => '#808080',
+            'title' => 'Відмінено'
+        ],
     ];
 
     /**
