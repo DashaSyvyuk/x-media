@@ -37,22 +37,22 @@ class OrderCrudController extends AbstractCrudController
     {
         yield FormField::addPanel('Контактна інформація');
         yield IdField::new('id')->hideOnForm();
-        yield TextField::new('orderNumber', 'Номер замовлення');
-        yield TextField::new('name', 'Ім\'я');
-        yield TextField::new('surname', 'Прізвище');
-        yield TextField::new('phone', 'Номер телефону');
-        yield TextField::new('email', 'Email');
-        yield TextField::new('comment', 'Коментар')->hideOnIndex();
+        yield TextField::new('orderNumber', 'Номер замовлення')->setColumns(7);
+        yield TextField::new('name', 'Ім\'я')->setColumns(7);
+        yield TextField::new('surname', 'Прізвище')->setColumns(7);
+        yield TextField::new('phone', 'Номер телефону')->setColumns(7);
+        yield TextField::new('email', 'Email')->setColumns(7);
+        yield TextField::new('comment', 'Коментар')->hideOnIndex()->setColumns(7);
 
         yield FormField::addPanel('Інформація про доставку');
 
-        yield TextField::new('address', 'Адреса')->hideOnIndex();
-        yield AssociationField::new('paytype', 'Спосіб оплати')->hideOnIndex();
-        yield AssociationField::new('deltype', 'Спосіб доставки')->hideOnIndex();
-        yield ChoiceField::new('status', 'Статус')->setChoices(array_flip(Order::STATUSES));
-        yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex();
-        yield TextField::new('ttn', 'ТТН')->hideOnIndex();
-        yield NumberField::new('total', 'Загальна вартість')->hideOnIndex();
+        yield TextField::new('address', 'Адреса')->hideOnIndex()->setColumns(7);
+        yield AssociationField::new('paytype', 'Спосіб оплати')->hideOnIndex()->setColumns(7);
+        yield AssociationField::new('deltype', 'Спосіб доставки')->hideOnIndex()->setColumns(7);
+        yield ChoiceField::new('status', 'Статус')->setChoices(array_flip(Order::STATUSES))->setColumns(7);
+        yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex()->setColumns(7);
+        yield TextField::new('ttn', 'ТТН')->hideOnIndex()->setColumns(7);
+        yield NumberField::new('total', 'Загальна вартість')->hideOnIndex()->setColumns(7);
 
         yield FormField::addPanel('Товари');
 
