@@ -37,6 +37,11 @@ class Category
     private string $title = "";
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $image = "";
+
+    /**
      * @ORM\Column(type="string")
      */
     private ?string $metaKeyword = "";
@@ -94,6 +99,16 @@ class Category
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setImage(?string $image): void
+    {
+        $this->image = $image;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
     }
 
     public function setMetaKeyword(?string $metaKeyword): void
