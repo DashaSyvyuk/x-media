@@ -1730,16 +1730,20 @@ section .feedbacks {
     justify-content: center;
     flex-direction: column;
     align-items: flex-start;
-    line-height: 0.9;
+    line-height: 0;
     padding: 10px 17px;
 }
 
 .my-orders li .detail .gray {
-    color: #333;
+    color: #666;
 }
 
 .my-orders li .detail .margin-bottom-2 {
     margin-bottom: 2px;
+}
+
+.my-orders li .detail .price {
+    font-weight: 600;
 }
 
 .my-orders .products td {
@@ -1809,7 +1813,7 @@ section .feedbacks {
     align-items: center;
 }
 
-.my-order img {
+.my-order .info .delivery-payment-block img {
     width: 25px;
     margin-right: 15px;
 }

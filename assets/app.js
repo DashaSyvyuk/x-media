@@ -27,6 +27,6 @@ function prevImage(event) {
     $(event.currentTarget).attr('src', $(event.currentTarget).data('first'));
 }
 
-$('.product-image img').on('mouseover', (e) => nextImage(e));
+$('.product img').on('mouseover', (e) => nextImage(e));
 
-$('.product-image img').on('mouseout', (e) => prevImage(e));
+$('.product img').on('mouseout', (e) => prevImage(e));
