@@ -10,10 +10,10 @@ $('.rating').each(function() {
     $(this).find('.star-rating').starRating({
          emptyColor: '#eee',
          initialRating: value,
-         strokeColor: '#00e765',
+         strokeColor: '#119e00',
          starSize: 20,
-         activeColor: '#00e765',
-         hoverColor: '#00e765',
+         activeColor: '#119e00',
+         hoverColor: '#119e00',
          useGradient: false,
          readOnly: true
     });
