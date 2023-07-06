@@ -3,6 +3,7 @@
         src="{% if product.images|length > 0 %}/images/products/{{ product.images[0].imageUrl }}{% endif %}"
         data-first="{% if product.images|length > 0 %}/images/products/{{ product.images[0].imageUrl }}{% endif %}"
         data-next="{% if product.images|length > 0 %}/images/products/{{ product.images[1].imageUrl }}{% endif %}"
+        onerror="this.src='/images/no_image.png';"
     >
     <div class="product-title"><a href="/products/{{ product.id }}">{{ product.title }}</a></div>
     <div class="rating">

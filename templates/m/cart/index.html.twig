@@ -24,7 +24,10 @@
                     <div class="product-row" data-id="{{ product.id }}" data-name="{{ product.title }}">
                         <div class="image">
                             <a class="no-link-style" href="/products/{{ product.id }}">
-                                <img src="/images/products/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}" />
+                                <img
+                                    src="/images/products/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}"
+                                    onerror="this.src='/images/no_image.png';"
+                                />
                             </a>
                         </div>
                         <div class="info">

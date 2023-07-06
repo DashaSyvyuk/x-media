@@ -56,7 +56,10 @@
                         {% for item in order.items %}
                             <div class="order-product">
                                 <div class="image">
-                                    <img src="/images/products/{% if item.product.images|length > 0 %}{{ item.product.images[0].imageUrl }}{% endif %}" />
+                                    <img
+                                        src="/images/products/{% if item.product.images|length > 0 %}{{ item.product.images[0].imageUrl }}{% endif %}"
+                                        onerror="this.src='/images/no_image.png';"
+                                    />
                                 </div>
                                 <div class="product-information">
                                     <div class="title"><a class="no-link-style" href="/products/{{ item.product.id }}">{{ item.product.title }}</a></div>

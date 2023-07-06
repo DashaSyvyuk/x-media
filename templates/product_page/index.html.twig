@@ -24,12 +24,18 @@
             <div class="list">
                 <div class="inner">
                     {% for image in product.getImages() %}
-                        <img src="/images/products/{{ image.imageUrl }}" {% if loop.first %}class="active"{% endif %}>
+                        <img
+                            src="/images/products/{{ image.imageUrl }}" {% if loop.first %}class="active"{% endif %}
+                            onerror="this.src='/images/no_image.png';"
+                        >
                     {% endfor %}
                 </div>
             </div>
             <div class="main">
-                <img src="/images/products/{{ product.getImages()[0].imageUrl }}">
+                <img
+                    src="/images/products/{{ product.getImages()[0].imageUrl }}"
+                    onerror="this.src='/images/no_image.png';"
+                >
             </div>
         </div>
 
@@ -178,7 +184,10 @@
         <div class="products">
             {% for image in product.getImages() %}
                 <div class="image">
-                    <img src="/images/products/{{ image.imageUrl }}">
+                    <img
+                        src="/images/products/{{ image.imageUrl }}"
+                        onerror="this.src='/images/no_image.png';"
+                    >
                 </div>
             {% endfor %}
         </div>

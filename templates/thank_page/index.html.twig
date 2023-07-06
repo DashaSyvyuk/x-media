@@ -26,7 +26,14 @@
             <table class="products">
                 {% for item in order.items %}
                     <tr>
-                        <td class="image"><a href="/products/{{ item.product.id }}"><img src="/images/products/{{ item.product.getImages()[0].imageUrl }}"></a></td>
+                        <td class="image">
+                            <a href="/products/{{ item.product.id }}">
+                                <img
+                                    src="/images/products/{{ item.product.getImages()[0].imageUrl }}"
+                                    onerror="this.src='/images/no_image.png';"
+                                >
+                            </a>
+                        </td>
                         <td><a href="/products/{{ item.product.id }}">{{ item.product.title }}</a></td>
                         <td class="count">{{ item.count }}</td>
                     </tr>

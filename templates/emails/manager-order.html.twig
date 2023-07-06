@@ -5,7 +5,13 @@
         <tr>
             <td style="padding: 20px; background-color: #eee">
                 <a style="color: #000; text-decoration: none;" href="{{ mainUrl }}products/{{ item.product.id }}">
-                    <img src="{{ mainUrl }}/images/products/{{ item.product.getImages()[0].imageUrl }}" width="100" style="margin-right: 10px;"  alt=""/>
+                    <img
+                        src="{{ mainUrl }}/images/products/{{ item.product.getImages()[0].imageUrl }}"
+                        width="100"
+                        style="margin-right: 10px;"
+                        alt=""
+                        onerror="this.src='/images/no_image.png';"
+                    />
                 </a>
             </td>
             <td style="padding: 20px; background-color: #eee">

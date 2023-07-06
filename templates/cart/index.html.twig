@@ -15,7 +15,10 @@
                         <td class="product-name">
                             <div class="product-title">
                                 <a class="no-link-style" href="/products/{{ product.id }}">
-                                    <img src="/images/products/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}" />
+                                    <img
+                                        src="/images/products/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}"
+                                        onerror="this.src='/images/no_image.png';"
+                                    />
                                 </a>
                                 <div><a class="no-link-style" href="/products/{{ product.id }}">{{ product.title }}</a></div>
                             </div>

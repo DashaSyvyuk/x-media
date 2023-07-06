@@ -29,7 +29,10 @@
                                         <tr>
                                             <td>
                                                 <a href="/products/{{ item.product.id }}" target="_blank">
-                                                    <img src="/images/products/{{ item.product.getImages()[0].imageUrl }}">
+                                                    <img
+                                                        src="/images/products/{{ item.product.getImages()[0].imageUrl }}"
+                                                        onerror="this.src='/images/no_image.png';"
+                                                    >
                                                 </a>
                                             </td>
                                         </tr>

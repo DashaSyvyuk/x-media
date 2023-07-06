@@ -1,6 +1,10 @@
 <div class="product">
     <div class="inner">
-        <img class="product-image" src="/images/products/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}">
+        <img
+            class="product-image"
+            src="/images/products/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}"
+            onerror="this.src='/images/no_image.png';"
+        >
         <div class="product-title"><a href="/products/{{ product.id }}">{{ product.title }}</a></div>
         <div class="rating">
             <span class="star-rating"></span>
