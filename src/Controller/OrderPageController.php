@@ -204,15 +204,12 @@ class OrderPageController extends BaseController
 
     private function getAddress($data): ?string
     {
-        if (!$data->get('address') && !$data->get('city') && !$data->get('city')) {
-            return null;
-        }
-
         $address = $data->get('address');
         $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $data->get('city')]);
         $office = $this->novaPoshtaOfficeRepository->findOneBy(['ref' => $data->get('office')]);
+        $pickUpPoint = $this->settingRepository->findOneBy(['slug' => 'pick_up_point_address']);
 
-        return $city ? $city . ', ' . $office : $address;
+        return $city ? $city . ', ' . $office : (!empty($address) ? $address : $pickUpPoint->getValue() ?? null);
     }
 
     private function generateOrderNumber(): string
