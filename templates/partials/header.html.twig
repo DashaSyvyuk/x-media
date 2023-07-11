@@ -24,6 +24,6 @@
                 0
             {% endif %}
         </div>
-        <a href="{% if app.session.get('user') %}/account{% else %}/login{% endif %}"><img id="account" src="/images/account.png"></a>
+        <a href="{% if app.session.get('user') %}/account{% else %}/login{% endif %}"><img id="account" src="/images/{% if app.session.get('user') %}account_logged.png{% else %}account.png{% endif %}"></a>
     </div>
 </div>
