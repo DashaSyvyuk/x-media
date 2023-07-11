@@ -28,6 +28,11 @@ class PaymentType
     private string $title = "";
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $cost = 0;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private bool $enabled = true;
@@ -65,6 +70,16 @@ class PaymentType
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setCost(?int $cost): void
+    {
+        $this->cost = $cost;
+    }
+
+    public function getCost(): ?int
+    {
+        return $this->cost;
     }
 
     public function setEnabled(bool $enabled): void

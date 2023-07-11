@@ -196,7 +196,7 @@ class OrderPageController extends BaseController
         }
 
         return [
-            'products' => $products,
+            'products'   => $products,
             'totalPrice' => $totalPrice,
             'totalCount' => $totalCount
         ];
