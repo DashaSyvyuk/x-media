@@ -65,6 +65,9 @@ header #menu-open {
     color: #000;
     display: contents;
 }
+.bold {
+    font-weight: bold;
+}
 .hamburger {
     width: 33px;
     height: 28px;
@@ -255,6 +258,13 @@ header #menu-open {
 }
 #search img {
     width: 25px;
+}
+.last-active-order {
+    padding: 5px;
+}
+.last-active-order p {
+    text-align: center;
+    margin-top: -10px;
 }
 #slider .item {
     position: relative;
@@ -1103,6 +1113,15 @@ section .title {
     box-sizing: border-box;
     background-color: #eee;
     font-size: 10px;
+}
+
+.product-page .detail .property-link {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    background: #ccc;
+    padding: 10px 0;
+    margin-top: -10px;
 }
 
 .product-page .detail .attributes .title {
