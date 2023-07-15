@@ -20,7 +20,7 @@ class ProductFilterAttributeType extends AbstractType {
         $builder
             ->add('filter', EntityType::class, [
                 'class' => Filter::class,
-                'placeholder' => '',
+                'placeholder' => 'Оберіть фільтр',
                 'label' => 'Фільтр',
                 'required' => true
             ])
@@ -41,7 +41,6 @@ class ProductFilterAttributeType extends AbstractType {
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) use ($formModifier) {
-                // this would be your entity, i.e. SportMeetup
                 $data = $event->getData();
 
                 $formModifier($event->getForm(), $data?->getFilter());
