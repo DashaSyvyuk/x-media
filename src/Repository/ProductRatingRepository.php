@@ -19,10 +19,16 @@ class ProductRatingRepository extends ServiceEntityRepository
         parent::__construct($registry, ProductRating::class);
     }
 
-    public function create(ProductRating $rating)
+    public function create(array $data): ProductRating
     {
+        $productRating = new ProductRating();
+        $productRating->setProduct($data['product']);
+        $productRating->setValue($data['rating']);
+
         $entityManager = $this->getEntityManager();
-        $entityManager->persist($rating);
+        $entityManager->persist($productRating);
         $entityManager->flush();
+
+        return $productRating;
     }
 }

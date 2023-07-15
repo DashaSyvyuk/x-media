@@ -2,58 +2,30 @@
 
 namespace App\Controller;
 
-use App\Entity\Comment;
-use App\Entity\ProductRating;
-use App\Repository\CommentRepository;
-use App\Repository\ProductRatingRepository;
-use App\Repository\ProductRepository;
+use App\Service\Comment\CommentCreateService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CommentController extends AbstractController
 {
-    private CommentRepository $commentRepository;
-
-    private ProductRatingRepository $productRatingRepository;
-
-    private ProductRepository $productRepository;
-
-    /**
-     * @param CommentRepository $commentRepository
-     * @param ProductRatingRepository $productRatingRepository
-     * @param ProductRepository $productRepository
-     */
     public function __construct(
-        CommentRepository $commentRepository,
-        ProductRatingRepository $productRatingRepository,
-        ProductRepository $productRepository
+        private readonly CommentCreateService $commentCreateService,
     ) {
-        $this->commentRepository = $commentRepository;
-        $this->productRatingRepository = $productRatingRepository;
-        $this->productRepository = $productRepository;
     }
 
     public function post(Request $request): Response
     {
-        $product = $this->productRepository->findOneBy(['id' => $request->request->get('product')]);
+        try {
+            $this->commentCreateService->run($request->request->all());
 
-        $rating = new ProductRating();
-        $rating->setProduct($product);
-        $rating->setValue($request->request->get('rating'));
-
-        $comment = new Comment();
-        $comment->setAuthor($request->request->get('author'));
-        $comment->setEmail($request->request->get('email'));
-        $comment->setComment($request->request->get('comment'));
-        $comment->setProduct($product);
-        $comment->setStatus('NEW');
-
-        $this->productRatingRepository->create($rating);
-        $this->commentRepository->create($comment);
-
-        return new Response(json_encode([
-            'success' => true
-        ]));
+            return new Response(json_encode([
+                'success' => true
+            ]));
+        } catch (\Exception $e) {
+            return new Response(json_encode([
+                'success' => false
+            ]));
+        }
     }
 }

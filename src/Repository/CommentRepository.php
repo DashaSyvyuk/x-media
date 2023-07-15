@@ -19,10 +19,19 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    public function create(Comment $comment)
+    public function create(array $data): Comment
     {
+        $comment = new Comment();
+        $comment->setAuthor($data['author']);
+        $comment->setEmail($data['email']);
+        $comment->setComment($data['comment']);
+        $comment->setProduct($data['product']);
+        $comment->setStatus($data['status']);
+
         $entityManager = $this->getEntityManager();
         $entityManager->persist($comment);
         $entityManager->flush();
+
+        return $comment;
     }
 }
