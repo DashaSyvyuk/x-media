@@ -38,11 +38,11 @@ class ProductCrudController extends AbstractCrudController
         return Product::class;
     }
 
-    /* public function configureAssets(Assets $assets): Assets
+    public function configureAssets(Assets $assets): Assets
     {
         return parent::configureAssets($assets)
             ->addWebpackEncoreEntry('admin');
-    } */
+    }
 
     public function configureCrud(Crud $crud): Crud
     {

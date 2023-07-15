@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
-use App\Repository\FilterAttributeRepository;
 use App\Repository\FilterRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;

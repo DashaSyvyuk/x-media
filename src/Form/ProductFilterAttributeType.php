@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Filter;
 use App\Entity\FilterAttribute;
 use App\Entity\ProductFilterAttribute;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,8 +14,8 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ProductFilterAttributeType extends AbstractType {
-
+class ProductFilterAttributeType extends AbstractType
+{
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -22,7 +23,10 @@ class ProductFilterAttributeType extends AbstractType {
                 'class' => Filter::class,
                 'placeholder' => 'Оберіть фільтр',
                 'label' => 'Фільтр',
-                'required' => true
+                'required' => true,
+                'attr' => [
+                    'class' => 'filter'
+                ]
             ])
         ;
 
@@ -35,6 +39,9 @@ class ProductFilterAttributeType extends AbstractType {
                 'choices' => $attributes,
                 'label' => 'Параметр',
                 'required' => true,
+                'attr' => [
+                    'class' => 'filter-attribute'
+                ]
             ]);
         };
 

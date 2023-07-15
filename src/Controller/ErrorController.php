@@ -22,8 +22,6 @@ class ErrorController extends BaseController
 
     public function show(Request $request): Response
     {
-        return $this->renderTemplate($request,'bundles/TwigBundle/Exception/error404.html.twig', [
-            'totalCount' => $_COOKIE['totalCount'] ?? 0
-        ]);
+        return $this->renderTemplate($request,'bundles/TwigBundle/Exception/error404.html.twig', []);
     }
 }
