@@ -23,7 +23,7 @@ class ProductCharacteristic
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
-    private int $id = 0;
+    private ?int $id = 0;
 
     /**
      * @ORM\Column(type="string")
@@ -56,7 +56,7 @@ class ProductCharacteristic
      */
     private DateTime $updatedAt;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

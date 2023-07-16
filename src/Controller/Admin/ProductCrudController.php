@@ -104,7 +104,6 @@ class ProductCrudController extends AbstractCrudController
 
                     ],
                     'attr' => ['rows' => '40'],
-
                 ])
             ->setColumns(12)
             ->hideOnIndex();
@@ -120,7 +119,7 @@ class ProductCrudController extends AbstractCrudController
         yield CollectionField::new('characteristics')
             ->setColumns(12)
             ->setEntryType(ProductCharacteristicType::class)
-            ->renderExpanded()
+            ->renderExpanded(false)
             ->onlyOnForms();
 
         yield FormField::addPanel('Фільтри');

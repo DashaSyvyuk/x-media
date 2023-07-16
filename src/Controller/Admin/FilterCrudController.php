@@ -46,14 +46,8 @@ class FilterCrudController extends AbstractCrudController
         yield FormField::addPanel('Параметри');
 
         yield CollectionField::new('attributes', 'Параметри')
-            ->allowAdd()
-            ->allowDelete()
             ->renderExpanded()
-            ->setEntryIsComplex(true)
             ->setEntryType(AttributeType::class)
-            ->setFormTypeOptions([
-                'by_reference' => 'false'
-            ])
             ->hideOnIndex();
     }
 }

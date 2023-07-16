@@ -5,7 +5,10 @@ namespace App\Form;
 use App\Entity\Filter;
 use App\Entity\FilterAttribute;
 use App\Entity\ProductFilterAttribute;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use App\Repository\FilterRepository;
+use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,12 +19,23 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProductFilterAttributeType extends AbstractType
 {
+    public function __construct(
+        private readonly AdminContextProvider $adminContextProvider,
+        private readonly FilterRepository $filterRepository
+    )
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $category = $this->adminContextProvider->getContext()->getEntity()->getInstance()->getCategory();
+        $filters = $this->filterRepository->findBy(['category' => $category]);
+
         $builder
             ->add('filter', EntityType::class, [
                 'class' => Filter::class,
                 'placeholder' => 'Оберіть фільтр',
+                'choices' => $filters,
                 'label' => 'Фільтр',
                 'required' => true,
                 'attr' => [
@@ -70,6 +84,8 @@ class ProductFilterAttributeType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class' => ProductFilterAttribute::class,
         ]);

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
-use App\Repository\NovaPoshtaCityRepository;
 use App\Repository\UserRepository;
 use App\Repository\SettingRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,25 +10,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends BaseController
 {
-    private NovaPoshtaCityRepository $novaPoshtaCityRepository;
-
-    private UserRepository $userRepository;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
-     * @param NovaPoshtaCityRepository $novaPoshtaCityRepository
      * @param UserRepository $userRepository
      */
     public function __construct(
-        CategoryRepository $categoryRepository,
-        SettingRepository $settingRepository,
-        NovaPoshtaCityRepository $novaPoshtaCityRepository,
-        UserRepository $userRepository
+        private readonly CategoryRepository $categoryRepository,
+        private readonly SettingRepository $settingRepository,
+        private readonly UserRepository $userRepository
     ) {
         parent::__construct($categoryRepository, $settingRepository);
-        $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
-        $this->userRepository = $userRepository;
     }
 
     public function post(Request $request): Response
