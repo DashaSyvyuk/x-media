@@ -133,7 +133,7 @@ class ProductCrudController extends AbstractCrudController
         yield CollectionField::new('comments')
             ->setColumns(12)
             ->setEntryType(CommentType::class)
-            ->renderExpanded()
+            ->renderExpanded(false)
             ->onlyOnForms();
     }
 

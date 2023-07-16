@@ -35,6 +35,12 @@ class ProductQueue
     private Supplier $supplier;
 
     /**
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Warehouse")
+     */
+    private Warehouse $warehouse;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private int $price = 0;
@@ -82,6 +88,16 @@ class ProductQueue
     public function setSupplier(?Supplier $supplier): void
     {
         $this->supplier = $supplier;
+    }
+
+    public function getWarehouse(): Warehouse
+    {
+        return $this->warehouse;
+    }
+
+    public function setWarehouse(Warehouse $warehouse): void
+    {
+        $this->warehouse = $warehouse;
     }
 
     public function getPrice(): int
@@ -132,5 +148,10 @@ class ProductQueue
     public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function __toString(): string
+    {
+        return $this->product->getTitle();
     }
 }

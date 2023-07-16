@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Supplier;
 use App\Entity\Warehouse;
+use App\Form\CommentType;
+use App\Form\ProductQueueType;
 use App\Form\SupplierProductType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -42,5 +44,12 @@ class WarehouseCrudController extends AbstractCrudController
         yield TextField::new('city', 'Місто')->setColumns(7);
         yield TextareaField::new('notes', 'Нотатки')->hideOnIndex()->setColumns(7);
         yield BooleanField::new('active', 'Активний')->setColumns(7);
+        yield AssociationField::new('productQueues', 'Черга товарів')->hideOnIndex();
+
+        yield CollectionField::new('productQueues')
+            ->setColumns(12)
+            ->setEntryType(ProductQueueType::class)
+            ->renderExpanded(false)
+            ->onlyOnForms();
     }
 }

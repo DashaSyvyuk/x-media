@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
@@ -64,6 +65,11 @@ class Warehouse
     private bool $active = true;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductQueue", mappedBy="warehouse", cascade={"all"}, orphanRemoval=true)
+     */
+    private $productQueues;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -72,6 +78,11 @@ class Warehouse
      * @ORM\Column(type="datetime")
      */
     public DateTime $updatedAt;
+
+    public function __construct()
+    {
+        $this->productQueues = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -177,6 +188,35 @@ class Warehouse
         return $this->active;
     }
 
+    public function getProductQueues()
+    {
+        return $this->productQueues;
+    }
+
+    public function setProductQueues($productQueues): void
+    {
+        if (count($productQueues) > 0) {
+            foreach ($productQueues as $productQueue) {
+                $this->addProductQueue($productQueue);
+            }
+        }
+    }
+
+    public function addProductQueue(ProductQueue $productQueue): void
+    {
+        if (!$this->productQueues->contains($productQueue)) {
+            $productQueue->setWarehouse($this);
+            $this->productQueues[] = $productQueue;
+        }
+    }
+
+    public function removeProductQueue(ProductQueue $productQueue): void
+    {
+        if ($this->productQueues->contains($productQueue)) {
+            $this->productQueues->removeElement($productQueue);
+        }
+    }
+
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
@@ -199,6 +239,6 @@ class Warehouse
 
     public function __toString(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 }
