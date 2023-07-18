@@ -15,6 +15,46 @@
     </form>
 </div>
 
+<div class="last-active-order">
+    {% if app.session.get('user') and order %}
+        <p>Привіт, <span class="green bold">{{ user.name }}</span> ось<br>
+            твоє останнє активне замовлення
+        </p>
+        <ul class="my-orders">
+            <li>
+                <a class="no-link-style" href="/account/orders/{{ order.id }}">
+                    <table class="products">
+                        {% for item in order.items %}
+                            <tr>
+                                <td>
+                                    <a href="/products/{{ item.product.id }}" target="_blank">
+                                        <img
+                                                src="/images/products/{{ item.product.getImages()[0].imageUrl }}"
+                                                onerror="this.src='/images/no_image.png';"
+                                        >
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <div class="info">
+                        <div class="status">
+                            <b style="color: {{ constant('App\\Entity\\Order::GROUPED_STATUSES')[order.status]['color'] }}">
+                                {{ constant('App\\Entity\\Order::GROUPED_STATUSES')[order.status]['title'] }}
+                            </b>
+                        </div>
+                        <div class="number-order">№ {{ order.orderNumber }}</div>
+                        <div class="datetime-price">
+                            <div class="datetime">{{ order.createdAt.format('Y-m-d H:i:s') }}</div>
+                            <div class="price"><b>{{ order.total|number_format(0, ',', ' ') }} грн</b></div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    {% endif %}
+</div>
+
 <div id="slider">
     {% for slider in sliders %}
         <div class="item">

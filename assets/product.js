@@ -41,6 +41,14 @@ $('.product-page .tabs-place .tabs .tab').on('click', (e) => {
     $('#' + tab).addClass('active');
 });
 
+$('.property-link').on('click', function() {
+    const tab = $('[data-tab="characteristics"]');
+    tab.trigger('click');
+    $('html, body').animate({
+        scrollTop: tab.offset().top
+    }, 1000);
+});
+
 $('.rating').starRating({
     emptyColor: '#eee',
     initialRating: 5,

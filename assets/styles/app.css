@@ -796,6 +796,7 @@ header {
     box-sizing: border-box;
     background-color: #eee;
     font-size: 10px;
+    position: relative;
 }
 
 .product-page .detail .attributes .title {
@@ -805,6 +806,12 @@ header {
 
 .product-page .detail .attributes .value {
     text-align: right;
+}
+
+.product-page .detail .attributes .property-link {
+    cursor: pointer;
+    padding: 5px 0 0 5px;
+    text-decoration: solid;
 }
 
 .product-page .detail .title, .product-page .detail .value {
