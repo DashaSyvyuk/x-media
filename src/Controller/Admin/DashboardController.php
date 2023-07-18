@@ -14,6 +14,7 @@ use App\Entity\Product;
 use App\Entity\Setting;
 use App\Entity\Slider;
 use App\Entity\Supplier;
+use App\Entity\SupplierOrder;
 use App\Entity\Warehouse;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -92,6 +93,7 @@ class DashboardController extends AbstractDashboardController
         ]);
 
         yield MenuItem::subMenu('Постачальники', 'fa fa-truck')->setSubItems([
+            MenuItem::linkToCrud('Замовлення постачальникам', 'fa fa-shopping-cart', SupplierOrder::class),
             MenuItem::linkToCrud('Постачальники', 'fas fa-truck', Supplier::class),
             MenuItem::linkToCrud('Склади', 'fa fa-archive', Warehouse::class)
         ]);
