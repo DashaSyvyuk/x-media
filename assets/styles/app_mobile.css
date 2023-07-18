@@ -456,6 +456,8 @@ footer div {
     text-align: center;
     font-family: 'Montserrat', sans-serif;
     border: none;
+    -webkit-appearance: none;
+    border-radius: 0;
 }
 .green {
     color: #119e00;
