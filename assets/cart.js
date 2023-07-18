@@ -138,6 +138,7 @@ function getTotalCount(cart) {
     if (total >= 0) {
         $('#cart-count').text(total);
         $("#cart-block .title span").text(total);
+        $(".total-count").text(total);
     }
 
     return total;

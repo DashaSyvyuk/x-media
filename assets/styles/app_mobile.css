@@ -466,6 +466,8 @@ footer div {
     text-align: center;
     font-family: 'Montserrat', sans-serif;
     border: none;
+    -webkit-appearance: none;
+    border-radius: 0;
 }
 .green {
     color: #119e00;
@@ -701,6 +703,7 @@ section .title {
     box-sizing: border-box;
     background-color: #eee;
     border: none;
+    color: black;
 }
 
 .filter-buttons button img {
@@ -964,7 +967,7 @@ section .title {
 }
 
 #filters-mobile-form {
-    padding-bottom: 65px;
+    padding-bottom: 78px;
 }
 
 #mobile-sorting, #mobile-filters {
@@ -999,7 +1002,7 @@ section .title {
     width: 49%;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
-    padding: 8px;
+    padding: 15px;
     box-sizing: border-box;
     border: 1px solid #000;
 }
@@ -1333,12 +1336,12 @@ section .title {
     width: 100%;
     box-sizing: border-box;
     font-size: 12px;
-    text-align: center;
 }
 
 #comment-list h4 {
     font-weight: 600;
     font-size: 14px;
+    text-align: center;
 }
 
 .comment .inner p {
@@ -1446,6 +1449,7 @@ section .feedbacks {
     resize: none;
     font-family: 'Montserrat', sans-serif;
     outline: none;
+    border-radius: unset;
 }
 
 .add-comment input[type=text]:focus, .add-comment textarea:focus {

@@ -10,12 +10,13 @@
 
     <section>
         <div class="account">
-            <ul class="left-side">
-                <li><a href="/account"><img src="/images/home.png"><span>Головна сторінка</span></a></li>
-                <li><a href="/account/contacts"><img src="/images/setting.png"><span>Контактні дані</span></a></li>
-                <li class="open"><a href="/account/orders"><img src="/images/list.png"><span>Мої замовлення</span></a></li>
-                <li><a id="logout"><img src="/images/log_out.png"><span>Вийти</span></a></li>
-            </ul>
+
+            <div class="breadcrumb">
+                <a class="image" href="/orders">
+                    <img src="/images/arrow_navigate.png">
+                </a>
+                <span>Замовлення №{{ order.orderNumber }}</span>
+            </div>
 
             <div class="main-part">
                 <div class="order-detail-page">
