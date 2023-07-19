@@ -20,6 +20,16 @@ class CartController extends BaseController
 
     public function getCart(): Response
     {
+        if (!array_key_exists('cart', $_COOKIE)) {
+            return new Response(json_encode([
+                'cart' => $this->renderView('cart/index.html.twig', [
+                    'products'   => [],
+                    'totalCount' => 0,
+                    'totalPrice' => 0
+                ])
+            ]));
+        }
+
         $cart = $this->cartShowService->run($_COOKIE['cart']);
 
         return new Response(json_encode([
@@ -33,9 +43,17 @@ class CartController extends BaseController
 
     public function getMobileCart(Request $request): Response
     {
+        if (!array_key_exists('cart', $_COOKIE)) {
+            return $this->renderTemplate($request, 'm/cart/index.html.twig', [
+                'products'   => [],
+                'totalCount' => 0,
+                'totalPrice' => 0
+            ]);
+        }
+
         $cart = $this->cartShowService->run($_COOKIE['cart']);
 
-        return $this->renderTemplate($request, 'cart/index.html.twig', [
+        return $this->renderTemplate($request, 'm/cart/index.html.twig', [
             'products'   => $cart['products'],
             'totalCount' => $cart['totalCount'],
             'totalPrice' => $cart['totalPrice']
