@@ -25,19 +25,20 @@
                         <li>
                             <a class="no-link-style" href="/account/orders/{{ order.id }}">
                                 <table class="products">
-                                    {% for item in order.items %}
-                                        <tr>
-                                            <td>
-                                                <a href="/products/{{ item.product.id }}" target="_blank">
-                                                    <img
-                                                        src="/images/products/{{ item.product.getImages()[0].imageUrl }}"
-                                                        onerror="this.src='/images/no_image.png';"
-                                                    >
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
+                                    <tr>
+                                        <td>
+{#                                            <a class="no-link-style" href="/products/{{ order.items[0].product.id }}" target="_blank">#}
+                                                <img
+                                                    src="/images/products/{{ order.items[0].product.getImages()[0].imageUrl }}"
+                                                    onerror="this.src='/images/no_image.png';"
+                                                >
+{#                                            </a>#}
+                                        </td>
+                                    </tr>
                                 </table>
+                                {% if order.items|length > 1 %}
+                                    <div class="extra-products-amount">+{{ order.items|length - 1 }}</div>
+                                {% endif %}
                                 <div class="info">
                                     <div class="status">
                                         <b style="color: {{ constant('App\\Entity\\Order::GROUPED_STATUSES')[order.status]['color'] }}">

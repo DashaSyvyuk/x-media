@@ -60,10 +60,26 @@ class MyOrderController extends BaseController
             self::PAGINATION_LIMIT
         );
 
+        $monthNamesUa = [
+            '01' => 'січня',
+            '02' => 'лютого',
+            '03' => 'березня',
+            '04' => 'квітня',
+            '05' => 'травня',
+            '06' => 'червня',
+            '07' => 'липня',
+            '08' => 'серпня',
+            '09' => 'вересня',
+            '10' => 'жовтня',
+            '11' => 'листопада',
+            '12' => 'грудня',
+        ];
+
         return $this->renderTemplate($request, 'my_order/index.html.twig', [
             'user' => $user,
             'pagination' => $pagination,
             'noOrder' => $text,
+            'monthNamesUa' => $monthNamesUa,
         ]);
     }
 
@@ -76,10 +92,10 @@ class MyOrderController extends BaseController
         }
 
         return $this->renderTemplate($request, 'my_order/detail.html.twig', [
-            'order'       => $order,
-            'phoneNumber' => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
-            'email'       => $this->settingRepository->findOneBy(['slug' => 'email']),
-            'status'      => Order::GROUPED_STATUSES[$order->getStatus()],
+            'order'        => $order,
+            'phoneNumber'  => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
+            'email'        => $this->settingRepository->findOneBy(['slug' => 'email']),
+            'status'       => Order::GROUPED_STATUSES[$order->getStatus()],
         ]);
     }
 }

@@ -51,10 +51,26 @@ class AccountController extends BaseController
 
         $text = $this->settingRepository->findOneBy(['slug' => 'there_is_no_active_order']);
 
+        $monthNamesUa = [
+            '01' => 'січня',
+            '02' => 'лютого',
+            '03' => 'березня',
+            '04' => 'квітня',
+            '05' => 'травня',
+            '06' => 'червня',
+            '07' => 'липня',
+            '08' => 'серпня',
+            '09' => 'вересня',
+            '10' => 'жовтня',
+            '11' => 'листопада',
+            '12' => 'грудня',
+        ];
+
         return $this->renderTemplate($request, 'account/index.html.twig', [
             'user' => $user,
             'order' => $order,
             'noOrder' => $text,
+            'monthNamesUa' => $monthNamesUa,
         ]);
     }
 }

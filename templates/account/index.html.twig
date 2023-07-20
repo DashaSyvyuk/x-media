@@ -44,25 +44,38 @@
                                             {{ constant('App\\Entity\\Order::GROUPED_STATUSES')[order.status]['title'] }}
                                         </b>
                                     </p><br>
-                                    <p class="gray margin-bottom-2 bold">{{ order.createdAt.format('Y-m-d H:i:s') }}</p>
-                                    <p class="gray">№ {{ order.orderNumber }}</p><br>
+                                    <p class="gray">{{ order.createdAt.format('d') }} {{ monthNamesUa[order.createdAt.format('m')] }} {{ order.createdAt.format('Y') }}</p>
+                                    <p class="gray bold">№ {{ order.orderNumber }}</p><br>
                                     <p class="price">{{ order.total|number_format(0, '.', ' ') }} грн</p>
                                 </div>
-                                <table class="products">
-                                    {% for item in order.items %}
-                                        <tr>
-                                            <td class="image">
-                                                <a href="/products/{{ item.product.id }}" target="_blank">
-                                                    <img
-                                                            src="/images/products/{{ item.product.getImages()[0].imageUrl }}"
-                                                            onerror="this.src='/images/no_image.png';"
-                                                    >
-                                                </a>
-                                            </td>
-                                            <td><a href="/products/{{ item.product.id }}" target="_blank">{{ item.product.title }}</a></td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
+                                <div class="products">
+                                    {% if order.items|length > 1 %}
+                                        {% for item in order.items %}
+                                            <div class="image">
+                                                {#                                                        <a href="/products/{{ item.product.id }}" target="_blank">#}
+                                                <img
+                                                        src="/images/products/{{ item.product.getImages()[0].imageUrl }}"
+                                                        onerror="this.src='/images/no_image.png';"
+                                                >
+                                                {#                                                        </a>#}
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="image">
+                                            {#                                                <a href="/products/{{ order.items[0].product.id }}" target="_blank">#}
+                                            <img
+                                                    src="/images/products/{{ order.items[0].product.getImages()[0].imageUrl }}"
+                                                    onerror="this.src='/images/no_image.png';"
+                                            >
+                                            {#                                                </a>#}
+                                        </div>
+                                        <div class="product-title">
+                                            {#                                                <a href="/products/{{ order.items[0].product.id }}" target="_blank">#}
+                                            {{ order.items[0].product.title }}
+                                            {#                                                </a>#}
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </a>
                         </li>
                     {% else %}

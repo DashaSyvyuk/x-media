@@ -76,7 +76,7 @@ header #menu-open {
     align-items: center;
     justify-content: space-between;
     position: absolute;
-    left: 10px;
+    left: 5px;
     top: 10px;
     cursor: pointer;
     transition: 0.5s all ease-in;
@@ -409,7 +409,7 @@ footer .items p {
 footer .items img {
     width: 15px;
     height: auto;
-    margin-right: 10px;
+    margin: 0 5px;
 }
 footer .items .social-network-img {
     width: 40px;
@@ -582,7 +582,8 @@ section .title {
     font-size: 10px;
     margin-bottom: 15px;
     display: flex;
-    min-height: 80px;
+    height: 80px;
+    position: relative;
 }
 .my-orders .products {
     display: flex;
@@ -597,10 +598,26 @@ section .title {
 .my-orders .products img {
     width: 50px;
 }
+
+.my-orders .extra-products-amount {
+    width: 15px;
+    height: 15px;
+    background: dimgrey;
+    padding: 3px;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    left: 50px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
 .my-orders .products tbody, .my-orders .products tr, .my-orders .products td {
     border: none;
     margin: 0;
     padding: 0;
+    container-type: size;
 }
 .my-orders .info {
     width: calc(100% - 80px);
@@ -699,7 +716,7 @@ section .title {
     align-items: center;
     justify-content: center;
     font-family: 'Montserrat', sans-serif;
-    padding: 10px;
+    padding: 15px;
     box-sizing: border-box;
     background-color: #eee;
     border: none;
@@ -1005,6 +1022,7 @@ section .title {
     padding: 15px;
     box-sizing: border-box;
     border: 1px solid #000;
+    color: black;
 }
 
 #use-filters .use {
@@ -1860,7 +1878,7 @@ section .feedbacks {
 
 .order-detail-page .delivery-payment-info img {
     width: 30px;
-    height: fit-content;
+    height: 30px;
 }
 
 .order-detail-page .delivery-payment-info .span-text {
