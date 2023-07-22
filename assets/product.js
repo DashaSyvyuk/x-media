@@ -17,20 +17,22 @@ $('.product-page .images .list img').on('mouseover', (e) => {
 });
 
 $('.images .main').on('click', () => {
-    $("#product-preview .products").slick({
+    $("#product-preview-mobile .products").slick({
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: false,
         dots: true,
-        arrows: true,
+        arrows: false,
         pauseOnHover: false
     });
-   $('#product-preview').show();
+   $('#product-preview-mobile').show();
+   $('body').css('overflow', 'hidden');
 });
 
-$('#product-preview #background').on('click', () => {
-    $('#product-preview').hide();
-    $("#product-preview .products").slick('unslick');
+$('#product-preview-mobile #background').on('click', () => {
+    $('#product-preview-mobile').hide();
+    $("#product-preview-mobile .products").slick('unslick');
+    $('body').css('overflow', 'auto');
 });
 
 $('.product-page .tabs-place .tabs .tab').on('click', (e) => {
