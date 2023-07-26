@@ -110,18 +110,18 @@
                 <div class="content-tab active" id="description">{{ product.getDescription()|raw }}</div>
                 <div class="content-tab" id="characteristics">
                     <table>
-                        {% if product.productCode %}
-                            <tr>
-                                <td>Код товару</td>
-                                <td>{{ product.productCode }}</td>
-                            </tr>
-                        {% endif %}
                         {% for characteristic in product.getCharacteristics() %}
                             <tr>
                                 <td>{{ characteristic.getTitle()|raw }}</td>
                                 <td>{{ characteristic.getValue()|raw }}</td>
                             </tr>
                         {% endfor %}
+                        {% if product.productCode %}
+                            <tr>
+                                <td>Код товару</td>
+                                <td>{{ product.productCode }}</td>
+                            </tr>
+                        {% endif %}
                     </table>
                 </div>
                 <div class="content-tab" id="reviews">
