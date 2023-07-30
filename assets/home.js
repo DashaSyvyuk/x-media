@@ -80,3 +80,14 @@ $("#feedbacks-mobile").slick({
     arrows: false,
     pauseOnHover: false,
 });
+
+window.addEventListener('scroll', function() {
+    const header = document.getElementById('menu-fixed');
+    const windowHeight = window.innerHeight;
+
+    if (window.pageYOffset > windowHeight) {
+        header.classList.add('top-hide');
+    } else {
+        header.classList.remove('top-hide');
+    }
+});

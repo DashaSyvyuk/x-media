@@ -79,7 +79,7 @@ body, html {
 
 section {
     width: 100%;
-    padding: 20px 10%;
+    padding: 100px 10%;
     box-sizing: border-box;
 }
 
@@ -304,7 +304,10 @@ footer .copywrite {
 header {
     width: 100%;
     box-shadow: 0 0 15px rgba(0, 0, 0, .3);
-    padding: 20px 0;
+    padding: 5px 0;
+    position: fixed;
+    background: white;
+    z-index: 10000;
 }
 
 #menu {
@@ -316,21 +319,39 @@ header {
     padding: 5px;
 }
 
-#menu #logo a {
+#menu-fixed {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 5px;
+    background: white;
+    z-index: 1000;
+    position: fixed;
+    top: -65px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, .3);
+    transition: top 0.3s;
+}
+
+#menu-fixed.top-hide {
+    top: 0;
+}
+
+#menu #logo a, #menu-fixed #logo a {
     font-size: 30px;
     color: #000;
     text-decoration: none;
     font-weight: 500;
 }
 
-#menu #categories ul {
+#menu #categories ul, #menu-fixed #categories ul {
     display: flex;
     align-items: center;
     justify-content: space-between;
     list-style-type: none;
 }
 
-#menu #categories ul li a {
+#menu #categories ul li a, #menu-fixed #categories ul li a {
     text-decoration: none;
     color: #000;
     padding: 10px 15px;
@@ -338,15 +359,15 @@ header {
     font-weight: 600;
 }
 
-#menu #categories ul li a:hover {
+#menu #categories ul li a:hover, #menu-fixed #categories ul li a:hover {
     background-color: rgba(200,200,200,.7);
 }
 
-#menu #search {
+#menu #search, #menu-fixed #search {
     position: relative;
 }
 
-#menu #search input {
+#menu #search input, #menu-fixed #search input {
     width: 200px;
     height: 25px;
     border: 1px solid #bbb;
@@ -354,11 +375,11 @@ header {
     padding-left: 10px;
 }
 
-#menu #search input:focus {
+#menu #search input:focus, #menu-fixed #search input:focus {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
-#menu #search button {
+#menu #search button, #menu-fixed #search button {
     border: none;
     position: absolute;
     right: 1px;
@@ -368,15 +389,15 @@ header {
     background-color: #fff;
 }
 
-#menu #search img {
+#menu #search img, #menu-fixed #search img {
     width: 27px;
 }
 
-#menu #cart {
+#menu #cart, #menu-fixed #cart {
     position: relative;
 }
 
-#menu #cart-count {
+#menu #cart-count, #menu-fixed #cart-count {
     background-color: #119E00;
     color: #fff;
     border-radius: 20px;
@@ -392,12 +413,12 @@ header {
     height: 16px;
 }
 
-#menu #cart img {
+#menu #cart img, #menu-fixed #cart img {
     width: 30px;
     cursor: pointer;
 }
 
-#menu #account {
+#menu #account, #menu-fixed #account {
     margin-left: 30px;
 }
 

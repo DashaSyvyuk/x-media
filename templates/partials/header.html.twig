@@ -27,3 +27,32 @@
         <a href="{% if app.session.get('user') %}/account{% else %}/login{% endif %}"><img id="account" src="/images/{% if app.session.get('user') %}account_logged.png{% else %}account.png{% endif %}"></a>
     </div>
 </div>
+<div id="menu-fixed">
+    <div id="logo"><a href="/">X-media</a></div>
+    <div id="categories">
+        <ul>
+            {% for category in categories %}
+                <li>
+                    <a href="/categories/{{ category.slug }}">{{ category.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="search">
+        <form action="/search" method="GET">
+            <input type="text" name="search" placeholder="Пошук..." autocomplete="off" value="{% if searchString is defined %}{{ searchString }}{% endif %}">
+            <button type="submit"><img src="/images/search.svg" /></button>
+        </form>
+    </div>
+    <div id="cart">
+        <img class="cart" src="/images/cart.png">
+        <div id="cart-count"/>
+            {% if totalCount > 0 %}
+                {{ totalCount }}
+            {% else %}
+                0
+            {% endif %}
+        </div>
+        <a href="{% if app.session.get('user') %}/account{% else %}/login{% endif %}"><img id="account" src="/images/{% if app.session.get('user') %}account_logged.png{% else %}account.png{% endif %}"></a>
+    </div>
+</div>
