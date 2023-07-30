@@ -87,24 +87,8 @@ class ProductCrudController extends AbstractCrudController
 
         yield FormField::addPanel('Ціни');
         yield AssociationField::new('currency', 'Валюта')->hideOnIndex()->setColumns(6);
-        yield NumberField::new('priceWithVAT', 'Ціна з ПДВ (zl)')->hideOnIndex()->setColumns(6);
-        yield NumberField::new('priceWithoutVAT', 'Ціна без ПДВ (zl)')->setFormTypeOptions([
-            'disabled' => true
-        ])->hideOnIndex()->setColumns(6);
-        yield NumberField::new('purchasePriceUAH', 'Ціна (грн)')->setFormTypeOptions([
-            'disabled' => true
-        ])->hideOnIndex()->setColumns(6);
         yield NumberField::new('deliveryCost', 'Витрати на доставку (грн)')->hideOnIndex()->setColumns(6);
-        yield NumberField::new('totalPrice', 'Загальна вартість товару (грн)')->setFormTypeOptions([
-            'disabled' => true,
-        ])->hideOnIndex()->setColumns(6);
         yield NumberField::new('price', 'Ціна (грн)')->setColumns(6);
-        yield NumberField::new('marge', 'Marge (грн)')->setFormTypeOptions([
-            'disabled' => true,
-        ])->hideOnIndex()->setColumns(6);
-        yield NumberField::new('margePercentage', 'Marge(%)')->setFormTypeOptions([
-            'disabled' => true,
-        ])->hideOnIndex()->setColumns(6);
 
         yield FormField::addPanel('Опис');
         yield TextareaField::new('description', 'Опис')

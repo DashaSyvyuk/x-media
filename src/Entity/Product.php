@@ -45,11 +45,6 @@ class Product
     /**
      * @ORM\Column(type="integer")
      */
-    private int $priceWithVAT = 0;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
     private int $deliveryCost = 0;
 
     /**
@@ -162,16 +157,6 @@ class Product
     public function setPrice(int $price): void
     {
         $this->price = $price;
-    }
-
-    public function getPriceWithVAT(): int
-    {
-        return $this->priceWithVAT;
-    }
-
-    public function setPriceWithVAT(int $priceWithVAT): void
-    {
-        $this->priceWithVAT = $priceWithVAT;
     }
 
     public function getDeliveryCost(): int
@@ -419,31 +404,6 @@ class Product
         return $this->productCode;
     }
 
-    public function getPriceWithoutVAT()
-    {
-        return $this->priceWithVAT / 1.23;
-    }
-
-    public function getPurchasePriceUAH()
-    {
-        return round($this->getPriceWithoutVAT() * $this->currency->getExchangeRate());
-    }
-
-    public function getTotalPrice()
-    {
-        return round($this->getPurchasePriceUAH() + $this->deliveryCost);
-    }
-
-    public function getMarge()
-    {
-        return round($this->price - $this->getTotalPrice());
-    }
-
-    public function getMargePercentage()
-    {
-        return round(($this->getMarge() * 100) / $this->price);
-    }
-
     public function getRatings()
     {
         return $this->ratings;
@@ -489,8 +449,8 @@ class Product
         return $count > 0 ? $total/$count : 0;
     }
 
-    public function __toString():string
+    public function __toString(): string
     {
-        return '' . $this->title;
+        return $this->title;
     }
 }
