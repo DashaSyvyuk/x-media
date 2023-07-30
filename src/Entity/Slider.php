@@ -6,7 +6,6 @@ use App\Repository\SliderRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass=SliderRepository::class)
@@ -16,8 +15,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class Slider
 {
     use DateStorageTrait;
-
-    const SERVER_PATH_TO_IMAGE_FOLDER = '../public/images/slider';
 
     /**
      * @ORM\Id
@@ -40,8 +37,6 @@ class Slider
      * @ORM\Column(type="text")
      */
     private $image_url;
-
-    private $file;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -103,22 +98,12 @@ class Slider
         $this->priority = $priority;
     }
 
-    public function setFile(UploadedFile $file = null)
-    {
-        $this->file = $file;
-    }
-
-    public function getFile()
-    {
-        return $this->file;
-    }
-
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -128,45 +113,8 @@ class Slider
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
-    }
-
-    public function upload()
-    {
-        if ($this->getFile() == null) {
-            return;
-        }
-
-        $this->getFile()->move(
-            self::SERVER_PATH_TO_IMAGE_FOLDER,
-            $this->getFile()->getClientOriginalName()
-        );
-
-        $this->image_url = 'images/slider/' . $this->getFile()->getClientOriginalName();
-
-        $this->setFile(null);
-    }
-
-    /**
-     * @ORM\PrePersist()
-     */
-    public function onPrePersist()
-    {
-        $this->upload();
-    }
-
-    /**
-     * @ORM\PreUpdate()
-     */
-    public function onPreUpdate()
-    {
-        $this->upload();
-    }
-
-    public function refreshUpdated(): void
-    {
-        $this->setUpdatedAt(new DateTime());
     }
 }

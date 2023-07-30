@@ -3,9 +3,11 @@
 namespace App\Controller\Admin;
 
 use App\Entity\SupplierOrder;
+use App\Form\SupplierOrderProductType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -35,10 +37,10 @@ class SupplierOrderCrudController extends AbstractCrudController
         yield TextField::new('orderNumber', 'Номер замовлення')->setColumns(6);
         yield DateField::new('expectedDate', 'Очікувана дата')->setColumns(6);
 
-        /*yield CollectionField::new('products', 'Товари')
+        yield CollectionField::new('products', 'Товари')
             ->setColumns(12)
-            ->setEntryType(SupplierProductType::class)
+            ->setEntryType(SupplierOrderProductType::class)
             ->renderExpanded()
-            ->onlyOnForms();*/
+            ->onlyOnForms();
     }
 }

@@ -108,4 +108,11 @@ class ProductRepository extends ServiceEntityRepository
 
         return $query->getQuery()->getArrayResult()[0];
     }
+
+    public function create(Product $product): void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($product);
+        $entityManager->flush();
+    }
 }

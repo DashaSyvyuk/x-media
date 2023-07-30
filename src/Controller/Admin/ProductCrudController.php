@@ -5,11 +5,11 @@ namespace App\Controller\Admin;
 use App\Entity\Product;
 use App\Entity\ProductCharacteristic;
 use App\Entity\ProductFilterAttribute;
-use App\Entity\ProductImage;
 use App\Form\CommentType;
 use App\Form\ProductCharacteristicType;
 use App\Form\ProductFilterAttributeType;
 use App\Form\ProductImageType;
+use App\Repository\ProductRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -26,10 +26,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ProductCrudController extends AbstractCrudController
 {
-    public function __construct(private readonly AdminUrlGenerator $adminUrlGenerator)
+    public function __construct(
+        private readonly AdminUrlGenerator $adminUrlGenerator,
+        private readonly ProductRepository $productRepository
+    )
     {
     }
 
@@ -54,6 +58,16 @@ class ProductCrudController extends AbstractCrudController
             ->setPaginatorPageSize(10)
             ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
             ;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        $cloneAction = Action::new('Copy', 'Copy')
+            ->linkToCrudAction('cloneAction');
+
+        $actions->add(Crud::PAGE_INDEX, $cloneAction);
+
+        return parent::configureActions($actions);
     }
 
     public function configureFields(string $pageName): iterable
@@ -137,64 +151,39 @@ class ProductCrudController extends AbstractCrudController
             ->onlyOnForms();
     }
 
-    public function edit(AdminContext $context)
+    public function cloneAction(AdminContext $context): RedirectResponse
     {
-        if ($context->getRequest()->query->has('duplicate')) {
-            $entity = $context->getEntity()->getInstance();
-            /** @var Product $cloned */
-            $cloned = clone $entity;
-            $cloned->setCreatedAt(new \DateTime('now'));
+        $id = $context->getRequest()->query->get('entityId');
+        $entity = $this->productRepository->find($id);
 
-            if ($entity->getCharacteristics()) {
-                foreach($entity->getCharacteristics() as $characteristic) {
-                    $productCharacteristic = new ProductCharacteristic();
-                    $productCharacteristic->setTitle($characteristic->getTitle());
-                    $productCharacteristic->setValue($characteristic->getValue());
-                    $productCharacteristic->setPosition($characteristic->getPosition());
+        $clone = clone $entity;
+        $clone->setCreatedAt(new \DateTime('now'));
+        $clone->setTitle(sprintf('%s (Copy)', $entity->getTitle()));
 
-                    $cloned->addCharacteristic($productCharacteristic);
-                }
+        if ($entity->getCharacteristics()) {
+            foreach($entity->getCharacteristics() as $characteristic) {
+                $productCharacteristic = new ProductCharacteristic();
+                $productCharacteristic->setTitle($characteristic->getTitle());
+                $productCharacteristic->setValue($characteristic->getValue());
+                $productCharacteristic->setPosition($characteristic->getPosition());
+
+                $clone->addCharacteristic($productCharacteristic);
             }
-
-            if ($entity->getFilterAttributes()) {
-                foreach ($entity->getFilterAttributes() as $filterAttribute) {
-                    $productFilterAttribute = new ProductFilterAttribute();
-                    $productFilterAttribute->setFilter($filterAttribute->getFilter());
-                    $productFilterAttribute->setFilterAttribute($filterAttribute->getFilterAttribute());
-
-                    $cloned->addFilterAttribute($productFilterAttribute);
-                }
-            }
-
-            if ($entity->getImages()) {
-                foreach ($entity->getImages() as $image) {
-                    $productImage = new ProductImage();
-                    $productImage->setImageUrl($image->getImageUrl());
-                    $productImage->setPosition($image->getPosition());
-
-                    $cloned->addImage($productImage);
-                }
-            }
-            $context->getEntity()->setInstance($cloned);
         }
 
-        return parent::edit($context);
-    }
+        if ($entity->getFilterAttributes()) {
+            foreach ($entity->getFilterAttributes() as $filterAttribute) {
+                $productFilterAttribute = new ProductFilterAttribute();
+                $productFilterAttribute->setFilter($filterAttribute->getFilter());
+                $productFilterAttribute->setFilterAttribute($filterAttribute->getFilterAttribute());
 
-    public function configureActions(Actions $actions): Actions
-    {
-        $duplicate = Action::new('duplicate', false)
-            ->setLabel('Copy')
-            ->linkToUrl(
-                fn(Product $entity) => $this->adminUrlGenerator
-                    ->setAction(Action::EDIT)
-                    ->setEntityId($entity->getId())
-                    ->set('duplicate', '1')
-                    ->generateUrl()
-            );
+                $clone->addFilterAttribute($productFilterAttribute);
+            }
+        }
 
-        $actions->add(Crud::PAGE_INDEX, $duplicate);
+        $this->persistEntity($this->get('doctrine')->getManagerForClass($context->getEntity()->getFqcn()), $clone);
+        $this->addFlash('success', 'Product duplicated');
 
-        return parent::configureActions($actions);
+        return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
     }
 }
