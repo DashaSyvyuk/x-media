@@ -36,9 +36,9 @@ class ProductCharacteristic
     private string $value = "";
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned"=true})
+     * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=true)
      */
-    private int $position = 0;
+    private ?int $position = 0;
 
     /**
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
@@ -85,7 +85,7 @@ class ProductCharacteristic
     /**
      * @param string $title
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -101,20 +101,20 @@ class ProductCharacteristic
     /**
      * @param string $value
      */
-    public function setValue(string $value)
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getPosition(): int
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position): void
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
     }

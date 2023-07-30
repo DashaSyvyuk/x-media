@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
@@ -41,10 +40,10 @@ class Filter
     private $attributes;
 
     /**
-     * @var int
-     * @ORM\Column(type="integer")
+     * @var int|null
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private int $priority = 0;
+    private ?int $priority = 0;
 
     /**
      * @var bool
@@ -145,17 +144,17 @@ class Filter
     }
 
     /**
-     * @param int $priority
+     * @param int|null $priority
      */
-    public function setPriority(int $priority): void
+    public function setPriority(?int $priority): void
     {
         $this->priority = $priority;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getPriority(): int
+    public function getPriority(): ?int
     {
         return $this->priority;
     }
@@ -163,7 +162,7 @@ class Filter
     /**
      * @param int $openedCount
      */
-    public function setOpenedCount(int $openedCount)
+    public function setOpenedCount(int $openedCount): void
     {
         $this->openedCount = $openedCount;
     }
@@ -202,12 +201,12 @@ class Filter
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

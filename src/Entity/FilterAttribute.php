@@ -40,10 +40,10 @@ class FilterAttribute
     private $filter;
 
     /**
-     * @var int
-     * @ORM\Column(type="integer")
+     * @var int|null
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private int $priority = 0;
+    private ?int $priority = 0;
 
     /**
      * @ORM\Column(type="datetime")
@@ -82,7 +82,7 @@ class FilterAttribute
     /**
      * @param ?Filter $filter
      */
-    public function setFilter(?Filter $filter)
+    public function setFilter(?Filter $filter): void
     {
         $this->filter = $filter;
     }
@@ -96,43 +96,43 @@ class FilterAttribute
     }
 
     /**
-     * @param int $priority
+     * @param int|null $priority
      */
-    public function setPriority(int $priority)
+    public function setPriority(?int $priority): void
     {
         $this->priority = $priority;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getPriority(): int
+    public function getPriority(): ?int
     {
         return $this->priority;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
     public function __toString(): string
     {
-        return '' . $this->value;
+        return $this->value;
     }
 }

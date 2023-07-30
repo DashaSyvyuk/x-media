@@ -21,8 +21,6 @@ class ProductImage
 {
     use DateStorageTrait;
 
-    const SERVER_PATH_TO_IMAGE_FOLDER = '../public/images/products';
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -41,9 +39,9 @@ class ProductImage
     private $file;
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned"=true})
+     * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=true)
      */
-    private int $position = 0;
+    private ?int $position = 0;
 
     /**
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
@@ -79,7 +77,7 @@ class ProductImage
     /**
      * @param Product $product
      */
-    public function setProduct(Product $product)
+    public function setProduct(Product $product): void
     {
         $this->product = $product;
     }
@@ -95,20 +93,20 @@ class ProductImage
     /**
      * @param $imageUrl
      */
-    public function setImageUrl($imageUrl)
+    public function setImageUrl($imageUrl): void
     {
         $this->imageUrl = $imageUrl;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getPosition(): int
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position): void
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
     }
@@ -131,19 +129,6 @@ class ProductImage
     public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
-    }
-
-    public function setFile($file)
-    {
-        $this->file = $file;
-        if ($file) {
-            $this->updatedAt = new DateTime();
-        }
-    }
-
-    public function getFile()
-    {
-        return $this->file;
     }
 
     public function __toString()
