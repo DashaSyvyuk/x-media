@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Slider;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -31,9 +32,10 @@ class SliderCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
-        yield TextField::new('title')->setLabel('Заголовок');
-        yield TextField::new('url')->setLabel('Посилання')->hideOnIndex();
-        yield NumberField::new('priority')->setLabel('Пріоритет')->hideOnIndex();
+        yield TextField::new('title', 'Заголовок');
+        yield TextField::new('url', 'Посилання')->hideOnIndex();
+        yield NumberField::new('priority', 'Пріоритет')->hideOnIndex();
+        yield BooleanField::new('active', 'Показувати');
         yield ImageField::new('imageUrl')
             ->setLabel('Картинка')
             ->setUploadDir('/public/images/slider/')

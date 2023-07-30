@@ -21,27 +21,32 @@ class Slider
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $title;
+    private ?string $title;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $url;
+    private string $url;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $image_url;
+    private string $image_url;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $priority;
+    private ?int $priority;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $active;
 
     /**
      * @ORM\Column(type="datetime")
@@ -96,6 +101,16 @@ class Slider
     public function setPriority(?int $priority): void
     {
         $this->priority = $priority;
+    }
+
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
     }
 
     public function getCreatedAt(): DateTime
