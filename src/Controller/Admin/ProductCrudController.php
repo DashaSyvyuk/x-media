@@ -87,8 +87,6 @@ class ProductCrudController extends AbstractCrudController
         yield TextField::new('metaDescription', 'Мета тег (Опис)')->setColumns(6)->hideOnIndex();
 
         yield FormField::addPanel('Ціни');
-        yield AssociationField::new('currency', 'Валюта')->hideOnIndex()->setColumns(6);
-        yield NumberField::new('deliveryCost', 'Витрати на доставку (грн)')->hideOnIndex()->setColumns(6);
         yield NumberField::new('price', 'Ціна (грн)')->setColumns(6);
 
         yield FormField::addPanel('Опис');
