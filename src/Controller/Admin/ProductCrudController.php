@@ -82,6 +82,7 @@ class ProductCrudController extends AbstractCrudController
         yield AssociationField::new('category', 'Категорія')->setColumns(6)->hideOnIndex();
         yield TextField::new('note', 'Нотатки')->setColumns(6)->hideOnIndex();
         yield TextField::new('productCode', 'Код товару')->setColumns(6)->hideOnIndex();
+        yield TextField::new('olx', 'Olx')->setColumns(6)->hideOnIndex();
         yield TextField::new('metaKeyword', 'Мета тег (Ключові слова)')->setColumns(6)->hideOnIndex();
         yield TextField::new('metaDescription', 'Мета тег (Опис)')->setColumns(6)->hideOnIndex();
 

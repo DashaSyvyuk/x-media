@@ -116,6 +116,11 @@ class Product
     private ?string $productCode = "";
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $olx;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -402,6 +407,16 @@ class Product
     public function getProductCode(): ?string
     {
         return $this->productCode;
+    }
+
+    public function setOlx(?string $olx): void
+    {
+        $this->olx = $olx;
+    }
+
+    public function getOlx(): ?string
+    {
+        return $this->olx;
     }
 
     public function getRatings()

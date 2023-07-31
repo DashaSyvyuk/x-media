@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use \DateTime;
 use App\Traits\DateStorageTrait;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -20,6 +19,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class ProductImage
 {
     use DateStorageTrait;
+
+    const SERVER_PATH_TO_IMAGE_FOLDER = '../public/images/products';
 
     /**
      * @ORM\Id
@@ -109,6 +110,19 @@ class ProductImage
     public function setPosition(?int $position): void
     {
         $this->position = $position;
+    }
+
+    public function setFile($file)
+    {
+        $this->file = $file;
+        if ($file) {
+            $this->updatedAt = new DateTime();
+        }
+    }
+
+    public function getFile()
+    {
+        return $this->file;
     }
 
     public function getCreatedAt(): DateTime
