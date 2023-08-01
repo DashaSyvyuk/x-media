@@ -6,7 +6,6 @@ use App\Repository\SliderRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass=SliderRepository::class)
@@ -17,36 +16,37 @@ class Slider
 {
     use DateStorageTrait;
 
-    const SERVER_PATH_TO_IMAGE_FOLDER = '../public/images/slider';
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $title;
+    private ?string $title;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $url;
+    private string $url;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $image_url;
-
-    private $file;
+    private string $image_url;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $priority;
+    private ?int $priority;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $active;
 
     /**
      * @ORM\Column(type="datetime")
@@ -103,14 +103,14 @@ class Slider
         $this->priority = $priority;
     }
 
-    public function setFile(UploadedFile $file = null)
+    public function getActive(): bool
     {
-        $this->file = $file;
+        return $this->active;
     }
 
-    public function getFile()
+    public function setActive(bool $active): void
     {
-        return $this->file;
+        $this->active = $active;
     }
 
     public function getCreatedAt(): DateTime
@@ -118,7 +118,7 @@ class Slider
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -128,45 +128,8 @@ class Slider
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
-    }
-
-    public function upload()
-    {
-        if ($this->getFile() == null) {
-            return;
-        }
-
-        $this->getFile()->move(
-            self::SERVER_PATH_TO_IMAGE_FOLDER,
-            $this->getFile()->getClientOriginalName()
-        );
-
-        $this->image_url = 'images/slider/' . $this->getFile()->getClientOriginalName();
-
-        $this->setFile(null);
-    }
-
-    /**
-     * @ORM\PrePersist()
-     */
-    public function onPrePersist()
-    {
-        $this->upload();
-    }
-
-    /**
-     * @ORM\PreUpdate()
-     */
-    public function onPreUpdate()
-    {
-        $this->upload();
-    }
-
-    public function refreshUpdated(): void
-    {
-        $this->setUpdatedAt(new DateTime());
     }
 }

@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use \DateTime;
 use App\Traits\DateStorageTrait;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -41,9 +40,9 @@ class ProductImage
     private $file;
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned"=true})
+     * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=true)
      */
-    private int $position = 0;
+    private ?int $position = 0;
 
     /**
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
@@ -79,7 +78,7 @@ class ProductImage
     /**
      * @param Product $product
      */
-    public function setProduct(Product $product)
+    public function setProduct(Product $product): void
     {
         $this->product = $product;
     }
@@ -95,22 +94,35 @@ class ProductImage
     /**
      * @param $imageUrl
      */
-    public function setImageUrl($imageUrl)
+    public function setImageUrl($imageUrl): void
     {
         $this->imageUrl = $imageUrl;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getPosition(): int
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position): void
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
+    }
+
+    public function setFile($file)
+    {
+        $this->file = $file;
+        if ($file) {
+            $this->updatedAt = new DateTime();
+        }
+    }
+
+    public function getFile()
+    {
+        return $this->file;
     }
 
     public function getCreatedAt(): DateTime
@@ -131,19 +143,6 @@ class ProductImage
     public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
-    }
-
-    public function setFile($file)
-    {
-        $this->file = $file;
-        if ($file) {
-            $this->updatedAt = new DateTime();
-        }
-    }
-
-    public function getFile()
-    {
-        return $this->file;
     }
 
     public function __toString()

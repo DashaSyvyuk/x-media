@@ -43,16 +43,6 @@ class Product
     private int $price = 0;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private int $priceWithVAT = 0;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private int $deliveryCost = 0;
-
-    /**
      * @ORM\Column(type="string")
      */
     private ?string $title = "";
@@ -84,12 +74,6 @@ class Product
     private ?Category $category = null;
 
     /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="Currency")
-     */
-    private Currency $currency;
-
-    /**
      * @ORM\OneToMany(targetEntity="ProductImage", mappedBy="product", cascade={"all"}, orphanRemoval=true)
      */
     private $images;
@@ -119,6 +103,11 @@ class Product
      * @ORM\Column(type="string")
      */
     private ?string $productCode = "";
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $olx;
 
     /**
      * @ORM\Column(type="datetime")
@@ -164,26 +153,6 @@ class Product
         $this->price = $price;
     }
 
-    public function getPriceWithVAT(): int
-    {
-        return $this->priceWithVAT;
-    }
-
-    public function setPriceWithVAT(int $priceWithVAT): void
-    {
-        $this->priceWithVAT = $priceWithVAT;
-    }
-
-    public function getDeliveryCost(): int
-    {
-        return $this->deliveryCost;
-    }
-
-    public function setDeliveryCost(int $deliveryCost): void
-    {
-        $this->deliveryCost = $deliveryCost;
-    }
-
     public function setTitle(?string $title): void
     {
         $this->title = $title;
@@ -214,7 +183,7 @@ class Product
         return $this->metaDescription;
     }
 
-    public function setDescription(?string $description)
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -224,7 +193,7 @@ class Product
         return $this->description;
     }
 
-    public function setNote(?string $note)
+    public function setNote(?string $note): void
     {
         $this->note = $note;
     }
@@ -244,16 +213,6 @@ class Product
         return $this->category;
     }
 
-    public function setCurrency(Currency $currency): void
-    {
-        $this->currency = $currency;
-    }
-
-    public function getCurrency(): Currency
-    {
-        return $this->currency;
-    }
-
     public function getImages()
     {
         $images = $this->images->toArray();
@@ -265,7 +224,7 @@ class Product
         return $images;
     }
 
-    public function setImages($images)
+    public function setImages($images): void
     {
         if (count($images) > 0) {
             foreach ($images as $image) {
@@ -277,7 +236,7 @@ class Product
     /**
      * @param ProductImage $image
      */
-    public function addImage(ProductImage $image)
+    public function addImage(ProductImage $image): void
     {
         $image->setProduct($this);
         $this->images[] = $image;
@@ -286,7 +245,7 @@ class Product
     /**
      * @param ProductImage $image
      */
-    public function removeImage(ProductImage $image)
+    public function removeImage(ProductImage $image): void
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
@@ -298,7 +257,7 @@ class Product
         return $this->comments;
     }
 
-    public function setComments($comments)
+    public function setComments($comments): void
     {
         if (count($comments) > 0) {
             foreach ($comments as $comment) {
@@ -310,7 +269,7 @@ class Product
     /**
      * @param Comment $comment
      */
-    public function addComment(Comment $comment)
+    public function addComment(Comment $comment): void
     {
         $comment->setProduct($this);
         $this->comments[] = $comment;
@@ -319,7 +278,7 @@ class Product
     /**
      * @param Comment $comment
      */
-    public function removeComment(Comment $comment)
+    public function removeComment(Comment $comment): void
     {
         if ($this->comments->contains($comment)) {
             $this->comments->removeElement($comment);
@@ -331,7 +290,7 @@ class Product
         return $this->characteristics;
     }
 
-    public function setCharacteristics($characteristics)
+    public function setCharacteristics($characteristics): void
     {
         if (count($characteristics) > 0) {
             foreach ($characteristics as $characteristic) {
@@ -343,7 +302,7 @@ class Product
     /**
      * @param ProductCharacteristic $characteristic
      */
-    public function addCharacteristic(ProductCharacteristic $characteristic)
+    public function addCharacteristic(ProductCharacteristic $characteristic): void
     {
         $characteristic->setProduct($this);
         $this->characteristics[] = $characteristic;
@@ -352,7 +311,7 @@ class Product
     /**
      * @param ProductCharacteristic $characteristic
      */
-    public function removeCharacteristic(ProductCharacteristic $characteristic)
+    public function removeCharacteristic(ProductCharacteristic $characteristic): void
     {
         if ($this->characteristics->contains($characteristic)) {
             $this->characteristics->removeElement($characteristic);
@@ -362,7 +321,7 @@ class Product
     /**
      * @param ProductFilterAttribute $filterAttribute
      */
-    public function addFilterAttribute(ProductFilterAttribute $filterAttribute)
+    public function addFilterAttribute(ProductFilterAttribute $filterAttribute): void
     {
         if ($this->filterAttributes->contains($filterAttribute)) {
             return;
@@ -375,7 +334,7 @@ class Product
     /**
      * @param ProductFilterAttribute $filterAttribute
      */
-    public function removeFilterAttribute(ProductFilterAttribute $filterAttribute)
+    public function removeFilterAttribute(ProductFilterAttribute $filterAttribute): void
     {
         if (!$this->filterAttributes->contains($filterAttribute)) {
             return;
@@ -419,29 +378,14 @@ class Product
         return $this->productCode;
     }
 
-    public function getPriceWithoutVAT()
+    public function setOlx(?string $olx): void
     {
-        return $this->priceWithVAT / 1.23;
+        $this->olx = $olx;
     }
 
-    public function getPurchasePriceUAH()
+    public function getOlx(): ?string
     {
-        return round($this->getPriceWithoutVAT() * $this->currency->getExchangeRate());
-    }
-
-    public function getTotalPrice()
-    {
-        return round($this->getPurchasePriceUAH() + $this->deliveryCost);
-    }
-
-    public function getMarge()
-    {
-        return round($this->price - $this->getTotalPrice());
-    }
-
-    public function getMargePercentage()
-    {
-        return round(($this->getMarge() * 100) / $this->price);
+        return $this->olx;
     }
 
     public function getRatings()
@@ -489,8 +433,8 @@ class Product
         return $count > 0 ? $total/$count : 0;
     }
 
-    public function __toString():string
+    public function __toString(): string
     {
-        return '' . $this->title;
+        return $this->title;
     }
 }

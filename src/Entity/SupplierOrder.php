@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -57,6 +58,12 @@ class SupplierOrder
     private AdminUser $adminUser;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SupplierOrderProduct",
+     *     mappedBy="supplierOrder", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+     */
+    private $products;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -65,6 +72,11 @@ class SupplierOrder
      * @ORM\Column(type="datetime")
      */
     public DateTime $updatedAt;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -169,6 +181,32 @@ class SupplierOrder
     {
         return $this->adminUser;
     }
+
+    /**
+     * @param SupplierOrderProduct $product
+     */
+    public function addProduct(SupplierOrderProduct $product): void
+    {
+        $product->setSupplierOrder($this);
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+        }
+    }
+
+    /**
+     * @param SupplierOrderProduct $product
+     * @return bool
+     */
+    public function removeProduct(SupplierOrderProduct $product): bool
+    {
+        return $this->products->removeElement($product);
+    }
+
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;

@@ -31,9 +31,9 @@ class SupplierOrderProduct
 
     /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product")
+     * @ORM\ManyToOne(targetEntity="App\Entity\SupplierProduct")
      */
-    private Product $product;
+    private SupplierProduct $product;
 
     /**
      * @ORM\Column(type="integer")
@@ -80,17 +80,17 @@ class SupplierOrderProduct
     }
 
     /**
-     * @param Product $product
+     * @param SupplierProduct $product
      */
-    public function setProduct(Product $product): void
+    public function setProduct(SupplierProduct $product): void
     {
         $this->product = $product;
     }
 
     /**
-     * @return Product
+     * @return SupplierProduct
      */
-    public function getProduct(): Product
+    public function getProduct(): SupplierProduct
     {
         return $this->product;
     }
@@ -144,5 +144,23 @@ class SupplierOrderProduct
     public function setUpdatedAt($updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getSupplierProductPrice(): ?int
+    {
+        if (!$this->product) {
+            return null;
+        }
+
+        return $this->product->getPrice();
+    }
+
+    public function getProductPrice(): ?int
+    {
+        if (!$this->product) {
+            return null;
+        }
+
+        return $this->product->getProduct()->getPrice();
     }
 }

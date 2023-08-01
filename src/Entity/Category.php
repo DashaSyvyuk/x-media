@@ -5,7 +5,6 @@ namespace App\Entity;
 use \DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
@@ -62,9 +61,9 @@ class Category
     private string $status = "";
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned"=true})
+     * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=true)
      */
-    private int $position = 0;
+    private ?int $position = 0;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
@@ -151,12 +150,12 @@ class Category
         $this->status = $status;
     }
 
-    public function setPosition(int $position)
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
     }
 
-    public function getPosition(): int
+    public function getPosition(): ?int
     {
         return $this->position;
     }
@@ -164,7 +163,7 @@ class Category
     /**
      * @param Product $product
      */
-    public function addProduct(Product $product)
+    public function addProduct(Product $product): void
     {
         $product->setCategory($this);
         if (!$this->products->contains($product)) {
@@ -191,7 +190,7 @@ class Category
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -201,13 +200,13 @@ class Category
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function __toString():string
+    public function __toString(): string
     {
-        return '' . $this->title;
+        return $this->title;
     }
 }
