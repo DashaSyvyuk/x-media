@@ -93,7 +93,7 @@ $(document).on('click', '#close-cart', () => {
     $('#cart-popup').hide();
 });
 
-$(document).on('click', '#menu #cart .cart', () => showCart());
+$(document).on('click', '#menu .cart .cart-ico, #menu-fixed .cart .cart-ico', () => showCart());
 
 $(window).click((e) => {
     if(!$('#cart-block').has(e.target)) {
@@ -136,9 +136,9 @@ function getTotalCount(cart) {
     }, 0);
 
     if (total >= 0) {
-        $('#cart-count').text(total);
+        $('.cart-count').text(total);
         $("#cart-block .title span").text(total);
-        $(".total-count").text(total);
+        $(".breadcrumb .total-count").text(total);
     }
 
     return total;

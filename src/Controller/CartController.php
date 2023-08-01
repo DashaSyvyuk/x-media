@@ -44,7 +44,7 @@ class CartController extends BaseController
     public function getMobileCart(Request $request): Response
     {
         if (!array_key_exists('cart', $_COOKIE)) {
-            return $this->renderTemplate($request, 'm/cart/index.html.twig', [
+            return $this->renderTemplate($request, 'cart/index.html.twig', [
                 'products'   => [],
                 'totalCount' => 0,
                 'totalPrice' => 0
@@ -53,7 +53,7 @@ class CartController extends BaseController
 
         $cart = $this->cartShowService->run($_COOKIE['cart']);
 
-        return $this->renderTemplate($request, 'm/cart/index.html.twig', [
+        return $this->renderTemplate($request, 'cart/index.html.twig', [
             'products'   => $cart['products'],
             'totalCount' => $cart['totalCount'],
             'totalPrice' => $cart['totalPrice']

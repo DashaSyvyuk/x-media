@@ -1,6 +1,6 @@
 <div id="menu">
-    <div id="logo"><a href="/">X-media</a></div>
-    <div id="categories">
+    <div class="logo"><a href="/">X-media</a></div>
+    <div class="categories">
         <ul>
             {% for category in categories %}
                 <li>
@@ -9,27 +9,27 @@
             {% endfor %}
         </ul>
     </div>
-    <div id="search">
+    <div class="search">
         <form action="/search" method="GET">
             <input type="text" name="search" placeholder="Пошук..." autocomplete="off" value="{% if searchString is defined %}{{ searchString }}{% endif %}">
             <button type="submit"><img src="/images/search.svg" /></button>
         </form>
     </div>
-    <div id="cart">
-        <img class="cart" src="/images/cart.png">
-        <div id="cart-count"/>
+    <div class="cart">
+        <img class="cart-ico" src="/images/cart.png">
+        <div class="cart-count"/>
             {% if totalCount > 0 %}
                 {{ totalCount }}
             {% else %}
                 0
             {% endif %}
         </div>
-        <a href="{% if app.session.get('user') %}/account{% else %}/login{% endif %}"><img id="account" src="/images/{% if app.session.get('user') %}account_logged.png{% else %}account.png{% endif %}"></a>
+        <a href="{% if app.session.get('user') %}/account{% else %}/login{% endif %}"><img class="account-ico" src="/images/{% if app.session.get('user') %}account_logged.png{% else %}account.png{% endif %}"></a>
     </div>
 </div>
 <div id="menu-fixed">
-    <div id="logo"><a href="/">X-media</a></div>
-    <div id="categories">
+    <div class="logo"><a href="/">X-media</a></div>
+    <div class="categories">
         <ul>
             {% for category in categories %}
                 <li>
@@ -38,21 +38,21 @@
             {% endfor %}
         </ul>
     </div>
-    <div id="search">
+    <div class="search">
         <form action="/search" method="GET">
             <input type="text" name="search" placeholder="Пошук..." autocomplete="off" value="{% if searchString is defined %}{{ searchString }}{% endif %}">
             <button type="submit"><img src="/images/search.svg" /></button>
         </form>
     </div>
-    <div id="cart">
-        <img class="cart" src="/images/cart.png">
-        <div id="cart-count"/>
+    <div class="cart">
+        <img class="cart-ico" src="/images/cart.png">
+        <div class="cart-count"/>
             {% if totalCount > 0 %}
                 {{ totalCount }}
             {% else %}
                 0
             {% endif %}
         </div>
-        <a href="{% if app.session.get('user') %}/account{% else %}/login{% endif %}"><img id="account" src="/images/{% if app.session.get('user') %}account_logged.png{% else %}account.png{% endif %}"></a>
+        <a href="{% if app.session.get('user') %}/account{% else %}/login{% endif %}"><img class="account-ico" src="/images/{% if app.session.get('user') %}account_logged.png{% else %}account.png{% endif %}"></a>
     </div>
 </div>
