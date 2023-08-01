@@ -1061,14 +1061,13 @@ section .title {
 }
 
 .product-page .images .list .inner {
-    overflow-x: auto;
+    overflow-x: scroll;
     padding: 5px;
-    display: flex;
+    display: inline-flex;
     box-sizing: border-box;
     height: 84px;
     width: 100%;
     align-items: center;
-    justify-content: center;
 }
 
 .product-page .images .list img {
