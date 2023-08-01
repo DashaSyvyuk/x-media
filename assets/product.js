@@ -45,9 +45,11 @@ $('.product-page .tabs-place .tabs .tab').on('click', (e) => {
 
 $('.property-link').on('click', function() {
     const tab = $('[data-tab="characteristics"]');
+    const headerHeight = $('header').height();
     tab.trigger('click');
+
     $('html, body').animate({
-        scrollTop: tab.offset().top
+        scrollTop: tab.offset().top - headerHeight - 20
     }, 1000);
 });
 
