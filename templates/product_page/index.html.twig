@@ -33,7 +33,7 @@
             </div>
             <div class="main">
                 <img
-                    src="/images/products/{{ product.getImages()[0].imageUrl }}"
+                    src="/images/products/{% if 0 in product.getImages()|keys %}{{ product.getImages()[0].imageUrl }}{% endif %}"
                     onerror="this.src='/images/no_image.png';"
                 >
             </div>

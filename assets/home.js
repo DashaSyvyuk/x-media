@@ -81,7 +81,7 @@ $("#feedbacks-mobile").slick({
     pauseOnHover: false,
 });
 
-window.addEventListener('scroll', function() {
+/*window.addEventListener('scroll', function() {
     const header = document.getElementById('menu-fixed');
     const windowHeight = window.innerHeight;
 
@@ -90,4 +90,4 @@ window.addEventListener('scroll', function() {
     } else {
         header.classList.remove('top-hide');
     }
-});
+});*/

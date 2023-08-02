@@ -35,6 +35,25 @@ $('#product-preview-mobile #background').on('click', () => {
     $('body').css('overflow', 'auto');
 });
 
+$('.images .main').on('click', () => {
+    $("#product-preview .products").slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: false,
+        dots: true,
+        arrows: false,
+        pauseOnHover: false
+    });
+   $('#product-preview').show();
+   $('body').css('overflow', 'hidden');
+});
+
+$('#product-preview #background').on('click', () => {
+    $('#product-preview').hide();
+    $("#product-preview .products").slick('unslick');
+    $('body').css('overflow', 'auto');
+});
+
 $('.product-page .tabs-place .tabs .tab').on('click', (e) => {
     $('.product-page .tabs-place .tabs .tab').removeClass('active');
     $('.product-page .tabs-place .content .content-tab').removeClass('active');

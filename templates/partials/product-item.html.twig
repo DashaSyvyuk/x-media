@@ -1,8 +1,8 @@
 <div class="product">
     <img
         src="{% if product.images|length > 0 %}/images/products/{{ product.images[0].imageUrl }}{% endif %}"
-        data-first="{% if product.images|length > 0 %}/images/products/{{ product.images[0].imageUrl }}{% endif %}"
-        data-next="{% if product.images|length > 0 %}/images/products/{{ product.images[1].imageUrl }}{% endif %}"
+        data-first="{% if 0 in product.images|keys %}/images/products/{{ product.images[0].imageUrl }}{% endif %}"
+        data-next="{% if 1 in product.images|keys %}/images/products/{{ product.images[1].imageUrl }}{% endif %}"
         onerror="this.src='/images/no_image.png';"
     >
     <div class="product-title"><a href="/products/{{ product.id }}">{{ product.title }}</a></div>

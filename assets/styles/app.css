@@ -3,6 +3,7 @@ body, html {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
+    min-width: 1200px;
 }
 .bold {
     font-weight: bold;
@@ -122,7 +123,7 @@ section .breadcrumb a:hover {
     height: 100vh;
     margin: 0;
     overflow: hidden;
-    min-width: 320px;
+    min-width: 1200px;
     object-fit: cover;
 }
 
@@ -317,6 +318,7 @@ header {
     align-items: center;
     justify-content: space-around;
     padding: 5px;
+    min-width: calc(1200px - 20%);
 }
 
 #menu-fixed {
@@ -1007,6 +1009,7 @@ header {
     top: 0;
     left: 0;
     display: none;
+    z-index: 10000;
 }
 
 #product-preview #background {
