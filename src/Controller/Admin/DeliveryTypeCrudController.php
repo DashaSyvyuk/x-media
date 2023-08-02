@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class DeliveryTypeCrudController extends AbstractCrudController
@@ -34,6 +35,7 @@ class DeliveryTypeCrudController extends AbstractCrudController
     {
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('title', 'Назва');
+        yield IntegerField::new('cost', 'Вартість');
         yield BooleanField::new('enabled', 'Активний');
         yield AssociationField::new('paymentTypes', 'Способи оплати')->hideOnIndex();
         yield ImageField::new('icon')
