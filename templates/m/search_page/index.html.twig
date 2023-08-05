@@ -7,6 +7,15 @@
 
 {% block body %}
 
-    <p>search page mobile</p>
+    <div class="breadcrumb">
+        <a class="image" href="/">
+            <img src="/images/arrow_navigate.png">
+        </a>
+        <span>Пошук за запитом "{{ searchString }}"</span>
+    </div>
+
+    <div id="products-block">
+        {% include 'm/partials/product-list.html.twig' %}
+    </div>
 
 {% endblock %}
