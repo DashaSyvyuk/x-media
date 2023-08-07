@@ -214,14 +214,13 @@ class OrderPageController extends BaseController
 
     private function generateOrderNumber(): string
     {
-        $lastId = 1;
-        $today = date('Ymd');
-        $lastOrder = $this->orderRepository->findOneBy([], ['id' => 'desc']);
+        $orderNumber = (string) time();
+        $order = $this->orderRepository->findOneBy(['orderNumber' => $orderNumber]);
 
-        if ($lastOrder) {
-            $lastId = $lastOrder->getId() + 1;
+        if ($order) {
+            $orderNumber = $this->generateOrderNumber();
         }
 
-        return sprintf('%s%s', $today, $lastId);
+        return $orderNumber;
     }
 }

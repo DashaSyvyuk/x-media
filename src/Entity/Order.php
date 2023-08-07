@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
 use App\Validator\OrderStatus;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -182,12 +183,12 @@ class Order
     /**
      * @ORM\Column(type="datetime")
      */
-    public $createdAt;
+    public DateTime $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    public $updatedAt;
+    public DateTime $updatedAt;
 
     public function __construct()
     {
@@ -319,7 +320,7 @@ class Order
         return $this->comment;
     }
 
-    public function setTotal(int $total)
+    public function setTotal(int $total): void
     {
         $this->total = $total;
     }
@@ -337,23 +338,25 @@ class Order
     /**
      * @param OrderItem $item
      */
-    public function addItem(OrderItem $item)
+    public function addItem(OrderItem $item): void
     {
-        $item->setOrder($this);
-        $this->items[] = $item;
+        if (!$this->items->contains($item)) {
+            $item->setOrder($this);
+            $this->items[] = $item;
+        }
     }
 
     /**
      * @param OrderItem $item
      */
-    public function removeItem(OrderItem $item)
+    public function removeItem(OrderItem $item): void
     {
         if ($this->items->contains($item)) {
             $this->items->removeElement($item);
         }
     }
 
-    public function setUser(?User $user)
+    public function setUser(?User $user): void
     {
         $this->user = $user;
     }
@@ -363,28 +366,28 @@ class Order
         return $this->user;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function __toString():string
+    public function __toString(): string
     {
-        return '' . $this->name;
+        return $this->name;
     }
 }
