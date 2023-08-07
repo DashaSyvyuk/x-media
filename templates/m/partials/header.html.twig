@@ -22,7 +22,7 @@
     </a>
 </header>
 
-{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.query.all|merge({'page-type': 'desktop'})) %}
 
 <section class="menu_body" id="menu-body">
     <div class="menu_body__item_wrapper">
@@ -35,7 +35,7 @@
             <li><a href="/delivery-and-pay">Доставка та оплата</a></li>
             <li><a href="/about-us">Про нас</a></li>
             <li><a href="/feedbacks">Відгуки про магазин</a></li>
-            <li><a href="{{ currentPath }}?page-type=desktop"><div><img src="/images/desktop_version.png"><span>Повна версія сайту</span></div></a></li>
+            <li><a href="{{ currentPath }}"><div><img src="/images/desktop_version.png"><span>Повна версія сайту</span></div></a></li>
         </ul>
     </div>
 </section>
