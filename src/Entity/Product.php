@@ -102,7 +102,12 @@ class Product
     /**
      * @ORM\Column(type="string")
      */
-    private ?string $productCode = "";
+    private string $productCode = "";
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $productCode2 = "";
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -368,14 +373,24 @@ class Product
         $this->updatedAt = $updatedAt;
     }
 
-    public function setProductCode(?string $productCode): void
+    public function setProductCode(string $productCode): void
     {
         $this->productCode = $productCode;
     }
 
-    public function getProductCode(): ?string
+    public function getProductCode(): string
     {
         return $this->productCode;
+    }
+
+    public function setProductCode2(?string $productCode2): void
+    {
+        $this->productCode2 = $productCode2;
+    }
+
+    public function getProductCode2(): ?string
+    {
+        return $this->productCode2;
     }
 
     public function setOlx(?string $olx): void
