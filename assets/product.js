@@ -41,8 +41,10 @@ $('.images .main').on('click', () => {
         slidesToScroll: 1,
         autoplay: false,
         dots: true,
-        arrows: false,
-        pauseOnHover: false
+        arrows: true,
+        pauseOnHover: false,
+        prevArrow: '<div class="slick-prev"><img src="/images/arrow_left.png"></div>',
+        nextArrow: '<div class="slick-next"><img src="/images/arrow_right.png"></div>',
     });
    $('#product-preview').show();
    $('body').css('overflow', 'hidden');
