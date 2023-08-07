@@ -29,7 +29,7 @@
         </div>
     </div>
     <div>
-        {% set currentPath = path(app.request.attributes.get('_route'), app.request.query.all|merge({'page-type': 'mobile'})) %}
+        {% set currentPath = path(app.request.attributes.get('_route'), app.request.query.all|merge(app.request.attributes.get('_route_params'))|merge({'page-type': 'mobile'})) %}
 
         <a href="{{ currentPath }}" id="switch-version"><img src="/images/phone_version.png"><span>Мобільна версія</span></a>
     </div>
