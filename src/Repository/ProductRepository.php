@@ -39,7 +39,7 @@ class ProductRepository extends ServiceEntityRepository
         return $query;
     }
 
-    public function findBySearch(string $search)
+    public function findBySearch(string $search): QueryBuilder
     {
         $search = explode(' ', $search);
 
@@ -48,9 +48,7 @@ class ProductRepository extends ServiceEntityRepository
         foreach ($search as $value) {
             $query
                 ->orWhere('p.title LIKE :title')
-                ->orWhere('p.description LIKE :description')
-                ->setParameter('title', '%' . $value . '%')
-                ->setParameter('description', '%' . $value . '%');
+                ->setParameter('title', '%' . $value . '%');
         }
 
         return $query;
