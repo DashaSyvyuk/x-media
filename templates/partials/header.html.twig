@@ -2,12 +2,54 @@
     <div class="logo"><a href="/">X-media</a></div>
     <div class="categories">
         <ul>
+            {% if categories|length > 3 %}
+            <li class="catalog">
+                <a href="" onclick="return false;">Каталог</a>
+            </li>
+            {% endif %}
             {% for category in categories %}
+                {% if category.showInHeader %}
                 <li>
                     <a href="/categories/{{ category.slug }}">{{ category.title }}</a>
                 </li>
+                {% endif %}
             {% endfor %}
         </ul>
+        {% if categories|length > 3 %}
+        <div class="header-main">
+            <ul class="categories-without-children">
+                {% for category in categories %}
+                    {% if category.children|length == 0 %}
+                        <li>
+                            <a href="/categories/{{ category.slug }}">{{ category.title }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+
+            <ul class="categories-with-children">
+                {% for category in categories %}
+                    {% if category.children|length > 0 %}
+                    <div class="parent">
+                        <div>
+                            <a href="/categories/{{ category.slug }}">
+                                <img src="/images/category/{{ category.image }}">
+                                <p>{{ category.title }}</p>
+                            </a>
+                        </div>
+                        <div class="children">
+                            {% for child in category.children %}
+                            <li>
+                                <a href="/categories/{{ child.slug }}">{{ child.title }}</a>
+                            </li>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
     </div>
     <div class="search">
         <form action="/search" method="GET">

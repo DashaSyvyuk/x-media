@@ -23,12 +23,26 @@ class Category
 {
     use DateStorageTrait;
 
+    const ACTIVE = 'ACTIVE';
+    const DISABLED = 'DISABLED';
+
+    const STATUSES = [
+        'Активний'     => self::ACTIVE,
+        'Заблокований' => self::DISABLED
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
     private int $id;
+
+    /**
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Category")
+     */
+    private ?Category $parent = null;
 
     /**
      * @ORM\Column(type="string")
@@ -66,6 +80,11 @@ class Category
     private ?int $position = 0;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $showInHeader = false;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
      */
     private $products;
@@ -88,6 +107,16 @@ class Category
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setParent(?Category $parent): void
+    {
+        $this->parent = $parent;
+    }
+
+    public function getParent(): ?Category
+    {
+        return $this->parent;
     }
 
     public function setTitle(string $title): void
@@ -158,6 +187,16 @@ class Category
     public function getPosition(): ?int
     {
         return $this->position;
+    }
+
+    public function setShowInHeader(bool $showInHeader): void
+    {
+        $this->showInHeader = $showInHeader;
+    }
+
+    public function getShowInHeader(): bool
+    {
+        return $this->showInHeader;
     }
 
     /**

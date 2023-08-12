@@ -29,7 +29,7 @@ class BaseController extends AbstractController
     public function renderTemplate(Request $request, string $view, array $parameters): Response
     {
         return $this->render($this->isMobile($request) ? "m/{$view}" : $view, array_merge($parameters, [
-            'categories'         => $this->categoryRepository->findBy(['status' => 'ACTIVE'], ['position' => 'ASC']),
+            'categories'         => $this->categoryRepository->getCategoriesTree(),
             'totalCount'         => $_COOKIE['totalCount'] ?? 0,
             'phoneNumber'        => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
             'email'              => $this->settingRepository->findOneBy(['slug' => 'email']),

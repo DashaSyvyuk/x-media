@@ -4,8 +4,6 @@ namespace App\Repository;
 
 use App\Entity\AdminUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -27,8 +25,6 @@ class AdminUserRepository extends ServiceEntityRepository implements PasswordUpg
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function add(AdminUser $entity, bool $flush = true): void
     {
@@ -39,8 +35,6 @@ class AdminUserRepository extends ServiceEntityRepository implements PasswordUpg
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function remove(AdminUser $entity, bool $flush = true): void
     {
@@ -63,33 +57,4 @@ class AdminUserRepository extends ServiceEntityRepository implements PasswordUpg
         $this->_em->persist($user);
         $this->_em->flush();
     }
-
-    // /**
-    //  * @return AdminUser[] Returns an array of AdminUser objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?AdminUser
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

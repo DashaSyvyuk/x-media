@@ -19,6 +19,19 @@ $('.rating').each(function() {
     });
 });
 
+$('#menu .catalog').on('mouseover', () => {
+    $('#menu .header-main').css('visibility', 'visible');
+    $('body').css('overflow', 'hidden');
+});
+
+$(document).click(function(event) {
+    const $target = $(event.target);
+    if (!$target.closest('#menu .header-main').length && $('#menu .header-main').is(':visible')) {
+        $('#menu .header-main').css('visibility', 'hidden');
+        $('body').css('overflow', 'auto');
+    }
+});
+
 function nextImage(event) {
     $(event.currentTarget).attr('src', $(event.currentTarget).data('next'));
 }

@@ -31,6 +31,15 @@
             <li><a href="/">Головна</a></li>
             {% for category in categories %}
                 <li><a href="/categories/{{ category.slug }}">{{ category.title }}</a></li>
+                {% if category.children|length > 0 %}
+                    <ul class="children">
+                        {% for child in category.children %}
+                            <li>
+                                <a href="/categories/{{ child.slug }}">{{ child.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             {% endfor %}
             <li><a href="/delivery-and-pay">Доставка та оплата</a></li>
             <li><a href="/about-us">Про нас</a></li>

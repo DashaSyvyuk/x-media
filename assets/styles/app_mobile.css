@@ -163,6 +163,11 @@ header #menu-open {
     position: relative;
     padding-left: 55px;
 }
+.menu_body .menu_list .children {
+    list-style-type: none;
+    padding-bottom: 10px;
+    padding-left: 30px;
+}
 .menu_body .menu_list li img {
     width: 20px;
     margin-right: 10px;

@@ -339,6 +339,15 @@ header {
     top: 0;
 }
 
+#menu .logo {
+    z-index: 10;
+}
+
+#menu .categories ul {
+    position: relative;
+    z-index: 10;
+}
+
 #menu .logo a, #menu-fixed .logo a {
     font-size: 30px;
     color: #000;
@@ -365,6 +374,88 @@ header {
     background-color: rgba(200,200,200,.7);
 }
 
+#menu .header-main {
+    padding-top: 150px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .6);
+    visibility: hidden;
+    background-color: #fff;
+    height: 100vh;
+    width: calc(100vw - 300px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+}
+
+#menu .header-main .categories-without-children {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 250px;
+    align-items: start;
+}
+
+#menu .header-main .categories-without-children li {
+    padding: 7px 15px;
+}
+
+#menu .header-main .categories-without-children li a:hover {
+    background-color: #fff;
+    text-decoration: underline;
+}
+
+#menu .header-main .categories-without-children li a {
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+#menu .header-main .categories-with-children {
+    display: flex;
+    align-items: start;
+    text-align: center;
+}
+
+#menu .header-main .categories-with-children .parent {
+    width: 180px;
+}
+
+#menu .header-main .categories-with-children .parent a {
+    display: block;
+    text-decoration: none;
+}
+
+#menu .header-main .categories-with-children .parent a:hover {
+    text-decoration: underline;
+}
+
+#menu .header-main .categories-with-children .parent a p {
+    color: #000;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+#menu .header-main .categories-with-children .children {
+    margin-top: 30px;
+    text-align: left;
+}
+
+#menu .header-main .categories-with-children .children a {
+    font-size: 12px;
+    font-weight: 400;
+    padding: 5px;
+}
+
+#menu .header-main .categories-with-children .children a:hover {
+    background-color: #fff;
+}
+
+#menu .header-main .categories-with-children img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
 #menu .search, #menu-fixed .search {
     position: relative;
 }
@@ -375,6 +466,7 @@ header {
     border: 1px solid #bbb;
     outline: none;
     padding-left: 10px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 #menu .search input:focus, #menu-fixed .search input:focus {

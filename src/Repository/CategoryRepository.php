@@ -18,4 +18,37 @@ class CategoryRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Category::class);
     }
+
+    public function getCategoriesTree(int $parent = null): array
+    {
+        $result = [];
+        $query = $this->createQueryBuilder('c');
+
+        if ($parent) {
+            $query = $query
+                ->andWhere('c.parent = :parent')
+                ->setParameter('parent', $parent);
+        } else {
+            $query = $query->andWhere('c.parent is NULL');
+        }
+
+        $categories = $query->andWhere('c.status = :status')
+            ->setParameter('status', Category::ACTIVE)
+            ->orderBy('c.position', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+
+        foreach ($categories as $category) {
+            $categoryArray['id'] = $category->getId();
+            $categoryArray['title'] = $category->getTitle();
+            $categoryArray['image'] = $category->getImage();
+            $categoryArray['slug'] = $category->getSlug();
+            $categoryArray['showInHeader'] = $category->getShowInHeader();
+            $categoryArray['children'] = $this->getCategoriesTree($category->getId());
+            $result[] = $categoryArray;
+        }
+
+        return $result;
+    }
 }
