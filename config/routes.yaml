@@ -57,6 +57,10 @@ feedback:
     controller: App\Controller\FeedbackPageController::index
     methods: GET
 
+error:
+    path: /404
+    controller: App\Controller\ErrorController::show
+
 post_feedback:
     path: /feedbacks
     controller: App\Controller\FeedbackPageController::post

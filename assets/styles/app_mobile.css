@@ -1916,3 +1916,13 @@ section .feedbacks {
     font-size: 12px;
     font-weight: 500;
 }
+
+.not-found {
+    text-align: center;
+}
+
+.not-found img {
+    width: 100px;
+    height: auto;
+    margin-top: 50px;
+}
