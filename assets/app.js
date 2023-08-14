@@ -21,7 +21,17 @@ $('.rating').each(function() {
 
 $('#menu .catalog').on('mouseover', () => {
     $('#menu .header-main').css('visibility', 'visible');
-    $('body').css('overflow', 'hidden');
+    // $('body').css('overflow', 'hidden');
+});
+
+$('#menu .header-main .categories-list .catogory-option').on('mouseover', function() {
+    $('#menu .header-main').css('width', '300px');
+    $('#menu .subcategories ul').hide();
+    const id = $(this).data('id');
+    if ($('#menu .subcategories-list-' + id).html()) {
+        $('#menu .subcategories-list-' + id).show();
+        $('#menu .header-main').css('width', '600px');
+    }
 });
 
 $(document).click(function(event) {

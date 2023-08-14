@@ -374,86 +374,96 @@ header {
     background-color: rgba(200,200,200,.7);
 }
 
-#menu .header-main {
-    padding-top: 150px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .6);
-    visibility: hidden;
-    background-color: #fff;
-    height: 100vh;
-    width: calc(100vw - 300px);
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
+#menu .catalog {
+    display: grid;
 }
 
-#menu .header-main .categories-without-children {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 250px;
-    align-items: start;
-}
-
-#menu .header-main .categories-without-children li {
-    padding: 7px 15px;
-}
-
-#menu .header-main .categories-without-children li a:hover {
-    background-color: #fff;
-    text-decoration: underline;
-}
-
-#menu .header-main .categories-without-children li a {
-    font-weight: 500;
-    text-transform: uppercase;
-}
-
-#menu .header-main .categories-with-children {
-    display: flex;
-    align-items: start;
+#menu .catalog a {
+    width: 300px;
+    box-sizing: border-box;
+    border-right: 1px solid #ccc;
     text-align: center;
 }
 
-#menu .header-main .categories-with-children .parent {
-    width: 180px;
+#menu .catalog .ico {
+    width: 19px;
+    height: 12px;
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
 }
 
-#menu .header-main .categories-with-children .parent a {
-    display: block;
-    text-decoration: none;
+#menu .catalog .line1 {
+    top: 0;
+    width: 19px;
+    position: absolute;
+    height: 2px;
+    background: #000;
 }
 
-#menu .header-main .categories-with-children .parent a:hover {
-    text-decoration: underline;
+#menu .catalog .line2 {
+    top: 5px;
+    width: 19px;
+    position: absolute;
+    height: 2px;
+    background: #000;
 }
 
-#menu .header-main .categories-with-children .parent a p {
-    color: #000;
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: 13px;
+#menu .catalog .line3 {
+    bottom: 0;
+    width: 19px;
+    position: absolute;
+    height: 2px;
+    background: #000;
 }
 
-#menu .header-main .categories-with-children .children {
-    margin-top: 30px;
-    text-align: left;
-}
-
-#menu .header-main .categories-with-children .children a {
-    font-size: 12px;
-    font-weight: 400;
-    padding: 5px;
-}
-
-#menu .header-main .categories-with-children .children a:hover {
+#menu .header-main {
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
+    visibility: hidden;
     background-color: #fff;
+    width: 300px;
+    position: fixed;
+    top: 70px;
+    left: calc(10% + 203px);
+    display: flex;
+    box-sizing: border-box;
+    border: 1px solid #eee;
 }
 
-#menu .header-main .categories-with-children img {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
+.home-page #menu .header-main {
+    top: 118px;
+    background-color: rgba(255, 255, 255, .8);
+}
+
+#menu .header-main ul {
+    padding: 0;
+    width: 220px;
+    box-sizing: border-box;
+}
+
+#menu .header-main ul li {
+    list-style-type: none;
+    font-size: 14px;
+    padding: 10px 20px;
+    width: 300px;
+    box-sizing: border-box;
+    border-right: 1px solid #ccc;
+}
+
+#menu .header-main ul li:hover {
+    background-color: rgba(200,200,200,.7);
+    cursor: pointer;
+}
+
+#menu .header-main .subcategories {
+    position: absolute;
+    top: 0;
+    left: 300px;
+    width: 300px;
+}
+
+#menu .header-main .subcategories ul {
+    display: none;
 }
 
 #menu .search, #menu-fixed .search {
