@@ -23,4 +23,16 @@ $(document).ready(function () {
             e.stopImmediatePropagation();
         })
     });
+
+    $('.menu_body .menu_list .parent-category').on('click', function () {
+        const id = $(this).data('category-id');
+        $('.children').not('.category-' + id).hide();
+        $('.menu_body .menu_list .parent-category').not(this).find("img").attr("src", "/images/arrow_down_gray.png");
+        $('.category-' + id).toggle();
+        if ($(this).find("img").attr("src") === "/images/arrow_down_gray.png") {
+            $(this).find("img").attr("src", "/images/arrow_up_gray.png");
+        } else {
+            $(this).find("img").attr("src", "/images/arrow_down_gray.png");
+        }
+    });
 });

@@ -159,16 +159,21 @@ header #menu-open {
     padding: 0 0 0 0;
 }
 .menu_body .menu_list li {
-    margin-bottom: 30px;
+    width: calc(100% - 55px);
+    padding: 15px 0 15px 55px;
     position: relative;
-    padding-left: 55px;
+}
+.menu_body .menu_list li img {
+    float: right;
+    width: 20px;
 }
 .menu_body .menu_list .children {
     list-style-type: none;
     padding-bottom: 10px;
     padding-left: 30px;
+    display: none;
 }
-.menu_body .menu_list li img {
+.menu_body .menu_list li .full-v-img {
     width: 20px;
     margin-right: 10px;
 }

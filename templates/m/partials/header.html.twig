@@ -30,9 +30,12 @@
         <ul class="menu_list">
             <li><a href="/">Головна</a></li>
             {% for category in categories %}
-                <li><a href="/categories/{{ category.slug }}">{{ category.title }}</a></li>
+                <li class="parent-category" data-category-id="{{ category.id }}">
+                    <a>{{ category.title }}</a>
+                    <img class="arrow" src="/images/arrow_down_gray.png">
+                </li>
                 {% if category.children|length > 0 %}
-                    <ul class="children">
+                    <ul class="children category-{{ category.id }}">
                         {% for child in category.children %}
                             <li>
                                 <a href="/categories/{{ child.slug }}">{{ child.title }}</a>
@@ -41,10 +44,12 @@
                     </ul>
                 {% endif %}
             {% endfor %}
+            <hr>
             <li><a href="/delivery-and-pay">Доставка та оплата</a></li>
             <li><a href="/about-us">Про нас</a></li>
             <li><a href="/feedbacks">Відгуки про магазин</a></li>
-            <li><a href="{{ currentPath }}"><div><img src="/images/desktop_version.png"><span>Повна версія сайту</span></div></a></li>
+            <hr>
+            <li><a href="{{ currentPath }}"><div><img class="full-v-img" src="/images/desktop_version.png"><span>Повна версія сайту</span></div></a></li>
         </ul>
     </div>
 </section>
