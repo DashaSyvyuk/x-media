@@ -12,6 +12,28 @@
                     </span>
                     Каталог товарів
                 </a>
+                <div class="header-main">
+                    <ul class="categories-list">
+                        {% for category in categories %}
+                            <li>
+                                <a class="no-link-style" href="/categories/{{ category.slug }}">
+                                    <span>{{ category.title }}</span>
+                                    {% if category.children|length > 0 %}
+                                        <div class="subcategories">
+                                            <ul>
+                                                {% for child in category.children %}
+                                                    <li>
+                                                        <a class="no-link-style" href="/categories/{{ child.slug }}">{{ child.title }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </li>
             {% endif %}
             {% for category in categories %}
@@ -40,29 +62,6 @@
         </div>
         <a href="{% if app.session.get('user') %}/account{% else %}/login{% endif %}"><img class="account-ico" src="/images/{% if app.session.get('user') %}account_logged.png{% else %}account.png{% endif %}"></a>
     </div>
-
-    {% if categories|length > 3 %}
-        <div class="header-main">
-            <ul class="categories-list">
-                {% for category in categories %}
-                    <li data-id="{{ category.id }}" class="catogory-option">
-                        <a class="no-link-style" href="/categories/{{ category.slug }}">{{ category.title }}</a>
-                    </li>
-                    {% if category.children|length > 0 %}
-                        <div class="subcategories">
-                            <ul class="subcategories-list-{{ category.id }}">
-                                {% for child in category.children %}
-                                    <li>
-                                        <a class="no-link-style" href="/categories/{{ child.slug }}">{{ child.title }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
 </div>
 <!-- <div id="menu-fixed">
     <div class="logo"><a href="/">X-media</a></div>

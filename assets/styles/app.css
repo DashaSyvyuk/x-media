@@ -366,16 +366,17 @@ header {
     text-decoration: none;
     color: #000;
     padding: 10px 15px;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 #menu .categories ul li a:hover, #menu-fixed .categories ul li a:hover {
     background-color: rgba(200,200,200,.7);
 }
 
-#menu .catalog {
-    display: grid;
+#menu ul li.catalog {
+    position: relative;
+    display: block;
 }
 
 #menu .catalog a {
@@ -417,42 +418,51 @@ header {
     background: #000;
 }
 
+#menu ul li.catalog:hover .header-main {
+    visibility: visible;
+}
+
 #menu .header-main {
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
     visibility: hidden;
     background-color: #fff;
     width: 300px;
-    position: fixed;
-    top: 70px;
-    left: calc(10% + 203px);
     display: flex;
     box-sizing: border-box;
-    border: 1px solid #eee;
-}
-
-.home-page #menu .header-main {
-    top: 118px;
-    background-color: rgba(255, 255, 255, .8);
+    border: none;
+    position: absolute;
+    top: 29px;
 }
 
 #menu .header-main ul {
     padding: 0;
-    width: 220px;
     box-sizing: border-box;
+    flex-direction: column;
 }
 
 #menu .header-main ul li {
     list-style-type: none;
-    font-size: 14px;
     padding: 10px 20px;
     width: 300px;
     box-sizing: border-box;
     border-right: 1px solid #ccc;
 }
 
+#menu .header-main ul li a {
+    font-size: 14px;
+}
+
 #menu .header-main ul li:hover {
-    background-color: rgba(200,200,200,.7);
+    background-color: rgba(200, 200, 200, .7);
     cursor: pointer;
+}
+
+#menu .header-main .categories-list li {
+    position: relative;
+}
+
+#menu .header-main .categories-list li:hover .subcategories {
+    display: block;
 }
 
 #menu .header-main .subcategories {
@@ -460,10 +470,9 @@ header {
     top: 0;
     left: 300px;
     width: 300px;
-}
-
-#menu .header-main .subcategories ul {
     display: none;
+    background-color: #fff;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
 }
 
 #menu .search, #menu-fixed .search {
