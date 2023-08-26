@@ -26,6 +26,7 @@
 /public/images/delivery
 /public/images/payment
 /public/images/category
+/public/xml/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###

@@ -58,12 +58,17 @@ class Category
     /**
      * @ORM\Column(type="string")
      */
-    private string $status = "";
+    private string $status = '';
 
     /**
      * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=true)
      */
     private ?int $position = 0;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $hotlineLink = '';
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
@@ -158,6 +163,16 @@ class Category
     public function getPosition(): ?int
     {
         return $this->position;
+    }
+
+    public function setHotlineLink(?string $hotlineLink): void
+    {
+        $this->hotlineLink = $hotlineLink;
+    }
+
+    public function getHotlineLink(): ?string
+    {
+        return $this->hotlineLink;
     }
 
     /**

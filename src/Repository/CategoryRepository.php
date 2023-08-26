@@ -18,4 +18,29 @@ class CategoryRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Category::class);
     }
+
+    public function getCategoriesForProducts(array $ids): array
+    {
+        $result = [];
+        $categories = $this->createQueryBuilder('c')
+            ->leftJoin('c.products', 'p')
+            ->where('p.id IN (:ids)')
+            ->andWhere('c.status = :status')
+            ->andWhere('c.hotlineLink IS NOT NULL')
+            ->setParameter('ids', $ids)
+            ->setParameter('status', 'ACTIVE')
+            ->orderBy('c.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        foreach ($categories as $category) {
+            $categoryArray['id'] = $category->getId();
+            $categoryArray['title'] = $category->getTitle();
+            $categoryArray['hotlineLink'] = $category->getHotlineLink();
+            $result[] = $categoryArray;
+        }
+
+        return $result;
+    }
 }

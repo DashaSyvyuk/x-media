@@ -5,6 +5,7 @@
         "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "aaronddm/xml-builder": "^2.0",
         "composer/package-versions-deprecated": "*",
         "doctrine/annotations": "*",
         "doctrine/doctrine-bundle": "^2.9",
