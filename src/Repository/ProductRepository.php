@@ -127,19 +127,24 @@ class ProductRepository extends ServiceEntityRepository
                 return 'https://x-media.com.ua/images/products' . $item->getImageUrl();
             }, $product->getImages());
 
-            $row = [
-                'id' => $product->getId(),
-                'title' => strip_tags(addslashes($product->getTitle())),
-                'categoryId' => $product->getCategory()->getId(),
-                'categoryHotlineLink' => $product->getCategory()->getHotlineLink(),
-                'price' => $product->getPrice(),
-                'images' => $images,
-                'characteristics' => $product->getCharacteristics(),
-                'description' => addslashes(htmlspecialchars(htmlentities(strip_tags($product->getDescription()), ENT_XML1), ENT_QUOTES)),
-                'keywords' => addslashes($product->getMetaKeyword()),
-            ];
+            $vendor = array_filter($product->getCharacteristics()->toArray(), fn ($item) => in_array($item->getTitle(), ['Марка', 'Виробник']));
 
-            $result[] = $row;
+            if (!empty($vendor)) {
+                $row = [
+                    'id' => $product->getId(),
+                    'title' => strip_tags(addslashes($product->getTitle())),
+                    'categoryId' => $product->getCategory()->getId(),
+                    'categoryHotlineLink' => $product->getCategory()->getHotlineLink(),
+                    'price' => $product->getPrice(),
+                    'images' => $images,
+                    'characteristics' => $product->getCharacteristics(),
+                    'description' => addslashes(htmlspecialchars(htmlentities(strip_tags($product->getDescription()), ENT_XML1), ENT_QUOTES)),
+                    'keywords' => addslashes($product->getMetaKeyword()),
+                    'vendor' => $vendor[0]->getValue(),
+                ];
+
+                $result[] = $row;
+            }
         }
 
         return $result;

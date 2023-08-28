@@ -32,40 +32,43 @@ class GenerateXmlService
         try {
             $this->xmlBuilder
                 ->createXMLArray()
-                ->start('shop')
+                ->start('price')
+                    ->add('date', date('Y-m-d H:i:s'))
+                    ->add('firmName', 'X-media')
+                    ->add('firmId', 41387)
+                    ->add('delivery', null, [
+                            'delivery_id' => 1,
+                            'type'        => 'warehouse',
+                            'carrier'     => 'NP'
+                        ])
                     ->startLoop('categories', [], function (XMLArray $XMLArray) use ($categories) {
                         foreach ($categories as $category) {
-                            $XMLArray->add('category', $category['title'], [
-                                'id'         => $category['id'],
-                                'portal_url' => $category['hotlineLink']
-                            ]);
+                            $XMLArray->start('category')
+                                ->add('id', $category['id'])
+                                ->add('name', $category['title'])
+                            ->end();
                         }
                     })
                     ->end()
-                    ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products) {
+                    ->startLoop('items', [], function (XMLArray $XMLArray) use ($products) {
                         foreach ($products as $product) {
                             $images = $product['images'];
                             $characteristics = $product['characteristics'];
 
-                            $XMLArray->start('offer', [
-                                'id' => $product['id'],
-                                'available' => true,
-                                'in_stock' => true,
-                                'selling_type' => 'r'
-                            ])
-                                ->add('name', $product['title'])
-                                ->add('name_ua', $product['title'])
+                            $XMLArray->start('item')
+                                ->add('id', $product['id'])
                                 ->add('categoryId', $product['categoryId'])
-                                ->add('portal_category_url', $product['categoryHotlineLink'])
-                                ->add('price', $product['price'])
-                                ->add('quantity_in_stock', 10)
-                                ->add('currencyId', 'UAH')
-                                ->add('barcode', str_pad($product['id'], 25, 0, STR_PAD_LEFT))
+                                ->add('vendor', $product['vendor'])
+                                ->add('name', $product['title'])
+                                ->add('description', $product['description'])
+                                ->add('url', sprintf('https://x-media.com.ua/products/%s', $product['id']))
                                 ->loop(function (XMLArray $XMLArray) use ($images) {
                                     foreach ($images as $image) {
-                                        $XMLArray->add('picture', $image);
+                                        $XMLArray->add('image', $image);
                                     }
                                 })
+                                ->add('priceRUAH', $product['price'])
+                                ->add('stock', 'В наявності')
                                 ->loop(function (XMLArray $XMLArray) use ($characteristics) {
                                     foreach ($characteristics as $characteristic) {
                                         $XMLArray->add('param', strip_tags(addslashes($characteristic->getValue())), [
@@ -73,9 +76,7 @@ class GenerateXmlService
                                         ]);
                                     }
                                 })
-                                ->add('description', $product['description'])
-                                ->add('description_ua', $product['description'])
-                                ->add('keywords', $product['keywords'])
+                                ->add('condition', 0)
                             ;
                         }
                     })
