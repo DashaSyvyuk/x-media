@@ -68,7 +68,7 @@ class Category
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $hotlineLink = '';
+    private ?string $hotlineCategory = '';
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
@@ -165,14 +165,14 @@ class Category
         return $this->position;
     }
 
-    public function setHotlineLink(?string $hotlineLink): void
+    public function setHotlineCategory(?string $hotlineCategory): void
     {
-        $this->hotlineLink = $hotlineLink;
+        $this->hotlineCategory = $hotlineCategory;
     }
 
-    public function getHotlineLink(): ?string
+    public function getHotlineCategory(): ?string
     {
-        return $this->hotlineLink;
+        return $this->hotlineCategory;
     }
 
     /**

@@ -26,7 +26,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->leftJoin('c.products', 'p')
             ->where('p.id IN (:ids)')
             ->andWhere('c.status = :status')
-            ->andWhere('c.hotlineLink IS NOT NULL')
+            ->andWhere('c.hotlineCategory IS NOT NULL')
             ->setParameter('ids', $ids)
             ->setParameter('status', 'ACTIVE')
             ->orderBy('c.title', 'ASC')
@@ -36,8 +36,7 @@ class CategoryRepository extends ServiceEntityRepository
 
         foreach ($categories as $category) {
             $categoryArray['id'] = $category->getId();
-            $categoryArray['title'] = $category->getTitle();
-            $categoryArray['hotlineLink'] = $category->getHotlineLink();
+            $categoryArray['title'] = $category->getHotlineCategory();
             $result[] = $categoryArray;
         }
 

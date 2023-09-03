@@ -114,7 +114,7 @@ class ProductRepository extends ServiceEntityRepository
             ->leftJoin('p.category', 'c')
             ->where('p.id IN (:ids)')
             ->andWhere('c.status = :status')
-            ->andWhere('c.hotlineLink IS NOT NULL')
+            ->andWhere('c.hotlineCategory IS NOT NULL')
             ->setParameter('ids', $ids)
             ->setParameter('status', 'ACTIVE')
             ->orderBy('p.title', 'ASC')
@@ -124,7 +124,7 @@ class ProductRepository extends ServiceEntityRepository
 
         foreach ($products as $product) {
             $images = array_map(function ($item) {
-                return 'https://x-media.com.ua/images/products' . $item->getImageUrl();
+                return 'https://x-media.com.ua/images/products/' . $item->getImageUrl();
             }, $product->getImages());
 
             $vendor = array_filter($product->getCharacteristics()->toArray(), fn ($item) => in_array($item->getTitle(), ['Марка', 'Виробник']));
@@ -134,7 +134,6 @@ class ProductRepository extends ServiceEntityRepository
                     'id' => $product->getId(),
                     'title' => strip_tags(addslashes($product->getTitle())),
                     'categoryId' => $product->getCategory()->getId(),
-                    'categoryHotlineLink' => $product->getCategory()->getHotlineLink(),
                     'price' => $product->getPrice(),
                     'images' => $images,
                     'characteristics' => $product->getCharacteristics(),
