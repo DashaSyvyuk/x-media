@@ -35,7 +35,7 @@
             <li><a href="/delivery-and-pay">Доставка та оплата</a></li>
             <li><a href="/about-us">Про нас</a></li>
             <li><a href="/feedbacks">Відгуки про магазин</a></li>
-            <li><a href="{{ currentPath }}"><div><img src="/images/desktop_version.png"><span>Повна версія сайту</span></div></a></li>
+            <li><a href="{% if app.request.attributes.get('_route') == 'mobile_cart' %}/?page-type=desktop{% else %}{{ currentPath }}{% endif %}"><div><img src="/images/desktop_version.png"><span>Повна версія сайту</span></div></a></li>
         </ul>
     </div>
 </section>
