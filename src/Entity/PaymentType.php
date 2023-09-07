@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 /**
- * @ORM\Table("payment_type")
+ * @ORM\Table("payment_type", indexes={
+ *     @Index(columns={"title"}),
+ * })
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks()
  */
