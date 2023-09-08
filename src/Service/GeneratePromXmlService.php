@@ -10,7 +10,7 @@ use AaronDDM\XMLBuilder\Exception\XMLArrayException;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 
-class GenerateXmlService
+class GeneratePromXmlService
 {
     private XMLWriterService $xmlWriterService;
     private XMLBuilder $xmlBuilder;
@@ -32,43 +32,39 @@ class GenerateXmlService
         try {
             $this->xmlBuilder
                 ->createXMLArray()
-                ->start('price')
-                    ->add('date', date('Y-m-d H:i:s'))
-                    ->add('firmName', 'X-media')
-                    ->add('firmId', 41387)
-                    ->add('delivery', null, [
-                            'delivery_id' => 1,
-                            'type'        => 'warehouse',
-                            'carrier'     => 'NP'
-                        ])
+                ->start('shop')
                     ->startLoop('categories', [], function (XMLArray $XMLArray) use ($categories) {
                         foreach ($categories as $category) {
-                            $XMLArray->start('category')
-                                ->add('id', $category['id'])
-                                ->add('name', $category['title'])
-                            ->end();
+                            $XMLArray->add('category', $category['title'], [
+                                'id' => $category['id'],
+                                'portal_url' => $category['promCategoryLink']
+                            ]);
                         }
                     })
                     ->end()
-                    ->startLoop('items', [], function (XMLArray $XMLArray) use ($products) {
+                    ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products) {
                         foreach ($products as $product) {
                             $images = $product['images'];
                             $characteristics = $product['characteristics'];
 
-                            $XMLArray->start('item')
-                                ->add('id', $product['id'])
-                                ->add('categoryId', $product['categoryId'])
-                                ->add('vendor', $product['vendor'])
+                            $XMLArray->start('offer', [
+                                'id' => $product['id'],
+                                'selling_type' => 'r',
+                                'available' => true
+                            ])
                                 ->add('name', $product['title'])
-                                ->add('description', $product['description'])
-                                ->add('url', sprintf('https://x-media.com.ua/products/%s', $product['id']))
+                                ->add('name_ua', $product['title'])
+                                ->add('categoryId', $product['categoryId'])
+                                ->add('portal_category_url', $product['promCategoryLink'])
+                                ->add('price', $product['price'])
+                                ->add('quantity_in_stock', 10)
+                                ->add('currencyId', 'UAH')
                                 ->loop(function (XMLArray $XMLArray) use ($images) {
                                     foreach ($images as $image) {
-                                        $XMLArray->add('image', $image);
+                                        $XMLArray->add('picture', $image);
                                     }
                                 })
-                                ->add('priceRUAH', $product['price'])
-                                ->add('stock', 'В наявності')
+                                ->add('vendor', $product['vendor'])
                                 ->loop(function (XMLArray $XMLArray) use ($characteristics) {
                                     foreach ($characteristics as $characteristic) {
                                         $XMLArray->add('param', strip_tags(addslashes($characteristic->getValue())), [
@@ -76,14 +72,16 @@ class GenerateXmlService
                                         ]);
                                     }
                                 })
-                                ->add('condition', 0)
+                                ->add('description', $product['description'])
+                                ->add('description_ua', $product['description'])
+                                ->add('available', true)
                             ;
                         }
                     })
-                    ->end()
+                ->end()
                 ->end();
 
-            file_put_contents(__DIR__ . '/../../public/xml/products.xml', $this->xmlBuilder->getXML());
+            file_put_contents(__DIR__ . '/../../public/prom/products.xml', $this->xmlBuilder->getXML());
         } catch (XMLArrayException|XMLBuilderException $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
         }

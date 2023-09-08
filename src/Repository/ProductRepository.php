@@ -115,6 +115,7 @@ class ProductRepository extends ServiceEntityRepository
             ->where('p.id IN (:ids)')
             ->andWhere('c.status = :status')
             ->andWhere('c.hotlineCategory IS NOT NULL')
+            ->andWhere('c.promCategoryLink IS NOT NULL')
             ->setParameter('ids', $ids)
             ->setParameter('status', 'ACTIVE')
             ->orderBy('p.title', 'ASC')
@@ -140,6 +141,7 @@ class ProductRepository extends ServiceEntityRepository
                     'description' => addslashes(htmlspecialchars(htmlentities(strip_tags($product->getDescription()), ENT_XML1), ENT_QUOTES)),
                     'keywords' => addslashes($product->getMetaKeyword()),
                     'vendor' => $vendor[0]->getValue(),
+                    'promCategoryLink' => $product->getCategory()->getPromCategoryLink()
                 ];
 
                 $result[] = $row;

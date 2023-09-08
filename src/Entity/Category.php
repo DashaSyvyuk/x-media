@@ -71,6 +71,11 @@ class Category
     private ?string $hotlineCategory = '';
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $promCategoryLink = '';
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
      */
     private $products;
@@ -173,6 +178,16 @@ class Category
     public function getHotlineCategory(): ?string
     {
         return $this->hotlineCategory;
+    }
+
+    public function setPromCategoryLink(?string $promCategoryLink): void
+    {
+        $this->promCategoryLink = $promCategoryLink;
+    }
+
+    public function getPromCategoryLink(): ?string
+    {
+        return $this->promCategoryLink;
     }
 
     /**

@@ -10,7 +10,8 @@ use App\Form\ProductCharacteristicType;
 use App\Form\ProductFilterAttributeType;
 use App\Form\ProductImageType;
 use App\Repository\ProductRepository;
-use App\Service\GenerateXmlService;
+use App\Service\GenerateHotlineXmlService;
+use App\Service\GeneratePromXmlService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -35,7 +36,8 @@ class ProductCrudController extends AbstractCrudController
     public function __construct(
         private readonly AdminUrlGenerator $adminUrlGenerator,
         private readonly ProductRepository $productRepository,
-        private readonly GenerateXmlService $generateXmlService
+        private readonly GenerateHotlineXmlService $generateHotlineXmlService,
+        private readonly GeneratePromXmlService $generatePromXmlService,
     )
     {
     }
@@ -70,8 +72,11 @@ class ProductCrudController extends AbstractCrudController
 
         $actions->add(Crud::PAGE_INDEX, $cloneAction);
 
-        $actions->addBatchAction(Action::new('exportXml', 'Export *.xml')
-            ->linkToCrudAction('exportXmlAction'));
+        $actions->addBatchAction(Action::new('hotlineXml', 'Hotline feed *.xml')
+            ->linkToCrudAction('hotlineXmlAction'));
+
+        $actions->addBatchAction(Action::new('promXml', 'Prom feed *.xml')
+            ->linkToCrudAction('promXmlAction'));
 
         return parent::configureActions($actions);
     }
@@ -177,13 +182,24 @@ class ProductCrudController extends AbstractCrudController
         return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
     }
 
-    public function exportXmlAction(BatchActionDto $batchActionDto): RedirectResponse
+    public function hotlineXmlAction(BatchActionDto $batchActionDto): RedirectResponse
     {
         $ids = $batchActionDto->getEntityIds();
 
-        $this->generateXmlService->execute($ids);
+        $this->generateHotlineXmlService->execute($ids);
 
-        $this->addFlash('success', 'Document is generated <a href="/xml/products.xml" target="_blank">here</a>');
+        $this->addFlash('success', 'Document is generated <a href="/hotline/products.xml" target="_blank">here</a>');
+
+        return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+    }
+
+    public function promXmlAction(BatchActionDto $batchActionDto): RedirectResponse
+    {
+        $ids = $batchActionDto->getEntityIds();
+
+        $this->generatePromXmlService->execute($ids);
+
+        $this->addFlash('success', 'Document is generated <a href="/prom/products.xml" target="_blank">here</a>');
 
         return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
     }
