@@ -147,7 +147,7 @@ header #menu-open {
     transform: translateX(0);
 }
 .menu_body .menu_body__item_wrapper {
-    padding: 40px 40px 40px 0;
+    padding: 40px 0;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -159,8 +159,8 @@ header #menu-open {
     padding: 0 0 0 0;
 }
 .menu_body .menu_list li {
-    width: calc(100% - 55px);
-    padding: 15px 0 15px 55px;
+    width: calc(100% - 90px);
+    padding: 15px 35px 15px 55px;
     position: relative;
 }
 .menu_body .menu_list li img {
