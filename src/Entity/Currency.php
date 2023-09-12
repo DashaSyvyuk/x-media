@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 /**
- * @ORM\Table("currency")
+ * @ORM\Table("currency", indexes={
+ *     @Index(columns={"code"}),
+ * })
  * @ORM\Entity()
  */
 class Currency

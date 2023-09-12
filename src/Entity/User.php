@@ -6,11 +6,16 @@ use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="user")
+ * @ORM\Table(name="user", indexes={
+ *     @Index(columns={"email"}),
+ *     @Index(columns={"surname"}),
+ *     @Index(columns={"phone"}),
+ * })
  */
 class User
 {

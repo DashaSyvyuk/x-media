@@ -7,9 +7,17 @@ use App\Validator\OrderStatus;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 /**
- * @ORM\Table("orders")
+ * @ORM\Table("orders", indexes={
+ *     @Index(columns={"order_number"}),
+ *     @Index(columns={"surname"}),
+ *     @Index(columns={"phone"}),
+ *     @Index(columns={"email"}),
+ *     @Index(columns={"status"}),
+ *     @Index(columns={"created_at"}),
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
  * @ORM\HasLifecycleCallbacks()
  * @OrderStatus()

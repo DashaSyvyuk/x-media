@@ -107,6 +107,50 @@ class ProductRepository extends ServiceEntityRepository
         return $query->getQuery()->getArrayResult()[0];
     }
 
+    public function getProductsByIds(array $ids): array
+    {
+        $result = [];
+        $products = $this->createQueryBuilder('p')
+            ->leftJoin('p.category', 'c')
+            ->where('p.id IN (:ids)')
+            ->andWhere('c.status = :status')
+            ->andWhere('c.hotlineCategory IS NOT NULL')
+            ->andWhere('c.promCategoryLink IS NOT NULL')
+            ->setParameter('ids', $ids)
+            ->setParameter('status', 'ACTIVE')
+            ->orderBy('p.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        foreach ($products as $product) {
+            $images = array_map(function ($item) {
+                return 'https://x-media.com.ua/images/products/' . $item->getImageUrl();
+            }, $product->getImages());
+
+            $vendor = array_filter($product->getCharacteristics()->toArray(), fn ($item) => in_array($item->getTitle(), ['Марка', 'Виробник']));
+
+            if (!empty($vendor)) {
+                $row = [
+                    'id' => $product->getId(),
+                    'title' => strip_tags(addslashes($product->getTitle())),
+                    'categoryId' => $product->getCategory()->getId(),
+                    'price' => $product->getPrice(),
+                    'images' => $images,
+                    'characteristics' => $product->getCharacteristics(),
+                    'description' => addslashes(htmlspecialchars(htmlentities(strip_tags($product->getDescription()), ENT_XML1), ENT_QUOTES)),
+                    'keywords' => addslashes($product->getMetaKeyword()),
+                    'vendor' => $vendor[0]->getValue(),
+                    'promCategoryLink' => $product->getCategory()->getPromCategoryLink()
+                ];
+
+                $result[] = $row;
+            }
+        }
+
+        return $result;
+    }
+
     public function create(Product $product): void
     {
         $entityManager = $this->getEntityManager();

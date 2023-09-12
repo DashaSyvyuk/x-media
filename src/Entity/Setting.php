@@ -5,11 +5,14 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SettingRepository")
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="setting")
+ * @ORM\Table(name="setting", indexes={
+ *     @Index(columns={"title"}),
+ * })
  */
 class Setting
 {

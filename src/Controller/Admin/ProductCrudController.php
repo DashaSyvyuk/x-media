@@ -10,12 +10,15 @@ use App\Form\ProductCharacteristicType;
 use App\Form\ProductFilterAttributeType;
 use App\Form\ProductImageType;
 use App\Repository\ProductRepository;
+use App\Service\GenerateHotlineXmlService;
+use App\Service\GeneratePromXmlService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -32,7 +35,9 @@ class ProductCrudController extends AbstractCrudController
 {
     public function __construct(
         private readonly AdminUrlGenerator $adminUrlGenerator,
-        private readonly ProductRepository $productRepository
+        private readonly ProductRepository $productRepository,
+        private readonly GenerateHotlineXmlService $generateHotlineXmlService,
+        private readonly GeneratePromXmlService $generatePromXmlService,
     )
     {
     }
@@ -55,9 +60,9 @@ class ProductCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Товар')
             ->setSearchFields(['title'])
             ->setDefaultSort(['id' => 'DESC'])
-            ->setPaginatorPageSize(10)
+            ->setPaginatorPageSize(100)
             ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
-            ;
+        ;
     }
 
     public function configureActions(Actions $actions): Actions
@@ -66,6 +71,12 @@ class ProductCrudController extends AbstractCrudController
             ->linkToCrudAction('cloneAction');
 
         $actions->add(Crud::PAGE_INDEX, $cloneAction);
+
+        $actions->addBatchAction(Action::new('hotlineXml', 'Hotline feed *.xml')
+            ->linkToCrudAction('hotlineXmlAction'));
+
+        $actions->addBatchAction(Action::new('promXml', 'Prom feed *.xml')
+            ->linkToCrudAction('promXmlAction'));
 
         return parent::configureActions($actions);
     }
@@ -167,6 +178,28 @@ class ProductCrudController extends AbstractCrudController
 
         $this->persistEntity($this->get('doctrine')->getManagerForClass($context->getEntity()->getFqcn()), $clone);
         $this->addFlash('success', 'Product duplicated');
+
+        return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+    }
+
+    public function hotlineXmlAction(BatchActionDto $batchActionDto): RedirectResponse
+    {
+        $ids = $batchActionDto->getEntityIds();
+
+        $this->generateHotlineXmlService->execute($ids);
+
+        $this->addFlash('success', 'Document is generated <a href="/hotline/products.xml" target="_blank">here</a>');
+
+        return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+    }
+
+    public function promXmlAction(BatchActionDto $batchActionDto): RedirectResponse
+    {
+        $ids = $batchActionDto->getEntityIds();
+
+        $this->generatePromXmlService->execute($ids);
+
+        $this->addFlash('success', 'Document is generated <a href="/prom/products.xml" target="_blank">here</a>');
 
         return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
     }

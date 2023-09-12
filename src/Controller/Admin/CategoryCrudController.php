@@ -37,6 +37,8 @@ class CategoryCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield AssociationField::new('parent', 'Батьківська категорія')->hideOnIndex();
         yield TextField::new('title', 'Назва');
+        yield TextField::new('hotlineCategory', 'Відповідна категорія на Hotline')->hideOnIndex();
+        yield TextField::new('promCategoryLink', 'Посилання на категорію на Prom')->hideOnIndex();
         yield ImageField::new('image', 'Картинка')
             ->setUploadDir('/public/images/category/')
             ->setBasePath('images/category/');

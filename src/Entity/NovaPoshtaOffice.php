@@ -5,9 +5,14 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 /**
- * @ORM\Table("nova_poshta_office")
+ * @ORM\Table("nova_poshta_office", indexes={
+ *     @Index(columns={"title"}),
+ *     @Index(columns={"ref"}),
+ *     @Index(columns={"created_at"}),
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\NovaPoshtaOfficeRepository")
  * @ORM\HasLifecycleCallbacks()
  */

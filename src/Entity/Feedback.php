@@ -5,9 +5,13 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 /**
- * @ORM\Table("feedback")
+ * @ORM\Table("feedback", indexes={
+ *     @Index(columns={"email"}),
+ *     @Index(columns={"created_at"}),
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\FeedbackRepository")
  * @ORM\HasLifecycleCallbacks()
  */

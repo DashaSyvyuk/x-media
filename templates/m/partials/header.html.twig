@@ -32,7 +32,9 @@
             {% for category in categories %}
                 <li class="parent-category" data-category-id="{{ category.id }}">
                     <a>{{ category.title }}</a>
+                    {% if category.children|length > 0 %}
                     <img class="arrow" src="/images/arrow_down_gray.png">
+                    {% endif %}
                 </li>
                 {% if category.children|length > 0 %}
                     <ul class="children category-{{ category.id }}">
@@ -49,7 +51,14 @@
             <li><a href="/about-us">Про нас</a></li>
             <li><a href="/feedbacks">Відгуки про магазин</a></li>
             <hr>
-            <li><a href="{{ currentPath }}"><div><img class="full-v-img" src="/images/desktop_version.png"><span>Повна версія сайту</span></div></a></li>
+            <li>
+                <a href="{% if app.request.attributes.get('_route') == 'mobile_cart' %}/?page-type=desktop{% else %}{{ currentPath }}{% endif %}">
+                    <div>
+                        <img class="full-v-img" src="/images/desktop_version.png">
+                        <span>Повна версія сайту</span>
+                    </div>
+                </a>
+            </li>
         </ul>
     </div>
 </section>

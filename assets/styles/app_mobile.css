@@ -1215,7 +1215,17 @@ section .title {
 .product-page .readonly-rating {
     align-items: center;
     display: flex;
-    margin: 5px 0 15px 0;
+    margin: 5px 0 0;
+}
+
+.product-page .in-stock {
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    width: 90px;
+    justify-content: space-between;
+    height: 25px;
+    margin-bottom: 10px;
 }
 
 .product-page .tabs-place {

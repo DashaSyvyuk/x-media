@@ -36,8 +36,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->setParameter('status', Category::ACTIVE)
             ->orderBy('c.position', 'ASC')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
 
         foreach ($categories as $category) {
             $categoryArray['id'] = $category->getId();
@@ -46,6 +45,32 @@ class CategoryRepository extends ServiceEntityRepository
             $categoryArray['slug'] = $category->getSlug();
             $categoryArray['showInHeader'] = $category->getShowInHeader();
             $categoryArray['children'] = $this->getCategoriesTree($category->getId());
+            $result[] = $categoryArray;
+        }
+
+        return $result;
+    }
+
+    public function getCategoriesForProducts(array $ids): array
+    {
+        $result = [];
+        $categories = $this->createQueryBuilder('c')
+            ->leftJoin('c.products', 'p')
+            ->where('p.id IN (:ids)')
+            ->andWhere('c.status = :status')
+            ->andWhere('c.hotlineCategory IS NOT NULL')
+            ->andWhere('c.promCategoryLink IS NOT NULL')
+            ->setParameter('ids', $ids)
+            ->setParameter('status', 'ACTIVE')
+            ->orderBy('c.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        foreach ($categories as $category) {
+            $categoryArray['id'] = $category->getId();
+            $categoryArray['title'] = $category->getHotlineCategory();
+            $categoryArray['promCategoryLink'] = $category->getPromCategoryLink();
             $result[] = $categoryArray;
         }
 

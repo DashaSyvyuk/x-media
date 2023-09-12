@@ -72,7 +72,7 @@ class Category
     /**
      * @ORM\Column(type="string")
      */
-    private string $status = "";
+    private string $status = '';
 
     /**
      * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=true)
@@ -83,6 +83,16 @@ class Category
      * @ORM\Column(type="boolean")
      */
     private bool $showInHeader = false;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $hotlineCategory = '';
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $promCategoryLink = '';
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
@@ -197,6 +207,26 @@ class Category
     public function getShowInHeader(): bool
     {
         return $this->showInHeader;
+    }
+
+    public function setHotlineCategory(?string $hotlineCategory): void
+    {
+        $this->hotlineCategory = $hotlineCategory;
+    }
+
+    public function getHotlineCategory(): ?string
+    {
+        return $this->hotlineCategory;
+    }
+
+    public function setPromCategoryLink(?string $promCategoryLink): void
+    {
+        $this->promCategoryLink = $promCategoryLink;
+    }
+
+    public function getPromCategoryLink(): ?string
+    {
+        return $this->promCategoryLink;
     }
 
     /**
