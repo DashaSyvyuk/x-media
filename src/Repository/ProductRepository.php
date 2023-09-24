@@ -41,17 +41,10 @@ class ProductRepository extends ServiceEntityRepository
 
     public function findBySearch(string $search): QueryBuilder
     {
-        $search = explode(' ', $search);
-
-        $query = $this->createQueryBuilder('p');
-
-        foreach ($search as $value) {
-            $query
-                ->orWhere('p.title LIKE :title')
-                ->setParameter('title', '%' . $value . '%');
-        }
-
-        return $query;
+        return
+            $this->createQueryBuilder('p')
+            ->where('REGEXP(p.title, :regexp) = true')
+            ->setParameter('regexp', $search);
     }
 
     private function prepareQuery(
