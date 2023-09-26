@@ -27,6 +27,8 @@ class HomePageController extends BaseController
      * @param ProductRepository $productRepository
      * @param SettingRepository $settingRepository
      * @param FeedbackRepository $feedbackRepository
+     * @param UserRepository $userRepository
+     * @param OrderRepository $orderRepository
      */
     public function __construct(
         SliderRepository $sliderRepository,
