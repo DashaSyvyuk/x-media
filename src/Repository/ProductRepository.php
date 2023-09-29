@@ -121,7 +121,7 @@ class ProductRepository extends ServiceEntityRepository
                 return 'https://x-media.com.ua/images/products/' . $item->getImageUrl();
             }, $product->getImages());
 
-            $vendor = array_filter($product->getCharacteristics()->toArray(), fn ($item) => in_array($item->getTitle(), ['Марка', 'Виробник']));
+            $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
 
             if (!empty($vendor)) {
                 $row = [
@@ -133,7 +133,7 @@ class ProductRepository extends ServiceEntityRepository
                     'characteristics' => $product->getCharacteristics(),
                     'description' => addslashes(htmlspecialchars(htmlentities(strip_tags($product->getDescription()), ENT_XML1), ENT_QUOTES)),
                     'keywords' => addslashes($product->getMetaKeyword()),
-                    'vendor' => $vendor[0]->getValue(),
+                    'vendor' => $vendor[0]->getFilterAttribute()->getValue(),
                     'promCategoryLink' => $product->getCategory()->getPromCategoryLink()
                 ];
 
