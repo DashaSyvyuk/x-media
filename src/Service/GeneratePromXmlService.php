@@ -49,14 +49,13 @@ class GeneratePromXmlService
 
                             $XMLArray->start('offer', [
                                 'id' => $product['id'],
-                                'selling_type' => 'r',
-                                'available' => true
+                                'selling_type' => 'r'
                             ])
                                 ->add('name', $product['title'])
                                 ->add('name_ua', $product['title'])
                                 ->add('categoryId', $product['categoryId'])
                                 ->add('portal_category_url', $product['promCategoryLink'])
-                                ->add('price', $product['price'])
+                                ->add('price', ceil($product['price'] * 1.03 / 100) * 100)
                                 ->add('quantity_in_stock', 10)
                                 ->add('currencyId', 'UAH')
                                 ->loop(function (XMLArray $XMLArray) use ($images) {
@@ -74,6 +73,7 @@ class GeneratePromXmlService
                                 })
                                 ->add('description', $product['description'])
                                 ->add('description_ua', $product['description'])
+                                ->add('article', $product['article'])
                                 ->add('available', true)
                             ;
                         }

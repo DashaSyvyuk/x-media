@@ -131,10 +131,11 @@ class ProductRepository extends ServiceEntityRepository
                     'price' => $product->getPrice(),
                     'images' => $images,
                     'characteristics' => $product->getCharacteristics(),
-                    'description' => addslashes(htmlspecialchars(htmlentities(strip_tags($product->getDescription()), ENT_XML1), ENT_QUOTES)),
+                    'description' => htmlentities($product->getDescription(), ENT_XML1),
                     'keywords' => addslashes($product->getMetaKeyword()),
                     'vendor' => $vendor[0]->getFilterAttribute()->getValue(),
-                    'promCategoryLink' => $product->getCategory()->getPromCategoryLink()
+                    'promCategoryLink' => $product->getCategory()->getPromCategoryLink(),
+                    'article' => $product->getProductCode()
                 ];
 
                 $result[] = $row;
