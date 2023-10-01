@@ -49,7 +49,8 @@ class GeneratePromXmlService
 
                             $XMLArray->start('offer', [
                                 'id' => $product['id'],
-                                'selling_type' => 'r'
+                                'selling_type' => 'r',
+                                'available' => true
                             ])
                                 ->add('name', $product['title'])
                                 ->add('name_ua', $product['title'])
@@ -74,7 +75,6 @@ class GeneratePromXmlService
                                 ->add('description', $product['description'])
                                 ->add('description_ua', $product['description'])
                                 ->add('article', $product['article'])
-                                ->add('available', true)
                             ;
                         }
                     })
