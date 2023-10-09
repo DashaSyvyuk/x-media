@@ -71,12 +71,13 @@ class GenerateHotlineXmlService
                                 ->add('stock', 'В наявності')
                                 ->loop(function (XMLArray $XMLArray) use ($characteristics) {
                                     foreach ($characteristics as $characteristic) {
-                                        $XMLArray->add('param', strip_tags(addslashes($characteristic->getValue())), [
-                                            'name' => strip_tags(addslashes($characteristic->getTitle()))
+                                        $XMLArray->add('param', htmlspecialchars(addslashes($characteristic->getValue())), [
+                                            'name' => htmlspecialchars(addslashes($characteristic->getTitle()))
                                         ]);
                                     }
                                 })
                                 ->add('condition', 0)
+                                ->add('code', $product['article'])
                             ;
                         }
                     })
