@@ -122,6 +122,7 @@ class ProductRepository extends ServiceEntityRepository
             }, $product->getImages());
 
             $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
+            $warranty = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => $item->getFilter()->getTitle() == 'Гарантія');
 
             if (!empty($vendor)) {
                 $row = [
@@ -135,7 +136,8 @@ class ProductRepository extends ServiceEntityRepository
                     'keywords' => addslashes($product->getMetaKeyword()),
                     'vendor' => $vendor[0]->getFilterAttribute()->getValue(),
                     'promCategoryLink' => $product->getCategory()->getPromCategoryLink(),
-                    'article' => $product->getProductCode()
+                    'article' => $product->getProductCode(),
+                    'warranty' => $warranty ? $warranty[0]->getFilterAttribute()->getValue() : 12,
                 ];
 
                 $result[] = $row;

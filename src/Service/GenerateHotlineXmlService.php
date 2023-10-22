@@ -69,6 +69,9 @@ class GenerateHotlineXmlService
                                 })
                                 ->add('priceRUAH', $product['price'])
                                 ->add('stock', 'В наявності')
+                                ->add('guarantee', $product['warranty'], [
+                                    'type' => 'manufacturer'
+                                ])
                                 ->loop(function (XMLArray $XMLArray) use ($characteristics) {
                                     foreach ($characteristics as $characteristic) {
                                         $XMLArray->add('param', htmlspecialchars(addslashes($characteristic->getValue())), [
