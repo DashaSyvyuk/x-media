@@ -75,6 +75,7 @@ class Product
 
     /**
      * @ORM\OneToMany(targetEntity="ProductImage", mappedBy="product", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $images;
 
@@ -220,13 +221,7 @@ class Product
 
     public function getImages()
     {
-        $images = $this->images->toArray();
-
-        usort($images, function($a, $b) {
-            return strcmp($a->getPosition(), $b->getPosition());
-        });
-
-        return $images;
+        return $this->images;
     }
 
     public function setImages($images): void
