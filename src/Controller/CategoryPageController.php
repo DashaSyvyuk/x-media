@@ -34,8 +34,8 @@ class CategoryPageController extends BaseController
     public function getCategory(string $slug, PaginatorInterface $paginator, Request $request): Response
     {
         $query = $this->getFilters($request->query->get('filters'));
-        $order = $request->query->get('order');
-        $direction = $request->query->get('direction');
+        $order = $request->query->get('order') ?? 'createdAt';
+        $direction = $request->query->get('direction') ?? 'desc';
         $priceFrom = $request->query->get('price_from');
         $priceTo = $request->query->get('price_to');
         $limit = $this->settingRepository->findOneBy(['slug' => 'pagination_limit']);
