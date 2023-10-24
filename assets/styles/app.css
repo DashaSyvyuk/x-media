@@ -607,6 +607,10 @@ header {
     flex-wrap: wrap;
 }
 
+.product:hover {
+    cursor: pointer;
+}
+
 .product img {
     width: 100%;
     height: 250px;
@@ -936,8 +940,11 @@ header {
     display: flex;
     align-items: center;
     font-size: 11px;
-    width: 90px;
-    justify-content: space-between;
+    width: 120px;
+}
+
+.product-page .in-stock p {
+    margin-right: 10px;
 }
 
 .product-page .tabs-place {

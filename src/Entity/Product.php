@@ -23,6 +23,19 @@ class Product
     const STATUS_ACTIVE = 'Активний';
     const STATUS_BLOCKED = 'Заблокований';
 
+    const AVAILABILITY_AVAILABLE = 'в наявності';
+    const AVAILABILITY_TO_ORDER = 'під замовлення';
+
+    const AVAILABILITIES = [
+        self::AVAILABILITY_AVAILABLE => self::AVAILABILITY_AVAILABLE,
+        self::AVAILABILITY_TO_ORDER => self::AVAILABILITY_TO_ORDER,
+    ];
+
+    const AVAILABILITY_ICONS = [
+        self::AVAILABILITY_AVAILABLE => 'images/available.svg',
+        self::AVAILABILITY_TO_ORDER => 'images/to_order.svg',
+    ];
+
     use DateStorageTrait;
 
     /**
@@ -36,6 +49,11 @@ class Product
      * @ORM\Column(type="string")
      */
     private string $status = "";
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $availability = "";
 
     /**
      * @ORM\Column(type="integer")
@@ -147,6 +165,16 @@ class Product
     public function setStatus(string $status): void
     {
         $this->status = $status;
+    }
+
+    public function getAvailability(): string
+    {
+        return $this->availability;
+    }
+
+    public function setAvailability(string $availability): void
+    {
+        $this->availability = $availability;
     }
 
     public function getPrice(): int

@@ -100,26 +100,35 @@ class ProductRepository extends ServiceEntityRepository
         return $query->getQuery()->getArrayResult()[0];
     }
 
-    public function getProductsByIds(array $ids): array
+    public function getProductsByIds(array $ids, bool $withActiveProducts = true): array
     {
         $result = [];
-        $products = $this->createQueryBuilder('p')
+        $query = $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'c')
             ->where('p.id IN (:ids)')
             ->andWhere('c.status = :status')
             ->andWhere('c.hotlineCategory IS NOT NULL')
             ->andWhere('c.promCategoryLink IS NOT NULL')
             ->setParameter('ids', $ids)
-            ->setParameter('status', 'ACTIVE')
+            ->setParameter('status', 'ACTIVE');
+
+        if ($withActiveProducts) {
+            $query = $query
+                ->andWhere('p.status = :product_status')
+                ->setParameter('product_status', Product::STATUS_ACTIVE);
+        }
+
+        $products = $query
             ->orderBy('p.title', 'ASC')
             ->getQuery()
             ->getResult()
         ;
 
         foreach ($products as $product) {
-            $images = array_map(function ($item) {
-                return 'https://x-media.com.ua/images/products/' . $item->getImageUrl();
-            }, $product->getImages());
+            $images = [];
+            foreach ($product->getImages() as $item) {
+                $images[] = 'https://x-media.com.ua/images/products/' . $item->getImageUrl();
+            }
 
             $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
             $warranty = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => $item->getFilter()->getTitle() == 'Гарантія');

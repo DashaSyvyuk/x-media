@@ -138,7 +138,7 @@ class Order
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private string $email = "";
+    private ?string $email = null;
 
     /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
@@ -258,12 +258,12 @@ class Order
         return $this->phone;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail(?string $email): void
     {
         $this->email = $email;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }

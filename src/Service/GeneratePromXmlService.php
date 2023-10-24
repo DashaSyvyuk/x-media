@@ -26,8 +26,8 @@ class GeneratePromXmlService
 
     public function execute(array $ids): void
     {
-        $categories = $this->categoryRepository->getCategoriesForProducts($ids);
-        $products = $this->productRepository->getProductsByIds($ids);
+        $categories = $this->categoryRepository->getCategoriesForProducts($ids, false);
+        $products = $this->productRepository->getProductsByIds($ids, false);
 
         try {
             $this->xmlBuilder

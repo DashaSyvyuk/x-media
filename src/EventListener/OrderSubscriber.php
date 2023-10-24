@@ -39,22 +39,24 @@ class OrderSubscriber
             $old = $changes['ttn'][0];
             $new = $changes['ttn'][1];
             if ($new !== $old) {
-                $message = (new Email())
-                    ->subject(sprintf('Замовлення № %s прямує до Вас', $order->getOrderNumber()))
-                    ->from('x-media@x-media.com.ua')
-                    ->to($order->getEmail())
-                    ->html(
-                        $this->renderView(
-                            [
-                                'name' => $order->getName(),
-                                'orderNumber' => $order->getOrderNumber(),
-                                'ttn' => $new,
-                                'phoneNumber' => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
-                                'email' => $this->settingRepository->findOneBy(['slug' => 'email']),
-                            ]
-                        )
-                    );
-                $this->mailer->send($message);
+                if ($order->getEmail()) {
+                    $message = (new Email())
+                        ->subject(sprintf('Замовлення № %s прямує до Вас', $order->getOrderNumber()))
+                        ->from('x-media@x-media.com.ua')
+                        ->to($order->getEmail())
+                        ->html(
+                            $this->renderView(
+                                [
+                                    'name' => $order->getName(),
+                                    'orderNumber' => $order->getOrderNumber(),
+                                    'ttn' => $new,
+                                    'phoneNumber' => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
+                                    'email' => $this->settingRepository->findOneBy(['slug' => 'email']),
+                                ]
+                            )
+                        );
+                    $this->mailer->send($message);
+                }
 
                 if ($phone = $order->getPhone()) {
                     TurboSms::send($phone, sprintf('Замовлення відправлено! ТТН %s', $new));

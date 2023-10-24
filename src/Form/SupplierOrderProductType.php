@@ -24,6 +24,9 @@ class SupplierOrderProductType extends AbstractType
                 'disabled' => true,
                 'label' => 'Ціна продажу'
             ])
+            ->add('quantity', null, [
+                'label' => 'Кількість'
+            ])
         ;
     }
 

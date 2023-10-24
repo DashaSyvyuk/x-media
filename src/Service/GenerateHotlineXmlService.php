@@ -26,8 +26,8 @@ class GenerateHotlineXmlService
 
     public function execute(array $ids): void
     {
-        $categories = $this->categoryRepository->getCategoriesForProducts($ids);
-        $products = $this->productRepository->getProductsByIds($ids);
+        $categories = $this->categoryRepository->getCategoriesForProducts($ids, true);
+        $products = $this->productRepository->getProductsByIds($ids, true);
 
         try {
             $this->xmlBuilder
