@@ -45,7 +45,7 @@ class AccountController extends BaseController
         $user = $this->userRepository->findOneBy(['email' => $email]);
 
         if (!$user) {
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('login');
         }
 
         $order = $this->orderRepository->findOneBy(['user' => $user], ['createdAt' => 'DESC']);

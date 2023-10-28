@@ -1316,6 +1316,7 @@ section .title {
 
 #product-preview-mobile .slick-dots {
     bottom: 30px;
+    width: calc(100% - 40px);
 }
 
 #reviews {
