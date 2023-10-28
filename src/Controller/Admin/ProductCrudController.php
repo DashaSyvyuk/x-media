@@ -101,7 +101,9 @@ class ProductCrudController extends AbstractCrudController
         yield TextField::new('metaDescription', 'Мета тег (Опис)')->setColumns(6)->hideOnIndex();
 
         yield FormField::addPanel('Ціни');
-        yield NumberField::new('price', 'Ціна (грн)')->setColumns(6);
+        yield NumberField::new('price', 'Ціна (грн)')
+            ->setThousandsSeparator(' ')
+            ->setColumns(6);
 
         yield FormField::addPanel('Опис');
         yield TextareaField::new('description', 'Опис')

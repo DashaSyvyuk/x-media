@@ -41,7 +41,7 @@ class OrderCrudController extends AbstractCrudController
         yield TextField::new('name', 'Ім\'я')->setColumns(7);
         yield TextField::new('surname', 'Прізвище')->setColumns(7);
         yield TextField::new('phone', 'Номер телефону')->setColumns(7);
-        yield TextField::new('email', 'Email')->setColumns(7);
+        yield TextField::new('email', 'Email')->setColumns(7)->hideOnIndex();
         yield TextField::new('comment', 'Коментар')->hideOnIndex()->setColumns(7);
 
         yield FormField::addPanel('Інформація про доставку');
@@ -52,7 +52,9 @@ class OrderCrudController extends AbstractCrudController
         yield ChoiceField::new('status', 'Статус')->setChoices(array_flip(Order::STATUSES))->setColumns(7);
         yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex()->setColumns(7);
         yield TextField::new('ttn', 'ТТН')->hideOnIndex()->setColumns(7);
-        yield NumberField::new('total', 'Загальна вартість')->hideOnIndex()->setColumns(7);
+        yield NumberField::new('total', 'Загальна вартість')
+            ->setThousandsSeparator(' ')
+            ->setColumns(7);
 
         yield FormField::addPanel('Товари');
 
