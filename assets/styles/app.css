@@ -1994,3 +1994,11 @@ section .feedbacks {
     width: 20px;
     margin: 0 15px;
 }
+
+#search .error {
+    color: #ff0000;
+    font-size: 10px;
+}
+#search p {
+    margin: 2px 0 0 0;
+}
