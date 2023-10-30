@@ -15,6 +15,7 @@ use App\Entity\Setting;
 use App\Entity\Slider;
 use App\Entity\Supplier;
 use App\Entity\SupplierOrder;
+use App\Entity\User;
 use App\Entity\Warehouse;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -72,7 +73,7 @@ class DashboardController extends AbstractDashboardController
     {
         // yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
-        yield MenuItem::subMenu('Контент', 'fas fa-list')->setSubItems([
+        yield MenuItem::subMenu('Контент', 'fas fa-box-open')->setSubItems([
             MenuItem::linkToCrud('Товари', 'fas fa-box-open', Product::class),
             MenuItem::linkToCrud('Фільтри', 'fas fa-filter', Filter::class),
             MenuItem::linkToCrud('Категорії', 'fas fa-comment', Category::class),
@@ -81,8 +82,9 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Відгуки', 'fas fa-comment', Feedback::class),
         ]);
 
-        yield MenuItem::subMenu('Замовлення', 'fas fa-comment')->setSubItems([
+        yield MenuItem::subMenu('Замовлення', 'fas fa-list')->setSubItems([
             MenuItem::linkToCrud('Замовлення', 'fas fa-list', Order::class),
+            MenuItem::linkToCrud('Користувачі', 'fa-solid fa-user-secret', User::class),
         ]);
 
         yield MenuItem::subMenu('Постачальники', 'fa fa-truck')->setSubItems([
