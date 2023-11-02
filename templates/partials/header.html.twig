@@ -17,19 +17,28 @@
                         {% for category in categories %}
                             <li>
                                 <a class="no-link-style" href="/categories/{{ category.slug }}">
-                                    <span>{{ category.title }}</span>
-                                    {% if category.children|length > 0 %}
-                                        <div class="subcategories">
-                                            <ul>
-                                                {% for child in category.children %}
-                                                    <li>
-                                                        <a class="no-link-style" href="/categories/{{ child.slug }}">{{ child.title }}</a>
-                                                    </li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    {% endif %}
+                                    <div class="link">
+                                        <span>{{ category.title }}</span>
+                                        {% if category.children|length > 0 %}
+                                            <img class="category_arrow" src="/images/arrow_subcategory.png">
+                                        {% endif %}
+                                    </div>
                                 </a>
+                                {% if category.children|length > 0 %}
+                                    <div class="subcategories">
+                                        <ul>
+                                            {% for child in category.children %}
+                                                <li>
+                                                    <a class="no-link-style" href="/categories/{{ child.slug }}">
+                                                        <div class="link">
+                                                            {{ child.title }}
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>

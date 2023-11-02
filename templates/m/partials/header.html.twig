@@ -28,32 +28,51 @@
     <div class="menu_body__item_wrapper">
         <!--    menu list-->
         <ul class="menu_list">
-            <li><a href="/">Головна</a></li>
+            <li><a href="/"><div class="link">Головна</div></a></li>
             {% for category in categories %}
                 <li class="parent-category" data-category-id="{{ category.id }}">
-                    <a>{{ category.title }}</a>
                     {% if category.children|length > 0 %}
-                    <img class="arrow" src="/images/arrow_down_gray.png">
+                        <div class="link">
+                            {{ category.title }}
+                            <img class="arrow" src="/images/arrow_down_gray.png">
+                        </div>
+                    {% else %}
+                        <a href="/categories/{{ category.slug }}">
+                            <div class="link">
+                                {{ category.title }}
+                            </div>
+                        </a>
                     {% endif %}
                 </li>
                 {% if category.children|length > 0 %}
                     <ul class="children category-{{ category.id }}">
                         {% for child in category.children %}
                             <li>
-                                <a href="/categories/{{ child.slug }}">{{ child.title }}</a>
+                                <a href="/categories/{{ child.slug }}">
+                                    <div class="link">
+                                        {{ child.title }}
+                                    </div>
+                                </a>
                             </li>
                         {% endfor %}
+                        <li>
+                            <a href="/categories/{{ category.slug }}">
+                                <div class="link">
+                                    Все в категорії
+                                </div>
+                            </a>
+                        </li>
                     </ul>
                 {% endif %}
             {% endfor %}
             <hr>
-            <li><a href="/delivery-and-pay">Доставка та оплата</a></li>
-            <li><a href="/about-us">Про нас</a></li>
-            <li><a href="/feedbacks">Відгуки про магазин</a></li>
+            <li><a href="/delivery-and-pay"><div class="link">Доставка та оплата</div></a></li>
+            <li><a href="/about-us"><div class="link">Про нас</div></a></li>
+            <li><a href="/feedbacks"><div class="link">Відгуки про магазин</div></a></li>
             <hr>
             <li>
                 <a href="{% if app.request.attributes.get('_route') == 'mobile_cart' %}/?page-type=desktop{% else %}{{ currentPath }}{% endif %}">
-                    <div>
+                    <div class="link">
                         <img class="full-v-img" src="/images/desktop_version.png">
                         <span>Повна версія сайту</span>
                     </div>

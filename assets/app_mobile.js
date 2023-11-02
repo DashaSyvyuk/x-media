@@ -10,6 +10,7 @@ $(document).ready(function () {
     $(hamburger).click(function (e) {
         menu.toggleClass('open');
         hamburger.toggleClass('open');
+        $('body').toggleClass('no-scroll');
     });
 
     $('.menu_body__item_wrapper li.has_child').each(function (index) {
@@ -28,7 +29,7 @@ $(document).ready(function () {
         const id = $(this).data('category-id');
         $('.children').not('.category-' + id).hide();
         $('.menu_body .menu_list .parent-category').not(this).find("img").attr("src", "/images/arrow_down_gray.png");
-        $('.category-' + id).toggle();
+        $('.category-' + id).slideToggle(500);
         if ($(this).find("img").attr("src") === "/images/arrow_down_gray.png") {
             $(this).find("img").attr("src", "/images/arrow_up_gray.png");
         } else {

@@ -16,34 +16,44 @@
         <div class="title">{{ category.title }}</div>
 
         <div class="breadcrumb">
-            <a>X-media</a>
-            <span> > </span>
+            <a class="no-link-style">x-media</a>
+            <span>&nbsp;> </span>
             <a href="/">Головна</a>
+            {% if category.parent %}
+                <span> > </span>
+                <a href="/categories/{{ category.parent.slug }}">{{ category.parent.title }}</a>
+            {% endif %}
             <span> > </span>
             <a href="" class="selected">{{ category.title }}</a>
         </div>
 
-        <div id="filters">
-            {% include 'partials/filters.html.twig' %}
-        </div>
+        {% if categoryTree|length > 0 %}
+            {% include 'partials/category-list.html.twig' %}
+        {% else %}
 
-        <div id="products-block">
-            <div class="order-by">
-                <select name="order">
-                    <option value="price" data-direction="asc" {% if order is defined and order=='price' and direction is defined and direction=='asc' %}selected{% endif %}>
-                        Від дешевих до дорогих
-                    </option>
-                    <option value="price" data-direction="desc" {% if order is defined and order=='price' and direction is defined and direction=='desc' %}selected{% endif %}>
-                        Від дорогих до дешевих
-                    </option>
-                    <option value="createdAt" data-direction="desc" {% if order is defined and order=='createdAt' and direction is defined and direction=='desc' %}selected{% endif %}>
-                        Новинки
-                    </option>
-                </select>
+            <div id="filters">
+                {% include 'partials/filters.html.twig' %}
             </div>
-            {% include 'partials/product-list.html.twig' %}
-            <div class="loader"></div>
-        </div>
+
+            <div id="products-block">
+                <div class="order-by">
+                    <select name="order">
+                        <option value="price" data-direction="asc" {% if order is defined and order=='price' and direction is defined and direction=='asc' %}selected{% endif %}>
+                            Від дешевих до дорогих
+                        </option>
+                        <option value="price" data-direction="desc" {% if order is defined and order=='price' and direction is defined and direction=='desc' %}selected{% endif %}>
+                            Від дорогих до дешевих
+                        </option>
+                        <option value="createdAt" data-direction="desc" {% if order is defined and order=='createdAt' and direction is defined and direction=='desc' %}selected{% endif %}>
+                            Новинки
+                        </option>
+                    </select>
+                </div>
+                {% include 'partials/product-list.html.twig' %}
+                <div class="loader"></div>
+            </div>
+
+        {% endif %}
     </section>
 
 {% endblock %}

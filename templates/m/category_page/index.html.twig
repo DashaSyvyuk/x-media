@@ -9,47 +9,52 @@
 {% block body %}
 
     <div class="breadcrumb">
-        <a class="image" href="/">
+        <a class="image" href="/{% if category.parent %}categories/{{ category.parent.slug }}{% endif %}">
             <img src="/images/arrow_navigate.png">
         </a>
         <span>{{ category.title }}</span>
     </div>
 
-    <div class="filter-buttons">
-        <button id="show-filter"><span>Фільтри</span> <img src="{{ asset('images/filters.png') }}" alt="Фільтри"></button>
-        <button id="show-sort"><span>Сортування</span> <img src="{{ asset('images/sort.png') }}" alt="Сортування"></button>
-    </div>
+    {% if categoryTree|length > 0 %}
+        {% include 'm/partials/category-list.html.twig' %}
+    {% else %}
 
-    <div id="mobile-filters">
-        {% include 'm/partials/filters.html.twig' %}
-        <div id="use-filters">
-            <button class="use">Застосувати</button>
-            <button class="cancel">Скасувати</button>
+        <div class="filter-buttons">
+            <button id="show-filter"><span>Фільтри</span> <img src="{{ asset('images/filters.png') }}" alt="Фільтри"></button>
+            <button id="show-sort"><span>Сортування</span> <img src="{{ asset('images/sort.png') }}" alt="Сортування"></button>
         </div>
-    </div>
 
-    <div id="mobile-sorting">
-        <div class="page-title">Сортування</div>
-        <label class="radio-container">Від дешевих до дорогих
-            <input type="radio" name="sort" value="price" data-direction="asc" {% if order is defined and order=='price' and direction is defined and direction=='asc' %}checked="checked"{% endif %}>
-            <span class="radio-checkmark"></span>
-        </label>
-        <label class="radio-container">Від дорогих до дешевих
-            <input type="radio" name="sort" value="price" data-direction="desc" {% if order is defined and order=='price' and direction is defined and direction=='desc' %}checked="checked"{% endif %}>
-            <span class="radio-checkmark"></span>
-        </label>
-        <label class="radio-container">Новинки
-            <input type="radio" name="sort" value="createdAt" data-direction="desc" {% if order is defined and order=='createdAt' and direction is defined and direction=='desc' %}checked="checked"{% endif %}>
-            <span class="radio-checkmark"></span>
-        </label>
-        <div id="use-filters">
-            <button class="use">Застосувати</button>
-            <button class="cancel">Скасувати</button>
+        <div id="mobile-filters">
+            {% include 'm/partials/filters.html.twig' %}
+            <div id="use-filters">
+                <button class="use">Застосувати</button>
+                <button class="cancel">Скасувати</button>
+            </div>
         </div>
-    </div>
 
-    <div id="products-block">
-        {% include 'm/partials/product-list.html.twig' %}
-    </div>
+        <div id="mobile-sorting">
+            <div class="page-title">Сортування</div>
+            <label class="radio-container">Від дешевих до дорогих
+                <input type="radio" name="sort" value="price" data-direction="asc" {% if order is defined and order=='price' and direction is defined and direction=='asc' %}checked="checked"{% endif %}>
+                <span class="radio-checkmark"></span>
+            </label>
+            <label class="radio-container">Від дорогих до дешевих
+                <input type="radio" name="sort" value="price" data-direction="desc" {% if order is defined and order=='price' and direction is defined and direction=='desc' %}checked="checked"{% endif %}>
+                <span class="radio-checkmark"></span>
+            </label>
+            <label class="radio-container">Новинки
+                <input type="radio" name="sort" value="createdAt" data-direction="desc" {% if order is defined and order=='createdAt' and direction is defined and direction=='desc' %}checked="checked"{% endif %}>
+                <span class="radio-checkmark"></span>
+            </label>
+            <div id="use-filters">
+                <button class="use">Застосувати</button>
+                <button class="cancel">Скасувати</button>
+            </div>
+        </div>
+
+        <div id="products-block">
+            {% include 'm/partials/product-list.html.twig' %}
+        </div>
+    {% endif %}
 
 {% endblock %}

@@ -77,6 +77,7 @@ class CategoryPageController extends BaseController
         } else {
             return $this->renderTemplate($request, 'category_page/index.html.twig', [
                 'category' => $category,
+                'categoryTree' => $this->categoryRepository->getCategoriesTree($category->getId()),
                 'filters' => $this->filterRepository->findByCategory($slug),
                 'pagination' => $pagination,
                 'query' => $query,
