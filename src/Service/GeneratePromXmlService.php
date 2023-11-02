@@ -26,8 +26,8 @@ class GeneratePromXmlService
 
     public function execute(array $ids): void
     {
-        $categories = $this->categoryRepository->getCategoriesForProducts($ids);
-        $products = $this->productRepository->getProductsByIds($ids);
+        $categories = $this->categoryRepository->getCategoriesForProducts($ids, false);
+        $products = $this->productRepository->getProductsByIds($ids, false);
 
         try {
             $this->xmlBuilder
@@ -56,7 +56,7 @@ class GeneratePromXmlService
                                 ->add('name_ua', $product['title'])
                                 ->add('categoryId', $product['categoryId'])
                                 ->add('portal_category_url', $product['promCategoryLink'])
-                                ->add('price', $product['price'])
+                                ->add('price', ceil($product['price'] * 1.03 / 100) * 100)
                                 ->add('quantity_in_stock', 10)
                                 ->add('currencyId', 'UAH')
                                 ->loop(function (XMLArray $XMLArray) use ($images) {
@@ -67,14 +67,14 @@ class GeneratePromXmlService
                                 ->add('vendor', $product['vendor'])
                                 ->loop(function (XMLArray $XMLArray) use ($characteristics) {
                                     foreach ($characteristics as $characteristic) {
-                                        $XMLArray->add('param', strip_tags(addslashes($characteristic->getValue())), [
-                                            'name' => strip_tags(addslashes($characteristic->getTitle()))
+                                        $XMLArray->add('param', htmlspecialchars(addslashes($characteristic->getValue())), [
+                                            'name' => htmlspecialchars(addslashes($characteristic->getTitle()))
                                         ]);
                                     }
                                 })
                                 ->add('description', $product['description'])
                                 ->add('description_ua', $product['description'])
-                                ->add('available', true)
+                                ->add('article', $product['article'])
                             ;
                         }
                     })

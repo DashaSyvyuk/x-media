@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -51,17 +52,24 @@ class CategoryRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function getCategoriesForProducts(array $ids): array
+    public function getCategoriesForProducts(array $ids, bool $withActiveProducts = true): array
     {
         $result = [];
-        $categories = $this->createQueryBuilder('c')
+        $query = $this->createQueryBuilder('c')
             ->leftJoin('c.products', 'p')
             ->where('p.id IN (:ids)')
             ->andWhere('c.status = :status')
             ->andWhere('c.hotlineCategory IS NOT NULL')
             ->andWhere('c.promCategoryLink IS NOT NULL')
             ->setParameter('ids', $ids)
-            ->setParameter('status', 'ACTIVE')
+            ->setParameter('status', 'ACTIVE');
+
+        if ($withActiveProducts) {
+            $query = $query
+                ->andWhere('p.status = :product_status')
+                ->setParameter('product_status', Product::STATUS_ACTIVE);
+        }
+        $categories = $query
             ->orderBy('c.title', 'ASC')
             ->getQuery()
             ->getResult()

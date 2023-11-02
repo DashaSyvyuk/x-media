@@ -1255,10 +1255,13 @@ section .title {
     display: flex;
     align-items: center;
     font-size: 11px;
-    width: 90px;
-    justify-content: space-between;
+    width: 120px;
     height: 25px;
     margin-bottom: 10px;
+}
+
+.product-page .in-stock p {
+    margin-right: 10px;
 }
 
 .product-page .tabs-place {
@@ -1356,6 +1359,7 @@ section .title {
 
 #product-preview-mobile .slick-dots {
     bottom: 30px;
+    width: calc(100% - 40px);
 }
 
 #reviews {
@@ -1978,4 +1982,11 @@ section .feedbacks {
     width: 100px;
     height: auto;
     margin-top: 50px;
+}
+#search .error {
+    color: #ff0000;
+    font-size: 10px;
+}
+#search p {
+    margin: 2px 0 0 0;
 }

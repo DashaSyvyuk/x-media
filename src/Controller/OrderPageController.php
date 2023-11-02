@@ -10,6 +10,7 @@ use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
+use App\Utils\TurboSms;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -150,6 +151,10 @@ class OrderPageController extends BaseController
                     );
 
                 $mailer->send($message);
+            }
+
+            if ($phone = $order->getPhone()) {
+                TurboSms::send($phone, sprintf('Дякуємо за замовлення у нашому магазині! Номер замовлення %s :)', $order->getOrderNumber()));
             }
 
             $managerMessage = (new Email())

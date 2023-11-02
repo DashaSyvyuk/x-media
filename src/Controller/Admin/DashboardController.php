@@ -15,6 +15,7 @@ use App\Entity\Setting;
 use App\Entity\Slider;
 use App\Entity\Supplier;
 use App\Entity\SupplierOrder;
+use App\Entity\User;
 use App\Entity\Warehouse;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -37,7 +38,7 @@ class DashboardController extends AbstractDashboardController
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
 
         // Option 1. Make your dashboard redirect to the same page for all users
-        return $this->redirect($adminUrlGenerator->setController(CategoryCrudController::class)->generateUrl());
+        return $this->redirect($adminUrlGenerator->setController(ProductCrudController::class)->generateUrl());
     }
 
     public function configureDashboard(): Dashboard
@@ -70,32 +71,33 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        // yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
-        yield MenuItem::subMenu('Контент', 'fas fa-list')->setSubItems([
+        yield MenuItem::subMenu('Контент', 'fas fa-box-open')->setSubItems([
+            MenuItem::linkToCrud('Товари', 'fas fa-box-open', Product::class),
+            MenuItem::linkToCrud('Фільтри', 'fas fa-filter', Filter::class),
             MenuItem::linkToCrud('Категорії', 'fas fa-comment', Category::class),
             MenuItem::linkToCrud('Слайдер', 'fas fa-image', Slider::class),
-            MenuItem::linkToCrud('Фільтри', 'fas fa-filter', Filter::class),
-            MenuItem::linkToCrud('Товари', 'fas fa-box-open', Product::class),
-        ]);
-
-        yield MenuItem::subMenu('Замовлення', 'fas fa-comment')->setSubItems([
-            MenuItem::linkToCrud('Замовлення', 'fas fa-list', Order::class),
             MenuItem::linkToCrud('Коментарі', 'fas fa-comment', Comment::class),
             MenuItem::linkToCrud('Відгуки', 'fas fa-comment', Feedback::class),
-            MenuItem::linkToCrud('Способи доставки', 'fa fa-bus', DeliveryType::class),
-            MenuItem::linkToCrud('Способи оплати', 'fa fa-dollar', PaymentType::class),
+        ]);
+
+        yield MenuItem::subMenu('Замовлення', 'fas fa-list')->setSubItems([
+            MenuItem::linkToCrud('Замовлення', 'fas fa-list', Order::class),
+            MenuItem::linkToCrud('Користувачі', 'fa-solid fa-user-secret', User::class),
+        ]);
+
+        yield MenuItem::subMenu('Постачальники', 'fa fa-truck')->setSubItems([
+            MenuItem::linkToCrud('Постачальники', 'fas fa-truck', Supplier::class),
+            MenuItem::linkToCrud('Замовлення', 'fa fa-shopping-cart', SupplierOrder::class),
+            MenuItem::linkToCrud('Склади', 'fa fa-archive', Warehouse::class)
         ]);
 
         yield MenuItem::subMenu('Налаштування', 'fa fa-cog')->setSubItems([
             MenuItem::linkToCrud('Валюти', 'fas fa-comment', Currency::class),
             MenuItem::linkToCrud('Налаштування', 'fa fa-cog', Setting::class),
-        ]);
-
-        yield MenuItem::subMenu('Постачальники', 'fa fa-truck')->setSubItems([
-            MenuItem::linkToCrud('Замовлення постачальникам', 'fa fa-shopping-cart', SupplierOrder::class),
-            MenuItem::linkToCrud('Постачальники', 'fas fa-truck', Supplier::class),
-            MenuItem::linkToCrud('Склади', 'fa fa-archive', Warehouse::class)
+            MenuItem::linkToCrud('Способи доставки', 'fa fa-bus', DeliveryType::class),
+            MenuItem::linkToCrud('Способи оплати', 'fa fa-dollar', PaymentType::class),
         ]);
     }
 }

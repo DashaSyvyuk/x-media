@@ -19,7 +19,7 @@
         <div class="images">
             <div class="main">
                 <img
-                    src="/images/products/{{ product.getImages()[0].imageUrl }}"
+                    src="/images/products/{% if 0 in product.getImages()|keys %}{{ product.getImages()[0].imageUrl }}{% endif %}"
                     onerror="this.src='/images/no_image.png';"
                 >
             </div>
@@ -47,8 +47,8 @@
                 </span>
             </div>
             <div class="in-stock">
-                <p>В наявності</p>
-                <img src="{{ asset('images/available.svg') }}" width="15">
+                <p>{{ product.availability }}</p>
+                <img src="{{ asset(constant('App\\Entity\\Product::AVAILABILITY_ICONS')[product.availability]) }}" width="15">
             </div>
             <div class="information-block">
                 <div class="attributes-buy">

@@ -14,9 +14,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use SM\Factory\Factory;
+use SM\SMException;
 
 class OrderCrudController extends AbstractCrudController
 {
+    public function __construct(
+        private readonly Factory $stateFactory,
+    )
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return Order::class;
@@ -41,7 +49,7 @@ class OrderCrudController extends AbstractCrudController
         yield TextField::new('name', 'Ім\'я')->setColumns(7);
         yield TextField::new('surname', 'Прізвище')->setColumns(7);
         yield TextField::new('phone', 'Номер телефону')->setColumns(7);
-        yield TextField::new('email', 'Email')->setColumns(7);
+        yield TextField::new('email', 'Email')->setColumns(7)->hideOnIndex();
         yield TextField::new('comment', 'Коментар')->hideOnIndex()->setColumns(7);
 
         yield FormField::addPanel('Інформація про доставку');
@@ -49,10 +57,12 @@ class OrderCrudController extends AbstractCrudController
         yield TextField::new('address', 'Адреса')->hideOnIndex()->setColumns(7);
         yield AssociationField::new('paytype', 'Спосіб оплати')->hideOnIndex()->setColumns(7);
         yield AssociationField::new('deltype', 'Спосіб доставки')->hideOnIndex()->setColumns(7);
-        yield ChoiceField::new('status', 'Статус')->setChoices(array_flip(Order::STATUSES))->setColumns(7);
+        yield ChoiceField::new('status', 'Статус')->setChoices(array_flip($this->getAvailableStatuses()))->setColumns(7);
         yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex()->setColumns(7);
         yield TextField::new('ttn', 'ТТН')->hideOnIndex()->setColumns(7);
-        yield NumberField::new('total', 'Загальна вартість')->hideOnIndex()->setColumns(7);
+        yield NumberField::new('total', 'Загальна вартість')
+            ->setThousandsSeparator(' ')
+            ->setColumns(7);
 
         yield FormField::addPanel('Товари');
 
@@ -66,5 +76,26 @@ class OrderCrudController extends AbstractCrudController
                 'by_reference' => 'false'
             ])
             ->hideOnIndex();
+    }
+
+    private function getAvailableStatuses(): array
+    {
+        $currentOrder = $this->getContext()->getEntity()->getInstance();
+        if ($currentOrder) {
+            $statuses = [];
+            $orderSM = $this->stateFactory->get($currentOrder, 'simple');
+            foreach (Order::STATUSES as $key => $status) {
+                try {
+                    if ($orderSM->can($key)) {
+                        $statuses[$key] = $status;
+                    }
+                } catch (SMException $e) {
+                }
+            }
+
+            return $statuses;
+        }
+
+        return Order::STATUSES;
     }
 }

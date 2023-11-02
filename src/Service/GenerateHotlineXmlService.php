@@ -26,8 +26,8 @@ class GenerateHotlineXmlService
 
     public function execute(array $ids): void
     {
-        $categories = $this->categoryRepository->getCategoriesForProducts($ids);
-        $products = $this->productRepository->getProductsByIds($ids);
+        $categories = $this->categoryRepository->getCategoriesForProducts($ids, true);
+        $products = $this->productRepository->getProductsByIds($ids, true);
 
         try {
             $this->xmlBuilder
@@ -69,14 +69,18 @@ class GenerateHotlineXmlService
                                 })
                                 ->add('priceRUAH', $product['price'])
                                 ->add('stock', 'В наявності')
+                                ->add('guarantee', $product['warranty'], [
+                                    'type' => 'manufacturer'
+                                ])
                                 ->loop(function (XMLArray $XMLArray) use ($characteristics) {
                                     foreach ($characteristics as $characteristic) {
-                                        $XMLArray->add('param', strip_tags(addslashes($characteristic->getValue())), [
-                                            'name' => strip_tags(addslashes($characteristic->getTitle()))
+                                        $XMLArray->add('param', htmlspecialchars(addslashes($characteristic->getValue())), [
+                                            'name' => htmlspecialchars(addslashes($characteristic->getTitle()))
                                         ]);
                                     }
                                 })
                                 ->add('condition', 0)
+                                ->add('code', $product['article'])
                             ;
                         }
                     })

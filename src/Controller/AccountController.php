@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\CategoryRepository;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
@@ -44,33 +45,18 @@ class AccountController extends BaseController
         $user = $this->userRepository->findOneBy(['email' => $email]);
 
         if (!$user) {
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('login');
         }
 
         $order = $this->orderRepository->findOneBy(['user' => $user], ['createdAt' => 'DESC']);
 
         $text = $this->settingRepository->findOneBy(['slug' => 'there_is_no_active_order']);
 
-        $monthNamesUa = [
-            '01' => 'січня',
-            '02' => 'лютого',
-            '03' => 'березня',
-            '04' => 'квітня',
-            '05' => 'травня',
-            '06' => 'червня',
-            '07' => 'липня',
-            '08' => 'серпня',
-            '09' => 'вересня',
-            '10' => 'жовтня',
-            '11' => 'листопада',
-            '12' => 'грудня',
-        ];
-
         return $this->renderTemplate($request, 'account/index.html.twig', [
             'user' => $user,
             'order' => $order,
             'noOrder' => $text,
-            'monthNamesUa' => $monthNamesUa,
+            'monthNamesUa' => User::MONTH_NAMES,
         ]);
     }
 }

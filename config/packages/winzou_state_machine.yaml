@@ -21,22 +21,13 @@ winzou_state_machine:
         from: [ new ]
         to: new
       not_approved:
-        from: [ new, not_approved ]
+        from: [new, not_approved]
         to: not_approved
-      canceled_not_confirmed:
-        from: [ new, not_approved, canceled_not_confirmed ]
-        to: canceled_not_confirmed
-      canceled_no_product:
-        from: [ new, not_approved, canceled_no_product ]
-        to: canceled_no_product
-      canceled_not_picked_up:
-        from: [new, not_approved, canceled_not_picked_up]
-        to: canceled_not_picked_up
       confirmed:
-        from: [ not_approved, confirmed ]
+        from: [ new, not_approved, confirmed ]
         to: confirmed
       packing:
-        from: [ confirmed, packing ]
+        from: [ new, not_approved, confirmed, packing ]
         to: packing
       nova_poshta_delivering:
         from: [ packing, nova_poshta_delivering ]
@@ -45,5 +36,14 @@ winzou_state_machine:
         from: [ packing, courier_delivering ]
         to: courier_delivering
       completed:
-        from: [nova_poshta_delivering, courier_delivering, completed]
+        from: [ packing, nova_poshta_delivering, courier_delivering, completed ]
         to: completed
+      canceled_not_confirmed:
+        from: [ new, not_approved, confirmed, canceled_not_confirmed ]
+        to: canceled_not_confirmed
+      canceled_no_product:
+        from: [ new, not_approved, confirmed, canceled_no_product ]
+        to: canceled_no_product
+      canceled_not_picked_up:
+        from: [nova_poshta_delivering, courier_delivering, canceled_not_picked_up]
+        to: canceled_not_picked_up

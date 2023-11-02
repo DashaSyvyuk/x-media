@@ -7,6 +7,7 @@ use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table("product", indexes={
@@ -23,6 +24,22 @@ class Product
     const STATUS_ACTIVE = 'Активний';
     const STATUS_BLOCKED = 'Заблокований';
 
+    const AVAILABILITY_AVAILABLE = 'в наявності';
+    const AVAILABILITY_TO_ORDER = 'під замовлення';
+    const AVAILABILITY_PRE_ORDER = 'передзамовлення';
+
+    const AVAILABILITIES = [
+        self::AVAILABILITY_AVAILABLE => self::AVAILABILITY_AVAILABLE,
+        self::AVAILABILITY_TO_ORDER => self::AVAILABILITY_TO_ORDER,
+        self::AVAILABILITY_PRE_ORDER => self::AVAILABILITY_PRE_ORDER,
+    ];
+
+    const AVAILABILITY_ICONS = [
+        self::AVAILABILITY_AVAILABLE => 'images/available.svg',
+        self::AVAILABILITY_PRE_ORDER => 'images/pre_order.svg',
+        self::AVAILABILITY_TO_ORDER => 'images/to_order.svg',
+    ];
+
     use DateStorageTrait;
 
     /**
@@ -38,7 +55,13 @@ class Product
     private string $status = "";
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private string $availability = "";
+
+    /**
      * @ORM\Column(type="integer")
+     * @Assert\GreaterThanOrEqual(value="1", message="Too low value")
      */
     private int $price = 0;
 
@@ -75,6 +98,7 @@ class Product
 
     /**
      * @ORM\OneToMany(targetEntity="ProductImage", mappedBy="product", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $images;
 
@@ -146,6 +170,16 @@ class Product
     public function setStatus(string $status): void
     {
         $this->status = $status;
+    }
+
+    public function getAvailability(): string
+    {
+        return $this->availability;
+    }
+
+    public function setAvailability(string $availability): void
+    {
+        $this->availability = $availability;
     }
 
     public function getPrice(): int
@@ -220,13 +254,7 @@ class Product
 
     public function getImages()
     {
-        $images = $this->images->toArray();
-
-        usort($images, function($a, $b) {
-            return strcmp($a->getPosition(), $b->getPosition());
-        });
-
-        return $images;
+        return $this->images;
     }
 
     public function setImages($images): void

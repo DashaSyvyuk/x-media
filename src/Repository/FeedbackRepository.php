@@ -4,8 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Feedback;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,15 +20,19 @@ class FeedbackRepository extends ServiceEntityRepository
         parent::__construct($registry, Feedback::class);
     }
 
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException
-     */
-    public function create(Feedback $feedback)
+    public function create(array $data): Feedback
     {
+        $feedback = new Feedback();
+        $feedback->setAuthor($data['author']);
+        $feedback->setEmail($data['email']);
+        $feedback->setComment($data['comment']);
+        $feedback->setStatus($data['status']);
+
         $entityManager = $this->getEntityManager();
         $entityManager->persist($feedback);
         $entityManager->flush();
+
+        return $feedback;
     }
 
     public function findActiveFeedbacks(): QueryBuilder

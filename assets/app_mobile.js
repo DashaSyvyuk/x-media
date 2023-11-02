@@ -37,3 +37,22 @@ $(document).ready(function () {
         }
     });
 });
+
+$('#search').on('submit', (e) => {
+    const searchString = $('#search input').val();
+
+    if (searchString.length < 3 && searchString.length !== 0) {
+        $('#search input').addClass('red');
+        $('#search .error').text('Мінімальна довжина строки 3 символи');
+
+        return false;
+    } else {
+        $('#search input').removeClass('red');
+        $('#search .error').text('');
+        if (searchString.length === 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+});

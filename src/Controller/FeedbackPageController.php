@@ -6,6 +6,7 @@ use App\Entity\Feedback;
 use App\Repository\CategoryRepository;
 use App\Repository\FeedbackRepository;
 use App\Repository\SettingRepository;
+use App\Service\Feedback\CreateService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,18 +15,23 @@ class FeedbackPageController extends BaseController
 {
     private FeedbackRepository $feedbackRepository;
 
+    private CreateService $createService;
+
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
      * @param FeedbackRepository $feedbackRepository
+     * @param CreateService $createService
      */
     public function __construct(
         CategoryRepository $categoryRepository,
         SettingRepository $settingRepository,
-        FeedbackRepository $feedbackRepository
+        FeedbackRepository $feedbackRepository,
+        CreateService $createService
     ) {
         parent::__construct($categoryRepository, $settingRepository);
         $this->feedbackRepository = $feedbackRepository;
+        $this->createService = $createService;
     }
 
     public function index(PaginatorInterface $paginator, Request $request): Response
@@ -45,13 +51,10 @@ class FeedbackPageController extends BaseController
 
     public function post(Request $request): Response
     {
-        $feedback = new Feedback();
-        $feedback->setAuthor($request->request->get('author'));
-        $feedback->setEmail($request->request->get('email'));
-        $feedback->setComment($request->request->get('comment'));
-        $feedback->setStatus('NEW');
-
-        $this->feedbackRepository->create($feedback);
+        $this->createService->run([
+            ...$request->request->all(),
+            'status' => 'NEW',
+        ]);
 
         return new Response(json_encode([
             'success' => true

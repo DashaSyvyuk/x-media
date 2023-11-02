@@ -90,6 +90,8 @@ class ProductCrudController extends AbstractCrudController
             Product::STATUS_ACTIVE => Product::STATUS_ACTIVE,
             Product::STATUS_BLOCKED => Product::STATUS_BLOCKED,
         ])->setColumns(6)->hideOnIndex();
+        yield ChoiceField::new('availability', 'Наявність')
+            ->setChoices(Product::AVAILABILITIES)->setColumns(6)->hideOnIndex();
         yield AssociationField::new('category', 'Категорія')->setColumns(6)->hideOnIndex();
         yield TextField::new('note', 'Нотатки')->setColumns(6)->hideOnIndex();
         yield TextField::new('productCode', 'Код товару')->setColumns(6)->hideOnIndex();
@@ -99,7 +101,9 @@ class ProductCrudController extends AbstractCrudController
         yield TextField::new('metaDescription', 'Мета тег (Опис)')->setColumns(6)->hideOnIndex();
 
         yield FormField::addPanel('Ціни');
-        yield NumberField::new('price', 'Ціна (грн)')->setColumns(6);
+        yield NumberField::new('price', 'Ціна (грн)')
+            ->setThousandsSeparator(' ')
+            ->setColumns(6);
 
         yield FormField::addPanel('Опис');
         yield TextareaField::new('description', 'Опис')

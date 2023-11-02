@@ -37,12 +37,12 @@ class SupplierOrder
     private Supplier $supplier;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private ?DateTime $dateTime = null;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private ?DateTime $expectedDate = null;
 
@@ -119,33 +119,33 @@ class SupplierOrder
     }
 
     /**
-     * @param DateTime $dateTime
+     * @param DateTime|null $dateTime
      */
-    public function setDateTime(DateTime $dateTime): void
+    public function setDateTime(?DateTime $dateTime): void
     {
         $this->dateTime = $dateTime;
     }
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getDateTime(): DateTime
+    public function getDateTime(): ?DateTime
     {
         return $this->dateTime;
     }
 
     /**
-     * @param DateTime $expectedDate
+     * @param DateTime|null $expectedDate
      */
-    public function setExpectedDate(DateTime $expectedDate): void
+    public function setExpectedDate(?DateTime $expectedDate): void
     {
         $this->expectedDate = $expectedDate;
     }
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getExpectedDate(): DateTime
+    public function getExpectedDate(): ?DateTime
     {
         return $this->expectedDate;
     }
