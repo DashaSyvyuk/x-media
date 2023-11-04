@@ -19,7 +19,7 @@ trait DateStorageTrait
         //using Doctrine DateTime here
         $this->updatedAt = new \DateTime('now');
 
-        if ($this->title) {
+        if (isset($this->title)) {
             $this->metaKeyword = $this->title;
             $this->metaDescription = $this->title;
         }
@@ -33,7 +33,7 @@ trait DateStorageTrait
         //using Doctrine DateTime here
         $this->updatedAt = new \DateTime('now');
 
-        if ($this->title) {
+        if (isset($this->title)) {
             $this->metaKeyword = $this->title;
             $this->metaDescription = $this->title;
         }
