@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Order;
 use App\Form\OrderItemType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -28,6 +29,12 @@ class OrderCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return Order::class;
+    }
+
+    public function configureAssets(Assets $assets): Assets
+    {
+        return parent::configureAssets($assets)
+            ->addCssFile('admin/admin.css');
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -57,7 +64,21 @@ class OrderCrudController extends AbstractCrudController
         yield TextField::new('address', 'Адреса')->hideOnIndex()->setColumns(7);
         yield AssociationField::new('paytype', 'Спосіб оплати')->hideOnIndex()->setColumns(7);
         yield AssociationField::new('deltype', 'Спосіб доставки')->hideOnIndex()->setColumns(7);
-        yield ChoiceField::new('status', 'Статус')->setChoices(array_flip($this->getAvailableStatuses()))->setColumns(7);
+        yield ChoiceField::new('status', 'Статус')
+            ->setChoices(array_flip($this->getAvailableStatuses()))
+            ->renderAsBadges([
+                Order::NEW => 'warning',
+                Order::NOT_APPROVED => 'primary',
+                Order::NOVA_POSHTA_DELIVERING => 'danger',
+                Order::COURIER_DELIVERING => 'danger',
+                Order::COMPLETED => 'success',
+                Order::PACKING => 'info',
+                Order::APPROVED => 'info',
+                Order::CANCELED_NOT_CONFIRMED => 'secondary',
+                Order::CANCELED_NO_PRODUCT => 'secondary',
+                Order::CANCELED_NOT_PICKED_UP => 'secondary',
+            ])
+            ->setColumns(7);
         yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex()->setColumns(7);
         yield TextField::new('ttn', 'ТТН')->hideOnIndex()->setColumns(7);
         yield NumberField::new('total', 'Загальна вартість')
