@@ -204,7 +204,7 @@ class Product
 
     public function setMetaKeyword(?string $metaKeyword): void
     {
-        $this->metaKeyword = $metaKeyword;
+        $this->metaKeyword = $this->title;
     }
 
     public function getMetaKeyword(): ?string
@@ -214,7 +214,7 @@ class Product
 
     public function setMetaDescription(?string $metaDescription): void
     {
-        $this->metaDescription = $metaDescription;
+        $this->metaDescription = $this->title;
     }
 
     public function getMetaDescription(): ?string
