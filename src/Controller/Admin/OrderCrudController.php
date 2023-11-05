@@ -6,6 +6,7 @@ use App\Entity\Order;
 use App\Form\OrderItemType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -15,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 use SM\Factory\Factory;
 use SM\SMException;
 
@@ -29,6 +31,13 @@ class OrderCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return Order::class;
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add(ChoiceFilter::new('status')->setChoices(array_flip($this->getAvailableStatuses())))
+            ;
     }
 
     public function configureAssets(Assets $assets): Assets
@@ -101,7 +110,7 @@ class OrderCrudController extends AbstractCrudController
 
     private function getAvailableStatuses(): array
     {
-        $currentOrder = $this->getContext()->getEntity()->getInstance();
+        $currentOrder = $this->getContext()?->getEntity()?->getInstance();
         if ($currentOrder) {
             $statuses = [];
             $orderSM = $this->stateFactory->get($currentOrder, 'simple');
