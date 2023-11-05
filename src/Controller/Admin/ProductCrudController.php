@@ -9,9 +9,11 @@ use App\Form\CommentType;
 use App\Form\ProductCharacteristicType;
 use App\Form\ProductFilterAttributeType;
 use App\Form\ProductImageType;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Service\GenerateHotlineXmlService;
 use App\Service\GeneratePromXmlService;
+use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -38,6 +40,7 @@ class ProductCrudController extends AbstractCrudController
         private readonly ProductRepository $productRepository,
         private readonly GenerateHotlineXmlService $generateHotlineXmlService,
         private readonly GeneratePromXmlService $generatePromXmlService,
+        private readonly CategoryRepository $categoryRepository,
     )
     {
     }
@@ -92,7 +95,12 @@ class ProductCrudController extends AbstractCrudController
         ])->setColumns(6)->hideOnIndex();
         yield ChoiceField::new('availability', 'Наявність')
             ->setChoices(Product::AVAILABILITIES)->setColumns(6)->hideOnIndex();
-        yield AssociationField::new('category', 'Категорія')->setColumns(6)->hideOnIndex();
+        yield AssociationField::new('category', 'Категорія')
+            ->setFormTypeOption('query_builder', function (EntityRepository $entityRepository) {
+                return $entityRepository->createQueryBuilder('c')
+                    ->where('c.id IN (:ids)')
+                    ->setParameter('ids', $this->categoryRepository->getCategoriesIdsWithoutChildren());
+            })->setColumns(6)->hideOnIndex();
         yield TextField::new('note', 'Нотатки')->setColumns(6)->hideOnIndex();
         yield TextField::new('productCode', 'Код товару')->setColumns(6)->hideOnIndex();
         yield TextField::new('productCode2', 'Код товару 2')->setColumns(6)->hideOnIndex();

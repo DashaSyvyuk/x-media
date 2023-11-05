@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -81,6 +82,27 @@ class CategoryRepository extends ServiceEntityRepository
             $categoryArray['title'] = $category->getHotlineCategory();
             $categoryArray['promCategoryLink'] = $category->getPromCategoryLink();
             $result[] = $categoryArray;
+        }
+
+        return $result;
+    }
+
+    public function getCategoriesIdsWithoutChildren(): array
+    {
+        $categories = $this->getCategoriesTree();
+
+        return $this->getCategoriesId($categories);
+    }
+
+    private function getCategoriesId(array $categories): array
+    {
+        $result = [];
+        foreach ($categories as $category) {
+            if (empty($category['children'])) {
+                $result[] = $category['id'];
+            } else {
+                $result = array_merge($result, $this->getCategoriesId($category['children']));
+            }
         }
 
         return $result;
