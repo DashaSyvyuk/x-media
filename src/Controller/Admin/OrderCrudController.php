@@ -77,12 +77,12 @@ class OrderCrudController extends AbstractCrudController
             ->setChoices(array_flip($this->getAvailableStatuses()))
             ->renderAsBadges([
                 Order::NEW => 'warning',
-                Order::NOT_APPROVED => 'primary',
+                Order::NOT_APPROVED => 'warning',
                 Order::NOVA_POSHTA_DELIVERING => 'danger',
                 Order::COURIER_DELIVERING => 'danger',
                 Order::COMPLETED => 'success',
                 Order::PACKING => 'info',
-                Order::APPROVED => 'warning',
+                Order::APPROVED => 'primary',
                 Order::CANCELED_NOT_CONFIRMED => 'secondary',
                 Order::CANCELED_NO_PRODUCT => 'secondary',
                 Order::CANCELED_NOT_PICKED_UP => 'secondary',
