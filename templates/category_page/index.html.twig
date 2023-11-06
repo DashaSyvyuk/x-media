@@ -13,7 +13,7 @@
     </header>
 
     <section>
-        <div class="title">{{ category.title }}</div>
+        <div class="title">{{ category.title }} <span class="category-title-gray">{% if categoryTree|length == 0 %}({{ pagination.getTotalItemCount() }}){% endif %}</span></div>
 
         <div class="breadcrumb">
             <a class="no-link-style">x-media</a>

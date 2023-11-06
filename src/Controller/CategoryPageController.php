@@ -72,20 +72,20 @@ class CategoryPageController extends BaseController
                     'pagination' => $pagination
                 ]),
                 'minPrice' => $prices['min_price'],
-                'maxPrice' => $prices['max_price']
+                'maxPrice' => $prices['max_price'],
             ]));
         } else {
             return $this->renderTemplate($request, 'category_page/index.html.twig', [
-                'category' => $category,
+                'category'     => $category,
                 'categoryTree' => $this->categoryRepository->getCategoriesTree($category->getId()),
-                'filters' => $this->filterRepository->findByCategory($slug),
-                'pagination' => $pagination,
-                'query' => $query,
-                'filterCount' => $filterSetting ? $filterSetting->getValue() : null,
-                'order' => $order,
-                'direction' => $direction,
-                'minPrice' => $prices['min_price'],
-                'maxPrice' => $prices['max_price']
+                'filters'      => $this->filterRepository->findByCategory($slug),
+                'pagination'   => $pagination,
+                'query'        => $query,
+                'filterCount'  => $filterSetting ? $filterSetting->getValue() : null,
+                'order'        => $order,
+                'direction'    => $direction,
+                'minPrice'     => $prices['min_price'],
+                'maxPrice'     => $prices['max_price'],
             ]);
         }
     }

@@ -12,7 +12,7 @@
         <a class="image" href="/{% if category.parent %}categories/{{ category.parent.slug }}{% endif %}">
             <img src="/images/arrow_navigate.png">
         </a>
-        <span>{{ category.title }}</span>
+        <span>{{ category.title }} <span class="category-title-gray">{% if categoryTree|length == 0 %}({{ pagination.getTotalItemCount() }}){% endif %}</span></span>
     </div>
 
     {% if categoryTree|length > 0 %}

@@ -681,7 +681,7 @@ header {
     margin-top: 20px;
 }
 
-#categories-block .category-item .category-title .category-title-gray {
+#categories-block .category-item .category-title .category-title-gray, .title .category-title-gray {
     font-weight: normal;
     color: #666666;
 }

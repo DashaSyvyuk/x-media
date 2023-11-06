@@ -5,6 +5,11 @@
     {{ encore_entry_script_tags('cart') }}
 {% endblock %}
 
+{% block meta %}
+    <meta name="keywords" content="{{ product.metaKeyword }}"/>
+    <meta name="description" content="{{ product.metaDescription }}"/>
+{% endblock %}
+
 {% block body %}
     <header>
         {% include 'partials/header.html.twig' %}

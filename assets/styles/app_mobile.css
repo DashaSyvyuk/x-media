@@ -335,7 +335,7 @@ hr {
     font-weight: 600;
     padding: 10px 0 20px 0;
 }
-#categories-block .category-item .category-title .category-title-gray {
+#categories-block .category-item .category-title .category-title-gray, .breadcrumb .category-title-gray {
     font-weight: normal;
     color: #666666;
 }

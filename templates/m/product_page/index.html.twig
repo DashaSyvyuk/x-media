@@ -6,6 +6,11 @@
     {{ encore_entry_script_tags('app_mobile') }}
 {% endblock %}
 
+{% block meta %}
+    <meta name="keywords" content="{{ product.metaKeyword }}"/>
+    <meta name="description" content="{{ product.metaDescription }}"/>
+{% endblock %}
+
 {% block body %}
 
     <section class="product-page">

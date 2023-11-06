@@ -82,7 +82,7 @@ class OrderCrudController extends AbstractCrudController
                 Order::COURIER_DELIVERING => 'danger',
                 Order::COMPLETED => 'success',
                 Order::PACKING => 'info',
-                Order::APPROVED => 'info',
+                Order::APPROVED => 'warning',
                 Order::CANCELED_NOT_CONFIRMED => 'secondary',
                 Order::CANCELED_NO_PRODUCT => 'secondary',
                 Order::CANCELED_NOT_PICKED_UP => 'secondary',
