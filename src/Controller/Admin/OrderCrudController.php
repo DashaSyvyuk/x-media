@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
@@ -61,6 +62,10 @@ class OrderCrudController extends AbstractCrudController
     {
         yield FormField::addPanel('Контактна інформація');
         yield IdField::new('id')->hideOnForm();
+        yield DateField::new('createdAt', 'Дата Створення')
+            ->setColumns(7)
+            ->setDisabled(true)
+            ->hideOnIndex();
         yield TextField::new('orderNumber', 'Номер замовлення')->setColumns(7);
         yield TextField::new('name', 'Ім\'я')->setColumns(7);
         yield TextField::new('surname', 'Прізвище')->setColumns(7);
