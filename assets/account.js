@@ -32,8 +32,8 @@ $('#update-account-password').on('submit', (e) => {
         const response = JSON.parse(data);
 
         if (response.error) {
-            $currentTarget.find('input[name=password]').addClass('red');
-            $currentTarget.find('.password .error').text(response.error);
+            $currentTarget.find('input').addClass('red-border');
+            $currentTarget.find('.password .error').text(response.error).slideDown(200);
         } else {
             $currentTarget.find('.success').text('Пароль було успішно оновлено');
             setTimeout(function() { $currentTarget.find('.success').text(''); }, 5000);
@@ -44,8 +44,8 @@ $('#update-account-password').on('submit', (e) => {
 });
 
 $('#update-account-password input').on('input', () => {
-    $('#update-account-password input[name=password]').removeClass('red');
-    $('#update-account-password .password .error').text('');
+    $('#update-account-password input').removeClass('red-border');
+    $('#update-account-password .password .error').slideUp(500);
 });
 
 $('#nova-poshta-city').select2({
