@@ -3,27 +3,49 @@ import './bootstrap';
 import $ from 'jquery';
 import 'select2';
 
-$('#user').on('submit', (e) => {
-    const name = $('#user input[name=name]').val();
-    const surname = $('#user input[name=surname]').val();
-    const password = $('#user input[name=password]').val();
-    const passwordConfirm = $('#user input[name=password_confirm]').val();
-    const city = $('#user select[name=city]').val();
-    const office = $('#user select[name=office]').val();
-    const address = $('#user textarea[name=address]').val();
+$('#save-contact').on('submit', (e) => {
+    const $currentTarget = $(e.currentTarget);
+    const name = $currentTarget.find('input[name=name]').val();
+    const surname = $currentTarget.find('input[name=surname]').val();
+    const city = $currentTarget.find('select[name=city]').val();
+    const office = $currentTarget.find('select[name=office]').val();
+    const address = $currentTarget.find('textarea[name=address]').val();
 
-    $.post( '/user', { name, surname, password, passwordConfirm, city, office, address }, (data) => {
+    $.post( '/user', { name, surname, city, office, address }, (data) => {
         const response = JSON.parse(data);
 
-        if (response.error) {
-            $('#user input[name=password]').addClass('red');
-            $('#user .password .error').text(response.error);
-        } else {
-            location.reload();
+        if (!response.error) {
+            $currentTarget.find('.success').text('Дані було успішно оновлено');
+            setTimeout(function() { $currentTarget.find('.success').text(''); }, 5000);
         }
     });
 
     return false;
+});
+
+$('#update-account-password').on('submit', (e) => {
+    const $currentTarget = $(e.currentTarget);
+    const password = $currentTarget.find('input[name=password]').val();
+    const passwordConfirm = $currentTarget.find('input[name=password_confirm]').val();
+
+    $.post( '/user', { password, passwordConfirm }, (data) => {
+        const response = JSON.parse(data);
+
+        if (response.error) {
+            $currentTarget.find('input[name=password]').addClass('red');
+            $currentTarget.find('.password .error').text(response.error);
+        } else {
+            $currentTarget.find('.success').text('Пароль було успішно оновлено');
+            setTimeout(function() { $currentTarget.find('.success').text(''); }, 5000);
+        }
+    });
+
+    return false;
+});
+
+$('#update-account-password input').on('input', () => {
+    $('#update-account-password input[name=password]').removeClass('red');
+    $('#update-account-password .password .error').text('');
 });
 
 $('#nova-poshta-city').select2({

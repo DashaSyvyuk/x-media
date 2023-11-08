@@ -31,31 +31,33 @@ class UserController extends BaseController
 
         $user = $this->userRepository->findOneBy(['email' => $email]);
 
-        $password = $request->request->get('password');
+        if ($request->request->get('password')) {
+            $password = $request->request->get('password');
 
-        $passwordConfirm = $request->request->get('passwordConfirm');
+            $passwordConfirm = $request->request->get('passwordConfirm');
 
-        if ($password && !password_verify($password, $user->getPassword())) {
-            if ($password != $passwordConfirm) {
-                return new Response(json_encode([
-                    'error' => 'Паролі не співпадають'
-                ]));
+            if ($password && !password_verify($password, $user->getPassword())) {
+                if ($password != $passwordConfirm) {
+                    return new Response(json_encode([
+                        'error' => 'Паролі не співпадають'
+                    ]));
+                }
+
+                if (strlen($password) < 6) {
+                    return new Response(json_encode([
+                        'error' => 'Мінімальна довжина пароля 6 символів'
+                    ]));
+                }
+
+                $user->setPassword($password);
             }
-
-            if (strlen($password)) {
-                return new Response(json_encode([
-                    'error' => 'Мінімальна довжина пароля 6 символів'
-                ]));
-            }
-
-            $user->setPassword($password);
+        } else {
+            $user->setName($request->request->get('name'));
+            $user->setSurname($request->request->get('surname'));
+            $user->setNovaPoshtaCity($request->request->get('city'));
+            $user->setNovaPoshtaOffice($request->request->get('office'));
+            $user->setAddress($request->request->get('address'));
         }
-
-        $user->setName($request->request->get('name'));
-        $user->setSurname($request->request->get('surname'));
-        $user->setNovaPoshtaCity($request->request->get('city'));
-        $user->setNovaPoshtaOffice($request->request->get('office'));
-        $user->setAddress($request->request->get('address'));
 
         $this->userRepository->update($user);
 

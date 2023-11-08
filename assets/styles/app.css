@@ -1411,7 +1411,12 @@ section .feedbacks {
     border: 1px solid red !important;
 }
 
-#sign_up .error, #login .error, #user .error, #restore-password .error, #update-password .error {
+#sign_up .error,
+#login .error,
+#save-contact .error,
+#restore-password .error,
+#update-password .error,
+#update-account-password .error {
     color: red;
     font-size: 12px;
 }
@@ -1636,7 +1641,7 @@ section .feedbacks {
     margin: 0 auto;
 }
 
-.order-place p, #sign_up p, #login p, #user p, #restore-password p, #update-password p {
+.order-place p, #sign_up p, #login p, #save-contact p, #restore-password p, #update-password p, #update-account-password p {
     font-size: 12px;
     margin: 18px 0 6px 0;
 }
@@ -1646,7 +1651,8 @@ section .feedbacks {
 #login input[type=text], #login input[type=password],
 #restore-password input[type=text],
 #update-password input[type=password],
-#user input[type=text], #user select, #user input[type=password], #user textarea {
+#save-contact input[type=text], #save-contact select, #save-contact input[type=password], #save-contact textarea,
+#update-account-password input[type=password] {
     width: 100%;
     padding: 6px 10px;
     border: 1px solid #E0E0E0;
@@ -1660,21 +1666,23 @@ section .feedbacks {
 .order-place input[type=submit],
 #sign_up input[type=submit],
 #login input[type=submit],
-#user input[type=submit],
+#save-contact input[type=submit],
 #restore-password input[type=submit],
-#update-password input[type=submit]{
+#update-password input[type=submit],
+#update-account-password input[type=submit] {
     width: 100%;
 }
 
 .order-place input[type=text]:focus, .order-place select:focus,
 .order-place textarea:focus, #sign_up input:focus, #login input:focus,
-#user input[type=text]:focus, #user select:focus,
+#save-contact input[type=text]:focus, #save-contact select:focus,
 #restore-password input:focus,
-#update-password input:focus {
+#update-password input:focus,
+#update-account-password input:focus {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
-.order-place .required, #sign_up .required, #user .required {
+.order-place .required, #sign_up .required, #save-contact .required, #update-account-password .required {
     color: #ff0000;
 }
 
@@ -1695,8 +1703,12 @@ section .feedbacks {
     display: block;
 }
 
-#sign_up input[type=submit], #login input[type=submit], #user input[type=submit],
-#restore-password input[type=submit], #update-password input[type=submit] {
+#sign_up input[type=submit],
+#login input[type=submit],
+#save-contact input[type=submit],
+#restore-password input[type=submit],
+#update-password input[type=submit],
+#update-account-password input[type=submit] {
     margin-top: 20px;
 }
 
@@ -2151,7 +2163,6 @@ section .feedbacks {
 }
 
 .status-block .status-bar .line {
-
     flex: 1 1 auto;
     width: 20px;
     margin: 0 15px;
@@ -2163,4 +2174,13 @@ section .feedbacks {
 }
 #search p {
     margin: 2px 0 0 0;
+}
+
+.success {
+    color: #119E00;
+    font-size: 12px;
+    margin-top: 5px;
+}
+.no-orders {
+    font-size: 12px;
 }

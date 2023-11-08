@@ -2,6 +2,11 @@ import './styles/app.css';
 import './bootstrap';
 import $ from 'jquery';
 
+$('#login input').on('input', () => {
+    $('#login input[name=email]').removeClass('red');
+    $('#login .email .error').text('');
+});
+
 $('#login').on('submit', (e) => {
     const email = $('#login input[name=email]').val();
     const password = $('#login input[name=password]').val();

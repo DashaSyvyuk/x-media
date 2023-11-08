@@ -23,8 +23,7 @@
             </ul>
             <div class="main-part">
                 <h4>Контактні дані:</h4>
-
-                <form method="POST" action="/user" id="user">
+                <form method="POST" action="/user" id="save-contact">
                     <div>
                         <p>Ім'я: <span class="required">*</span></p>
                         <input type="text" name="name" value="{{ user.name }}" autocomplete="off" required>
@@ -40,16 +39,6 @@
                     <div class="email">
                         <p>E-mail:</p>
                         <input type="text" name="email" value="{{ user.email }}" readonly>
-                        <p class="error"></p>
-                    </div>
-                    <div class="password">
-                        <p>Пароль:</p>
-                        <input type="password" name="password" autocomplete="off">
-                        <p class="error"></p>
-                    </div>
-                    <div class="password_confirm">
-                        <p>Повторіть пароль:</p>
-                        <input type="password" name="password_confirm" autocomplete="off">
                         <p class="error"></p>
                     </div>
                     <div>
@@ -76,9 +65,27 @@
                         <p>Адреса:</p>
                         <textarea name="address">{{ user.address }}</textarea>
                     </div>
-
+                    <div class="success"></div>
                     <div>
                         <input class="green-button" type="submit" value="Зберегти зміни">
+                    </div>
+                </form>
+
+                <h4>Змінити пароль:</h4>
+                <form method="POST" action="/user" id="update-account-password">
+                    <div class="password">
+                        <p>Пароль:</p>
+                        <input type="password" name="password" autocomplete="off">
+                        <p class="error"></p>
+                    </div>
+                    <div class="password_confirm">
+                        <p>Повторіть пароль:</p>
+                        <input type="password" name="password_confirm" autocomplete="off">
+                        <p class="error"></p>
+                    </div>
+                    <div class="success"></div>
+                    <div>
+                        <input class="green-button" type="submit" value="Зберегти новий пароль">
                     </div>
                 </form>
             </div>
