@@ -30,9 +30,7 @@
                     <p>Свої особисті дані можна змінити на сторінці <a href="/account/contacts">редагування профілю</a>.</p>
                 </div>
 
-                {% if order %}
-                    <h5 class="last-order">Останнє активне замовлення:</h5>
-                {% endif %}
+                <h5 class="last-order">Останнє активне замовлення:</h5>
 
                 <ul class="my-orders">
                     {% if order %}
@@ -79,10 +77,11 @@
                             </a>
                         </li>
                     {% else %}
-                        <p class="no-orders">{{ noOrder.getValue() }}</p>
+                        <p class="account-description">{{ noOrder.getValue() }}</p>
                     {% endif %}
                 </ul>
                 <h5 class="wish-list">Улюблені продукти:</h5>
+                <p class="account-description">Ви ще не додали жодного улюбленого продукту :(</p>
             </div>
         </div>
     </section>

@@ -3,8 +3,8 @@ import './bootstrap';
 import $ from 'jquery';
 
 $('#login input').on('input', () => {
-    $('#login input[name=email]').removeClass('red');
-    $('#login .email .error').text('');
+    $('#login .email .error').slideUp(500);
+    $('#login input').removeClass('red-border');
 });
 
 $('#login').on('submit', (e) => {
@@ -15,8 +15,8 @@ $('#login').on('submit', (e) => {
         const response = JSON.parse(data);
 
         if (response.error) {
-            $('#login input[name=email]').addClass('red');
-            $('#login .email .error').text(response.error);
+            $('#login input').addClass('red-border');
+            $('#login .email .error').text(response.error).slideDown(200);
         } else {
             window.location.href = '/account';
         }

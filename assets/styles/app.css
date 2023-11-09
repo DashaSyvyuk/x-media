@@ -14,8 +14,14 @@ body, html {
 .green {
     color: #119e00;
 }
+.red-border {
+    border: 1px solid red !important;
+}
 .red {
     color: #ff0000;
+}
+.hide {
+    display: none;
 }
 .no-link-style {
     text-decoration: none;
@@ -2180,7 +2186,4 @@ section .feedbacks {
     color: #119E00;
     font-size: 12px;
     margin-top: 5px;
-}
-.no-orders {
-    font-size: 12px;
 }
