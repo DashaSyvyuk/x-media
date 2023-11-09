@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Order;
 use App\Form\OrderItemType;
+use App\Utils\OrderNumber;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
@@ -18,6 +19,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
+use Psr\Log\NullLogger;
 use SM\Factory\Factory;
 use SM\SMException;
 
@@ -25,6 +27,7 @@ class OrderCrudController extends AbstractCrudController
 {
     public function __construct(
         private readonly Factory $stateFactory,
+        private readonly OrderNumber $orderNumber,
     )
     {
     }
@@ -64,9 +67,14 @@ class OrderCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield DateField::new('createdAt', 'Дата Створення')
             ->setColumns(7)
-            ->setDisabled(true)
+            ->setDisabled()
             ->hideOnIndex();
-        yield TextField::new('orderNumber', 'Номер замовлення')->setColumns(7);
+        yield TextField::new('orderNumber', 'Номер замовлення')
+            ->setFormTypeOptions([
+                'data' => $this->getOrderNumber(),
+            ])
+            ->setDisabled()
+            ->setColumns(7);
         yield TextField::new('name', 'Ім\'я')->setColumns(7);
         yield TextField::new('surname', 'Прізвище')->setColumns(7);
         yield TextField::new('phone', 'Номер телефону')->setColumns(7);
@@ -115,8 +123,9 @@ class OrderCrudController extends AbstractCrudController
 
     private function getAvailableStatuses(): array
     {
-        $currentOrder = $this->getContext()?->getEntity()?->getInstance();
-        if ($currentOrder) {
+        $currentOrder = $this->getContext()?->getEntity()->getInstance();
+
+        if ($currentOrder && $currentOrder->getId()) {
             $statuses = [];
             $orderSM = $this->stateFactory->get($currentOrder, 'simple');
             foreach (Order::STATUSES as $key => $status) {
@@ -132,5 +141,16 @@ class OrderCrudController extends AbstractCrudController
         }
 
         return Order::STATUSES;
+    }
+
+    private function getOrderNumber(): string
+    {
+        $currentOrder = $this->getContext()?->getEntity()->getInstance();
+
+        if ($currentOrder && $currentOrder->getId()) {
+            return $currentOrder->getOrderNumber();
+        }
+
+        return $this->orderNumber->generateOrderNumber();
     }
 }

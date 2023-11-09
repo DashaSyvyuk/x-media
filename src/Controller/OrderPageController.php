@@ -10,6 +10,7 @@ use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
+use App\Utils\OrderNumber;
 use App\Utils\TurboSms;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -35,6 +36,8 @@ class OrderPageController extends BaseController
 
     private UserRepository $userRepository;
 
+    private OrderNumber $orderNumber;
+
     /**
      * @param CategoryRepository $categoryRepository
      * @param OrderRepository $orderRepository
@@ -44,6 +47,7 @@ class OrderPageController extends BaseController
      * @param NovaPoshtaCityRepository $novaPoshtaCityRepository
      * @param NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
      * @param UserRepository $userRepository
+     * @param OrderNumber $orderNumber
      */
     public function __construct(
         CategoryRepository $categoryRepository,
@@ -53,7 +57,8 @@ class OrderPageController extends BaseController
         DeliveryTypeRepository $deliveryTypeRepository,
         NovaPoshtaCityRepository $novaPoshtaCityRepository,
         NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        OrderNumber $orderNumber
     ) {
         parent::__construct($categoryRepository, $settingRepository);
         $this->settingRepository = $settingRepository;
@@ -63,6 +68,7 @@ class OrderPageController extends BaseController
         $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
         $this->novaPoshtaOfficeRepository = $novaPoshtaOfficeRepository;
         $this->userRepository = $userRepository;
+        $this->orderNumber = $orderNumber;
     }
 
     public function index(Request $request): Response
@@ -112,7 +118,7 @@ class OrderPageController extends BaseController
             $totalCart = $this->getTotalCart($_COOKIE['cart']);
 
             $order = $this->orderRepository->create([
-                'orderNumber' => $this->generateOrderNumber(),
+                'orderNumber' => $this->orderNumber->generateOrderNumber(),
                 'name'        => $request->request->get('name'),
                 'surname'     => $request->request->get('surname'),
                 'address'     => $this->getAddress($request->request),
@@ -215,17 +221,5 @@ class OrderPageController extends BaseController
         $pickUpPoint = $this->settingRepository->findOneBy(['slug' => 'pick_up_point_address']);
 
         return $city ? $city . ', ' . $office : (!empty($address) ? $address : $pickUpPoint->getValue() ?? null);
-    }
-
-    private function generateOrderNumber(): string
-    {
-        $orderNumber = (string) time();
-        $order = $this->orderRepository->findOneBy(['orderNumber' => $orderNumber]);
-
-        if ($order) {
-            $orderNumber = $this->generateOrderNumber();
-        }
-
-        return $orderNumber;
     }
 }

@@ -63,7 +63,7 @@ class ProductCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Товар')
             ->setSearchFields(['title'])
             ->setDefaultSort(['id' => 'DESC'])
-            ->setPaginatorPageSize(100)
+            ->setPaginatorPageSize(150)
             ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
         ;
     }
