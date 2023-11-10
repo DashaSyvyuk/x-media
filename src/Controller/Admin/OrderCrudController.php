@@ -64,8 +64,23 @@ class OrderCrudController extends AbstractCrudController
     {
         yield FormField::addPanel('Контактна інформація');
         yield IdField::new('id')->hideOnForm();
+        yield ChoiceField::new('status', 'Статус')
+            ->setChoices(array_flip($this->getAvailableStatuses()))
+            ->renderAsBadges([
+                Order::NEW => 'warning',
+                Order::NOT_APPROVED => 'warning',
+                Order::NOVA_POSHTA_DELIVERING => 'danger',
+                Order::COURIER_DELIVERING => 'danger',
+                Order::COMPLETED => 'success',
+                Order::PACKING => 'info',
+                Order::APPROVED => 'primary',
+                Order::CANCELED_NOT_CONFIRMED => 'secondary',
+                Order::CANCELED_NO_PRODUCT => 'secondary',
+                Order::CANCELED_NOT_PICKED_UP => 'secondary',
+            ])
+            ->setColumns(5);
         yield DateField::new('createdAt', 'Дата Створення')
-            ->setColumns(7)
+            ->setColumns(2)
             ->setDisabled()
             ->hideOnIndex();
         yield TextField::new('orderNumber', 'Номер замовлення')
@@ -84,21 +99,7 @@ class OrderCrudController extends AbstractCrudController
         yield TextField::new('address', 'Адреса')->hideOnIndex()->setColumns(7);
         yield AssociationField::new('paytype', 'Спосіб оплати')->hideOnIndex()->setColumns(7);
         yield AssociationField::new('deltype', 'Спосіб доставки')->hideOnIndex()->setColumns(7);
-        yield ChoiceField::new('status', 'Статус')
-            ->setChoices(array_flip($this->getAvailableStatuses()))
-            ->renderAsBadges([
-                Order::NEW => 'warning',
-                Order::NOT_APPROVED => 'warning',
-                Order::NOVA_POSHTA_DELIVERING => 'danger',
-                Order::COURIER_DELIVERING => 'danger',
-                Order::COMPLETED => 'success',
-                Order::PACKING => 'info',
-                Order::APPROVED => 'primary',
-                Order::CANCELED_NOT_CONFIRMED => 'secondary',
-                Order::CANCELED_NO_PRODUCT => 'secondary',
-                Order::CANCELED_NOT_PICKED_UP => 'secondary',
-            ])
-            ->setColumns(7);
+
         yield BooleanField::new('sendNotification', 'Відправляти сповіщення')->hideOnIndex()->setColumns(7);
         yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex()->setColumns(7);
         yield TextField::new('ttn', 'ТТН')->hideOnIndex()->setColumns(7);
