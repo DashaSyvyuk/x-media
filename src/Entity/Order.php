@@ -123,7 +123,7 @@ class Order
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private string $surname = "";
+    private ?string $surname = "";
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -178,7 +178,7 @@ class Order
     private int $total = 0;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\OrderItem", mappedBy="order", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderItem", mappedBy="order", cascade={"all"}, orphanRemoval=true)
      */
     private $items;
 
@@ -187,6 +187,11 @@ class Order
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
     private ?User $user;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $sendNotification = false;
 
     /**
      * @ORM\Column(type="datetime")
@@ -228,12 +233,12 @@ class Order
         return $this->name;
     }
 
-    public function setSurname(string $surname): void
+    public function setSurname(?string $surname): void
     {
         $this->surname = $surname;
     }
 
-    public function getSurname(): string
+    public function getSurname(): ?string
     {
         return $this->surname;
     }
@@ -367,6 +372,16 @@ class Order
     public function setUser(?User $user): void
     {
         $this->user = $user;
+    }
+
+    public function getSendNotification(): bool
+    {
+        return $this->sendNotification;
+    }
+
+    public function setSendNotification(bool $sendNotification): void
+    {
+        $this->sendNotification = $sendNotification;
     }
 
     public function getUser(): ?User

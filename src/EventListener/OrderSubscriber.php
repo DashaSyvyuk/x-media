@@ -39,7 +39,7 @@ class OrderSubscriber
             $old = $changes['ttn'][0];
             $new = $changes['ttn'][1];
             if ($new !== $old) {
-                if ($order->getEmail()) {
+                if ($order->getEmail() && $order->getSendNotification()) {
                     $message = (new Email())
                         ->subject(sprintf('Замовлення № %s прямує до Вас', $order->getOrderNumber()))
                         ->from('x-media@x-media.com.ua')
@@ -58,7 +58,7 @@ class OrderSubscriber
                     $this->mailer->send($message);
                 }
 
-                if ($phone = $order->getPhone()) {
+                if ($phone = $order->getPhone() && $order->getSendNotification()) {
                     TurboSms::send($phone, sprintf('Ваше замовлення %s відправлено! ТТН: %s', $order->getOrderNumber(), $new));
                 }
             }

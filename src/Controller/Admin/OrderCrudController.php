@@ -19,7 +19,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
-use Psr\Log\NullLogger;
 use SM\Factory\Factory;
 use SM\SMException;
 
@@ -73,7 +72,6 @@ class OrderCrudController extends AbstractCrudController
             ->setFormTypeOptions([
                 'data' => $this->getOrderNumber(),
             ])
-            ->setDisabled()
             ->setColumns(7);
         yield TextField::new('name', 'Ім\'я')->setColumns(7);
         yield TextField::new('surname', 'Прізвище')->setColumns(7);
@@ -101,6 +99,7 @@ class OrderCrudController extends AbstractCrudController
                 Order::CANCELED_NOT_PICKED_UP => 'secondary',
             ])
             ->setColumns(7);
+        yield BooleanField::new('sendNotification', 'Відправляти сповіщення')->hideOnIndex()->setColumns(7);
         yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex()->setColumns(7);
         yield TextField::new('ttn', 'ТТН')->hideOnIndex()->setColumns(7);
         yield NumberField::new('total', 'Загальна вартість')
@@ -113,11 +112,7 @@ class OrderCrudController extends AbstractCrudController
             ->allowAdd()
             ->allowDelete()
             ->renderExpanded()
-            ->setEntryIsComplex(true)
             ->setEntryType(OrderItemType::class)
-            ->setFormTypeOptions([
-                'by_reference' => 'false'
-            ])
             ->hideOnIndex();
     }
 

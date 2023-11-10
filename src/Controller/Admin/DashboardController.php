@@ -17,6 +17,7 @@ use App\Entity\Supplier;
 use App\Entity\SupplierOrder;
 use App\Entity\User;
 use App\Entity\Warehouse;
+use App\Repository\OrderRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -28,6 +29,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
+    public function __construct(
+        private readonly OrderRepository $orderRepository,
+    )
+    {
+    }
+
     /**
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
@@ -36,8 +43,6 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-
-        // Option 1. Make your dashboard redirect to the same page for all users
         return $this->redirect($adminUrlGenerator->setController(ProductCrudController::class)->generateUrl());
     }
 
@@ -72,6 +77,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         // yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        $ordersCount = $this->orderRepository->count(['status' => 'new']);
 
         yield MenuItem::subMenu('Контент', 'fas fa-box-open')->setSubItems([
             MenuItem::linkToCrud('Товари', 'fas fa-box-open', Product::class),
@@ -82,8 +88,8 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Відгуки', 'fas fa-comment', Feedback::class),
         ]);
 
-        yield MenuItem::subMenu('Замовлення', 'fas fa-list')->setSubItems([
-            MenuItem::linkToCrud('Замовлення', 'fas fa-list', Order::class),
+        yield MenuItem::subMenu(sprintf('Замовлення (%d)', $ordersCount), 'fas fa-list')->setSubItems([
+            MenuItem::linkToCrud(sprintf('Замовлення (%d)', $ordersCount), 'fas fa-list', Order::class),
             MenuItem::linkToCrud('Користувачі', 'fa-solid fa-user-secret', User::class),
         ]);
 

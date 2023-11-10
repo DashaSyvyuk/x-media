@@ -129,7 +129,8 @@ class OrderPageController extends BaseController
                 'comment'     => $request->request->get('comment') ?? '',
                 'total'       => $totalCart['totalPrice'],
                 'products'    => $totalCart['products'],
-                'user'        => $user
+                'user'        => $user,
+                'sendNotification' => true,
             ]);
 
             unset($_COOKIE['cart']);

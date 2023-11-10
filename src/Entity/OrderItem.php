@@ -29,13 +29,13 @@ class OrderItem
 
     /**
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="orderItems")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product")
      */
     private Product $product;
 
     /**
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="orderItems")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="items")
      */
     private Order $order;
 
