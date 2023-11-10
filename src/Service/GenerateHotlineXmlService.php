@@ -24,10 +24,10 @@ class GenerateHotlineXmlService
         $this->xmlBuilder = new XMLBuilder($this->xmlWriterService);
     }
 
-    public function execute(array $ids): void
+    public function execute(): void
     {
-        $categories = $this->categoryRepository->getCategoriesForProducts($ids, true);
-        $products = $this->productRepository->getProductsByIds($ids, true);
+        $categories = $this->categoryRepository->getCategoriesForHotline();
+        $products = $this->productRepository->getProductsForHotline();
 
         try {
             $this->xmlBuilder

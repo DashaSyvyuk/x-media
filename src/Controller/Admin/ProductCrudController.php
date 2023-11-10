@@ -63,20 +63,19 @@ class ProductCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Товар')
             ->setSearchFields(['title'])
             ->setDefaultSort(['id' => 'DESC'])
-            ->setPaginatorPageSize(150)
+            ->setPaginatorPageSize(10)
             ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
         ;
     }
 
     public function configureActions(Actions $actions): Actions
     {
-        $cloneAction = Action::new('Copy', 'Copy')
-            ->linkToCrudAction('cloneAction');
+        $actions->add(Crud::PAGE_INDEX, Action::new('Copy', 'Copy')
+            ->linkToCrudAction('cloneAction'));
 
-        $actions->add(Crud::PAGE_INDEX, $cloneAction);
-
-        $actions->addBatchAction(Action::new('hotlineXml', 'Hotline feed *.xml')
-            ->linkToCrudAction('hotlineXmlAction'));
+        $actions->add(Crud::PAGE_INDEX, Action::new('hotlineXml', 'Hotline feed *.xml')
+            ->linkToCrudAction('hotlineXmlAction')
+            ->createAsGlobalAction());
 
         $actions->addBatchAction(Action::new('promXml', 'Prom feed *.xml')
             ->linkToCrudAction('promXmlAction'));
@@ -192,11 +191,9 @@ class ProductCrudController extends AbstractCrudController
         return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
     }
 
-    public function hotlineXmlAction(BatchActionDto $batchActionDto): RedirectResponse
+    public function hotlineXmlAction(AdminContext $adminContext): RedirectResponse
     {
-        $ids = $batchActionDto->getEntityIds();
-
-        $this->generateHotlineXmlService->execute($ids);
+        $this->generateHotlineXmlService->execute();
 
         $this->addFlash('success', 'Document is generated <a href="/hotline/products.xml" target="_blank">here</a>');
 

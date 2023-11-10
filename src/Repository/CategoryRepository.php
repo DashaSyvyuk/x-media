@@ -54,24 +54,16 @@ class CategoryRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function getCategoriesForProducts(array $ids, bool $withActiveProducts = true): array
+    public function getCategoriesForProm(array $ids): array
     {
         $result = [];
-        $query = $this->createQueryBuilder('c')
+        $categories = $this->createQueryBuilder('c')
             ->leftJoin('c.products', 'p')
             ->where('p.id IN (:ids)')
             ->andWhere('c.status = :status')
-            ->andWhere('c.hotlineCategory IS NOT NULL')
             ->andWhere('c.promCategoryLink IS NOT NULL')
             ->setParameter('ids', $ids)
-            ->setParameter('status', 'ACTIVE');
-
-        if ($withActiveProducts) {
-            $query = $query
-                ->andWhere('p.status = :product_status')
-                ->setParameter('product_status', Product::STATUS_ACTIVE);
-        }
-        $categories = $query
+            ->setParameter('status', 'ACTIVE')
             ->orderBy('c.title', 'ASC')
             ->getQuery()
             ->getResult()
@@ -82,6 +74,31 @@ class CategoryRepository extends ServiceEntityRepository
             $categoryArray['title'] = $category->getHotlineCategory();
             $categoryArray['promCategoryLink'] = $category->getPromCategoryLink();
             $result[] = $categoryArray;
+        }
+
+        return $result;
+    }
+
+    public function getCategoriesForHotline(): array
+    {
+        $result = [];
+        $categories = $this->createQueryBuilder('c')
+            ->leftJoin('c.products', 'p')
+            ->andWhere('c.status = :status')
+            ->andWhere('c.hotlineCategory IS NOT NULL')
+            ->setParameter('status', 'ACTIVE')
+            ->andWhere('p.status = :product_status')
+            ->setParameter('product_status', Product::STATUS_ACTIVE)
+            ->orderBy('c.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        foreach ($categories as $category) {
+            $result[] = [
+                'id' => $category->getId(),
+                'title' => $category->getHotlineCategory(),
+            ];
         }
 
         return $result;
