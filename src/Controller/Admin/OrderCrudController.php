@@ -83,6 +83,17 @@ class OrderCrudController extends AbstractCrudController
             ->setColumns(2)
             ->setDisabled()
             ->hideOnIndex();
+        yield ChoiceField::new('labels', 'Додати мітку')
+            ->setChoices(Order::LABELS)
+            ->allowMultipleChoices()
+            ->renderExpanded()
+            ->renderAsBadges([
+                Order::LABEL_XMEDIA => 'success',
+                Order::LABEL_PROM   => 'info',
+                Order::LABEL_OLX    => 'primary',
+                Order::LABEL_JONNY  => 'warning'
+            ])
+            ->setColumns(7);
         yield TextField::new('orderNumber', 'Номер замовлення')
             ->setFormTypeOptions([
                 'data' => $this->getOrderNumber(),

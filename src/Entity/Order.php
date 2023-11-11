@@ -103,6 +103,17 @@ class Order
         ],
     ];
 
+    const LABEL_XMEDIA = 'x-media';
+    const LABEL_PROM = 'prom';
+    const LABEL_OLX = 'olx';
+    const LABEL_JONNY = 'Jonny';
+    const LABELS = [
+        self::LABEL_XMEDIA => self::LABEL_XMEDIA,
+        self::LABEL_PROM   => self::LABEL_PROM,
+        self::LABEL_OLX    => self::LABEL_OLX,
+        self::LABEL_JONNY  => self::LABEL_JONNY,
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -192,6 +203,11 @@ class Order
      * @ORM\Column(type="boolean")
      */
     private bool $sendNotification = false;
+
+    /**
+     * @ORM\Column(type="simple_array", nullable=true)
+     */
+    private ?array $labels = [];
 
     /**
      * @ORM\Column(type="datetime")
@@ -387,6 +403,16 @@ class Order
     public function getUser(): ?User
     {
         return $this->user;
+    }
+
+    public function setLabels(?array $labels): void
+    {
+        $this->labels = $labels;
+    }
+
+    public function getLabels(): ?array
+    {
+        return $this->labels;
     }
 
     public function getCreatedAt(): DateTime
