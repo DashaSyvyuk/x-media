@@ -64,6 +64,15 @@ class OrderCrudController extends AbstractCrudController
     {
         yield FormField::addPanel('Контактна інформація');
         yield IdField::new('id')->hideOnForm();
+        yield TextField::new('orderNumber', 'Номер замовлення')
+            ->setFormTypeOptions([
+                'data' => $this->getOrderNumber(),
+            ])
+            ->setColumns(5);
+        yield DateField::new('createdAt', 'Дата Створення')
+            ->setColumns(3)
+            ->setDisabled()
+            ->hideOnIndex();
         yield ChoiceField::new('status', 'Статус')
             ->setChoices(array_flip($this->getAvailableStatuses()))
             ->renderAsBadges([
@@ -79,26 +88,7 @@ class OrderCrudController extends AbstractCrudController
                 Order::CANCELED_NOT_PICKED_UP => 'secondary',
             ])
             ->setColumns(5);
-        yield DateField::new('createdAt', 'Дата Створення')
-            ->setColumns(2)
-            ->setDisabled()
-            ->hideOnIndex();
-        yield ChoiceField::new('labels', 'Додати мітку')
-            ->setChoices(Order::LABELS)
-            ->allowMultipleChoices()
-            ->renderExpanded()
-            ->renderAsBadges([
-                Order::LABEL_XMEDIA => 'success',
-                Order::LABEL_PROM   => 'info',
-                Order::LABEL_OLX    => 'primary',
-                Order::LABEL_JONNY  => 'warning'
-            ])
-            ->setColumns(7);
-        yield TextField::new('orderNumber', 'Номер замовлення')
-            ->setFormTypeOptions([
-                'data' => $this->getOrderNumber(),
-            ])
-            ->setColumns(7);
+        yield TextField::new('ttn', 'ТТН')->hideOnIndex()->setColumns(3);
         yield TextField::new('name', 'Ім\'я')->setColumns(7);
         yield TextField::new('surname', 'Прізвище')->setColumns(7);
         yield TextField::new('phone', 'Номер телефону')->setColumns(7);
@@ -113,9 +103,19 @@ class OrderCrudController extends AbstractCrudController
 
         yield BooleanField::new('sendNotification', 'Відправляти сповіщення')->hideOnIndex()->setColumns(7);
         yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex()->setColumns(7);
-        yield TextField::new('ttn', 'ТТН')->hideOnIndex()->setColumns(7);
         yield NumberField::new('total', 'Загальна вартість')
             ->setThousandsSeparator(' ')
+            ->setColumns(7);
+        yield ChoiceField::new('labels', 'Мітка')
+            ->setChoices(Order::LABELS)
+            ->allowMultipleChoices()
+            ->renderExpanded()
+            ->renderAsBadges([
+                Order::LABEL_XMEDIA => 'success',
+                Order::LABEL_PROM   => 'info',
+                Order::LABEL_OLX    => 'primary',
+                Order::LABEL_JONNY  => 'warning'
+            ])
             ->setColumns(7);
 
         yield FormField::addPanel('Товари');
