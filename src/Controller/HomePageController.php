@@ -56,7 +56,7 @@ class HomePageController extends BaseController
         $user = $this->userRepository->findOneBy(['email' => $email]);
 
         return $this->renderTemplate($request, 'home_page/index.html.twig', [
-            'sliders' => $this->sliderRepository->findBy(['active' => true], ['priority' => 'ASC']),
+            'sliders' => $this->sliderRepository->getActiveItems(),
             'products' => $this->productRepository->findBy(['status' => Product::STATUS_ACTIVE], ['createdAt' => 'DESC'], 10),
             'totalCount' => $_COOKIE['totalCount'] ?? 0,
             'feedbacks' => $this->feedbackRepository->findBy(['status' => 'CONFIRMED'], ['createdAt' => 'DESC']),

@@ -49,6 +49,12 @@ class Slider
     private bool $active;
 
     /**
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Promotion")
+     */
+    private ?Promotion $promotion = null;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -111,6 +117,16 @@ class Slider
     public function setActive(bool $active): void
     {
         $this->active = $active;
+    }
+
+    public function getPromotion(): ?Promotion
+    {
+        return $this->promotion;
+    }
+
+    public function setPromotion(?Promotion $promotion): void
+    {
+        $this->promotion = $promotion;
     }
 
     public function getCreatedAt(): DateTime

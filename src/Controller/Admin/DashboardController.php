@@ -11,6 +11,7 @@ use App\Entity\Filter;
 use App\Entity\Order;
 use App\Entity\PaymentType;
 use App\Entity\Product;
+use App\Entity\Promotion;
 use App\Entity\Setting;
 use App\Entity\Slider;
 use App\Entity\Supplier;
@@ -84,6 +85,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Фільтри', 'fas fa-filter', Filter::class),
             MenuItem::linkToCrud('Категорії', 'fas fa-comment', Category::class),
             MenuItem::linkToCrud('Слайдер', 'fas fa-image', Slider::class),
+            MenuItem::linkToCrud('Акції', 'fa fa-percent', Promotion::class),
             MenuItem::linkToCrud('Коментарі', 'fas fa-comment', Comment::class),
             MenuItem::linkToCrud('Відгуки', 'fas fa-comment', Feedback::class),
         ]);
