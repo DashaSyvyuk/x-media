@@ -51,6 +51,15 @@
                     <a href="/categories/{{ category.slug }}">{{ category.title }}</a>
                 </li>
                 {% endif %}
+                {% if category.children|length > 0 %}
+                    {% for child in category.children %}
+                        {% if child.showInHeader %}
+                        <li>
+                            <a href="/categories/{{ child.slug }}">{{ child.title }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             {% endfor %}
         </ul>
     </div>

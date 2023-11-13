@@ -8,7 +8,7 @@ $('#slider').slick({
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 8000,
     dots: true,
     arrows: false,
     pauseOnHover: false
@@ -19,7 +19,7 @@ $("#new-products").slick({
     slidesToShow: 4,
     slidesToScroll: 4,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 6000,
     dots: true,
     arrows: false,
     pauseOnHover: false,
