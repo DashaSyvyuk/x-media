@@ -66,6 +66,12 @@ class Product
     private int $price = 0;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Assert\GreaterThan(propertyPath="price", message="Too low value")
+     */
+    private ?int $crossedOutPrice = 0;
+
+    /**
      * @ORM\Column(type="string")
      */
     private ?string $title = "";
@@ -190,6 +196,16 @@ class Product
     public function setPrice(int $price): void
     {
         $this->price = $price;
+    }
+
+    public function getCrossedOutPrice(): ?int
+    {
+        return $this->crossedOutPrice;
+    }
+
+    public function setCrossedOutPrice(?int $crossedOutPrice): void
+    {
+        $this->crossedOutPrice = $crossedOutPrice;
     }
 
     public function setTitle(?string $title): void

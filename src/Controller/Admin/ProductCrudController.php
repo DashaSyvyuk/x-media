@@ -109,6 +109,10 @@ class ProductCrudController extends AbstractCrudController
         yield NumberField::new('price', 'Ціна (грн)')
             ->setThousandsSeparator(' ')
             ->setColumns(6);
+        yield NumberField::new('crossedOutPrice', 'Перекреслена ціна (грн)')
+            ->setThousandsSeparator(' ')
+            ->hideOnIndex()
+            ->setColumns(6);
 
         yield FormField::addPanel('Опис');
         yield TextareaField::new('description', 'Опис')
