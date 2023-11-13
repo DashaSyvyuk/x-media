@@ -36,6 +36,7 @@ class Filter
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\FilterAttribute",
      *     mappedBy="filter", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+     * @ORM\OrderBy({"priority" = "ASC"})
      */
     private $attributes;
 
@@ -213,13 +214,7 @@ class Filter
 
     public function getFilterAttributes()
     {
-        $attributes = $this->attributes->toArray();
-
-        usort($attributes, function($a, $b) {
-            return strcmp($a->getPriority(), $b->getPriority());
-        });
-
-        return $attributes;
+        return $this->attributes;
     }
 
     public function __toString(): string
