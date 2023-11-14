@@ -8,7 +8,7 @@
 
 {% block body %}
 
-<div id="search">
+<div id="search-block">
     <form action="/search" method="GET" id="search">
         <input type="text" name="search" placeholder="Пошук..." autocomplete="off" value="{% if searchString is defined %}{{ searchString }}{% endif %}">
         <p class="error"></p>
