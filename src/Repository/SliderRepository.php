@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Promotion;
 use App\Entity\Slider;
 use Carbon\Carbon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -29,8 +30,10 @@ class SliderRepository extends ServiceEntityRepository
             ->where('s.active = :active')
             ->andWhere('p.activeFrom <= :now OR p.activeFrom is NULL')
             ->andWhere('p.activeTo >= :now OR p.activeTo is NULL')
+            ->andWhere('p.status = :status OR p.status is NULL')
             ->setParameter('active', true)
             ->setParameter('now', $now)
+            ->setParameter('status', Promotion::ACTIVE)
             ->orderBy('s.priority', 'ASC')
             ->getQuery()
             ->getResult();

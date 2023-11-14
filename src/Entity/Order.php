@@ -119,7 +119,7 @@ class Order
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
-    private int $id = 0;
+    private ?int $id = 0;
 
     /**
      * @ORM\Column(type="string")
@@ -224,7 +224,7 @@ class Order
         $this->items = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

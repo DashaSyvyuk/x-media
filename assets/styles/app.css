@@ -860,6 +860,13 @@ header {
     margin-top: 30px;
 }
 
+.product .price-add2cart .crossed-out-price {
+    font-size: 12px;
+    text-decoration: line-through;
+    font-weight: normal;
+    color: #bbb;
+}
+
 .product .add2cart div:hover {
     box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
@@ -1058,11 +1065,21 @@ header {
 }
 
 .product-page .detail .price {
+    margin-bottom: 33px;
+    margin-top: 10px;
+}
+
+.product-page .detail .crossed-out-price {
+    color: #bbb;
+    text-decoration: line-through;
+    text-align: right;
+    font-size: 18px;
+}
+
+.product-page .detail .usual-price {
     font-size: 26px;
     text-align: right;
     font-weight: 500;
-    margin-top: 30px;
-    margin-bottom: 30px;
 }
 
 .product-page .detail .add2cart {

@@ -21,7 +21,14 @@
                 {% endif %}
             {% endfor %}
         </div>
-        <div class="price">Ціна: {{ product.price|number_format(0, '.', ' ') }} грн</div>
+        <div class="price">
+            <div class="crossed-out-price">
+                {% if product.getCalculatedCrossedOutPrice() %}
+                    {{ product.crossedOutPrice|number_format(0, '.', ' ') }} грн
+                {% endif %}
+            </div>
+            <div class="usual-price">Ціна: {{ product.price|number_format(0, '.', ' ') }} грн</div>
+        </div>
         <div class="add2cart">
             <div data-id="{{ product.id }}">
                 <span>Купити</span>

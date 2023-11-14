@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Carbon\Carbon;
 use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -130,6 +131,11 @@ class Product
     private $ratings;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PromotionProduct", mappedBy="product", cascade={"all"}, orphanRemoval=true)
+     */
+    private $promotionProducts;
+
+    /**
      * @ORM\Column(type="string")
      */
     private string $productCode = "";
@@ -161,6 +167,7 @@ class Product
         $this->characteristics = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->ratings = new ArrayCollection();
+        $this->promotionProducts = new ArrayCollection();
     }
 
     public function getId(): int
@@ -490,6 +497,43 @@ class Product
         }
 
         return $count > 0 ? $total/$count : 0;
+    }
+
+    public function getPromotionProducts()
+    {
+        return $this->promotionProducts;
+    }
+
+    public function addPromotionProduct(PromotionProduct $promotionProduct): void
+    {
+        if (!$this->promotionProducts->contains($promotionProduct)) {
+            $promotionProduct->setProduct($this);
+            $this->promotionProducts[] = $promotionProduct;
+        }
+    }
+
+    public function removePromotionProduct(PromotionProduct $promotionProduct): void
+    {
+        if ($this->promotionProducts->contains($promotionProduct)) {
+            $this->promotionProducts->removeElement($promotionProduct);
+        }
+    }
+
+    public function getCalculatedCrossedOutPrice(): int
+    {
+        $now = Carbon::now();
+        $promotionExists = false;
+
+        foreach ($this->promotionProducts as $product) {
+            $promotion = $product->getPromotion();
+            if ($promotion->getStatus() === Promotion::ACTIVE &&
+                $promotion->getActiveFrom() <= $now && $promotion->getActiveTo() >= $now
+            ) {
+                $promotionExists = true;
+            }
+        }
+
+        return $promotionExists ? $this->crossedOutPrice : 0;
     }
 
     public function __toString(): string
