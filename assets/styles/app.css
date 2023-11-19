@@ -864,7 +864,7 @@ header {
     font-size: 12px;
     text-decoration: line-through;
     font-weight: normal;
-    color: #bbb;
+    color: #666;
 }
 
 .product .add2cart div:hover {
@@ -1070,7 +1070,7 @@ header {
 }
 
 .product-page .detail .crossed-out-price {
-    color: #bbb;
+    color: #666;
     text-decoration: line-through;
     text-align: right;
     font-size: 18px;
@@ -2208,19 +2208,10 @@ section .feedbacks {
 
 .filter.promotion-category-outer {
     list-style-type: none;
-    padding-left: 0;
-    font-size: 14px;
-    margin-top: 46px;
+    font-size: 12px;
 }
 .filter.promotion-category-outer li {
     padding: 5px 0;
-}
-.filter .promotion-category-inner {
-    list-style-type: none;
-}
-.filter.promotion-category-outer a {
-    text-decoration: none;
-    color: #000;
 }
 .filter.promotion-category-outer a:hover {
     font-weight: bold;
