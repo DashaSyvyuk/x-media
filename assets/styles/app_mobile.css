@@ -2030,3 +2030,22 @@ section .feedbacks {
 .no-orders {
     font-size: 12px;
 }
+.filter.promotion-category-outer {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 14px;
+    margin-top: 46px;
+}
+.filter.promotion-category-outer li {
+    padding: 5px 0;
+}
+.filter .promotion-category-inner {
+    list-style-type: none;
+}
+.filter.promotion-category-outer a {
+    text-decoration: none;
+    color: #000;
+}
+.filter.promotion-category-outer a:hover {
+    font-weight: bold;
+}

@@ -147,3 +147,11 @@ confirm_email:
 api_filter_attributes:
     path: /api/v1/filter/{id}/filter_attributes
     controller: App\Controller\API\FilterAttributeController::get
+
+promotion:
+    path: /promotion/{slug}
+    controller: App\Controller\PromotionController::getPromotion
+
+promotion_category:
+    path: /promotion/{slug}/{categorySlug}
+    controller: App\Controller\PromotionController::getPromotion

@@ -27,6 +27,7 @@ Encore
     .addEntry('app_mobile', './assets/app_mobile.js')
     .addEntry('product', './assets/product.js')
     .addEntry('category', './assets/category.js')
+    .addEntry('promotion', './assets/promotion.js')
     .addEntry('cart', './assets/cart.js')
     .addEntry('star-rating', './assets/star-rating.js')
     .addEntry('feedback', './assets/feedback.js')

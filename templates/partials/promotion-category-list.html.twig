@@ -1,0 +1,16 @@
+<div id="categories-block">
+    {% for category in categoryTree %}
+        <div class="category-item">
+            <a class="no-link-style" href="{{ path('promotion_category', {'categorySlug': category.slug, 'slug': promotion.slug}) }}">
+                <div class="category-image">
+                    <img src="/images/category/{{ category.image }}">
+                </div>
+                <div class="category-title">
+                    {{ category.title }} <span class="category-title-gray">({{ category.productsCount }})</span>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+
+    <div class="loader"></div>
+</div>

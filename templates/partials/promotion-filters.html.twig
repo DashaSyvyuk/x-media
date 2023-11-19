@@ -1,0 +1,38 @@
+<form id="promotion-filter-form">
+    <ul class="filter promotion-category-outer">
+    {% for category in categoriesTree %}
+        <li>
+            <a href="{{ path('promotion_category', {'categorySlug': category.slug, 'slug': promotion.slug}) }}" class="{% if currentCategory and category.slug == currentCategory.slug %}bold{% endif %}">
+                {{ category.title }} <span>({{ category.productsCount }})</span>
+            </a>
+            <ul class="promotion-category-inner">
+            {% for child in category.children %}
+                <li>
+                    <a href="{{ path('promotion_category', {'categorySlug': child.slug, 'slug': promotion.slug}) }}" class="{% if currentCategory and child.slug == currentCategory.slug %}bold{% endif %}">
+                        {{ child.title }} <span>({{ child.productsCount }})</span>
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <div class="filter promotion-filter-parameter">
+        <p class="filter-title">Марка</p>
+        <div class="outer">
+            <div class="inner">
+                {% for attribute in filters %}
+                    <label class="container">{{ attribute }}
+                        <input
+                            type="checkbox"
+                            name="{{ attribute }}"
+                            {% if attribute in vendors %}checked{% endif %}
+                        >
+                        <span class="checkmark"></span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</form>

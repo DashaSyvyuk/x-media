@@ -519,7 +519,7 @@ class Product
         }
     }
 
-    public function getCalculatedCrossedOutPrice(): int
+    public function getCalculatedCrossedOutPrice(): ?int
     {
         $now = Carbon::now();
         $promotionExists = false;

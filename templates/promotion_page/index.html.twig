@@ -1,0 +1,56 @@
+{% extends "base.html.twig" %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('cart') }}
+    {{ encore_entry_script_tags('promotion') }}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block body %}
+
+    <header>
+        {% include 'partials/header.html.twig' %}
+    </header>
+
+    <section>
+        <div class="title">{{ promotion.title }} <span class="category-title-gray">({{ pagination.getTotalItemCount() }})</span></div>
+
+        <div class="breadcrumb">
+            <a class="no-link-style">x-media</a>
+            <span>&nbsp;> </span>
+            <a href="/">Головна</a>
+            <span> > </span>
+            <a href="">Акції</a>
+            <span> > </span>
+            <a href="" class="selected">{{ promotion.title }}</a>
+        </div>
+
+        {% if categoryTree|length > 0 %}
+            {% include 'partials/promotion-category-list.html.twig' %}
+        {% else %}
+
+            <div id="filters">
+                {% include 'partials/promotion-filters.html.twig' %}
+            </div>
+
+            <div id="promotion-products-block">
+                <div class="order-by">
+                    <select name="order">
+                        <option value="price" data-direction="asc" {% if order is defined and order=='price' and direction is defined and direction=='asc' %}selected{% endif %}>
+                            Від дешевих до дорогих
+                        </option>
+                        <option value="price" data-direction="desc" {% if order is defined and order=='price' and direction is defined and direction=='desc' %}selected{% endif %}>
+                            Від дорогих до дешевих
+                        </option>
+                        <option value="createdAt" data-direction="desc" {% if order is defined and order=='createdAt' and direction is defined and direction=='desc' %}selected{% endif %}>
+                            Новинки
+                        </option>
+                    </select>
+                </div>
+                {% include 'partials/product-list.html.twig' %}
+                <div class="loader"></div>
+            </div>
+        {% endif %}
+    </section>
+
+{% endblock %}

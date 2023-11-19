@@ -38,6 +38,7 @@ class PromotionCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('title', 'Назва')->setColumns(7);
         yield TextareaField::new('description', 'Опис')->hideOnIndex()->setColumns(7);
+        yield TextField::new('slug', 'Slug')->hideOnIndex()->setColumns(7);
         yield ChoiceField::new('status', 'Статус')
             ->setChoices(array_flip(Promotion::STATUSES))
             ->renderAsBadges([

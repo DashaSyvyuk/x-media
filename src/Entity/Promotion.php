@@ -39,6 +39,11 @@ class Promotion
     /**
      * @ORM\Column(type="string")
      */
+    private string $slug = "";
+
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $description = "";
 
     /**
@@ -89,6 +94,16 @@ class Promotion
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
     }
 
     public function setDescription(string $description): void

@@ -4,7 +4,11 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Entity\Promotion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -41,10 +45,25 @@ class ProductRepository extends ServiceEntityRepository
 
     public function findBySearch(string $search): QueryBuilder
     {
-        return
-            $this->createQueryBuilder('p')
-            ->where('REGEXP(p.title, :regexp) = true')
-            ->setParameter('regexp', $search);
+        $words = explode(' ', $search);
+        $titleConditions = [];
+        $codeConditions = [];
+
+        foreach ($words as $word) {
+            $wordEscaped = addslashes($word);
+            $titleConditions[] = "p.title LIKE '%" . $wordEscaped . "%'";
+            $codeConditions[] = "p.productCode LIKE '%" . $wordEscaped . "%'";
+        }
+
+        $titleQuery = '(' . implode(' AND ', $titleConditions) . ')';
+        $codeQuery = '(' . implode(' AND ', $codeConditions) . ')';
+
+        return $this->createQueryBuilder('p')
+            ->orWhere($titleQuery)
+            ->orWhere($codeQuery)
+            ->andWhere('p.status = :status')
+            ->setParameter('status', Product::STATUS_ACTIVE)
+        ;
     }
 
     private function prepareQuery(
@@ -187,6 +206,86 @@ class ProductRepository extends ServiceEntityRepository
                 ];
 
                 $result[] = $row;
+            }
+        }
+
+        return $result;
+    }
+
+    public function findByPromotionAndVendor(
+        Promotion $promotion,
+        ?Category $category,
+        ?string $vendors,
+        ?string $order,
+        ?string $direction,
+    ): QueryBuilder
+    {
+        $query = $this->createQueryBuilder('p')
+            ->leftJoin('p.promotionProducts', 'pp')
+            ->andWhere('pp.promotion = :promotion')
+            ->andWhere('p.status = :status')
+            ->setParameter('promotion', $promotion)
+            ->setParameter('status', Product::STATUS_ACTIVE);
+
+        if ($category) {
+            $query
+                ->leftJoin('p.category', 'category')
+                ->andWhere('category = :category')
+                ->setParameter('category', $category);
+        }
+
+        if ($vendors) {
+            $query = $query
+                ->leftJoin('p.filterAttributes', 'filterAttributes')
+                ->leftJoin('filterAttributes.filterAttribute', 'filterAttribute')
+                ->andWhere('filterAttribute.value IN (:vendors)')
+                ->setParameter('vendors', explode(',', $vendors))
+            ;
+        }
+
+        if ($order && $direction) {
+            $query->orderBy('p.' . $order, $direction);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function getCategoriesTreeForPromotion(array $categories, Promotion $promotion): array
+    {
+        $result = [];
+
+        foreach ($categories as $category) {
+            if (!empty($category['children'])) {
+                $children = $this->getCategoriesTreeForPromotion($category['children'], $promotion);
+                $total = array_sum(array_column($children, 'productsCount'));
+
+                if ($total > 0) {
+                    $result[] = array_merge($category, [
+                        'productsCount' => $total,
+                        'children' => $children,
+                    ]);
+                }
+            } else {
+                $productsCount = $this->createQueryBuilder('p')
+                    ->select(['COUNT(p.id)'])
+                    ->leftJoin('p.category', 'category')
+                    ->leftJoin('p.promotionProducts', 'promotionProducts')
+                    ->where('promotionProducts.promotion = :promotion')
+                    ->andWhere('category.id = :id')
+                    ->andWhere('p.status = :status')
+                    ->setParameter('promotion', $promotion)
+                    ->setParameter('id', $category['id'])
+                    ->setParameter('status', Product::STATUS_ACTIVE)
+                    ->getQuery()
+                    ->getSingleScalarResult();
+
+                if ($productsCount > 0) {
+                    $result[] = array_merge($category, ['productsCount' => $productsCount]);
+                }
             }
         }
 

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping\Index;
  * @ORM\Table("product_filter_attribute", indexes={
  *     @Index(columns={"product_id", "filter_id", "filter_attribute_id"})
  * })
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\ProductFilterAttributeRepository")
  */
 class ProductFilterAttribute
 {
@@ -44,7 +44,7 @@ class ProductFilterAttribute
         return $this->id;
     }
 
-    public function setId(?int $id)
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
@@ -54,10 +54,7 @@ class ProductFilterAttribute
         return $this->product;
     }
 
-    /**
-     * @param Product $product
-     */
-    public function setProduct(Product $product)
+    public function setProduct(Product $product): void
     {
         $this->product = $product;
     }
@@ -67,10 +64,7 @@ class ProductFilterAttribute
         return $this->filter;
     }
 
-    /**
-     * @param Filter $filter
-     */
-    public function setFilter(Filter $filter)
+    public function setFilter(Filter $filter): void
     {
         $this->filter = $filter;
     }
@@ -80,10 +74,7 @@ class ProductFilterAttribute
         return $this->filterAttribute;
     }
 
-    /**
-     * @param FilterAttribute $filterAttribute
-     */
-    public function setFilterAttribute(FilterAttribute $filterAttribute)
+    public function setFilterAttribute(FilterAttribute $filterAttribute): void
     {
         $this->filterAttribute = $filterAttribute;
     }
