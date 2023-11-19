@@ -1,14 +1,18 @@
 <form id="promotion-filter-form">
+    <div class="selected-filters">
+    </div>
+    <div class="filter promotion-filter-parameter">
+        <p class="filter-title">Категорії:</p>
     <ul class="filter promotion-category-outer">
     {% for category in categoriesTree %}
         <li>
-            <a href="{{ path('promotion_category', {'categorySlug': category.slug, 'slug': promotion.slug}) }}" class="{% if currentCategory and category.slug == currentCategory.slug %}bold{% endif %}">
+            <a href="{{ path('promotion_category', {'categorySlug': category.slug, 'slug': promotion.slug}) }}" class="{% if currentCategory and category.slug == currentCategory.slug %}bold{% endif %} no-link-style">
                 {{ category.title }} <span>({{ category.productsCount }})</span>
             </a>
             <ul class="promotion-category-inner">
             {% for child in category.children %}
                 <li>
-                    <a href="{{ path('promotion_category', {'categorySlug': child.slug, 'slug': promotion.slug}) }}" class="{% if currentCategory and child.slug == currentCategory.slug %}bold{% endif %}">
+                    <a href="{{ path('promotion_category', {'categorySlug': child.slug, 'slug': promotion.slug}) }}" class="{% if currentCategory and child.slug == currentCategory.slug %}bold{% endif %} no-link-style">
                         {{ child.title }} <span>({{ child.productsCount }})</span>
                     </a>
                 </li>
@@ -17,6 +21,7 @@
         </li>
     {% endfor %}
     </ul>
+    </div>
 
     <div class="filter promotion-filter-parameter">
         <p class="filter-title">Марка</p>
