@@ -2037,3 +2037,13 @@ section .feedbacks {
 .filter.promotion-category-outer li {
     padding: 5px 0;
 }
+.filter .promotion-category-inner {
+    list-style-type: none;
+}
+.filter.promotion-category-outer a {
+    text-decoration: none;
+    color: #000;
+}
+.filter.promotion-category-outer a:hover {
+    font-weight: bold;
+}

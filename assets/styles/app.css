@@ -2199,13 +2199,11 @@ section .feedbacks {
 #search p {
     margin: 2px 0 0 0;
 }
-
 .success {
     color: #119E00;
     font-size: 12px;
     margin-top: 5px;
 }
-
 .filter.promotion-category-outer {
     list-style-type: none;
     font-size: 12px;
@@ -2215,4 +2213,11 @@ section .feedbacks {
 }
 .filter.promotion-category-outer a:hover {
     font-weight: bold;
+}
+.filter .promotion-category-inner {
+    list-style-type: none;
+}
+.filter.promotion-category-outer a {
+    text-decoration: none;
+    color: #000;
 }
