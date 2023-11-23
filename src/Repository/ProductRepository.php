@@ -188,7 +188,7 @@ class ProductRepository extends ServiceEntityRepository
             }
 
             $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
-            $warranty = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => $item->getFilter()->getTitle() == 'Гарантія');
+            $warranty = array_values(array_filter($product->getCharacteristics()->toArray(), fn ($item) => $item->getTitle() == 'Гарантія'));
 
             if (!empty($vendor)) {
                 $row = [
@@ -202,7 +202,7 @@ class ProductRepository extends ServiceEntityRepository
                     'keywords' => addslashes($product->getMetaKeyword()),
                     'vendor' => $vendor[0]->getFilterAttribute()->getValue(),
                     'article' => $product->getProductCode(),
-                    'warranty' => $warranty ? $warranty[0]->getFilterAttribute()->getValue() : 12,
+                    'warranty' => $warranty ? (int) $warranty[0]->getValue() : 12,
                 ];
 
                 $result[] = $row;
