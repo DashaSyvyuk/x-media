@@ -26,5 +26,50 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+
+        <script src="{{ asset('js/jquery-1.9.1.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('js/jquery.menu-aim.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
+        <script>
+            $(document).ready(function () {
+                if ($('.categories-list').length > 0){
+                    const $menu = $('.categories-list');
+                    $menu.menuAim({
+                        activate: activateSubmenu,
+                        deactivate: deactivateSubmenu
+                    });
+                    function activateSubmenu(row) {
+                        const $row = $(row);
+                        const submenuId = $row.data('submenuId');
+                        const $submenu = $('#' + submenuId);
+                        $submenu.css({
+                            visibility: 'visible',
+                        });
+                        $row.find('a').addClass('maintainHover');
+                    }
+
+                    function deactivateSubmenu(row) {
+                        const $row = $(row);
+                        const submenuId = $row.data('submenuId');
+                        const $submenu = $('#' + submenuId);
+                        $submenu.css({
+                            visibility: 'hidden',
+                        });
+                        $row.find('a').removeClass('maintainHover');
+                    }
+                    $('.categories-list li').click(function(e) {
+                        e.stopPropagation();
+                    });
+                    $('.categories-list').on('mouseleave', function() {
+                        $('.popover').css('visibility', 'hidden');
+                        $('a.maintainHover').removeClass('maintainHover');
+                    });
+                    $(document).click(function() {
+                        $('.popover').css('visibility', 'hidden');
+                        $('a.maintainHover').removeClass('maintainHover');
+                    });
+                }
+            });
+        </script>
     </body>
 </html>

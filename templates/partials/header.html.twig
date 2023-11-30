@@ -15,7 +15,7 @@
                 <div class="header-main">
                     <ul class="categories-list">
                         {% for category in categories %}
-                            <li>
+                            <li class="category" data-submenu-id="submenu-{{ category.id }}">
                                 <a class="no-link-style" href="/categories/{{ category.slug }}">
                                     <div class="link">
                                         <span>{{ category.title }}</span>
@@ -25,7 +25,7 @@
                                     </div>
                                 </a>
                                 {% if category.children|length > 0 %}
-                                    <div class="subcategories">
+                                    <div class="subcategories popover" id="submenu-{{ category.id }}">
                                         <ul>
                                             {% for child in category.children %}
                                                 <li>

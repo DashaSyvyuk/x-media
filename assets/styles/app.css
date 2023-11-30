@@ -461,39 +461,29 @@ header {
     padding: 10px 10px 10px 20px;
     text-align: left;
 }
-
 #menu .header-main ul li:hover {
     background-color: rgba(200, 200, 200, .7);
     cursor: pointer;
 }
-
 #menu .header-main .categories-list li {
     position: relative;
 }
-
 #menu .header-main .categories-list li img {
     float: right;
     height: 18px;
 }
-
-#menu .header-main .categories-list li:hover .subcategories {
-    display: block;
-}
-
 #menu .header-main .subcategories {
     position: absolute;
     top: 0;
     left: 300px;
     width: 300px;
-    display: none;
+    visibility: hidden;
     background-color: #fff;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
 }
-
 #menu .search, #menu-fixed .search {
     position: relative;
 }
-
 #menu .search input, #menu-fixed .search input {
     width: 200px;
     height: 25px;
