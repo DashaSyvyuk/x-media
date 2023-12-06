@@ -258,7 +258,7 @@ hr {
 #search-block {
     position: relative;
     width: 100%;
-    padding: 25px 15px;
+    padding: 10px 5px;
     box-sizing: border-box;
 }
 #search input {
@@ -277,8 +277,8 @@ hr {
 #search button {
     border: none;
     position: absolute;
-    right: 25px;
-    top: 27px;
+    right: 7px;
+    top: 12px;
     cursor: pointer;
     height: 25px;
     background-color: #fff;

@@ -16,8 +16,8 @@
     </form>
 </div>
 
-<div class="last-active-order">
-    {% if app.session.get('user') and order %}
+{% if app.session.get('user') and order %}
+    <div class="last-active-order">
         <p>Привіт, <span class="green bold">{{ user.name }}</span>, ось<br>
             твоє останнє активне замовлення
         </p>
@@ -54,8 +54,8 @@
                 </a>
             </li>
         </ul>
-    {% endif %}
-</div>
+    </div>
+{% endif %}
 
 <div id="slider">
     {% for slider in sliders %}
