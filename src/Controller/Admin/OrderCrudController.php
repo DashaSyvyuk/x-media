@@ -89,11 +89,11 @@ class OrderCrudController extends AbstractCrudController
             ])
             ->setColumns(5);
         yield TextField::new('ttn', 'ТТН')->hideOnIndex()->setColumns(3);
-        yield TextField::new('name', 'Ім\'я')->setColumns(7);
-        yield TextField::new('surname', 'Прізвище')->setColumns(7);
-        yield TextField::new('phone', 'Номер телефону')->setColumns(7);
+        yield TextField::new('name', 'Ім\'я')->hideOnIndex()->setColumns(7);
+        yield TextField::new('surname', 'Прізвище')->hideOnIndex()->setColumns(7);
+        yield TextField::new('phone', 'Номер телефону')->hideOnIndex()->setColumns(7);
         yield TextField::new('email', 'Email')->setColumns(7)->hideOnIndex();
-        yield TextField::new('comment', 'Коментар')->hideOnIndex()->setColumns(7);
+        yield TextField::new('comment', 'Коментар')->setColumns(7);
 
         yield FormField::addPanel('Інформація про доставку');
 
@@ -124,8 +124,7 @@ class OrderCrudController extends AbstractCrudController
             ->allowAdd()
             ->allowDelete()
             ->renderExpanded()
-            ->setEntryType(OrderItemType::class)
-            ->hideOnIndex();
+            ->setEntryType(OrderItemType::class);
     }
 
     private function getAvailableStatuses(): array

@@ -62,7 +62,7 @@ class OrderItem
     /**
      * @param Product $product
      */
-    public function setProduct(Product $product)
+    public function setProduct(Product $product): void
     {
         $this->product = $product;
     }
@@ -111,5 +111,10 @@ class OrderItem
     public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function __toString(): string
+    {
+        return $this->product->getTitle();
     }
 }
