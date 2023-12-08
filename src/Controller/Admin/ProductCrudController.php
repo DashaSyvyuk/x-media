@@ -101,7 +101,7 @@ class ProductCrudController extends AbstractCrudController
                     ->setParameter('ids', $this->categoryRepository->getCategoriesIdsWithoutChildren());
             })->setColumns(6)->hideOnIndex();
         yield TextField::new('note', 'Нотатки')->setColumns(6)->hideOnIndex();
-        yield TextField::new('productCode', 'Код товару')->setColumns(6)->hideOnIndex();
+        yield TextField::new('productCode', 'Код товару')->setColumns(6);
         yield TextField::new('productCode2', 'Код товару 2')->setColumns(6)->hideOnIndex();
         yield TextField::new('olx', 'Olx')->setColumns(6)->hideOnIndex();
 
