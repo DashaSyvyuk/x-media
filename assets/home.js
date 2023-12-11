@@ -50,6 +50,42 @@ $("#new-products").slick({
     ]
 });
 
+$(".promotion-carousel").slick({
+    infinite: true,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    autoplay: true,
+    autoplaySpeed: 10000,
+    dots: true,
+    arrows: false,
+    pauseOnHover: false,
+    responsive: [
+        {
+            breakpoint: 1400,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+                infinite: true,
+                dots: true
+            }
+        },
+        {
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2
+            }
+        },
+        {
+            breakpoint: 650,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1
+            }
+        }
+    ]
+});
+
 $("#feedbacks").slick({
     infinite: true,
     slidesToShow: 2,

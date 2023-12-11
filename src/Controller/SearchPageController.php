@@ -11,23 +11,17 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SearchPageController extends BaseController
 {
-    private ProductRepository $productRepository;
-
-    private SettingRepository $settingRepository;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param ProductRepository $productRepository
      * @param SettingRepository $settingRepository
      */
     public function __construct(
-        CategoryRepository $categoryRepository,
-        ProductRepository $productRepository,
-        SettingRepository $settingRepository
+        private readonly CategoryRepository $categoryRepository,
+        private readonly ProductRepository $productRepository,
+        private readonly SettingRepository $settingRepository
     ) {
-        parent::__construct($categoryRepository, $settingRepository);
-        $this->productRepository = $productRepository;
-        $this->settingRepository = $settingRepository;
+        parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
 
     public function getSearch(PaginatorInterface $paginator, Request $request): Response

@@ -11,20 +11,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProductPageController extends BaseController
 {
-    private ProductRepository $productRepository;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param ProductRepository $productRepository
      * @param SettingRepository $settingRepository
      */
     public function __construct(
-        CategoryRepository $categoryRepository,
-        ProductRepository $productRepository,
-        SettingRepository $settingRepository
+        private readonly CategoryRepository $categoryRepository,
+        private readonly ProductRepository $productRepository,
+        private readonly SettingRepository $settingRepository
     ) {
-        parent::__construct($categoryRepository, $settingRepository);
-        $this->productRepository = $productRepository;
+        parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
 
     public function getProduct(string $id, Request $request): Response

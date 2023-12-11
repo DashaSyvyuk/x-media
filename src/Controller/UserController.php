@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
 use App\Repository\SettingRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,13 +15,15 @@ class UserController extends BaseController
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
      * @param UserRepository $userRepository
+     * @param ProductRepository $productRepository
      */
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
         private readonly SettingRepository $settingRepository,
-        private readonly UserRepository $userRepository
+        private readonly UserRepository $userRepository,
+        private readonly ProductRepository $productRepository,
     ) {
-        parent::__construct($categoryRepository, $settingRepository);
+        parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
 
     public function post(Request $request): Response

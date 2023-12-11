@@ -31,7 +31,7 @@ class ProductCharacteristic
     private string $title = "";
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="text")
      */
     private string $value = "";
 

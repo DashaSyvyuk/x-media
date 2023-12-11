@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\CategoryRepository;
 use App\Repository\NovaPoshtaCityRepository;
+use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
 use App\Repository\SettingRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,25 +12,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AccountContactController extends BaseController
 {
-    private NovaPoshtaCityRepository $novaPoshtaCityRepository;
-
-    private UserRepository $userRepository;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
+     * @param ProductRepository $productRepository
      * @param NovaPoshtaCityRepository $novaPoshtaCityRepository
      * @param UserRepository $userRepository
      */
     public function __construct(
-        CategoryRepository $categoryRepository,
-        SettingRepository $settingRepository,
-        NovaPoshtaCityRepository $novaPoshtaCityRepository,
-        UserRepository $userRepository
+        private readonly CategoryRepository $categoryRepository,
+        private readonly SettingRepository $settingRepository,
+        private readonly ProductRepository $productRepository,
+        private readonly NovaPoshtaCityRepository $novaPoshtaCityRepository,
+        private readonly UserRepository $userRepository
     ) {
-        parent::__construct($categoryRepository, $settingRepository);
-        $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
-        $this->userRepository = $userRepository;
+        parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
 
     public function index(Request $request): Response

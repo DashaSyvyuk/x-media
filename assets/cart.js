@@ -210,6 +210,7 @@ function showCart() {
         const obj = JSON.parse(data);
 
         $('#cart-popup').html(obj.cart).show();
+        $('.cart-count').text(obj.totalCount);
     });
 }
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,20 +11,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends BaseController
 {
-    private UserRepository $userRepository;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
      * @param UserRepository $userRepository
+     * @param ProductRepository $productRepository
      */
     public function __construct(
-        CategoryRepository $categoryRepository,
-        SettingRepository $settingRepository,
-        UserRepository $userRepository
+        private readonly CategoryRepository $categoryRepository,
+        private readonly SettingRepository $settingRepository,
+        private readonly UserRepository $userRepository,
+        private readonly ProductRepository $productRepository
     ) {
-        parent::__construct($categoryRepository, $settingRepository);
-        $this->userRepository = $userRepository;
+        parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
 
     public function index(Request $request): Response

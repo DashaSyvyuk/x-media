@@ -2,22 +2,11 @@
 
 namespace App\Controller;
 
-use App\Repository\CategoryRepository;
-use App\Repository\SettingRepository;
-use App\Service\Cart\CartShowService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CartController extends BaseController
 {
-    public function __construct(
-        private readonly CategoryRepository $categoryRepository,
-        private readonly SettingRepository $settingRepository,
-        private readonly CartShowService $cartShowService
-    ) {
-        parent::__construct($this->categoryRepository, $this->settingRepository);
-    }
-
     public function getCart(): Response
     {
         if (!array_key_exists('cart', $_COOKIE)) {
@@ -30,14 +19,15 @@ class CartController extends BaseController
             ]));
         }
 
-        $cart = $this->cartShowService->run($_COOKIE['cart']);
+        $cart = $this->getTotalCart();
 
         return new Response(json_encode([
             'cart' => $this->renderView('cart/index.html.twig', [
                 'products'   => $cart['products'],
                 'totalCount' => $cart['totalCount'],
                 'totalPrice' => $cart['totalPrice']
-            ])
+            ]),
+            'totalCount' => $cart['totalCount'],
         ]));
     }
 
@@ -51,7 +41,7 @@ class CartController extends BaseController
             ]);
         }
 
-        $cart = $this->cartShowService->run($_COOKIE['cart']);
+        $cart = $this->getTotalCart();
 
         return $this->renderTemplate($request, 'cart/index.html.twig', [
             'products'   => $cart['products'],

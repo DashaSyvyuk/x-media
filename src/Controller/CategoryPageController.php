@@ -21,11 +21,11 @@ class CategoryPageController extends BaseController
      */
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
-        private readonly FilterRepository   $filterRepository,
-        private readonly ProductRepository  $productRepository,
+        private readonly FilterRepository $filterRepository,
+        private readonly ProductRepository $productRepository,
         private readonly SettingRepository $settingRepository
     ) {
-        parent::__construct($categoryRepository, $settingRepository);
+        parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
 
     /**

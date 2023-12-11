@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,20 +12,16 @@ use Symfony\Component\HttpFoundation\Request;
 
 class BaseController extends AbstractController
 {
-    private CategoryRepository $categoryRepository;
-
-    private SettingRepository $settingRepository;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
+     * @param ProductRepository $productRepository
      */
     public function __construct(
-        CategoryRepository $categoryRepository,
-        SettingRepository $settingRepository
+        private readonly CategoryRepository $categoryRepository,
+        private readonly SettingRepository  $settingRepository,
+        private readonly ProductRepository $productRepository,
     ) {
-        $this->categoryRepository = $categoryRepository;
-        $this->settingRepository = $settingRepository;
     }
 
     public function renderTemplate(Request $request, string $view, array $parameters): Response
@@ -68,5 +66,44 @@ class BaseController extends AbstractController
         } else {
             return false;
         }
+    }
+
+    public function getTotalCart(): array
+    {
+        $products = [];
+        $totalCount = 0;
+        $totalPrice = 0;
+        $cart = [];
+
+        if (!empty($_COOKIE['cart'])) {
+            foreach (json_decode($_COOKIE['cart']) as $item) {
+                if ($item->id && $item->id > 0 && $item->count && $item->count > 0) {
+                    $product = $this->productRepository->findOneBy(['id' => $item->id, 'status' => Product::STATUS_ACTIVE]);
+
+                    if ($product) {
+                        $product->count = $item->count;
+                        $totalCount += $item->count;
+                        $totalPrice += $product->getPrice() * $item->count;
+                        $cart = [
+                            ...$cart,
+                            [
+                                'id' => $product->getId(),
+                                'count' => $item->count,
+                            ]
+                        ];
+                        $products[] = $product;
+                    }
+                }
+            }
+        }
+
+        setcookie('cart', json_encode($cart), time() + (3600 * 24));
+        setcookie('totalCount', $totalCount, time() + (3600 * 24));
+
+        return [
+            'products'   => $products,
+            'totalPrice' => $totalPrice,
+            'totalCount' => $totalCount
+        ];
     }
 }

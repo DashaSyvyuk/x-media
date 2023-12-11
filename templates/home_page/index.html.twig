@@ -20,6 +20,17 @@
         {% include 'partials/header.html.twig' %}
 
         <section>
+            {% if promotions|length > 0 %}
+                {% for promotion in promotions %}
+                    <p class="title"><spanc class="green">Акція! </spanc>{{ promotion.getTitle() }}</p>
+                    <div class="promotion-carousel">
+                        {% for promotionProduct in promotion.getProducts() %}
+                            {% set product = promotionProduct.getProduct() %}
+                            {% include 'partials/product-item.html.twig' %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            {% endif %}
             <p class="title">Новинки</p>
             <div id="new-products">
                 {% for product in products %}

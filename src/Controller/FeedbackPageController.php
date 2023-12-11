@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Feedback;
 use App\Repository\CategoryRepository;
 use App\Repository\FeedbackRepository;
+use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use App\Service\Feedback\CreateService;
 use Knp\Component\Pager\PaginatorInterface;
@@ -13,25 +13,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FeedbackPageController extends BaseController
 {
-    private FeedbackRepository $feedbackRepository;
-
-    private CreateService $createService;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
      * @param FeedbackRepository $feedbackRepository
+     * @param ProductRepository $productRepository
      * @param CreateService $createService
      */
     public function __construct(
-        CategoryRepository $categoryRepository,
-        SettingRepository $settingRepository,
-        FeedbackRepository $feedbackRepository,
-        CreateService $createService
+        private readonly CategoryRepository $categoryRepository,
+        private readonly SettingRepository $settingRepository,
+        private readonly FeedbackRepository $feedbackRepository,
+        private readonly ProductRepository $productRepository,
+        private readonly CreateService $createService
     ) {
-        parent::__construct($categoryRepository, $settingRepository);
-        $this->feedbackRepository = $feedbackRepository;
-        $this->createService = $createService;
+        parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
 
     public function index(PaginatorInterface $paginator, Request $request): Response

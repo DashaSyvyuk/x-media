@@ -22,22 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderPageController extends BaseController
 {
-    private SettingRepository $settingRepository;
-
-    private OrderRepository $orderRepository;
-
-    private ProductRepository $productRepository;
-
-    private DeliveryTypeRepository $deliveryTypeRepository;
-
-    private NovaPoshtaCityRepository $novaPoshtaCityRepository;
-
-    private NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository;
-
-    private UserRepository $userRepository;
-
-    private OrderNumber $orderNumber;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param OrderRepository $orderRepository
@@ -50,25 +34,17 @@ class OrderPageController extends BaseController
      * @param OrderNumber $orderNumber
      */
     public function __construct(
-        CategoryRepository $categoryRepository,
-        OrderRepository $orderRepository,
-        ProductRepository $productRepository,
-        SettingRepository $settingRepository,
-        DeliveryTypeRepository $deliveryTypeRepository,
-        NovaPoshtaCityRepository $novaPoshtaCityRepository,
-        NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository,
-        UserRepository $userRepository,
-        OrderNumber $orderNumber
+        private readonly CategoryRepository $categoryRepository,
+        private readonly OrderRepository $orderRepository,
+        private readonly ProductRepository $productRepository,
+        private readonly SettingRepository $settingRepository,
+        private readonly DeliveryTypeRepository $deliveryTypeRepository,
+        private readonly NovaPoshtaCityRepository $novaPoshtaCityRepository,
+        private readonly NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository,
+        private readonly UserRepository $userRepository,
+        private readonly OrderNumber $orderNumber
     ) {
-        parent::__construct($categoryRepository, $settingRepository);
-        $this->settingRepository = $settingRepository;
-        $this->orderRepository = $orderRepository;
-        $this->productRepository = $productRepository;
-        $this->deliveryTypeRepository = $deliveryTypeRepository;
-        $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
-        $this->novaPoshtaOfficeRepository = $novaPoshtaOfficeRepository;
-        $this->userRepository = $userRepository;
-        $this->orderNumber = $orderNumber;
+        parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
 
     public function index(Request $request): Response
@@ -86,7 +62,7 @@ class OrderPageController extends BaseController
                 }
             }
 
-            $totalCart = $this->getTotalCart($_COOKIE['cart']);
+            $totalCart = $this->getTotalCart();
 
             return $this->renderTemplate($request, 'order_page/index.html.twig', [
                 'totalPrice' => $totalCart['totalPrice'],
@@ -115,7 +91,7 @@ class OrderPageController extends BaseController
             }
 
             $managerEmail = $this->settingRepository->findOneBy(['slug' => 'email']);
-            $totalCart = $this->getTotalCart($_COOKIE['cart']);
+            $totalCart = $this->getTotalCart();
 
             $order = $this->orderRepository->create([
                 'orderNumber' => $this->orderNumber->generateOrderNumber(),
@@ -187,31 +163,6 @@ class OrderPageController extends BaseController
         } else {
             return $this->redirectToRoute('index');
         }
-    }
-
-    private function getTotalCart($cart) {
-        $products = [];
-        $totalCount = 0;
-        $totalPrice = 0;
-
-        foreach (json_decode($cart) as $item) {
-            if ($item->id && $item->id > 0 && $item->count && $item->count > 0) {
-                $product = $this->productRepository->findOneBy(['id' => $item->id]);
-
-                if ($product) {
-                    $product->count = $item->count;
-                    $totalCount += $item->count;
-                    $totalPrice += $product->getPrice() * $item->count;
-                    $products[] = $product;
-                }
-            }
-        }
-
-        return [
-            'products'   => $products,
-            'totalPrice' => $totalPrice,
-            'totalCount' => $totalCount
-        ];
     }
 
     private function getAddress($data): ?string

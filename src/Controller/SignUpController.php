@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\CategoryRepository;
 use App\Repository\OrderRepository;
+use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
 use Carbon\Carbon;
@@ -15,25 +16,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SignUpController extends BaseController
 {
-    private UserRepository $userRepository;
-
-    private OrderRepository $orderRepository;
-
     /**
      * @param CategoryRepository $categoryRepository
      * @param SettingRepository $settingRepository
      * @param UserRepository $userRepository
      * @param OrderRepository $orderRepository
+     * @param ProductRepository $productRepository
      */
     public function __construct(
-        CategoryRepository $categoryRepository,
-        SettingRepository $settingRepository,
-        UserRepository $userRepository,
-        OrderRepository $orderRepository
+        private readonly CategoryRepository $categoryRepository,
+        private readonly SettingRepository $settingRepository,
+        private readonly UserRepository $userRepository,
+        private readonly OrderRepository $orderRepository,
+        private readonly ProductRepository $productRepository,
     ) {
-        parent::__construct($categoryRepository, $settingRepository);
-        $this->userRepository = $userRepository;
-        $this->orderRepository = $orderRepository;
+        parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
 
     public function index(Request $request): Response

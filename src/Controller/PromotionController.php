@@ -31,7 +31,7 @@ class PromotionController extends BaseController
         private readonly PromotionRepository $promotionRepository,
         private readonly ProductFilterAttributeRepository $productFilterAttributeRepository,
     ) {
-        parent::__construct($categoryRepository, $settingRepository);
+        parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
 
     /**
