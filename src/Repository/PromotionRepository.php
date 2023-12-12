@@ -41,7 +41,7 @@ class PromotionRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function getActivePromotions()
+    public function getActivePromotions(int $maxResults = 10)
     {
         $now = Carbon::now();
 
@@ -51,6 +51,7 @@ class PromotionRepository extends ServiceEntityRepository
             ->andWhere('p.status = :status')
             ->setParameter('now', $now)
             ->setParameter('status', Promotion::ACTIVE)
+            ->setMaxResults($maxResults)
             ->getQuery()
             ->getResult();
     }

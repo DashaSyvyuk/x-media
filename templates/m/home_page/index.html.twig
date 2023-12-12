@@ -70,7 +70,7 @@
     <div class="home-page">
         {% if promotions|length > 0 %}
             {% for promotion in promotions %}
-                <p class="title"><span class="green">Акція! </span>{{ promotion.getTitle() }}</p>
+                <p class="title"><span class="green">Акція! </span><a href="{{ path('promotion', {'slug': promotion.getSlug()}) }}" target="_blank" class="link">{{ promotion.getTitle() }}</a></p>
                 <div class="promotion-carousel">
                     {% for promotionProduct in promotion.getProducts() %}
                         {% set product = promotionProduct.getProduct() %}

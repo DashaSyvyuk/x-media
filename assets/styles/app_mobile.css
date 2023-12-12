@@ -441,6 +441,13 @@ section .title {
     text-align: center;
     padding: 10px;
 }
+section .title .link {
+    text-decoration: none;
+    color: #000;
+}
+section .title .link:hover {
+    text-decoration: underline;
+}
 footer {
     width: 100%;
     margin-top: 40px;
