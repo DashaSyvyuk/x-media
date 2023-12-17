@@ -60,15 +60,12 @@
                     $('.categories-list li').click(function(e) {
                         e.stopPropagation();
                     });
-                    $('.categories-list li').on('mouseover', (e) => {
+                    $('.categories-list li:first-child').on('mouseover', (e) => {
                        activateSubmenu(e.currentTarget);
                     });
                     $menu.on('mouseleave', function() {
                         $('.popover').css('visibility', 'hidden');
                         $('a.maintainHover').removeClass('maintainHover');
-                        $('.categories-list li').each((row) => {
-                            deactivateSubmenu(row);
-                        })
                     });
                     $(document).click(function() {
                         $('.popover').css('visibility', 'hidden');
