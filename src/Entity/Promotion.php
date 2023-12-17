@@ -166,6 +166,18 @@ class Promotion
         }
     }
 
+    public function getActiveProducts(int $maxCount = 10): array
+    {
+        $result = [];
+        foreach ($this->products as $key => $promotionProduct) {
+            if ($promotionProduct->getProduct()->getStatus() === Product::STATUS_ACTIVE && $key < $maxCount) {
+                $result[] = $promotionProduct;
+            }
+        }
+
+        return $result;
+    }
+
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;

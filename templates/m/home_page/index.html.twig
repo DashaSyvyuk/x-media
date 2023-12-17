@@ -72,7 +72,7 @@
             {% for promotion in promotions %}
                 <p class="title"><span class="green">Акція! </span><a href="{{ path('promotion', {'slug': promotion.getSlug()}) }}" target="_blank" class="link">{{ promotion.getTitle() }}</a></p>
                 <div class="promotion-carousel">
-                    {% for promotionProduct in promotion.getProducts() %}
+                    {% for promotionProduct in promotion.getActiveProducts() %}
                         {% set product = promotionProduct.getProduct() %}
                         {% include 'm/partials/product-item.html.twig' %}
                     {% endfor %}
