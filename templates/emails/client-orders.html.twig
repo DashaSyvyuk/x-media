@@ -21,7 +21,7 @@
             </td>
             <td style="padding: 20px; background-color: #eee">
                 <a style="color: #000; text-decoration: none;" href="{{ mainUrl }}products/{{ item.product.id }}">
-                    <span class="height: 10px;">{{ item.product.title }}</span>
+                    <span class="height: 10px;">{{ item.product.title|raw }}</span>
                 </a>
             </td>
             <td style="padding: 20px; background-color: #eee; text-align: center;"><span>{{ item.product.price|number_format(0, '.', ' ') }}</span> грн</td>

@@ -62,7 +62,7 @@
                                             </div>
                                             <div class="product-title">
 {#                                                <a href="/products/{{ order.items[0].product.id }}" target="_blank">#}
-                                                    {{ order.items[0].product.title }}
+                                                    {{ order.items[0].product.title|raw }}
 {#                                                </a>#}
                                             </div>
                                         {% endif %}

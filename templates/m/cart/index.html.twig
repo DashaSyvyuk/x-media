@@ -21,7 +21,7 @@
         {% if products|length > 0 %}
             <div class="inner">
                 {% for product in products %}
-                    <div class="product-row" data-id="{{ product.id }}" data-name="{{ product.title }}">
+                    <div class="product-row" data-id="{{ product.id }}" data-name="{{ product.title|raw }}">
                         <div class="image">
                             <a class="no-link-style" href="/products/{{ product.id }}">
                                 <img
@@ -32,7 +32,7 @@
                         </div>
                         <div class="info">
                             <div class="row">
-                                <div class="product_title"><a class="no-link-style" href="/products/{{ product.id }}">{{ product.title }}</a></div>
+                                <div class="product_title"><a class="no-link-style" href="/products/{{ product.id }}">{{ product.title|raw }}</a></div>
                                 <div class="remove"><img class="delete" src="/images/delete.png"></div>
                             </div>
                             <div class="row">

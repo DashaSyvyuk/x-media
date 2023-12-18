@@ -34,7 +34,7 @@
                                 >
                             </a>
                         </td>
-                        <td><a href="/products/{{ item.product.id }}">{{ item.product.title }}</a></td>
+                        <td><a href="/products/{{ item.product.id }}">{{ item.product.title|raw }}</a></td>
                         <td class="count">{{ item.count }}</td>
                     </tr>
                 {% endfor %}
