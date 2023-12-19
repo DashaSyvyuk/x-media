@@ -980,7 +980,7 @@ header {
 .product-page .images .main img {
     width: 100%;
     object-fit: contain;
-    max-height: 500px;
+    max-height: 350px;
 }
 
 .product-page .detail {
