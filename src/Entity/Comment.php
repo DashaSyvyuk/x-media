@@ -19,6 +19,16 @@ class Comment
 {
     use DateStorageTrait;
 
+    const STATUS_NEW = 'NEW';
+    const STATUS_CONFIRMED = 'CONFIRMED';
+    const STATUS_DISABLED = 'DISABLED';
+
+    const STATUSES = [
+        'Новий'         => self::STATUS_NEW,
+        'Підтверджено'  => self::STATUS_CONFIRMED,
+        'Заблокований'  => self::STATUS_DISABLED,
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -56,6 +66,12 @@ class Comment
      * @ORM\Column(type="text", nullable=true)
      */
     private ?string $answer;
+
+    /**
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
+     * @ORM\OneToOne(targetEntity="App\Entity\ProductRating")
+     */
+    private ?ProductRating $productRating;
 
     /**
      * @ORM\Column(type="datetime")
@@ -122,9 +138,19 @@ class Comment
         return $this->product;
     }
 
-    public function setProduct(Product $product)
+    public function setProduct(Product $product): void
     {
         $this->product = $product;
+    }
+
+    public function getProductRating(): ?ProductRating
+    {
+        return $this->productRating;
+    }
+
+    public function setProductRating(?ProductRating $productRating): void
+    {
+        $this->productRating = $productRating;
     }
 
     public function getAnswer(): ?string
@@ -132,7 +158,7 @@ class Comment
         return $this->answer;
     }
 
-    public function setAnswer(?string $answer)
+    public function setAnswer(?string $answer): void
     {
         $this->answer = $answer;
     }
@@ -142,7 +168,7 @@ class Comment
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -152,13 +178,13 @@ class Comment
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
     public function __toString():string
     {
-        return '' . $this->comment;
+        return $this->comment;
     }
 }

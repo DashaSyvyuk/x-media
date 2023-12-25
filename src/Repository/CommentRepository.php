@@ -27,6 +27,7 @@ class CommentRepository extends ServiceEntityRepository
         $comment->setComment($data['comment']);
         $comment->setProduct($data['product']);
         $comment->setStatus($data['status']);
+        $comment->setProductRating($data['productRating']);
 
         $entityManager = $this->getEntityManager();
         $entityManager->persist($comment);

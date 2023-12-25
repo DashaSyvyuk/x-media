@@ -32,15 +32,12 @@ class CommentCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
-        yield TextField::new('author')->setLabel('Автор');
-        yield TextField::new('email', null)->setLabel('Email');
-        yield ChoiceField::new('status')->setChoices([
-                'Новий' => 'NEW',
-                'Підтверджено' => 'CONFIRMED',
-                'Заблокований' => 'DISABLED',
-            ])->setLabel('Статус');
-        yield TextareaField::new('comment')->setLabel('Коментар')->hideOnIndex();
-        yield TextareaField::new('answer')->setLabel('Відповідь')->hideOnIndex();
-        yield AssociationField::new('product')->setLabel('Товар');
+        yield TextField::new('author', 'Автор');
+        yield TextField::new('email','Email');
+        yield ChoiceField::new('status', 'Статус')->setChoices(Comment::STATUSES);
+        yield TextareaField::new('comment', 'Коментар')->hideOnIndex();
+        yield TextareaField::new('answer', 'Відповідь')->hideOnIndex();
+        yield AssociationField::new('product', 'Товар');
+        yield AssociationField::new('productRating', 'Рейтинг')->hideOnIndex()->setDisabled();
     }
 }

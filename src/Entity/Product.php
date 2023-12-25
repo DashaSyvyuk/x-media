@@ -313,6 +313,11 @@ class Product
         return $this->comments;
     }
 
+    public function getConfirmedComments()
+    {
+        return $this->comments->filter(fn (Comment $comment) => $comment->getStatus() == Comment::STATUS_CONFIRMED);
+    }
+
     public function setComments($comments): void
     {
         if (count($comments) > 0) {

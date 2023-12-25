@@ -20,17 +20,18 @@ class CommentCreateService
     {
         $product = $this->productRepository->findOneBy(['id' => $data['product']]);
 
-        $this->productRatingRepository->create([
+        $productRating = $this->productRatingRepository->create([
             'product' => $product,
             'rating'  => $data['rating']
         ]);
 
         return $this->commentRepository->create([
-            'author'  => $data['author'],
-            'email'   => $data['email'],
-            'comment' => $data['comment'],
-            'product' => $product,
-            'status'  => 'NEW',
+            'author'        => $data['author'],
+            'email'         => $data['email'],
+            'comment'       => $data['comment'],
+            'product'       => $product,
+            'status'        => Comment::STATUS_NEW,
+            'productRating' => $productRating,
         ]);
     }
 }

@@ -163,9 +163,9 @@
                     </form>
                     <div id="comment-list">
                         <h4>Відгуки про товар:</h4>
-                        {% if product.getComments()|length %}
+                        {% if product.getConfirmedComments()|length %}
                             <div id="list">
-                                {% for comment in product.getComments() %}
+                                {% for comment in product.getConfirmedComments() %}
                                     <div class="comment">
                                         {% include 'partials/comment.html.twig' %}
                                     </div>
