@@ -105,6 +105,7 @@ class OrderCrudController extends AbstractCrudController
         yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex()->setColumns(7);
         yield NumberField::new('total', 'Загальна вартість')
             ->setThousandsSeparator(' ')
+            ->setDisabled()
             ->setColumns(7);
         yield ChoiceField::new('labels', 'Мітка')
             ->setChoices(Order::LABELS)

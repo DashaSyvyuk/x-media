@@ -8,6 +8,7 @@ use App\Utils\TurboSms;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
+use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -30,6 +31,7 @@ class OrderSubscriber
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      * @throws TransportExceptionInterface
+     * @throws Exception
      */
     public function preUpdate(Order $order, PreUpdateEventArgs $args): void
     {

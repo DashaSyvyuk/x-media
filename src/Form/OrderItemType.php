@@ -14,6 +14,7 @@ class OrderItemType extends AbstractType {
         $builder
             ->add('product')
             ->add('count')
+            ->add('price')
         ;
     }
 

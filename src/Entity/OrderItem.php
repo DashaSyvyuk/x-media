@@ -28,6 +28,11 @@ class OrderItem
     private int $count = 0;
 
     /**
+     * @ORM\Column(type="integer", options={"unsigned"=true})
+     */
+    private int $price = 0;
+
+    /**
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * @ORM\ManyToOne(targetEntity="App\Entity\Product")
      */
@@ -80,9 +85,6 @@ class OrderItem
         $this->order = $order;
     }
 
-    /**
-     * @return int
-     */
     public function getCount(): int
     {
         return $this->count;
@@ -91,6 +93,16 @@ class OrderItem
     public function setCount(int $count): void
     {
         $this->count = $count;
+    }
+
+    public function getPrice(): int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): void
+    {
+        $this->price = $price;
     }
 
     public function getCreatedAt(): DateTime

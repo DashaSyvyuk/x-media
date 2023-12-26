@@ -52,10 +52,12 @@ class OrderRepository extends ServiceEntityRepository
         $order->setSendNotification($data['sendNotification']);
 
         foreach ($data['products'] as $item) {
+            $product = $this->productRepository->findOneBy(['id' => $item->getId()]);
             $orderItem = new OrderItem();
             $orderItem->setOrder($order);
             $orderItem->setCount($item->count);
-            $orderItem->setProduct($this->productRepository->findOneBy(['id' => $item->getId()]));
+            $orderItem->setProduct($product);
+            $orderItem->setPrice($product->getPrice());
 
             $order->addItem($orderItem);
         }
