@@ -12,7 +12,7 @@ trait DateStorageTrait
     /**
      * @ORM\PrePersist()
      */
-    public function onPrePersist()
+    public function onPrePersist(): void
     {
         //using Doctrine DateTime here
         $this->createdAt = new \DateTime('now');
@@ -28,7 +28,7 @@ trait DateStorageTrait
     /**
      * @ORM\PreUpdate()
      */
-    public function onPreUpdate()
+    public function onPreUpdate(): void
     {
         //using Doctrine DateTime here
         $this->updatedAt = new \DateTime('now');

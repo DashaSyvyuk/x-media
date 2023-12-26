@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping\Index;
  * @ORM\Table("product_characteristic", indexes={
  *     @Index(columns={"product_id", "position"})
  * })
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\ProductCharacteristicRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class ProductCharacteristic
