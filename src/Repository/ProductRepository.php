@@ -50,7 +50,7 @@ class ProductRepository extends ServiceEntityRepository
         $codeConditions = [];
 
         foreach ($words as $word) {
-            $wordEscaped = addslashes($word);
+            $wordEscaped = str_replace("'", "''", $word);
             $titleConditions[] = "p.title LIKE '%" . $wordEscaped . "%'";
             $codeConditions[] = "p.productCode LIKE '%" . $wordEscaped . "%'";
         }
