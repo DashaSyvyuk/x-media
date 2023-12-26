@@ -91,7 +91,12 @@ class ProductCrudController extends AbstractCrudController
         yield ChoiceField::new('status', 'Статус')->setChoices([
             Product::STATUS_ACTIVE => Product::STATUS_ACTIVE,
             Product::STATUS_BLOCKED => Product::STATUS_BLOCKED,
-        ])->setColumns(6)->hideOnIndex();
+        ])
+            ->renderAsBadges([
+                Product::STATUS_BLOCKED => 'danger',
+                Product::STATUS_ACTIVE => 'success',
+            ])
+            ->setColumns(6);
         yield ChoiceField::new('availability', 'Наявність')
             ->setChoices(Product::AVAILABILITIES)->setColumns(6)->hideOnIndex();
         yield AssociationField::new('category', 'Категорія')
