@@ -27,7 +27,7 @@
             <a href="" class="selected">{{ category.title }}</a>
         </div>
 
-        {% if categoryTree|length > 0 %}
+        {% if categoryTree|length > 0 and searchString is not defined %}
             {% include 'partials/category-list.html.twig' %}
         {% else %}
 

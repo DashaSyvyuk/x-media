@@ -26,15 +26,16 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     public function findByCategoryAndAttributes(
-        Category $category,
+        ?Category $category,
         array $attributes,
+        ?string $search,
         ?string $order,
         ?string $direction,
         ?int $priceFrom,
         ?int $priceTo
     ): QueryBuilder
     {
-        $query = $this->prepareQuery($category, $attributes, $priceFrom, $priceTo);
+        $query = $this->prepareQuery($category, $attributes, $search, $priceFrom, $priceTo);
 
         if ($order && $direction) {
             $query->orderBy('p.' . $order, $direction);
@@ -43,42 +44,24 @@ class ProductRepository extends ServiceEntityRepository
         return $query;
     }
 
-    public function findBySearch(string $search): QueryBuilder
-    {
-        $words = explode(' ', trim($search));
-        $titleConditions = [];
-        $codeConditions = [];
-
-        foreach ($words as $word) {
-            $wordEscaped = str_replace("'", "''", trim($word));
-            $titleConditions[] = "p.title LIKE '%" . $wordEscaped . "%'";
-            $codeConditions[] = "p.productCode LIKE '%" . $wordEscaped . "%'";
-        }
-
-        $titleQuery = '(' . implode(' AND ', $titleConditions) . ')';
-        $codeQuery = '(' . implode(' AND ', $codeConditions) . ')';
-
-        return $this->createQueryBuilder('p')
-            ->orWhere($titleQuery)
-            ->orWhere($codeQuery)
-            ->andWhere('p.status = :status')
-            ->setParameter('status', Product::STATUS_ACTIVE)
-        ;
-    }
-
     private function prepareQuery(
-        Category $category,
+        ?Category $category,
         array $attributes,
+        ?string $search,
         ?int $priceFrom,
         ?int $priceTo
     ): QueryBuilder
     {
         $query = $this->createQueryBuilder('p')
-            ->leftJoin('p.category', 'category')
-            ->andWhere('category = :category')
-            ->andWhere('p.status = :status')
-            ->setParameter('category', $category)
-            ->setParameter('status', Product::STATUS_ACTIVE);
+            ->leftJoin('p.category', 'category');
+
+        if ($search) {
+            [$titleQuery, $codeQuery] = $this->prepareSearchString($search);
+
+            $query
+                ->orWhere($titleQuery)
+                ->orWhere($codeQuery);
+        }
 
         if ($attributes) {
             foreach ($attributes as $filter => $values) {
@@ -102,17 +85,24 @@ class ProductRepository extends ServiceEntityRepository
                 ->setParameter('to', $priceTo);
         }
 
+        $query
+            ->andWhere('p.category = :category')
+            ->andWhere('p.status = :status')
+            ->setParameter('category', $category)
+            ->setParameter('status', Product::STATUS_ACTIVE);
+
         return $query;
     }
 
     public function getMinAndMaxPriceInCategory(
-        Category $category,
+        ?Category $category,
         array $attributes,
+        ?string $search,
         ?int $priceFrom,
         ?int $priceTo
     ): array
     {
-        $query = $this->prepareQuery($category, $attributes, $priceFrom, $priceTo);
+        $query = $this->prepareQuery($category, $attributes, $search, $priceFrom, $priceTo);
 
         $query->select('MIN(p.price) AS min_price, MAX(p.price) AS max_price');
 
@@ -290,6 +280,79 @@ class ProductRepository extends ServiceEntityRepository
         }
 
         return $result;
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function getCategoriesTreeForSearch(array $categories, string $search): array
+    {
+        $result = [];
+
+        foreach ($categories as $category) {
+            if (!empty($category['children'])) {
+                $children = $this->getCategoriesTreeForSearch($category['children'], $search);
+                $total = array_sum(array_column($children, 'productsCount'));
+
+                if ($total > 0) {
+                    $result[] = array_merge($category, [
+                        'productsCount' => $total,
+                        'children' => $children,
+                    ]);
+                }
+            } else {
+                [$titleQuery, $codeQuery] = $this->prepareSearchString($search);
+
+                $productsCount = $this->createQueryBuilder('p')
+                    ->select(['COUNT(p.id)'])
+                    ->leftJoin('p.category', 'category')
+                    ->orWhere($titleQuery)
+                    ->orWhere($codeQuery)
+                    ->andWhere('category.id = :id')
+                    ->andWhere('p.status = :status')
+                    ->setParameter('id', $category['id'])
+                    ->setParameter('status', Product::STATUS_ACTIVE)
+                    ->getQuery()
+                    ->getSingleScalarResult();
+
+                if ($productsCount > 0) {
+                    $result[] = array_merge($category, ['productsCount' => $productsCount]);
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public function findBySearch(string $search): QueryBuilder
+    {
+        [$titleQuery, $codeQuery] = $this->prepareSearchString($search);
+
+        return $this->createQueryBuilder('p')
+            ->orWhere($titleQuery)
+            ->orWhere($codeQuery)
+            ->andWhere('p.status = :status')
+            ->setParameter('status', Product::STATUS_ACTIVE)
+        ;
+    }
+
+    private function prepareSearchString(string $search): array
+    {
+        $words = explode(' ', trim($search));
+        $titleConditions = [];
+        $codeConditions = [];
+
+        foreach ($words as $word) {
+            $wordEscaped = str_replace("'", "''", trim($word));
+            $titleConditions[] = "p.title LIKE '%" . $wordEscaped . "%'";
+            $codeConditions[] = "p.productCode LIKE '%" . $wordEscaped . "%'";
+        }
+
+        $titleQuery = '(' . implode(' AND ', $titleConditions) . ')';
+        $codeQuery = '(' . implode(' AND ', $codeConditions) . ')';
+
+        return [$titleQuery, $codeQuery];
     }
 
     public function create(Product $product): void

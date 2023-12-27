@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,19 +26,25 @@ class SearchPageController extends BaseController
         parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function getSearch(PaginatorInterface $paginator, Request $request): Response
     {
         $limit = $this->settingRepository->findOneBy(['slug' => 'pagination_limit']);
 
-        $query = $request->query->get('search');
+        $search = $request->query->get('search');
 
-        $products = $this->productRepository->findBySearch($query);
+        $products = $this->productRepository->findBySearch($search);
 
         $pagination = $paginator->paginate(
             $products,
             $request->query->getInt('page', 1),
             $limit->getValue()
         );
+
+        $categories = $this->categoryRepository->getCategoriesTree();
 
         if ($request->isXmlHttpRequest()) {
             return new Response(json_encode([
@@ -46,8 +54,9 @@ class SearchPageController extends BaseController
             ]));
         } else {
             return $this->renderTemplate($request, 'search_page/index.html.twig', [
-                'pagination' => $pagination,
-                'searchString' => $query
+                'pagination'     => $pagination,
+                'searchString'   => $search,
+                'categoriesTree' => $this->productRepository->getCategoriesTreeForSearch($categories, $search),
             ]);
         }
     }

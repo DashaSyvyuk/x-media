@@ -40,6 +40,7 @@ class CategoryPageController extends BaseController
         $priceTo = $request->query->get('price_to');
         $limit = $this->settingRepository->findOneBy(['slug' => 'pagination_limit']);
         $filters = $this->filterRepository->findByFilterAttributes($query);
+        $search = $request->query->get('search');
 
         $category = $this->categoryRepository->findOneBy(['slug' => $slug, 'status' => 'ACTIVE']);
 
@@ -52,7 +53,7 @@ class CategoryPageController extends BaseController
         ]);
 
         $products = $this->productRepository->findByCategoryAndAttributes(
-            $category, $filters, $order, $direction, $priceFrom, $priceTo
+            $category, $filters, $search, $order, $direction, $priceFrom, $priceTo
         );
 
         $pagination = $paginator->paginate(
@@ -61,7 +62,7 @@ class CategoryPageController extends BaseController
             $limit->getValue()
         );
 
-        $prices = $this->productRepository->getMinAndMaxPriceInCategory($category, $filters, $priceFrom, $priceTo);
+        $prices = $this->productRepository->getMinAndMaxPriceInCategory($category, $filters, $search, $priceFrom, $priceTo);
 
         $query['price_from'] = $priceFrom;
         $query['price_to'] = $priceTo;
@@ -86,14 +87,8 @@ class CategoryPageController extends BaseController
                 'direction'    => $direction,
                 'minPrice'     => $prices['min_price'],
                 'maxPrice'     => $prices['max_price'],
+                'searchString' => $search,
             ]);
         }
-    }
-
-    private function getFilters(?string $filters): array
-    {
-        $attributes = explode(';', $filters);
-
-        return !empty($attributes[0]) ? $attributes : [];
     }
 }

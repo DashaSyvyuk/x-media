@@ -32,7 +32,7 @@ $('.product img').on('mouseover', (e) => nextImage(e));
 $('.product img').on('mouseout', (e) => prevImage(e));
 
 $('#search').on('submit', (e) => {
-    const searchString = $('#search input').val();
+    const searchString = $('#search input[type=text]').val();
 
     if (searchString.length < 3 && searchString.length !== 0) {
         $('#search input').addClass('red');

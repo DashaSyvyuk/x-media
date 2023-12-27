@@ -15,7 +15,7 @@
         <span>{{ category.title }} <span class="category-title-gray">{% if categoryTree|length == 0 %}({{ pagination.getTotalItemCount() }}){% endif %}</span></span>
     </div>
 
-    {% if categoryTree|length > 0 %}
+    {% if categoryTree|length > 0 and searchString is not defined %}
         {% include 'm/partials/category-list.html.twig' %}
     {% else %}
 

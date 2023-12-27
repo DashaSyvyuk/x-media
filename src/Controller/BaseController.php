@@ -106,4 +106,11 @@ class BaseController extends AbstractController
             'totalCount' => $totalCount
         ];
     }
+
+    public function getFilters(?string $filters): array
+    {
+        $attributes = explode(';', $filters);
+
+        return !empty($attributes[0]) ? $attributes : [];
+    }
 }

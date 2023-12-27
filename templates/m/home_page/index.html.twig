@@ -9,7 +9,7 @@
 {% block body %}
 
 <div id="search-block">
-    <form action="/search" method="GET" id="search">
+    <form action="{% if category is defined %}{{ path('categories', {'slug': category.getSlug()}) }}{% else %}/search{% endif %}" method="GET" id="search">
         <input type="text" name="search" placeholder="Пошук..." autocomplete="off" value="{% if searchString is defined %}{{ searchString }}{% endif %}">
         <p class="error"></p>
         <button type="submit"><img src="/images/search.svg" /></button>

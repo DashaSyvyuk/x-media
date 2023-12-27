@@ -54,9 +54,11 @@ function getUrl() {
     const orderBy = getOrderBy();
     const priceFrom = getPriceFrom();
     const priceTo = getPriceTo();
+    const search = getSearch();
 
     return '?' + (filter.length ? filter : '') + (orderBy.length ? '&' + orderBy : '')
-        + (priceFrom.length ? '&' + priceFrom : '') + (priceTo.length ? '&' + priceTo : '');
+        + (priceFrom.length ? '&' + priceFrom : '') + (priceTo.length ? '&' + priceTo : '')
+        + (search.length ? '&' + search : '');
 }
 
 function getOrderBy() {
@@ -111,6 +113,17 @@ function getPriceTo() {
 
     if (value.length) {
         return 'price_to=' + value.replace(' ', '');
+    }
+
+    return '';
+}
+
+function getSearch() {
+    const target = $('#search input[type=text]');
+    const value = target.val();
+
+    if (value.length) {
+        return 'search=' + value;
     }
 
     return '';
