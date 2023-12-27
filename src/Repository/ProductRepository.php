@@ -45,12 +45,12 @@ class ProductRepository extends ServiceEntityRepository
 
     public function findBySearch(string $search): QueryBuilder
     {
-        $words = explode(' ', $search);
+        $words = explode(' ', trim($search));
         $titleConditions = [];
         $codeConditions = [];
 
         foreach ($words as $word) {
-            $wordEscaped = str_replace("'", "''", $word);
+            $wordEscaped = str_replace("'", "''", trim($word));
             $titleConditions[] = "p.title LIKE '%" . $wordEscaped . "%'";
             $codeConditions[] = "p.productCode LIKE '%" . $wordEscaped . "%'";
         }

@@ -33,11 +33,7 @@ class FeedbackCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('author')->setLabel('Автор');
         yield TextField::new('email', null)->setLabel('Email');
-        yield ChoiceField::new('status')->setChoices([
-            'Новий' => 'NEW',
-            'Підтверджено' => 'CONFIRMED',
-            'Заблокований' => 'DISABLED',
-        ])->setLabel('Статус');
+        yield ChoiceField::new('status')->setChoices(Feedback::STATUSES)->setLabel('Статус');
         yield TextareaField::new('comment')->setLabel('Коментар')->hideOnIndex();
         yield TextareaField::new('answer')->setLabel('Відповідь')->hideOnIndex();
     }

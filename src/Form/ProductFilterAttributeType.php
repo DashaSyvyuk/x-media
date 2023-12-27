@@ -6,8 +6,6 @@ use App\Entity\Filter;
 use App\Entity\FilterAttribute;
 use App\Entity\ProductFilterAttribute;
 use App\Repository\FilterRepository;
-use Doctrine\ORM\QueryBuilder;
-use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

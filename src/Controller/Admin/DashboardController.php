@@ -19,6 +19,7 @@ use App\Entity\SupplierOrder;
 use App\Entity\User;
 use App\Entity\Warehouse;
 use App\Repository\CommentRepository;
+use App\Repository\FeedbackRepository;
 use App\Repository\OrderRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -34,6 +35,7 @@ class DashboardController extends AbstractDashboardController
     public function __construct(
         private readonly OrderRepository $orderRepository,
         private readonly CommentRepository $commentRepository,
+        private readonly FeedbackRepository $feedbackRepository,
     )
     {
     }
@@ -82,6 +84,7 @@ class DashboardController extends AbstractDashboardController
         // yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         $ordersCount = $this->orderRepository->count(['status' => Order::NEW]);
         $commentsCount = $this->commentRepository->count(['status' => Comment::STATUS_NEW]);
+        $feedbacksCount = $this->feedbackRepository->count(['status' => Feedback::STATUS_NEW]);
 
         yield MenuItem::subMenu('Контент', 'fas fa-box-open')->setSubItems([
             MenuItem::linkToCrud('Товари', 'fas fa-box-open', Product::class),
@@ -90,7 +93,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Слайдер', 'fas fa-image', Slider::class),
             MenuItem::linkToCrud('Акції', 'fa fa-percent', Promotion::class),
             MenuItem::linkToCrud(sprintf('Коментарі (%s)', $commentsCount), 'fas fa-comment', Comment::class),
-            MenuItem::linkToCrud('Відгуки', 'fas fa-comment', Feedback::class),
+            MenuItem::linkToCrud(sprintf('Відгуки (%s)', $feedbacksCount), 'fas fa-comment', Feedback::class),
         ]);
 
         yield MenuItem::subMenu(sprintf('Замовлення (%d)', $ordersCount), 'fas fa-list')->setSubItems([

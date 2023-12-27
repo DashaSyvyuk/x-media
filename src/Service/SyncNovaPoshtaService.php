@@ -15,8 +15,6 @@ class SyncNovaPoshtaService
 
     private Client $client;
 
-    private SettingRepository $settingRepository;
-
     private NovaPoshtaCityRepository $novaPoshtaCityRepository;
 
     private NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository;
@@ -26,18 +24,17 @@ class SyncNovaPoshtaService
         NovaPoshtaCityRepository $novaPoshtaCityRepository,
         NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
     ) {
-        $this->settingRepository = $settingRepository;
         $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
         $this->novaPoshtaOfficeRepository = $novaPoshtaOfficeRepository;
-        $this->key = $this->settingRepository->findOneBy(['slug' => 'nova_poshta_api_key'])->getValue();
+        $this->key = $settingRepository->findOneBy(['slug' => 'nova_poshta_api_key'])->getValue();
         $this->client = new Client(['base_uri' => 'https://api.novaposhta.ua']);
     }
 
     public function execute(): void
     {
-        /*foreach ($this->syncCities() as $item) {
+        foreach ($this->syncCities() as $item) {
             $this->saveCity($item);
-        }*/
+        }
 
         foreach ($this->syncOffices() as $item) {
             $this->saveOffice($item);

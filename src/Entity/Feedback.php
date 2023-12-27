@@ -19,6 +19,16 @@ class Feedback
 {
     use DateStorageTrait;
 
+    const STATUS_NEW = 'NEW';
+    const STATUS_CONFIRMED = 'CONFIRMED';
+    const STATUS_DISABLED = 'DISABLED';
+
+    const STATUSES = [
+        'Новий'         => self::STATUS_NEW,
+        'Підтверджено'  => self::STATUS_CONFIRMED,
+        'Заблокований'  => self::STATUS_DISABLED,
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

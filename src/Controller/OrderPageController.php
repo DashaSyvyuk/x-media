@@ -86,7 +86,7 @@ class OrderPageController extends BaseController
     {
         if (isset($_COOKIE['cart'])) {
             $user = null;
-            if ($email = $request->request->get('email')) {
+            if ($email = trim($request->request->get('email'))) {
                 $user = $this->userRepository->findOneBy(['email' => $email]);
             }
 
@@ -95,14 +95,14 @@ class OrderPageController extends BaseController
 
             $order = $this->orderRepository->create([
                 'orderNumber' => $this->orderNumber->generateOrderNumber(),
-                'name'        => $request->request->get('name'),
-                'surname'     => $request->request->get('surname'),
+                'name'        => trim($request->request->get('name')),
+                'surname'     => trim($request->request->get('surname')),
                 'address'     => $this->getAddress($request->request),
-                'phone'       => $request->request->get('phone'),
-                'email'       => $request->request->get('email') ?? '',
-                'paytype'     => $request->request->get('paytype'),
-                'deltype'     => $request->request->get('deltype'),
-                'comment'     => $request->request->get('comment') ?? '',
+                'phone'       => trim($request->request->get('phone')),
+                'email'       => trim($request->request->get('email')) ?? '',
+                'paytype'     => trim($request->request->get('paytype')),
+                'deltype'     => trim($request->request->get('deltype')),
+                'comment'     => trim($request->request->get('comment')) ?? '',
                 'total'       => $totalCart['totalPrice'],
                 'products'    => $totalCart['products'],
                 'user'        => $user,
@@ -167,9 +167,9 @@ class OrderPageController extends BaseController
 
     private function getAddress($data): ?string
     {
-        $address = $data->get('address');
-        $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $data->get('city')]);
-        $office = $this->novaPoshtaOfficeRepository->findOneBy(['ref' => $data->get('office')]);
+        $address = trim($data->get('address'));
+        $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => trim($data->get('city'))]);
+        $office = $this->novaPoshtaOfficeRepository->findOneBy(['ref' => trim($data->get('office'))]);
         $pickUpPoint = $this->settingRepository->findOneBy(['slug' => 'pick_up_point_address']);
 
         return $city ? $city . ', ' . $office : (!empty($address) ? $address : $pickUpPoint->getValue() ?? null);
