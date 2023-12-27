@@ -28,9 +28,9 @@ class OrderItem
     private int $count = 0;
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned"=true})
+     * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=true)
      */
-    private int $price = 0;
+    private ?int $price = 0;
 
     /**
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
@@ -95,12 +95,12 @@ class OrderItem
         $this->count = $count;
     }
 
-    public function getPrice(): int
+    public function getPrice(): ?int
     {
         return $this->price;
     }
 
-    public function setPrice(int $price): void
+    public function setPrice(?int $price): void
     {
         $this->price = $price;
     }

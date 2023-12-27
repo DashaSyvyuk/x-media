@@ -4,15 +4,15 @@ namespace App\EventListener;
 
 use App\Entity\OrderItem;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
-use Doctrine\ORM\Event\PostUpdateEventArgs;
+use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Events;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-#[AsEntityListener(event: Events::postUpdate, method: 'postUpdate', entity: OrderItem::class)]
-class OrderItemSubscriber
+#[AsEntityListener(event: Events::postPersist, method: 'postPersist', entity: OrderItem::class)]
+class OrderItemPostPersistSubscriber
 {
     /**
      * @throws ContainerExceptionInterface
@@ -20,7 +20,7 @@ class OrderItemSubscriber
      * @throws TransportExceptionInterface
      * @throws Exception
      */
-    public function postUpdate(OrderItem $orderItem, PostUpdateEventArgs $args): void
+    public function postPersist(OrderItem $orderItem, PostPersistEventArgs $args): void
     {
         $em = $args->getEntityManager();
         $order = $orderItem->getOrder();
@@ -28,6 +28,7 @@ class OrderItemSubscriber
 
         foreach ($order->getItems() as $item) {
             $total += ($item->getPrice() ?: $item->getProduct()->getPrice()) * $item->getCount();
+            $item->setPrice($item->getPrice() ?: $item->getProduct()->getPrice());
         }
 
         $order->setTotal($total);
