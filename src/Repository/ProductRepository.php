@@ -325,16 +325,30 @@ class ProductRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function findBySearch(string $search): QueryBuilder
+    public function findBySearch(string $search, ?string $vendors, ?string $order, ?string $direction): QueryBuilder
     {
         [$titleQuery, $codeQuery] = $this->prepareSearchString($search);
 
-        return $this->createQueryBuilder('p')
+        $query = $this->createQueryBuilder('p')
             ->orWhere($titleQuery)
             ->orWhere($codeQuery)
             ->andWhere('p.status = :status')
-            ->setParameter('status', Product::STATUS_ACTIVE)
-        ;
+            ->setParameter('status', Product::STATUS_ACTIVE);
+
+        if ($vendors) {
+            $query = $query
+                ->leftJoin('p.filterAttributes', 'filterAttributes')
+                ->leftJoin('filterAttributes.filterAttribute', 'filterAttribute')
+                ->andWhere('filterAttribute.value IN (:vendors)')
+                ->setParameter('vendors', explode(',', $vendors))
+            ;
+        }
+
+        if ($order && $direction) {
+            $query->orderBy('p.' . $order, $direction);
+        }
+
+        return $query;
     }
 
     private function prepareSearchString(string $search): array

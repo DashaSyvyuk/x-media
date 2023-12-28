@@ -1,15 +1,15 @@
-<form id="promotion-filter-form">
+<form id="search-filter-form">
     <div class="selected-filters">
     </div>
-    <div class="filter promotion-filter-parameter">
+    <div class="filter search-filter-parameter">
         <p class="filter-title">Категорії:</p>
-        <ul class="filter promotion-category-outer">
+        <ul class="filter search-category-outer">
             {% for category in categoriesTree %}
                 <li>
-                    <a href="{{ path('categories', {'slug': category.slug, 'search': searchString}) }}" class="no-link-style">
+                    <a href="{% if category.children|length > 0 %}{{ path('search_category', {'categorySlug': category.slug, 'search': searchString}) }}{% else %}{{ path('categories', {'slug': category.slug, 'search': searchString}) }}{% endif %}" class="no-link-style">
                         {{ category.title }} <span>({{ category.productsCount }})</span>
                     </a>
-                    <ul class="promotion-category-inner">
+                    <ul class="search-category-inner">
                         {% for child in category.children %}
                             <li>
                                 <a href="{{ path('categories', {'slug': child.slug, 'search': searchString}) }}" class="no-link-style">
@@ -21,5 +21,23 @@
                 </li>
             {% endfor %}
         </ul>
+    </div>
+
+    <div class="filter search-filter-parameter">
+        <p class="filter-title">Марка</p>
+        <div class="outer">
+            <div class="inner">
+                {% for attribute in filters %}
+                    <label class="container">{{ attribute }}
+                        <input
+                            type="checkbox"
+                            name="{{ attribute }}"
+                            {% if attribute in vendors %}checked{% endif %}
+                        >
+                        <span class="checkmark"></span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </form>

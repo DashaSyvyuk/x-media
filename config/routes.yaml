@@ -31,6 +31,10 @@ search:
     path: /search
     controller: App\Controller\SearchPageController::getSearch
 
+search_category:
+    path: /search/{categorySlug}
+    controller: App\Controller\SearchPageController::getSearch
+
 delivery_and_pay:
     path: /delivery-and-pay
     controller: App\Controller\DeliveryAndPayController::index

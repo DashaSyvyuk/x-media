@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('category') }}
+    {{ encore_entry_script_tags('search') }}
     {{ encore_entry_script_tags('cart') }}
     {{ encore_entry_script_tags('app') }}
 
@@ -24,27 +24,31 @@
             <a class="selected">Пошук</a>
         </div>
 
-        <div id="filters">
-            {% include 'partials/search-filters.html.twig' %}
-        </div>
-
-        <div id="products-block">
-            <div class="order-by">
-                <select name="order">
-                    <option value="price" data-direction="asc" {% if order is defined and order=='price' and direction is defined and direction=='asc' %}selected{% endif %}>
-                        Від дешевих до дорогих
-                    </option>
-                    <option value="price" data-direction="desc" {% if order is defined and order=='price' and direction is defined and direction=='desc' %}selected{% endif %}>
-                        Від дорогих до дешевих
-                    </option>
-                    <option value="createdAt" data-direction="desc" {% if order is defined and order=='createdAt' and direction is defined and direction=='desc' %}selected{% endif %}>
-                        Новинки
-                    </option>
-                </select>
+        {% if categoryTree|length > 0 %}
+            {% include 'partials/search-category-list.html.twig' %}
+        {% else %}
+            <div id="filters">
+                {% include 'partials/search-filters.html.twig' %}
             </div>
-            {% include 'partials/product-list.html.twig' %}
-            <div class="loader"></div>
-        </div>
+
+            <div id="search-products-block">
+                <div class="order-by">
+                    <select name="order">
+                        <option value="price" data-direction="asc" {% if order is defined and order=='price' and direction is defined and direction=='asc' %}selected{% endif %}>
+                            Від дешевих до дорогих
+                        </option>
+                        <option value="price" data-direction="desc" {% if order is defined and order=='price' and direction is defined and direction=='desc' %}selected{% endif %}>
+                            Від дорогих до дешевих
+                        </option>
+                        <option value="createdAt" data-direction="desc" {% if order is defined and order=='createdAt' and direction is defined and direction=='desc' %}selected{% endif %}>
+                            Новинки
+                        </option>
+                    </select>
+                </div>
+                {% include 'partials/product-list.html.twig' %}
+                <div class="loader"></div>
+            </div>
+        {% endif %}
     </section>
 
 {% endblock %}
