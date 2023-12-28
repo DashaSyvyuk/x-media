@@ -26,6 +26,11 @@ class Currency
     private string $title = "";
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $shortTitle = "";
+
+    /**
      * @ORM\Column(type="string")
      */
     private string $code = "";
@@ -53,6 +58,16 @@ class Currency
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setShortTitle(?string $shortTitle): void
+    {
+        $this->shortTitle = $shortTitle;
+    }
+
+    public function getShortTitle(): ?string
+    {
+        return $this->shortTitle;
     }
 
     public function setCode(string $code): void

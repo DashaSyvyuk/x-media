@@ -30,8 +30,9 @@ class CurrencyCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
-        yield TextField::new('title')->setLabel('Назва');
-        yield TextField::new('code', null)->setLabel('Код');
-        yield NumberField::new('exchangeRate')->setLabel('Обмінний курс');
+        yield TextField::new('title', 'Назва');
+        yield TextField::new('shortTitle', 'Скорочення');
+        yield TextField::new('code','Код');
+        yield NumberField::new('exchangeRate', 'Обмінний курс');
     }
 }
