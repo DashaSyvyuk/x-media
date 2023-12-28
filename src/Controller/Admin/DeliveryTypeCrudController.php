@@ -37,6 +37,7 @@ class DeliveryTypeCrudController extends AbstractCrudController
         yield TextField::new('title', 'Назва');
         yield IntegerField::new('cost', 'Вартість');
         yield BooleanField::new('enabled', 'Активний');
+        yield IntegerField::new('priority', 'Пріоритет')->hideOnIndex();
         yield AssociationField::new('paymentTypes', 'Способи оплати')->hideOnIndex();
         yield ImageField::new('icon')
             ->setLabel('Іконка')

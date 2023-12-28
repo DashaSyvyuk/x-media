@@ -56,6 +56,11 @@ class DeliveryType
     private $paymentTypes;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $priority = 0;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private DateTime $createdAt;
@@ -162,6 +167,16 @@ class DeliveryType
     public function getPaymentTypes()
     {
         return $this->paymentTypes;
+    }
+
+    public function setPriority(?int $priority): void
+    {
+        $this->priority = $priority;
+    }
+
+    public function getPriority(): ?int
+    {
+        return $this->priority;
     }
 
     public function __toString()
