@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Currency;
+use App\Entity\Debtor;
 use App\Entity\DeliveryType;
 use App\Entity\Feedback;
 use App\Entity\Filter;
@@ -94,6 +95,10 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Акції', 'fa fa-percent', Promotion::class),
             MenuItem::linkToCrud(sprintf('Коментарі (%s)', $commentsCount), 'fas fa-comment', Comment::class),
             MenuItem::linkToCrud(sprintf('Відгуки (%s)', $feedbacksCount), 'fas fa-comment', Feedback::class),
+        ]);
+
+        yield MenuItem::subMenu('Фінанси', 'fa fa-coins')->setSubItems([
+            MenuItem::linkToCrud('Борги', 'fa fa-coins', Debtor::class),
         ]);
 
         yield MenuItem::subMenu(sprintf('Замовлення (%d)', $ordersCount), 'fas fa-list')->setSubItems([

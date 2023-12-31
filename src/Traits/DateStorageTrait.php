@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Entity\Payment;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,6 +24,19 @@ trait DateStorageTrait
             $this->metaKeyword = $this->title;
             $this->metaDescription = $this->title;
         }
+
+        if ($this instanceof Payment) {
+            $debtor = $this->getDebtor();
+            $total = $debtor->getTotal() - $this->getSum();
+            $this->description = sprintf(
+                '%s %s %s = %s %s',
+                number_format($total, 0, '.', ' '),
+                abs($this->getSum()) > 0 ? '+' : '-',
+                number_format(abs($this->getSum()), 0, '.', ' '),
+                number_format((int) $total + $this->getSum(), 0, '.', ' '),
+                $debtor->getCurrency()?->getShortTitle()
+            );
+        }
     }
 
     /**
@@ -36,6 +50,19 @@ trait DateStorageTrait
         if (isset($this->title)) {
             $this->metaKeyword = $this->title;
             $this->metaDescription = $this->title;
+        }
+
+        if ($this instanceof Payment) {
+            $debtor = $this->getDebtor();
+            $total = $debtor->getTotal() - $this->getSum();
+            $this->description = sprintf(
+                '%s %s %s = %s %s',
+                number_format($total, 0, '.', ' '),
+                abs($this->getSum()) > 0 ? '+' : '-',
+                number_format(abs($this->getSum()), 0, '.', ' '),
+                number_format((int) $total + $this->getSum(), 0, '.', ' '),
+                $debtor->getCurrency()?->getShortTitle()
+            );
         }
     }
 }
