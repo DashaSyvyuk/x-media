@@ -2,8 +2,8 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Debtor;
-use App\Form\DebtorPaymentType;
+use App\Entity\Circulation;
+use App\Form\CirculationPaymentType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -12,11 +12,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class DebtorCrudController extends AbstractCrudController
+class CirculationCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Debtor::class;
+        return Circulation::class;
     }
 
     public function configureAssets(Assets $assets): Assets
@@ -28,8 +28,8 @@ class DebtorCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Борг')
-            ->setEntityLabelInPlural('Борги')
+            ->setEntityLabelInSingular('Обіг')
+            ->setEntityLabelInPlural('Обіг')
             ->setDefaultSort(['id' => 'DESC'])
             ->setPaginatorPageSize(10)
             ;
@@ -38,7 +38,7 @@ class DebtorCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
-        yield TextField::new('name', 'Ім\'я')->setColumns(4);
+        yield AssociationField::new('adminUser', 'Email адміна')->setColumns(4);
         yield AssociationField::new('currency', 'Валюта')->setColumns(4);
         yield TextField::new('total', 'Борг')
             ->formatValue(function ($value) {
@@ -51,7 +51,7 @@ class DebtorCrudController extends AbstractCrudController
             ->allowAdd()
             ->allowDelete()
             ->renderExpanded(false)
-            ->setEntryType(DebtorPaymentType::class)
+            ->setEntryType(CirculationPaymentType::class)
             ->setColumns(7)
             ->hideOnIndex()
         ;

@@ -2,7 +2,8 @@
 
 namespace App\Traits;
 
-use App\Entity\Payment;
+use App\Entity\CirculationPayment;
+use App\Entity\DebtorPayment;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,7 +26,7 @@ trait DateStorageTrait
             $this->metaDescription = $this->title;
         }
 
-        if ($this instanceof Payment) {
+        if ($this instanceof DebtorPayment) {
             $debtor = $this->getDebtor();
             $total = $debtor->getTotal() - $this->getSum();
             $this->description = sprintf(
@@ -35,6 +36,19 @@ trait DateStorageTrait
                 number_format(abs($this->getSum()), 0, '.', ' '),
                 number_format((int) $total + $this->getSum(), 0, '.', ' '),
                 $debtor->getCurrency()?->getShortTitle()
+            );
+        }
+
+        if ($this instanceof CirculationPayment) {
+            $circulation = $this->getCirculation();
+            $total = $circulation->getTotal() - $this->getSum();
+            $this->description = sprintf(
+                '%s %s %s = %s %s',
+                number_format($total, 0, '.', ' '),
+                abs($this->getSum()) > 0 ? '+' : '-',
+                number_format(abs($this->getSum()), 0, '.', ' '),
+                number_format((int) $total + $this->getSum(), 0, '.', ' '),
+                $circulation->getCurrency()?->getShortTitle()
             );
         }
     }
@@ -52,7 +66,7 @@ trait DateStorageTrait
             $this->metaDescription = $this->title;
         }
 
-        if ($this instanceof Payment) {
+        if ($this instanceof DebtorPayment) {
             $debtor = $this->getDebtor();
             $total = $debtor->getTotal() - $this->getSum();
             $this->description = sprintf(
@@ -62,6 +76,19 @@ trait DateStorageTrait
                 number_format(abs($this->getSum()), 0, '.', ' '),
                 number_format((int) $total + $this->getSum(), 0, '.', ' '),
                 $debtor->getCurrency()?->getShortTitle()
+            );
+        }
+
+        if ($this instanceof CirculationPayment) {
+            $circulation = $this->getCirculation();
+            $total = $circulation->getTotal() - $this->getSum();
+            $this->description = sprintf(
+                '%s %s %s = %s %s',
+                number_format($total, 0, '.', ' '),
+                abs($this->getSum()) > 0 ? '+' : '-',
+                number_format(abs($this->getSum()), 0, '.', ' '),
+                number_format((int) $total + $this->getSum(), 0, '.', ' '),
+                $circulation->getCurrency()?->getShortTitle()
             );
         }
     }

@@ -42,12 +42,12 @@
                         {% endfor %}
                     </select>
                 </div>
-                {% for deliveryType in deliveryTypes %}
-                    {% if deliveryType.id == 1 %}
-                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info active">
+                {% for key, deliveryType in deliveryTypes %}
+                    {% if deliveryType.id == 1 or deliveryType.id == 4 or deliveryType.id == 6 %}
+                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info {% if key == 0 %}active{% endif %}">
                             <div class="payment">
                                 <p>Спосіб оплати:</p>
-                                <select name="paytype">
+                                <select name="paytype" {% if key != 0 %}disabled="disabled"{% endif %}>
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
                                         {% if paymentType.enabled %}
                                             <option value="{{ paymentType.id }}">{{ paymentType.title }}</option>
@@ -56,11 +56,11 @@
                                 </select>
                             </div>
                         </span>
-                    {% elseif deliveryType.id == 2 %}
-                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info">
+                    {% elseif deliveryType.id == 2 or deliveryType.id == 5 %}
+                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info {% if key == 0 %}active{% endif %}">
                             <div class="payment">
                                 <p>Спосіб оплати:</p>
-                                <select name="paytype" disabled="disabled">
+                                <select name="paytype" {% if key != 0 %}disabled="disabled"{% endif %}>
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
                                         {% if paymentType.enabled %}
                                             <option value="{{ paymentType.id }}">{{ paymentType.title }}</option>
@@ -70,14 +70,14 @@
                             </div>
                             <div>
                                 <p>Адреса:</p>
-                                <textarea name="address" disabled="disabled">{% if user %}{{ user.name }}{% endif %}</textarea>
+                                <textarea name="address" {% if key != 0 %}disabled="disabled"{% endif %}>{% if user %}{{ user.name }}{% endif %}</textarea>
                             </div>
                         </span>
                     {% elseif deliveryType.id == 3 %}
-                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info">
+                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info {% if key == 0 %}active{% endif %}">
                             <div>
                                 <p>Спосіб оплати:</p>
-                                <select name="paytype" disabled="disabled">
+                                <select name="paytype" {% if key != 0 %}disabled="disabled"{% endif %}>
                                     {% for paymentType in deliveryType.getPaymentTypes() %}
                                         {% if paymentType.enabled %}
                                             <option value="{{ paymentType.id }}">{{ paymentType.title }}</option>
@@ -87,7 +87,7 @@
                             </div>
                             <div>
                                 <p>Місто:</p>
-                                <select name="city" id="nova-poshta-city" disabled>
+                                <select name="city" id="nova-poshta-city" {% if key != 0 %}disabled="disabled"{% endif %}>
                                     <option value="">Оберіть місто</option>
                                     {% for city in cities %}
                                         <option value="{{ city.ref }}" {% if user and city.ref == user.novaPoshtaCity %}selected{% endif %}>

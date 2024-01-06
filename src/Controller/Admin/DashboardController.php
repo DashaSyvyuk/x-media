@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Category;
+use App\Entity\Circulation;
 use App\Entity\Comment;
 use App\Entity\Currency;
 use App\Entity\Debtor;
@@ -99,6 +100,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::subMenu('Фінанси', 'fa fa-coins')->setSubItems([
             MenuItem::linkToCrud('Борги', 'fa fa-coins', Debtor::class),
+            MenuItem::linkToCrud('Обіг', 'fa fa-dollar-sign', Circulation::class),
         ]);
 
         yield MenuItem::subMenu(sprintf('Замовлення (%d)', $ordersCount), 'fas fa-list')->setSubItems([

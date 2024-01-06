@@ -122,7 +122,7 @@ function getSearch() {
     const target = $('#search input[type=text]');
     const value = target.val();
 
-    if (value.length) {
+    if (value && value.length) {
         return 'search=' + value;
     }
 

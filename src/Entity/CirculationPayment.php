@@ -7,11 +7,11 @@ use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table("payments")
- * @ORM\Entity(repositoryClass="App\Repository\PaymentRepository")
+ * @ORM\Table("circulation_payments")
+ * @ORM\Entity(repositoryClass="App\Repository\CirculationPaymentRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Payment
+class CirculationPayment
 {
     use DateStorageTrait;
 
@@ -39,9 +39,9 @@ class Payment
 
     /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Debtor")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Circulation")
      */
-    private Debtor $debtor;
+    private Circulation $circulation;
 
     /**
      * @ORM\Column(type="datetime")
@@ -88,14 +88,14 @@ class Payment
         $this->description = $description;
     }
 
-    public function getDebtor(): Debtor
+    public function getCirculation(): Circulation
     {
-        return $this->debtor;
+        return $this->circulation;
     }
 
-    public function setDebtor(Debtor $debtor): void
+    public function setCirculation(Circulation $circulation): void
     {
-        $this->debtor = $debtor;
+        $this->circulation = $circulation;
     }
 
     public function getCreatedAt(): DateTime

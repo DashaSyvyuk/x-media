@@ -8,11 +8,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table("debtors")
- * @ORM\Entity(repositoryClass="App\Repository\DebtorRepository")
+ * @ORM\Table("circulations")
+ * @ORM\Entity(repositoryClass="App\Repository\CirculationRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Debtor
+class Circulation
 {
     use DateStorageTrait;
 
@@ -24,9 +24,10 @@ class Debtor
     private ?int $id = 0;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\AdminUser")
      */
-    private string $name = "";
+    private ?AdminUser $adminUser = null;
 
     /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
@@ -35,7 +36,7 @@ class Debtor
     private Currency $currency;
 
     /**
-     * @ORM\OneToMany(targetEntity="DebtorPayment", mappedBy="debtor", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\CirculationPayment", mappedBy="circulation", cascade={"all"}, orphanRemoval=true)
      */
     private $payments;
 
@@ -61,14 +62,14 @@ class Debtor
         return $this->id;
     }
 
-    public function setName(string $name): void
+    public function setAdminUser(?AdminUser $adminUser): void
     {
-        $this->name = $name;
+        $this->adminUser = $adminUser;
     }
 
-    public function getName(): string
+    public function getAdminUser(): ?AdminUser
     {
-        return $this->name;
+        return $this->adminUser;
     }
 
     public function setCurrency(Currency $currency): void
@@ -86,15 +87,15 @@ class Debtor
         return $this->payments;
     }
 
-    public function addPayment(DebtorPayment $payment): void
+    public function addPayment(CirculationPayment $payment): void
     {
         if (!$this->payments->contains($payment)) {
-            $payment->setDebtor($this);
+            $payment->setCirculation($this);
             $this->payments[] = $payment;
         }
     }
 
-    public function removePayment(DebtorPayment $payment): void
+    public function removePayment(CirculationPayment $payment): void
     {
         if ($this->payments->contains($payment)) {
             $this->payments->removeElement($payment);
@@ -134,6 +135,6 @@ class Debtor
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->adminUser?->getEmail();
     }
 }
