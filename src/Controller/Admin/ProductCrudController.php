@@ -9,6 +9,7 @@ use App\Form\CommentType;
 use App\Form\ProductCharacteristicType;
 use App\Form\ProductFilterAttributeType;
 use App\Form\ProductImageType;
+use App\Form\ProductPromotionType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Service\GenerateHotlineXmlService;
@@ -156,10 +157,10 @@ class ProductCrudController extends AbstractCrudController
             ->renderExpanded()
             ->onlyOnForms();
 
-        yield FormField::addPanel('Відгуки');
-        yield CollectionField::new('comments')
+        yield FormField::addPanel('Акції');
+        yield CollectionField::new('promotionProducts')
             ->setColumns(12)
-            ->setEntryType(CommentType::class)
+            ->setEntryType(ProductPromotionType::class)
             ->renderExpanded(false)
             ->onlyOnForms();
     }
