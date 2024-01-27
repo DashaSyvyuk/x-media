@@ -32,7 +32,7 @@ trait DateStorageTrait
             $this->description = sprintf(
                 '%s %s %s = %s %s',
                 number_format($total, 0, '.', ' '),
-                abs($this->getSum()) > 0 ? '+' : '-',
+                $this->getSum() > 0 ? '+' : '-',
                 number_format(abs($this->getSum()), 0, '.', ' '),
                 number_format((int) $total + $this->getSum(), 0, '.', ' '),
                 $debtor->getCurrency()?->getShortTitle()
@@ -45,7 +45,7 @@ trait DateStorageTrait
             $this->description = sprintf(
                 '%s %s %s = %s %s',
                 number_format($total, 0, '.', ' '),
-                abs($this->getSum()) > 0 ? '+' : '-',
+                $this->getSum() > 0 ? '+' : '-',
                 number_format(abs($this->getSum()), 0, '.', ' '),
                 number_format((int) $total + $this->getSum(), 0, '.', ' '),
                 $circulation->getCurrency()?->getShortTitle()
@@ -72,7 +72,7 @@ trait DateStorageTrait
             $this->description = sprintf(
                 '%s %s %s = %s %s',
                 number_format($total, 0, '.', ' '),
-                abs($this->getSum()) > 0 ? '+' : '-',
+                $this->getSum() > 0 ? '+' : '-',
                 number_format(abs($this->getSum()), 0, '.', ' '),
                 number_format((int) $total + $this->getSum(), 0, '.', ' '),
                 $debtor->getCurrency()?->getShortTitle()
@@ -85,7 +85,7 @@ trait DateStorageTrait
             $this->description = sprintf(
                 '%s %s %s = %s %s',
                 number_format($total, 0, '.', ' '),
-                abs($this->getSum()) > 0 ? '+' : '-',
+                $this->getSum() > 0 ? '+' : '-',
                 number_format(abs($this->getSum()), 0, '.', ' '),
                 number_format((int) $total + $this->getSum(), 0, '.', ' '),
                 $circulation->getCurrency()?->getShortTitle()
