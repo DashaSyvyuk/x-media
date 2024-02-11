@@ -19,10 +19,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use SM\Factory\Factory;
 use SM\SMException;
 
-class OrderCrudController extends AbstractCrudController
+#[Security("is_granted('ROLE_SUPER_ADMIN')")]
+class
+OrderCrudController extends AbstractCrudController
 {
     public function __construct(
         private readonly Factory $stateFactory,

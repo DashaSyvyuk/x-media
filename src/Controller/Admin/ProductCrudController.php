@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\Product;
 use App\Entity\ProductCharacteristic;
 use App\Entity\ProductFilterAttribute;
-use App\Form\CommentType;
 use App\Form\ProductCharacteristicType;
 use App\Form\ProductFilterAttributeType;
 use App\Form\ProductImageType;
@@ -32,8 +31,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+#[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')")]
 class ProductCrudController extends AbstractCrudController
 {
     public function __construct(

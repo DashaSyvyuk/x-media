@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\AdminUser;
 use App\Entity\Category;
 use App\Entity\Circulation;
 use App\Entity\Comment;
@@ -29,9 +30,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')")]
 class DashboardController extends AbstractDashboardController
 {
     public function __construct(
@@ -92,33 +95,34 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Товари', 'fas fa-box-open', Product::class),
             MenuItem::linkToCrud('Фільтри', 'fas fa-filter', Filter::class),
             MenuItem::linkToCrud('Категорії', 'fas fa-comment', Category::class),
-            MenuItem::linkToCrud('Слайдер', 'fas fa-image', Slider::class),
-            MenuItem::linkToCrud('Акції', 'fa fa-percent', Promotion::class),
-            MenuItem::linkToCrud(sprintf('Коментарі (%s)', $commentsCount), 'fas fa-comment', Comment::class),
-            MenuItem::linkToCrud(sprintf('Відгуки (%s)', $feedbacksCount), 'fas fa-comment', Feedback::class),
+            MenuItem::linkToCrud('Слайдер', 'fas fa-image', Slider::class)->setPermission('ROLE_ADMIN'),
+            MenuItem::linkToCrud('Акції', 'fa fa-percent', Promotion::class)->setPermission('ROLE_ADMIN'),
+            MenuItem::linkToCrud(sprintf('Коментарі (%s)', $commentsCount), 'fas fa-comment', Comment::class)->setPermission('ROLE_ADMIN'),
+            MenuItem::linkToCrud(sprintf('Відгуки (%s)', $feedbacksCount), 'fas fa-comment', Feedback::class)->setPermission('ROLE_ADMIN'),
         ]);
 
         yield MenuItem::subMenu('Фінанси', 'fa fa-coins')->setSubItems([
-            MenuItem::linkToCrud('Борги', 'fa fa-coins', Debtor::class),
+            MenuItem::linkToCrud('Борги', 'fa fa-coins', Debtor::class)->setPermission('ROLE_SUPER_ADMIN'),
             MenuItem::linkToCrud('Обіг', 'fa fa-dollar-sign', Circulation::class),
-        ]);
+        ])->setPermission('ROLE_ADMIN');
 
         yield MenuItem::subMenu(sprintf('Замовлення (%d)', $ordersCount), 'fas fa-list')->setSubItems([
             MenuItem::linkToCrud(sprintf('Замовлення (%d)', $ordersCount), 'fas fa-list', Order::class),
             MenuItem::linkToCrud('Користувачі', 'fa-solid fa-user-secret', User::class),
-        ]);
+        ])->setPermission('ROLE_SUPER_ADMIN');
 
         yield MenuItem::subMenu('Постачальники', 'fa fa-truck')->setSubItems([
             MenuItem::linkToCrud('Постачальники', 'fas fa-truck', Supplier::class),
             MenuItem::linkToCrud('Замовлення', 'fa fa-shopping-cart', SupplierOrder::class),
             MenuItem::linkToCrud('Склади', 'fa fa-archive', Warehouse::class)
-        ]);
+        ])->setPermission('ROLE_ADMIN');
 
         yield MenuItem::subMenu('Налаштування', 'fa fa-cog')->setSubItems([
             MenuItem::linkToCrud('Валюти', 'fas fa-comment', Currency::class),
-            MenuItem::linkToCrud('Налаштування', 'fa fa-cog', Setting::class),
+            MenuItem::linkToCrud('Налаштування', 'fa fa-cog', Setting::class)->setPermission('ROLE_SUPER_ADMIN'),
             MenuItem::linkToCrud('Способи доставки', 'fa fa-bus', DeliveryType::class),
             MenuItem::linkToCrud('Способи оплати', 'fa fa-dollar', PaymentType::class),
-        ]);
+            MenuItem::linkToCrud('Адміни', 'fa-solid fa-user-secret', AdminUser::class),
+        ])->setPermission('ROLE_ADMIN');
     }
 }

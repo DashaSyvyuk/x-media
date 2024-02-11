@@ -12,6 +12,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+
+    const ROLES = [
+        'Холоп'  => self::ROLE_USER,
+        'Кріпак' => self::ROLE_ADMIN,
+        'Бог'    => self::ROLE_SUPER_ADMIN,
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -23,6 +33,21 @@ class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $name;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $surname;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $phone;
 
     /**
      * @ORM\Column(type="json")
@@ -52,6 +77,36 @@ class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getSurname(): string
+    {
+        return $this->surname;
+    }
+
+    public function setSurname(string $surname): void
+    {
+        $this->surname = $surname;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): void
+    {
+        $this->phone = $phone;
+    }
+
     /**
      * A visual identifier that represents this user.
      *
@@ -76,8 +131,6 @@ class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -99,7 +152,7 @@ class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setPassword(string $password): self
     {
-        $this->password = $password;
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
 
         return $this;
     }

@@ -2,29 +2,27 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Currency;
+use App\Entity\AdminUser;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN')")]
-class CurrencyCrudController extends AbstractCrudController
+class AdminUserCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Currency::class;
+        return AdminUser::class;
     }
 
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Валюта')
-            ->setEntityLabelInPlural('Валюти')
-            ->setSearchFields(['title', 'code'])
-            ->setDefaultSort(['id' => 'DESC'])
+            ->setEntityLabelInSingular('Адмін')
+            ->setEntityLabelInPlural('Адміни')
             ->setPaginatorPageSize(10)
             ;
     }
@@ -32,9 +30,14 @@ class CurrencyCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
-        yield TextField::new('title', 'Назва');
-        yield TextField::new('shortTitle', 'Скорочення');
-        yield TextField::new('code','Код');
-        yield NumberField::new('exchangeRate', 'Обмінний курс');
+        yield TextField::new('email', 'Логін');
+        yield TextField::new('password', 'Пароль')->hideOnIndex();
+        yield TextField::new('name', 'Ім\'я');
+        yield TextField::new('surname', 'Прізвище');
+        yield TextField::new('phone', 'Телефон');
+        yield ChoiceField::new('roles', 'Ролі')
+            ->setChoices(AdminUser::ROLES)
+            ->allowMultipleChoices(true)
+        ;
     }
 }
