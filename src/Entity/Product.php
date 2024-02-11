@@ -26,7 +26,7 @@ class Product
     const STATUS_BLOCKED = 'Заблокований';
 
     const AVAILABILITY_AVAILABLE = 'в наявності';
-    const AVAILABILITY_TO_ORDER = 'під замовлення';
+    const AVAILABILITY_TO_ORDER = 'під замовлення (1-3 дні)';
     const AVAILABILITY_PRE_ORDER = 'передзамовлення';
 
     const AVAILABILITIES = [
