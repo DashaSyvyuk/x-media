@@ -5,7 +5,7 @@
             {% for attribute in filter.getFilterAttributes() %}
                 {% if attribute.id in query %}
                     <div class="item" data-filter-id="{{ attribute.id }}">
-                        <span class="attribute-title">{{ attribute.value }}</span>
+                        <span class="attribute-title">{{ attribute.value|raw }}</span>
                         <img src="/images/close.png">
                     </div>
                 {% endif %}
@@ -67,7 +67,7 @@
                         {% if filter.openedCount > 0 and filter.openedCount == (loop.index - 1) and filter.openedCount < filter.getFilterAttributes()|length %}
                             <div class="hidden-part">
                         {% endif %}
-                        <label class="container">{{ attribute.value }}
+                        <label class="container">{{ attribute.value|raw }}
                             <input
                                     type="checkbox"
                                     name="{{ attribute.id }}"
