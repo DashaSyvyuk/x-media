@@ -1,5 +1,6 @@
 <div id="categories-block">
     {% for category in categoryTree %}
+        {% if category.productsCount > 0 %}
         <div class="category-item">
             <a class="no-link-style" href="/categories/{{ category.slug }}">
                 <div class="category-image">
@@ -10,5 +11,6 @@
                 </div>
             </a>
         </div>
+        {% endif %}
     {% endfor %}
 </div>

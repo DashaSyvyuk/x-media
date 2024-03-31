@@ -52,7 +52,7 @@ class CategoryRepository extends ServiceEntityRepository
             $categoryArray['slug'] = $category->getSlug();
             $categoryArray['showInHeader'] = $category->getShowInHeader();
             $categoryArray['children'] = $this->getCategoriesTree($category->getId());
-            $categoryArray['productsCount'] = $category->getProducts()->count();
+            $categoryArray['productsCount'] = $category->getActiveProducts()->count();
             $result[] = $categoryArray;
         }
 

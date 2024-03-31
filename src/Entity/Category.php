@@ -254,6 +254,13 @@ class Category
         return $this->products;
     }
 
+    public function getActiveProducts()
+    {
+        return $this->products->filter(function(Product $product) {
+            return $product->getStatus() === Product::STATUS_ACTIVE;
+        });
+    }
+
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
