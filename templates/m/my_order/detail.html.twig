@@ -21,7 +21,7 @@
             <div class="main-part">
                 <div class="order-detail-page">
                     <div class="info">
-                        <div class="status"><span class="label">Статус</span><br>{{ order.status }}</div>
+                        <div class="status"><span class="label">Статус</span><br>{{ constant('App\\Entity\\Order::GROUPED_STATUSES')[order.status]['title'] }}</div>
                         <div class="datetime right"><span class="label">Дата створення</span><br>{{ order.createdAt.format('Y-m-d H:i:s') }}</div>
                         <div class="amount"><span class="label">Кількість продуктів</span><br>{{ order.items.count }}</div>
                         <div class="price right"><span class="label">Вартість</span><br><span class="green">{{ order.total|number_format(0, '.', ' ') }} грн</span></div>
