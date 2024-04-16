@@ -56,7 +56,7 @@ class GeneratePromXmlService
                                 ->add('name_ua', $product['title'])
                                 ->add('categoryId', $product['categoryId'])
                                 ->add('portal_category_url', $product['promCategoryLink'])
-                                ->add('price', ceil($product['price'] * 1.03 / 100) * 100)
+                                ->add('price', ceil($product['price'] * 1.04 / 100) * 100)
                                 ->add('quantity_in_stock', 10)
                                 ->add('currencyId', 'UAH')
                                 ->loop(function (XMLArray $XMLArray) use ($images) {
