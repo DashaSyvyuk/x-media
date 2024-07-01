@@ -20,11 +20,15 @@ $('.rating').each(function() {
 });
 
 function nextImage(event) {
-    $(event.currentTarget).attr('src', $(event.currentTarget).data('next'));
+    if ($(event.currentTarget).data('next').length) {
+        $(event.currentTarget).attr('src', $(event.currentTarget).data('next'));
+    }
 }
 
 function prevImage(event) {
-    $(event.currentTarget).attr('src', $(event.currentTarget).data('first'));
+    if ($(event.currentTarget).data('first').length) {
+        $(event.currentTarget).attr('src', $(event.currentTarget).data('first'));
+    }
 }
 
 $('.product img').on('mouseover', (e) => nextImage(e));
