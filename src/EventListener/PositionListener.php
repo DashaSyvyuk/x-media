@@ -29,21 +29,21 @@ class PositionListener
         $entityManager = $args->getObjectManager();
 
         if ($entity instanceof ProductImage) {
-            $productImage = $this->productImageRepository->findOneBy([], ['position' => 'DESC']);
+            $productImage = $this->productImageRepository->findOneBy(['product' => $entity->getProduct()], ['position' => 'DESC']);
 
             $entity->setPosition($productImage->getPosition() + 1);
             $entityManager->flush();
         }
 
         if ($entity instanceof ProductCharacteristic) {
-            $productCharacteristic = $this->productCharacteristicRepository->findOneBy([], ['position' => 'DESC']);
+            $productCharacteristic = $this->productCharacteristicRepository->findOneBy(['product' => $entity->getProduct()], ['position' => 'DESC']);
 
             $entity->setPosition($productCharacteristic->getPosition() + 1);
             $entityManager->flush();
         }
 
         if ($entity instanceof Category) {
-            $category = $this->categoryRepository->findOneBy([], ['position' => 'DESC']);
+            $category = $this->categoryRepository->findOneBy(['parent' => $entity->getParent()], ['position' => 'DESC']);
 
             $entity->setPosition($category->getPosition() + 1);
             $entityManager->flush();

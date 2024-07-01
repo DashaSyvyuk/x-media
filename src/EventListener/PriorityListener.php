@@ -36,7 +36,7 @@ class PriorityListener
         }
 
         if ($entity instanceof FilterAttribute) {
-            $filterAttribute = $this->filterAttributeRepository->findOneBy([], ['priority' => 'DESC']);
+            $filterAttribute = $this->filterAttributeRepository->findOneBy(['filter' => $entity->getFilter()], ['priority' => 'DESC']);
 
             $entity->setPriority($filterAttribute->getPriority() + 1);
             $entityManager->flush();
