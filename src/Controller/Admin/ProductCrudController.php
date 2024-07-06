@@ -63,7 +63,7 @@ class ProductCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Товари')
             ->setEntityLabelInPlural('Товар')
-            ->setSearchFields(['title'])
+            ->setSearchFields(['id', 'title', 'productCode'])
             ->setDefaultSort(['id' => 'DESC'])
             ->setPaginatorPageSize(10)
             ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
