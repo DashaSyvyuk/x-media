@@ -4,9 +4,14 @@ namespace App\Controller\Admin;
 
 use App\Entity\Debtor;
 use App\Form\DebtorPaymentType;
+use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -32,8 +37,7 @@ class DebtorCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Борг')
             ->setEntityLabelInPlural('Борги')
-            ->setDefaultSort(['id' => 'DESC'])
-            ->setPaginatorPageSize(10)
+            ->setPaginatorPageSize(30)
             ;
     }
 
@@ -57,5 +61,18 @@ class DebtorCrudController extends AbstractCrudController
             ->setColumns(7)
             ->hideOnIndex()
         ;
+    }
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
+    {
+        $queryBuilder = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+
+        if (0 === count($searchDto->getSort())) {
+            $queryBuilder
+                ->addSelect('(SELECT SUM(payment.sum) FROM App\Entity\DebtorPayment payment WHERE payment.debtor=entity) AS HIDDEN total')
+                ->addOrderBy('total', 'DESC');
+        }
+
+        return $queryBuilder;
     }
 }
