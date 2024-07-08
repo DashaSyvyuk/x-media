@@ -15,7 +15,15 @@
     </div>
 
     <div id="products-block">
-        {% include 'm/partials/product-list.html.twig' %}
+        {% if pagination|length == 0 %}
+            <br><br>
+            <p>
+                За вашим запитом товари не знайдено.<br> Не хвилюйтеся, перевірте Ваш запит або
+                перегляньте наші популярні категорії або зв'яжіться з нами для додаткової допомоги!
+            </p>
+        {% else %}
+            {% include 'm/partials/product-list.html.twig' %}
+        {% endif %}
     </div>
 
 {% endblock %}

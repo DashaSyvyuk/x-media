@@ -24,8 +24,15 @@
             <a class="selected">Пошук</a>
         </div>
 
-        {% if categoryTree|length > 0 %}
-            {% include 'partials/search-category-list.html.twig' %}
+        {% if pagination|length == 0 %}
+            <div id="filters"></div>
+            <div id="search-products-block">
+                <br><br>
+                <p>
+                    За вашим запитом товари не знайдено.<br> Не хвилюйтеся, перевірте Ваш запит або
+                    перегляньте наші популярні категорії або зв'яжіться з нами для додаткової допомоги!
+                </p>
+            </div>
         {% else %}
             <div id="filters">
                 {% include 'partials/search-filters.html.twig' %}
