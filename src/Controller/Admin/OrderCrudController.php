@@ -101,6 +101,8 @@ OrderCrudController extends AbstractCrudController
         yield FormField::addPanel('Інформація про доставку');
 
         yield TextField::new('address', 'Адреса')->hideOnIndex()->setColumns(7);
+        yield AssociationField::new('novaPoshtaCity', 'Місто (Нова пошта)')->hideOnIndex()->setColumns(7);
+        yield AssociationField::new('novaPoshtaOffice', 'Відділення (Нова пошта)')->hideOnIndex()->setColumns(7);
         yield AssociationField::new('paytype', 'Спосіб оплати')->hideOnIndex()->setColumns(7);
         yield AssociationField::new('deltype', 'Спосіб доставки')->hideOnIndex()->setColumns(7);
 

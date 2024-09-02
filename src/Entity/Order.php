@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Traits\DateStorageTrait;
+use App\Validator\OrderAddress;
 use App\Validator\OrderStatus;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table("orders", indexes={
@@ -21,6 +23,7 @@ use Doctrine\ORM\Mapping\Index;
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
  * @ORM\HasLifecycleCallbacks()
  * @OrderStatus()
+ * @OrderAddress()
  */
 class Order
 {
@@ -66,7 +69,7 @@ class Order
             'color' => '#FF8C00',
             'title' => 'В процесі'
         ],
-        self::PACKING                => [
+        self::PACKING => [
             'id'    => 2,
             'color' => '#FF8C00',
             'title' => 'В процесі'
@@ -76,12 +79,12 @@ class Order
             'color' => '#0000FF',
             'title' => 'Відправлено'
         ],
-        self::COURIER_DELIVERING     => [
+        self::COURIER_DELIVERING => [
             'id'    => 3,
             'color' => '#0000FF',
             'title' => 'Відправлено'
         ],
-        self::COMPLETED              => [
+        self::COMPLETED => [
             'id'    => 4,
             'color' => '#000000',
             'title' => 'Доставлено'
@@ -91,7 +94,7 @@ class Order
             'color' => '#808080',
             'title' => 'Відмінено'
         ],
-        self::CANCELED_NO_PRODUCT    => [
+        self::CANCELED_NO_PRODUCT => [
             'id'    => 5,
             'color' => '#808080',
             'title' => 'Відмінено'
@@ -128,11 +131,13 @@ class Order
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Поле обов'язкове")
      */
     private string $name = "";
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(message="Поле обов'язкове")
      */
     private ?string $surname = "";
 
@@ -142,12 +147,26 @@ class Order
     private ?string $address = "";
 
     /**
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\NovaPoshtaCity")
+     */
+    private ?NovaPoshtaCity $novaPoshtaCity;
+
+    /**
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\NovaPoshtaOffice")
+     */
+    private ?NovaPoshtaOffice $novaPoshtaOffice;
+
+    /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Поле обов'язкове")
      */
     private string $phone = "";
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\Email(message="Неправильний формат")
      */
     private ?string $email = null;
 
@@ -267,6 +286,26 @@ class Order
     public function getAddress(): ?string
     {
         return $this->address;
+    }
+
+    public function setNovaPoshtaCity(?NovaPoshtaCity $novaPoshtaCity): void
+    {
+        $this->novaPoshtaCity = $novaPoshtaCity;
+    }
+
+    public function getNovaPoshtaCity(): ?NovaPoshtaCity
+    {
+        return $this->novaPoshtaCity;
+    }
+
+    public function setNovaPoshtaOffice(?NovaPoshtaOffice $novaPoshtaOffice): void
+    {
+        $this->novaPoshtaOffice = $novaPoshtaOffice;
+    }
+
+    public function getNovaPoshtaOffice(): ?NovaPoshtaOffice
+    {
+        return $this->novaPoshtaOffice;
     }
 
     public function setPhone(string $phone): void

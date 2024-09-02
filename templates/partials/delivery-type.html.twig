@@ -1,0 +1,53 @@
+<span class="delivery-info">
+    <div class="payment">
+        <label>
+            <p>Спосіб оплати:</p>
+            <select name="paytype">
+                {% for paymentType in deliveryType.getPaymentTypes() %}
+                    {% if paymentType.enabled %}
+                        <option value="{{ paymentType.id }}">{{ paymentType.title }}</option>
+                    {% endif %}
+                {% endfor%}
+            </select>
+        </label>
+    </div>
+    {% if deliveryType.needAddressField %}
+    <div>
+        <label>
+            <p>Адреса:</p>
+            <textarea name="address"></textarea>
+        </label>
+    </div>
+    {% endif %}
+    {% if deliveryType.isNovaPoshta %}
+        <div>
+            <label>
+                <p>Місто:</p>
+                <select name="city" id="nova-poshta-city">
+                    <option value="">Оберіть місто</option>
+                    {% for city in cities %}
+                        <option value="{{ city.ref }}" {% if user and city.ref == user.novaPoshtaCity %}selected{% endif %}>
+                            {{ city.title }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        {% if offices|length > 0 %}
+        <div id="nova-poshta-office">
+            <label>
+                <p>Відділення:</p>
+                <select name="office" id="nova-poshta-office">
+                    {% for office in offices %}
+                        <option value="{{ office.ref }}" {% if office.ref == user.novaPoshtaOffice %}selected{% endif %}>
+                            {{ office.title }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        {% else %}
+        <div id="nova-poshta-office"></div>
+        {% endif %}
+    {% endif %}
+</span>

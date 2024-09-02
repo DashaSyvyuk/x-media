@@ -84,10 +84,9 @@ class CategoryRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function getCategoriesForHotline(): array
+    public function getCategoriesForHotline()
     {
-        $result = [];
-        $categories = $this->createQueryBuilder('c')
+        return $this->createQueryBuilder('c')
             ->leftJoin('c.products', 'p')
             ->andWhere('c.status = :status')
             ->andWhere('c.hotlineCategory IS NOT NULL')
@@ -98,15 +97,6 @@ class CategoryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
-
-        foreach ($categories as $category) {
-            $result[] = [
-                'id' => $category->getId(),
-                'title' => $category->getHotlineCategory(),
-            ];
-        }
-
-        return $result;
     }
 
     public function getCategoriesIdsWithoutChildren(): array

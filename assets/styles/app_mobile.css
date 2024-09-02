@@ -286,7 +286,7 @@ hr {
 #search img {
     width: 25px;
 }
-#search .error {
+#search .error, #order .error {
     color: #ff0000;
     font-size: 10px;
 }
@@ -541,6 +541,10 @@ footer div {
     border: none;
     -webkit-appearance: none;
     border-radius: 0;
+}
+.green-button:disabled {
+    background-color: rgb(17, 158, 0, .6);
+    cursor: default;
 }
 .green {
     color: #119e00;
@@ -1802,14 +1806,6 @@ section .feedbacks {
     color: #119E00;
 }
 
-.order-place .delivery-info {
-    display: none;
-}
-
-.order-place .delivery-info.active {
-    display: block;
-}
-
 .order-detail {
     width: 100%;
     padding: 5px;
@@ -2054,4 +2050,12 @@ section .feedbacks {
 }
 .filter.promotion-category-outer a:hover {
     font-weight: bold;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border: solid black !important;
+    border-width: 0 1px 1px 0 !important;
+    display: inline-block;
+    padding: 2.5px;
+    rotate: 45deg;
+    left: 64% !important;
 }

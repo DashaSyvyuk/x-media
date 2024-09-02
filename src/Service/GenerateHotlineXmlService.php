@@ -26,6 +26,7 @@ class GenerateHotlineXmlService
 
     public function execute(): void
     {
+        ini_set('memory_limit', '256M');
         $categories = $this->categoryRepository->getCategoriesForHotline();
         $products = $this->productRepository->getProductsForHotline();
 
@@ -44,44 +45,49 @@ class GenerateHotlineXmlService
                     ->startLoop('categories', [], function (XMLArray $XMLArray) use ($categories) {
                         foreach ($categories as $category) {
                             $XMLArray->start('category')
-                                ->add('id', $category['id'])
-                                ->add('name', $category['title'])
+                                ->add('id', $category->getId())
+                                ->add('name', $category->getHotlineCategory())
                             ->end();
                         }
                     })
                     ->end()
                     ->startLoop('items', [], function (XMLArray $XMLArray) use ($products) {
                         foreach ($products as $product) {
-                            $images = $product['images'];
-                            $characteristics = $product['characteristics'];
+                            $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
 
-                            $XMLArray->start('item')
-                                ->add('id', $product['id'])
-                                ->add('categoryId', $product['categoryId'])
-                                ->add('vendor', $product['vendor'])
-                                ->add('name', $product['title'])
-                                ->add('description', $product['description'])
-                                ->add('url', sprintf('https://x-media.com.ua/products/%s', $product['id']))
-                                ->loop(function (XMLArray $XMLArray) use ($images) {
-                                    foreach ($images as $image) {
-                                        $XMLArray->add('image', $image);
-                                    }
-                                })
-                                ->add('priceRUAH', $product['price'])
-                                ->add('stock', 'В наявності')
-                                ->add('guarantee', $product['warranty'], [
-                                    'type' => 'manufacturer'
-                                ])
-                                ->loop(function (XMLArray $XMLArray) use ($characteristics) {
-                                    foreach ($characteristics as $characteristic) {
-                                        $XMLArray->add('param', htmlspecialchars(addslashes($characteristic->getValue())), [
-                                            'name' => htmlspecialchars(addslashes($characteristic->getTitle()))
-                                        ]);
-                                    }
-                                })
-                                ->add('condition', 0)
-                                ->add('code', $product['article'])
-                            ;
+                            if (!empty($vendor)) {
+                                $images = $product->getImages();
+                                $characteristics = $product->getCharacteristics();
+                                $warranty = array_values(array_filter($product->getCharacteristics()->toArray(), fn ($item) => $item->getTitle() == 'Гарантія'));
+
+                                $XMLArray->start('item')
+                                    ->add('id', $product->getId())
+                                    ->add('categoryId', $product->getCategory()->getId())
+                                    ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
+                                    ->add('name', strip_tags(addslashes($product->getTitle())))
+                                    ->add('description', htmlentities($product->getDescription(), ENT_XML1))
+                                    ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
+                                    ->loop(function (XMLArray $XMLArray) use ($images) {
+                                        foreach ($images as $image) {
+                                            $XMLArray->add('image', 'https://x-media.com.ua/images/products/' . $image->getImageUrl());
+                                        }
+                                    })
+                                    ->add('priceRUAH', $product->getPrice())
+                                    ->add('stock', 'В наявності')
+                                    ->add('guarantee', $warranty ? (int) $warranty[0]->getValue() : 12, [
+                                        'type' => 'manufacturer'
+                                    ])
+                                    ->loop(function (XMLArray $XMLArray) use ($characteristics) {
+                                        foreach ($characteristics as $characteristic) {
+                                            $XMLArray->add('param', htmlspecialchars(addslashes($characteristic->getValue())), [
+                                                'name' => htmlspecialchars(addslashes($characteristic->getTitle()))
+                                            ]);
+                                        }
+                                    })
+                                    ->add('condition', 0)
+                                    ->add('code', $product->getProductCode())
+                                ;
+                            }
                         }
                     })
                     ->end()

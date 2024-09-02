@@ -156,10 +156,9 @@ class ProductRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function getProductsForHotline(): array
+    public function getProductsForHotline()
     {
-        $result = [];
-        $products = $this->createQueryBuilder('p')
+        return $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'c')
             ->andWhere('c.status = :status')
             ->andWhere('c.hotlineCategory IS NOT NULL')
@@ -170,36 +169,6 @@ class ProductRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
-
-        foreach ($products as $product) {
-            $images = [];
-            foreach ($product->getImages() as $item) {
-                $images[] = 'https://x-media.com.ua/images/products/' . $item->getImageUrl();
-            }
-
-            $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
-            $warranty = array_values(array_filter($product->getCharacteristics()->toArray(), fn ($item) => $item->getTitle() == 'Гарантія'));
-
-            if (!empty($vendor)) {
-                $row = [
-                    'id' => $product->getId(),
-                    'title' => strip_tags(addslashes($product->getTitle())),
-                    'categoryId' => $product->getCategory()->getId(),
-                    'price' => $product->getPrice(),
-                    'images' => $images,
-                    'characteristics' => $product->getCharacteristics(),
-                    'description' => htmlentities($product->getDescription(), ENT_XML1),
-                    'keywords' => addslashes($product->getMetaKeyword()),
-                    'vendor' => $vendor[0]->getFilterAttribute()->getValue(),
-                    'article' => $product->getProductCode(),
-                    'warranty' => $warranty ? (int) $warranty[0]->getValue() : 12,
-                ];
-
-                $result[] = $row;
-            }
-        }
-
-        return $result;
     }
 
     public function findByPromotionAndVendor(

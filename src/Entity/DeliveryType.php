@@ -42,6 +42,16 @@ class DeliveryType
     private bool $enabled = true;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $needAddressField = true;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $isNovaPoshta = false;
+
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     private ?string $icon = "";
@@ -113,6 +123,26 @@ class DeliveryType
     public function getEnabled(): bool
     {
         return $this->enabled;
+    }
+
+    public function setNeedAddressField(bool $needAddressField): void
+    {
+        $this->needAddressField = $needAddressField;
+    }
+
+    public function getNeedAddressField(): bool
+    {
+        return $this->needAddressField;
+    }
+
+    public function setIsNovaPoshta(bool $isNovaPoshta): void
+    {
+        $this->isNovaPoshta = $isNovaPoshta;
+    }
+
+    public function getIsNovaPoshta(): bool
+    {
+        return $this->isNovaPoshta;
     }
 
     public function setIcon(?string $icon): void

@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Order;
 use App\Entity\OrderItem;
+use App\Repository\NovaPoshtaCityRepository;
+use App\Repository\NovaPoshtaOfficeRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -20,20 +22,20 @@ class OrderRepository extends ServiceEntityRepository
     private ProductRepository $productRepository;
     private PaymentTypeRepository $paymentTypeRepository;
     private DeliveryTypeRepository $deliveryTypeRepository;
+    private \App\Repository\NovaPoshtaCityRepository $novaPoshtaCityRepository;
+    private \App\Repository\NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository;
 
-    public function __construct(ManagerRegistry $registry, ProductRepository $productRepository, PaymentTypeRepository $paymentTypeRepository, DeliveryTypeRepository $deliveryTypeRepository)
+    public function __construct(ManagerRegistry $registry, ProductRepository $productRepository, PaymentTypeRepository $paymentTypeRepository, DeliveryTypeRepository $deliveryTypeRepository, NovaPoshtaCityRepository $novaPoshtaCityRepository, NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository)
     {
         parent::__construct($registry, Order::class);
         $this->productRepository = $productRepository;
         $this->paymentTypeRepository = $paymentTypeRepository;
         $this->deliveryTypeRepository = $deliveryTypeRepository;
+        $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
+        $this->novaPoshtaOfficeRepository = $novaPoshtaOfficeRepository;
     }
 
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException
-     */
-    public function create(array $data): Order
+    public function fill(array $data): Order
     {
         $order = new Order();
         $order->setName($data['name']);
@@ -50,6 +52,8 @@ class OrderRepository extends ServiceEntityRepository
         $order->setUser($data['user']);
         $order->setOrderNumber($data['orderNumber']);
         $order->setSendNotification($data['sendNotification']);
+        $order->setNovaPoshtaCity($this->novaPoshtaCityRepository->findOneBy(['ref' => $data['city']]));
+        $order->setNovaPoshtaOffice($this->novaPoshtaOfficeRepository->findOneBy(['ref' => $data['office']]));
 
         foreach ($data['products'] as $item) {
             $product = $this->productRepository->findOneBy(['id' => $item->getId()]);
@@ -61,6 +65,12 @@ class OrderRepository extends ServiceEntityRepository
 
             $order->addItem($orderItem);
         }
+
+        return $order;
+    }
+
+    public function create(Order $order): Order
+    {
         $entityManager = $this->getEntityManager();
         $entityManager->persist($order);
         $entityManager->flush();

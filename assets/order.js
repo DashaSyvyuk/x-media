@@ -5,22 +5,17 @@ import 'select2';
 import Inputmask from 'inputmask';
 
 Inputmask('+38 (999) 999-99-99').mask('.order-place input[name=phone]');
+let deliveryTypeId = $('select[name=deltype]').find("option:first-child").val();
+
+initDeliveryType(deliveryTypeId);
 
 $(document).on('change', 'select[name=deltype]', () => {
-    const deliveryType = $('select[name=deltype] option:selected').data('deltype-id');
+    deliveryTypeId = $('select[name=deltype] option:selected').val();
 
-    $('.delivery-info').removeClass('active');
-    $('.delivery-info select, .delivery-info textarea').attr('disabled', true).attr('required', false);
-    $('span[data-delivery='+deliveryType+']').addClass('active');
-    $('span[data-delivery='+deliveryType+'] select, span[data-delivery='+deliveryType+'] textarea').attr('disabled', false).attr('required', true);
+    initDeliveryType(deliveryTypeId);
 });
 
-$('#nova-poshta-city').select2({
-    placeholder: 'Оберіть місто',
-    width: '100%'
-});
-
-$('#nova-poshta-city').on('change', (e) => {
+$(document).on('change', '#nova-poshta-city', (e) => {
     const selected = $('#nova-poshta-city option:selected').val();
     const url = '/nova-poshta-office?cityRef=' + selected;
 
@@ -36,3 +31,42 @@ $('#nova-poshta-city').on('change', (e) => {
         $('#nova-poshta-office select').select2();
     });
 });
+
+$('#order').on('submit', (e) => {
+    const $target = $(e.currentTarget);
+    $target.find('input[type=submit]').attr('disabled', true);
+    const name = $target.find('input[name=name]').val();
+    const surname = $target.find('input[name=surname]').val();
+    const phone = $target.find('input[name=phone]').val();
+    const email = $target.find('input[name=email]').val();
+    const deltype = $target.find('select[name=deltype]').val();
+    const comment = $target.find('textarea[name=comment]').val();
+    const paytype = $target.find('select[name=paytype]') ? $target.find('select[name=paytype]').val() : '';
+    const address = $target.find('textarea[name=address]') ? $target.find('textarea[name=address]').val() : '';
+    const city = $target.find('select[name=city]') ? $target.find('select[name=city]').val() : '';
+    const office = $target.find('select[name=office]') ? $target.find('select[name=office]').val() : '';
+
+    $.post( '/order', { name, surname, phone, email, deltype, comment, paytype, address, city, office })
+        .done(function(data) { window.location.href = '/thank-you'; })
+        .fail(function(xhr) {
+            $('#order .error').remove();
+            $.each(xhr.responseJSON, function(name, value) {
+              $('*[name=' + name + ']').closest('label').after('<span class="error"> - ' + value + '<br></span>');
+            });
+            $target.find('input[type=submit]').attr('disabled', false);
+        });
+
+    return false;
+});
+
+function initDeliveryType(deliveryTypeId) {
+    $.get('/delivery-type/' + deliveryTypeId, (data) => {
+        const obj = JSON.parse(data);
+
+        $('#payment-type').html(obj.template);
+        $('#nova-poshta-city').select2({
+            placeholder: 'Оберіть місто',
+            width: '100%'
+        });
+    });
+}

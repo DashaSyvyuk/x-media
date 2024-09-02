@@ -17,105 +17,47 @@
         </div>
 
         <div class="order-place">
-            <form method="POST" action="/order">
+            <form method="POST" action="/order" id="order">
                 <div>
-                    <p>Ім'я: <span class="required">*</span></p>
-                    <input type="text" name="name" autocomplete="off" value="{% if user %}{{ user.name }}{% endif %}" required>
+                    <label>
+                        <p>Ім'я: <span class="required">*</span></p>
+                        <input type="text" name="name" autocomplete="off" value="{% if user %}{{ user.name }}{% endif %}">
+                    </label>
                 </div>
                 <div>
-                    <p>Прізвище: <span class="required">*</span></p>
-                    <input type="text" name="surname" autocomplete="off" value="{% if user %}{{ user.surname }}{% endif %}" required>
+                    <label>
+                        <p>Прізвище: <span class="required">*</span></p>
+                        <input type="text" name="surname" autocomplete="off" value="{% if user %}{{ user.surname }}{% endif %}">
+                    </label>
                 </div>
                 <div>
-                    <p>Номер телефону: <span class="required">*</span></p>
-                    <input type="text" name="phone" autocomplete="off" value="{% if user %}{{ user.phone }}{% endif %}" required>
+                    <label>
+                        <p>Номер телефону: <span class="required">*</span></p>
+                        <input type="text" name="phone" autocomplete="off" value="{% if user %}{{ user.phone }}{% endif %}">
+                    </label>
                 </div>
                 <div>
-                    <p>E-mail:</p>
-                    <input type="text" name="email" autocomplete="off" value="{% if user %}{{ user.email }}{% endif %}">
+                    <label>
+                        <p>E-mail:</p>
+                        <input type="text" name="email" autocomplete="off" value="{% if user %}{{ user.email }}{% endif %}">
+                    </label>
                 </div>
                 <div>
-                    <p>Спосіб доставки:</p>
-                    <select name="deltype">
-                        {% for deliveryType in deliveryTypes %}
-                            <option data-deltype-id="{{ deliveryType.id }}" value="{{ deliveryType.id }}">{{ deliveryType.title }}</option>
-                        {% endfor %}
-                    </select>
+                    <label>
+                        <p>Спосіб доставки:</p>
+                        <select name="deltype">
+                            {% for deliveryType in deliveryTypes %}
+                                <option value="{{ deliveryType.id }}">{{ deliveryType.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
                 </div>
-                {% for key, deliveryType in deliveryTypes %}
-                    {% if deliveryType.id == 1 or deliveryType.id == 4 or deliveryType.id == 6 %}
-                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info {% if key == 0 %}active{% endif %}">
-                            <div class="payment">
-                                <p>Спосіб оплати:</p>
-                                <select name="paytype" {% if key != 0 %}disabled="disabled"{% endif %}>
-                                    {% for paymentType in deliveryType.getPaymentTypes() %}
-                                        {% if paymentType.enabled %}
-                                            <option value="{{ paymentType.id }}">{{ paymentType.title }}</option>
-                                        {% endif %}
-                                    {% endfor%}
-                                </select>
-                            </div>
-                        </span>
-                    {% elseif deliveryType.id == 2 or deliveryType.id == 5 %}
-                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info {% if key == 0 %}active{% endif %}">
-                            <div class="payment">
-                                <p>Спосіб оплати:</p>
-                                <select name="paytype" {% if key != 0 %}disabled="disabled"{% endif %}>
-                                    {% for paymentType in deliveryType.getPaymentTypes() %}
-                                        {% if paymentType.enabled %}
-                                            <option value="{{ paymentType.id }}">{{ paymentType.title }}</option>
-                                        {% endif %}
-                                    {% endfor%}
-                                </select>
-                            </div>
-                            <div>
-                                <p>Адреса:</p>
-                                <textarea name="address" {% if key != 0 %}disabled="disabled"{% endif %}>{% if user %}{{ user.name }}{% endif %}</textarea>
-                            </div>
-                        </span>
-                    {% elseif deliveryType.id == 3 %}
-                        <span data-delivery="{{ deliveryType.id }}" class="delivery-info {% if key == 0 %}active{% endif %}">
-                            <div>
-                                <p>Спосіб оплати:</p>
-                                <select name="paytype" {% if key != 0 %}disabled="disabled"{% endif %}>
-                                    {% for paymentType in deliveryType.getPaymentTypes() %}
-                                        {% if paymentType.enabled %}
-                                            <option value="{{ paymentType.id }}">{{ paymentType.title }}</option>
-                                        {% endif %}
-                                    {% endfor%}
-                                </select>
-                            </div>
-                            <div>
-                                <p>Місто:</p>
-                                <select name="city" id="nova-poshta-city" {% if key != 0 %}disabled="disabled"{% endif %}>
-                                    <option value="">Оберіть місто</option>
-                                    {% for city in cities %}
-                                        <option value="{{ city.ref }}" {% if user and city.ref == user.novaPoshtaCity %}selected{% endif %}>
-                                            {{ city.title }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            {% if offices|length > 0 %}
-                                <div id="nova-poshta-office">
-                                    <p>Відділення:</p>
-                                    <select name="office" id="nova-poshta-office">
-                                        {% for office in offices %}
-                                            <option value="{{ office.ref }}" {% if office.ref == user.novaPoshtaOffice %}selected{% endif %}>
-                                                {{ office.title }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            {% else %}
-                                <div id="nova-poshta-office"></div>
-                            {% endif %}
-                        </span>
-                    {% endif %}
-                {% endfor %}
+                <span id="payment-type"></span>
                 <div>
-                    <p>Коментар:</p>
-                    <textarea name="comment"></textarea>
+                    <label>
+                        <p>Коментар:</p>
+                        <textarea name="comment"></textarea>
+                    </label>
                 </div>
                 <div>
                     <p class="total-price">Загальна вартість: <span>{{ totalPrice|number_format(0, '.', ' ') }} грн</span></p>

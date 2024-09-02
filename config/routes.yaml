@@ -159,3 +159,12 @@ promotion:
 promotion_category:
     path: /promotion/{slug}/{categorySlug}
     controller: App\Controller\PromotionController::getPromotion
+
+delivery_type:
+    path: /delivery-type/{id}
+    controller: App\Controller\API\DeliveryTypeController::getItem
+
+thank_you:
+    path: /thank-you
+    controller: App\Controller\ThankYouController::index
+    methods: GET

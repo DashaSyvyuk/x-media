@@ -5,20 +5,16 @@ namespace App\Controller;
 use App\Repository\CategoryRepository;
 use App\Repository\DeliveryTypeRepository;
 use App\Repository\NovaPoshtaCityRepository;
-use App\Repository\NovaPoshtaOfficeRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
+use App\Service\Order\CreateService;
 use App\Utils\OrderNumber;
-use App\Utils\TurboSms;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class OrderPageController extends BaseController
 {
@@ -29,9 +25,9 @@ class OrderPageController extends BaseController
      * @param SettingRepository $settingRepository
      * @param DeliveryTypeRepository $deliveryTypeRepository
      * @param NovaPoshtaCityRepository $novaPoshtaCityRepository
-     * @param NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
      * @param UserRepository $userRepository
      * @param OrderNumber $orderNumber
+     * @param CreateService $createService
      */
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
@@ -40,9 +36,9 @@ class OrderPageController extends BaseController
         private readonly SettingRepository $settingRepository,
         private readonly DeliveryTypeRepository $deliveryTypeRepository,
         private readonly NovaPoshtaCityRepository $novaPoshtaCityRepository,
-        private readonly NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository,
         private readonly UserRepository $userRepository,
-        private readonly OrderNumber $orderNumber
+        private readonly OrderNumber $orderNumber,
+        private readonly CreateService $createService,
     ) {
         parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
     }
@@ -77,101 +73,57 @@ class OrderPageController extends BaseController
         }
     }
 
-    /**
-     * @throws OptimisticLockException
-     * @throws TransportExceptionInterface
-     * @throws ORMException
-     */
-    public function post(Request $request, MailerInterface $mailer): Response
+    public function post(Request $request, ValidatorInterface $validator): Response|JsonResponse
     {
         if (isset($_COOKIE['cart'])) {
+            $totalCart = $this->getTotalCart();
+
             $user = null;
             if ($email = trim($request->request->get('email'))) {
                 $user = $this->userRepository->findOneBy(['email' => $email]);
             }
 
-            $managerEmail = $this->settingRepository->findOneBy(['slug' => 'email']);
-            $totalCart = $this->getTotalCart();
-
-            $order = $this->orderRepository->create([
-                'orderNumber' => $this->orderNumber->generateOrderNumber(),
-                'name'        => trim($request->request->get('name')),
-                'surname'     => trim($request->request->get('surname')),
-                'address'     => $this->getAddress($request->request),
-                'phone'       => trim($request->request->get('phone')),
-                'email'       => trim($request->request->get('email')) ?? '',
-                'paytype'     => trim($request->request->get('paytype')),
-                'deltype'     => trim($request->request->get('deltype')),
-                'comment'     => trim($request->request->get('comment')) ?? '',
-                'total'       => $totalCart['totalPrice'],
-                'products'    => $totalCart['products'],
-                'user'        => $user,
+            $order = $this->orderRepository->fill([
+                'orderNumber'      => $this->orderNumber->generateOrderNumber(),
+                'email'            => trim($request->request->get('email')) ?? '',
+                'name'             => trim($request->request->get('name')) ?? '',
+                'surname'          => trim($request->request->get('surname')) ?? '',
+                'address'          => trim($request->request->get('address')) ?? '',
+                'city'             => trim($request->request->get('city')) ?? '',
+                'office'           => trim($request->request->get('office')) ?? '',
+                'phone'            => trim($request->request->get('phone')) ?? '',
+                'paytype'          => trim($request->request->get('paytype')) ?? '',
+                'deltype'          => trim($request->request->get('deltype')) ?? '',
+                'comment'          => trim($request->request->get('comment')) ?? '',
+                'total'            => $totalCart['totalPrice'],
+                'products'         => $totalCart['products'],
+                'user'             => $user,
                 'sendNotification' => true,
             ]);
+
+            $errors = $validator->validate($order);
+
+            if (count($errors) > 0) {
+                $messages = [];
+                foreach ($errors as $violation) {
+                    $messages[$violation->getPropertyPath()][] = $violation->getMessage();
+                }
+                return new JsonResponse($messages, 422);
+            }
+
+            $order = $this->orderRepository->create($order);
+
+            $this->createService->run($order, $request->getHost());
 
             unset($_COOKIE['cart']);
             unset($_COOKIE['totalCount']);
             setcookie('cart', null, -1, '/');
             setcookie('totalCount', null, -1, '/');
+            setcookie('orderId', $order->getId());
 
-            $mainUrl = sprintf('%s%s/', 'https://', $request->getHost());
-
-            if ($order->getEmail()) {
-                $message = (new Email())
-                    ->subject(sprintf('Нове замовлення %s', $order->getOrderNumber()))
-                    ->from('x-media@x-media.com.ua')
-                    ->to($order->getEmail())
-                    ->html(
-                        $this->renderView(
-                            'emails/client-orders.html.twig',
-                            [
-                                'order' => $order,
-                                'mainUrl' => $mainUrl,
-                                'phoneNumber' => $this->settingRepository->findOneBy(['slug' => 'phone_number']),
-                                'email' => $managerEmail
-                            ]
-                        )
-                    );
-
-                $mailer->send($message);
-            }
-
-            if ($phone = $order->getPhone()) {
-                TurboSms::send($phone, sprintf('Дякуємо за замовлення у нашому магазині! Номер замовлення %s :)', $order->getOrderNumber()));
-            }
-
-            $managerMessage = (new Email())
-                ->subject(sprintf('Нове замовлення %s', $order->getOrderNumber()))
-                ->from('x-media@x-media.com.ua')
-                ->to($managerEmail->getValue())
-                ->html(
-                    $this->renderView(
-                        'emails/manager-order.html.twig',
-                        [
-                            'mainUrl' => $mainUrl,
-                            'order' => $order
-                        ]
-                    )
-                )
-            ;
-
-            $mailer->send($managerMessage);
-
-            return $this->renderTemplate($request, 'thank_page/index.html.twig', [
-                'order' => $order
-            ]);
+            return new JsonResponse(null, 200);
         } else {
-            return $this->redirectToRoute('index');
+            return new JsonResponse([], 422);
         }
-    }
-
-    private function getAddress($data): ?string
-    {
-        $address = trim($data->get('address'));
-        $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => trim($data->get('city'))]);
-        $office = $this->novaPoshtaOfficeRepository->findOneBy(['ref' => trim($data->get('office'))]);
-        $pickUpPoint = $this->settingRepository->findOneBy(['slug' => 'pick_up_point_address']);
-
-        return $city ? $city . ', ' . $office : (!empty($address) ? $address : $pickUpPoint->getValue() ?? null);
     }
 }
