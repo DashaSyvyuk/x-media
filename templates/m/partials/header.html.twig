@@ -22,7 +22,7 @@
     </a>
 </header>
 
-{% set currentPath = app.request.attributes.get('_route') ? path(app.request.attributes.get('_route'), app.request.query.all ?? {}|merge(app.request.attributes.get('_route_params') ?? {})|merge({'page-type': 'desktop'})) : '/?page-type=desktop' %}
+{% set currentPath = app.request.attributes.get('_route') ? path(app.request.attributes.get('_route'), app.request.query.all|merge(app.request.attributes.get('_route_params') ?? {})|merge({'page-type': 'desktop'})) : '/?page-type=desktop' %}
 
 <section class="menu_body" id="menu-body">
     <div class="menu_body__item_wrapper">
