@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\CategoryRepository;
 use App\Repository\DeliveryTypeRepository;
 use App\Repository\NovaPoshtaCityRepository;
+use App\Repository\NovaPoshtaOfficeRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SettingRepository;
@@ -25,6 +26,7 @@ class OrderPageController extends BaseController
      * @param SettingRepository $settingRepository
      * @param DeliveryTypeRepository $deliveryTypeRepository
      * @param NovaPoshtaCityRepository $novaPoshtaCityRepository
+     * @param NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
      * @param UserRepository $userRepository
      * @param OrderNumber $orderNumber
      * @param CreateService $createService
@@ -36,6 +38,7 @@ class OrderPageController extends BaseController
         private readonly SettingRepository $settingRepository,
         private readonly DeliveryTypeRepository $deliveryTypeRepository,
         private readonly NovaPoshtaCityRepository $novaPoshtaCityRepository,
+        private readonly NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository,
         private readonly UserRepository $userRepository,
         private readonly OrderNumber $orderNumber,
         private readonly CreateService $createService,
@@ -88,7 +91,7 @@ class OrderPageController extends BaseController
                 'email'            => trim($request->request->get('email')) ?? '',
                 'name'             => trim($request->request->get('name')) ?? '',
                 'surname'          => trim($request->request->get('surname')) ?? '',
-                'address'          => trim($request->request->get('address')) ?? '',
+                'address'          => $this->getAddress($request->request),
                 'city'             => trim($request->request->get('city')) ?? '',
                 'office'           => trim($request->request->get('office')) ?? '',
                 'phone'            => trim($request->request->get('phone')) ?? '',
@@ -125,5 +128,15 @@ class OrderPageController extends BaseController
         } else {
             return new JsonResponse([], 422);
         }
+    }
+
+    private function getAddress($data): ?string
+    {
+        $address = trim($data->get('address'));
+        $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => trim($data->get('city'))]);
+        $office = $this->novaPoshtaOfficeRepository->findOneBy(['ref' => trim($data->get('office'))]);
+        $delType = $this->deliveryTypeRepository->findOneBy(['id' => $data->get('deltype')]);
+
+        return $city ? $city . ', ' . $office : (!empty($address) ? $address : $delType->getAddress() ?? null);
     }
 }

@@ -4,11 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Order;
 use App\Entity\OrderItem;
-use App\Repository\NovaPoshtaCityRepository;
-use App\Repository\NovaPoshtaOfficeRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,8 +18,8 @@ class OrderRepository extends ServiceEntityRepository
     private ProductRepository $productRepository;
     private PaymentTypeRepository $paymentTypeRepository;
     private DeliveryTypeRepository $deliveryTypeRepository;
-    private \App\Repository\NovaPoshtaCityRepository $novaPoshtaCityRepository;
-    private \App\Repository\NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository;
+    private NovaPoshtaCityRepository $novaPoshtaCityRepository;
+    private NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository;
 
     public function __construct(ManagerRegistry $registry, ProductRepository $productRepository, PaymentTypeRepository $paymentTypeRepository, DeliveryTypeRepository $deliveryTypeRepository, NovaPoshtaCityRepository $novaPoshtaCityRepository, NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository)
     {

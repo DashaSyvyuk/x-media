@@ -54,6 +54,11 @@ class DeliveryType
     /**
      * @ORM\Column(type="string", nullable=true)
      */
+    private ?string $address = "";
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     private ?string $icon = "";
 
     /**
@@ -143,6 +148,16 @@ class DeliveryType
     public function getIsNovaPoshta(): bool
     {
         return $this->isNovaPoshta;
+    }
+
+    public function setAddress(?string $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
     }
 
     public function setIcon(?string $icon): void
