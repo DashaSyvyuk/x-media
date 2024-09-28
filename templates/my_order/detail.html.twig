@@ -202,7 +202,7 @@
                                 </div>
                                 <div class="title"><a class="no-link-style" href="/products/{{ item.product.id }}">{{ item.product.title|raw }}</a></div>
                                 <div class="quantity"><span>{{ item.count }}</span> шт</div>
-                                <div class="price"><span>{{ (item.product.price*item.count)|number_format(0, '.', ' ') }}</span> грн</div>
+                                <div class="price"><span>{{ (item.price*item.count)|number_format(0, '.', ' ') }}</span> грн</div>
                             </div>
                         {% endfor %}
                         <div class="total-price bold">
