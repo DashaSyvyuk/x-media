@@ -42,6 +42,9 @@ class CategoryCrudController extends AbstractCrudController
         yield TextField::new('hotlineCategory', 'Відповідна категорія на Hotline')
             ->setHelp('Ноутбуки і планшети')
             ->hideOnIndex();
+        yield TextField::new('rozetkaCategory', 'Відповідна категорія на Rozetka')
+            ->setHelp('Смарт-годинник')
+            ->hideOnIndex();
         yield TextField::new('promCategoryLink', 'Посилання на категорію на Prom')
             ->setHelp('https://prom.ua/Noutbuki')
             ->hideOnIndex();

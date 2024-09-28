@@ -92,6 +92,11 @@ class Category
     /**
      * @ORM\Column(type="string", nullable=true)
      */
+    private ?string $rozetkaCategory = '';
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     private ?string $promCategoryLink = '';
 
     /**
@@ -212,6 +217,16 @@ class Category
     public function setHotlineCategory(?string $hotlineCategory): void
     {
         $this->hotlineCategory = $hotlineCategory;
+    }
+
+    public function getRozetkaCategory(): ?string
+    {
+        return $this->rozetkaCategory;
+    }
+
+    public function setRozetkaCategory(?string $rozetkaCategory): void
+    {
+        $this->rozetkaCategory = $rozetkaCategory;
     }
 
     public function getHotlineCategory(): ?string

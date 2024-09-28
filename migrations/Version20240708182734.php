@@ -27,6 +27,7 @@ final class Version20240708182734 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_E52FFDEEEEA61FD6 ON orders (nova_poshta_city_id)');
         $this->addSql('CREATE INDEX IDX_E52FFDEE2FE96810 ON orders (nova_poshta_office_id)');
         $this->addSql('ALTER TABLE delivery_type ADD address VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE category ADD rozetka_category VARCHAR(255) DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
@@ -39,5 +40,6 @@ final class Version20240708182734 extends AbstractMigration
         $this->addSql('DROP INDEX IDX_E52FFDEE2FE96810 ON orders');
         $this->addSql('ALTER TABLE orders DROP nova_poshta_city_id, DROP nova_poshta_office_id');
         $this->addSql('ALTER TABLE delivery_type DROP address');
+        $this->addSql('ALTER TABLE category DROP rozetka_category');
     }
 }

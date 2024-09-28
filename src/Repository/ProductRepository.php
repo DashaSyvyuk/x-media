@@ -171,6 +171,21 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
 
+    public function getProductsForRozetka()
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.category', 'c')
+            ->andWhere('c.status = :status')
+            ->andWhere('c.rozetkaCategory IS NOT NULL')
+            ->setParameter('status', 'ACTIVE')
+            ->andWhere('p.status = :product_status')
+            ->setParameter('product_status', Product::STATUS_ACTIVE)
+            ->orderBy('p.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findByPromotionAndVendor(
         Promotion $promotion,
         ?Category $category,

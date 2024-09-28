@@ -13,6 +13,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Service\GenerateHotlineXmlService;
 use App\Service\GeneratePromXmlService;
+use App\Service\GenerateRozetkaXmlService;
 use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -43,6 +44,7 @@ class ProductCrudController extends AbstractCrudController
         private readonly GenerateHotlineXmlService $generateHotlineXmlService,
         private readonly GeneratePromXmlService $generatePromXmlService,
         private readonly CategoryRepository $categoryRepository,
+        private readonly GenerateRozetkaXmlService $generateRozetkaXmlService,
     )
     {
     }
@@ -77,6 +79,10 @@ class ProductCrudController extends AbstractCrudController
 
         $actions->add(Crud::PAGE_INDEX, Action::new('hotlineXml', 'Hotline feed *.xml')
             ->linkToCrudAction('hotlineXmlAction')
+            ->createAsGlobalAction());
+
+        $actions->add(Crud::PAGE_INDEX, Action::new('rozetkaXml', 'Rozetka feed *.xml')
+            ->linkToCrudAction('rozetkaXmlAction')
             ->createAsGlobalAction());
 
         $actions->addBatchAction(Action::new('promXml', 'Prom feed *.xml')
@@ -207,6 +213,15 @@ class ProductCrudController extends AbstractCrudController
         $this->generateHotlineXmlService->execute();
 
         $this->addFlash('success', 'Document is generated <a href="/hotline/products.xml" target="_blank">here</a>');
+
+        return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+    }
+
+    public function rozetkaXmlAction(AdminContext $adminContext): RedirectResponse
+    {
+        $this->generateRozetkaXmlService->execute();
+
+        $this->addFlash('success', 'Document is generated <a href="/rozetka/products.xml" target="_blank">here</a>');
 
         return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
     }
