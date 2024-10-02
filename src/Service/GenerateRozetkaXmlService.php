@@ -73,7 +73,6 @@ class GenerateRozetkaXmlService
                                 if (!empty($vendor)) {
                                     $images = $product->getImages();
                                     $characteristics = $product->getCharacteristics();
-                                    $warranty = array_values(array_filter($product->getCharacteristics()->toArray(), fn ($item) => $item->getTitle() == 'Гарантія'));
 
                                     $XMLArray->start('offer', [
                                         'id' => $product->getId(),
@@ -81,8 +80,7 @@ class GenerateRozetkaXmlService
                                     ])
                                         ->add('stock_quantity', rand(1, 3))
                                         ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
-                                        ->add('price', $product->getPrice())
-                                        ->add('price_old', $product->getCrossedOutPrice())
+                                        ->add('price', $this->adjustPrice($product->getPrice()))
                                         ->add('currencyId', 'UAH')
                                         ->add('categoryId', $product->getCategory()->getId())
                                         ->loop(function (XMLArray $XMLArray) use ($images) {
@@ -112,5 +110,21 @@ class GenerateRozetkaXmlService
         } catch (XMLArrayException|XMLBuilderException $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
         }
+    }
+
+    private function adjustPrice(int $price, int $ourPercent = 10, int $fee = 15) {
+        $totalDiscount = $ourPercent + $fee; // Сума знижок
+        $multiplier = 1 / (1 - $totalDiscount / 100);
+
+        $newPrice = $price * $multiplier;
+
+        if ($price < 20000) {
+            // Округлення до сотень і віднімання 1
+            $newPrice = ceil($newPrice / 100) * 100 - 1;
+        } else {
+            $newPrice = ceil($newPrice / 1000) * 1000 - 1;
+        }
+
+        return $newPrice;
     }
 }
