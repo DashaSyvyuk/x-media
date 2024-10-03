@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -129,6 +130,10 @@ OrderCrudController extends AbstractCrudController
             ->allowDelete()
             ->renderExpanded()
             ->setEntryType(OrderItemType::class);
+
+        yield HiddenField::new('source')->setFormTypeOptions([
+            'data' => 'Admin',
+        ])->hideOnIndex();
     }
 
     private function getAvailableStatuses(): array

@@ -150,13 +150,13 @@ class Order
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      * @ORM\ManyToOne(targetEntity="App\Entity\NovaPoshtaCity")
      */
-    private ?NovaPoshtaCity $novaPoshtaCity;
+    private ?NovaPoshtaCity $novaPoshtaCity = null;
 
     /**
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      * @ORM\ManyToOne(targetEntity="App\Entity\NovaPoshtaOffice")
      */
-    private ?NovaPoshtaOffice $novaPoshtaOffice;
+    private ?NovaPoshtaOffice $novaPoshtaOffice = null;
 
     /**
      * @ORM\Column(type="string")
@@ -201,6 +201,11 @@ class Order
      * @ORM\Column(type="text", nullable=true)
      */
     private ?string $comment = "";
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $source = 'User Side';
 
     /**
      * @ORM\Column(type="integer")
@@ -386,6 +391,16 @@ class Order
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    public function setSource(string $source): void
+    {
+        $this->source = $source;
+    }
+
+    public function getSource(): ?string
+    {
+        return $this->source;
     }
 
     public function setTotal(int $total): void

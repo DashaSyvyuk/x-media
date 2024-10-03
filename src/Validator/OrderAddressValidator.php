@@ -17,6 +17,10 @@ class OrderAddressValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint): bool
     {
+        if ($value->getSource() === 'Admin') {
+            return true;
+        }
+
         if ($value->getDeltype()->getIsNovaPoshta() && !$value->getNovaPoshtaCity()) {
             $this->context->buildViolation('Поле обов\'язкове')->atPath('city')->addViolation();
 
