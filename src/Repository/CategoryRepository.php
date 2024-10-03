@@ -59,15 +59,13 @@ class CategoryRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function getCategoriesForProm(array $ids): array
+    public function getCategoriesForProm(): array
     {
         $result = [];
         $categories = $this->createQueryBuilder('c')
             ->leftJoin('c.products', 'p')
-            ->where('p.id IN (:ids)')
             ->andWhere('c.status = :status')
             ->andWhere('c.promCategoryLink IS NOT NULL')
-            ->setParameter('ids', $ids)
             ->setParameter('status', 'ACTIVE')
             ->orderBy('c.title', 'ASC')
             ->getQuery()

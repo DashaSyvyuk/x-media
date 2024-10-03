@@ -85,8 +85,9 @@ class ProductCrudController extends AbstractCrudController
             ->linkToCrudAction('rozetkaXmlAction')
             ->createAsGlobalAction());
 
-        $actions->addBatchAction(Action::new('promXml', 'Prom feed *.xml')
-            ->linkToCrudAction('promXmlAction'));
+        $actions->add(Crud::PAGE_INDEX, Action::new('promXml', 'Prom feed *.xml')
+            ->linkToCrudAction('promXmlAction')
+            ->createAsGlobalAction());
 
         return parent::configureActions($actions);
     }
@@ -226,11 +227,9 @@ class ProductCrudController extends AbstractCrudController
         return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
     }
 
-    public function promXmlAction(BatchActionDto $batchActionDto): RedirectResponse
+    public function promXmlAction(AdminContext $adminContext): RedirectResponse
     {
-        $ids = $batchActionDto->getEntityIds();
-
-        $this->generatePromXmlService->execute($ids);
+        $this->generatePromXmlService->execute();
 
         $this->addFlash('success', 'Document is generated <a href="/prom/products.xml" target="_blank">here</a>');
 

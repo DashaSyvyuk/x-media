@@ -24,10 +24,12 @@ class GeneratePromXmlService
         $this->xmlBuilder = new XMLBuilder($this->xmlWriterService);
     }
 
-    public function execute(array $ids): void
+    public function execute(): void
     {
-        $categories = $this->categoryRepository->getCategoriesForProm($ids);
-        $products = $this->productRepository->getProductsForProm($ids);
+        ini_set('memory_limit', '256M');
+
+        $categories = $this->categoryRepository->getCategoriesForProm();
+        $products = $this->productRepository->getProductsForProm();
 
         try {
             $this->xmlBuilder

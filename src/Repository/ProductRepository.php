@@ -109,15 +109,13 @@ class ProductRepository extends ServiceEntityRepository
         return $query->getQuery()->getArrayResult()[0];
     }
 
-    public function getProductsForProm(array $ids): array
+    public function getProductsForProm(): array
     {
         $result = [];
         $products = $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'c')
-            ->where('p.id IN (:ids)')
             ->andWhere('c.status = :status')
             ->andWhere('c.promCategoryLink IS NOT NULL')
-            ->setParameter('ids', $ids)
             ->setParameter('status', 'ACTIVE')
             ->orderBy('p.title', 'ASC')
             ->getQuery()
