@@ -117,6 +117,8 @@ class ProductRepository extends ServiceEntityRepository
             ->andWhere('c.status = :status')
             ->andWhere('c.promCategoryLink IS NOT NULL')
             ->setParameter('status', 'ACTIVE')
+            ->andWhere('p.status = :product_status')
+            ->setParameter('product_status', Product::STATUS_ACTIVE)
             ->orderBy('p.title', 'ASC')
             ->getQuery()
             ->getResult()
