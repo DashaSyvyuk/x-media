@@ -62,14 +62,16 @@ class GeneratePromXmlService
                                 ->add('quantity_in_stock', 10)
                                 ->add('currencyId', 'UAH')
                                 ->loop(function (XMLArray $XMLArray) use ($images) {
-                                    foreach ($images as $image) {
-                                        $XMLArray->add('picture', $image);
+                                    foreach ($images as $key => $image) {
+                                        if ($key < 10) {
+                                            $XMLArray->add('picture', $image);
+                                        }
                                     }
                                 })
-                                ->add('vendor', $product['vendor'])
+                                ->add('vendor', substr($product['vendor'], 0, 25))
                                 ->loop(function (XMLArray $XMLArray) use ($characteristics) {
                                     foreach ($characteristics as $characteristic) {
-                                        $XMLArray->add('param', htmlspecialchars(addslashes($characteristic->getValue())), [
+                                        $XMLArray->add('param', substr(htmlspecialchars(addslashes($characteristic->getValue())), 0, 255), [
                                             'name' => htmlspecialchars(addslashes($characteristic->getTitle()))
                                         ]);
                                     }
