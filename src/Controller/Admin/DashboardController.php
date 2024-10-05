@@ -15,6 +15,7 @@ use App\Entity\Order;
 use App\Entity\PaymentType;
 use App\Entity\Product;
 use App\Entity\Promotion;
+use App\Entity\ReturnProduct;
 use App\Entity\Setting;
 use App\Entity\Slider;
 use App\Entity\Supplier;
@@ -109,6 +110,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu(sprintf('Замовлення (%d)', $ordersCount), 'fas fa-list')->setSubItems([
             MenuItem::linkToCrud(sprintf('Замовлення (%d)', $ordersCount), 'fas fa-list', Order::class),
             MenuItem::linkToCrud('Користувачі', 'fa-solid fa-user-secret', User::class),
+            MenuItem::linkToCrud('Повернення', 'fa fa-undo', ReturnProduct::class),
         ])->setPermission('ROLE_SUPER_ADMIN');
 
         yield MenuItem::subMenu('Постачальники', 'fa fa-truck')->setSubItems([
