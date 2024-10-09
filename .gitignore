@@ -29,6 +29,7 @@
 /public/xml/
 /public/prom/
 /public/hotline/
+/public/rozetka/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###

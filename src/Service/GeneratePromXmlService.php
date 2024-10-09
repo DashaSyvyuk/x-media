@@ -72,7 +72,7 @@ class GeneratePromXmlService
                                 ->loop(function (XMLArray $XMLArray) use ($characteristics) {
                                     foreach ($characteristics as $characteristic) {
                                         $XMLArray->add('param', substr(htmlspecialchars(addslashes($characteristic->getValue())), 0, 255), [
-                                            'name' => htmlspecialchars(addslashes($characteristic->getTitle()))
+                                            'name' => substr(htmlspecialchars(addslashes($characteristic->getTitle())), 0, 255)
                                         ]);
                                     }
                                 })

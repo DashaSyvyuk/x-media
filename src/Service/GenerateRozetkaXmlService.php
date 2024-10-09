@@ -71,34 +71,35 @@ class GenerateRozetkaXmlService
                                 $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
 
                                 if (!empty($vendor)) {
-                                    $images = $product->getImages();
-                                    $characteristics = $product->getCharacteristics();
+                                    if ($vendor[0]->getFilterAttribute()->getValue() !== 'Apple') {
+                                        $images = $product->getImages();
+                                        $characteristics = $product->getCharacteristics();
 
-                                    $XMLArray->start('offer', [
-                                        'id' => $product->getId(),
-                                        'available' => true,
-                                    ])
-                                        ->add('stock_quantity', rand(1, 3))
-                                        ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
-                                        ->add('price', $this->adjustPrice($product->getPrice()))
-                                        ->add('currencyId', 'UAH')
-                                        ->add('categoryId', $product->getCategory()->getId())
-                                        ->loop(function (XMLArray $XMLArray) use ($images) {
-                                            foreach ($images as $image) {
-                                                $XMLArray->add('picture', 'https://x-media.com.ua/images/products/' . $image->getImageUrl());
-                                            }
-                                        })
-                                        ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
-                                        ->add('name', strip_tags(addslashes($product->getTitle())))
-                                        ->add('description', htmlentities($product->getDescription(), ENT_XML1))
-                                        ->loop(function (XMLArray $XMLArray) use ($characteristics) {
-                                            foreach ($characteristics as $characteristic) {
-                                                $XMLArray->add('param', htmlspecialchars(addslashes($characteristic->getValue())), [
-                                                    'name' => htmlspecialchars(addslashes($characteristic->getTitle()))
-                                                ]);
-                                            }
-                                        })
-                                    ;
+                                        $XMLArray->start('offer', [
+                                            'id' => $product->getId(),
+                                            'available' => true,
+                                        ])
+                                            ->add('stock_quantity', rand(1, 3))
+                                            ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
+                                            ->add('price', $this->adjustPrice($product->getPrice()))
+                                            ->add('currencyId', 'UAH')
+                                            ->add('categoryId', $product->getCategory()->getId())
+                                            ->loop(function (XMLArray $XMLArray) use ($images) {
+                                                foreach ($images as $image) {
+                                                    $XMLArray->add('picture', 'https://x-media.com.ua/images/products/' . $image->getImageUrl());
+                                                }
+                                            })
+                                            ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
+                                            ->add('name', strip_tags(addslashes($product->getTitle())))
+                                            ->add('description', $this->formatString($product->getDescription()))
+                                            ->loop(function (XMLArray $XMLArray) use ($characteristics) {
+                                                foreach ($characteristics as $characteristic) {
+                                                    $XMLArray->add('param',substr(strip_tags(addslashes($characteristic->getValue())), 0, 255), [
+                                                        'name' => substr(strip_tags(addslashes($characteristic->getTitle())), 0, 255)
+                                                    ]);
+                                                }
+                                            });
+                                    }
                                 }
                             }
                         })
@@ -126,5 +127,10 @@ class GenerateRozetkaXmlService
         }
 
         return $newPrice;
+    }
+
+    private function formatString(string $string): string
+    {
+        return sprintf('<![CDATA[%s]]>', trim($string));
     }
 }

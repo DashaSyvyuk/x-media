@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<yml_catalog date="2024-09-28 11:27">
+<yml_catalog date="2024-10-08 19:34">
     <shop>
         <name>X-media</name>
         <company>X-media</company>
@@ -12,10 +12,9 @@
         </categories>
         <offers>
             <offer id="541" available="1">
-                <stock_quantity>3</stock_quantity>
+                <stock_quantity>2</stock_quantity>
                 <url>https://x-media.com.ua/products/541</url>
-                <price>20999</price>
-                <price_old>21499</price_old>
+                <price>27999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/5NlYrcJvP2.jpg</picture>
@@ -24,135 +23,134 @@
                 <picture>https://x-media.com.ua/images/products/mghCapYE8p.jpg</picture>
                 <vendor>Asus</vendor>
                 <name>Портативна ігрова приставка ASUS ROG Ally  7” FHD IPS, AMD Ryzen Z1, Windows 11 Home</name>
-                <description>&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Грайте у всі свої ігри&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+                <description><![CDATA[<p style="text-align:center"><span style="font-size:28px"><strong>Грайте у всі свої ігри</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_0.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_0.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Ігровий КПК&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Ігровий КПК</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;ASUS ROG Ally &amp;mdash; це портативна консоль на базі Windows , тож ви можете грати в усі свої ігри незалежно від платформи та де б ви не були. Незалежно від того, чи це інді-ігри, чи високобюджетні ігри Triple-A, завдяки високій потужності консолі грати в кожну з них буде однаково приємно. Окрім дуже зручної та зручної форми, консоль також вирізняється великим екраном Full HD 120 Гц&amp;nbsp;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">ASUS ROG Ally &mdash; це портативна консоль на базі Windows , тож ви можете грати в усі свої ігри незалежно від платформи та де б ви не були. Незалежно від того, чи це інді-ігри, чи високобюджетні ігри Triple-A, завдяки високій потужності консолі грати в кожну з них буде однаково приємно. Окрім дуже зручної та зручної форми, консоль також вирізняється великим екраном Full HD 120 Гц&nbsp;</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="ASUS ROG Ally RC71L-NH001W консоль windows power full hd 120 Hz" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_1.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="ASUS ROG Ally RC71L-NH001W консоль windows power full hd 120 Hz" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_1.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Розваги на повній швидкості&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Розваги на повній швидкості</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Хочете пограти з друзями? Просто підключіть консоль ASUS ROG Ally до телевізора та з&amp;rsquo;єднайте з нею кілька планшетів, щоб разом насолоджуватися грою. Якщо ви віддаєте перевагу грати на самоті та бажаєте отримати ще більшу продуктивність, ви можете підключити пристрій до зовнішньої відеокарти XG Mobile і монітора, клавіатури та миші, щоб забезпечити ігровий досвід, схожий на ПК, із реалістичними зображеннями з роздільністю до 4K&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Хочете пограти з друзями? Просто підключіть консоль ASUS ROG Ally до телевізора та з&rsquo;єднайте з нею кілька планшетів, щоб разом насолоджуватися грою. Якщо ви віддаєте перевагу грати на самоті та бажаєте отримати ще більшу продуктивність, ви можете підключити пристрій до зовнішньої відеокарти XG Mobile і монітора, клавіатури та миші, щоб забезпечити ігровий досвід, схожий на ПК, із реалістичними зображеннями з роздільністю до 4K</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Мобільна консоль ASUS ROG Ally RC71L-NH001W XG роздільна здатність 4k" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_2.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Мобільна консоль ASUS ROG Ally RC71L-NH001W XG роздільна здатність 4k" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_2.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Багато бібліотек, один пристрій&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Багато бібліотек, один пристрій</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Незалежно від того, де ви купуєте свої ігри, ви можете грати в них на консолі ASUS ROG Ally , яка сумісна з такими сервісами, як Steam, Xbox Game Pass, Epic, GOG та іншими. Нову версію програмного забезпечення Armory Crate було розроблено, щоб найкраще організувати ваші ігри, щоб їх можна було запускати зручно та з одного місця, незалежно від місця, де вони встановлені. Тож ви можете забути про розділену бібліотеку&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Незалежно від того, де ви купуєте свої ігри, ви можете грати в них на консолі ASUS ROG Ally , яка сумісна з такими сервісами, як Steam, Xbox Game Pass, Epic, GOG та іншими. Нову версію програмного забезпечення Armory Crate було розроблено, щоб найкраще організувати ваші ігри, щоб їх можна було запускати зручно та з одного місця, незалежно від місця, де вони встановлені. Тож ви можете забути про розділену бібліотеку</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Сумісність із сервісами консолі ASUS ROG Ally RC71L-NH001W Steam Xbox Game Pass Epic GOG" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_3.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Сумісність із сервісами консолі ASUS ROG Ally RC71L-NH001W Steam Xbox Game Pass Epic GOG" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_3.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Відкрийте для себе наступну улюблену гру&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Відкрийте для себе наступну улюблену гру</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;ASUS ROG Ally дозволяє грати в найновіші ігри відразу після їх запуску, тож вам не доведеться чекати персоналізованих версій і ніколи нічого не пропустити. Разом з консоллю ви отримаєте безкоштовну 90-денну пробну версію Xbox Game Pass Ultimate (після цього періоду з вас буде стягуватися плата згідно з прейскурантом послуги), завдяки якій ви зможете відразу спробувати всі нові ігри. Нові назви постійно додаються до бібліотеки, тож у вас ніколи не вистачить нових вражень&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">ASUS ROG Ally дозволяє грати в найновіші ігри відразу після їх запуску, тож вам не доведеться чекати персоналізованих версій і ніколи нічого не пропустити. Разом з консоллю ви отримаєте безкоштовну 90-денну пробну версію Xbox Game Pass Ultimate (після цього періоду з вас буде стягуватися плата згідно з прейскурантом послуги), завдяки якій ви зможете відразу спробувати всі нові ігри. Нові назви постійно додаються до бібліотеки, тож у вас ніколи не вистачить нових вражень</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Консоль ASUS ROG Ally RC71L-NH001W xbox пройшла остаточний пробний період" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_4.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Консоль ASUS ROG Ally RC71L-NH001W xbox пройшла остаточний пробний період" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_4.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Призначений для кишенькової гри&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Призначений для кишенькової гри</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Консоль ASUS ROG Ally оснащена дивовижним процесором AMD Ryzen&amp;trade; Z1 , який базується на архітектурі Zen 4 і був створений за 4-нм техпроцесом , тож може впоратися з будь-якими викликами. Для цього він використовує графічний процесор RDNA&amp;trade; 3 і має такі технології масштабування, як FidelityFX&amp;trade; Super Resolution і Radeon&amp;trade; Super Resolution , які дозволяють збільшити кількість кадрів за секунду, зберігаючи чудову якість зображення. Це абсолютно нова якість ігрового процесу на кишеньковій консолі&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Консоль ASUS ROG Ally оснащена дивовижним процесором AMD Ryzen&trade; Z1 , який базується на архітектурі Zen 4 і був створений за 4-нм техпроцесом , тож може впоратися з будь-якими викликами. Для цього він використовує графічний процесор RDNA&trade; 3 і має такі технології масштабування, як FidelityFX&trade; Super Resolution і Radeon&trade; Super Resolution , які дозволяють збільшити кількість кадрів за секунду, зберігаючи чудову якість зображення. Це абсолютно нова якість ігрового процесу на кишеньковій консолі</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="ASUS ROG Ally RC71L-NH001W консоль CPU Z1 APU zen 4 4 нм GPU RDNA™ 3" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_5.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="ASUS ROG Ally RC71L-NH001W консоль CPU Z1 APU zen 4 4 нм GPU RDNA™ 3" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_5.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Система охолодження нульової гравітації&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Система охолодження нульової гравітації</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Щоб грати будь-де, необхідна відповідна система охолодження. Ось чому в консолі ASUS ROG Ally використовується охолодження Zero Gravity , яке базується на спеціально розробленій трубі з використанням сітчастої структури, завдяки чому вона справді кидає виклик гравітації. Крім того, пристрій оснащений двома вентиляторами , які забезпечують краще охолодження та мінімізують створюваний шум&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Щоб грати будь-де, необхідна відповідна система охолодження. Ось чому в консолі ASUS ROG Ally використовується охолодження Zero Gravity , яке базується на спеціально розробленій трубі з використанням сітчастої структури, завдяки чому вона справді кидає виклик гравітації. Крім того, пристрій оснащений двома вентиляторами , які забезпечують краще охолодження та мінімізують створюваний шум</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Консоль ASUS ROG Ally RC71L-NH001W без гравітації з двома вентиляторами" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_6.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Консоль ASUS ROG Ally RC71L-NH001W без гравітації з двома вентиляторами" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_6.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Чемпіон у напівлегкій вазі&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Чемпіон у напівлегкій вазі</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Незважаючи на такий величезний потенціал, консоль ASUS ROG Ally важить всього 608 грамів , тому не буде викликати дискомфорту навіть під час дуже тривалих ігор. Крім того, ви можете легко носити його в рюкзаку або сумці, не додаючи собі особливого тягаря&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Незважаючи на такий величезний потенціал, консоль ASUS ROG Ally важить всього 608 грамів , тому не буде викликати дискомфорту навіть під час дуже тривалих ігор. Крім того, ви можете легко носити його в рюкзаку або сумці, не додаючи собі особливого тягаря</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Консоль ASUS ROG Ally RC71L-NH001W, вага 608 г" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_7.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Консоль ASUS ROG Ally RC71L-NH001W, вага 608 г" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_7.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Неймовірна різкість&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Неймовірна різкість</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Окрім відмінної продуктивності, дуже важлива якість дисплея. Ось чому ASUS ROG Ally оснащений дисплеєм, який пропонує якість, яка була в ігрових комп&amp;rsquo;ютерах лише кілька років тому. Консоль має 7-дюймовий екран із сенсорною матрицею з роздільною здатністю до 1920 x 1080 пікселів , частотою оновлення до 120 Гц і підтримує технологію FreeSync Premium , що разом забезпечує відмінне враження під час кожної гри. Крім того, екран покритий склом Corning&amp;reg; Gorilla&amp;reg; Glass Victus&amp;reg; , яке захищає його від зносу під час щоденного використання&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Окрім відмінної продуктивності, дуже важлива якість дисплея. Ось чому ASUS ROG Ally оснащений дисплеєм, який пропонує якість, яка була в ігрових комп&rsquo;ютерах лише кілька років тому. Консоль має 7-дюймовий екран із сенсорною матрицею з роздільною здатністю до 1920 x 1080 пікселів , частотою оновлення до 120 Гц і підтримує технологію FreeSync Premium , що разом забезпечує відмінне враження під час кожної гри. Крім того, екран покритий склом Corning&reg; Gorilla&reg; Glass Victus&reg; , яке захищає його від зносу під час щоденного використання</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Консоль ASUS ROG Ally RC71L-NH001W 7-дюймовий сенсорний екран 1080p 120 Гц freesync premium Corning® Gorilla® Glass Victus®" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_8.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Консоль ASUS ROG Ally RC71L-NH001W 7-дюймовий сенсорний екран 1080p 120 Гц freesync premium Corning® Gorilla® Glass Victus®" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_8.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Гра на свіжому повітрі&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Гра на свіжому повітрі</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Дисплей у консолі ASUS ROG Ally досягає яскравості до 500 ніт , тож ви можете вільно грати навіть у дуже яскравих кімнатах, не турбуючись про те, що ви не зможете побачити, що відбувається на екрані. Ця висока яскравість також дозволяє використовувати консоль на відкритому повітрі, не ховаючись у тіні, щоб добре бачити екран. Відблиски на поверхні дисплея зменшуються завдяки покриттю Corning&amp;reg; Gorilla&amp;reg; Glass DXC , що робить ще простіше контролювати кожну деталь. Крім того, покриття також забезпечує більш ніж на 40% більшу твердість , що робить екран менш сприйнятливим до подряпин&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Дисплей у консолі ASUS ROG Ally досягає яскравості до 500 ніт , тож ви можете вільно грати навіть у дуже яскравих кімнатах, не турбуючись про те, що ви не зможете побачити, що відбувається на екрані. Ця висока яскравість також дозволяє використовувати консоль на відкритому повітрі, не ховаючись у тіні, щоб добре бачити екран. Відблиски на поверхні дисплея зменшуються завдяки покриттю Corning&reg; Gorilla&reg; Glass DXC , що робить ще простіше контролювати кожну деталь. Крім того, покриття також забезпечує більш ніж на 40% більшу твердість , що робить екран менш сприйнятливим до подряпин</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Яскравість екрана консолі ASUS ROG Ally RC71L-NH001W Покриття Corning® Gorilla® Glass DXC" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_9.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Яскравість екрана консолі ASUS ROG Ally RC71L-NH001W Покриття Corning® Gorilla® Glass DXC" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_9.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Захоплюючий стереозвук&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Захоплюючий стереозвук</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Завдяки двом фронтальним динамікам із розумним підсилювачем , які працюють у стандарті Dolby Atmos , ви можете насолоджуватися звуком без спотворень і повністю зануритися в гру. Двонаправлене шумозаглушення за допомогою ШІ відповідає за позбавлення від фонових звуків , яке обробляє звук як на вході, так і на виході&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Завдяки двом фронтальним динамікам із розумним підсилювачем , які працюють у стандарті Dolby Atmos , ви можете насолоджуватися звуком без спотворень і повністю зануритися в гру. Двонаправлене шумозаглушення за допомогою ШІ відповідає за позбавлення від фонових звуків , яке обробляє звук як на вході, так і на виході</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Консоль ASUS ROG Ally RC71L-NH001W, звук Dolby Atmos, шумозаглушення" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_10.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Консоль ASUS ROG Ally RC71L-NH001W, звук Dolby Atmos, шумозаглушення" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_10.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Розширення microSD&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Розширення microSD</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Спеціальний слот для карт пам&amp;rsquo;яті microSD UHS-II стане в нагоді людям, які мають справді велику бібліотеку ігор. Не хвилюйтеся, що ігри, збережені на карті пам&amp;rsquo;яті, працюватимуть повільніше &amp;ndash; у порівнянні зі спеціальним SSD PCIe Gen 4 час завантаження лише приблизно на 4% довший , а це означає, що час очікування довший лише на кілька секунд. Наприклад, Cyberpunk 2077 завантажується з диска за 26,86 секунди , а з SD-карти UHS-II час завантаження становить 27,92 секунди&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Спеціальний слот для карт пам&rsquo;яті microSD UHS-II стане в нагоді людям, які мають справді велику бібліотеку ігор. Не хвилюйтеся, що ігри, збережені на карті пам&rsquo;яті, працюватимуть повільніше &ndash; у порівнянні зі спеціальним SSD PCIe Gen 4 час завантаження лише приблизно на 4% довший , а це означає, що час очікування довший лише на кілька секунд. Наприклад, Cyberpunk 2077 завантажується з диска за 26,86 секунди , а з SD-карти UHS-II час завантаження становить 27,92 секунди</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Час зарядки карти microSD консолі ASUS ROG Ally RC71L-NH001W" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_11.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Час зарядки карти microSD консолі ASUS ROG Ally RC71L-NH001W" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/58/5886764/storage_app_opisy2_asus_533146/asus_rog_ally_11.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;</description>
-                <param name="Процесор">Ryzen Z1</param>
-                <param name="Графічний макет">Графіка AMD Radeon</param>
-                <param name="Частота оновлення екрана [Гц]">120</param>
-                <param name="Датчики">Сканер відбитків пальців</param>
-                <param name="З\&amp;#039;єднання">Bluetooth, Wi-Fi</param>
-                <param name="Оперативна пам\&amp;#039;ять [ГБ">16 ГБ DDR5</param>
-                <param name="Внутрішня пам\&amp;#039;ять [ГБ]">512</param>
-                <param name="Діагональ екрану [дюйм]">7</param>
-                <param name="Гучномовці">Так</param>
-                <param name="Скло">Gorilla Glass Victus</param>
-                <param name="Тип екрану">IPS</param>
-                <param name="Вбудований мікрофон">Так</param>
-                <param name="Ширина [мм]">280</param>
-                <param name="Висота [мм]">111</param>
-                <param name="Глибина [мм]">212</param>
-                <param name="Вага [г]">608</param>
-                <param name="Гарантія">24 місяці</param>
+<p style="text-align:center">&nbsp;</p>]]></description>
+                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[Ryzen Z1]]></param>
+                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[Графіка AMD Radeon]]></param>
+                <param name="&lt;![CDATA[Частота оновлення екрана [Гц]]]&gt;"><![CDATA[120]]></param>
+                <param name="&lt;![CDATA[Датчики]]&gt;"><![CDATA[Сканер відбитків пальців]]></param>
+                <param name="&lt;![CDATA[З'єднання]]&gt;"><![CDATA[Bluetooth, Wi-Fi]]></param>
+                <param name="&lt;![CDATA[Оперативна пам'ять [ГБ]]&gt;"><![CDATA[16 ГБ DDR5]]></param>
+                <param name="&lt;![CDATA[Внутрішня пам'ять [ГБ]]]&gt;"><![CDATA[512]]></param>
+                <param name="&lt;![CDATA[Діагональ екрану [дюйм]]]&gt;"><![CDATA[7]]></param>
+                <param name="&lt;![CDATA[Гучномовці]]&gt;"><![CDATA[Так]]></param>
+                <param name="&lt;![CDATA[Скло]]&gt;"><![CDATA[Gorilla Glass Victus]]></param>
+                <param name="&lt;![CDATA[Тип екрану]]&gt;"><![CDATA[IPS]]></param>
+                <param name="&lt;![CDATA[Вбудований мікрофон]]&gt;"><![CDATA[Так]]></param>
+                <param name="&lt;![CDATA[Ширина [мм]]]&gt;"><![CDATA[280]]></param>
+                <param name="&lt;![CDATA[Висота [мм]]]&gt;"><![CDATA[111]]></param>
+                <param name="&lt;![CDATA[Глибина [мм]]]&gt;"><![CDATA[212]]></param>
+                <param name="&lt;![CDATA[Вага [г]]]&gt;"><![CDATA[608]]></param>
+                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
             </offer>
             <offer id="116" available="1">
-                <stock_quantity>1</stock_quantity>
+                <stock_quantity>2</stock_quantity>
                 <url>https://x-media.com.ua/products/116</url>
-                <price>31999</price>
-                <price_old/>
+                <price>42999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/uz2vpoRt9s.jpg</picture>
@@ -165,120 +163,119 @@
                 <picture>https://x-media.com.ua/images/products/l6H4QENjZ2.jpg</picture>
                 <vendor>Asus</vendor>
                 <name>Портативна ігрова приставка ASUS ROG Ally AMD Ryzen Z1 Extreme/512GB/Windows 11 Home/7” FHD IPS</name>
-                <description>&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Портативна консоль ASUS ROG Ally з процесором AMD Ryzen Z1 Extream&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+                <description><![CDATA[<p style="text-align:center"><span style="font-size:26px"><strong>Портативна консоль ASUS ROG Ally з процесором AMD Ryzen Z1 Extream</strong></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;ROG Ally &amp;mdash; потужна портативна консоль. Оскільки він працює на Windows, ви можете грати в усі свої ігри з будь-якої платформи, де б ви не були. Ви можете глибоко зануритися в дію ваших улюблених AAA або інді-ігор, насолоджуючись годинами гри на великому екрані Full HD 120 Гц і надзвичайно зручною ергономікою. При вазі всього 608 грам ROG Ally забезпечить комфорт навіть під час тривалих ігрових сесій і не стане важким тягарем у вашому рюкзаку.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">ROG Ally &mdash; потужна портативна консоль. Оскільки він працює на Windows, ви можете грати в усі свої ігри з будь-якої платформи, де б ви не були. Ви можете глибоко зануритися в дію ваших улюблених AAA або інді-ігор, насолоджуючись годинами гри на великому екрані Full HD 120 Гц і надзвичайно зручною ергономікою. При вазі всього 608 грам ROG Ally забезпечить комфорт навіть під час тривалих ігрових сесій і не стане важким тягарем у вашому рюкзаку.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Насолоджуйтеся спільним геймплеєм, підключивши ROG Ally до телевізора та об&amp;rsquo;єднавши кілька контролерів. Таким чином, ви можете миттєво перетворити Ally на суперефективний ігровий пристрій для домашнього дивана.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Насолоджуйтеся спільним геймплеєм, підключивши ROG Ally до телевізора та об&rsquo;єднавши кілька контролерів. Таким чином, ви можете миттєво перетворити Ally на суперефективний ігровий пристрій для домашнього дивана.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Багато бібліотек, один пристрій. ROG Ally повністю сумісний із Steam, Xbox Game Pass, Epic, GOG тощо, тож незалежно від того, де ви купуєте свої ігри, ви точно зможете грати в них на Ally.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Багато бібліотек, один пристрій. ROG Ally повністю сумісний із Steam, Xbox Game Pass, Epic, GOG тощо, тож незалежно від того, де ви купуєте свої ігри, ви точно зможете грати в них на Ally.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль ASUS ROG Ally – вид спереду" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-widok-przod.jpg?" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативна консоль ASUS ROG Ally – вид спереду" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-widok-przod.jpg?" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Час на роботу - на повну&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Час на роботу - на повну</strong></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Консоль ASUS ROG Ally у поєднанні із зовнішньою відеокартою XG Mobile, монітором, мишею та клавіатурою дозволить вам працювати та грати на високому рівні з виключно реалістичним зображенням навіть у роздільній здатності 4K.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Консоль ASUS ROG Ally у поєднанні із зовнішньою відеокартою XG Mobile, монітором, мишею та клавіатурою дозволить вам працювати та грати на високому рівні з виключно реалістичним зображенням навіть у роздільній здатності 4K.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Для високопродуктивного пристрою потрібен екран із найвищими характеристиками. Таким чином, екран Ally забезпечує відмінні характеристики, які можна було знайти у багаторазово більших ігрових ноутбуках, пропонованих конкурентами кілька років тому. 7-дюймовий екран оснащений сенсорною матрицею 1080p із частотою оновлення 120 Гц і підтримкою FreeSync Premium, що забезпечує приголомшливі ігрові враження. Для захисту екрану від зносу під час повсякденного використання використовується скло Corning Gorilla Glass Victus, завдяки якому сенсорний екран завжди виглядає як новий.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Для високопродуктивного пристрою потрібен екран із найвищими характеристиками. Таким чином, екран Ally забезпечує відмінні характеристики, які можна було знайти у багаторазово більших ігрових ноутбуках, пропонованих конкурентами кілька років тому. 7-дюймовий екран оснащений сенсорною матрицею 1080p із частотою оновлення 120 Гц і підтримкою FreeSync Premium, що забезпечує приголомшливі ігрові враження. Для захисту екрану від зносу під час повсякденного використання використовується скло Corning Gorilla Glass Victus, завдяки якому сенсорний екран завжди виглядає як новий.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль ASUS ROG Ally - призначена для гри в портативний комп’ютер" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-lifestyle-01.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативна консоль ASUS ROG Ally - призначена для гри в портативний комп’ютер" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-lifestyle-01.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Призначений для кишенькової гри&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Призначений для кишенькової гри</strong></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Новітній APU серії AMD Ryzen Z1 забезпечує дивовижну ігрову машину ASUS ROG Ally. Цей кремнієвий чіп, виготовлений за найсучаснішим технологічним процесом 4 нм, базується на архітектурі Zen 4 і використовує новітній графічний процесор RDNA 3. Звичайні РК-екрани зазвичай мають максимальну яскравість у діапазоні 200-300 ніт, тоді як Ally може похвалитися максимальною яскравістю 500 заклепок. Вища яскравість екрану дозволяє Ally чітко відображати дію в складних умовах із високою яскравістю навколишнього середовища, наприклад під час використання на вулиці.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Новітній APU серії AMD Ryzen Z1 забезпечує дивовижну ігрову машину ASUS ROG Ally. Цей кремнієвий чіп, виготовлений за найсучаснішим технологічним процесом 4 нм, базується на архітектурі Zen 4 і використовує новітній графічний процесор RDNA 3. Звичайні РК-екрани зазвичай мають максимальну яскравість у діапазоні 200-300 ніт, тоді як Ally може похвалитися максимальною яскравістю 500 заклепок. Вища яскравість екрану дозволяє Ally чітко відображати дію в складних умовах із високою яскравістю навколишнього середовища, наприклад під час використання на вулиці.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Ally має дивовижні технології масштабування, такі як FidelityFX Super Resolution і Radeon Super Resolution, які дозволяють збільшити частоту кадрів, зберігаючи чудову якість зображення. ROG тісно співпрацює з AMD, щоб повністю розкрити потенціал цього передового пристрою та надати можливості для повного перетворення портативних ігор.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Ally має дивовижні технології масштабування, такі як FidelityFX Super Resolution і Radeon Super Resolution, які дозволяють збільшити частоту кадрів, зберігаючи чудову якість зображення. ROG тісно співпрацює з AMD, щоб повністю розкрити потенціал цього передового пристрою та надати можливості для повного перетворення портативних ігор.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль ASUS ROG Ally - кутовий вид ззаду" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-widok-tyl-bok.jpg?" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативна консоль ASUS ROG Ally - кутовий вид ззаду" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-widok-tyl-bok.jpg?" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Захоплюючий стереозвук&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Захоплюючий стереозвук</strong></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Подвійні спрямовані вперед динаміки з інтелектуальним підсилювачем і технологією Dolby Atmos надають ASUS ROG Ally більше гучності без спотворень, тож ви можете повністю зануритися в ігрові дії.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Подвійні спрямовані вперед динаміки з інтелектуальним підсилювачем і технологією Dolby Atmos надають ASUS ROG Ally більше гучності без спотворень, тож ви можете повністю зануритися в ігрові дії.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Крім того, двонаправлене шумопоглинання штучного інтелекту обробляє як вхідний, так і вихідний звук, відфільтровуючи будь-який дратівливий фоновий шум у вашому чаті.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Крім того, двонаправлене шумопоглинання штучного інтелекту обробляє як вхідний, так і вихідний звук, відфільтровуючи будь-який дратівливий фоновий шум у вашому чаті.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль ASUS ROG Ally - відкрийте для себе наступну улюблену гру" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-lifestyle-02.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативна консоль ASUS ROG Ally - відкрийте для себе наступну улюблену гру" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-lifestyle-02.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Відкрийте для себе наступну улюблену гру&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Відкрийте для себе наступну улюблену гру</strong></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Наявність ігор у кількох програмах може зробити вашу бібліотеку фрагментованою, що незручно. Спеціально для консолі ROG Ally виробник розробив нову редакцію програмного забезпечення Armory Crate, яке призначене для організації та зручного запуску всіх ваших ігор з одного місця, незалежно від того, де вони встановлені.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Наявність ігор у кількох програмах може зробити вашу бібліотеку фрагментованою, що незручно. Спеціально для консолі ROG Ally виробник розробив нову редакцію програмного забезпечення Armory Crate, яке призначене для організації та зручного запуску всіх ваших ігор з одного місця, незалежно від того, де вони встановлені.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Грайте в Deathloop, Sea of ​​​​Thieves, Minecraft і сотні інших комп&amp;#39;ютерних ігор. Крім того, ви можете грати в такі ігри, як Starfield і Redfall* раніше за інших, щойно вони вийдуть, і ви ніколи нічого не пропустите. ROG Ally поставляється з 90-денною безкоштовною пробною версією, тому ви можете почати грати в усі останні ігри відразу. Оскільки ігри постійно додаються, ви завжди можете пограти в щось нове.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Грайте в Deathloop, Sea of ​​​​Thieves, Minecraft і сотні інших комп&#39;ютерних ігор. Крім того, ви можете грати в такі ігри, як Starfield і Redfall* раніше за інших, щойно вони вийдуть, і ви ніколи нічого не пропустите. ROG Ally поставляється з 90-денною безкоштовною пробною версією, тому ви можете почати грати в усі останні ігри відразу. Оскільки ігри постійно додаються, ви завжди можете пограти в щось нове.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;*Starfield і Redfall: ігри, заплановані на 2023 рік&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">*Starfield і Redfall: ігри, заплановані на 2023 рік</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль ASUS ROG Ally - система охолодження Zero Gravity" src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-large,,2023/9/pr_2023_9_4_13_39_24_203_03.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативна консоль ASUS ROG Ally - система охолодження Zero Gravity" src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-large,,2023/9/pr_2023_9_4_13_39_24_203_03.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Система охолодження нульової гравітації&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Система охолодження нульової гравітації</strong></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;ROG Ally був створений для гри будь-де, тому індивідуальне рішення для охолодження було дуже важливим. Звичайні системи охолодження покладаються на силу тяжіння, яка дозволяє тепловим трубкам відводити тепло від системи. Однак Еллі використовує спеціально сконструйовану трубу з сітчастою структурою, яка справді кидає виклик силі тяжіння.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">ROG Ally був створений для гри будь-де, тому індивідуальне рішення для охолодження було дуже важливим. Звичайні системи охолодження покладаються на силу тяжіння, яка дозволяє тепловим трубкам відводити тепло від системи. Однак Еллі використовує спеціально сконструйовану трубу з сітчастою структурою, яка справді кидає виклик силі тяжіння.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;У багатьох портативних пристроях на ринку використовується один вентилятор, але ASUS знала на етапі проектування, що додатковий потік повітря завжди корисний. У Ally є подвійні вентилятори, які забезпечують краще охолодження на низьких швидкостях, щоб звести до мінімуму шум.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">У багатьох портативних пристроях на ринку використовується один вентилятор, але ASUS знала на етапі проектування, що додатковий потік повітря завжди корисний. У Ally є подвійні вентилятори, які забезпечують краще охолодження на низьких швидкостях, щоб звести до мінімуму шум.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль ASUS ROG Ally - система охолодження Zero Gravity" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-chlodzenie.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативна консоль ASUS ROG Ally - система охолодження Zero Gravity" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-chlodzenie.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Розширення microSD&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Розширення microSD</strong></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Якщо у вас велика бібліотека ігор, консоль ASUS ROG Ally вас не розчарує. Спеціальний слот для карт пам&amp;rsquo;яті microSD UHS-II дає змогу легко додати до пристрою швидку пам&amp;rsquo;ять, щоб мати змогу зберігати більше встановлених ігор.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Якщо у вас велика бібліотека ігор, консоль ASUS ROG Ally вас не розчарує. Спеціальний слот для карт пам&rsquo;яті microSD UHS-II дає змогу легко додати до пристрою швидку пам&rsquo;ять, щоб мати змогу зберігати більше встановлених ігор.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Тому Аллі готова грати в будь-який час. Завдяки часу завантаження лише на 4% повільніше, ніж у спеціального твердотільного накопичувача PCIe Gen, ви зможете насолоджуватися ідеальною установкою для своїх ігор.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Тому Аллі готова грати в будь-який час. Завдяки часу завантаження лише на 4% повільніше, ніж у спеціального твердотільного накопичувача PCIe Gen, ви зможете насолоджуватися ідеальною установкою для своїх ігор.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль ASUS ROG Ally - вид зверху" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-widok-gora.jpg" /&gt;&lt;/p&gt;</description>
-                <param name="Процесор">AMD Ryzen Z1 Extreme (8 ядер, 16 потоків, 3,3 - 5,1 ГГц)</param>
-                <param name="Графічний макет">AMD RDNA 3.0 (2700 МГц)</param>
-                <param name="RAM">16 ГБ LPDDR5</param>
-                <param name="Вмонтована пам\&amp;#039;ять">512 ГБ SSD NVMe</param>
-                <param name="Тип екрана">Сенсорний, IPS</param>
-                <param name="Частота оновлення екрана">120 Гц</param>
-                <param name="Діагональ екрану">7\&quot;</param>
-                <param name="Розширення екрану">1920x1080</param>
-                <param name="Зв\&amp;#039;язок">Wi-Fi 6E 802.11 ax</param>
-                <param name="Роз\&amp;#039;єми">USB 3.2 Gen 2 (Type-C) - 1 шт.&lt;br&gt;Аудіовихід - 1 шт.&lt;br&gt;Зчитувач карт пам\&#039;яті MicroSD - 1 шт.&lt;br&gt;Роз\&#039;єм ROG XG - 1 шт.</param>
-                <param name="Кнопки">D-Pad&lt;br&gt;Аналогові ручки - 2 шт.&lt;br&gt;Бампер лівий/правий Лівий/правий тригер&lt;br&gt;Леза M1/M2 кнопка [+].&lt;br&gt;Кнопка [-] Кнопки A/B/X/Y&lt;br&gt;Кнопка Armory Crate&lt;br&gt;Кнопка \&quot;Додому\&quot;&lt;br&gt;Кнопка меню Кнопка перегляду</param>
-                <param name="Блок живлення">Акумулятор 5200 мАг, літій-іонний</param>
-                <param name="Колір">Білий</param>
-                <param name="Додаткова інформація">AMD FreeSync&lt;br&gt;Dolby Atmos&lt;br&gt;RGB підсвічування&lt;br&gt;Corning Gorilla Glass DXC&lt;br&gt;Corning Gorilla Glass Victus&lt;br&gt;Вбудовані стереодинаміки&lt;br&gt;Операційна система Windows 11&lt;br&gt;Сумісний з Armory Crate SE&lt;br&gt;Сумісний з Xbox Game Pass&lt;br&gt;Сумісний зі Steam Сумі</param>
-                <param name="Аксесуари в комплекті">Кабель USB Type-C&lt;br&gt;Зарядний пристрій</param>
-                <param name="Гарантія">24 місяці</param>
+<p style="text-align:center"><img alt="Портативна консоль ASUS ROG Ally - вид зверху" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-widok-gora.jpg" /></p>]]></description>
+                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Ryzen Z1 Extreme (8 ядер, 16 потоків, 3,3 - 5,1 ГГц)]]></param>
+                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 3.0 (2700 МГц)]]></param>
+                <param name="&lt;![CDATA[RAM]]&gt;"><![CDATA[16 ГБ LPDDR5]]></param>
+                <param name="&lt;![CDATA[Вмонтована пам'ять]]&gt;"><![CDATA[512 ГБ SSD NVMe]]></param>
+                <param name="&lt;![CDATA[Тип екрана]]&gt;"><![CDATA[Сенсорний, IPS]]></param>
+                <param name="&lt;![CDATA[Частота оновлення екрана]]&gt;"><![CDATA[120 Гц]]></param>
+                <param name="&lt;![CDATA[Діагональ екрану]]&gt;"><![CDATA[7"]]></param>
+                <param name="&lt;![CDATA[Розширення екрану]]&gt;"><![CDATA[1920x1080]]></param>
+                <param name="&lt;![CDATA[Зв'язок]]&gt;"><![CDATA[Wi-Fi 6E 802.11 ax]]></param>
+                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[USB 3.2 Gen 2 (Type-C) - 1 шт.<br>Аудіовихід - 1 шт.<br>Зчитувач карт пам'яті MicroSD - 1 шт.<br>Роз'єм ROG XG - 1 шт.]]></param>
+                <param name="&lt;![CDATA[Кнопки]]&gt;"><![CDATA[D-Pad<br>Аналогові ручки - 2 шт.<br>Бампер лівий/правий Лівий/правий тригер<br>Леза M1/M2 кнопка [+].<br>Кнопка [-] Кнопки A/B/X/Y<br>Кнопка Armory Crate<br>Кнопка "Додому"<br>Кнопка меню Кнопка перегляду]]></param>
+                <param name="&lt;![CDATA[Блок живлення]]&gt;"><![CDATA[Акумулятор 5200 мАг, літій-іонний]]></param>
+                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Білий]]></param>
+                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[AMD FreeSync<br>Dolby Atmos<br>RGB підсвічування<br>Corning Gorilla Glass DXC<br>Corning Gorilla Glass Victus<br>Вбудовані стереодинаміки<br>Операційна система Windows 11<br>Сумісний з Armory Crate SE<br>Сумісний з Xbox Game Pass<br>Сумісний зі Steam Сумі]]></param>
+                <param name="&lt;![CDATA[Аксесуари в комплекті]]&gt;"><![CDATA[Кабель USB Type-C<br>Зарядний пристрій]]></param>
+                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
             </offer>
             <offer id="100" available="1">
-                <stock_quantity>2</stock_quantity>
+                <stock_quantity>1</stock_quantity>
                 <url>https://x-media.com.ua/products/100</url>
-                <price>28899</price>
-                <price_old>33999</price_old>
+                <price>38999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/lQUd6gn99p.jpg</picture>
@@ -289,97 +286,96 @@
                 <picture>https://x-media.com.ua/images/products/LnE0s-m3jd.jpg</picture>
                 <vendor>Lenovo</vendor>
                 <name>Портативна ігрова приставка Lenovo Legion Go 512 GB Shadow Black</name>
-                <description>&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Сенсорний екран Lenovo PureSight Gaming&lt;/strong&gt;&lt;/span&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+                <description><![CDATA[<p style="text-align:center"><span style="color:#444444"><span style="font-size:26px"><strong>Сенсорний екран Lenovo PureSight Gaming</strong></span></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:14px"&gt;Портативна консоль Lenovo Legion Go оснащена вражаючим сенсорним екраном Lenovo PureSight Gaming з одним із найбільших розмірів діагоналі на ринку мобільних консолей &amp;ndash; цілих 8,8 дюйма, роздільною здатністю 2560 x 1600, яскравістю 500 ніт і 100% покриттям Палітра кольорів DCI-P3.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:14px">Портативна консоль Lenovo Legion Go оснащена вражаючим сенсорним екраном Lenovo PureSight Gaming з одним із найбільших розмірів діагоналі на ринку мобільних консолей &ndash; цілих 8,8 дюйма, роздільною здатністю 2560 x 1600, яскравістю 500 ніт і 100% покриттям Палітра кольорів DCI-P3.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:14px"&gt;Ви можете динамічно змінювати пропоновану роздільну здатність WQXGA від 1600p до 800p або регулювати частоту оновлення між швидкою 144 Гц і енергозберігаючою 60 Гц. Вибирайте параметри, які ідеально підходять вам, і пориньте в гру.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:14px">Ви можете динамічно змінювати пропоновану роздільну здатність WQXGA від 1600p до 800p або регулювати частоту оновлення між швидкою 144 Гц і енергозберігаючою 60 Гц. Вибирайте параметри, які ідеально підходять вам, і пориньте в гру.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль Lenovo Legion Go – вид спереду під кутом" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-widok-przod-bok.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативна консоль Lenovo Legion Go – вид спереду під кутом" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-widok-przod-bok.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Неперевершена потужність процесора AMD у ваших руках&lt;/strong&gt;&lt;/span&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:26px"><strong>Неперевершена потужність процесора AMD у ваших руках</strong></span></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:14px"&gt;Своєю продуктивністю консоль зобов&amp;#39;язана процесору AMD Ryzen Z1 Extreme. Цей потужний 8-ядерний процесор забезпечує одні з найкращих ігор на ринку. У поєднанні з вбудованою графікою RDNA 3 і тривалим часом автономної роботи консоль Legion Go пропонує захоплюючий ігровий досвід. Геймплей оживає завдяки революційній візуальній якості, що дозволяє грати в улюблені ігри без обмежень.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:14px">Своєю продуктивністю консоль зобов&#39;язана процесору AMD Ryzen Z1 Extreme. Цей потужний 8-ядерний процесор забезпечує одні з найкращих ігор на ринку. У поєднанні з вбудованою графікою RDNA 3 і тривалим часом автономної роботи консоль Legion Go пропонує захоплюючий ігровий досвід. Геймплей оживає завдяки революційній візуальній якості, що дозволяє грати в улюблені ігри без обмежень.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:14px"&gt;Крім того, Legion Go завдяки 16 ГБ оперативної пам&amp;rsquo;яті LPDDR5X із тактовою частотою 7500 МГц і до 512 ГБ накопичувача PCIe Gen 4 SSD забезпечує плавне перемикання між завданнями та достатньо місця для ігор, медіа та файлів. Легко розширюйте свій простір за допомогою слота для карток microSD із підтримкою до 2 ТБ, що дозволяє зберігати ще більше ваших улюблених книг. Насолоджуйтеся безперервною грою завдяки великому простору для зберігання, який можна розширити, усуваючи потребу видаляти старі ігри, щоб звільнити місце для нових.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:14px">Крім того, Legion Go завдяки 16 ГБ оперативної пам&rsquo;яті LPDDR5X із тактовою частотою 7500 МГц і до 512 ГБ накопичувача PCIe Gen 4 SSD забезпечує плавне перемикання між завданнями та достатньо місця для ігор, медіа та файлів. Легко розширюйте свій простір за допомогою слота для карток microSD із підтримкою до 2 ТБ, що дозволяє зберігати ще більше ваших улюблених книг. Насолоджуйтеся безперервною грою завдяки великому простору для зберігання, який можна розширити, усуваючи потребу видаляти старі ігри, щоб звільнити місце для нових.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль Lenovo Legion Go - неперевершена потужність процесора AMD у ваших руках" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-amd-ryzen.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативна консоль Lenovo Legion Go - неперевершена потужність процесора AMD у ваших руках" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-amd-ryzen.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Кілька режимів гри завдяки знімним контролерам&lt;/strong&gt;&lt;/span&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:26px"><strong>Кілька режимів гри завдяки знімним контролерам</strong></span></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:14px"&gt;Грайте в будь-які ігри за допомогою ергономічних контролерів і кількох режимів використання. Починаючи від портативного режиму з контролерами, підключеними до екрана, до режиму FPS, де ви можете відключити контролери та грати ще зручніше.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:14px">Грайте в будь-які ігри за допомогою ергономічних контролерів і кількох режимів використання. Починаючи від портативного режиму з контролерами, підключеними до екрана, до режиму FPS, де ви можете відключити контролери та грати ще зручніше.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:14px"&gt;Вільно покладіть екран на підставку, використовуйте лівий контролер з клавішами, а правий - вертикальну мишку для зручного прицілювання.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:14px">Вільно покладіть екран на підставку, використовуйте лівий контролер з клавішами, а правий - вертикальну мишку для зручного прицілювання.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль Lenovo Legion Go - кілька режимів гри зі знімними контролерами" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-kontrolery.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативна консоль Lenovo Legion Go - кілька режимів гри зі знімними контролерами" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-kontrolery.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Охолодження Lenovo Legion Coldfront&lt;/strong&gt;&lt;/span&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:26px"><strong>Охолодження Lenovo Legion Coldfront</strong></span></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:14px"&gt;Маленька і акуратна портативна консоль Lenovo Legion Go використовує технологію охолодження Legion Coldfront, яка використовується в ігровій серії Legion. 79 рідкокристалічних полімерних лопатей вентилятора усувають ризик перегріву пристрою, забезпечуючи ефективне охолодження та високу циркуляцію повітря.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:14px">Маленька і акуратна портативна консоль Lenovo Legion Go використовує технологію охолодження Legion Coldfront, яка використовується в ігровій серії Legion. 79 рідкокристалічних полімерних лопатей вентилятора усувають ризик перегріву пристрою, забезпечуючи ефективне охолодження та високу циркуляцію повітря.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:14px"&gt;Надтонкі ребра радіатора ідеально розсіюють тепло для оптимальної продуктивності. Грайте довгі години без будь-яких проблем і будьте впевнені, що пристрій буде підтримувати оптимальну температуру і тихий режим роботи, досягаючи ідеального балансу між потужністю і теплом.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:14px">Надтонкі ребра радіатора ідеально розсіюють тепло для оптимальної продуктивності. Грайте довгі години без будь-яких проблем і будьте впевнені, що пристрій буде підтримувати оптимальну температуру і тихий режим роботи, досягаючи ідеального балансу між потужністю і теплом.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль Lenovo Legion Go - охолодження Lenovo Legion Coldfront" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-chlodzenie.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативна консоль Lenovo Legion Go - охолодження Lenovo Legion Coldfront" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-chlodzenie.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Два динаміка і вбудований мікрофон&lt;/strong&gt;&lt;/span&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:26px"><strong>Два динаміка і вбудований мікрофон</strong></span></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:14px"&gt;Консоль Lenovo Legion Go має вбудовані подвійні твітери потужністю 2 Вт. Вони супроводжуються системою Dual Array &amp;mdash; системою з двох мікрофонів, які разом збирають звук із різних напрямків. Працюючи в режимі ближнього поля, вони запрограмовані на збір звуку з близького джерела, наприклад від користувача під час розмови або запису.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:14px">Консоль Lenovo Legion Go має вбудовані подвійні твітери потужністю 2 Вт. Вони супроводжуються системою Dual Array &mdash; системою з двох мікрофонів, які разом збирають звук із різних напрямків. Працюючи в режимі ближнього поля, вони запрограмовані на збір звуку з близького джерела, наприклад від користувача під час розмови або запису.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:14px"&gt;Крім того, консоль сумісна з технологією Dolby, яка покращує якість звуку. Крім ігор, ці функції ідеально підходять для перегляду фільмів або спілкування в Інтернеті.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:14px">Крім того, консоль сумісна з технологією Dolby, яка покращує якість звуку. Крім ігор, ці функції ідеально підходять для перегляду фільмів або спілкування в Інтернеті.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль Lenovo Legion Go - кутовий вид ззаду" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-widok-tyl-bok.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативна консоль Lenovo Legion Go - кутовий вид ззаду" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-widok-tyl-bok.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Super Rapid Charge Експрес-швидка зарядка&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&lt;span style="font-size:14px"&gt;Грайте довше з акумулятором Legion Go ємністю 49,2 Вт&amp;middot;год, що дозволяє грати довше без частого заряджання. Швидко зарядіть свій пристрій за допомогою Super Rapid Charge Express і продовжуйте грати в режимі обходу живлення під час підключення до джерела живлення.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:26px"><strong>Super Rapid Charge Експрес-швидка зарядка</strong></span><br />
+<span style="font-size:14px">Грайте довше з акумулятором Legion Go ємністю 49,2 Вт&middot;год, що дозволяє грати довше без частого заряджання. Швидко зарядіть свій пристрій за допомогою Super Rapid Charge Express і продовжуйте грати в режимі обходу живлення під час підключення до джерела живлення.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-size:14px"&gt;Усуньте проблеми з перегріванням за допомогою контролю температури та скористайтеся підтримкою оптимізації батареї, щоб продовжити свій ігровий сеанс.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="color:#444444"><span style="font-size:14px">Усуньте проблеми з перегріванням за допомогою контролю температури та скористайтеся підтримкою оптимізації батареї, щоб продовжити свій ігровий сеанс.</span></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативна консоль Lenovo Legion Go – вид спереду під кутом" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-widok-przod-dol.jpg" /&gt;&lt;/p&gt;</description>
-                <param name="Процесор">AMD Ryzen Z1 Extreme (8 ядер, 16 потоків, 3,3 - 5,1 ГГц)</param>
-                <param name="Графічний макет">AMD RDNA 3.0 (2700 МГц)</param>
-                <param name="RAM">16 ГБ LPDDR5X</param>
-                <param name="Вмонтована пам\&amp;#039;ять">512 ГБ NVMe SSD</param>
-                <param name="Тип екрана">Сенсорний, IPS</param>
-                <param name="Частота оновлення екрана">144 Гц</param>
-                <param name="Діагональ екрану">8,8\&quot;</param>
-                <param name="Розширення екрану">2560 x 1600</param>
-                <param name="Зв\&amp;#039;язок">Wi-Fi 802.11 a/b/g/n/ac/ax&lt;br&gt;Bluetooth 5.2</param>
-                <param name="Роз\&amp;#039;єми">USB 3.2 Gen 2 (Type-C) - 2 шт.&lt;br&gt;Аудіовихід - 1 шт.&lt;br&gt;Зчитувач карт пам\&#039;яті MicroSD - 1 шт.</param>
-                <param name="Кнопки">D-Pad&lt;br&gt;Аналогові ручки - 2 шт.&lt;br&gt;Бампер лівий/правий Лівий/правий тригер&lt;br&gt;Кнопки A/B/X/Y&lt;br&gt;Кнопка захоплення&lt;br&gt;Кнопка меню&lt;br&gt;Кнопка параметрів&lt;br&gt;Кнопка відпускання&lt;br&gt;Кнопки V1/V2/V3&lt;br&gt;Кнопка M3</param>
-                <param name="Блок живлення">Акумулятор 49,2 Вт/год</param>
-                <param name="Колір">Чорний</param>
-                <param name="Додаткова інформація">Dolby Atmos&lt;br&gt;Підтримка VRR&lt;br&gt;Регулювання гучності&lt;br&gt;Вбудовані стереодинаміки&lt;br&gt;Вбудована регульована підставка&lt;br&gt;Знімний джойстик&lt;br&gt;Підтримка карт пам\&#039;яті microSD об\&#039;ємом до 2 ТБ&lt;br&gt;Операційна система Windows 11 Сумісний з Xbox Game Pass&lt;br&gt;Сумісни</param>
-                <param name="Аксесуари в комплекті">Xbox Game Pass Ultimate (3-місячна підписка на обслуговування)&lt;br&gt;Зарядний пристрій&lt;br&gt;Портативний футляр&lt;br&gt;Аксесуар для режиму FPS</param>
-                <param name="Гарантія">24 місяці</param>
+<p style="text-align:center"><img alt="Портативна консоль Lenovo Legion Go – вид спереду під кутом" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-widok-przod-dol.jpg" /></p>]]></description>
+                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Ryzen Z1 Extreme (8 ядер, 16 потоків, 3,3 - 5,1 ГГц)]]></param>
+                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 3.0 (2700 МГц)]]></param>
+                <param name="&lt;![CDATA[RAM]]&gt;"><![CDATA[16 ГБ LPDDR5X]]></param>
+                <param name="&lt;![CDATA[Вмонтована пам'ять]]&gt;"><![CDATA[512 ГБ NVMe SSD]]></param>
+                <param name="&lt;![CDATA[Тип екрана]]&gt;"><![CDATA[Сенсорний, IPS]]></param>
+                <param name="&lt;![CDATA[Частота оновлення екрана]]&gt;"><![CDATA[144 Гц]]></param>
+                <param name="&lt;![CDATA[Діагональ екрану]]&gt;"><![CDATA[8,8"]]></param>
+                <param name="&lt;![CDATA[Розширення екрану]]&gt;"><![CDATA[2560 x 1600]]></param>
+                <param name="&lt;![CDATA[Зв'язок]]&gt;"><![CDATA[Wi-Fi 802.11 a/b/g/n/ac/ax<br>Bluetooth 5.2]]></param>
+                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[USB 3.2 Gen 2 (Type-C) - 2 шт.<br>Аудіовихід - 1 шт.<br>Зчитувач карт пам'яті MicroSD - 1 шт.]]></param>
+                <param name="&lt;![CDATA[Кнопки]]&gt;"><![CDATA[D-Pad<br>Аналогові ручки - 2 шт.<br>Бампер лівий/правий Лівий/правий тригер<br>Кнопки A/B/X/Y<br>Кнопка захоплення<br>Кнопка меню<br>Кнопка параметрів<br>Кнопка відпускання<br>Кнопки V1/V2/V3<br>Кнопка M3]]></param>
+                <param name="&lt;![CDATA[Блок живлення]]&gt;"><![CDATA[Акумулятор 49,2 Вт/год]]></param>
+                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Чорний]]></param>
+                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[Dolby Atmos<br>Підтримка VRR<br>Регулювання гучності<br>Вбудовані стереодинаміки<br>Вбудована регульована підставка<br>Знімний джойстик<br>Підтримка карт пам'яті microSD об'ємом до 2 ТБ<br>Операційна система Windows 11 Сумісний з Xbox Game Pass<br>Сумісни]]></param>
+                <param name="&lt;![CDATA[Аксесуари в комплекті]]&gt;"><![CDATA[Xbox Game Pass Ultimate (3-місячна підписка на обслуговування)<br>Зарядний пристрій<br>Портативний футляр<br>Аксесуар для режиму FPS]]></param>
+                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
             </offer>
             <offer id="540" available="1">
-                <stock_quantity>3</stock_quantity>
+                <stock_quantity>2</stock_quantity>
                 <url>https://x-media.com.ua/products/540</url>
-                <price>15599</price>
-                <price_old>16499</price_old>
+                <price>20799</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/WyWSXtaiLf.jpg</picture>
@@ -389,92 +385,91 @@
                 <picture>https://x-media.com.ua/images/products/A5mdvrBUx0.jpg</picture>
                 <vendor>Logitech</vendor>
                 <name>Портативна ігрова приставка LOGITECH G Cloud Gaming 940-000199</name>
-                <description>&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Портативна хмарна ігрова консоль&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+                <description><![CDATA[<p style="text-align:center"><span style="font-size:28px"><strong>Портативна хмарна ігрова консоль</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Портативна хмарна ігрова консоль Logitech G CLOUD має обчислювальну потужність і ігрову бібліотеку в хмарі. Завдяки цьому ви можете грати в необмежену кількість ігор у необмеженій кількості місць, а точне керування не обмежить ваші навички. Консоль C LOUD також легка та має акумулятор, якого вистачить на 12+ годин гри. Не просто грайте - грайте без обмежень&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Портативна хмарна ігрова консоль Logitech G CLOUD має обчислювальну потужність і ігрову бібліотеку в хмарі. Завдяки цьому ви можете грати в необмежену кількість ігор у необмеженій кількості місць, а точне керування не обмежить ваші навички. Консоль C LOUD також легка та має акумулятор, якого вистачить на 12+ годин гри. Не просто грайте - грайте без обмежень</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/10.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/10.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Хмарні ігри&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Хмарні ігри</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Насолоджуйтесь іграми AAA з роздільною здатністю 1080p, 60 кадрів/с без завантажень і оновлень апаратного забезпечення, використовуючи Wi-Fi і членство в хмарних іграх. Отримуйте доступ до ігор за допомогою Xbox Cloud Gaming (бета-версія) і членства NVIDIA GeForce NOW (купується окремо)&lt;/span&gt;&lt;img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/9.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Насолоджуйтесь іграми AAA з роздільною здатністю 1080p, 60 кадрів/с без завантажень і оновлень апаратного забезпечення, використовуючи Wi-Fi і членство в хмарних іграх. Отримуйте доступ до ігор за допомогою Xbox Cloud Gaming (бета-версія) і членства NVIDIA GeForce NOW (купується окремо)</span><img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/9.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Віддалена гра та інші програми&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Віддалена гра та інші програми</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Ви можете транслювати ігри зі своєї консолі за допомогою програми Xbox і розширювати можливості Steam за допомогою програми Steam Link. Ви навіть можете завантажувати хмарні ігрові програми з магазину Google Play&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Ви можете транслювати ігри зі своєї консолі за допомогою програми Xbox і розширювати можливості Steam за допомогою програми Steam Link. Ви навіть можете завантажувати хмарні ігрові програми з магазину Google Play</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/8.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/8.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Full HD зображення&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Full HD зображення</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;7-дюймовий сенсорний IPS-екран з роздільною здатністю 1920 &amp;times; 1080 пікселів (16:9) дозволяє грати в якості до 1080p, 60 кадрів в секунду, а також супроводжується стереозвуком і двома мікрофонами , тому консоль забезпечує приголомшливий аудіовізуальний досвід&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">7-дюймовий сенсорний IPS-екран з роздільною здатністю 1920 &times; 1080 пікселів (16:9) дозволяє грати в якості до 1080p, 60 кадрів в секунду, а також супроводжується стереозвуком і двома мікрофонами , тому консоль забезпечує приголомшливий аудіовізуальний досвід</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/7.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/7.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Більше місця для гри&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Більше місця для гри</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Тепер ви можете грати в улюблені ігри AAA у своїй вітальні, спальні, саду або будь-де, де є Wi-Fi&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Тепер ви можете грати в улюблені ігри AAA у своїй вітальні, спальні, саду або будь-де, де є Wi-Fi</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/4.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/4.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Точне керування&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Точне керування</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Елементи керування на цій консолі працюють як найкращі контролери з тактильним зворотним зв&amp;rsquo;язком (2), гіроскопом і переналаштуванням. Удосконалений ергономічний дизайн підходить для рук будь-якого розміру&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Елементи керування на цій консолі працюють як найкращі контролери з тактильним зворотним зв&rsquo;язком (2), гіроскопом і переналаштуванням. Удосконалений ергономічний дизайн підходить для рук будь-якого розміру</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/6.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/6.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;strong&gt;&lt;span style="font-size:28px"&gt;Екологічно виготовлений&lt;/span&gt;&lt;/strong&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Усі продукти Logitech G виробляються за процесами, сертифікованими як вуглецево-нейтральні. Упаковка також виготовлена ​​з паперу з FSC-сертифікованих лісів&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><strong><span style="font-size:28px">Екологічно виготовлений</span></strong><br />
+<span style="font-size:18px">Усі продукти Logitech G виробляються за процесами, сертифікованими як вуглецево-нейтральні. Упаковка також виготовлена ​​з паперу з FSC-сертифікованих лісів</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/5.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="LOGITECH G Cloud Gaming Handheld console 940-000199 kosnola хмарні обчислення потужність бібліотека клас якості AAA дистанційне відтворення інші програми Full HD зображення простір для гри елементи керування якість виготовлення екологія" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5789280/storage_app_opisy2_logitech_581665/5.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;</description>
-                <param name="Процесор">Qualcomm Snapdragon 720G</param>
-                <param name="Ширина [мм]">256</param>
-                <param name="Висота [мм]">32</param>
-                <param name="Частота оновлення екрана [Гц]">60</param>
-                <param name="Датчики">Датчик зовнішнього освітлення</param>
-                <param name="Глибина [мм]">117</param>
-                <param name="Гучномовці">Так</param>
-                <param name="З\&amp;#039;єднання">Bluetooth, Wi-Fi</param>
-                <param name="Оперативна пам\&amp;#039;ять [ГБ]">4</param>
-                <param name="Внутрішня пам\&amp;#039;ять [ГБ]">64</param>
-                <param name="Ємність акумулятора [мАг]">6000</param>
-                <param name="Діагональ екрану [дюйм]">7</param>
-                <param name="Тип екрану">IPS</param>
-                <param name="Вбудований мікрофон">Так</param>
-                <param name="Роз\&amp;#039;єми">мініджек 3,5 мм, USB</param>
-                <param name="Додаткова інформація">Слот для карток, хмарні ігри</param>
-                <param name="Тип консолі">Logitech G Cloud – портативний комп’ютер</param>
-                <param name="Вага [г]">463</param>
-                <param name="Колір">Білий</param>
-                <param name="Гарантія">24 місяці</param>
+<p style="text-align:center">&nbsp;</p>]]></description>
+                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[Qualcomm Snapdragon 720G]]></param>
+                <param name="&lt;![CDATA[Ширина [мм]]]&gt;"><![CDATA[256]]></param>
+                <param name="&lt;![CDATA[Висота [мм]]]&gt;"><![CDATA[32]]></param>
+                <param name="&lt;![CDATA[Частота оновлення екрана [Гц]]]&gt;"><![CDATA[60]]></param>
+                <param name="&lt;![CDATA[Датчики]]&gt;"><![CDATA[Датчик зовнішнього освітлення]]></param>
+                <param name="&lt;![CDATA[Глибина [мм]]]&gt;"><![CDATA[117]]></param>
+                <param name="&lt;![CDATA[Гучномовці]]&gt;"><![CDATA[Так]]></param>
+                <param name="&lt;![CDATA[З'єднання]]&gt;"><![CDATA[Bluetooth, Wi-Fi]]></param>
+                <param name="&lt;![CDATA[Оперативна пам'ять [ГБ]]]&gt;"><![CDATA[4]]></param>
+                <param name="&lt;![CDATA[Внутрішня пам'ять [ГБ]]]&gt;"><![CDATA[64]]></param>
+                <param name="&lt;![CDATA[Ємність акумулятора [мАг]]]&gt;"><![CDATA[6000]]></param>
+                <param name="&lt;![CDATA[Діагональ екрану [дюйм]]]&gt;"><![CDATA[7]]></param>
+                <param name="&lt;![CDATA[Тип екрану]]&gt;"><![CDATA[IPS]]></param>
+                <param name="&lt;![CDATA[Вбудований мікрофон]]&gt;"><![CDATA[Так]]></param>
+                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[мініджек 3,5 мм, USB]]></param>
+                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[Слот для карток, хмарні ігри]]></param>
+                <param name="&lt;![CDATA[Тип консолі]]&gt;"><![CDATA[Logitech G Cloud – портативний комп’ютер]]></param>
+                <param name="&lt;![CDATA[Вага [г]]]&gt;"><![CDATA[463]]></param>
+                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Білий]]></param>
+                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
             </offer>
             <offer id="539" available="1">
                 <stock_quantity>3</stock_quantity>
                 <url>https://x-media.com.ua/products/539</url>
-                <price>37599</price>
-                <price_old>37999</price_old>
+                <price>50999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/tj3QFJS80P.jpg</picture>
@@ -484,76 +479,75 @@
                 <picture>https://x-media.com.ua/images/products/_CzNyFAXUN.jpg</picture>
                 <vendor>MSI</vendor>
                 <name>Портативна ігрова приставка MSI Claw A1M-064PL</name>
-                <description>&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;MSI Claw A1M&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+                <description><![CDATA[<p style="text-align:center"><span style="font-size:28px"><strong>MSI Claw A1M</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;MSI Claw A1M &amp;mdash; це революційна портативна ігрова консоль, яка відкриває нову еру мобільних ігор. Ця консоль оснащена мобільним процесором із серії Intel Core Ultra, який пропонує технологію Intel XeSS. Завдяки цьому мобільні геймери можуть насолоджуватися плавним і захоплюючим геймплеєм навіть у найновіших іграх класу AAA&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">MSI Claw A1M &mdash; це революційна портативна ігрова консоль, яка відкриває нову еру мобільних ігор. Ця консоль оснащена мобільним процесором із серії Intel Core Ultra, який пропонує технологію Intel XeSS. Завдяки цьому мобільні геймери можуть насолоджуватися плавним і захоплюючим геймплеєм навіть у найновіших іграх класу AAA</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Комфорт у використанні&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Комфорт у використанні</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;Завдяки тисячам даних, зібраних по всьому світу, консолі серії Claw були розроблені відповідно до принципів ергономіки. Завдяки цьому його зручно тримати і точно контролювати гру. Консоль розроблена відповідно до природних контурів руки та забезпечує найкращий ігровий досвід незалежно від розміру руки гравця&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">Завдяки тисячам даних, зібраних по всьому світу, консолі серії Claw були розроблені відповідно до принципів ергономіки. Завдяки цьому його зручно тримати і точно контролювати гру. Консоль розроблена відповідно до природних контурів руки та забезпечує найкращий ігровий досвід незалежно від розміру руки гравця</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle2.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle2.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Досконалість завдяки антропометрії&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Досконалість завдяки антропометрії</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;Консолі Claw &amp;mdash; це пристрої, призначені для тримання в руках, тому зручність їх захоплення настільки важлива. Моделі серії Claw забезпечують оптимальний баланс між зручністю захоплення та вагою пристрою. Ми ретельно вдосконалили деталі конструкції, від вигину, адаптованого до руки, до позицій захоплення пальців і сили, необхідної для натискання спускового гачка&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">Консолі Claw &mdash; це пристрої, призначені для тримання в руках, тому зручність їх захоплення настільки важлива. Моделі серії Claw забезпечують оптимальний баланс між зручністю захоплення та вагою пристрою. Ми ретельно вдосконалили деталі конструкції, від вигину, адаптованого до руки, до позицій захоплення пальців і сили, необхідної для натискання спускового гачка</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle4.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle4.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Аж до моделі процесора Intel Core Ultra 7 155H&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Аж до моделі процесора Intel Core Ultra 7 155H</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;Завдяки неймовірній швидкості обробки даних і першому вбудованому процесору Intel NPU, який забезпечує прискорення на пристрої алгоритмів штучного інтелекту енергоефективним способом, останні процесори серії Intel&amp;reg; Core Ultra 7 155H були зміна гри. Нові процесори є шлюзом для плавної та ефективної обробки даних&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">Завдяки неймовірній швидкості обробки даних і першому вбудованому процесору Intel NPU, який забезпечує прискорення на пристрої алгоритмів штучного інтелекту енергоефективним способом, останні процесори серії Intel&reg; Core Ultra 7 155H були зміна гри. Нові процесори є шлюзом для плавної та ефективної обробки даних</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle9.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle9.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;7-дюймовий екран&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>7-дюймовий екран</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;Пориньте в гру з нашим 7-дюймовим ігровим дисплеєм преміум-класу з частотою оновлення 120 Гц, винятковою передачею кольорів і неймовірно плавною роботою&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">Пориньте в гру з нашим 7-дюймовим ігровим дисплеєм преміум-класу з частотою оновлення 120 Гц, винятковою передачею кольорів і неймовірно плавною роботою</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle10.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle10.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Сумісність зі стандартом Wi-Fi 7&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Сумісність зі стандартом Wi-Fi 7</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;Новий стандарт Wi-Fi 7 забезпечує продуктивність, яка дозволяє передавати дані з мультигігабітною продуктивністю до 5,8 Гбіт/с у діапазонах 5 і 6 ГГц. Завдяки більш широким, 320-мегагерцевим каналам, гарантується значне збільшення пропускної здатності мережі. Насолоджуйтеся наднизькою затримкою в 2 мілісекунди та відсутністю тремтіння сигналу під час бездротового керування кількома пристроями. Частота 6 ГГц забезпечує додаткову пропускну здатність, що підвищує загальну продуктивність ноутбука в мережі&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">Новий стандарт Wi-Fi 7 забезпечує продуктивність, яка дозволяє передавати дані з мультигігабітною продуктивністю до 5,8 Гбіт/с у діапазонах 5 і 6 ГГц. Завдяки більш широким, 320-мегагерцевим каналам, гарантується значне збільшення пропускної здатності мережі. Насолоджуйтеся наднизькою затримкою в 2 мілісекунди та відсутністю тремтіння сигналу під час бездротового керування кількома пристроями. Частота 6 ГГц забезпечує додаткову пропускну здатність, що підвищує загальну продуктивність ноутбука в мережі</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle3.jpg" /&gt;&lt;/p&gt;</description>
-                <param name="Процесор">Intel Core Ultra 7</param>
-                <param name="Графічний макет">Intel Arc Graphics</param>
-                <param name="Ширина [мм]">294</param>
-                <param name="Висота [мм]">21.2</param>
-                <param name="Частота оновлення екрана [Гц]">120</param>
-                <param name="Датчики">Сканер відбитків пальців</param>
-                <param name="Глибина [мм]">117</param>
-                <param name="Гучномовці">Так</param>
-                <param name="З\&amp;#039;єднання">Bluetooth, Wi-Fi</param>
-                <param name="Оперативна пам\&amp;#039;ять [ГБ]">16 ГБ DDR5</param>
-                <param name="Внутрішня пам\&amp;#039;ять [ГБ]">512</param>
-                <param name="Діагональ екрану [дюйм]">7</param>
-                <param name="Тип екрану">IPS</param>
-                <param name="Вбудований мікрофон">Ні</param>
-                <param name="Роз\&amp;#039;єми">Комбінований роз\&#039;єм, USB-C</param>
-                <param name="Вага [г]">675</param>
-                <param name="Колір">Чорний</param>
-                <param name="Гарантія">24 місяці</param>
-                <param name="Тест">тест</param>
+<p style="text-align:center"><img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle3.jpg" /></p>]]></description>
+                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[Intel Core Ultra 7]]></param>
+                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[Intel Arc Graphics]]></param>
+                <param name="&lt;![CDATA[Ширина [мм]]]&gt;"><![CDATA[294]]></param>
+                <param name="&lt;![CDATA[Висота [мм]]]&gt;"><![CDATA[21.2]]></param>
+                <param name="&lt;![CDATA[Частота оновлення екрана [Гц]]]&gt;"><![CDATA[120]]></param>
+                <param name="&lt;![CDATA[Датчики]]&gt;"><![CDATA[Сканер відбитків пальців]]></param>
+                <param name="&lt;![CDATA[Глибина [мм]]]&gt;"><![CDATA[117]]></param>
+                <param name="&lt;![CDATA[Гучномовці]]&gt;"><![CDATA[Так]]></param>
+                <param name="&lt;![CDATA[З'єднання]]&gt;"><![CDATA[Bluetooth, Wi-Fi]]></param>
+                <param name="&lt;![CDATA[Оперативна пам'ять [ГБ]]]&gt;"><![CDATA[16 ГБ DDR5]]></param>
+                <param name="&lt;![CDATA[Внутрішня пам'ять [ГБ]]]&gt;"><![CDATA[512]]></param>
+                <param name="&lt;![CDATA[Діагональ екрану [дюйм]]]&gt;"><![CDATA[7]]></param>
+                <param name="&lt;![CDATA[Тип екрану]]&gt;"><![CDATA[IPS]]></param>
+                <param name="&lt;![CDATA[Вбудований мікрофон]]&gt;"><![CDATA[Ні]]></param>
+                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[Комбінований роз'єм, USB-C]]></param>
+                <param name="&lt;![CDATA[Вага [г]]]&gt;"><![CDATA[675]]></param>
+                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Чорний]]></param>
+                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
+                <param name="&lt;![CDATA[Тест]]&gt;"><![CDATA[тест]]></param>
             </offer>
             <offer id="543" available="1">
                 <stock_quantity>2</stock_quantity>
                 <url>https://x-media.com.ua/products/543</url>
-                <price>18999</price>
-                <price_old>19199</price_old>
+                <price>25399</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/OywjU-SoGm.jpg</picture>
@@ -563,57 +557,56 @@
                 <picture>https://x-media.com.ua/images/products/OdZ-Vr3zpZ.jpg</picture>
                 <vendor>Razer</vendor>
                 <name>Портативна ігрова приставка Razer Edge Gaming Tablet and Kishi V2 Pro Controller</name>
-                <description>&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Грайте як ніколи раніше&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+                <description><![CDATA[<p style="text-align:center"><span style="font-size:28px"><strong>Грайте як ніколи раніше</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Консоль RAZER Edge розроблена спеціально для ігор Android, щоб запропонувати першокласний ігровий досвід. Надзвичайна продуктивність забезпечується процесором Snapdragon G3x Gen 1 , який активно охолоджується чіпсетом процесора Kryo з тактовою частотою 3 ГГц , який був спеціально розроблений для ігор Android з високою частотою кадрів. Завдяки їм ігровий процес проходить плавно, а температура консолі знаходиться під контролем&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Консоль RAZER Edge розроблена спеціально для ігор Android, щоб запропонувати першокласний ігровий досвід. Надзвичайна продуктивність забезпечується процесором Snapdragon G3x Gen 1 , який активно охолоджується чіпсетом процесора Kryo з тактовою частотою 3 ГГц , який був спеціально розроблений для ігор Android з високою частотою кадрів. Завдяки їм ігровий процес проходить плавно, а температура консолі знаходиться під контролем</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Консоль RAZER Edge Wifi + контролер у комплекті Kishi V2 Pro Snapdragon G3x Gen 1 Kryo 3 ГГц" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5710964/storage_app_opisy2_razer_570163/razer_edge_1.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Консоль RAZER Edge Wifi + контролер у комплекті Kishi V2 Pro Snapdragon G3x Gen 1 Kryo 3 ГГц" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5710964/storage_app_opisy2_razer_570163/razer_edge_1.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Плавна графіка та чуйний геймплей&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Плавна графіка та чуйний геймплей</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;Іноді того, що пропонують смартфони чи портативні консолі, недостатньо для ігор. Тому, щоб ваші ігри виглядали та працювали краще, консоль RAZER Edge оснащена 6,8-дюймовим екраном AMOLED&amp;trade; FHD+ із частотою оновлення 144 Гц , на якому ви не пропустите жодної деталі. Ви можете керувати грою за допомогою сенсорного екрану або, якщо хочете, контролера Kishi V2 Pro, що входить у комплект , із можливістю встановлення макросів&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">Іноді того, що пропонують смартфони чи портативні консолі, недостатньо для ігор. Тому, щоб ваші ігри виглядали та працювали краще, консоль RAZER Edge оснащена 6,8-дюймовим екраном AMOLED&trade; FHD+ із частотою оновлення 144 Гц , на якому ви не пропустите жодної деталі. Ви можете керувати грою за допомогою сенсорного екрану або, якщо хочете, контролера Kishi V2 Pro, що входить у комплект , із можливістю встановлення макросів</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="RAZER Edge Wifi Console + Kishi V2 Pro Bundle Controller AMOLED™ FHD+ екран 6.8 144 Гц" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5710964/storage_app_opisy2_razer_570163/razer_edge_2.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="RAZER Edge Wifi Console + Kishi V2 Pro Bundle Controller AMOLED™ FHD+ екран 6.8 144 Гц" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5710964/storage_app_opisy2_razer_570163/razer_edge_2.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Улюблені ігри будь-де&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Улюблені ігри будь-де</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;span style="font-size:18px"&gt;RAZER Edge працюватиме не лише для мобільних ігор, які ви можете вибрати серед тисяч доступних у Google Play Store . Ви також можете транслювати ігри на свій ПК або Xbox , надаючи доступ не лише до найкращих ігор для Android та iOS, але й до ігор AAA . Консоль поставляється з попередньо встановленими Razer Nexus, Xbox Game Pass, NVIDIA GeForce Now, Steam Link, Epic Launcher (для Fortnite і Rocket League Sideswipe) і Parsec&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<span style="font-size:18px">RAZER Edge працюватиме не лише для мобільних ігор, які ви можете вибрати серед тисяч доступних у Google Play Store . Ви також можете транслювати ігри на свій ПК або Xbox , надаючи доступ не лише до найкращих ігор для Android та iOS, але й до ігор AAA . Консоль поставляється з попередньо встановленими Razer Nexus, Xbox Game Pass, NVIDIA GeForce Now, Steam Link, Epic Launcher (для Fortnite і Rocket League Sideswipe) і Parsec</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Консоль RAZER Edge Wifi + набір контролера Kishi V2 Pro на 2 ТБ, карта MicroSD" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5710964/storage_app_opisy2_razer_570163/razer_edge_4.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Консоль RAZER Edge Wifi + набір контролера Kishi V2 Pro на 2 ТБ, карта MicroSD" src="https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/57/5710964/storage_app_opisy2_razer_570163/razer_edge_4.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;</description>
-                <param name="Процесор">Ігрова платформа Snapdragon G3X Gen 1</param>
-                <param name="Графічний макет">Графічний процесор Adreno 660</param>
-                <param name="Частота оновлення екрана [Гц]">144</param>
-                <param name="Оперативна пам\&amp;#039;ять [ГБ]">6 ГБ LPDDR5</param>
-                <param name="Внутрішня пам\&amp;#039;ять [ГБ]">128</param>
-                <param name="Ємність акумулятора [мАг]">5000</param>
-                <param name="Діагональ екрану [дюйм]">6.8</param>
-                <param name="Тип екрану">AMOLED</param>
-                <param name="Гучномовці">Так</param>
-                <param name="Вбудований мікрофон">Так</param>
-                <param name="Вміст набору">Консоль Edge Wi-Fi, контролер Kishi V2 Pro</param>
-                <param name="Роз\&amp;#039;єми">USB</param>
-                <param name="Ширина [мм]">260</param>
-                <param name="Висота [мм]">85</param>
-                <param name="Глибина [мм]">11</param>
-                <param name="Колір">Чорний</param>
-                <param name="Гарантія">24 місяці</param>
+<p style="text-align:center">&nbsp;</p>]]></description>
+                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[Ігрова платформа Snapdragon G3X Gen 1]]></param>
+                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[Графічний процесор Adreno 660]]></param>
+                <param name="&lt;![CDATA[Частота оновлення екрана [Гц]]]&gt;"><![CDATA[144]]></param>
+                <param name="&lt;![CDATA[Оперативна пам'ять [ГБ]]]&gt;"><![CDATA[6 ГБ LPDDR5]]></param>
+                <param name="&lt;![CDATA[Внутрішня пам'ять [ГБ]]]&gt;"><![CDATA[128]]></param>
+                <param name="&lt;![CDATA[Ємність акумулятора [мАг]]]&gt;"><![CDATA[5000]]></param>
+                <param name="&lt;![CDATA[Діагональ екрану [дюйм]]]&gt;"><![CDATA[6.8]]></param>
+                <param name="&lt;![CDATA[Тип екрану]]&gt;"><![CDATA[AMOLED]]></param>
+                <param name="&lt;![CDATA[Гучномовці]]&gt;"><![CDATA[Так]]></param>
+                <param name="&lt;![CDATA[Вбудований мікрофон]]&gt;"><![CDATA[Так]]></param>
+                <param name="&lt;![CDATA[Вміст набору]]&gt;"><![CDATA[Консоль Edge Wi-Fi, контролер Kishi V2 Pro]]></param>
+                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[USB]]></param>
+                <param name="&lt;![CDATA[Ширина [мм]]]&gt;"><![CDATA[260]]></param>
+                <param name="&lt;![CDATA[Висота [мм]]]&gt;"><![CDATA[85]]></param>
+                <param name="&lt;![CDATA[Глибина [мм]]]&gt;"><![CDATA[11]]></param>
+                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Чорний]]></param>
+                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
             </offer>
             <offer id="542" available="1">
                 <stock_quantity>2</stock_quantity>
                 <url>https://x-media.com.ua/products/542</url>
-                <price>36999</price>
-                <price_old>37499</price_old>
+                <price>49999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/6x71DUbFZa.jpg</picture>
@@ -621,86 +614,85 @@
                 <picture>https://x-media.com.ua/images/products/cG1pHdrB8m.jpg</picture>
                 <vendor>Valve</vendor>
                 <name>Портативна ігрова приставка VALVE Steam Deck Oled 1 TB</name>
-                <description>&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Яскравіші кольори, глибокий чорний&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+                <description><![CDATA[<p style="text-align:center"><span style="font-size:28px"><strong>Яскравіші кольори, глибокий чорний</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;OLED-екран Steam Deck з підтримкою HDR був розроблений з нуля для ігор, пропонуючи вражаючу контрастність, чудову чіткість і більше зображення. Завдяки ширшому діапазону кольорів, глибокому чорному та чудовому відтворенню руху ви побачите свої ігри в новому світлі&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">OLED-екран Steam Deck з підтримкою HDR був розроблений з нуля для ігор, пропонуючи вражаючу контрастність, чудову чіткість і більше зображення. Завдяки ширшому діапазону кольорів, глибокому чорному та чудовому відтворенню руху ви побачите свої ігри в новому світлі</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Портативная игровая приставка Valve Steam Deck OLED 1 TB [97645]  (ID#2043241708), цена: 30219 ₴, купить на Prom.ua" src="https://images.prom.ua/5234580726_w640_h640_portativnaya-igrovaya-pristavka.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Портативная игровая приставка Valve Steam Deck OLED 1 TB [97645]  (ID#2043241708), цена: 30219 ₴, купить на Prom.ua" src="https://images.prom.ua/5234580726_w640_h640_portativnaya-igrovaya-pristavka.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Грайте довше, завантажуйте швидше&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Грайте довше, завантажуйте швидше</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;Для OLED Steam Deck ми переробили внутрішні елементи, продовживши термін служби батареї та скоротивши час завантаження. При цьому ми зробили пристрій легшим і менше нагрівався&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">Для OLED Steam Deck ми переробили внутрішні елементи, продовживши термін служби батареї та скоротивши час завантаження. При цьому ми зробили пристрій легшим і менше нагрівався</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Швидше завантаження&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Швидше завантаження</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;Steam Deck OLED підтримує Wi-Fi 6E, пропонуючи збільшену пропускну здатність і меншу затримку. Це означає швидше завантаження (до 3 разів!) і стабільний онлайн-ігровий процес&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">Steam Deck OLED підтримує Wi-Fi 6E, пропонуючи збільшену пропускну здатність і меншу затримку. Це означає швидше завантаження (до 3 разів!) і стабільний онлайн-ігровий процес</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Легше і прохолодніше&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Легше і прохолодніше</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;Завдяки більшому вентилятору та новішим компонентам системи охолодження Steam Deck OLED досягає нижчих температур. Крім того, завдяки іншому дисплею він важить на 30 г (або приблизно на 5%) менше, ніж РК-модель&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">Завдяки більшому вентилятору та новішим компонентам системи охолодження Steam Deck OLED досягає нижчих температур. Крім того, завдяки іншому дисплею він важить на 30 г (або приблизно на 5%) менше, ніж РК-модель</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Кращий сенсорний екран&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Кращий сенсорний екран</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;Час відгуку та точність сенсорного екрана значно покращено. Вібрації більш точні та послідовні. Ми також додали окрему антену Bluetooth, щоб покращити з&amp;rsquo;єднання кількох контролерів&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">Час відгуку та точність сенсорного екрана значно покращено. Вібрації більш точні та послідовні. Ми також додали окрему антену Bluetooth, щоб покращити з&rsquo;єднання кількох контролерів</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Гіроскоп&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Гіроскоп</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;Завдяки вбудованому інерційному вимірювальному пристрою (IMU) і ємнісним джойстикам Steam Deck полегшує вам прицілювання. Змінюючи положення пристрою, ви можете досягти більшої точності, ніж за допомогою лише ручки чи тачпада&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">Завдяки вбудованому інерційному вимірювальному пристрою (IMU) і ємнісним джойстикам Steam Deck полегшує вам прицілювання. Змінюючи положення пристрою, ви можете досягти більшої точності, ніж за допомогою лише ручки чи тачпада</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:28px"&gt;&lt;strong&gt;Hi-Fi звук&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:28px"><strong>Hi-Fi звук</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;Динаміки Steam Deck круті! Вбудований DSP забезпечує чіткість звуку та широкий звуковий діапазон для занурення в прослуховування. Підключіть улюблені навушники або скористайтеся двома вбудованими мікрофонами, щоб спілкуватися з друзями&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px">Динаміки Steam Deck круті! Вбудований DSP забезпечує чіткість звуку та широкий звуковий діапазон для занурення в прослуховування. Підключіть улюблені навушники або скористайтеся двома вбудованими мікрофонами, щоб спілкуватися з друзями</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Steam Deck OLED sees burn-in after 1,500-hour stress test — reducing  brightness recommended to avoid damage | Tom's Hardware" src="https://cdn.mos.cms.futurecdn.net/jUKhtmdML6wqZQKxkBiJ3F-1200-80.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Steam Deck OLED sees burn-in after 1,500-hour stress test — reducing  brightness recommended to avoid damage | Tom's Hardware" src="https://cdn.mos.cms.futurecdn.net/jUKhtmdML6wqZQKxkBiJ3F-1200-80.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;</description>
-                <param name="Процесор">AMD Zen 2, 2,4-3,5 ГГц (4 ядра)</param>
-                <param name="Графічний макет">AMD RDNA 2 CJ, 1,0-1,6 ГГц</param>
-                <param name="Частота оновлення екрана [Гц]">90</param>
-                <param name="Датчики">2 датчика зовнішнього освітлення</param>
-                <param name="Оперативна пам\&amp;#039;ять [ГБ]">16 ГБ LPDDR5</param>
-                <param name="Внутрішня пам\&amp;#039;ять [ГБ]">1000</param>
-                <param name="Діагональ екрану [дюйм]">7.4</param>
-                <param name="Тип екрану">OLED</param>
-                <param name="Гучномовці">Так</param>
-                <param name="Вбудований мікрофон">Так</param>
-                <param name="З\&amp;#039;єднання">Bluetooth, Wi-Fi</param>
-                <param name="Вміст набору">USB кабель, консоль, адаптер живлення</param>
-                <param name="Роз\&amp;#039;єми">USB-C</param>
-                <param name="Ширина [мм]">298</param>
-                <param name="Висота [мм]">117</param>
-                <param name="Глибина [мм]">49</param>
-                <param name="Вага [г]">640</param>
-                <param name="Колір">Чорний</param>
-                <param name="Гарантія">24 місяці</param>
+<p style="text-align:center">&nbsp;</p>]]></description>
+                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Zen 2, 2,4-3,5 ГГц (4 ядра)]]></param>
+                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 2 CJ, 1,0-1,6 ГГц]]></param>
+                <param name="&lt;![CDATA[Частота оновлення екрана [Гц]]]&gt;"><![CDATA[90]]></param>
+                <param name="&lt;![CDATA[Датчики]]&gt;"><![CDATA[2 датчика зовнішнього освітлення]]></param>
+                <param name="&lt;![CDATA[Оперативна пам'ять [ГБ]]]&gt;"><![CDATA[16 ГБ LPDDR5]]></param>
+                <param name="&lt;![CDATA[Внутрішня пам'ять [ГБ]]]&gt;"><![CDATA[1000]]></param>
+                <param name="&lt;![CDATA[Діагональ екрану [дюйм]]]&gt;"><![CDATA[7.4]]></param>
+                <param name="&lt;![CDATA[Тип екрану]]&gt;"><![CDATA[OLED]]></param>
+                <param name="&lt;![CDATA[Гучномовці]]&gt;"><![CDATA[Так]]></param>
+                <param name="&lt;![CDATA[Вбудований мікрофон]]&gt;"><![CDATA[Так]]></param>
+                <param name="&lt;![CDATA[З'єднання]]&gt;"><![CDATA[Bluetooth, Wi-Fi]]></param>
+                <param name="&lt;![CDATA[Вміст набору]]&gt;"><![CDATA[USB кабель, консоль, адаптер живлення]]></param>
+                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[USB-C]]></param>
+                <param name="&lt;![CDATA[Ширина [мм]]]&gt;"><![CDATA[298]]></param>
+                <param name="&lt;![CDATA[Висота [мм]]]&gt;"><![CDATA[117]]></param>
+                <param name="&lt;![CDATA[Глибина [мм]]]&gt;"><![CDATA[49]]></param>
+                <param name="&lt;![CDATA[Вага [г]]]&gt;"><![CDATA[640]]></param>
+                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Чорний]]></param>
+                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
             </offer>
             <offer id="169" available="1">
-                <stock_quantity>2</stock_quantity>
+                <stock_quantity>3</stock_quantity>
                 <url>https://x-media.com.ua/products/169</url>
-                <price>23499</price>
-                <price_old/>
+                <price>31999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/eu_00l4HmK.jpg</picture>
@@ -709,85 +701,84 @@
                 <picture>https://x-media.com.ua/images/products/C206eHgr19.jpg</picture>
                 <vendor>Microsoft</vendor>
                 <name>Стаціонарна ігрова приставка Microsoft Xbox Series X + CoD MW3 (Voucher)</name>
-                <description>&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Консоль Microsoft Xbox Series X&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+                <description><![CDATA[<p style="text-align:center"><span style="font-size:26px"><strong>Консоль Microsoft Xbox Series X</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Майбутнє ігор тут. Її назва &amp;mdash; Xbox Series X. У цій консолі, як частині архітектури Xbox Velocity, глибоко інтегровані апаратні та програмні ресурси.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Майбутнє ігор тут. Її назва &mdash; Xbox Series X. У цій консолі, як частині архітектури Xbox Velocity, глибоко інтегровані апаратні та програмні ресурси.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Результатом цього злиття є безпрецедентна ігрова динаміка та реалізм, які надихають на безперервне дослідження віртуальних світів. Xbox Series X втілює мрію про трасування променів на консолі, величезну продуктивність і більший простір для ігор.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Результатом цього злиття є безпрецедентна ігрова динаміка та реалізм, які надихають на безперервне дослідження віртуальних світів. Xbox Series X втілює мрію про трасування променів на консолі, величезну продуктивність і більший простір для ігор.</span></p>
 
-&lt;div class="iframe-embed-responsive-16by9 iframe-embed-wrapper" style="text-align:center"&gt;&lt;iframe class="iframe-embed" sandbox="" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/MICROSOFT/Xbox-Series-X/AR/ar.html" style="height:530px; width:100%"&gt;&lt;/iframe&gt;&lt;/div&gt;
+<div class="iframe-embed-responsive-16by9 iframe-embed-wrapper" style="text-align:center"><iframe class="iframe-embed" sandbox="" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/MICROSOFT/Xbox-Series-X/AR/ar.html" style="height:530px; width:100%"></iframe></div>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Трасування променів і до 120 кадрів в секунду&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Трасування променів і до 120 кадрів в секунду</strong></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Технологія трасування променів у реальному часі назавжди змінює ігровий ландшафт. Це підвищує реалістичність і проливає нове світло на відвідані місця.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Технологія трасування променів у реальному часі назавжди змінює ігровий ландшафт. Це підвищує реалістичність і проливає нове світло на відвідані місця.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Потужне обладнання також підтримує динаміку зображення, стабільно досягаючи до 120 кадрів/с у вибраних заголовках із повним відтворенням деталей і відображень. Xbox Series X також забезпечує зворотну сумісність для продуктів Xbox One.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Потужне обладнання також підтримує динаміку зображення, стабільно досягаючи до 120 кадрів/с у вибраних заголовках із повним відтворенням деталей і відображень. Xbox Series X також забезпечує зворотну сумісність для продуктів Xbox One.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;&lt;img alt="Консоль Sony PlayStation 5" src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-large,,2020/7/pr_2020_7_10_12_7_39_728_00.jpg" /&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px"><img alt="Консоль Sony PlayStation 5" src="https://cdn.x-kom.pl/i/setup/images/prod/big/product-large,,2020/7/pr_2020_7_10_12_7_39_728_00.jpg" /></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Надшвидкий драйв, миттєве повернення до ігор&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Надшвидкий драйв, миттєве повернення до ігор</strong></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;З консоллю Xbox Series X ви забудете, як це чекати, поки гра завантажиться. SSD-накопичувач NVMe ємністю 1 ТБ миттєво запустить збережений стан і дозволить вам переключитися на інший заголовок, а потім так само швидко повернутися в те саме місце. Ви граєте поодинці або з друзями, і вам не потрібно постійно починати все спочатку. Нарешті.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">З консоллю Xbox Series X ви забудете, як це чекати, поки гра завантажиться. SSD-накопичувач NVMe ємністю 1 ТБ миттєво запустить збережений стан і дозволить вам переключитися на інший заголовок, а потім так само швидко повернутися в те саме місце. Ви граєте поодинці або з друзями, і вам не потрібно постійно починати все спочатку. Нарешті.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Надшвидкий драйв, миттєве повернення до ігор" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/MICROSOFT/Xbox-Series-X/1TB/a5-konsola-microsoft-xbox-series-x-1tb-czarna.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Надшвидкий драйв, миттєве повернення до ігор" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/MICROSOFT/Xbox-Series-X/1TB/a5-konsola-microsoft-xbox-series-x-1tb-czarna.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Потужний дизайн. Тихе охолодження&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Потужний дизайн. Тихе охолодження</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;За бездоганну плавність графіки відповідає потужність в 12 терафлопс. Ви побачите справжнє 4K на своєму екрані, але це ще не все. Xbox Series X підтримує роздільну здатність 8K.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">За бездоганну плавність графіки відповідає потужність в 12 терафлопс. Ви побачите справжнє 4K на своєму екрані, але це ще не все. Xbox Series X підтримує роздільну здатність 8K.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;У запалі бою температуру компонентів контролює паралельна система охолодження, яка циркулює повітря через три паралельні канали. Важливо, що весь процес відбувається безшумно.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">У запалі бою температуру компонентів контролює паралельна система охолодження, яка циркулює повітря через три паралельні канали. Важливо, що весь процес відбувається безшумно.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Потужний салон.  Тихе охолодження" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/MICROSOFT/Xbox-Series-X/1TB/a6-konsola-microsoft-xbox-series-x-1tb-czarna.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Потужний салон.  Тихе охолодження" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/MICROSOFT/Xbox-Series-X/1TB/a6-konsola-microsoft-xbox-series-x-1tb-czarna.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Новий бездротовий контролер Xbox&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Новий бездротовий контролер Xbox</strong></span><br />
+&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Зустрічайте новий бездротовий контролер Xbox, який поставляється з консоллю Xbox Series X. Його модернізований дизайн підвищує комфорт використання під час гри.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Зустрічайте новий бездротовий контролер Xbox, який поставляється з консоллю Xbox Series X. Його модернізований дизайн підвищує комфорт використання під час гри.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Накладка дозволить точно прицілитися завдяки ручкам з шорсткою текстурою. Ви також можете легко знімати та ділитися вмістом.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Накладка дозволить точно прицілитися завдяки ручкам з шорсткою текстурою. Ви також можете легко знімати та ділитися вмістом.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Новий бездротовий контролер Xbox" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/MICROSOFT/Xbox-Series-X/1TB/a3-konsola-microsoft-xbox-series-x-1tb-czarna.jpg?" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Новий бездротовий контролер Xbox" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/MICROSOFT/Xbox-Series-X/1TB/a3-konsola-microsoft-xbox-series-x-1tb-czarna.jpg?" /></p>
 
-&lt;p style="text-align:center"&gt;&lt;br /&gt;
-&lt;strong&gt;&lt;span style="font-size:26px"&gt;Call of Duty: Modern Warfare III на Xbox Series X і Xbox One (vaucher)&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;
+<p style="text-align:center"><br />
+<strong><span style="font-size:26px">Call of Duty: Modern Warfare III на Xbox Series X і Xbox One (vaucher)</span></strong></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;У прямому продовженні рекордної Call of Duty: Modern Warfare II капітан Прайс і Strike Group 141 стикаються з великою загрозою. Ультранаціоналіст і військовий злочинець Володимир Макаров розширює свій вплив по всьому світу, втягуючи членів Ударної групи 141 у зіткнення, якого вони навіть не очікували.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">У прямому продовженні рекордної Call of Duty: Modern Warfare II капітан Прайс і Strike Group 141 стикаються з великою загрозою. Ультранаціоналіст і військовий злочинець Володимир Макаров розширює свій вплив по всьому світу, втягуючи членів Ударної групи 141 у зіткнення, якого вони навіть не очікували.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Бій означає прийняття рішень, від вибору зброї до планування наступних дій. На додаток до флагманських вражаючих місій, відомих із попередніх кампаній Call of Duty, у Modern Warfare III представлені відкриті бойові місії, які дають гравцеві більше контролю. Не існує єдиного заздалегідь визначеного способу їх завершення. Від вас залежить, будете ви діяти тихо або знищуєте ворогів у прямому бою.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Бій означає прийняття рішень, від вибору зброї до планування наступних дій. На додаток до флагманських вражаючих місій, відомих із попередніх кампаній Call of Duty, у Modern Warfare III представлені відкриті бойові місії, які дають гравцеві більше контролю. Не існує єдиного заздалегідь визначеного способу їх завершення. Від вас залежить, будете ви діяти тихо або знищуєте ворогів у прямому бою.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;У цьому наборі ви отримаєте гру Call of Duty: Modern Warfare III для Xbox Series X|S / Xbox One як код для завантаження з магазину Xbox (потрібне підключення до Інтернету).&lt;/span&gt;&lt;/p&gt;</description>
-                <param name="Процесор">AMD Ryzen Zen 2 (8 ядер, 3,8 ГГц)</param>
-                <param name="Графічний макет">AMD RDNA 2.0 (1825 МГц)</param>
-                <param name="RAM">16 ГБ GDDR6</param>
-                <param name="SSD">1 ТБ SSD NVMe</param>
-                <param name="Зв\&amp;#039;язок">Wi-Fi 802.11 a/b/g/n/ac/ax&lt;br&gt;Bluetooth 5.1&lt;br&gt;LAN 10/100/1000 Мбіт/с</param>
-                <param name="Оптичний диск">Blu-Ray</param>
-                <param name="Роз\&amp;#039;єми">HDMI вихід - 1 шт.&lt;br&gt;USB 3.2 Gen 1 - 3 шт.&lt;br&gt;RJ-45 (LAN) - 1 шт.&lt;br&gt;Слот розширення для носія даних - 1 шт.</param>
-                <param name="Колір">Чорний</param>
-                <param name="Додаткова інформація">Підтримка 4K UHD&lt;br&gt;Підтримка 8K&lt;br&gt;Можливість роботи вертикально</param>
-                <param name="Аксесуари в комплекті">Microsoft Xbox Series Wireless Pad&lt;br&gt;Кабель HDMI&lt;br&gt;Силовий кабель</param>
-                <param name="Ігри включені">Call of Duty Modern Warfare 3 [цифрова версія]</param>
-                <param name="Гарантія">24 місяці</param>
+<p style="text-align:center"><span style="font-size:14px">У цьому наборі ви отримаєте гру Call of Duty: Modern Warfare III для Xbox Series X|S / Xbox One як код для завантаження з магазину Xbox (потрібне підключення до Інтернету).</span></p>]]></description>
+                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Ryzen Zen 2 (8 ядер, 3,8 ГГц)]]></param>
+                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 2.0 (1825 МГц)]]></param>
+                <param name="&lt;![CDATA[RAM]]&gt;"><![CDATA[16 ГБ GDDR6]]></param>
+                <param name="&lt;![CDATA[SSD]]&gt;"><![CDATA[1 ТБ SSD NVMe]]></param>
+                <param name="&lt;![CDATA[Зв'язок]]&gt;"><![CDATA[Wi-Fi 802.11 a/b/g/n/ac/ax<br>Bluetooth 5.1<br>LAN 10/100/1000 Мбіт/с]]></param>
+                <param name="&lt;![CDATA[Оптичний диск]]&gt;"><![CDATA[Blu-Ray]]></param>
+                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[HDMI вихід - 1 шт.<br>USB 3.2 Gen 1 - 3 шт.<br>RJ-45 (LAN) - 1 шт.<br>Слот розширення для носія даних - 1 шт.]]></param>
+                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Чорний]]></param>
+                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[Підтримка 4K UHD<br>Підтримка 8K<br>Можливість роботи вертикально]]></param>
+                <param name="&lt;![CDATA[Аксесуари в комплекті]]&gt;"><![CDATA[Microsoft Xbox Series Wireless Pad<br>Кабель HDMI<br>Силовий кабель]]></param>
+                <param name="&lt;![CDATA[Ігри включені]]&gt;"><![CDATA[Call of Duty Modern Warfare 3 [цифрова версія]]]></param>
+                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
             </offer>
             <offer id="138" available="1">
-                <stock_quantity>1</stock_quantity>
+                <stock_quantity>3</stock_quantity>
                 <url>https://x-media.com.ua/products/138</url>
-                <price>26599</price>
-                <price_old/>
+                <price>35999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/Zoc57Ire2d.jpg</picture>
@@ -797,80 +788,79 @@
                 <picture>https://x-media.com.ua/images/products/2fwZ69gCo2.jpg</picture>
                 <vendor>Sony</vendor>
                 <name>Стаціонарна ігрова приставка Sony PlayStation 5 + Call of Duty Modern Warfare III</name>
-                <description>&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Комплект PlayStation 5 + Call of Duty: Modern Warfare III (цифрова версія)&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+                <description><![CDATA[<p style="text-align:center"><span style="font-size:26px"><strong>Комплект PlayStation 5 + Call of Duty: Modern Warfare III (цифрова версія)</strong></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;Придбайте цей спеціальний набір, який містить усе необхідне, щоб розпочати свою пригоду з наступним поколінням консолей PlayStation. Потужна консоль PlayStation 5 і гра Call of Duty: Modern Warfare III з можливостями PS5 дозволять вам на багато годин поринути у віртуальний світ.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">Придбайте цей спеціальний набір, який містить усе необхідне, щоб розпочати свою пригоду з наступним поколінням консолей PlayStation. Потужна консоль PlayStation 5 і гра Call of Duty: Modern Warfare III з можливостями PS5 дозволять вам на багато годин поринути у віртуальний світ.</span></p>
 
-&lt;p&gt;&lt;span style="font-size:14px"&gt;Вміст набору:&lt;/span&gt;&lt;/p&gt;
+<p><span style="font-size:14px">Вміст набору:</span></p>
 
-&lt;ul&gt;
-	&lt;li&gt;&lt;span style="font-size:14px"&gt;Консоль Sony PlayStation 5 (накопичувальна версія) з контролером DualSense,&lt;/span&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;span style="font-size:14px"&gt;Гра Call of Duty: Modern Warfare III для PlayStation 5 (ваучер на завантаження гри),&lt;/span&gt;&lt;/li&gt;
-&lt;/ul&gt;
+<ul>
+	<li><span style="font-size:14px">Консоль Sony PlayStation 5 (накопичувальна версія) з контролером DualSense,</span></li>
+	<li><span style="font-size:14px">Гра Call of Duty: Modern Warfare III для PlayStation 5 (ваучер на завантаження гри),</span></li>
+</ul>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;&lt;img alt="Набір PlayStation 5 + Call of Duty: Modern Warfare III - Упаковка" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/Zestawy/zestaw-ps5-cod-mw3-opakowanie.jpg" /&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px"><img alt="Набір PlayStation 5 + Call of Duty: Modern Warfare III - Упаковка" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/Zestawy/zestaw-ps5-cod-mw3-opakowanie.jpg" /></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Консоль Sony PlayStation 5&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&lt;span style="font-size:14px"&gt;Чи може будь-яка консоль зробити стільки ж, скільки Sony PlayStation 5? Величезна потужність і чуйність, блискавичний SSD-накопичувач, ігри 4K, трасування променів, 3D просторовий звук і багато інших технологій, які повністю занурять вас у віртуальний світ. Унікальний світ PlayStation 5 ближче, ніж ви думаєте.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Консоль Sony PlayStation 5</strong></span><br />
+<span style="font-size:14px">Чи може будь-яка консоль зробити стільки ж, скільки Sony PlayStation 5? Величезна потужність і чуйність, блискавичний SSD-накопичувач, ігри 4K, трасування променів, 3D просторовий звук і багато інших технологій, які повністю занурять вас у віртуальний світ. Унікальний світ PlayStation 5 ближче, ніж ви думаєте.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;&lt;img alt="Консоль Sony PlayStation 5" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/1TB/a1-konsola-sony-playstation-5-1tb.jpg" /&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px"><img alt="Консоль Sony PlayStation 5" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/1TB/a1-konsola-sony-playstation-5-1tb.jpg" /></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Трасування променів і HDR кожен день&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&lt;span style="font-size:14px"&gt;Тут красиво, - вигукнете ви, запустивши гру з технологією трасування променів. Трасування променів бездоганно відтворює тіні та відблиски світла, фактично змінюючи візуальні ефекти ігор. Те, що ви знали досі, ледве могло замінити реалізм.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Трасування променів і HDR кожен день</strong></span><br />
+<span style="font-size:14px">Тут красиво, - вигукнете ви, запустивши гру з технологією трасування променів. Трасування променів бездоганно відтворює тіні та відблиски світла, фактично змінюючи візуальні ефекти ігор. Те, що ви знали досі, ледве могло замінити реалізм.</span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;PlayStation 5 представляє нову якість, додатково вдосконалену технологією HDR. Тільки подумайте: трасування променів, глибокий чорний, інтенсивні кольори &amp;ndash; все це у вашій консолі.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px">PlayStation 5 представляє нову якість, додатково вдосконалену технологією HDR. Тільки подумайте: трасування променів, глибокий чорний, інтенсивні кольори &ndash; все це у вашій консолі.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;&lt;img alt="Трасування променів і HDR кожен день" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/1TB/a2-konsola-sony-playstation-5-1tb.jpg" /&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px"><img alt="Трасування променів і HDR кожен день" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/1TB/a2-konsola-sony-playstation-5-1tb.jpg" /></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;120 кадрів/с і частота оновлення 120 Гц&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&lt;span style="font-size:14px"&gt;На PlayStation 5 ви гратимете зі швидкістю 120 кадрів в секунду, милуючись динамічними, як бритва, чіткими зображеннями та експонованими деталями. Ви також можете досягти 120 Гц у якості 4K у вибраних заголовках. Відчуйте захоплення від гри в ексклюзивні ігри з якістю, якої ви ніколи раніше не відчували.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>120 кадрів/с і частота оновлення 120 Гц</strong></span><br />
+<span style="font-size:14px">На PlayStation 5 ви гратимете зі швидкістю 120 кадрів в секунду, милуючись динамічними, як бритва, чіткими зображеннями та експонованими деталями. Ви також можете досягти 120 Гц у якості 4K у вибраних заголовках. Відчуйте захоплення від гри в ексклюзивні ігри з якістю, якої ви ніколи раніше не відчували.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;&lt;img alt="120 кадрів/с і частота оновлення 120 Гц" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/1TB/a3-konsola-sony-playstation-5-1tb.jpg" /&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px"><img alt="120 кадрів/с і частота оновлення 120 Гц" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/1TB/a3-konsola-sony-playstation-5-1tb.jpg" /></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:26px"&gt;&lt;strong&gt;Тривимірний звук, що підвищує реалістичність&lt;/strong&gt;&lt;/span&gt;&lt;br /&gt;
-&lt;span style="font-size:14px"&gt;Імідж - це лише половина досвіду. Друга половина здорова. PlayStation 5 використовує движок Tempest 3D AudioTech, випромінюючи звук, який оточує вас і переносить вас у серце подій. Всеспрямований звук зробить ігровий процес більш приємним. Це підвищить її ранг. Це потрясе вас до глибини душі.&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:26px"><strong>Тривимірний звук, що підвищує реалістичність</strong></span><br />
+<span style="font-size:14px">Імідж - це лише половина досвіду. Друга половина здорова. PlayStation 5 використовує движок Tempest 3D AudioTech, випромінюючи звук, який оточує вас і переносить вас у серце подій. Всеспрямований звук зробить ігровий процес більш приємним. Це підвищить її ранг. Це потрясе вас до глибини душі.</span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:14px"&gt;&lt;img alt="Тривимірний звук, що підвищує реалістичність" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/1TB/a4-konsola-sony-playstation-5-1tb.jpg" /&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:14px"><img alt="Тривимірний звук, що підвищує реалістичність" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/1TB/a4-konsola-sony-playstation-5-1tb.jpg" /></span></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;
+<p style="text-align:center">&nbsp;</p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;</description>
-                <param name="Процесор">AMD Ryzen Zen 2 (8 ядер, 3,5 ГГц)</param>
-                <param name="Графічний макет">AMD RDNA 2.0 (2360 МГц)</param>
-                <param name="RAM">16 ГБ GDDR6</param>
-                <param name="SSD">825 ГБ</param>
-                <param name="Зв\&amp;#039;язок">Wi-Fi 802.11 a/b/g/n/ac/ax&lt;br&gt;Bluetooth 5.1&lt;br&gt;LAN 10/100/1000 Мбіт/с</param>
-                <param name="Оптичний диск">Blu-Ray</param>
-                <param name="Роз\&amp;#039;єми">HDMI - 1 шт.&lt;br&gt;USB 3.2 Gen 1 - 1 шт.&lt;br&gt;USB Type-C - 1 шт.&lt;br&gt;RJ-45 (LAN) - 1 шт.&lt;br&gt;AUX - 1 шт.</param>
-                <param name="Колір">Білий</param>
-                <param name="Додаткова інформація">Підтримка 4K UHD&lt;br&gt;Підтримка 8K&lt;br&gt;Можливість роботи вертикально і горизонтально</param>
-                <param name="Аксесуари в комплекті">Бездротова панель DualSense&lt;br&gt;Силовий кабель&lt;br&gt;Кабель HDMI (сумісний з 4K)</param>
-                <param name="Ігри включені">Call of Duty Modern Warfare 3 [цифрова версія]</param>
-                <param name="Гарантія">24 місяці</param>
+<p style="text-align:center">&nbsp;</p>]]></description>
+                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Ryzen Zen 2 (8 ядер, 3,5 ГГц)]]></param>
+                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 2.0 (2360 МГц)]]></param>
+                <param name="&lt;![CDATA[RAM]]&gt;"><![CDATA[16 ГБ GDDR6]]></param>
+                <param name="&lt;![CDATA[SSD]]&gt;"><![CDATA[825 ГБ]]></param>
+                <param name="&lt;![CDATA[Зв'язок]]&gt;"><![CDATA[Wi-Fi 802.11 a/b/g/n/ac/ax<br>Bluetooth 5.1<br>LAN 10/100/1000 Мбіт/с]]></param>
+                <param name="&lt;![CDATA[Оптичний диск]]&gt;"><![CDATA[Blu-Ray]]></param>
+                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[HDMI - 1 шт.<br>USB 3.2 Gen 1 - 1 шт.<br>USB Type-C - 1 шт.<br>RJ-45 (LAN) - 1 шт.<br>AUX - 1 шт.]]></param>
+                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Білий]]></param>
+                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[Підтримка 4K UHD<br>Підтримка 8K<br>Можливість роботи вертикально і горизонтально]]></param>
+                <param name="&lt;![CDATA[Аксесуари в комплекті]]&gt;"><![CDATA[Бездротова панель DualSense<br>Силовий кабель<br>Кабель HDMI (сумісний з 4K)]]></param>
+                <param name="&lt;![CDATA[Ігри включені]]&gt;"><![CDATA[Call of Duty Modern Warfare 3 [цифрова версія]]]></param>
+                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
             </offer>
             <offer id="269" available="1">
                 <stock_quantity>2</stock_quantity>
                 <url>https://x-media.com.ua/products/269</url>
-                <price>27999</price>
-                <price_old>28199</price_old>
+                <price>37999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/oCWPt-nr69.jpg</picture>
@@ -879,45 +869,45 @@
                 <picture>https://x-media.com.ua/images/products/uihR5dwXy6.jpg</picture>
                 <vendor>Sony</vendor>
                 <name>Стаціонарна ігрова приставка Sony PlayStation 5 D</name>
-                <description>&lt;h2 style="text-align:center"&gt;&lt;strong&gt;&lt;span style="font-size:28px"&gt;&lt;span style="color:#1a1a1a"&gt;&lt;span style="font-family:Lato,sans-serif"&gt;&lt;span style="background-color:#ffffff"&gt;Сенсорні ефекти та адаптивні ефекти &amp;laquo;Тригер&amp;raquo;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h2&gt;
+                <description><![CDATA[<h2 style="text-align:center"><strong><span style="font-size:28px"><span style="color:#1a1a1a"><span style="font-family:Lato,sans-serif"><span style="background-color:#ffffff">Сенсорні ефекти та адаптивні ефекти &laquo;Тригер&raquo;.</span></span></span></span></strong></h2>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-family:Lato,sans-serif"&gt;&lt;span style="background-color:#ffffff"&gt;Бездротовий контролер DualSense забезпечує неймовірні сенсорні ефекти в деяких іграх для PS5, дозволяючи вам відчути результати ваших ігрових дій завдяки динамічній сенсорній реакції.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px"><span style="color:#444444"><span style="font-family:Lato,sans-serif"><span style="background-color:#ffffff">Бездротовий контролер DualSense забезпечує неймовірні сенсорні ефекти в деяких іграх для PS5, дозволяючи вам відчути результати ваших ігрових дій завдяки динамічній сенсорній реакції.</span></span></span></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-family:Lato,sans-serif"&gt;&lt;span style="background-color:#ffffff"&gt;Крім того, ви також дізнаєтесь про можливості адаптивних ефектів &amp;laquo;Trigger&amp;raquo; у вибраних іграх для PS5.&amp;nbsp;Завдяки цій технології опір при натисканні на тригери на контролері змінюється в залежності від того, що ви робите в грі.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px"><span style="color:#444444"><span style="font-family:Lato,sans-serif"><span style="background-color:#ffffff">Крім того, ви також дізнаєтесь про можливості адаптивних ефектів &laquo;Trigger&raquo; у вибраних іграх для PS5.&nbsp;Завдяки цій технології опір при натисканні на тригери на контролері змінюється в залежності від того, що ви робите в грі.</span></span></span></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Консоль Sony PlayStation 5 Slim - контролер DualSense" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/Slim/Standard-Edition/sony-konsola-playstation-5-slim-dualsense.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Консоль Sony PlayStation 5 Slim - контролер DualSense" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/Slim/Standard-Edition/sony-konsola-playstation-5-slim-dualsense.jpg" /></p>
 
-&lt;h2 style="text-align:center"&gt;&lt;strong&gt;&lt;span style="font-size:28px"&gt;&lt;span style="color:#1a1a1a"&gt;&lt;span style="font-family:Lato,sans-serif"&gt;&lt;span style="background-color:#ffffff"&gt;Технології трасування променів і HDR&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h2&gt;
+<h2 style="text-align:center"><strong><span style="font-size:28px"><span style="color:#1a1a1a"><span style="font-family:Lato,sans-serif"><span style="background-color:#ffffff">Технології трасування променів і HDR</span></span></span></span></strong></h2>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-family:Lato,sans-serif"&gt;&lt;span style="background-color:#ffffff"&gt;Імітація окремих світлових променів дозволяє створювати реалістичні тіні та відображення в іграх для PS5, які підтримують цю технологію, ще більше занурюючи гравців у віртуальний світ.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px"><span style="color:#444444"><span style="font-family:Lato,sans-serif"><span style="background-color:#ffffff">Імітація окремих світлових променів дозволяє створювати реалістичні тіні та відображення в іграх для PS5, які підтримують цю технологію, ще більше занурюючи гравців у віртуальний світ.</span></span></span></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-family:Lato,sans-serif"&gt;&lt;span style="background-color:#ffffff"&gt;Граючи в ігри для PS5 із підтримкою HDR на телевізорі з HDR, ви можете насолоджуватися неймовірно яскравими та інтенсивними кольорами.&amp;nbsp;Завдяки підтримці частоти оновлення 120 Гц для дисплеїв 4K ви можете насолоджуватися плавним геймплеєм зі швидкістю до 120 кадрів на секунду в підтримуваних іграх.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px"><span style="color:#444444"><span style="font-family:Lato,sans-serif"><span style="background-color:#ffffff">Граючи в ігри для PS5 із підтримкою HDR на телевізорі з HDR, ви можете насолоджуватися неймовірно яскравими та інтенсивними кольорами.&nbsp;Завдяки підтримці частоти оновлення 120 Гц для дисплеїв 4K ви можете насолоджуватися плавним геймплеєм зі швидкістю до 120 кадрів на секунду в підтримуваних іграх.</span></span></span></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Консоль Sony PlayStation 5 Slim - технології трасування променів і HDR" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/Slim/Standard-Edition/sony-konsola-playstation-5-slim-hdr-grafika.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Консоль Sony PlayStation 5 Slim - технології трасування променів і HDR" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/Slim/Standard-Edition/sony-konsola-playstation-5-slim-hdr-grafika.jpg" /></p>
 
-&lt;h2 style="text-align:center"&gt;&lt;strong&gt;&lt;span style="font-size:28px"&gt;&lt;span style="color:#1a1a1a"&gt;&lt;span style="font-family:Lato,sans-serif"&gt;&lt;span style="background-color:#ffffff"&gt;Зворотна сумісність і функція Game Boost&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/h2&gt;
+<h2 style="text-align:center"><strong><span style="font-size:28px"><span style="color:#1a1a1a"><span style="font-family:Lato,sans-serif"><span style="background-color:#ffffff">Зворотна сумісність і функція Game Boost</span></span></span></span></strong></h2>
 
-&lt;p style="text-align:center"&gt;&lt;span style="font-size:18px"&gt;&lt;span style="color:#444444"&gt;&lt;span style="font-family:Lato,sans-serif"&gt;&lt;span style="background-color:#ffffff"&gt;Ви можете грати в понад 4000 ігор для PS4 на консолі PS5 Slim.&amp;nbsp;Завдяки Game Boost ви можете насолоджуватися швидшою та плавною частотою кадрів у деяких із найкращих ігор для PS4.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+<p style="text-align:center"><span style="font-size:18px"><span style="color:#444444"><span style="font-family:Lato,sans-serif"><span style="background-color:#ffffff">Ви можете грати в понад 4000 ігор для PS4 на консолі PS5 Slim.&nbsp;Завдяки Game Boost ви можете насолоджуватися швидшою та плавною частотою кадрів у деяких із найкращих ігор для PS4.</span></span></span></span></p>
 
-&lt;p style="text-align:center"&gt;&lt;img alt="Тонка консоль Sony PlayStation 5 – плоский кутовий вид спереду з контролером DualSense" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/Slim/Standard-Edition/sony-konsola-playstation-5-slim-widok-przod-bok-dualsense-na-plasko.jpg" /&gt;&lt;/p&gt;
+<p style="text-align:center"><img alt="Тонка консоль Sony PlayStation 5 – плоский кутовий вид спереду з контролером DualSense" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/Slim/Standard-Edition/sony-konsola-playstation-5-slim-widok-przod-bok-dualsense-na-plasko.jpg" /></p>
 
-&lt;p style="text-align:center"&gt;&amp;nbsp;&lt;/p&gt;</description>
-                <param name="Тип продукту">PlayStation 5 D Chassis (Slim)</param>
-                <param name="Процесор">AMD Ryzen Zen 2 (8 ядер, 3,5 ГГц)</param>
-                <param name="Графічний макет">AMD RDNA 2.0 (2360 МГц)</param>
-                <param name="ОЗП">16 ГБ GDDR6</param>
-                <param name="SSD">1 ТБ</param>
-                <param name="З’єднання">Wi-Fi 802.11 a/b/g/n/ac/ax&lt;br&gt;Bluetooth 5.1&lt;br&gt;LAN 10/100/1000 Мбіт/с</param>
-                <param name="Оптичний диск">Blu-Ray</param>
-                <param name="Роз\&amp;#039;єми">HDMI - 1 шт.&lt;br&gt;USB 3.2 Gen 1 - 1 шт.&lt;br&gt;USB Type-C - 1 шт.&lt;br&gt;RJ-45 (LAN) - 1 шт.&lt;br&gt;AUX - 1 шт.&lt;br&gt;</param>
-                <param name="Колір">Білий і чорний</param>
-                <param name="Додаткова інформація">Підтримка 4K UHD&lt;br&gt;Підтримка 8K&lt;br&gt;Можливість роботи вертикально і горизонтально</param>
-                <param name="Аксесуари в комплекті">Бездротова панель DualSense&lt;br&gt;Кабель USB&lt;br&gt;Силовий кабель&lt;br&gt;Кабель HDMI (сумісний з 4K)&lt;br&gt;Дві горизонтальні базові ніжки</param>
-                <param name="Висота">358 мм</param>
-                <param name="Ширина">216 мм</param>
-                <param name="Глибина">92 мм</param>
-                <param name="Вага">3,2 кг</param>
-                <param name="Гарантія">12 місяців</param>
+<p style="text-align:center">&nbsp;</p>]]></description>
+                <param name="&lt;![CDATA[Тип продукту]]&gt;"><![CDATA[PlayStation 5 D Chassis (Slim)]]></param>
+                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Ryzen Zen 2 (8 ядер, 3,5 ГГц)]]></param>
+                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 2.0 (2360 МГц)]]></param>
+                <param name="&lt;![CDATA[ОЗП]]&gt;"><![CDATA[16 ГБ GDDR6]]></param>
+                <param name="&lt;![CDATA[SSD]]&gt;"><![CDATA[1 ТБ]]></param>
+                <param name="&lt;![CDATA[З’єднання]]&gt;"><![CDATA[Wi-Fi 802.11 a/b/g/n/ac/ax<br>Bluetooth 5.1<br>LAN 10/100/1000 Мбіт/с]]></param>
+                <param name="&lt;![CDATA[Оптичний диск]]&gt;"><![CDATA[Blu-Ray]]></param>
+                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[HDMI - 1 шт.<br>USB 3.2 Gen 1 - 1 шт.<br>USB Type-C - 1 шт.<br>RJ-45 (LAN) - 1 шт.<br>AUX - 1 шт.<br>]]></param>
+                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Білий і чорний]]></param>
+                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[Підтримка 4K UHD<br>Підтримка 8K<br>Можливість роботи вертикально і горизонтально]]></param>
+                <param name="&lt;![CDATA[Аксесуари в комплекті]]&gt;"><![CDATA[Бездротова панель DualSense<br>Кабель USB<br>Силовий кабель<br>Кабель HDMI (сумісний з 4K)<br>Дві горизонтальні базові ніжки]]></param>
+                <param name="&lt;![CDATA[Висота]]&gt;"><![CDATA[358 мм]]></param>
+                <param name="&lt;![CDATA[Ширина]]&gt;"><![CDATA[216 мм]]></param>
+                <param name="&lt;![CDATA[Глибина]]&gt;"><![CDATA[92 мм]]></param>
+                <param name="&lt;![CDATA[Вага]]&gt;"><![CDATA[3,2 кг]]></param>
+                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[12 місяців]]></param>
             </offer>
         </offers>
     </shop>
