@@ -8,7 +8,7 @@ use App\Entity\Product;
 
 trait PriceTrait
 {
-    private function getPrice(Product $product, Feed $feed, ?CategoryFeedPrice $priceParameters): float|int
+    private function getPrice(Product $product, ?Feed $feed, ?CategoryFeedPrice $priceParameters): float|int
     {
         if ($priceParameters) {
             return $this->adjustPrice($product->getPrice(), $priceParameters->getOurPercent(), $priceParameters->getFee());

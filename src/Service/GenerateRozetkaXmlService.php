@@ -126,12 +126,12 @@ class GenerateRozetkaXmlService
 
     private function formatString(string $string): string
     {
-        return sprintf('<![CDATA[%s]]>', trim($string));
+        return sprintf('<![CDATA[%s]]>', trim(strip_tags($string)));
     }
 
     private function convertString(string $text, ?Feed $feed): string
     {
-        $text = strip_tags(addslashes($text));
+        $text = strip_tags($text);
 
         if ($feed && $feed->getCutCharacteristics()) {
             $text = mb_substr($text, 0, 255, 'UTF-8');
