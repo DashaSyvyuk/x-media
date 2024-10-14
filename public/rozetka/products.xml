@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<yml_catalog date="2024-10-08 19:34">
+<yml_catalog date="2024-10-13 18:55">
     <shop>
         <name>X-media</name>
         <company>X-media</company>
@@ -11,8 +11,8 @@
             <category id="7">Консолі</category>
         </categories>
         <offers>
-            <offer id="541" available="1">
-                <stock_quantity>2</stock_quantity>
+            <offer id="541" available="true">
+                <stock_quantity>3</stock_quantity>
                 <url>https://x-media.com.ua/products/541</url>
                 <price>27999</price>
                 <currencyId>UAH</currencyId>
@@ -129,26 +129,26 @@
 <p style="text-align:center">&nbsp;</p>
 
 <p style="text-align:center">&nbsp;</p>]]></description>
-                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[Ryzen Z1]]></param>
-                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[Графіка AMD Radeon]]></param>
-                <param name="&lt;![CDATA[Частота оновлення екрана [Гц]]]&gt;"><![CDATA[120]]></param>
-                <param name="&lt;![CDATA[Датчики]]&gt;"><![CDATA[Сканер відбитків пальців]]></param>
-                <param name="&lt;![CDATA[З'єднання]]&gt;"><![CDATA[Bluetooth, Wi-Fi]]></param>
-                <param name="&lt;![CDATA[Оперативна пам'ять [ГБ]]&gt;"><![CDATA[16 ГБ DDR5]]></param>
-                <param name="&lt;![CDATA[Внутрішня пам'ять [ГБ]]]&gt;"><![CDATA[512]]></param>
-                <param name="&lt;![CDATA[Діагональ екрану [дюйм]]]&gt;"><![CDATA[7]]></param>
-                <param name="&lt;![CDATA[Гучномовці]]&gt;"><![CDATA[Так]]></param>
-                <param name="&lt;![CDATA[Скло]]&gt;"><![CDATA[Gorilla Glass Victus]]></param>
-                <param name="&lt;![CDATA[Тип екрану]]&gt;"><![CDATA[IPS]]></param>
-                <param name="&lt;![CDATA[Вбудований мікрофон]]&gt;"><![CDATA[Так]]></param>
-                <param name="&lt;![CDATA[Ширина [мм]]]&gt;"><![CDATA[280]]></param>
-                <param name="&lt;![CDATA[Висота [мм]]]&gt;"><![CDATA[111]]></param>
-                <param name="&lt;![CDATA[Глибина [мм]]]&gt;"><![CDATA[212]]></param>
-                <param name="&lt;![CDATA[Вага [г]]]&gt;"><![CDATA[608]]></param>
-                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
+                <param name="Процесор">Ryzen Z1</param>
+                <param name="Графічний макет">Графіка AMD Radeon</param>
+                <param name="Частота оновлення екрана [Гц]">120</param>
+                <param name="Датчики">Сканер відбитків пальців</param>
+                <param name="З\'єднання">Bluetooth, Wi-Fi</param>
+                <param name="Оперативна пам\'ять [ГБ">16 ГБ DDR5</param>
+                <param name="Внутрішня пам\'ять [ГБ]">512</param>
+                <param name="Діагональ екрану [дюйм]">7</param>
+                <param name="Гучномовці">Так</param>
+                <param name="Скло">Gorilla Glass Victus</param>
+                <param name="Тип екрану">IPS</param>
+                <param name="Вбудований мікрофон">Так</param>
+                <param name="Ширина [мм]">280</param>
+                <param name="Висота [мм]">111</param>
+                <param name="Глибина [мм]">212</param>
+                <param name="Вага [г]">608</param>
+                <param name="Гарантія">24 місяці</param>
             </offer>
-            <offer id="116" available="1">
-                <stock_quantity>2</stock_quantity>
+            <offer id="116" available="true">
+                <stock_quantity>1</stock_quantity>
                 <url>https://x-media.com.ua/products/116</url>
                 <price>42999</price>
                 <currencyId>UAH</currencyId>
@@ -255,24 +255,24 @@
 <p style="text-align:center">&nbsp;</p>
 
 <p style="text-align:center"><img alt="Портативна консоль ASUS ROG Ally - вид зверху" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/ASUS/ROG-Ally/asus-przenosna-konsola-rog-ally-widok-gora.jpg" /></p>]]></description>
-                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Ryzen Z1 Extreme (8 ядер, 16 потоків, 3,3 - 5,1 ГГц)]]></param>
-                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 3.0 (2700 МГц)]]></param>
-                <param name="&lt;![CDATA[RAM]]&gt;"><![CDATA[16 ГБ LPDDR5]]></param>
-                <param name="&lt;![CDATA[Вмонтована пам'ять]]&gt;"><![CDATA[512 ГБ SSD NVMe]]></param>
-                <param name="&lt;![CDATA[Тип екрана]]&gt;"><![CDATA[Сенсорний, IPS]]></param>
-                <param name="&lt;![CDATA[Частота оновлення екрана]]&gt;"><![CDATA[120 Гц]]></param>
-                <param name="&lt;![CDATA[Діагональ екрану]]&gt;"><![CDATA[7"]]></param>
-                <param name="&lt;![CDATA[Розширення екрану]]&gt;"><![CDATA[1920x1080]]></param>
-                <param name="&lt;![CDATA[Зв'язок]]&gt;"><![CDATA[Wi-Fi 6E 802.11 ax]]></param>
-                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[USB 3.2 Gen 2 (Type-C) - 1 шт.<br>Аудіовихід - 1 шт.<br>Зчитувач карт пам'яті MicroSD - 1 шт.<br>Роз'єм ROG XG - 1 шт.]]></param>
-                <param name="&lt;![CDATA[Кнопки]]&gt;"><![CDATA[D-Pad<br>Аналогові ручки - 2 шт.<br>Бампер лівий/правий Лівий/правий тригер<br>Леза M1/M2 кнопка [+].<br>Кнопка [-] Кнопки A/B/X/Y<br>Кнопка Armory Crate<br>Кнопка "Додому"<br>Кнопка меню Кнопка перегляду]]></param>
-                <param name="&lt;![CDATA[Блок живлення]]&gt;"><![CDATA[Акумулятор 5200 мАг, літій-іонний]]></param>
-                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Білий]]></param>
-                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[AMD FreeSync<br>Dolby Atmos<br>RGB підсвічування<br>Corning Gorilla Glass DXC<br>Corning Gorilla Glass Victus<br>Вбудовані стереодинаміки<br>Операційна система Windows 11<br>Сумісний з Armory Crate SE<br>Сумісний з Xbox Game Pass<br>Сумісний зі Steam Сумі]]></param>
-                <param name="&lt;![CDATA[Аксесуари в комплекті]]&gt;"><![CDATA[Кабель USB Type-C<br>Зарядний пристрій]]></param>
-                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
+                <param name="Процесор">AMD Ryzen Z1 Extreme (8 ядер, 16 потоків, 3,3 - 5,1 ГГц)</param>
+                <param name="Графічний макет">AMD RDNA 3.0 (2700 МГц)</param>
+                <param name="RAM">16 ГБ LPDDR5</param>
+                <param name="Вмонтована пам\'ять">512 ГБ SSD NVMe</param>
+                <param name="Тип екрана">Сенсорний, IPS</param>
+                <param name="Частота оновлення екрана">120 Гц</param>
+                <param name="Діагональ екрану">7\"</param>
+                <param name="Розширення екрану">1920x1080</param>
+                <param name="Зв\'язок">Wi-Fi 6E 802.11 ax</param>
+                <param name="Роз\'єми">USB 3.2 Gen 2 (Type-C) - 1 шт.Аудіовихід - 1 шт.Зчитувач карт пам\'яті MicroSD - 1 шт.Роз\'єм ROG XG - 1 шт.</param>
+                <param name="Кнопки">D-PadАналогові ручки - 2 шт.Бампер лівий/правий Лівий/правий тригерЛеза M1/M2 кнопка [+].Кнопка [-] Кнопки A/B/X/YКнопка Armory CrateКнопка \"Додому\"Кнопка меню Кнопка перегляду</param>
+                <param name="Блок живлення">Акумулятор 5200 мАг, літій-іонний</param>
+                <param name="Колір">Білий</param>
+                <param name="Додаткова інформація">AMD FreeSyncDolby AtmosRGB підсвічуванняCorning Gorilla Glass DXCCorning Gorilla Glass VictusВбудовані стереодинамікиОпераційна система Windows 11Сумісний з Armory Crate SEСумісний з Xbox Game PassСумісний зі Steam Сумі</param>
+                <param name="Аксесуари в комплекті">Кабель USB Type-CЗарядний пристрій</param>
+                <param name="Гарантія">24 місяці</param>
             </offer>
-            <offer id="100" available="1">
+            <offer id="100" available="true">
                 <stock_quantity>1</stock_quantity>
                 <url>https://x-media.com.ua/products/100</url>
                 <price>38999</price>
@@ -355,25 +355,25 @@
 <p style="text-align:center">&nbsp;</p>
 
 <p style="text-align:center"><img alt="Портативна консоль Lenovo Legion Go – вид спереду під кутом" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/LENOVO/Legion-Go/lenovo-konsola-przenosna-legion-go-widok-przod-dol.jpg" /></p>]]></description>
-                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Ryzen Z1 Extreme (8 ядер, 16 потоків, 3,3 - 5,1 ГГц)]]></param>
-                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 3.0 (2700 МГц)]]></param>
-                <param name="&lt;![CDATA[RAM]]&gt;"><![CDATA[16 ГБ LPDDR5X]]></param>
-                <param name="&lt;![CDATA[Вмонтована пам'ять]]&gt;"><![CDATA[512 ГБ NVMe SSD]]></param>
-                <param name="&lt;![CDATA[Тип екрана]]&gt;"><![CDATA[Сенсорний, IPS]]></param>
-                <param name="&lt;![CDATA[Частота оновлення екрана]]&gt;"><![CDATA[144 Гц]]></param>
-                <param name="&lt;![CDATA[Діагональ екрану]]&gt;"><![CDATA[8,8"]]></param>
-                <param name="&lt;![CDATA[Розширення екрану]]&gt;"><![CDATA[2560 x 1600]]></param>
-                <param name="&lt;![CDATA[Зв'язок]]&gt;"><![CDATA[Wi-Fi 802.11 a/b/g/n/ac/ax<br>Bluetooth 5.2]]></param>
-                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[USB 3.2 Gen 2 (Type-C) - 2 шт.<br>Аудіовихід - 1 шт.<br>Зчитувач карт пам'яті MicroSD - 1 шт.]]></param>
-                <param name="&lt;![CDATA[Кнопки]]&gt;"><![CDATA[D-Pad<br>Аналогові ручки - 2 шт.<br>Бампер лівий/правий Лівий/правий тригер<br>Кнопки A/B/X/Y<br>Кнопка захоплення<br>Кнопка меню<br>Кнопка параметрів<br>Кнопка відпускання<br>Кнопки V1/V2/V3<br>Кнопка M3]]></param>
-                <param name="&lt;![CDATA[Блок живлення]]&gt;"><![CDATA[Акумулятор 49,2 Вт/год]]></param>
-                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Чорний]]></param>
-                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[Dolby Atmos<br>Підтримка VRR<br>Регулювання гучності<br>Вбудовані стереодинаміки<br>Вбудована регульована підставка<br>Знімний джойстик<br>Підтримка карт пам'яті microSD об'ємом до 2 ТБ<br>Операційна система Windows 11 Сумісний з Xbox Game Pass<br>Сумісни]]></param>
-                <param name="&lt;![CDATA[Аксесуари в комплекті]]&gt;"><![CDATA[Xbox Game Pass Ultimate (3-місячна підписка на обслуговування)<br>Зарядний пристрій<br>Портативний футляр<br>Аксесуар для режиму FPS]]></param>
-                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
+                <param name="Процесор">AMD Ryzen Z1 Extreme (8 ядер, 16 потоків, 3,3 - 5,1 ГГц)</param>
+                <param name="Графічний макет">AMD RDNA 3.0 (2700 МГц)</param>
+                <param name="RAM">16 ГБ LPDDR5X</param>
+                <param name="Вмонтована пам\'ять">512 ГБ NVMe SSD</param>
+                <param name="Тип екрана">Сенсорний, IPS</param>
+                <param name="Частота оновлення екрана">144 Гц</param>
+                <param name="Діагональ екрану">8,8\"</param>
+                <param name="Розширення екрану">2560 x 1600</param>
+                <param name="Зв\'язок">Wi-Fi 802.11 a/b/g/n/ac/axBluetooth 5.2</param>
+                <param name="Роз\'єми">USB 3.2 Gen 2 (Type-C) - 2 шт.Аудіовихід - 1 шт.Зчитувач карт пам\'яті MicroSD - 1 шт.</param>
+                <param name="Кнопки">D-PadАналогові ручки - 2 шт.Бампер лівий/правий Лівий/правий тригерКнопки A/B/X/YКнопка захопленняКнопка менюКнопка параметрівКнопка відпусканняКнопки V1/V2/V3Кнопка M3</param>
+                <param name="Блок живлення">Акумулятор 49,2 Вт/год</param>
+                <param name="Колір">Чорний</param>
+                <param name="Додаткова інформація">Dolby AtmosПідтримка VRRРегулювання гучностіВбудовані стереодинамікиВбудована регульована підставкаЗнімний джойстикПідтримка карт пам\'яті microSD об\'ємом до 2 ТБОпераційна система Windows 11 Сумісний з Xbox Game PassСумісни</param>
+                <param name="Аксесуари в комплекті">Xbox Game Pass Ultimate (3-місячна підписка на обслуговування)Зарядний пристрійПортативний футлярАксесуар для режиму FPS</param>
+                <param name="Гарантія">24 місяці</param>
             </offer>
-            <offer id="540" available="1">
-                <stock_quantity>2</stock_quantity>
+            <offer id="540" available="true">
+                <stock_quantity>3</stock_quantity>
                 <url>https://x-media.com.ua/products/540</url>
                 <price>20799</price>
                 <currencyId>UAH</currencyId>
@@ -445,28 +445,28 @@
 <p style="text-align:center">&nbsp;</p>
 
 <p style="text-align:center">&nbsp;</p>]]></description>
-                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[Qualcomm Snapdragon 720G]]></param>
-                <param name="&lt;![CDATA[Ширина [мм]]]&gt;"><![CDATA[256]]></param>
-                <param name="&lt;![CDATA[Висота [мм]]]&gt;"><![CDATA[32]]></param>
-                <param name="&lt;![CDATA[Частота оновлення екрана [Гц]]]&gt;"><![CDATA[60]]></param>
-                <param name="&lt;![CDATA[Датчики]]&gt;"><![CDATA[Датчик зовнішнього освітлення]]></param>
-                <param name="&lt;![CDATA[Глибина [мм]]]&gt;"><![CDATA[117]]></param>
-                <param name="&lt;![CDATA[Гучномовці]]&gt;"><![CDATA[Так]]></param>
-                <param name="&lt;![CDATA[З'єднання]]&gt;"><![CDATA[Bluetooth, Wi-Fi]]></param>
-                <param name="&lt;![CDATA[Оперативна пам'ять [ГБ]]]&gt;"><![CDATA[4]]></param>
-                <param name="&lt;![CDATA[Внутрішня пам'ять [ГБ]]]&gt;"><![CDATA[64]]></param>
-                <param name="&lt;![CDATA[Ємність акумулятора [мАг]]]&gt;"><![CDATA[6000]]></param>
-                <param name="&lt;![CDATA[Діагональ екрану [дюйм]]]&gt;"><![CDATA[7]]></param>
-                <param name="&lt;![CDATA[Тип екрану]]&gt;"><![CDATA[IPS]]></param>
-                <param name="&lt;![CDATA[Вбудований мікрофон]]&gt;"><![CDATA[Так]]></param>
-                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[мініджек 3,5 мм, USB]]></param>
-                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[Слот для карток, хмарні ігри]]></param>
-                <param name="&lt;![CDATA[Тип консолі]]&gt;"><![CDATA[Logitech G Cloud – портативний комп’ютер]]></param>
-                <param name="&lt;![CDATA[Вага [г]]]&gt;"><![CDATA[463]]></param>
-                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Білий]]></param>
-                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
+                <param name="Процесор">Qualcomm Snapdragon 720G</param>
+                <param name="Ширина [мм]">256</param>
+                <param name="Висота [мм]">32</param>
+                <param name="Частота оновлення екрана [Гц]">60</param>
+                <param name="Датчики">Датчик зовнішнього освітлення</param>
+                <param name="Глибина [мм]">117</param>
+                <param name="Гучномовці">Так</param>
+                <param name="З\'єднання">Bluetooth, Wi-Fi</param>
+                <param name="Оперативна пам\'ять [ГБ]">4</param>
+                <param name="Внутрішня пам\'ять [ГБ]">64</param>
+                <param name="Ємність акумулятора [мАг]">6000</param>
+                <param name="Діагональ екрану [дюйм]">7</param>
+                <param name="Тип екрану">IPS</param>
+                <param name="Вбудований мікрофон">Так</param>
+                <param name="Роз\'єми">мініджек 3,5 мм, USB</param>
+                <param name="Додаткова інформація">Слот для карток, хмарні ігри</param>
+                <param name="Тип консолі">Logitech G Cloud – портативний комп’ютер</param>
+                <param name="Вага [г]">463</param>
+                <param name="Колір">Білий</param>
+                <param name="Гарантія">24 місяці</param>
             </offer>
-            <offer id="539" available="1">
+            <offer id="539" available="true">
                 <stock_quantity>3</stock_quantity>
                 <url>https://x-media.com.ua/products/539</url>
                 <price>50999</price>
@@ -524,27 +524,27 @@
 <p style="text-align:center"><span style="font-size:18px">Новий стандарт Wi-Fi 7 забезпечує продуктивність, яка дозволяє передавати дані з мультигігабітною продуктивністю до 5,8 Гбіт/с у діапазонах 5 і 6 ГГц. Завдяки більш широким, 320-мегагерцевим каналам, гарантується значне збільшення пропускної здатності мережі. Насолоджуйтеся наднизькою затримкою в 2 мілісекунди та відсутністю тремтіння сигналу під час бездротового керування кількома пристроями. Частота 6 ГГц забезпечує додаткову пропускну здатність, що підвищує загальну продуктивність ноутбука в мережі</span></p>
 
 <p style="text-align:center"><img alt="Konsola MSI Claw A1M-064PL" src="https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/63/6328378/Konsola-MSI-Claw-A1M-064PL-lifestyle3.jpg" /></p>]]></description>
-                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[Intel Core Ultra 7]]></param>
-                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[Intel Arc Graphics]]></param>
-                <param name="&lt;![CDATA[Ширина [мм]]]&gt;"><![CDATA[294]]></param>
-                <param name="&lt;![CDATA[Висота [мм]]]&gt;"><![CDATA[21.2]]></param>
-                <param name="&lt;![CDATA[Частота оновлення екрана [Гц]]]&gt;"><![CDATA[120]]></param>
-                <param name="&lt;![CDATA[Датчики]]&gt;"><![CDATA[Сканер відбитків пальців]]></param>
-                <param name="&lt;![CDATA[Глибина [мм]]]&gt;"><![CDATA[117]]></param>
-                <param name="&lt;![CDATA[Гучномовці]]&gt;"><![CDATA[Так]]></param>
-                <param name="&lt;![CDATA[З'єднання]]&gt;"><![CDATA[Bluetooth, Wi-Fi]]></param>
-                <param name="&lt;![CDATA[Оперативна пам'ять [ГБ]]]&gt;"><![CDATA[16 ГБ DDR5]]></param>
-                <param name="&lt;![CDATA[Внутрішня пам'ять [ГБ]]]&gt;"><![CDATA[512]]></param>
-                <param name="&lt;![CDATA[Діагональ екрану [дюйм]]]&gt;"><![CDATA[7]]></param>
-                <param name="&lt;![CDATA[Тип екрану]]&gt;"><![CDATA[IPS]]></param>
-                <param name="&lt;![CDATA[Вбудований мікрофон]]&gt;"><![CDATA[Ні]]></param>
-                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[Комбінований роз'єм, USB-C]]></param>
-                <param name="&lt;![CDATA[Вага [г]]]&gt;"><![CDATA[675]]></param>
-                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Чорний]]></param>
-                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
-                <param name="&lt;![CDATA[Тест]]&gt;"><![CDATA[тест]]></param>
+                <param name="Процесор">Intel Core Ultra 7</param>
+                <param name="Графічний макет">Intel Arc Graphics</param>
+                <param name="Ширина [мм]">294</param>
+                <param name="Висота [мм]">21.2</param>
+                <param name="Частота оновлення екрана [Гц]">120</param>
+                <param name="Датчики">Сканер відбитків пальців</param>
+                <param name="Глибина [мм]">117</param>
+                <param name="Гучномовці">Так</param>
+                <param name="З\'єднання">Bluetooth, Wi-Fi</param>
+                <param name="Оперативна пам\'ять [ГБ]">16 ГБ DDR5</param>
+                <param name="Внутрішня пам\'ять [ГБ]">512</param>
+                <param name="Діагональ екрану [дюйм]">7</param>
+                <param name="Тип екрану">IPS</param>
+                <param name="Вбудований мікрофон">Ні</param>
+                <param name="Роз\'єми">Комбінований роз\'єм, USB-C</param>
+                <param name="Вага [г]">675</param>
+                <param name="Колір">Чорний</param>
+                <param name="Гарантія">24 місяці</param>
+                <param name="Тест">тест</param>
             </offer>
-            <offer id="543" available="1">
+            <offer id="543" available="true">
                 <stock_quantity>2</stock_quantity>
                 <url>https://x-media.com.ua/products/543</url>
                 <price>25399</price>
@@ -585,26 +585,26 @@
 <p style="text-align:center">&nbsp;</p>
 
 <p style="text-align:center">&nbsp;</p>]]></description>
-                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[Ігрова платформа Snapdragon G3X Gen 1]]></param>
-                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[Графічний процесор Adreno 660]]></param>
-                <param name="&lt;![CDATA[Частота оновлення екрана [Гц]]]&gt;"><![CDATA[144]]></param>
-                <param name="&lt;![CDATA[Оперативна пам'ять [ГБ]]]&gt;"><![CDATA[6 ГБ LPDDR5]]></param>
-                <param name="&lt;![CDATA[Внутрішня пам'ять [ГБ]]]&gt;"><![CDATA[128]]></param>
-                <param name="&lt;![CDATA[Ємність акумулятора [мАг]]]&gt;"><![CDATA[5000]]></param>
-                <param name="&lt;![CDATA[Діагональ екрану [дюйм]]]&gt;"><![CDATA[6.8]]></param>
-                <param name="&lt;![CDATA[Тип екрану]]&gt;"><![CDATA[AMOLED]]></param>
-                <param name="&lt;![CDATA[Гучномовці]]&gt;"><![CDATA[Так]]></param>
-                <param name="&lt;![CDATA[Вбудований мікрофон]]&gt;"><![CDATA[Так]]></param>
-                <param name="&lt;![CDATA[Вміст набору]]&gt;"><![CDATA[Консоль Edge Wi-Fi, контролер Kishi V2 Pro]]></param>
-                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[USB]]></param>
-                <param name="&lt;![CDATA[Ширина [мм]]]&gt;"><![CDATA[260]]></param>
-                <param name="&lt;![CDATA[Висота [мм]]]&gt;"><![CDATA[85]]></param>
-                <param name="&lt;![CDATA[Глибина [мм]]]&gt;"><![CDATA[11]]></param>
-                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Чорний]]></param>
-                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
+                <param name="Процесор">Ігрова платформа Snapdragon G3X Gen 1</param>
+                <param name="Графічний макет">Графічний процесор Adreno 660</param>
+                <param name="Частота оновлення екрана [Гц]">144</param>
+                <param name="Оперативна пам\'ять [ГБ]">6 ГБ LPDDR5</param>
+                <param name="Внутрішня пам\'ять [ГБ]">128</param>
+                <param name="Ємність акумулятора [мАг]">5000</param>
+                <param name="Діагональ екрану [дюйм]">6.8</param>
+                <param name="Тип екрану">AMOLED</param>
+                <param name="Гучномовці">Так</param>
+                <param name="Вбудований мікрофон">Так</param>
+                <param name="Вміст набору">Консоль Edge Wi-Fi, контролер Kishi V2 Pro</param>
+                <param name="Роз\'єми">USB</param>
+                <param name="Ширина [мм]">260</param>
+                <param name="Висота [мм]">85</param>
+                <param name="Глибина [мм]">11</param>
+                <param name="Колір">Чорний</param>
+                <param name="Гарантія">24 місяці</param>
             </offer>
-            <offer id="542" available="1">
-                <stock_quantity>2</stock_quantity>
+            <offer id="542" available="true">
+                <stock_quantity>1</stock_quantity>
                 <url>https://x-media.com.ua/products/542</url>
                 <price>49999</price>
                 <currencyId>UAH</currencyId>
@@ -669,28 +669,28 @@
 <p style="text-align:center">&nbsp;</p>
 
 <p style="text-align:center">&nbsp;</p>]]></description>
-                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Zen 2, 2,4-3,5 ГГц (4 ядра)]]></param>
-                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 2 CJ, 1,0-1,6 ГГц]]></param>
-                <param name="&lt;![CDATA[Частота оновлення екрана [Гц]]]&gt;"><![CDATA[90]]></param>
-                <param name="&lt;![CDATA[Датчики]]&gt;"><![CDATA[2 датчика зовнішнього освітлення]]></param>
-                <param name="&lt;![CDATA[Оперативна пам'ять [ГБ]]]&gt;"><![CDATA[16 ГБ LPDDR5]]></param>
-                <param name="&lt;![CDATA[Внутрішня пам'ять [ГБ]]]&gt;"><![CDATA[1000]]></param>
-                <param name="&lt;![CDATA[Діагональ екрану [дюйм]]]&gt;"><![CDATA[7.4]]></param>
-                <param name="&lt;![CDATA[Тип екрану]]&gt;"><![CDATA[OLED]]></param>
-                <param name="&lt;![CDATA[Гучномовці]]&gt;"><![CDATA[Так]]></param>
-                <param name="&lt;![CDATA[Вбудований мікрофон]]&gt;"><![CDATA[Так]]></param>
-                <param name="&lt;![CDATA[З'єднання]]&gt;"><![CDATA[Bluetooth, Wi-Fi]]></param>
-                <param name="&lt;![CDATA[Вміст набору]]&gt;"><![CDATA[USB кабель, консоль, адаптер живлення]]></param>
-                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[USB-C]]></param>
-                <param name="&lt;![CDATA[Ширина [мм]]]&gt;"><![CDATA[298]]></param>
-                <param name="&lt;![CDATA[Висота [мм]]]&gt;"><![CDATA[117]]></param>
-                <param name="&lt;![CDATA[Глибина [мм]]]&gt;"><![CDATA[49]]></param>
-                <param name="&lt;![CDATA[Вага [г]]]&gt;"><![CDATA[640]]></param>
-                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Чорний]]></param>
-                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
+                <param name="Процесор">AMD Zen 2, 2,4-3,5 ГГц (4 ядра)</param>
+                <param name="Графічний макет">AMD RDNA 2 CJ, 1,0-1,6 ГГц</param>
+                <param name="Частота оновлення екрана [Гц]">90</param>
+                <param name="Датчики">2 датчика зовнішнього освітлення</param>
+                <param name="Оперативна пам\'ять [ГБ]">16 ГБ LPDDR5</param>
+                <param name="Внутрішня пам\'ять [ГБ]">1000</param>
+                <param name="Діагональ екрану [дюйм]">7.4</param>
+                <param name="Тип екрану">OLED</param>
+                <param name="Гучномовці">Так</param>
+                <param name="Вбудований мікрофон">Так</param>
+                <param name="З\'єднання">Bluetooth, Wi-Fi</param>
+                <param name="Вміст набору">USB кабель, консоль, адаптер живлення</param>
+                <param name="Роз\'єми">USB-C</param>
+                <param name="Ширина [мм]">298</param>
+                <param name="Висота [мм]">117</param>
+                <param name="Глибина [мм]">49</param>
+                <param name="Вага [г]">640</param>
+                <param name="Колір">Чорний</param>
+                <param name="Гарантія">24 місяці</param>
             </offer>
-            <offer id="169" available="1">
-                <stock_quantity>3</stock_quantity>
+            <offer id="169" available="true">
+                <stock_quantity>1</stock_quantity>
                 <url>https://x-media.com.ua/products/169</url>
                 <price>31999</price>
                 <currencyId>UAH</currencyId>
@@ -762,21 +762,21 @@
 <p style="text-align:center"><span style="font-size:14px">Бій означає прийняття рішень, від вибору зброї до планування наступних дій. На додаток до флагманських вражаючих місій, відомих із попередніх кампаній Call of Duty, у Modern Warfare III представлені відкриті бойові місії, які дають гравцеві більше контролю. Не існує єдиного заздалегідь визначеного способу їх завершення. Від вас залежить, будете ви діяти тихо або знищуєте ворогів у прямому бою.</span></p>
 
 <p style="text-align:center"><span style="font-size:14px">У цьому наборі ви отримаєте гру Call of Duty: Modern Warfare III для Xbox Series X|S / Xbox One як код для завантаження з магазину Xbox (потрібне підключення до Інтернету).</span></p>]]></description>
-                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Ryzen Zen 2 (8 ядер, 3,8 ГГц)]]></param>
-                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 2.0 (1825 МГц)]]></param>
-                <param name="&lt;![CDATA[RAM]]&gt;"><![CDATA[16 ГБ GDDR6]]></param>
-                <param name="&lt;![CDATA[SSD]]&gt;"><![CDATA[1 ТБ SSD NVMe]]></param>
-                <param name="&lt;![CDATA[Зв'язок]]&gt;"><![CDATA[Wi-Fi 802.11 a/b/g/n/ac/ax<br>Bluetooth 5.1<br>LAN 10/100/1000 Мбіт/с]]></param>
-                <param name="&lt;![CDATA[Оптичний диск]]&gt;"><![CDATA[Blu-Ray]]></param>
-                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[HDMI вихід - 1 шт.<br>USB 3.2 Gen 1 - 3 шт.<br>RJ-45 (LAN) - 1 шт.<br>Слот розширення для носія даних - 1 шт.]]></param>
-                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Чорний]]></param>
-                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[Підтримка 4K UHD<br>Підтримка 8K<br>Можливість роботи вертикально]]></param>
-                <param name="&lt;![CDATA[Аксесуари в комплекті]]&gt;"><![CDATA[Microsoft Xbox Series Wireless Pad<br>Кабель HDMI<br>Силовий кабель]]></param>
-                <param name="&lt;![CDATA[Ігри включені]]&gt;"><![CDATA[Call of Duty Modern Warfare 3 [цифрова версія]]]></param>
-                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
+                <param name="Процесор">AMD Ryzen Zen 2 (8 ядер, 3,8 ГГц)</param>
+                <param name="Графічний макет">AMD RDNA 2.0 (1825 МГц)</param>
+                <param name="RAM">16 ГБ GDDR6</param>
+                <param name="SSD">1 ТБ SSD NVMe</param>
+                <param name="Зв\'язок">Wi-Fi 802.11 a/b/g/n/ac/axBluetooth 5.1LAN 10/100/1000 Мбіт/с</param>
+                <param name="Оптичний диск">Blu-Ray</param>
+                <param name="Роз\'єми">HDMI вихід - 1 шт.USB 3.2 Gen 1 - 3 шт.RJ-45 (LAN) - 1 шт.Слот розширення для носія даних - 1 шт.</param>
+                <param name="Колір">Чорний</param>
+                <param name="Додаткова інформація">Підтримка 4K UHDПідтримка 8KМожливість роботи вертикально</param>
+                <param name="Аксесуари в комплекті">Microsoft Xbox Series Wireless PadКабель HDMIСиловий кабель</param>
+                <param name="Ігри включені">Call of Duty Modern Warfare 3 [цифрова версія]</param>
+                <param name="Гарантія">24 місяці</param>
             </offer>
-            <offer id="138" available="1">
-                <stock_quantity>3</stock_quantity>
+            <offer id="138" available="true">
+                <stock_quantity>1</stock_quantity>
                 <url>https://x-media.com.ua/products/138</url>
                 <price>35999</price>
                 <currencyId>UAH</currencyId>
@@ -844,21 +844,21 @@
 <p style="text-align:center">&nbsp;</p>
 
 <p style="text-align:center">&nbsp;</p>]]></description>
-                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Ryzen Zen 2 (8 ядер, 3,5 ГГц)]]></param>
-                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 2.0 (2360 МГц)]]></param>
-                <param name="&lt;![CDATA[RAM]]&gt;"><![CDATA[16 ГБ GDDR6]]></param>
-                <param name="&lt;![CDATA[SSD]]&gt;"><![CDATA[825 ГБ]]></param>
-                <param name="&lt;![CDATA[Зв'язок]]&gt;"><![CDATA[Wi-Fi 802.11 a/b/g/n/ac/ax<br>Bluetooth 5.1<br>LAN 10/100/1000 Мбіт/с]]></param>
-                <param name="&lt;![CDATA[Оптичний диск]]&gt;"><![CDATA[Blu-Ray]]></param>
-                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[HDMI - 1 шт.<br>USB 3.2 Gen 1 - 1 шт.<br>USB Type-C - 1 шт.<br>RJ-45 (LAN) - 1 шт.<br>AUX - 1 шт.]]></param>
-                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Білий]]></param>
-                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[Підтримка 4K UHD<br>Підтримка 8K<br>Можливість роботи вертикально і горизонтально]]></param>
-                <param name="&lt;![CDATA[Аксесуари в комплекті]]&gt;"><![CDATA[Бездротова панель DualSense<br>Силовий кабель<br>Кабель HDMI (сумісний з 4K)]]></param>
-                <param name="&lt;![CDATA[Ігри включені]]&gt;"><![CDATA[Call of Duty Modern Warfare 3 [цифрова версія]]]></param>
-                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[24 місяці]]></param>
+                <param name="Процесор">AMD Ryzen Zen 2 (8 ядер, 3,5 ГГц)</param>
+                <param name="Графічний макет">AMD RDNA 2.0 (2360 МГц)</param>
+                <param name="RAM">16 ГБ GDDR6</param>
+                <param name="SSD">825 ГБ</param>
+                <param name="Зв\'язок">Wi-Fi 802.11 a/b/g/n/ac/axBluetooth 5.1LAN 10/100/1000 Мбіт/с</param>
+                <param name="Оптичний диск">Blu-Ray</param>
+                <param name="Роз\'єми">HDMI - 1 шт.USB 3.2 Gen 1 - 1 шт.USB Type-C - 1 шт.RJ-45 (LAN) - 1 шт.AUX - 1 шт.</param>
+                <param name="Колір">Білий</param>
+                <param name="Додаткова інформація">Підтримка 4K UHDПідтримка 8KМожливість роботи вертикально і горизонтально</param>
+                <param name="Аксесуари в комплекті">Бездротова панель DualSenseСиловий кабельКабель HDMI (сумісний з 4K)</param>
+                <param name="Ігри включені">Call of Duty Modern Warfare 3 [цифрова версія]</param>
+                <param name="Гарантія">24 місяці</param>
             </offer>
-            <offer id="269" available="1">
-                <stock_quantity>2</stock_quantity>
+            <offer id="269" available="true">
+                <stock_quantity>3</stock_quantity>
                 <url>https://x-media.com.ua/products/269</url>
                 <price>37999</price>
                 <currencyId>UAH</currencyId>
@@ -892,22 +892,22 @@
 <p style="text-align:center"><img alt="Тонка консоль Sony PlayStation 5 – плоский кутовий вид спереду з контролером DualSense" src="https://allegro.stati.pl/AllegroIMG/PRODUCENCI/SONY/PlayStation-5/Slim/Standard-Edition/sony-konsola-playstation-5-slim-widok-przod-bok-dualsense-na-plasko.jpg" /></p>
 
 <p style="text-align:center">&nbsp;</p>]]></description>
-                <param name="&lt;![CDATA[Тип продукту]]&gt;"><![CDATA[PlayStation 5 D Chassis (Slim)]]></param>
-                <param name="&lt;![CDATA[Процесор]]&gt;"><![CDATA[AMD Ryzen Zen 2 (8 ядер, 3,5 ГГц)]]></param>
-                <param name="&lt;![CDATA[Графічний макет]]&gt;"><![CDATA[AMD RDNA 2.0 (2360 МГц)]]></param>
-                <param name="&lt;![CDATA[ОЗП]]&gt;"><![CDATA[16 ГБ GDDR6]]></param>
-                <param name="&lt;![CDATA[SSD]]&gt;"><![CDATA[1 ТБ]]></param>
-                <param name="&lt;![CDATA[З’єднання]]&gt;"><![CDATA[Wi-Fi 802.11 a/b/g/n/ac/ax<br>Bluetooth 5.1<br>LAN 10/100/1000 Мбіт/с]]></param>
-                <param name="&lt;![CDATA[Оптичний диск]]&gt;"><![CDATA[Blu-Ray]]></param>
-                <param name="&lt;![CDATA[Роз'єми]]&gt;"><![CDATA[HDMI - 1 шт.<br>USB 3.2 Gen 1 - 1 шт.<br>USB Type-C - 1 шт.<br>RJ-45 (LAN) - 1 шт.<br>AUX - 1 шт.<br>]]></param>
-                <param name="&lt;![CDATA[Колір]]&gt;"><![CDATA[Білий і чорний]]></param>
-                <param name="&lt;![CDATA[Додаткова інформація]]&gt;"><![CDATA[Підтримка 4K UHD<br>Підтримка 8K<br>Можливість роботи вертикально і горизонтально]]></param>
-                <param name="&lt;![CDATA[Аксесуари в комплекті]]&gt;"><![CDATA[Бездротова панель DualSense<br>Кабель USB<br>Силовий кабель<br>Кабель HDMI (сумісний з 4K)<br>Дві горизонтальні базові ніжки]]></param>
-                <param name="&lt;![CDATA[Висота]]&gt;"><![CDATA[358 мм]]></param>
-                <param name="&lt;![CDATA[Ширина]]&gt;"><![CDATA[216 мм]]></param>
-                <param name="&lt;![CDATA[Глибина]]&gt;"><![CDATA[92 мм]]></param>
-                <param name="&lt;![CDATA[Вага]]&gt;"><![CDATA[3,2 кг]]></param>
-                <param name="&lt;![CDATA[Гарантія]]&gt;"><![CDATA[12 місяців]]></param>
+                <param name="Тип продукту">PlayStation 5 D Chassis (Slim)</param>
+                <param name="Процесор">AMD Ryzen Zen 2 (8 ядер, 3,5 ГГц)</param>
+                <param name="Графічний макет">AMD RDNA 2.0 (2360 МГц)</param>
+                <param name="ОЗП">16 ГБ GDDR6</param>
+                <param name="SSD">1 ТБ</param>
+                <param name="З’єднання">Wi-Fi 802.11 a/b/g/n/ac/axBluetooth 5.1LAN 10/100/1000 Мбіт/с</param>
+                <param name="Оптичний диск">Blu-Ray</param>
+                <param name="Роз\'єми">HDMI - 1 шт.USB 3.2 Gen 1 - 1 шт.USB Type-C - 1 шт.RJ-45 (LAN) - 1 шт.AUX - 1 шт.</param>
+                <param name="Колір">Білий і чорний</param>
+                <param name="Додаткова інформація">Підтримка 4K UHDПідтримка 8KМожливість роботи вертикально і горизонтально</param>
+                <param name="Аксесуари в комплекті">Бездротова панель DualSenseКабель USBСиловий кабельКабель HDMI (сумісний з 4K)Дві горизонтальні базові ніжки</param>
+                <param name="Висота">358 мм</param>
+                <param name="Ширина">216 мм</param>
+                <param name="Глибина">92 мм</param>
+                <param name="Вага">3,2 кг</param>
+                <param name="Гарантія">12 місяців</param>
             </offer>
         </offers>
     </shop>

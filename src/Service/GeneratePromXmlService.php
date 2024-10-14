@@ -7,17 +7,23 @@ use AaronDDM\XMLBuilder\XMLArray;
 use AaronDDM\XMLBuilder\XMLBuilder;
 use AaronDDM\XMLBuilder\Writer\XMLWriterService;
 use AaronDDM\XMLBuilder\Exception\XMLArrayException;
+use App\Entity\Feed;
+use App\Repository\CategoryFeedPriceRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\FeedRepository;
 use App\Repository\ProductRepository;
 
 class GeneratePromXmlService
 {
+    use PriceTrait;
     private XMLWriterService $xmlWriterService;
     private XMLBuilder $xmlBuilder;
 
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
         private readonly ProductRepository  $productRepository,
+        private readonly FeedRepository $feedRepository,
+        private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
     )
     {
         $this->xmlWriterService = new XMLWriterService();
@@ -30,6 +36,7 @@ class GeneratePromXmlService
 
         $categories = $this->categoryRepository->getCategoriesForProm();
         $products = $this->productRepository->getProductsForProm();
+        $feedSettings = $this->feedRepository->findOneBy(['type' => Feed::FEED_PROM]);
 
         try {
             $this->xmlBuilder
@@ -44,10 +51,17 @@ class GeneratePromXmlService
                         }
                     })
                     ->end()
-                    ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products) {
+                    ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feedSettings) {
                         foreach ($products as $product) {
+                            $productItem = $this->productRepository->findOneBy(['id' => $product['id']]);
                             $images = $product['images'];
                             $characteristics = $product['characteristics'];
+                            $vendor = array_filter($productItem->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
+                            $priceParameters = $feedSettings ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feedSettings, 'category' => $productItem->getCategory()]) : null;
+
+                            if (!empty($vendor) && $feedSettings && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feedSettings->getIgnoreBrands()))) {
+                                continue;
+                            }
 
                             $XMLArray->start('offer', [
                                 'id' => $product['id'],
@@ -58,7 +72,7 @@ class GeneratePromXmlService
                                 ->add('name_ua', $product['title'])
                                 ->add('categoryId', $product['categoryId'])
                                 ->add('portal_category_url', $product['promCategoryLink'])
-                                ->add('price', ceil($product['price'] * 1.04 / 100) * 100)
+                                ->add('price', $this->getPrice($productItem, $priceParameters))
                                 ->add('quantity_in_stock', 10)
                                 ->add('currencyId', 'UAH')
                                 ->loop(function (XMLArray $XMLArray) use ($images) {
@@ -69,10 +83,10 @@ class GeneratePromXmlService
                                     }
                                 })
                                 ->add('vendor', substr($product['vendor'], 0, 25))
-                                ->loop(function (XMLArray $XMLArray) use ($characteristics) {
+                                ->loop(function (XMLArray $XMLArray) use ($characteristics, $feedSettings) {
                                     foreach ($characteristics as $characteristic) {
-                                        $XMLArray->add('param', substr(htmlspecialchars(addslashes($characteristic->getValue())), 0, 255), [
-                                            'name' => substr(htmlspecialchars(addslashes($characteristic->getTitle())), 0, 255)
+                                        $XMLArray->add('param', $this->formatString($characteristic->getValue(), $feedSettings), [
+                                            'name' => $this->formatString($characteristic->getTitle(), $feedSettings)
                                         ]);
                                     }
                                 })
@@ -89,5 +103,16 @@ class GeneratePromXmlService
         } catch (XMLArrayException|XMLBuilderException $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
         }
+    }
+
+    private function formatString(string $text, ?Feed $feed): string
+    {
+        $text = strip_tags(addslashes($text));
+
+        if ($feed && $feed->getCutCharacteristics()) {
+            $text = mb_substr($text, 0, 255, 'UTF-8');
+        }
+
+        return $text;
     }
 }

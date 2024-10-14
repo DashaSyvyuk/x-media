@@ -7,18 +7,25 @@ use AaronDDM\XMLBuilder\XMLArray;
 use AaronDDM\XMLBuilder\XMLBuilder;
 use AaronDDM\XMLBuilder\Writer\XMLWriterService;
 use AaronDDM\XMLBuilder\Exception\XMLArrayException;
+use App\Entity\Feed;
+use App\Repository\CategoryFeedPriceRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\FeedRepository;
 use App\Repository\ProductRepository;
 use Carbon\Carbon;
 
 class GenerateRozetkaXmlService
 {
+    use PriceTrait;
+
     private XMLWriterService $xmlWriterService;
     private XMLBuilder $xmlBuilder;
 
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
         private readonly ProductRepository  $productRepository,
+        private readonly FeedRepository $feedRepository,
+        private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
     )
     {
         $this->xmlWriterService = new XMLWriterService();
@@ -36,6 +43,7 @@ class GenerateRozetkaXmlService
                 'rate' => '1',
             ]
         ];
+        $feedSettings = $this->feedRepository->findOneBy(['type' => Feed::FEED_ROZETKA]);
 
         try {
             $this->xmlBuilder
@@ -66,40 +74,43 @@ class GenerateRozetkaXmlService
                             }
                         })
                         ->end()
-                        ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products) {
+                        ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feedSettings) {
                             foreach ($products as $product) {
                                 $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
 
                                 if (!empty($vendor)) {
-                                    if ($vendor[0]->getFilterAttribute()->getValue() !== 'Apple') {
-                                        $images = $product->getImages();
-                                        $characteristics = $product->getCharacteristics();
-
-                                        $XMLArray->start('offer', [
-                                            'id' => $product->getId(),
-                                            'available' => true,
-                                        ])
-                                            ->add('stock_quantity', rand(1, 3))
-                                            ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
-                                            ->add('price', $this->adjustPrice($product->getPrice()))
-                                            ->add('currencyId', 'UAH')
-                                            ->add('categoryId', $product->getCategory()->getId())
-                                            ->loop(function (XMLArray $XMLArray) use ($images) {
-                                                foreach ($images as $image) {
-                                                    $XMLArray->add('picture', 'https://x-media.com.ua/images/products/' . $image->getImageUrl());
-                                                }
-                                            })
-                                            ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
-                                            ->add('name', strip_tags(addslashes($product->getTitle())))
-                                            ->add('description', $this->formatString($product->getDescription()))
-                                            ->loop(function (XMLArray $XMLArray) use ($characteristics) {
-                                                foreach ($characteristics as $characteristic) {
-                                                    $XMLArray->add('param',substr(strip_tags(addslashes($characteristic->getValue())), 0, 255), [
-                                                        'name' => substr(strip_tags(addslashes($characteristic->getTitle())), 0, 255)
-                                                    ]);
-                                                }
-                                            });
+                                    if ($feedSettings && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feedSettings->getIgnoreBrands()))) {
+                                        continue;
                                     }
+
+                                    $images = $product->getImages();
+                                    $characteristics = $product->getCharacteristics();
+                                    $priceParameters = $feedSettings ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feedSettings, 'category' => $product->getCategory()]) : null;
+
+                                    $XMLArray->start('offer', [
+                                        'id' => $product->getId(),
+                                        'available' => 'true',
+                                    ])
+                                        ->add('stock_quantity', rand(1, 3))
+                                        ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
+                                        ->add('price', $this->getPrice($product, $priceParameters))
+                                        ->add('currencyId', 'UAH')
+                                        ->add('categoryId', $product->getCategory()->getId())
+                                        ->loop(function (XMLArray $XMLArray) use ($images) {
+                                            foreach ($images as $image) {
+                                                $XMLArray->add('picture', 'https://x-media.com.ua/images/products/' . $image->getImageUrl());
+                                            }
+                                        })
+                                        ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
+                                        ->add('name', strip_tags(addslashes($product->getTitle())))
+                                        ->add('description', $this->formatString($product->getDescription()))
+                                        ->loop(function (XMLArray $XMLArray) use ($characteristics, $feedSettings) {
+                                            foreach ($characteristics as $characteristic) {
+                                                $XMLArray->add('param', $this->convertString($characteristic->getValue(), $feedSettings), [
+                                                    'name' => $this->convertString($characteristic->getTitle(), $feedSettings)
+                                                ]);
+                                            }
+                                        });
                                 }
                             }
                         })
@@ -113,24 +124,19 @@ class GenerateRozetkaXmlService
         }
     }
 
-    private function adjustPrice(int $price, int $ourPercent = 10, int $fee = 15) {
-        $totalDiscount = $ourPercent + $fee; // Сума знижок
-        $multiplier = 1 / (1 - $totalDiscount / 100);
-
-        $newPrice = $price * $multiplier;
-
-        if ($price < 20000) {
-            // Округлення до сотень і віднімання 1
-            $newPrice = ceil($newPrice / 100) * 100 - 1;
-        } else {
-            $newPrice = ceil($newPrice / 1000) * 1000 - 1;
-        }
-
-        return $newPrice;
-    }
-
     private function formatString(string $string): string
     {
         return sprintf('<![CDATA[%s]]>', trim($string));
+    }
+
+    private function convertString(string $text, ?Feed $feed): string
+    {
+        $text = strip_tags(addslashes($text));
+
+        if ($feed && $feed->getCutCharacteristics()) {
+            $text = mb_substr($text, 0, 255, 'UTF-8');
+        }
+
+        return $text;
     }
 }

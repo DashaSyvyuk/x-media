@@ -7,17 +7,24 @@ use AaronDDM\XMLBuilder\XMLArray;
 use AaronDDM\XMLBuilder\XMLBuilder;
 use AaronDDM\XMLBuilder\Writer\XMLWriterService;
 use AaronDDM\XMLBuilder\Exception\XMLArrayException;
+use App\Entity\Feed;
+use App\Repository\CategoryFeedPriceRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\FeedRepository;
 use App\Repository\ProductRepository;
 
 class GenerateHotlineXmlService
 {
+    use PriceTrait;
+
     private XMLWriterService $xmlWriterService;
     private XMLBuilder $xmlBuilder;
 
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
         private readonly ProductRepository  $productRepository,
+        private readonly FeedRepository $feedRepository,
+        private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
     )
     {
         $this->xmlWriterService = new XMLWriterService();
@@ -29,6 +36,7 @@ class GenerateHotlineXmlService
         ini_set('memory_limit', '256M');
         $categories = $this->categoryRepository->getCategoriesForHotline();
         $products = $this->productRepository->getProductsForHotline();
+        $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_HOTLINE]);
 
         try {
             $this->xmlBuilder
@@ -51,14 +59,18 @@ class GenerateHotlineXmlService
                         }
                     })
                     ->end()
-                    ->startLoop('items', [], function (XMLArray $XMLArray) use ($products) {
+                    ->startLoop('items', [], function (XMLArray $XMLArray) use ($products, $feed) {
                         foreach ($products as $product) {
                             $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
 
                             if (!empty($vendor)) {
+                                if ($feed && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feed->getIgnoreBrands()))) {
+                                    continue;
+                                }
                                 $images = $product->getImages();
                                 $characteristics = $product->getCharacteristics();
                                 $warranty = array_values(array_filter($product->getCharacteristics()->toArray(), fn ($item) => $item->getTitle() == 'Гарантія'));
+                                $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $product->getCategory()]) : null;
 
                                 $XMLArray->start('item')
                                     ->add('id', $product->getId())
@@ -72,15 +84,15 @@ class GenerateHotlineXmlService
                                             $XMLArray->add('image', 'https://x-media.com.ua/images/products/' . $image->getImageUrl());
                                         }
                                     })
-                                    ->add('priceRUAH', $product->getPrice())
+                                    ->add('priceRUAH', $this->getPrice($product, $priceParameters))
                                     ->add('stock', 'В наявності')
                                     ->add('guarantee', $warranty ? (int) $warranty[0]->getValue() : 12, [
                                         'type' => 'manufacturer'
                                     ])
-                                    ->loop(function (XMLArray $XMLArray) use ($characteristics) {
+                                    ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
                                         foreach ($characteristics as $characteristic) {
-                                            $XMLArray->add('param', htmlspecialchars(addslashes($characteristic->getValue())), [
-                                                'name' => htmlspecialchars(addslashes($characteristic->getTitle()))
+                                            $XMLArray->add('param', $this->formatString($characteristic->getValue(), $feed), [
+                                                'name' => $this->formatString($characteristic->getTitle(), $feed)
                                             ]);
                                         }
                                     })
@@ -97,5 +109,16 @@ class GenerateHotlineXmlService
         } catch (XMLArrayException|XMLBuilderException $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
         }
+    }
+
+    private function formatString(string $text, ?Feed $feed): string
+    {
+        $text = htmlspecialchars(strip_tags(addslashes($text)));
+
+        if ($feed && $feed->getCutCharacteristics()) {
+            $text = mb_substr($text, 0, 255, 'UTF-8');
+        }
+
+        return $text;
     }
 }

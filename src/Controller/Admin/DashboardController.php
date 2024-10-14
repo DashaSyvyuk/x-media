@@ -9,6 +9,7 @@ use App\Entity\Comment;
 use App\Entity\Currency;
 use App\Entity\Debtor;
 use App\Entity\DeliveryType;
+use App\Entity\Feed;
 use App\Entity\Feedback;
 use App\Entity\Filter;
 use App\Entity\Order;
@@ -125,6 +126,10 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Способи доставки', 'fa fa-bus', DeliveryType::class),
             MenuItem::linkToCrud('Способи оплати', 'fa fa-dollar', PaymentType::class),
             MenuItem::linkToCrud('Адміни', 'fa-solid fa-user-secret', AdminUser::class),
+        ])->setPermission('ROLE_ADMIN');
+
+        yield MenuItem::subMenu('Feeds', 'fa fa-file')->setSubItems([
+            MenuItem::linkToCrud('Feeds', 'fa fa-file', Feed::class),
         ])->setPermission('ROLE_ADMIN');
     }
 }

@@ -3,11 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Category;
+use App\Form\FeedPriceType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -57,5 +59,10 @@ class CategoryCrudController extends AbstractCrudController
         yield TextareaField::new('metaDescription', 'Опис')->hideOnIndex();
         yield IntegerField::new('position', 'Пріоритет');
         yield BooleanField::new('showInHeader', 'Показувати в хедері')->hideOnIndex();
+        yield CollectionField::new('feedPrices')
+            ->setColumns(12)
+            ->setEntryType(FeedPriceType::class)
+            ->renderExpanded()
+            ->onlyOnForms();
     }
 }

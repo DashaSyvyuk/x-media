@@ -105,6 +105,11 @@ class Category
     private $products;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CategoryFeedPrice", mappedBy="category", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+     */
+    private $feedPrices;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -117,6 +122,7 @@ class Category
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->feedPrices = new ArrayCollection();
     }
 
     public function getId(): int
@@ -267,6 +273,31 @@ class Category
     public function getProducts()
     {
         return $this->products;
+    }
+
+    /**
+     * @param CategoryFeedPrice $feedPrice
+     */
+    public function addFeedPrice(CategoryFeedPrice $feedPrice): void
+    {
+        $feedPrice->setCategory($this);
+        if (!$this->feedPrices->contains($feedPrice)) {
+            $this->feedPrices[] = $feedPrice;
+        }
+    }
+
+    /**
+     * @param CategoryFeedPrice $feedPrice
+     * @return bool
+     */
+    public function removeFeedPrice(CategoryFeedPrice $feedPrice): bool
+    {
+        return $this->feedPrices->removeElement($feedPrice);
+    }
+
+    public function getFeedPrices()
+    {
+        return $this->feedPrices;
     }
 
     public function getActiveProducts()
