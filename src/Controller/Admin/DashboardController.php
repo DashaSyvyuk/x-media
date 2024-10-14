@@ -23,6 +23,7 @@ use App\Entity\Supplier;
 use App\Entity\SupplierOrder;
 use App\Entity\User;
 use App\Entity\Warehouse;
+use App\Entity\Warranty;
 use App\Repository\CommentRepository;
 use App\Repository\FeedbackRepository;
 use App\Repository\OrderRepository;
@@ -112,6 +113,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud(sprintf('Замовлення (%d)', $ordersCount), 'fas fa-list', Order::class),
             MenuItem::linkToCrud('Користувачі', 'fa-solid fa-user-secret', User::class),
             MenuItem::linkToCrud('Повернення', 'fa fa-undo', ReturnProduct::class),
+            MenuItem::linkToCrud('Гарантія', 'fa fa-certificate', Warranty::class),
         ])->setPermission('ROLE_SUPER_ADMIN');
 
         yield MenuItem::subMenu('Постачальники', 'fa fa-truck')->setSubItems([
