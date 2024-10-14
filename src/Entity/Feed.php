@@ -51,6 +51,16 @@ class Feed
     private ?string $ignoreBrands = "";
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private int $ourPercent = 0;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private int $fee = 0;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -98,6 +108,26 @@ class Feed
     public function getIgnoreBrands(): ?string
     {
         return $this->ignoreBrands;
+    }
+
+    public function setOurPercent(int $ourPercent): void
+    {
+        $this->ourPercent = $ourPercent;
+    }
+
+    public function getOurPercent(): int
+    {
+        return $this->ourPercent;
+    }
+
+    public function setFee(int $fee): void
+    {
+        $this->fee = $fee;
+    }
+
+    public function getFee(): int
+    {
+        return $this->fee;
     }
 
     public function getCreatedAt(): DateTime

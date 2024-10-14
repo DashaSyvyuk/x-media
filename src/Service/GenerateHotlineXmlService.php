@@ -84,7 +84,7 @@ class GenerateHotlineXmlService
                                             $XMLArray->add('image', 'https://x-media.com.ua/images/products/' . $image->getImageUrl());
                                         }
                                     })
-                                    ->add('priceRUAH', $this->getPrice($product, $priceParameters))
+                                    ->add('priceRUAH', $this->getPrice($product, $feed, $priceParameters))
                                     ->add('stock', 'В наявності')
                                     ->add('guarantee', $warranty ? (int) $warranty[0]->getValue() : 12, [
                                         'type' => 'manufacturer'

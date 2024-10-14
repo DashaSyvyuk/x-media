@@ -36,7 +36,7 @@ class GeneratePromXmlService
 
         $categories = $this->categoryRepository->getCategoriesForProm();
         $products = $this->productRepository->getProductsForProm();
-        $feedSettings = $this->feedRepository->findOneBy(['type' => Feed::FEED_PROM]);
+        $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_PROM]);
 
         try {
             $this->xmlBuilder
@@ -51,15 +51,15 @@ class GeneratePromXmlService
                         }
                     })
                     ->end()
-                    ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feedSettings) {
+                    ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feed) {
                         foreach ($products as $product) {
                             $productItem = $this->productRepository->findOneBy(['id' => $product['id']]);
                             $images = $product['images'];
                             $characteristics = $product['characteristics'];
                             $vendor = array_filter($productItem->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
-                            $priceParameters = $feedSettings ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feedSettings, 'category' => $productItem->getCategory()]) : null;
+                            $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $productItem->getCategory()]) : null;
 
-                            if (!empty($vendor) && $feedSettings && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feedSettings->getIgnoreBrands()))) {
+                            if (!empty($vendor) && $feed && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feed->getIgnoreBrands()))) {
                                 continue;
                             }
 
@@ -72,7 +72,7 @@ class GeneratePromXmlService
                                 ->add('name_ua', $product['title'])
                                 ->add('categoryId', $product['categoryId'])
                                 ->add('portal_category_url', $product['promCategoryLink'])
-                                ->add('price', $this->getPrice($productItem, $priceParameters))
+                                ->add('price', $this->getPrice($productItem, $feed, $priceParameters))
                                 ->add('quantity_in_stock', 10)
                                 ->add('currencyId', 'UAH')
                                 ->loop(function (XMLArray $XMLArray) use ($images) {
@@ -83,10 +83,10 @@ class GeneratePromXmlService
                                     }
                                 })
                                 ->add('vendor', substr($product['vendor'], 0, 25))
-                                ->loop(function (XMLArray $XMLArray) use ($characteristics, $feedSettings) {
+                                ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
                                     foreach ($characteristics as $characteristic) {
-                                        $XMLArray->add('param', $this->formatString($characteristic->getValue(), $feedSettings), [
-                                            'name' => $this->formatString($characteristic->getTitle(), $feedSettings)
+                                        $XMLArray->add('param', $this->formatString($characteristic->getValue(), $feed), [
+                                            'name' => $this->formatString($characteristic->getTitle(), $feed)
                                         ]);
                                     }
                                 })

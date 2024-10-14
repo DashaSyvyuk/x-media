@@ -2,18 +2,19 @@
 
 namespace App\Service;
 
+use App\Entity\Feed;
 use App\Entity\CategoryFeedPrice;
 use App\Entity\Product;
 
 trait PriceTrait
 {
-    private function getPrice(Product $product, ?CategoryFeedPrice $priceParameters): float|int
+    private function getPrice(Product $product, Feed $feed, ?CategoryFeedPrice $priceParameters): float|int
     {
         if ($priceParameters) {
             return $this->adjustPrice($product->getPrice(), $priceParameters->getOurPercent(), $priceParameters->getFee());
         }
 
-        return $this->adjustPrice($product->getPrice(), 10, 15);
+        return $this->adjustPrice($product->getPrice(), $feed->getOurPercent(), $feed->getFee());
     }
 
     private function adjustPrice(int $price, int $ourPercent, int $fee): float|int

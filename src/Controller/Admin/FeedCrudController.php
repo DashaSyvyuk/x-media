@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
@@ -35,5 +36,7 @@ class FeedCrudController extends AbstractCrudController
         yield ChoiceField::new('type', 'Тип')->setChoices(Feed::TYPES);
         yield BooleanField::new('cutCharacteristics', 'Обрізати характеристики до 255 символів');
         yield TextField::new('ignoreBrands', 'Ігнорувати бренди')->setHelp('Розділення \';\'');
+        yield NumberField::new('ourPercent');
+        yield NumberField::new('fee');
     }
 }

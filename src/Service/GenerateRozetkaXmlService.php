@@ -43,7 +43,7 @@ class GenerateRozetkaXmlService
                 'rate' => '1',
             ]
         ];
-        $feedSettings = $this->feedRepository->findOneBy(['type' => Feed::FEED_ROZETKA]);
+        $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_ROZETKA]);
 
         try {
             $this->xmlBuilder
@@ -74,18 +74,18 @@ class GenerateRozetkaXmlService
                             }
                         })
                         ->end()
-                        ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feedSettings) {
+                        ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feed) {
                             foreach ($products as $product) {
                                 $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
 
                                 if (!empty($vendor)) {
-                                    if ($feedSettings && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feedSettings->getIgnoreBrands()))) {
+                                    if ($feed && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feed->getIgnoreBrands()))) {
                                         continue;
                                     }
 
                                     $images = $product->getImages();
                                     $characteristics = $product->getCharacteristics();
-                                    $priceParameters = $feedSettings ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feedSettings, 'category' => $product->getCategory()]) : null;
+                                    $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $product->getCategory()]) : null;
 
                                     $XMLArray->start('offer', [
                                         'id' => $product->getId(),
@@ -93,7 +93,7 @@ class GenerateRozetkaXmlService
                                     ])
                                         ->add('stock_quantity', rand(1, 3))
                                         ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
-                                        ->add('price', $this->getPrice($product, $priceParameters))
+                                        ->add('price', $this->getPrice($product, $feed, $priceParameters))
                                         ->add('currencyId', 'UAH')
                                         ->add('categoryId', $product->getCategory()->getId())
                                         ->loop(function (XMLArray $XMLArray) use ($images) {
@@ -104,10 +104,10 @@ class GenerateRozetkaXmlService
                                         ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
                                         ->add('name', strip_tags(addslashes($product->getTitle())))
                                         ->add('description', $this->formatString($product->getDescription()))
-                                        ->loop(function (XMLArray $XMLArray) use ($characteristics, $feedSettings) {
+                                        ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
                                             foreach ($characteristics as $characteristic) {
-                                                $XMLArray->add('param', $this->convertString($characteristic->getValue(), $feedSettings), [
-                                                    'name' => $this->convertString($characteristic->getTitle(), $feedSettings)
+                                                $XMLArray->add('param', $this->convertString($characteristic->getValue(), $feed), [
+                                                    'name' => $this->convertString($characteristic->getTitle(), $feed)
                                                 ]);
                                             }
                                         });

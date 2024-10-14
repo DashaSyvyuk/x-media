@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<yml_catalog date="2024-10-13 18:55">
+<yml_catalog date="2024-10-14 09:23">
     <shop>
         <name>X-media</name>
         <company>X-media</company>
@@ -14,7 +14,7 @@
             <offer id="541" available="true">
                 <stock_quantity>3</stock_quantity>
                 <url>https://x-media.com.ua/products/541</url>
-                <price>27999</price>
+                <price>20999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/5NlYrcJvP2.jpg</picture>
@@ -148,9 +148,9 @@
                 <param name="Гарантія">24 місяці</param>
             </offer>
             <offer id="116" available="true">
-                <stock_quantity>1</stock_quantity>
+                <stock_quantity>2</stock_quantity>
                 <url>https://x-media.com.ua/products/116</url>
-                <price>42999</price>
+                <price>31999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/uz2vpoRt9s.jpg</picture>
@@ -273,9 +273,9 @@
                 <param name="Гарантія">24 місяці</param>
             </offer>
             <offer id="100" available="true">
-                <stock_quantity>1</stock_quantity>
+                <stock_quantity>3</stock_quantity>
                 <url>https://x-media.com.ua/products/100</url>
-                <price>38999</price>
+                <price>28999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/lQUd6gn99p.jpg</picture>
@@ -373,9 +373,9 @@
                 <param name="Гарантія">24 місяці</param>
             </offer>
             <offer id="540" available="true">
-                <stock_quantity>3</stock_quantity>
+                <stock_quantity>1</stock_quantity>
                 <url>https://x-media.com.ua/products/540</url>
-                <price>20799</price>
+                <price>15599</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/WyWSXtaiLf.jpg</picture>
@@ -467,9 +467,9 @@
                 <param name="Гарантія">24 місяці</param>
             </offer>
             <offer id="539" available="true">
-                <stock_quantity>3</stock_quantity>
+                <stock_quantity>1</stock_quantity>
                 <url>https://x-media.com.ua/products/539</url>
-                <price>50999</price>
+                <price>37999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/tj3QFJS80P.jpg</picture>
@@ -547,7 +547,7 @@
             <offer id="543" available="true">
                 <stock_quantity>2</stock_quantity>
                 <url>https://x-media.com.ua/products/543</url>
-                <price>25399</price>
+                <price>18999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/OywjU-SoGm.jpg</picture>
@@ -604,9 +604,9 @@
                 <param name="Гарантія">24 місяці</param>
             </offer>
             <offer id="542" available="true">
-                <stock_quantity>1</stock_quantity>
+                <stock_quantity>2</stock_quantity>
                 <url>https://x-media.com.ua/products/542</url>
-                <price>49999</price>
+                <price>36999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/6x71DUbFZa.jpg</picture>
@@ -692,7 +692,7 @@
             <offer id="169" available="true">
                 <stock_quantity>1</stock_quantity>
                 <url>https://x-media.com.ua/products/169</url>
-                <price>31999</price>
+                <price>23999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/eu_00l4HmK.jpg</picture>
@@ -778,7 +778,7 @@
             <offer id="138" available="true">
                 <stock_quantity>1</stock_quantity>
                 <url>https://x-media.com.ua/products/138</url>
-                <price>35999</price>
+                <price>26999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/Zoc57Ire2d.jpg</picture>
@@ -860,7 +860,7 @@
             <offer id="269" available="true">
                 <stock_quantity>3</stock_quantity>
                 <url>https://x-media.com.ua/products/269</url>
-                <price>37999</price>
+                <price>27999</price>
                 <currencyId>UAH</currencyId>
                 <categoryId>7</categoryId>
                 <picture>https://x-media.com.ua/images/products/oCWPt-nr69.jpg</picture>
