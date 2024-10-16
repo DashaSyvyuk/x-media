@@ -114,6 +114,20 @@ class CategoryRepository extends ServiceEntityRepository
             ;
     }
 
+    public function getCategoriesForEkatalog()
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.products', 'p')
+            ->andWhere('c.status = :status')
+            ->setParameter('status', 'ACTIVE')
+            ->andWhere('p.status = :product_status')
+            ->setParameter('product_status', Product::STATUS_ACTIVE)
+            ->orderBy('c.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function getCategoriesIdsWithoutChildren(): array
     {
         $categories = $this->getCategoriesTree();

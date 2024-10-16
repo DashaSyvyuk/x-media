@@ -30,6 +30,7 @@
 /public/prom/
 /public/hotline/
 /public/rozetka/
+/public/e-katalog/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###

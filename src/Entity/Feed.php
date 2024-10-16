@@ -21,11 +21,13 @@ class Feed
     const FEED_ROZETKA = 'ROZETKA';
     const FEED_PROM = 'PROM';
     const FEED_HOTLINE = 'HOTLINE';
+    const FEED_EKATALOG = 'EKATALOG';
 
     const TYPES = [
-        'Rozetka' => self::FEED_ROZETKA,
-        'Prom'    => self::FEED_PROM,
-        'Hotline' => self::FEED_HOTLINE,
+        'Rozetka'   => self::FEED_ROZETKA,
+        'Prom'      => self::FEED_PROM,
+        'Hotline'   => self::FEED_HOTLINE,
+        'E-Katalog' => self::FEED_EKATALOG,
     ];
 
     /**

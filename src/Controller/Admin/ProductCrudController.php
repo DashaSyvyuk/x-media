@@ -11,6 +11,7 @@ use App\Form\ProductImageType;
 use App\Form\ProductPromotionType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use App\Service\GenerateEkatalogXmlService;
 use App\Service\GenerateHotlineXmlService;
 use App\Service\GeneratePromXmlService;
 use App\Service\GenerateRozetkaXmlService;
@@ -38,12 +39,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class ProductCrudController extends AbstractCrudController
 {
     public function __construct(
-        private readonly AdminUrlGenerator $adminUrlGenerator,
-        private readonly ProductRepository $productRepository,
-        private readonly GenerateHotlineXmlService $generateHotlineXmlService,
-        private readonly GeneratePromXmlService $generatePromXmlService,
-        private readonly CategoryRepository $categoryRepository,
-        private readonly GenerateRozetkaXmlService $generateRozetkaXmlService,
+        private readonly AdminUrlGenerator          $adminUrlGenerator,
+        private readonly ProductRepository          $productRepository,
+        private readonly GenerateHotlineXmlService  $generateHotlineXmlService,
+        private readonly GeneratePromXmlService     $generatePromXmlService,
+        private readonly CategoryRepository         $categoryRepository,
+        private readonly GenerateRozetkaXmlService  $generateRozetkaXmlService,
+        private readonly GenerateEkatalogXmlService $generateEkatalogXmlService,
     )
     {
     }
@@ -86,6 +88,10 @@ class ProductCrudController extends AbstractCrudController
 
         $actions->add(Crud::PAGE_INDEX, Action::new('promXml', 'Prom feed *.xml')
             ->linkToCrudAction('promXmlAction')
+            ->createAsGlobalAction());
+
+        $actions->add(Crud::PAGE_INDEX, Action::new('ekatalogXml', 'E-Katalog feed *.xml')
+            ->linkToCrudAction('ekatalogXmlAction')
             ->createAsGlobalAction());
 
         return parent::configureActions($actions);
@@ -231,6 +237,15 @@ class ProductCrudController extends AbstractCrudController
         $this->generatePromXmlService->execute();
 
         $this->addFlash('success', 'Document is generated <a href="/prom/products.xml" target="_blank">here</a>');
+
+        return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+    }
+
+    public function ekatalogXmlAction(AdminContext $adminContext): RedirectResponse
+    {
+        $this->generateEkatalogXmlService->execute();
+
+        $this->addFlash('success', 'Document is generated <a href="/e-katalog/products.xml" target="_blank">here</a>');
 
         return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
     }
