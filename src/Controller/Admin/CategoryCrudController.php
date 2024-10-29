@@ -50,6 +50,10 @@ class CategoryCrudController extends AbstractCrudController
         yield TextField::new('promCategoryLink', 'Посилання на категорію на Prom')
             ->setHelp('https://prom.ua/Noutbuki')
             ->hideOnIndex();
+        yield BooleanField::new('showInEkatalogFeed', 'Показувати категорію у E-Katalog feed *.yml')->hideOnIndex();
+        yield BooleanField::new('showInPromFeed', 'Показувати категорію у Prom feed *.yml')->hideOnIndex();
+        yield BooleanField::new('showInRozetkaFeed', 'Показувати категорію у Rozetka feed *.yml')->hideOnIndex();
+        yield BooleanField::new('showInHotlineFeed', 'Показувати категорію у Hotline feed *.yml')->hideOnIndex();
         yield ImageField::new('image', 'Картинка')
             ->setUploadDir('/public/images/category/')
             ->setBasePath('images/category/');

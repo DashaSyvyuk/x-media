@@ -100,6 +100,26 @@ class Category
     private ?string $promCategoryLink = '';
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $showInEkatalogFeed = true;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $showInPromFeed = true;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $showInRozetkaFeed = true;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $showInHotlineFeed = true;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
      */
     private $products;
@@ -248,6 +268,46 @@ class Category
     public function getPromCategoryLink(): ?string
     {
         return $this->promCategoryLink;
+    }
+
+    public function setShowInEkatalogFeed(bool $showInEkatalogFeed): void
+    {
+        $this->showInEkatalogFeed = $showInEkatalogFeed;
+    }
+
+    public function getShowInEkatalogFeed(): bool
+    {
+        return $this->showInEkatalogFeed;
+    }
+
+    public function setShowInPromFeed(bool $showInPromFeed): void
+    {
+        $this->showInPromFeed = $showInPromFeed;
+    }
+
+    public function getShowInPromFeed(): bool
+    {
+        return $this->showInPromFeed;
+    }
+
+    public function setShowInRozetkaFeed(bool $showInRozetkaFeed): void
+    {
+        $this->showInRozetkaFeed = $showInRozetkaFeed;
+    }
+
+    public function getShowInRozetkaFeed(): bool
+    {
+        return $this->showInRozetkaFeed;
+    }
+
+    public function setShowInHotlineFeed(bool $showInHotlineFeed): void
+    {
+        $this->showInHotlineFeed = $showInHotlineFeed;
+    }
+
+    public function getShowInHotlineFeed(): bool
+    {
+        return $this->showInHotlineFeed;
     }
 
     /**
