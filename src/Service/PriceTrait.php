@@ -14,7 +14,7 @@ trait PriceTrait
             return $this->adjustPrice($product->getPrice(), $priceParameters->getOurPercent(), $priceParameters->getFee());
         }
 
-        return $this->adjustPrice($product->getPrice(), $feed->getOurPercent(), $feed->getFee());
+        return $product->getPrice();
     }
 
     private function adjustPrice(int $price, int $ourPercent, int $fee): float|int
