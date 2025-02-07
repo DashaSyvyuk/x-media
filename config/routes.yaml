@@ -152,6 +152,10 @@ api_filter_attributes:
     path: /api/v1/filter/{id}/filter_attributes
     controller: App\Controller\API\FilterAttributeController::get
 
+api_rozetka_characteristics_values:
+    path: /api/v1/characteristics/{id}/values/{valueId}
+    controller: App\Controller\API\RozetkaCharacteristicsController::getValue
+
 promotion:
     path: /promotion/{slug}
     controller: App\Controller\PromotionController::getPromotion
@@ -168,3 +172,13 @@ thank_you:
     path: /thank-you
     controller: App\Controller\ThankYouController::index
     methods: GET
+
+show_upload_characteristics:
+    path: /upload-characteristics
+    controller: App\Controller\UploadCharacteristicsController::index
+    methods: GET
+
+upload_characteristics:
+    path: /upload-characteristics
+    controller: App\Controller\UploadCharacteristicsController::upload
+    methods: POST

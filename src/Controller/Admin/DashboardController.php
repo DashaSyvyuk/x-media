@@ -17,6 +17,7 @@ use App\Entity\PaymentType;
 use App\Entity\Product;
 use App\Entity\Promotion;
 use App\Entity\ReturnProduct;
+use App\Entity\RozetkaProduct;
 use App\Entity\Setting;
 use App\Entity\Slider;
 use App\Entity\Supplier;
@@ -132,6 +133,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::subMenu('Feeds', 'fa fa-file')->setSubItems([
             MenuItem::linkToCrud('Feeds', 'fa fa-file', Feed::class),
+            MenuItem::linkToCrud('Rozetka', 'fa fa-face-smile', RozetkaProduct::class),
         ])->setPermission('ROLE_ADMIN');
     }
 }

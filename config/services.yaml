@@ -30,3 +30,7 @@ services:
     App\EventListener\OrderSubscriber:
         tags:
             - name: 'doctrine.orm.entity_listener'
+
+    App\EventListener\ProductSubscriber:
+        tags:
+            - name: 'doctrine.orm.entity_listener'

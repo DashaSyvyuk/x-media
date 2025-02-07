@@ -19,6 +19,7 @@
         "knplabs/knp-paginator-bundle": "*",
         "nesbot/carbon": "*",
         "phpdocumentor/reflection-docblock": "*",
+        "phpoffice/phpspreadsheet": "^3.9",
         "ramsey/uuid": "*",
         "sensio/framework-extra-bundle": "*",
         "symfony/asset": "^5.3",

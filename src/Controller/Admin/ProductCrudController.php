@@ -82,9 +82,9 @@ class ProductCrudController extends AbstractCrudController
             ->linkToCrudAction('hotlineXmlAction')
             ->createAsGlobalAction());
 
-        $actions->add(Crud::PAGE_INDEX, Action::new('rozetkaXml', 'Rozetka feed *.xml')
+       /* $actions->add(Crud::PAGE_INDEX, Action::new('rozetkaXml', 'Rozetka feed *.xml')
             ->linkToCrudAction('rozetkaXmlAction')
-            ->createAsGlobalAction());
+            ->createAsGlobalAction());*/
 
         $actions->add(Crud::PAGE_INDEX, Action::new('promXml', 'Prom feed *.xml')
             ->linkToCrudAction('promXmlAction')

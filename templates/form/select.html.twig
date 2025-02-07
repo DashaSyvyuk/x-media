@@ -1,0 +1,5 @@
+<select id="RozetkaProduct_values_{{ valueId }}_values" name="RozetkaProduct[values][{{ valueId }}][value]" class="rozetka-characteristics-values form-select" >
+    {% for value in values %}
+        <option value="{{ value.id }}">{{ value.value }}</option>
+    {% endfor %}
+</select>

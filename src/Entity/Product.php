@@ -121,6 +121,11 @@ class Product
     private $filterAttributes;
 
     /**
+     * @ORM\OneToOne(targetEntity="App\Entity\RozetkaProduct", mappedBy="product")
+     */
+    private $rozetka;
+
+    /**
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="product", cascade={"all"}, orphanRemoval=true)
      */
     private $comments;
@@ -407,6 +412,16 @@ class Product
     public function getFilterAttributes()
     {
         return $this->filterAttributes;
+    }
+
+    public function setRozetka(?RozetkaProduct $rozetka): void
+    {
+        $this->rozetka = $rozetka;
+    }
+
+    public function getRozetka(): ?RozetkaProduct
+    {
+        return $this->rozetka;
     }
 
     public function getCreatedAt(): DateTime
