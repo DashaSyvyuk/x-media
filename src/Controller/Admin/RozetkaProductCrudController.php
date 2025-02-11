@@ -114,6 +114,6 @@ class RozetkaProductCrudController extends AbstractCrudController
 
         $this->addFlash('success', 'Document is generated <a href="/rozetka/products.xml" target="_blank">here</a>');
 
-        return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+        return $this->redirect($this->adminUrlGenerator->setController(RozetkaProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
     }
 }

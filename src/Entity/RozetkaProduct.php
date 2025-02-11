@@ -35,14 +35,14 @@ class RozetkaProduct
     private int $stockQuantity = 0;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
-    private string $article = "";
+    private ?string $article = "";
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
-    private string $series = "";
+    private ?string $series = "";
 
     /**
      * @ORM\Column(type="text")
@@ -50,10 +50,10 @@ class RozetkaProduct
     private string $description = "";
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      * @Assert\GreaterThanOrEqual(value="1", message="Too low value")
      */
-    private int $price = 0;
+    private ?int $price = 0;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProductRozetkaCharacteristicValue", mappedBy="rozetkaProduct", cascade={"all"}, orphanRemoval=true)
@@ -61,7 +61,7 @@ class RozetkaProduct
     private $values;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Product", mappedBy="rozetkaProduct")
+     * @ORM\OneToOne(targetEntity="App\Entity\Product")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private Product $product;
@@ -106,22 +106,22 @@ class RozetkaProduct
         $this->stockQuantity = $stockQuantity;
     }
 
-    public function getArticle(): string
+    public function getArticle(): ?string
     {
         return $this->article;
     }
 
-    public function setArticle(string $article): void
+    public function setArticle(?string $article): void
     {
         $this->article = $article;
     }
 
-    public function getSeries(): string
+    public function getSeries(): ?string
     {
         return $this->series;
     }
 
-    public function setSeries(string $series): void
+    public function setSeries(?string $series): void
     {
         $this->series = $series;
     }
@@ -136,12 +136,12 @@ class RozetkaProduct
         $this->description = $description;
     }
 
-    public function getPrice(): int
+    public function getPrice(): ?int
     {
         return $this->price;
     }
 
-    public function setPrice(int $price): void
+    public function setPrice(?int $price): void
     {
         $this->price = $price;
     }

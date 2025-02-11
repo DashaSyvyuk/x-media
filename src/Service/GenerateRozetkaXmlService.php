@@ -8,6 +8,8 @@ use AaronDDM\XMLBuilder\XMLBuilder;
 use AaronDDM\XMLBuilder\Writer\XMLWriterService;
 use AaronDDM\XMLBuilder\Exception\XMLArrayException;
 use App\Entity\Feed;
+use App\Entity\ProductRozetkaCharacteristicValue;
+use App\Entity\RozetkaProduct;
 use App\Repository\CategoryFeedPriceRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\FeedRepository;
@@ -76,6 +78,8 @@ class GenerateRozetkaXmlService
                         ->end()
                         ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feed) {
                             foreach ($products as $product) {
+                                /** @var $rozetkaProduct RozetkaProduct */
+                                $rozetkaProduct = $product->getRozetka();
                                 $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
 
                                 if (!empty($vendor)) {
@@ -84,16 +88,16 @@ class GenerateRozetkaXmlService
                                     }
 
                                     $images = $product->getImages();
-                                    $characteristics = $product->getCharacteristics();
+                                    $characteristics = $rozetkaProduct->getValues();
                                     $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $product->getCategory()]) : null;
 
                                     $XMLArray->start('offer', [
                                         'id' => $product->getId(),
                                         'available' => 'true',
                                     ])
-                                        ->add('stock_quantity', rand(1, 3))
+                                        ->add('stock_quantity', $rozetkaProduct && $rozetkaProduct->getStockQuantity() ? $rozetkaProduct->getStockQuantity() : rand(1, 3))
                                         ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
-                                        ->add('price', $this->getPrice($product, $feed, $priceParameters))
+                                        ->add('price', $rozetkaProduct && $rozetkaProduct->getPrice() ? $rozetkaProduct->getPrice() : $this->getPrice($product, $feed, $priceParameters))
                                         ->add('currencyId', 'UAH')
                                         ->add('categoryId', $product->getCategory()->getId())
                                         ->loop(function (XMLArray $XMLArray) use ($images) {
@@ -102,12 +106,13 @@ class GenerateRozetkaXmlService
                                             }
                                         })
                                         ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
-                                        ->add('name', strip_tags(addslashes($product->getTitle())))
-                                        ->add('description', $this->formatString($product->getDescription()))
+                                        ->add('name', strip_tags(addslashes($rozetkaProduct->getTitle())))
+                                        ->add('description', $this->formatString($rozetkaProduct->getDescription()))
                                         ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
+                                            /** @var ProductRozetkaCharacteristicValue $characteristic */
                                             foreach ($characteristics as $characteristic) {
-                                                $XMLArray->add('param', $this->convertString($characteristic->getValue(), $feed), [
-                                                    'name' => $this->convertString($characteristic->getTitle(), $feed)
+                                                $XMLArray->add('param', $this->convertString($this->getCharacteristicValue($characteristic), $feed), [
+                                                    'name' => $this->convertString($characteristic->getCharacteristic()->getTitle(), $feed)
                                                 ]);
                                             }
                                         });
@@ -138,5 +143,18 @@ class GenerateRozetkaXmlService
         }
 
         return $text;
+    }
+
+    private function getCharacteristicValue(ProductRozetkaCharacteristicValue $value): string
+    {
+        $characteristic = $value->getCharacteristic();
+        $type = $characteristic->getType();
+
+        return match ($type) {
+            'ListValues', 'CheckBoxGroupValues' => $value->getValues()->map(fn ($value) => $value['title']),
+            'List' => implode(',', $value->getValues()->map(fn ($value) => $value['title'])),
+            'ComboBox' => $value->getValues()->first()->getTitle(),
+            'Integer', 'Decimal', 'TexInput', 'TextArea' => $value->getStringValue(),
+        };
     }
 }
