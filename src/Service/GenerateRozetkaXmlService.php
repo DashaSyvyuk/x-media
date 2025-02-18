@@ -95,9 +95,9 @@ class GenerateRozetkaXmlService
                                         'id' => $product->getId(),
                                         'available' => 'true',
                                     ])
-                                        ->add('stock_quantity', $rozetkaProduct && $rozetkaProduct->getStockQuantity() ? $rozetkaProduct->getStockQuantity() : rand(1, 3))
+                                        ->add('stock_quantity', $rozetkaProduct->getStockQuantity() ?: rand(1, 3))
                                         ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
-                                        ->add('price', $rozetkaProduct && $rozetkaProduct->getPrice() ? $rozetkaProduct->getPrice() : $this->getPrice($product, $feed, $priceParameters))
+                                        ->add('price', $rozetkaProduct->getPrice() ?: $this->getPrice($product, $feed, $priceParameters))
                                         ->add('currencyId', 'UAH')
                                         ->add('categoryId', $product->getCategory()->getId())
                                         ->loop(function (XMLArray $XMLArray) use ($images) {
@@ -108,12 +108,27 @@ class GenerateRozetkaXmlService
                                         ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
                                         ->add('name', strip_tags(addslashes($rozetkaProduct->getTitle())))
                                         ->add('description', $this->formatString($rozetkaProduct->getDescription()))
+                                        ->add('article', $rozetkaProduct->getArticle())
+                                        ->add('series', $rozetkaProduct->getSeries())
                                         ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
                                             /** @var ProductRozetkaCharacteristicValue $characteristic */
                                             foreach ($characteristics as $characteristic) {
-                                                $XMLArray->add('param', $this->convertString($this->getCharacteristicValue($characteristic), $feed), [
-                                                    'name' => $this->convertString($characteristic->getCharacteristic()->getTitle(), $feed)
-                                                ]);
+                                                $values = $this->getCharacteristicValue($characteristic);
+
+                                                if (is_array($values)) {
+                                                    $XMLArray->startLoop('param', [
+                                                        'name' => $this->convertString($characteristic->getCharacteristic()->getTitle(), $feed)
+                                                    ], function (XMLArray $XMLArray) use ($values) {
+                                                        foreach ($values as $value) {
+                                                            $XMLArray->add('value', $value);
+                                                        }
+                                                    })
+                                                    ->end();
+                                                } else {
+                                                    $XMLArray->add('param', $this->convertString($values, $feed), [
+                                                        'name' => $this->convertString($characteristic->getCharacteristic()->getTitle(), $feed)
+                                                    ]);
+                                                }
                                             }
                                         });
                                 }
@@ -145,16 +160,16 @@ class GenerateRozetkaXmlService
         return $text;
     }
 
-    private function getCharacteristicValue(ProductRozetkaCharacteristicValue $value): string
+    private function getCharacteristicValue(ProductRozetkaCharacteristicValue $value): string|array
     {
         $characteristic = $value->getCharacteristic();
         $type = $characteristic->getType();
 
         return match ($type) {
-            'ListValues', 'CheckBoxGroupValues' => $value->getValues()->map(fn ($value) => $value['title']),
-            'List' => implode(',', $value->getValues()->map(fn ($value) => $value['title'])),
-            'ComboBox' => $value->getValues()->first()->getTitle(),
-            'Integer', 'Decimal', 'TexInput', 'TextArea' => $value->getStringValue(),
+            'ListValues', 'CheckBoxGroupValues' => $value->getValues()->map(fn ($value) => $value->getTitle())->toArray(),
+            'List' => implode(',', $value->getValues()->map(fn ($value) => $value->getTitle())->toArray()),
+            'ComboBox' => $value->getValue() ? $value->getValue()->getTitle() : '',
+            'Integer', 'Decimal', 'TextInput', 'TextArea' => $value->getStringValue(),
         };
     }
 }

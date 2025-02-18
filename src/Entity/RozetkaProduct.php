@@ -67,6 +67,18 @@ class RozetkaProduct
     private Product $product;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private bool $ready = false;
+
+    /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private bool $active = false;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     public DateTime $createdAt;
@@ -187,6 +199,26 @@ class RozetkaProduct
     public function setProduct(Product $product): void
     {
         $this->product = $product;
+    }
+
+    public function getReady(): bool
+    {
+        return $this->ready;
+    }
+
+    public function setReady(bool $ready): void
+    {
+        $this->ready = $ready;
+    }
+
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
     }
 
     public function getCreatedAt(): DateTime

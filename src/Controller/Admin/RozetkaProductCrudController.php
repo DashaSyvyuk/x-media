@@ -10,14 +10,18 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -46,10 +50,11 @@ class RozetkaProductCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Товари')
             ->setEntityLabelInPlural('Товар')
-            ->setSearchFields(['id', 'title', 'product.category'])
-            ->setDefaultSort(['id' => 'DESC'])
+            ->setSearchFields(['product.id', 'title', 'product.category.title'])
+            ->setDefaultSort(['product.id' => 'DESC'])
             ->setPaginatorPageSize(10)
             ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
+            ->overrideTemplate('crud/field/boolean', 'admin/fields/boolean.html.twig')
             ;
     }
 
@@ -64,7 +69,9 @@ class RozetkaProductCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        yield IdField::new('product.id')->hideOnForm();
+        $entity = $this->getContext();
+
+        yield IdField::new('product.id', 'Id')->hideOnForm();
         yield TextField::new('title', 'Назва')->setColumns(6);
         yield NumberField::new('stock_quantity', 'Кількість')
             ->setThousandsSeparator(' ')
@@ -76,6 +83,14 @@ class RozetkaProductCrudController extends AbstractCrudController
             ->setThousandsSeparator(' ')
             ->setColumns(6)
             ->hideOnIndex();
+        yield BooleanField::new('ready', 'Готовий')->setColumns(6)->hideOnForm()->hideOnDetail();
+        yield BooleanField::new('active', 'Активний')
+            ->setFormTypeOptions([
+                'dependent' => true
+            ])
+            ->setColumns(6)
+            ->hideOnForm()
+            ->hideOnDetail();
         yield TextareaField::new('description', 'Опис укр')
             ->setFormType(CKEditorType::class)
             ->setFormTypeOptions(
