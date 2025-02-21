@@ -74,7 +74,7 @@ class RozetkaCharacteristicType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $category = $this->adminContextProvider->getContext()->getEntity()->getInstance()->getProduct()->getCategory();
-        $characteristics = $this->rozetkaCharacteristicsRepository->findBy(['category' => $category]);
+        $characteristics = $this->rozetkaCharacteristicsRepository->findBy(['category' => $category, 'active' => true]);
 
         $builder
             ->add('characteristic', EntityType::class, [

@@ -13,7 +13,7 @@ class RozetkaCharacteristicsController extends AbstractController
         'List'                => 'form/multi-select.html.twig',
         'ListValues'          => 'form/multi-select.html.twig',
         'ComboBox'            => 'form/select.html.twig',
-        'CheckboxGroupValues' => 'form/multi-select.html.twig',
+        'CheckBoxGroupValues' => 'form/multi-select.html.twig',
         'Integer'             => 'form/integer.html.twig',
         'Decimal'             => 'form/decimal.html.twig',
         'TextInput'           => 'form/text-input.html.twig',
@@ -35,7 +35,7 @@ class RozetkaCharacteristicsController extends AbstractController
         }
 
         $values = [];
-        foreach ($this->rozetkaCharacteristicsValueRepository->findBy(['characteristic' => $characteristics]) as $value) {
+        foreach ($this->rozetkaCharacteristicsValueRepository->findBy(['characteristic' => $characteristics, 'active' => true], ['title' => 'ASC']) as $value) {
             $values[] = [
                 'id' => $value->getId(),
                 'value' => $value->getTitle()

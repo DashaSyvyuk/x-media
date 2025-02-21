@@ -10,7 +10,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -20,8 +19,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -69,8 +66,6 @@ class RozetkaProductCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        $entity = $this->getContext();
-
         yield IdField::new('product.id', 'Id')->hideOnForm();
         yield TextField::new('title', 'Назва')->setColumns(6);
         yield NumberField::new('stock_quantity', 'Кількість')
@@ -83,14 +78,11 @@ class RozetkaProductCrudController extends AbstractCrudController
             ->setThousandsSeparator(' ')
             ->setColumns(6)
             ->hideOnIndex();
-        yield BooleanField::new('ready', 'Готовий')->setColumns(6)->hideOnForm()->hideOnDetail();
+        yield BooleanField::new('ready', 'Готовий')->setColumns(7);
         yield BooleanField::new('active', 'Активний')
-            ->setFormTypeOptions([
-                'dependent' => true
-            ])
-            ->setColumns(6)
-            ->hideOnForm()
-            ->hideOnDetail();
+            ->setCustomOption('dependent', true)
+            ->setDisabled(!($pageName === Crud::PAGE_INDEX) && $this->isDisabled())
+            ->setColumns(7);
         yield TextareaField::new('description', 'Опис укр')
             ->setFormType(CKEditorType::class)
             ->setFormTypeOptions(
@@ -113,14 +105,14 @@ class RozetkaProductCrudController extends AbstractCrudController
             ->renderExpanded()
             ->onlyOnForms();
 
-        yield FormField::addPanel('Характеристики Товару');
+        /*yield FormField::addPanel('Характеристики Товару');
         yield CollectionField::new('product.characteristics', 'Характеристики товару')
             ->setColumns(12)
             ->setEntryType(ProductCharacteristicType::class)
             ->renderExpanded()
             ->onlyOnForms()
             ->setDisabled()
-        ;
+        ;*/
     }
 
     public function rozetkaXmlAction(AdminContext $adminContext): RedirectResponse
@@ -130,5 +122,17 @@ class RozetkaProductCrudController extends AbstractCrudController
         $this->addFlash('success', 'Document is generated <a href="/rozetka/products.xml" target="_blank">here</a>');
 
         return $this->redirect($this->adminUrlGenerator->setController(RozetkaProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+    }
+
+    public function isDisabled(): bool
+    {
+        /** @var RozetkaProduct $rozetkaProduct */
+        $rozetkaProduct = $this->getContext()?->getEntity()->getInstance();
+
+        if ($rozetkaProduct && $rozetkaProduct->getId()) {
+            return ! $rozetkaProduct->getReady();
+        }
+
+        return true;
     }
 }
