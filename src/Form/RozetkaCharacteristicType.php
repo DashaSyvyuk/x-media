@@ -90,7 +90,9 @@ class RozetkaCharacteristicType extends AbstractType
         ;
 
         $formModifier = function (FormInterface $form, RozetkaCharacteristics $characteristics = null) {
-            $attributes = null === $characteristics ? [] : $characteristics->getValues();
+            $attributes = null === $characteristics ? [] : $characteristics->getValues()->filter(function (RozetkaCharacteristicsValue $value) {
+                return $value->getActive() === true;
+            });
             $type = $characteristics?->getType();
 
             if (in_array($type, self::NEED_TEXT_FIELD)) {
