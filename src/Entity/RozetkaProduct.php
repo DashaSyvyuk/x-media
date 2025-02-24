@@ -37,11 +37,6 @@ class RozetkaProduct
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $article = "";
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
     private ?string $series = "";
 
     /**
@@ -116,16 +111,6 @@ class RozetkaProduct
     public function setStockQuantity(int $stockQuantity): void
     {
         $this->stockQuantity = $stockQuantity;
-    }
-
-    public function getArticle(): ?string
-    {
-        return $this->article;
-    }
-
-    public function setArticle(?string $article): void
-    {
-        $this->article = $article;
     }
 
     public function getSeries(): ?string

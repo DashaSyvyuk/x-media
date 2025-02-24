@@ -106,9 +106,9 @@ class GenerateRozetkaXmlService
                                             }
                                         })
                                         ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
-                                        ->add('name', strip_tags(addslashes($rozetkaProduct->getTitle())))
+                                        ->add('name', sprintf('%s (%s)', strip_tags(addslashes($rozetkaProduct->getTitle())), $product->getProductCode()))
                                         ->add('description', $this->formatString($rozetkaProduct->getDescription()))
-                                        ->add('article', $rozetkaProduct->getArticle())
+                                        ->add('article', $rozetkaProduct->getId())
                                         ->add('series', $rozetkaProduct->getSeries())
                                         ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
                                             /** @var ProductRozetkaCharacteristicValue $characteristic */

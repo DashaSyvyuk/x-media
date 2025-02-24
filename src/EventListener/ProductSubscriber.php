@@ -58,7 +58,6 @@ class ProductSubscriber
         $rozetkaProduct = new RozetkaProduct();
         $rozetkaProduct->setTitle($product->getTitle());
         $rozetkaProduct->setStockQuantity(0);
-        $rozetkaProduct->setArticle('');
         $rozetkaProduct->setSeries('');
         $rozetkaProduct->setDescription($product->getDescription());
         $rozetkaProduct->setPrice($this->getPrice($product, $feed, $priceParameters));

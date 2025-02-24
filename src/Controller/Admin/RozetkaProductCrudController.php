@@ -72,7 +72,6 @@ class RozetkaProductCrudController extends AbstractCrudController
             ->setThousandsSeparator(' ')
             ->setColumns(6)
             ->hideOnIndex();
-        yield TextField::new('article', 'Артикул')->setColumns(6);
         yield TextField::new('series', 'Серія')->setColumns(6);
         yield NumberField::new('price', 'Ціна')
             ->setThousandsSeparator(' ')
