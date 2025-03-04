@@ -24,7 +24,7 @@ use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-#[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN')")]
+#[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')")]
 class RozetkaProductCrudController extends AbstractCrudController
 {
     public function __construct(private readonly AdminUrlGenerator $adminUrlGenerator, private readonly GenerateRozetkaXmlService $generateRozetkaXmlService) {

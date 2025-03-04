@@ -132,8 +132,8 @@ class DashboardController extends AbstractDashboardController
         ])->setPermission('ROLE_ADMIN');
 
         yield MenuItem::subMenu('Feeds', 'fa fa-file')->setSubItems([
-            MenuItem::linkToCrud('Feeds', 'fa fa-file', Feed::class),
+            MenuItem::linkToCrud('Feeds', 'fa fa-file', Feed::class)->setPermission('ROLE_ADMIN'),
             MenuItem::linkToCrud('Rozetka', 'fa fa-face-smile', RozetkaProduct::class),
-        ])->setPermission('ROLE_ADMIN');
+        ]);
     }
 }
