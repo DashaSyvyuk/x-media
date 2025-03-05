@@ -34,6 +34,7 @@ class UploadCharacteristics
                     $characteristics->setFilterType(!('disable' === $row[3]));
                     $characteristics->setUnit($row[4]);
                     $characteristics->setEndToEndParameter($row[7] === 'Так');
+                    $characteristics->addCategory($category);
 
                     if (!in_array($row[2], ['TextArea', 'TextInput'])) {
                         if ($row[6]) {
@@ -55,7 +56,6 @@ class UploadCharacteristics
             } else {
                 $characteristics = $this->rozetkaCharacteristicsRepository->fill([
                     'rozetkaId' => $row[0],
-                    'category' => $category,
                     'title' => $row[1],
                     'type' => $row[2],
                     'filterType' => !('disable' === $row[3]),
@@ -68,7 +68,8 @@ class UploadCharacteristics
                             'title' => $row[6],
                             'active' => true,
                         ]
-                    ]
+                    ],
+                    'category' => $category,
                 ]);
 
                 $this->rozetkaCharacteristicsRepository->create($characteristics);

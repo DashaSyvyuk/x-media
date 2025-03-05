@@ -17,7 +17,7 @@ class RozetkaCharacteristicsValue
 
     /**
      * @var int
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
@@ -25,7 +25,7 @@ class RozetkaCharacteristicsValue
 
     /**
      * @var RozetkaCharacteristics
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true, name="characteristic_id", referencedColumnName="rozetka_id")
      * @ORM\ManyToOne(targetEntity="RozetkaCharacteristics", inversedBy="values")
      */
     private RozetkaCharacteristics $characteristic;

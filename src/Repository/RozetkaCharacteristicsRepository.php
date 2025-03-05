@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\RozetkaCharacteristics;
 use App\Entity\RozetkaCharacteristicsValue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -24,13 +25,13 @@ class RozetkaCharacteristicsRepository extends ServiceEntityRepository
     {
         $characteristics = new RozetkaCharacteristics();
         $characteristics->setRozetkaId($data['rozetkaId']);
-        $characteristics->setCategory($data['category']);
         $characteristics->setTitle($data['title']);
         $characteristics->setType($data['type']);
         $characteristics->setFilterType($data['filterType']);
         $characteristics->setUnit($data['unit']);
         $characteristics->setEndToEndParameter($data['endToEndParameter']);
         $characteristics->setActive($data['active']);
+        $characteristics->addCategory($data['category']);
 
         if (!in_array($data['type'], ['TextArea', 'TextInput'])) {
             foreach ($data['values'] as $value) {
@@ -64,5 +65,16 @@ class RozetkaCharacteristicsRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
         $entityManager->merge($characteristics);
         $entityManager->flush();
+    }
+
+    public function getCharacteristicsForCategory(Category $category)
+    {
+        return $this->createQueryBuilder('char')
+            ->where(':category MEMBER OF char.categories')
+            ->setParameters(['category' => $category])
+            ->andWhere('char.active = :active')
+            ->setParameter('active', true)
+            ->getQuery()
+            ->getResult();
     }
 }

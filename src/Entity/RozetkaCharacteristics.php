@@ -10,7 +10,8 @@ use Doctrine\ORM\Mapping\Index;
 
 /**
  * @ORM\Table("characteristics_rozetka", indexes={
- *     @Index(columns={"title"})
+ *     @Index(columns={"title"}),
+ *     @Index(columns={"rozetka_id"})
  * })
  * @ORM\Entity(repositoryClass="App\Repository\RozetkaCharacteristicsRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -21,23 +22,19 @@ class RozetkaCharacteristics
 
     /**
      * @var int
-     * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\Id()
      * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
-    private int $id;
-
-    /**
-     * @var int
-     * @ORM\Column(type="integer")
      */
     private int $rozetkaId = 0;
 
     /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category")
+     * @ORM\JoinTable(name="rozetka_characteristic_category",
+     *      joinColumns={@ORM\JoinColumn(name="rozetka_characteristic_id", referencedColumnName="rozetka_id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id")}
+     * )
      */
-    private ?Category $category = null;
+    private $categories;
 
     /**
      * @var string
@@ -76,8 +73,7 @@ class RozetkaCharacteristics
     private bool $active = true;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RozetkaCharacteristicsValue",
-     *     mappedBy="characteristic", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\RozetkaCharacteristicsValue", mappedBy="characteristic", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
      */
     private $values;
 
@@ -94,14 +90,7 @@ class RozetkaCharacteristics
     public function __construct()
     {
         $this->values = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
+        $this->categories = new ArrayCollection();
     }
 
     /**
@@ -121,19 +110,27 @@ class RozetkaCharacteristics
     }
 
     /**
-     * @param Category|null $category
+     * @param Category $category
      */
-    public function setCategory(?Category $category): void
+    public function addCategory(Category $category): void
     {
-        $this->category = $category;
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
     }
 
     /**
-     * @return Category|null
+     * @param Category $category
+     * @return bool
      */
-    public function getCategory(): ?Category
+    public function removeCategory(Category $category): bool
     {
-        return $this->category;
+        return $this->categories->removeElement($category);
+    }
+
+    public function getCategories()
+    {
+        return $this->categories;
     }
 
     /**

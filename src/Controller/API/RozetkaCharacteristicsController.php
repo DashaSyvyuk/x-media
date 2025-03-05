@@ -28,7 +28,7 @@ class RozetkaCharacteristicsController extends AbstractController
 
     public function getValue(string $id, int $valueId): Response
     {
-        $characteristics = $this->rozetkaCharacteristicsRepository->findOneBy(['id' => $id]);
+        $characteristics = $this->rozetkaCharacteristicsRepository->findOneBy(['rozetkaId' => $id]);
 
         if (!$characteristics) {
             return new Response('Not found', 404);
