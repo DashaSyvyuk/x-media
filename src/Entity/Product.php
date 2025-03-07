@@ -121,7 +121,7 @@ class Product
     private $filterAttributes;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\RozetkaProduct", mappedBy="product")
+     * @ORM\OneToOne(targetEntity="App\Entity\RozetkaProduct", mappedBy="product", cascade={"remove"}, orphanRemoval=true)
      */
     private $rozetka;
 

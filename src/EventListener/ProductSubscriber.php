@@ -42,7 +42,7 @@ class ProductSubscriber
             $rozetkaProduct->setDescription($product->getDescription());
         }
 
-        $rozetkaProduct->setPrice($this->getPrice($product, $feed, $priceParameters));
+        // $rozetkaProduct->setPrice($this->getPrice($product, $feed, $priceParameters));
 
         $this->repository->update($rozetkaProduct);
     }
