@@ -27,8 +27,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')")]
 class RozetkaProductCrudController extends AbstractCrudController
 {
-    public function __construct(private readonly AdminUrlGenerator $adminUrlGenerator, private readonly GenerateRozetkaXmlService $generateRozetkaXmlService) {
-
+    public function __construct(
+        private readonly AdminUrlGenerator $adminUrlGenerator,
+        private readonly GenerateRozetkaXmlService $generateRozetkaXmlService)
+    {
     }
 
     public static function getEntityFqcn(): string
@@ -57,9 +59,13 @@ class RozetkaProductCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $actions->add(Crud::PAGE_INDEX, Action::new('rozetkaXml', 'Rozetka feed *.xml')
-             ->linkToCrudAction('rozetkaXmlAction')
+        $actions->add(Crud::PAGE_INDEX, Action::new('rozetkaXmlForA', 'Rozetka feed for A *.xml')
+             ->linkToCrudAction('rozetkaForAXmlAction')
              ->createAsGlobalAction());
+
+        $actions->add(Crud::PAGE_INDEX, Action::new('rozetkaXmlForP', 'Rozetka feed for P *.xml')
+            ->linkToCrudAction('rozetkaForPXmlAction')
+            ->createAsGlobalAction());
 
         return parent::configureActions($actions);
     }
@@ -77,7 +83,11 @@ class RozetkaProductCrudController extends AbstractCrudController
             ->setThousandsSeparator(' ')
             ->setColumns(6);
         yield BooleanField::new('ready', 'Готовий')->setColumns(7);
-        yield BooleanField::new('active', 'Активний')
+        yield BooleanField::new('activeForA', 'Активний для A')
+            ->setCustomOption('dependent', true)
+            ->setDisabled(!($pageName === Crud::PAGE_INDEX) && $this->isDisabled())
+            ->setColumns(7);
+        yield BooleanField::new('activeForP', 'Активний для P')
             ->setCustomOption('dependent', true)
             ->setDisabled(!($pageName === Crud::PAGE_INDEX) && $this->isDisabled())
             ->setColumns(7);
@@ -113,11 +123,20 @@ class RozetkaProductCrudController extends AbstractCrudController
         ;*/
     }
 
-    public function rozetkaXmlAction(AdminContext $adminContext): RedirectResponse
+    public function rozetkaForAXmlAction(AdminContext $adminContext): RedirectResponse
     {
         $this->generateRozetkaXmlService->execute();
 
-        $this->addFlash('success', 'Document is generated <a href="/rozetka/products.xml" target="_blank">here</a>');
+        $this->addFlash('success', 'Document is generated <a href="/rozetka_for_a/products.xml" target="_blank">here</a>');
+
+        return $this->redirect($this->adminUrlGenerator->setController(RozetkaProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+    }
+
+    public function rozetkaForPXmlAction(AdminContext $adminContext): RedirectResponse
+    {
+        $this->generateRozetkaXmlService->execute('active_for_p');
+
+        $this->addFlash('success', 'Document is generated <a href="/rozetka_for_p/products.xml" target="_blank">here</a>');
 
         return $this->redirect($this->adminUrlGenerator->setController(RozetkaProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
     }

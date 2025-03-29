@@ -34,11 +34,12 @@ class GenerateRozetkaXmlService
         $this->xmlBuilder = new XMLBuilder($this->xmlWriterService);
     }
 
-    public function execute(): void
+    public function execute($activeFor = 'active_for_a'): void
     {
+        $activeForInCamelCase = lcfirst(str_replace('_', '', ucwords($activeFor, '_')));
         ini_set('memory_limit', '256M');
-        $categories = $this->categoryRepository->getCategoriesForRozetka();
-        $products = $this->productRepository->getProductsForRozetka();
+        $categories = $this->categoryRepository->getCategoriesForRozetka($activeForInCamelCase);
+        $products = $this->productRepository->getProductsForRozetka($activeForInCamelCase);
         $currencies = [
             [
                 'code' => 'UAH',
@@ -138,7 +139,7 @@ class GenerateRozetkaXmlService
                     ->end()
                 ->end();
 
-            file_put_contents(__DIR__ . '/../../public/rozetka/products.xml', $this->xmlBuilder->getXML());
+            file_put_contents(__DIR__ . sprintf('/../../public/rozetka_for_%s/products.xml', substr($activeFor, -1)), $this->xmlBuilder->getXML());
         } catch (XMLArrayException|XMLBuilderException $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
         }

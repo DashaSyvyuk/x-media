@@ -29,7 +29,9 @@
 /public/xml/
 /public/prom/
 /public/hotline/
-/public/rozetka/
+public/rozetka/
+public/rozetka_for_a/
+public/rozetka_for_p/
 /public/e-katalog/
 npm-debug.log
 yarn-error.log

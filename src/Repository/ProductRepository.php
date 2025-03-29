@@ -191,7 +191,7 @@ class ProductRepository extends ServiceEntityRepository
             ;
     }
 
-    public function getProductsForRozetka()
+    public function getProductsForRozetka(string $activeFor)
     {
         return $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'c')
@@ -203,7 +203,7 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('product_status', Product::STATUS_ACTIVE)
             ->andWhere('c.showInRozetkaFeed = :showInRozetkaFeed')
             ->setParameter('showInRozetkaFeed', true)
-            ->andWhere('rozetka.active = :active')
+            ->andWhere(sprintf('rozetka.%s = :active', $activeFor))
             ->setParameter('active', true)
             ->orderBy('p.title', 'ASC')
             ->getQuery()

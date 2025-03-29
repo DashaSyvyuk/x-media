@@ -71,7 +71,13 @@ class RozetkaProduct
      * @var bool
      * @ORM\Column(type="boolean")
      */
-    private bool $active = false;
+    private bool $activeForA = false;
+
+    /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private bool $activeForP = false;
 
     /**
      * @ORM\Column(type="datetime")
@@ -196,14 +202,24 @@ class RozetkaProduct
         $this->ready = $ready;
     }
 
-    public function getActive(): bool
+    public function getActiveForA(): bool
     {
-        return $this->active;
+        return $this->activeForA;
     }
 
-    public function setActive(bool $active): void
+    public function setActiveForA(bool $activeForA): void
     {
-        $this->active = $active;
+        $this->activeForA = $activeForA;
+    }
+
+    public function getActiveForP(): bool
+    {
+        return $this->activeForP;
+    }
+
+    public function setActiveForP(bool $activeForP): void
+    {
+        $this->activeForP = $activeForP;
     }
 
     public function getCreatedAt(): DateTime
