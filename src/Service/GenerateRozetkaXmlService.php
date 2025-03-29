@@ -108,8 +108,8 @@ class GenerateRozetkaXmlService
                                         ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
                                         ->add('name', sprintf('%s (%s)', strip_tags(addslashes($rozetkaProduct->getTitle())), $product->getProductCode()))
                                         ->add('description', $this->formatString($rozetkaProduct->getDescription()))
-                                        ->add('article', $rozetkaProduct->getId())
-                                        ->add('series', $product->getSeries())
+                                        ->add('article', $product->getId())
+                                        ->add('series', $rozetkaProduct->getSeries())
                                         ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
                                             /** @var ProductRozetkaCharacteristicValue $characteristic */
                                             foreach ($characteristics as $characteristic) {
