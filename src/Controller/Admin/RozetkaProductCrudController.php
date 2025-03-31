@@ -82,6 +82,10 @@ class RozetkaProductCrudController extends AbstractCrudController
         yield NumberField::new('price', 'Ціна')
             ->setThousandsSeparator(' ')
             ->setColumns(6);
+        yield NumberField::new('crossedOutPrice', 'Перекреслена ціна (грн)')
+            ->setThousandsSeparator(' ')
+            ->hideOnIndex()
+            ->setColumns(6);
         yield BooleanField::new('ready', 'Готовий')->setColumns(7);
         yield BooleanField::new('activeForA', 'Активний для A')
             ->setCustomOption('dependent', true)

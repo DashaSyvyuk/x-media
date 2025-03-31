@@ -99,6 +99,7 @@ class GenerateRozetkaXmlService
                                         ->add('stock_quantity', $rozetkaProduct->getStockQuantity() ?: rand(1, 3))
                                         ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
                                         ->add('price', $rozetkaProduct->getPrice() ?: $this->getPrice($product, $feed, $priceParameters))
+                                        ->add('old_price', $rozetkaProduct->getCrossedOutPrice())
                                         ->add('currencyId', 'UAH')
                                         ->add('categoryId', $product->getCategory()->getId())
                                         ->loop(function (XMLArray $XMLArray) use ($images) {
