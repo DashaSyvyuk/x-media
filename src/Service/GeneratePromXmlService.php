@@ -68,8 +68,8 @@ class GeneratePromXmlService
                                 'selling_type' => 'r',
                                 'available' => true
                             ])
-                                ->add('name', $product['title'])
-                                ->add('name_ua', $product['title'])
+                                ->add('name', sprintf('%s (%s)', $product['title'], $product['productCode']))
+                                ->add('name_ua', sprintf('%s (%s)', $product['title'], $product['productCode']))
                                 ->add('categoryId', $product['categoryId'])
                                 ->add('portal_category_url', $product['promCategoryLink'])
                                 ->add('price', $this->getPrice($productItem, $feed, $priceParameters))

@@ -149,6 +149,7 @@ class ProductRepository extends ServiceEntityRepository
                     'promCategoryLink' => $product->getCategory()->getPromCategoryLink(),
                     'article' => $product->getProductCode(),
                     'warranty' => $warranty ? $warranty[0]->getFilterAttribute()->getValue() : 12,
+                    'productCode' => $product?->getProductCode(),
                 ];
 
                 $result[] = $row;
