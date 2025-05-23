@@ -65,6 +65,13 @@
                         <textarea name="comment"></textarea>
                     </label>
                 </div>
+                <div style="margin-top: 10px;">
+                    <label class="container">
+                        <input type="checkbox" name="consent" />
+                        <span class="checkmark"></span>
+                        <span>Прочитав і погоджуюсь з правилами магазину. Правила магазину можна знайти <a href="/images/warranty.pdf" target="_blank" class="green">тут</a><span class="required">&nbsp;&nbsp;*</span></span>
+                    </label>
+                </div>
                 <div>
                     <p class="total-price">Загальна вартість: <span>{{ totalPrice|number_format(0, '.', ' ') }} грн</span></p>
                 </div>
