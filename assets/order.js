@@ -45,9 +45,10 @@ $('#order').on('submit', (e) => {
     const address = $target.find('textarea[name=address]') ? $target.find('textarea[name=address]').val() : '';
     const city = $target.find('select[name=city]') ? $target.find('select[name=city]').val() : '';
     const office = $target.find('select[name=office]') ? $target.find('select[name=office]').val() : '';
+    const consent = $target.find('input[name=consent]').is(':checked') ? 1 : 0;
 
-    $.post( '/order', { name, surname, phone, email, deltype, comment, paytype, address, city, office })
-        .done(function(data) { window.location.href = '/thank-you'; })
+    $.post( '/order', { name, surname, phone, email, deltype, comment, paytype, address, city, office, consent })
+        .done(function(data) { /* window.location.href = '/thank-you'; */ })
         .fail(function(xhr) {
             $('#order .error').remove();
             $.each(xhr.responseJSON, function(name, value) {
