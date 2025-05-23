@@ -109,8 +109,10 @@ class BaseController extends AbstractController
 
     public function getFilters(?string $filters): array
     {
-        $attributes = explode(';', $filters);
+        if ($filters) {
+            return explode(';', $filters);
+        }
 
-        return !empty($attributes[0]) ? $attributes : [];
+        return [];
     }
 }
