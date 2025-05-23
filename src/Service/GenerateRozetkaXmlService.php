@@ -122,7 +122,7 @@ class GenerateRozetkaXmlService
                                                         'name' => $this->convertString($characteristic->getCharacteristic()->getTitle(), $feed)
                                                     ], function (XMLArray $XMLArray) use ($values) {
                                                         foreach ($values as $value) {
-                                                            $XMLArray->add('value', $value);
+                                                            $XMLArray->add('value', htmlspecialchars($value));
                                                         }
                                                     })
                                                     ->end();

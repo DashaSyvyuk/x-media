@@ -61,7 +61,7 @@ class GenerateHotlineXmlService
                     ->end()
                     ->startLoop('items', [], function (XMLArray $XMLArray) use ($products, $feed) {
                         foreach ($products as $product) {
-                            $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
+                            $vendor = array_values(array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])));
 
                             if (!empty($vendor)) {
                                 if ($feed && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feed->getIgnoreBrands()))) {
