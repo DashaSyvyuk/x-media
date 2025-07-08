@@ -48,7 +48,7 @@ $('#order').on('submit', (e) => {
     const consent = $target.find('input[name=consent]').is(':checked') ? 1 : 0;
 
     $.post( '/order', { name, surname, phone, email, deltype, comment, paytype, address, city, office, consent })
-        .done(function(data) { /* window.location.href = '/thank-you'; */ })
+        .done(function(data) { window.location.href = '/thank-you'; })
         .fail(function(xhr) {
             $('#order .error').remove();
             $.each(xhr.responseJSON, function(name, value) {

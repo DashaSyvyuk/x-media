@@ -32,7 +32,7 @@ class GeneratePromXmlService
 
     public function execute(): void
     {
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '512M');
 
         $categories = $this->categoryRepository->getCategoriesForProm();
         $products = $this->productRepository->getProductsForProm();
@@ -56,7 +56,7 @@ class GeneratePromXmlService
                             $productItem = $this->productRepository->findOneBy(['id' => $product['id']]);
                             $images = $product['images'];
                             $characteristics = $product['characteristics'];
-                            $vendor = array_filter($productItem->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
+                            $vendor = array_values(array_filter($productItem->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])));
                             $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $productItem->getCategory()]) : null;
 
                             if (!empty($vendor) && $feed && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feed->getIgnoreBrands()))) {

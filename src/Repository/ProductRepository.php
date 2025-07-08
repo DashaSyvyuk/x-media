@@ -132,8 +132,8 @@ class ProductRepository extends ServiceEntityRepository
                 $images[] = 'https://x-media.com.ua/images/products/' . $item->getImageUrl();
             }
 
-            $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
-            $warranty = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => $item->getFilter()->getTitle() == 'Гарантія');
+            $vendor = array_values(array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])));
+            $warranty = array_values(array_filter($product->getFilterAttributes()->toArray(), fn ($item) => $item->getFilter()->getTitle() == 'Гарантія'));
 
             if (!empty($vendor)) {
                 $row = [

@@ -107,12 +107,12 @@ class OrderPageController extends BaseController
 
             $errors = $validator->validate($order);
 
-            if (count($errors) > 0) {
+            if (count($errors) > 0 || in_array($consent, ['0', 0, false])) {
                 $messages = [];
                 foreach ($errors as $violation) {
                     $messages[$violation->getPropertyPath()][] = $violation->getMessage();
                 }
-                if ($consent === '0') {
+                if (in_array($consent, ['0', 0, false])) {
                     $messages['consent'][] = 'Поле обов\'язкове';
                 }
                 return new JsonResponse($messages, 422);
