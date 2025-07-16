@@ -120,9 +120,7 @@ class ProductRozetkaCharacteristicValue
 
     public function getValues()
     {
-        return $this->values->filter(function ($value) {
-            return $value->getActive();
-        });
+        return $this->values;
     }
 
     public function getStringValue(): ?string
