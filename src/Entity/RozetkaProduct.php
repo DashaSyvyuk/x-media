@@ -167,7 +167,10 @@ class RozetkaProduct
 
     public function getValues()
     {
-        return $this->values;
+        return $this->values->filter(function ($value) {
+            $characteristic = $value->getCharacteristic();
+            return $characteristic && $characteristic->getActive();
+        });
     }
 
     public function setValues($values): void
