@@ -33,6 +33,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')")]
 class ProductCrudController extends AbstractCrudController
@@ -233,5 +238,38 @@ class ProductCrudController extends AbstractCrudController
         $this->addFlash('success', 'Document is generated <a href="/e-katalog/products.xml" target="_blank">here</a>');
 
         return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+    }
+
+    public function createIndexQueryBuilder(
+        SearchDto $searchDto,
+        EntityDto $entityDto,
+        FieldCollection $fields,
+        FilterCollection $filters
+    ): QueryBuilder {
+        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+
+        $search = trim($searchDto->getQuery());
+        if ($search !== '') {
+            // Розбиваємо на слова
+            $words = preg_split('/\s+/', $search);
+
+            // Очистимо попередні умови пошуку
+            $alias = $qb->getRootAliases()[0];
+            $orX = $qb->expr()->orX();
+
+            foreach (['title', 'productCode', 'id'] as $field) {
+                $andX = $qb->expr()->andX();
+                foreach ($words as $k => $word) {
+                    $paramName = ":{$field}_word{$k}";
+                    $andX->add($qb->expr()->like("LOWER($alias.$field)", "LOWER($paramName)"));
+                    $qb->setParameter($paramName, '%' . $word . '%');
+                }
+                $orX->add($andX);
+            }
+
+            $qb->andWhere($orX);
+        }
+
+        return $qb;
     }
 }
