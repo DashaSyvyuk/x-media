@@ -51,6 +51,7 @@ class ProductCrudController extends AbstractCrudController
         private readonly GenerateEkatalogXmlService $generateEkatalogXmlService,
     )
     {
+        ini_set('memory_limit', '256M');
     }
 
     public static function getEntityFqcn(): string
