@@ -60,6 +60,7 @@ WarrantyCrudController extends AbstractCrudController
                 Warranty::STATUS_SENT_BY_NOVA_POSHTA => 'danger',
                 Warranty::STATUS_COMPLETED => 'success',
                 Warranty::STATUS_NOT_FIXED => 'secondary',
+                Warranty::STATUS_NOT_FIXED_RETURNED => 'secondary',
             ])
             ->setColumns(4);
         yield TextField::new('name', 'Ім\'я')->setColumns(7);

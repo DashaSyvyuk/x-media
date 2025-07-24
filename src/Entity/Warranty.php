@@ -26,6 +26,7 @@ class Warranty
     const STATUS_SENT_BY_NOVA_POSHTA = 'sent_by_novaposhta';
     const STATUS_COMPLETED = 'completed';
     const STATUS_NOT_FIXED = 'not_fixed';
+    const STATUS_NOT_FIXED_RETURNED = 'not_fixed_returned';
 
     const STATUSES = [
         self::STATUS_NEW => 'Нове',
@@ -35,6 +36,7 @@ class Warranty
         self::STATUS_SENT_BY_NOVA_POSHTA => 'Відправлено новою поштою',
         self::STATUS_COMPLETED => 'Завершено',
         self::STATUS_NOT_FIXED => 'Невідремонтовано. Повернуто кошти',
+        self::STATUS_NOT_FIXED_RETURNED => 'Невідремонтовано. Повернуто покупцеві',
     ];
 
     use DateStorageTrait;
