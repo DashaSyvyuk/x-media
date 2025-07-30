@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Circulation
 {
     use DateStorageTrait;
+
+    private bool $showAllPayments = false;
 
     /**
      * @ORM\Id
@@ -82,9 +85,26 @@ class Circulation
         return $this->currency;
     }
 
-    public function getPayments()
+    public function setShowAllPayments(bool $flag): void
     {
-        return $this->payments;
+        $this->showAllPayments = $flag;
+    }
+
+    public function getPayments(): ArrayCollection
+    {
+        if ($this->showAllPayments) {
+            return $this->payments;
+        }
+
+        $criteria = Criteria::create()
+            ->orderBy(['id' => Criteria::DESC])
+            ->setMaxResults(30);
+
+        return new \Doctrine\Common\Collections\ArrayCollection(
+            array_reverse(
+                $this->payments->matching($criteria)->toArray()
+            )
+        );
     }
 
     public function addPayment(CirculationPayment $payment): void
