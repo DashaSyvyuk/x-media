@@ -68,6 +68,12 @@ class RozetkaProduct
     private Product $product;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\RozetkaProduct")
+     * @ORM\JoinColumn(name="rozetka_product_id", referencedColumnName="id")
+     */
+    private ?RozetkaProduct $rozetkaProduct = null;
+
+    /**
      * @var bool
      * @ORM\Column(type="boolean")
      */
@@ -209,6 +215,16 @@ class RozetkaProduct
     public function setProduct(Product $product): void
     {
         $this->product = $product;
+    }
+
+    public function getRozetkaProduct(): ?RozetkaProduct
+    {
+        return $this->rozetkaProduct;
+    }
+
+    public function setRozetkaProduct(?RozetkaProduct $rozetkaProduct): void
+    {
+        $this->rozetkaProduct = $rozetkaProduct;
     }
 
     public function getReady(): bool
