@@ -14,7 +14,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Factory\FormFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -29,7 +28,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
 
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')")]
 class RozetkaProductCrudController extends AbstractCrudController
@@ -113,7 +111,9 @@ class RozetkaProductCrudController extends AbstractCrudController
                     return $entityRepository->createQueryBuilder('rp')
                         ->leftJoin('rp.product', 'p')
                         ->where('p.category=:category')
-                        ->setParameter('category', $category);
+                        ->setParameter('category', $category)
+                        ->andWhere('rp.ready = :ready')
+                        ->setParameter('ready', true);
                 })
                 ->setColumns(6)->hideOnIndex();
         }
@@ -201,6 +201,7 @@ class RozetkaProductCrudController extends AbstractCrudController
                     $productValue->setRozetkaProduct($entityInstance);
                     $productValue->setCharacteristic($value->getCharacteristic());
                     $productValue->setValue($value->getValue());
+                    $productValue->setStringValue($value->getStringValue());
                     if ($value->getValues()) {
                         foreach($value->getValues() as $itemValue) {
                             $productValue->addValue($itemValue);

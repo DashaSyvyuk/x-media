@@ -279,6 +279,6 @@ class RozetkaProduct
 
     public function __toString(): string
     {
-        return $this->title;
+        return $this->product->getId() . ' - ' . $this->title;
     }
 }
