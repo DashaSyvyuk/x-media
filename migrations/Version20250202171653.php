@@ -20,7 +20,7 @@ final class Version20250202171653 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('INSERT INTO rozetka_product (title, description, product_id, price, stock_quantity, article, series, created_at, updated_at) SELECT title, description, id, price, 1, \'\', \'\', NOW(), NOW() FROM product');
+        $this->addSql('INSERT INTO rozetka_product (title, description, product_id, price, stock_quantity, article, series, created_at, updated_at) SELECT title, description, id, price, 3, \'\', \'\', NOW(), NOW() FROM product');
     }
 
     public function down(Schema $schema): void
