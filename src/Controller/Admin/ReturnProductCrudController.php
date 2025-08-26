@@ -20,6 +20,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class
 ReturnProductCrudController extends AbstractCrudController
 {
+    public function __construct()
+    {
+        ini_set('memory_limit', '256M');
+    }
     public static function getEntityFqcn(): string
     {
         return ReturnProduct::class;

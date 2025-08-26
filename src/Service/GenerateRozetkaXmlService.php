@@ -37,7 +37,7 @@ class GenerateRozetkaXmlService
     public function execute($activeFor = 'active_for_a'): void
     {
         $activeForInCamelCase = lcfirst(str_replace('_', '', ucwords($activeFor, '_')));
-        ini_set('memory_limit', '512M');
+        ini_set('memory_limit', '1024M');
         $categories = $this->categoryRepository->getCategoriesForRozetka($activeForInCamelCase);
         $products = $this->productRepository->getProductsForRozetka($activeForInCamelCase);
         $currencies = [
