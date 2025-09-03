@@ -86,6 +86,18 @@ class RozetkaProductCrudController extends AbstractCrudController
             ->setThousandsSeparator(' ')
             ->hideOnIndex()
             ->setColumns(6);
+        yield NumberField::new('promoPrice', 'Промо-ціна (грн)')
+            ->setThousandsSeparator(' ')
+            ->setNumDecimals(0)
+            ->hideOnIndex()
+            ->setRequired(false)
+            ->setHelp('Працює лише якщо увімкнено перемикач')
+            ->setColumns(3);
+        yield BooleanField::new('promoPriceActive', 'Активувати промо-ціну')
+            ->renderAsSwitch(true)
+            ->setColumns(3)
+            ->hideOnIndex()
+            ->setFormTypeOption('row_attr', ['class' => 'mt-4']);
         yield BooleanField::new('ready', 'Готовий')->setColumns(7);
         yield BooleanField::new('activeForA', 'Активний для A')
             ->setCustomOption('dependent', true)

@@ -37,7 +37,7 @@ class GenerateRozetkaXmlService
     public function execute($activeFor = 'active_for_a'): void
     {
         $activeForInCamelCase = lcfirst(str_replace('_', '', ucwords($activeFor, '_')));
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '512M');
         $categories = $this->categoryRepository->getCategoriesForRozetka($activeForInCamelCase);
         $products = $this->productRepository->getProductsForRozetka($activeForInCamelCase);
         $currencies = [
@@ -91,6 +91,8 @@ class GenerateRozetkaXmlService
                                     $images = $product->getImages();
                                     $characteristics = $rozetkaProduct->getValues();
                                     $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $product->getCategory()]) : null;
+                                    $promoPrice = $rozetkaProduct->getPromoPrice();
+                                    $hasPromo   = $rozetkaProduct->getPromoPriceActive() && $promoPrice !== null;
 
                                     $XMLArray->start('offer', [
                                         'id' => $product->getId(),
@@ -100,6 +102,11 @@ class GenerateRozetkaXmlService
                                         ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
                                         ->add('price', $rozetkaProduct->getPrice() ?: $this->getPrice($product, $feed, $priceParameters))
                                         ->add('old_price', $rozetkaProduct->getCrossedOutPrice())
+                                        ->loop(function (XMLArray $XMLArray) use ($hasPromo, $promoPrice) {
+                                            if ($hasPromo) {
+                                                $XMLArray->add('price_promo', number_format($promoPrice, 0, '.', ''));
+                                            }
+                                        })
                                         ->add('currencyId', 'UAH')
                                         ->add('categoryId', $product->getCategory()->getId())
                                         ->loop(function (XMLArray $XMLArray) use ($images) {
@@ -132,7 +139,8 @@ class GenerateRozetkaXmlService
                                                     ]);
                                                 }
                                             }
-                                        });
+                                        })
+                                        ->end();
                                 }
                             }
                         })
