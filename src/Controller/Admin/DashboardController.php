@@ -106,8 +106,10 @@ class DashboardController extends AbstractDashboardController
         ]);
 
         yield MenuItem::subMenu('Фінанси', 'fa fa-coins')->setSubItems([
-            MenuItem::linkToCrud('Борги', 'fa fa-coins', Debtor::class)->setPermission('ROLE_SUPER_ADMIN'),
-            MenuItem::linkToCrud('Обіг', 'fa fa-dollar-sign', Circulation::class),
+            MenuItem::linkToCrud('Борги', 'fa fa-coins', Debtor::class)->setPermission('ROLE_SUPER_ADMIN')
+                ->setQueryParameter('filters[active][value]', 1),
+            MenuItem::linkToCrud('Обіг', 'fa fa-dollar-sign', Circulation::class)
+                ->setQueryParameter('filters[active][value]', 1),
         ])->setPermission('ROLE_ADMIN');
 
         yield MenuItem::subMenu(sprintf('Замовлення (%d)', $ordersCount), 'fas fa-list')->setSubItems([
