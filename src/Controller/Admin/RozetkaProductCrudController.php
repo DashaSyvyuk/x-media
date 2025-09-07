@@ -106,6 +106,18 @@ class RozetkaProductCrudController extends AbstractCrudController
             ->setThousandsSeparator(' ')
             ->hideOnIndex()
             ->setColumns(6);
+        yield NumberField::new('promoPrice', 'Промо-ціна (грн)')
+            ->setThousandsSeparator(' ')
+            ->setNumDecimals(0)
+            ->hideOnIndex()
+            ->setRequired(false)
+            ->setHelp('Працює лише якщо увімкнено перемикач')
+            ->setColumns(3);
+        yield BooleanField::new('promoPriceActive', 'Активувати промо-ціну')
+            ->renderAsSwitch(true)
+            ->setColumns(3)
+            ->hideOnIndex()
+            ->setFormTypeOption('row_attr', ['class' => 'mt-4']);
         if ($editingEntityInstance && $editingEntityInstance->getReady() === false) {
             yield AssociationField::new('rozetkaProduct', 'Товар, з якого копіювати характеристики')
                 ->setFormTypeOption('query_builder', function (EntityRepository $entityRepository) use ($category) {

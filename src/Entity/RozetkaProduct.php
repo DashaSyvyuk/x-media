@@ -52,6 +52,18 @@ class RozetkaProduct
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Assert\GreaterThanOrEqual(value="1", message="Too low value")
+     */
+    private ?int $promoPrice = 0;
+
+    /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private bool $promoPriceActive = false;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
      * @Assert\GreaterThan(propertyPath="price", message="Too low value")
      */
     private ?int $crossedOutPrice = 0;
@@ -161,6 +173,16 @@ class RozetkaProduct
         $this->price = $price;
     }
 
+    public function getPromoPrice(): ?int
+    {
+        return $this->promoPrice;
+    }
+
+    public function setPromoPrice(?int $promoPrice): void
+    {
+        $this->promoPrice = $promoPrice;
+    }
+
     public function getCrossedOutPrice(): ?int
     {
         return $this->crossedOutPrice;
@@ -235,6 +257,16 @@ class RozetkaProduct
     public function setReady(bool $ready): void
     {
         $this->ready = $ready;
+    }
+
+    public function getPromoPriceActive(): bool
+    {
+        return $this->promoPriceActive;
+    }
+
+    public function setPromoPriceActive(bool $promoPriceActive): void
+    {
+        $this->promoPriceActive = $promoPriceActive;
     }
 
     public function getActiveForA(): bool
