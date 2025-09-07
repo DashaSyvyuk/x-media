@@ -37,7 +37,7 @@ class ProductRozetkaCharacteristicValue
      * @ORM\ManyToOne(targetEntity=RozetkaCharacteristicsValue::class)
      * @ORM\JoinColumn(nullable=true)
      */
-    private RozetkaCharacteristicsValue $value;
+    private ?RozetkaCharacteristicsValue $value = null;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\RozetkaCharacteristicsValue")
@@ -94,7 +94,7 @@ class ProductRozetkaCharacteristicValue
         return $this->value;
     }
 
-    public function setValue(RozetkaCharacteristicsValue $value): void
+    public function setValue(?RozetkaCharacteristicsValue $value): void
     {
         $this->value = $value;
     }

@@ -1,0 +1,48 @@
+{% extends '@EasyAdmin/crud/edit.html.twig' %}
+
+{% block page_actions %}
+    {{ parent() }}
+
+    {% if entity.instance.ready == false %}
+    <button class="btn btn-success" type="submit" name="ea[newForm][btn]"  value="1" id="custom-submit">
+        Зберегти & Копіювати характеристики
+    </button>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const button = document.getElementById('custom-submit');
+            const form = document.querySelector('form[name="RozetkaProduct"]');
+
+            button?.addEventListener('click', function () {
+                // Optionally inject a hidden field to identify the action
+                const hidden = document.createElement('input');
+                hidden.type = 'hidden';
+                hidden.name = 'ea_custom_action';
+                hidden.value = '1';
+                hidden['data-action-name'] = 'saveAndContinue';
+                form.appendChild(hidden);
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ea[submitAction]';
+                input.value = 'saveAndContinue';
+                form.appendChild(input);
+
+                const input2 = document.createElement('input');
+                input2.type = 'hidden';
+                input2.name = 'ea[crudAction]';
+                input2.value = 'edit';
+                form.appendChild(input2);
+
+                const newFormInput = document.createElement('input');
+                newFormInput.type = 'hidden';
+                newFormInput.name = 'ea[newForm][btn]';
+                newFormInput.value = 'saveAndContinue';
+                form.appendChild(newFormInput);
+
+                // Submit the form
+                form.submit();
+            });
+        });
+    </script>
+    {% endif %}
+{% endblock %}

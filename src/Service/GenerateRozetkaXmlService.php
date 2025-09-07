@@ -37,7 +37,7 @@ class GenerateRozetkaXmlService
     public function execute($activeFor = 'active_for_a'): void
     {
         $activeForInCamelCase = lcfirst(str_replace('_', '', ucwords($activeFor, '_')));
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '1024M');
         $categories = $this->categoryRepository->getCategoriesForRozetka($activeForInCamelCase);
         $products = $this->productRepository->getProductsForRozetka($activeForInCamelCase);
         $currencies = [
@@ -96,7 +96,7 @@ class GenerateRozetkaXmlService
                                         'id' => $product->getId(),
                                         'available' => 'true',
                                     ])
-                                        ->add('stock_quantity', $rozetkaProduct->getStockQuantity() ?: rand(1, 3))
+                                        ->add('stock_quantity', $rozetkaProduct->getStockQuantity() ?: 3)
                                         ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
                                         ->add('price', $rozetkaProduct->getPrice() ?: $this->getPrice($product, $feed, $priceParameters))
                                         ->add('old_price', $rozetkaProduct->getCrossedOutPrice())
