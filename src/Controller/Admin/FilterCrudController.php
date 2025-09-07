@@ -18,6 +18,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')")]
 class FilterCrudController extends AbstractCrudController
 {
+    public function __construct()
+    {
+        ini_set('memory_limit', '256M');
+    }
+
     public static function getEntityFqcn(): string
     {
         return Filter::class;

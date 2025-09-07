@@ -33,6 +33,7 @@ OrderCrudController extends AbstractCrudController
         private readonly OrderNumber $orderNumber,
     )
     {
+        ini_set('memory_limit', '256M');
     }
 
     public static function getEntityFqcn(): string

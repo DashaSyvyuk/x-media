@@ -20,6 +20,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class
 WarrantyCrudController extends AbstractCrudController
 {
+    public function __construct()
+    {
+        ini_set('memory_limit', '256M');
+    }
     public static function getEntityFqcn(): string
     {
         return Warranty::class;
@@ -60,6 +64,7 @@ WarrantyCrudController extends AbstractCrudController
                 Warranty::STATUS_SENT_BY_NOVA_POSHTA => 'danger',
                 Warranty::STATUS_COMPLETED => 'success',
                 Warranty::STATUS_NOT_FIXED => 'secondary',
+                Warranty::STATUS_NOT_FIXED_RETURNED => 'secondary',
             ])
             ->setColumns(4);
         yield TextField::new('name', 'Ім\'я')->setColumns(7);
