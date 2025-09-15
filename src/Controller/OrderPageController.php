@@ -44,6 +44,7 @@ class OrderPageController extends BaseController
         private readonly CreateService $createService,
     ) {
         parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
+        ini_set('memory_limit', '512M');
     }
 
     public function index(Request $request): Response
