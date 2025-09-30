@@ -49,7 +49,14 @@ class InStockCrudController extends AbstractCrudController
         yield AssociationField::new('warehouse', 'Склад')
             ->setColumns(7)
             ->autocomplete()
+            ->hideOnIndex()
             ->setRequired(true);
+
+        yield AssociationField::new('warehouse', 'Склад')
+            ->onlyOnIndex()
+            ->setCrudController(WarehouseCrudController::class)
+            ->setSortable('warehouse.city')
+            ->formatValue(fn($v, ?object $e) => $e?->getWarehouse()?->getCity() ?? '—');
 
         yield IntegerField::new('quantity', 'Кількість')
             ->setColumns(7)
