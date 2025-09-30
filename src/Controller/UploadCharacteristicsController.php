@@ -29,6 +29,7 @@ class UploadCharacteristicsController extends AbstractController
 
     public function upload(Request $request, UploadCharacteristics $service): Response
     {
+        ini_set('memory_limit', '512M');
         $categoryId = $request->request->get('category');
 
         if (!$category = $this->categoryRepository->findOneBy(['id' => $categoryId])) {

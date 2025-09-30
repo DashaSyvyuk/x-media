@@ -138,4 +138,22 @@ class ProductCharacteristic
     {
         $this->updatedAt = $updatedAt;
     }
+
+    public function __toString(): string
+    {
+        $title = trim($this->title);
+        $value = trim($this->value);
+
+        if ($title === '' && $value === '') {
+            return '';
+        }
+        if ($title === '') {
+            return $value;
+        }
+        if ($value === '') {
+            return $title;
+        }
+
+        return $title . ': ' . $value;
+    }
 }

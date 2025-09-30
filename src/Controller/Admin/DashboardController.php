@@ -24,6 +24,7 @@ use App\Entity\Supplier;
 use App\Entity\SupplierOrder;
 use App\Entity\User;
 use App\Entity\Warehouse;
+use App\Entity\InStock;
 use App\Entity\Warranty;
 use App\Repository\CommentRepository;
 use App\Repository\FeedbackRepository;
@@ -120,10 +121,11 @@ class DashboardController extends AbstractDashboardController
         ])->setPermission('ROLE_SUPER_ADMIN');
 
         yield MenuItem::subMenu('Постачальники', 'fa fa-truck')->setSubItems([
-            MenuItem::linkToCrud('Постачальники', 'fas fa-truck', Supplier::class),
-            MenuItem::linkToCrud('Замовлення', 'fa fa-shopping-cart', SupplierOrder::class),
-            MenuItem::linkToCrud('Склади', 'fa fa-archive', Warehouse::class)
-        ])->setPermission('ROLE_ADMIN');
+            MenuItem::linkToCrud('Постачальники', 'fas fa-truck', Supplier::class)->setPermission('ROLE_ADMIN'),
+//            MenuItem::linkToCrud('Замовлення', 'fa fa-shopping-cart', SupplierOrder::class),
+            MenuItem::linkToCrud('Наявність', 'fas fa-layer-group', InStock::class),
+            MenuItem::linkToCrud('Склади', 'fa fa-archive', Warehouse::class)->setPermission('ROLE_ADMIN')
+        ]);
 
         yield MenuItem::subMenu('Налаштування', 'fa fa-cog')->setSubItems([
             MenuItem::linkToCrud('Валюти', 'fas fa-comment', Currency::class),

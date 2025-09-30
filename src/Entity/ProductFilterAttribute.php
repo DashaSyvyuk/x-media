@@ -78,4 +78,10 @@ class ProductFilterAttribute
     {
         $this->filterAttribute = $filterAttribute;
     }
+
+    public function __toString(): string
+    {
+        return $this->getFilter()->getTitle() . ': ' . $this->getFilterAttribute()->getValue();
+    }
+
 }
