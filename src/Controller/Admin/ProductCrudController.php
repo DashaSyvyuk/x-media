@@ -157,6 +157,27 @@ class ProductCrudController extends AbstractCrudController
             ->onlyOnForms();
 
         yield FormField::addPanel('Характеристики');
+        yield AssociationField::new('characteristics')
+            ->onlyOnDetail()
+            ->setLabel(false)
+            ->setSortable(false)
+            ->formatValue(function ($value, ?object $entity) {
+                if (!$entity || !method_exists($entity, 'getCharacteristics')) {
+                    return $value ?? '—';
+                }
+
+                $collection = $entity->getCharacteristics();
+                if (!$collection || $collection->count() === 0) {
+                    return '—';
+                }
+
+                $items = [];
+                foreach ($collection as $ch) {
+                    $items[] = (string) $ch;
+                }
+
+                return implode('<br>• ', $items);
+            });
         yield CollectionField::new('characteristics')
             ->setColumns(12)
             ->setEntryType(ProductCharacteristicType::class)
@@ -164,6 +185,26 @@ class ProductCrudController extends AbstractCrudController
             ->onlyOnForms();
 
         yield FormField::addPanel('Фільтри');
+        yield AssociationField::new('filterAttributes')
+            ->onlyOnDetail()
+            ->setLabel(false)
+            ->setSortable(false)
+            ->formatValue(function ($value, ?object $entity) {
+                if (!$entity || !method_exists($entity, 'getFilterAttributes')) {
+                    return '—';
+                }
+
+                $rows = $entity->getFilterAttributes()->toArray();
+
+                usort($rows, static fn($a, $b) => strcmp((string)$a, (string)$b));
+
+                if (!$rows) {
+                    return '—';
+                }
+
+                $items = array_map(static fn($fa) => (string)$fa, $rows);
+                return implode(' <br>• ', $items);
+            });
         yield CollectionField::new('filterAttributes')
             ->setColumns(12)
             ->setEntryType(ProductFilterAttributeType::class)
