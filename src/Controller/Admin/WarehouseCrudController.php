@@ -50,6 +50,7 @@ class WarehouseCrudController extends AbstractCrudController
         yield BooleanField::new('active', 'Активний')->setColumns(7);
         yield IntegerField::new('stockQtySum', 'Кількість продуктів')
             ->setVirtual(true)
+            ->onlyOnDetail()
             ->formatValue(function ($value, ?object $entity) {
                 if (!$entity instanceof Warehouse) {
                     return '—';
