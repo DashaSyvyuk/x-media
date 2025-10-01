@@ -55,8 +55,21 @@ class InStockCrudController extends AbstractCrudController
         yield AssociationField::new('warehouse', 'Склад')
             ->onlyOnIndex()
             ->setCrudController(WarehouseCrudController::class)
-            ->setSortable('warehouse.city')
-            ->formatValue(fn($v, ?object $e) => $e?->getWarehouse()?->getCity() ?? '—');
+            ->formatValue(function ($v, ?object $e) {
+                $w = $e?->getWarehouse();
+                if (!$w) {
+                    return '—';
+                }
+
+                $city  = trim((string) ($w->getCity()  ?? ''));
+                $title = trim((string) ($w->getTitle() ?? ''));
+
+                if ($city === '' && $title === '') return '—';
+                if ($city === '')  return $title;
+                if ($title === '') return $city;
+
+                return $city . ' (' . $title . ')';
+            });
 
         yield IntegerField::new('quantity', 'Кількість')
             ->setColumns(7)
