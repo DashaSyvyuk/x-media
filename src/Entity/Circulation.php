@@ -55,6 +55,12 @@ class Circulation
      */
     public DateTime $updatedAt;
 
+    /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private bool $active = true;
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
