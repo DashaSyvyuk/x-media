@@ -33,6 +33,7 @@ class CommentCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        ini_set('memory_limit', '512M');
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('author', 'Автор');
         yield TextField::new('email','Email');

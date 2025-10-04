@@ -81,7 +81,6 @@ class InStockCrudController extends AbstractCrudController
             ->setThousandsSeparator(' ');
 
         yield TextareaField::new('note', 'Нотатка')
-            ->hideOnIndex()
             ->setColumns(12);
     }
 }
