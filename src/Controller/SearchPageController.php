@@ -30,6 +30,7 @@ class SearchPageController extends BaseController
         private readonly ProductFilterAttributeRepository $productFilterAttributeRepository,
     ) {
         parent::__construct($this->categoryRepository, $this->settingRepository, $this->productRepository);
+        ini_set('memory_limit', '512M');
     }
 
     /**
