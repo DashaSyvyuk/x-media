@@ -117,10 +117,11 @@ OrderCrudController extends AbstractCrudController
             ->allowMultipleChoices()
             ->renderExpanded()
             ->renderAsBadges([
-                Order::LABEL_XMEDIA => 'success',
-                Order::LABEL_PROM   => 'info',
-                Order::LABEL_OLX    => 'primary',
-                Order::LABEL_JONNY  => 'warning'
+                Order::LABEL_XMEDIA     => 'success',
+                Order::LABEL_PROM       => 'info',
+                Order::LABEL_OLX        => 'primary',
+                Order::LABEL_JONNY      => 'warning',
+                Order::LABEL_ROZETKA    => 'success'
             ])
             ->setColumns(7);
 
