@@ -110,11 +110,13 @@ class Order
     const LABEL_PROM = 'prom';
     const LABEL_OLX = 'olx';
     const LABEL_JONNY = 'Jonny';
+    const LABEL_ROZETKA = 'Rozetka';
     const LABELS = [
-        self::LABEL_XMEDIA => self::LABEL_XMEDIA,
-        self::LABEL_PROM   => self::LABEL_PROM,
-        self::LABEL_OLX    => self::LABEL_OLX,
-        self::LABEL_JONNY  => self::LABEL_JONNY,
+        self::LABEL_XMEDIA  => self::LABEL_XMEDIA,
+        self::LABEL_PROM    => self::LABEL_PROM,
+        self::LABEL_OLX     => self::LABEL_OLX,
+        self::LABEL_JONNY   => self::LABEL_JONNY,
+        self::LABEL_ROZETKA => self::LABEL_ROZETKA,
     ];
 
     /**
