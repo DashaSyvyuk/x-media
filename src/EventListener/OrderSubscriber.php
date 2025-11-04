@@ -9,27 +9,22 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Exception;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Twig\Environment;
 
 #[AsEntityListener(event: Events::preUpdate, method: 'preUpdate', entity: Order::class)]
 class OrderSubscriber
 {
     public function __construct(
         private readonly MailerInterface $mailer,
-        private readonly ContainerInterface $container,
-        private readonly SettingRepository $settingRepository
-    )
-    {
+        private readonly SettingRepository $settingRepository,
+        private readonly Environment $twig,
+    ) {
     }
 
     /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      * @throws TransportExceptionInterface
      * @throws Exception
      */
@@ -47,7 +42,8 @@ class OrderSubscriber
                         ->from('x-media@x-media.com.ua')
                         ->to($order->getEmail())
                         ->html(
-                            $this->renderView(
+                            $this->twig->render(
+                                'emails/client-orders-delivery.html.twig',
                                 [
                                     'name' => $order->getName(),
                                     'orderNumber' => $order->getOrderNumber(),
@@ -65,18 +61,5 @@ class OrderSubscriber
                 }
             }
         }
-    }
-
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    private function renderView(array $parameters)
-    {
-        if (!$this->container->has('twig')) {
-            throw new \LogicException('You cannot use the "renderView" method if the Twig Bundle is not available. Try running "composer require symfony/twig-bundle".');
-        }
-
-        return $this->container->get('twig')->render('emails/client-orders-delivery.html.twig', $parameters);
     }
 }
