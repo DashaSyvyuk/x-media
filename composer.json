@@ -101,7 +101,7 @@
     "scripts": {
         "auto-scripts": {
             "cache:warmup --no-optional-warmers": "symfony-cmd",
-            "cache:clear": "symfony-cmd",
+            "cache:clear --no-warmup --no-optional-warmers": "symfony-cmd",
             "ckeditor:install --clear=drop": "symfony-cmd",
             "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
