@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SyncNovaPoshtaDataCommand extends Command
 {
     protected static $defaultName = 'app:sync-nova-poshta';
+
     private SyncNovaPoshtaService $syncNovaPoshtaService;
 
     public function __construct(
@@ -22,6 +23,7 @@ class SyncNovaPoshtaDataCommand extends Command
     protected function configure(): void
     {
         $this
+            ->setName('app:sync-novaposhta')
             ->setDescription('Syncs data from Nova Poshta')
             ->setHelp('This command allows you to sync Nova Poshta data...');
     }
