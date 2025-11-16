@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-class OrderStatus extends Constraint
+#[\Attribute] class OrderStatus extends Constraint
 {
     public string $message = '';
 

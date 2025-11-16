@@ -7,70 +7,45 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table("supplier_orders")
- * @ORM\Entity(repositoryClass="App\Repository\SupplierOrderRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("supplier_orders")]
+#[ORM\Entity(repositoryClass: "App\Repository\SupplierOrderRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class SupplierOrder
 {
     use DateStorageTrait;
 
-    /**
-     * @var int
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @var string|null
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $orderNumber = null;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Supplier")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Supplier")]
     private Supplier $supplier;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: "datetime", nullable: true)]
     private ?DateTime $dateTime = null;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: "datetime", nullable: true)]
     private ?DateTime $expectedDate = null;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $status = true;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\AdminUser")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\AdminUser")]
     private AdminUser $adminUser;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SupplierOrderProduct",
-     *     mappedBy="supplierOrder", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
-     */
+    #[ORM\OneToMany(mappedBy: "supplierOrder", targetEntity: "App\Entity\SupplierOrderProduct", cascade: ["all"], fetch: "EAGER", orphanRemoval: true)]
     private $products;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function __construct()

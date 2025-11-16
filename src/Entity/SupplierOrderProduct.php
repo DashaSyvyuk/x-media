@@ -6,53 +6,36 @@ use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table("supplier_order_product")
- * @ORM\Entity(repositoryClass="App\Repository\SupplierOrderProductRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("supplier_order_product")]
+#[ORM\Entity(repositoryClass: "App\Repository\SupplierOrderProductRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class SupplierOrderProduct
 {
     use DateStorageTrait;
 
-    /**
-     * @var int
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\SupplierOrder")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\SupplierOrder")]
     private SupplierOrder $supplierOrder;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\SupplierProduct")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\SupplierProduct")]
     private SupplierProduct $product;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: "integer")]
     private int $quantity = 0;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: "integer")]
     private int $price = 0;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     /**

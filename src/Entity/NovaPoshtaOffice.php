@@ -5,51 +5,36 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("nova_poshta_office", indexes={
- *     @Index(columns={"title"}),
- *     @Index(columns={"ref"}),
- *     @Index(columns={"created_at"}),
- * })
- * @ORM\Entity(repositoryClass="App\Repository\NovaPoshtaOfficeRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("nova_poshta_office", indexes: [
+    new ORM\Index(columns: ["title"]),
+    new ORM\Index(columns: ["ref"]),
+    new ORM\Index(columns: ["created_at"]),
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\NovaPoshtaOfficeRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class NovaPoshtaOffice
 {
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $ref = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title = "";
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NovaPoshtaCity")
-     */
+    #[ORM\ManyToOne(targetEntity: "NovaPoshtaCity")]
     private $city;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $updatedAt;
 
     public function getId(): int

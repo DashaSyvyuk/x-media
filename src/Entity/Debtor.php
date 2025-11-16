@@ -7,54 +7,37 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table("debtors")
- * @ORM\Entity(repositoryClass="App\Repository\DebtorRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("debtors")]
+#[ORM\Entity(repositoryClass: "App\Repository\DebtorRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class Debtor
 {
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private ?int $id = 0;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $name = "";
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Currency")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Currency")]
     private Currency $currency;
 
-    /**
-     * @ORM\OneToMany(targetEntity="DebtorPayment", mappedBy="debtor", cascade={"all"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: "debtor", targetEntity: "DebtorPayment", cascade: ["all"], orphanRemoval: true)]
     private $payments;
 
     public ?string $total = '';
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $active = true;
 
     public function __construct()

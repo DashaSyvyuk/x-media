@@ -6,72 +6,45 @@ use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("filters", indexes={
- *     @Index(columns={"title"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\FilterRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("filters", indexes: [
+    new ORM\Index(columns: ["title"])
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\FilterRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class Filter
 {
     use DateStorageTrait;
 
-    /**
-     * @var int
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title = "";
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\FilterAttribute",
-     *     mappedBy="filter", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
-     * @ORM\OrderBy({"priority" = "ASC"})
-     */
+    #[ORM\OneToMany(mappedBy: "filter", targetEntity: "App\Entity\FilterAttribute", cascade: ["all"], fetch: "EAGER", orphanRemoval: true)]
+    #[ORM\OrderBy(["priority" => "ASC"])]
     private $attributes;
 
-    /**
-     * @var int|null
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: "integer", nullable: true)]
     private ?int $priority = 0;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $isOpened = true;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Category")]
     private Category $category;
 
-    /**
-     * @var int
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: "integer")]
     private int $openedCount = 0;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function __construct()

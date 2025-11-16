@@ -5,15 +5,12 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("feed", indexes={
- *     @Index(columns={"type"}),
- * })
- * @ORM\Entity(repositoryClass="App\Repository\FeedRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("feed", indexes: [
+    new ORM\Index(columns: ["type"]),
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\FeedRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class Feed
 {
     use DateStorageTrait;
@@ -30,46 +27,30 @@ class Feed
         'E-Katalog' => self::FEED_EKATALOG,
     ];
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $type = "";
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $cutCharacteristics = false;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $ignoreBrands = "";
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: "integer")]
     private int $ourPercent = 0;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: "integer")]
     private int $fee = 0;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function getId(): int

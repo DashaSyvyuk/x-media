@@ -7,53 +7,37 @@ use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("product_characteristic", indexes={
- *     @Index(columns={"product_id", "position"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\ProductCharacteristicRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table('product_characteristic', indexes: [
+    new ORM\Index(columns: ["product_id", "position"])
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\ProductCharacteristicRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class ProductCharacteristic
 {
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned"=>true])]
     private ?int $id = 0;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title = "";
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: "text")]
     private string $value = "";
 
-    /**
-     * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=true)
-     */
+    #[ORM\Column(type: "integer", nullable: true, options: ["unsigned" => true])]
     private ?int $position = 0;
 
-    /**
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="characteristics")
-     */
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Product", inversedBy: "characteristics")]
     private Product $product;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $updatedAt;
 
     public function getId(): ?int

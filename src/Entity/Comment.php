@@ -5,16 +5,13 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("comment", indexes={
- *     @Index(columns={"email"}),
- *     @Index(columns={"created_at"}),
- * })
- * @ORM\Entity()
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("comment", indexes: [
+    new ORM\Index(columns: ["email"]),
+    new ORM\Index(columns: ["created_at"]),
+])]
+#[ORM\Entity()]
+#[ORM\HasLifecycleCallbacks()]
 class Comment
 {
     use DateStorageTrait;
@@ -29,58 +26,38 @@ class Comment
         'Заблокований'  => self::STATUS_DISABLED,
     ];
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $author = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $status = "";
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $email = "";
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: "text")]
     private string $comment = "";
 
-    /**
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @ORM\ManyToOne(targetEntity="Product", inversedBy="comments")
-     */
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: "Product", inversedBy: "comments")]
     private Product $product;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $answer;
 
-    /**
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
-     * @ORM\OneToOne(targetEntity="App\Entity\ProductRating")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
+    #[ORM\OneToOne(targetEntity: "App\Entity\ProductRating")]
     private ?ProductRating $productRating;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function getId(): int

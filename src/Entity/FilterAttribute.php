@@ -5,54 +5,35 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("filter_attributes", indexes={
- *     @Index(columns={"value"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\FilterAttributeRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("filter_attributes", indexes: [
+    new ORM\Index(columns: ["value"])
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\FilterAttributeRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class FilterAttribute
 {
     use DateStorageTrait;
 
-    /**
-     * @var int
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private $id;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private $value = "";
 
-    /**
-     * @var Filter
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Filter", inversedBy="attributes")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Filter", inversedBy: "attributes")]
     private $filter;
 
-    /**
-     * @var int|null
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: "integer", nullable: true)]
     private ?int $priority = 0;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     /**

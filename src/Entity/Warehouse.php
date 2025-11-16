@@ -5,72 +5,45 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("warehouses", indexes={
- *     @Index(columns={"title"}),
- *     @Index(columns={"city"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\WarehouseRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("warehouses", indexes: [
+    new ORM\Index(columns: ["title"]),
+    new ORM\Index(columns: ["city"])
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\WarehouseRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class Warehouse
 {
     use DateStorageTrait;
 
-    /**
-     * @var int
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title = "";
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\AdminUser")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\AdminUser")]
     private AdminUser $adminUser;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $address = "";
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $city = "";
 
-    /**
-     * @var string|null
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $notes = "";
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $active = true;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     /**

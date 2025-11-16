@@ -6,56 +6,35 @@ use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table("rozetka_characteristics_values")
- * @ORM\Entity(repositoryClass="App\Repository\RozetkaCharacteristicsValueRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("rozetka_characteristics_values")]
+#[ORM\Entity(repositoryClass: "App\Repository\RozetkaCharacteristicsValueRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class RozetkaCharacteristicsValue
 {
     use DateStorageTrait;
 
-    /**
-     * @var int
-     * @ORM\Id()
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id()]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @var RozetkaCharacteristics
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true, name="characteristic_id", referencedColumnName="rozetka_id")
-     * @ORM\ManyToOne(targetEntity="RozetkaCharacteristics", inversedBy="values")
-     */
+    #[ORM\JoinColumn(name: "characteristic_id", referencedColumnName: "rozetka_id", nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "RozetkaCharacteristics", inversedBy: "values")]
     private RozetkaCharacteristics $characteristic;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $rozetkaId = "";
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title = "";
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $active = true;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     /**

@@ -5,59 +5,43 @@ namespace App\Entity;
 use \DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
-/**
- * @ORM\Table("product_image", indexes={
- *     @Index(columns={"product_id", "position"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\ProductImageRepository")
- * @Vich\Uploadable()
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table('product_image', indexes: [
+    new ORM\Index(columns: ["product_id", "position"])
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\ProductImageRepository")]
+#[ORM\HasLifecycleCallbacks()]
+#[Vich\Uploadable]
 class ProductImage
 {
     use DateStorageTrait;
 
     const SERVER_PATH_TO_IMAGE_FOLDER = '../public/images/products';
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: "text")]
     private $imageUrl;
 
-    /**
-     * @Vich\UploadableField(mapping="images", fileNameProperty="imageUrl")
-     */
-    private $file;
+    #[Vich\UploadableField(mapping: "images", fileNameProperty: "imageUrl")]
+    private ?File $file = null;
 
-    /**
-     * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=true)
-     */
+    #[ORM\Column(type: "integer", nullable: true, options: ["unsigned"=>true])]
     private ?int $position = 0;
 
-    /**
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="images")
-     */
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Product", inversedBy: "images")]
     private Product $product;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $updatedAt;
 
     public function __construct()

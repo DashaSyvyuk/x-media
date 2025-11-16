@@ -4,54 +4,49 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("product_rozetka_characteristic_value", indexes={
- *     @Index(columns={"rozetka_product_id", "characteristic_id"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\ProductRozetkaCharacteristicValueRepository")
- */
+#[ORM\Table("product_rozetka_characteristic_value", indexes: [
+    new ORM\Index(columns: ["rozetka_product_id", "characteristic_id"])
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\ProductRozetkaCharacteristicValueRepository")]
 class ProductRozetkaCharacteristicValue
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private ?int $id = 0;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=RozetkaProduct::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: RozetkaProduct::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private $rozetkaProduct;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=RozetkaCharacteristics::class)
-     * @ORM\JoinColumn(nullable=false, referencedColumnName="rozetka_id")
-     */
+    #[ORM\ManyToOne(targetEntity: RozetkaCharacteristics::class)]
+    #[ORM\JoinColumn(referencedColumnName: "rozetka_id", nullable: false)]
     private $characteristic;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=RozetkaCharacteristicsValue::class)
-     * @ORM\JoinColumn(nullable=true)
-     */
+    #[ORM\ManyToOne(targetEntity: RozetkaCharacteristicsValue::class)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?RozetkaCharacteristicsValue $value = null;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\RozetkaCharacteristicsValue")
-     * @ORM\JoinTable(name="product_rozetka_characteristic_value_value",
-     *      joinColumns={@ORM\JoinColumn(name="product_rozetka_characteristic_value_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="rozetka_characteristic_value_id", referencedColumnName="id")}
-     * )
-     */
+    #[ORM\ManyToMany(targetEntity: RozetkaCharacteristicsValue::class)]
+    #[ORM\JoinTable(
+        name: 'product_rozetka_characteristic_value_value',
+        joinColumns: [
+            new ORM\JoinColumn(
+                name: 'product_rozetka_characteristic_value_id',
+                referencedColumnName: 'id'
+            )
+        ],
+        inverseJoinColumns: [
+            new ORM\JoinColumn(
+                name: 'rozetka_characteristic_value_id',
+                referencedColumnName: 'id'
+            )
+        ]
+    )]
     private $values;
 
-    /**
-     * @var string|null
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $stringValue = "";
 
     public function __construct()

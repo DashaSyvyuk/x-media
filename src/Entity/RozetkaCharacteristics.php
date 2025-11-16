@@ -6,85 +6,58 @@ use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("characteristics_rozetka", indexes={
- *     @Index(columns={"title"}),
- *     @Index(columns={"rozetka_id"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\RozetkaCharacteristicsRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("characteristics_rozetka", indexes: [
+    new ORM\Index(columns: ["title"]),
+    new ORM\Index(columns: ["rozetka_id"])
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\RozetkaCharacteristicsRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class RozetkaCharacteristics
 {
     use DateStorageTrait;
 
-    /**
-     * @var int
-     * @ORM\Id()
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id()]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $rozetkaId = 0;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Category")
-     * @ORM\JoinTable(name="rozetka_characteristic_category",
-     *      joinColumns={@ORM\JoinColumn(name="rozetka_characteristic_id", referencedColumnName="rozetka_id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id")}
-     * )
-     */
+    #[ORM\ManyToMany(targetEntity: "App\Entity\Category")]
+    #[ORM\JoinTable(
+        name: "rozetka_characteristic_category",
+        joinColumns: [
+            new ORM\JoinColumn(name: "rozetka_characteristic_id", referencedColumnName: "rozetka_id")
+        ],
+        inverseJoinColumns: [
+            new ORM\JoinColumn(name: "category_id", referencedColumnName: "id")
+        ]
+    )]
     private $categories;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title = "";
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $type = "";
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $filterType = true;
 
-    /**
-     * @var string|null
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private ?string $unit = "";
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $endToEndParameter = true;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $active = true;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RozetkaCharacteristicsValue", mappedBy="characteristic", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
-     */
+    #[ORM\OneToMany(mappedBy: "characteristic", targetEntity: "App\Entity\RozetkaCharacteristicsValue", cascade: ["all"], fetch: "EAGER", orphanRemoval: true)]
     private $values;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function __construct()

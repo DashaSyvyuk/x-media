@@ -5,49 +5,34 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\SettingRepository")
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="setting", indexes={
- *     @Index(columns={"title"}),
- * })
- */
+#[ORM\Entity(repositoryClass: "App\Repository\SettingRepository")]
+#[ORM\HasLifecycleCallbacks()]
+#[ORM\Table(name: "setting", indexes: [
+    new ORM\Index(columns: ["title"]),
+])]
 class Setting
 {
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $slug;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $value;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $updatedAt;
 
     public function getId(): int

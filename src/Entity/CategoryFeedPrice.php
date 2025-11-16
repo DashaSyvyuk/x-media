@@ -6,52 +6,36 @@ use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table("category_feed_price")
- * @ORM\Entity(repositoryClass="App\Repository\CategoryFeedPriceRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("category_feed_price")]
+#[ORM\Entity(repositoryClass: "App\Repository\CategoryFeedPriceRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class CategoryFeedPrice
 {
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     * @ORM\ManyToOne(targetEntity="Category")
-     */
+    #[ORM\JoinColumn(onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: "Category")]
     private Category $category;
 
-    /**
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     * @ORM\ManyToOne(targetEntity="Feed")
-     */
+    #[ORM\JoinColumn(onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: "Feed")]
     private Feed $feed;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: "integer")]
     private int $ourPercent = 0;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: "integer")]
     private int $fee = 0;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function getId(): int

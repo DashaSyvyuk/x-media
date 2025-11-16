@@ -7,11 +7,9 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table("promotions")
- * @ORM\Entity(repositoryClass="App\Repository\PromotionRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("promotions")]
+#[ORM\Entity(repositoryClass: "App\Repository\PromotionRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class Promotion
 {
     use DateStorageTrait;
@@ -24,56 +22,36 @@ class Promotion
         self::BLOCKED => 'Заблокована',
     ];
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id = 0;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $slug = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $description = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $status = "";
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $activeFrom;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $activeTo;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PromotionProduct", mappedBy="promotion", cascade={"all"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: "promotion", targetEntity: "App\Entity\PromotionProduct", cascade: ["all"], orphanRemoval: true)]
     private $products;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function __construct()

@@ -10,16 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table("product", indexes={
- *     @Index(columns={"status"}),
- *     @Index(columns={"title"}),
- *     @Index(columns={"created_at"}),
- *     @Index(columns={"updated_at"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table('product', indexes: [
+    new ORM\Index(columns: ['status']),
+    new ORM\Index(columns: ['title']),
+    new ORM\Index(columns: ['created_at']),
+    new ORM\Index(columns: ['updated_at'])
+])]
+#[ORM\Entity(repositoryClass: 'App\Repository\ProductRepository')]
+#[ORM\HasLifecycleCallbacks()]
 class Product
 {
     const STATUS_ACTIVE = 'Активний';
@@ -43,126 +41,80 @@ class Product
 
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private string $status = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private string $availability = "";
 
-    /**
-     * @ORM\Column(type="integer")
-     * @Assert\GreaterThanOrEqual(value="1", message="Too low value")
-     */
+    #[ORM\Column(type: 'integer')]
+    #[Assert\GreaterThanOrEqual(value: '1', message: 'Too low value')]
     private int $price = 0;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Assert\GreaterThan(propertyPath="price", message="Too low value")
-     */
+    #[ORM\Column(type: "integer", nullable: true)]
+    #[Assert\GreaterThan(propertyPath: "price", message: "Too low value")]
     private ?int $crossedOutPrice = 0;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private ?string $title = "";
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: "text")]
     private ?string $description = "";
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $note = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private ?string $metaKeyword = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private ?string $metaDescription = "";
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "Category", inversedBy: "products")]
     private ?Category $category = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ProductImage", mappedBy="product", cascade={"all"}, orphanRemoval=true)
-     * @ORM\OrderBy({"position" = "ASC"})
-     */
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: "ProductImage", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OrderBy(["position" => "ASC"])]
     private $images;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ProductCharacteristic", mappedBy="product", cascade={"all"}, orphanRemoval=true)
-     * @ORM\OrderBy({"position" = "ASC"})
-     */
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: "ProductCharacteristic", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OrderBy(["position" => "ASC"])]
     private $characteristics;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ProductFilterAttribute", mappedBy="product", cascade={"all"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: "ProductFilterAttribute", cascade: ["all"], orphanRemoval: true)]
     private $filterAttributes;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\RozetkaProduct", mappedBy="product", cascade={"remove"}, orphanRemoval=true)
-     */
+    #[ORM\OneToOne(mappedBy: "product", targetEntity: "App\Entity\RozetkaProduct", cascade: ["remove"], orphanRemoval: true)]
     private $rozetka;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="product", cascade={"all"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: "Comment", cascade: ["all"], orphanRemoval: true)]
     private $comments;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ProductRating", mappedBy="product", cascade={"all"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: "ProductRating", cascade: ["all"], orphanRemoval: true)]
     private $ratings;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PromotionProduct", mappedBy="product", cascade={"all"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: "App\Entity\PromotionProduct", cascade: ["all"], orphanRemoval: true)]
     private $promotionProducts;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $productCode = "";
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $productCode2 = "";
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $olx;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function __construct()

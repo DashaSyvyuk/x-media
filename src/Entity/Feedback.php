@@ -5,16 +5,13 @@ namespace App\Entity;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("feedback", indexes={
- *     @Index(columns={"email"}),
- *     @Index(columns={"created_at"}),
- * })
- * @ORM\Entity(repositoryClass="App\Repository\FeedbackRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("feedback", indexes: [
+    new ORM\Index(columns: ["email"]),
+    new ORM\Index(columns: ["created_at"]),
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\FeedbackRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class Feedback
 {
     use DateStorageTrait;
@@ -29,46 +26,30 @@ class Feedback
         'Заблокований'  => self::STATUS_DISABLED,
     ];
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $author = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $status = "";
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $email = "";
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: "text")]
     private string $comment = "";
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $answer;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function getId(): int

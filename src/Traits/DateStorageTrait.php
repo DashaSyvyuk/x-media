@@ -11,9 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 trait DateStorageTrait
 {
-    /**
-     * @ORM\PrePersist()
-     */
+    #[ORM\PrePersist]
     public function onPrePersist(): void
     {
         //using Doctrine DateTime here
@@ -53,9 +51,7 @@ trait DateStorageTrait
         }
     }
 
-    /**
-     * @ORM\PreUpdate()
-     */
+    #[ORM\PreUpdate]
     public function onPreUpdate(): void
     {
         //using Doctrine DateTime here

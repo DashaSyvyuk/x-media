@@ -6,19 +6,16 @@ use \DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("category", indexes={
- *     @Index(columns={"title"}),
- *     @Index(columns={"status"}),
- *     @Index(columns={"position"}),
- *     @Index(columns={"created_at"}),
- *     @Index(columns={"updated_at"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table('category', indexes: [
+    new ORM\Index(columns: ['title']),
+    new ORM\Index(columns: ['status']),
+    new ORM\Index(columns: ['position']),
+    new ORM\Index(columns: ['created_at']),
+    new ORM\Index(columns: ['updated_at'])
+ ])]
+#[ORM\Entity(repositoryClass: "App\Repository\CategoryRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class Category
 {
     use DateStorageTrait;
@@ -31,112 +28,70 @@ class Category
         'Заблокований' => self::DISABLED
     ];
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
     private int $id;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="Category")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: 'Category')]
     private ?Category $parent = null;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private string $title = "";
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $image = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private ?string $metaKeyword = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private ?string $metaDescription = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private string $slug = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private string $status = '';
 
-    /**
-     * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $position = 0;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $showInHeader = false;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $hotlineCategory = '';
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $rozetkaCategory = '';
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $promCategoryLink = '';
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $showInEkatalogFeed = true;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $showInPromFeed = true;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $showInRozetkaFeed = true;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $showInHotlineFeed = true;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
-     */
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: 'App\Entity\Product', cascade: ['all'], fetch: 'EAGER', orphanRemoval: true)]
     private $products;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CategoryFeedPrice", mappedBy="category", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
-     */
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: 'App\Entity\CategoryFeedPrice', cascade: ['all'], fetch: 'EAGER', orphanRemoval: true)]
     private $feedPrices;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     public DateTime $updatedAt;
 
     public function __construct()

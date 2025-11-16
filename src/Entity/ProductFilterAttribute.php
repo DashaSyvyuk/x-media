@@ -5,38 +5,28 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("product_filter_attribute", indexes={
- *     @Index(columns={"product_id", "filter_id", "filter_attribute_id"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\ProductFilterAttributeRepository")
- */
+#[ORM\Table("product_filter_attribute", indexes: [
+    new ORM\Index(columns: ["product_id", "filter_id", "filter_attribute_id"])
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\ProductFilterAttributeRepository")]
 class ProductFilterAttribute
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private ?int $id = 0;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="filterAttributes")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "filterAttributes")]
+    #[ORM\JoinColumn(nullable: false)]
     private $product;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Filter::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Filter::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private $filter;
 
-    /**
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @ORM\ManyToOne(targetEntity=FilterAttribute::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: FilterAttribute::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private $filterAttribute;
 
     public function getId(): int

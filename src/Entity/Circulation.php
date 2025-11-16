@@ -8,57 +8,40 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table("circulations")
- * @ORM\Entity(repositoryClass="App\Repository\CirculationRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("circulations")]
+#[ORM\Entity(repositoryClass: "App\Repository\CirculationRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class Circulation
 {
     use DateStorageTrait;
 
     private bool $showAllPayments = false;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private ?int $id = 0;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\AdminUser")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\AdminUser")]
     private ?AdminUser $adminUser = null;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Currency")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Currency")]
     private Currency $currency;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CirculationPayment", mappedBy="circulation", cascade={"all"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: "circulation", targetEntity: "App\Entity\CirculationPayment", cascade: ["all"], orphanRemoval: true)]
     private $payments;
 
     public ?string $total = '';
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $active = true;
 
     public function __construct()

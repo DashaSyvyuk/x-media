@@ -6,52 +6,36 @@ use \DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table("order_item")
- * @ORM\Entity(repositoryClass="App\Repository\OrderItemRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("order_item")]
+#[ORM\Entity(repositoryClass: "App\Repository\OrderItemRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class OrderItem
 {
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $count = 0;
 
-    /**
-     * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=true)
-     */
+    #[ORM\Column(type: "integer", nullable: true, options: ["unsigned" => true])]
     private ?int $price = 0;
 
-    /**
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product")
-     */
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Product")]
     private Product $product;
 
-    /**
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="items")
-     */
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Order", inversedBy: "items")]
     private Order $order;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $updatedAt;
 
     public function getId(): int

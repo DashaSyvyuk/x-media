@@ -5,18 +5,15 @@ namespace App\Entity;
 use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table("return_product", indexes={
- *     @Index(columns={"status"}),
- *     @Index(columns={"created_at"}),
- *     @Index(columns={"updated_at"})
- * })
- * @ORM\Entity(repositoryClass="App\Repository\ReturnProductRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("return_product", indexes: [
+    new ORM\Index(columns: ["status"]),
+    new ORM\Index(columns: ["created_at"]),
+    new ORM\Index(columns: ["updated_at"])
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\ReturnProductRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class ReturnProduct
 {
     const STATUS_NEW = 'new';
@@ -33,74 +30,48 @@ class ReturnProduct
 
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $status = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $name = "";
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $surname = null;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $phone = "";
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $email = null;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $ttn = null;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="Supplier")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "Supplier")]
     private Supplier $supplier;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="Product")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "Product")]
     private Product $product;
 
-    /**
-     * @ORM\Column(type="integer")
-     * @Assert\GreaterThanOrEqual(value="1", message="Too low value")
-     */
+    #[ORM\Column(type: "integer")]
+    #[Assert\GreaterThanOrEqual(value: "1", message: "Too low value")]
     private int $amount = 0;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $reason = "";
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function getId(): int

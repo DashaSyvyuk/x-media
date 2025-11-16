@@ -8,23 +8,20 @@ use App\Validator\OrderStatus;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table("orders", indexes={
- *     @Index(columns={"order_number"}),
- *     @Index(columns={"surname"}),
- *     @Index(columns={"phone"}),
- *     @Index(columns={"email"}),
- *     @Index(columns={"status"}),
- *     @Index(columns={"created_at"}),
- * })
- * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
- * @ORM\HasLifecycleCallbacks()
- * @OrderStatus()
- * @OrderAddress()
- */
+#[ORM\Table("orders", indexes: [
+    new ORM\Index(columns: ["order_number"]),
+    new ORM\Index(columns: ["surname"]),
+    new ORM\Index(columns: ["phone"]),
+    new ORM\Index(columns: ["email"]),
+    new ORM\Index(columns: ["status"]),
+    new ORM\Index(columns: ["created_at"]),
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\OrderRepository")]
+#[ORM\HasLifecycleCallbacks]
+#[OrderStatus]
+#[OrderAddress]
 class Order
 {
     use DateStorageTrait;
@@ -119,130 +116,84 @@ class Order
         self::LABEL_ROZETKA => self::LABEL_ROZETKA,
     ];
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private ?int $id = 0;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $orderNumber = "";
 
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Поле обов'язкове")
-     */
+    #[ORM\Column(type: "string")]
+    #[Assert\NotBlank(message: "Поле обов'язкове")]
     private string $name = "";
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank(message="Поле обов'язкове")
-     */
+    #[ORM\Column(type: "string", nullable: true)]
+    #[Assert\NotBlank(message: "Поле обов'язкове")]
     private ?string $surname = "";
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $address = "";
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\NovaPoshtaCity")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\NovaPoshtaCity")]
     private ?NovaPoshtaCity $novaPoshtaCity = null;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\NovaPoshtaOffice")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\NovaPoshtaOffice")]
     private ?NovaPoshtaOffice $novaPoshtaOffice = null;
 
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Поле обов'язкове")
-     */
+    #[ORM\Column(type: "string")]
+    #[Assert\NotBlank(message: "Поле обов'язкове")]
     private string $phone = "";
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\Email(message="Неправильний формат")
-     */
+    #[ORM\Column(type: "string", nullable: true)]
+    #[Assert\Email(message: "Неправильний формат")]
     private ?string $email = null;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\PaymentType")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\PaymentType")]
     private ?PaymentType $paytype;
 
-    /**
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\DeliveryType")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\DeliveryType")]
     private ?DeliveryType $deltype;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $status = "";
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $paymentStatus;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $ttn = "";
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $comment = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $source = 'User Side';
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: "integer")]
     private int $total = 0;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\OrderItem", mappedBy="order", cascade={"all"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: "order", targetEntity: "App\Entity\OrderItem", cascade: ["all"], orphanRemoval: true)]
     private $items;
 
-    /**
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     */
+    #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\User")]
     private ?User $user;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $sendNotification = false;
 
-    /**
-     * @ORM\Column(type="simple_array", nullable=true)
-     */
+    #[ORM\Column(type: "simple_array", nullable: true)]
     private ?array $labels = [];
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function __construct()

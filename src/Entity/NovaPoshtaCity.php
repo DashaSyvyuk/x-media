@@ -6,51 +6,36 @@ use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("nova_poshta_city", indexes={
- *     @Index(columns={"title"}),
- *     @Index(columns={"ref"}),
- *     @Index(columns={"created_at"}),
- * })
- * @ORM\Entity(repositoryClass="App\Repository\NovaPoshtaCityRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("nova_poshta_city", indexes: [
+    new ORM\Index(columns: ["title"]),
+    new ORM\Index(columns: ["ref"]),
+    new ORM\Index(columns: ["created_at"]),
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\NovaPoshtaCityRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class NovaPoshtaCity
 {
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $ref = "";
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title = "";
 
-    /**
-     * @ORM\OneToMany(targetEntity="NovaPoshtaOffice", mappedBy="city", cascade={"all"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: "city", targetEntity: "NovaPoshtaOffice", cascade: ["all"], orphanRemoval: true)]
     private $offices;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $updatedAt;
 
     public function __construct()

@@ -8,109 +8,69 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table("rozetka_product")
- * @ORM\Entity(repositoryClass="App\Repository\RozetkaProductRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("rozetka_product")]
+#[ORM\Entity(repositoryClass: "App\Repository\RozetkaProductRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class RozetkaProduct
 {
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title = "";
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: "integer")]
     private int $stockQuantity = 0;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $series = "";
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: "text")]
     private string $description = "";
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Assert\GreaterThanOrEqual(value="1", message="Too low value")
-     */
+    #[ORM\Column(type: "integer", nullable: true)]
+    #[Assert\GreaterThanOrEqual(value: "1", message: "Too low value")]
     private ?int $price = 0;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Assert\GreaterThanOrEqual(value="1", message="Too low value")
-     */
+    #[ORM\Column(type: "integer", nullable: true)]
+    #[Assert\GreaterThanOrEqual(value: "1", message: "Too low value")]
     private ?int $promoPrice = 0;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $promoPriceActive = false;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Assert\GreaterThan(propertyPath="price", message="Too low value")
-     */
+    #[ORM\Column(type: "integer", nullable: true)]
+    #[Assert\GreaterThan(propertyPath: "price", message: "Too low value")]
     private ?int $crossedOutPrice = 0;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductRozetkaCharacteristicValue", mappedBy="rozetkaProduct", cascade={"all"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: "rozetkaProduct", targetEntity: "App\Entity\ProductRozetkaCharacteristicValue", cascade: ["all"], orphanRemoval: true)]
     private $values;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Product")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
-     */
+    #[ORM\OneToOne(targetEntity: "App\Entity\Product")]
+    #[ORM\JoinColumn(name: "product_id", referencedColumnName: "id")]
     private Product $product;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\RozetkaProduct")
-     * @ORM\JoinColumn(name="rozetka_product_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: "App\Entity\RozetkaProduct")]
+    #[ORM\JoinColumn(name: "rozetka_product_id", referencedColumnName: "id")]
     private ?RozetkaProduct $rozetkaProduct = null;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $ready = false;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $activeForA = false;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $activeForP = false;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
     public function __construct()

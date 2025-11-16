@@ -6,41 +6,29 @@ use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ProductRatingRepository")
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="product_rating")
- */
+#[ORM\Entity(repositoryClass: "App\Repository\ProductRatingRepository")]
+#[ORM\HasLifecycleCallbacks()]
+#[ORM\Table(name: "product_rating")]
 class ProductRating
 {
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private int $id;
 
-    /**
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="characteristics")
-     */
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Product", inversedBy: "characteristics")]
     private Product $product;
 
-    /**
-     * @ORM\Column(type="decimal", precision=8, scale=2)
-     */
+    #[ORM\Column(type: "decimal", precision: 8, scale: 2)]
     private string $value;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $updatedAt;
 
     public function getId(): int

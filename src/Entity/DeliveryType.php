@@ -6,83 +6,67 @@ use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Table("delivery_type", indexes={
- *     @Index(columns={"title"}),
- * })
- * @ORM\Entity(repositoryClass="App\Repository\DeliveryTypeRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table("delivery_type", indexes: [
+    new ORM\Index(columns: ["title"]),
+])]
+#[ORM\Entity(repositoryClass: "App\Repository\DeliveryTypeRepository")]
+#[ORM\HasLifecycleCallbacks()]
 class DeliveryType
 {
     use DateStorageTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title = "";
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: "integer", nullable: true)]
     private ?int $cost = 0;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $enabled = true;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $needAddressField = true;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $isNovaPoshta = false;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $address = "";
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $icon = "";
 
-    /**
-     * @ORM\ManyToMany(targetEntity="PaymentType")
-     * @ORM\JoinTable(name="delivery_payment",
-     *      joinColumns={@ORM\JoinColumn(name="delivery_type_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="payment_type_id", referencedColumnName="id")}
-     * )
-     */
+    #[ORM\ManyToMany(targetEntity: PaymentType::class)]
+    #[ORM\JoinTable(
+        name: 'delivery_payment',
+        joinColumns: [
+            new ORM\JoinColumn(
+                name: 'delivery_type_id',
+                referencedColumnName: 'id'
+            )
+        ],
+        inverseJoinColumns: [
+            new ORM\JoinColumn(
+                name: 'payment_type_id',
+                referencedColumnName: 'id'
+            )
+        ]
+    )]
     private $paymentTypes;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: "integer", nullable: true)]
     private ?int $priority = 0;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $updatedAt;
 
     public function __construct()

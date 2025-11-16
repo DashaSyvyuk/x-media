@@ -6,17 +6,14 @@ use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="user", indexes={
- *     @Index(columns={"email"}),
- *     @Index(columns={"surname"}),
- *     @Index(columns={"phone"}),
- * })
- */
+#[ORM\Entity(repositoryClass: "App\Repository\UserRepository")]
+#[ORM\HasLifecycleCallbacks()]
+#[ORM\Table(name: "user", indexes: [
+    new ORM\Index(columns: ["email"]),
+    new ORM\Index(columns: ["surname"]),
+    new ORM\Index(columns: ["phone"]),
+])]
 class User
 {
     use DateStorageTrait;
@@ -36,83 +33,51 @@ class User
         '12' => 'грудня',
     ];
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $surname;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $phone;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $email;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $password;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $address;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $novaPoshtaCity;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $novaPoshtaOffice;
 
-    /**
-     * @var bool
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $confirmed = false;
 
-    /**
-     * @var string|null
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $hash;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="user", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
-     */
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: "App\Entity\Order", cascade: ["all"], fetch: "EAGER", orphanRemoval: true)]
     private $orders;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: "datetime", nullable: true)]
     public ?DateTime $expiredAt;
 
     public function __construct()
