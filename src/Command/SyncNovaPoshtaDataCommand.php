@@ -19,10 +19,17 @@ class SyncNovaPoshtaDataCommand extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this
+            ->setDescription('Syncs data from Nova Poshta')
+            ->setHelp('This command allows you to sync Nova Poshta data...');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->syncNovaPoshtaService->execute();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
