@@ -6,7 +6,7 @@ use App\Entity\Order;
 use App\Repository\SettingRepository;
 use App\Utils\TurboSms;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 
 class CreateService

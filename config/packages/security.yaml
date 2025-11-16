@@ -1,8 +1,4 @@
 security:
-    encoders:
-        App\Entity\AdminUser:
-            algorithm: auto
-
     firewalls:
         # Disabling the security for the web debug toolbar, the profiler and Assetic.
         dev:
@@ -10,9 +6,8 @@ security:
             security: false
 
         main:
-            anonymous: ~
-            guard:
-                authenticators:
+            lazy: ~
+            custom_authenticators:
                     - App\Security\AdminAuthenticator
             logout:
                 path: app_logout
