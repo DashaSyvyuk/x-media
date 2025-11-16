@@ -1,0 +1,8 @@
+name: xmedia-app
+services:
+  - name: web
+    github:
+      repo: DashaSyvyuk/x-media
+      branch: master
+    build_command: "composer install --no-dev --optimize-autoloader --no-scripts"
+    run_command: "php-fpm"
