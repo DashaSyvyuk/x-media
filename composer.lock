@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b0f6cde8d04095bdef4885fdc1beaf60",
+    "content-hash": "67f78f88d68d9f9e01bd451bc357aa5a",
     "packages": [
         {
             "name": "aaronddm/xml-builder",
@@ -11026,7 +11026,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.3",
+        "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*"
     },
