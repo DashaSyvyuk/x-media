@@ -1,9 +1,9 @@
-Options +Indexes +FollowSymlinks
-RewriteEngine On
-RewriteBase /
+<IfModule mod_rewrite.c>
+    Options -Multiviews
+    RewriteEngine On
 
-RewriteRule ^(images|build|bundles|js|css)/(.*)$ https://x-media.com.ua/public/$1/$2 [L,NC,R=302]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . public/index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [QSA,L]
+    RewriteRule ^(images|build|bundles|js|css)/(.*)$ https://x-media.com.ua/public/$1/$2 [L,NC,R=302]
+</IfModule>
