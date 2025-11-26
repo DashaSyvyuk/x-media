@@ -58,7 +58,7 @@ class RozetkaProductCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Товари')
             ->setEntityLabelInPlural('Товар')
-            ->setSearchFields(['product.id', 'title', 'product.category.title'])
+            ->setSearchFields(['product.id', 'title', 'product.category.title', 'product.productCode'])
             ->setDefaultSort(['product.id' => 'DESC'])
             ->setPaginatorPageSize(10)
             ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
