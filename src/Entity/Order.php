@@ -26,18 +26,18 @@ class Order
 {
     use DateStorageTrait;
 
-    const NEW = 'new';
-    const NOT_APPROVED =  'not_approved';
-    const APPROVED = 'confirmed';
-    const PACKING = 'packing';
-    const NOVA_POSHTA_DELIVERING = 'nova_poshta_delivering';
-    const COURIER_DELIVERING = 'courier_delivering';
-    const COMPLETED = 'completed';
-    const CANCELED_NOT_CONFIRMED = 'canceled_not_confirmed';
-    const CANCELED_NO_PRODUCT = 'canceled_no_product';
-    const CANCELED_NOT_PICKED_UP = 'canceled_not_picked_up';
+    public const NEW = 'new';
+    public const NOT_APPROVED =  'not_approved';
+    public const APPROVED = 'confirmed';
+    public const PACKING = 'packing';
+    public const NOVA_POSHTA_DELIVERING = 'nova_poshta_delivering';
+    public const COURIER_DELIVERING = 'courier_delivering';
+    public const COMPLETED = 'completed';
+    public const CANCELED_NOT_CONFIRMED = 'canceled_not_confirmed';
+    public const CANCELED_NO_PRODUCT = 'canceled_no_product';
+    public const CANCELED_NOT_PICKED_UP = 'canceled_not_picked_up';
 
-    const STATUSES = [
+    public const STATUSES = [
         self::NEW                    => 'Нове замовлення',
         self::NOT_APPROVED           => 'Очікує на підтвердження',
         self::APPROVED               => 'Підтверджено. В дорозі від постачальника',
@@ -50,7 +50,7 @@ class Order
         self::CANCELED_NOT_PICKED_UP => 'Відмінено. Не відібране',
     ];
 
-    const GROUPED_STATUSES = [
+    public const GROUPED_STATUSES = [
         self::NEW => [
             'id'    => 1,
             'color' => '#119E00',
@@ -103,12 +103,12 @@ class Order
         ],
     ];
 
-    const LABEL_XMEDIA = 'x-media';
-    const LABEL_PROM = 'prom';
-    const LABEL_OLX = 'olx';
-    const LABEL_JONNY = 'Jonny';
-    const LABEL_ROZETKA = 'Rozetka';
-    const LABELS = [
+    public const LABEL_XMEDIA = 'x-media';
+    public const LABEL_PROM = 'prom';
+    public const LABEL_OLX = 'olx';
+    public const LABEL_JONNY = 'Jonny';
+    public const LABEL_ROZETKA = 'Rozetka';
+    public const LABELS = [
         self::LABEL_XMEDIA  => self::LABEL_XMEDIA,
         self::LABEL_PROM    => self::LABEL_PROM,
         self::LABEL_OLX     => self::LABEL_OLX,

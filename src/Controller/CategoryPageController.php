@@ -53,7 +53,13 @@ class CategoryPageController extends BaseController
         ]);
 
         $products = $this->productRepository->findByCategoryAndAttributes(
-            $category, $filters, $search, $order, $direction, $priceFrom, $priceTo
+            $category,
+            $filters,
+            $search,
+            $order,
+            $direction,
+            $priceFrom,
+            $priceTo
         );
 
         $pagination = $paginator->paginate(
@@ -62,7 +68,13 @@ class CategoryPageController extends BaseController
             $limit->getValue()
         );
 
-        $prices = $this->productRepository->getMinAndMaxPriceInCategory($category, $filters, $search, $priceFrom, $priceTo);
+        $prices = $this->productRepository->getMinAndMaxPriceInCategory(
+            $category,
+            $filters,
+            $search,
+            $priceFrom,
+            $priceTo
+        );
 
         $query['price_from'] = $priceFrom;
         $query['price_to'] = $priceTo;

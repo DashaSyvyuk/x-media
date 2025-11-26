@@ -11,13 +11,15 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method RozetkaCharacteristics|null find($id, $lockMode = null, $lockVersion = null)
  * @method RozetkaCharacteristics|null findOneBy(array $criteria, array $orderBy = null)
- * @method RozetkaCharacteristics[]    findAll()
- * @method RozetkaCharacteristics[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method RozetkaCharacteristics[] findAll()
+ * @method RozetkaCharacteristics[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class RozetkaCharacteristicsRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, private readonly RozetkaCharacteristicsValueRepository $valueRepository)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly RozetkaCharacteristicsValueRepository $valueRepository
+    ) {
         parent::__construct($registry, RozetkaCharacteristics::class);
     }
 

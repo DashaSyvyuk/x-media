@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use \DateTime;
+use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -18,7 +18,7 @@ class ProductImage
 {
     use DateStorageTrait;
 
-    const SERVER_PATH_TO_IMAGE_FOLDER = '../public/images/products';
+    public const SERVER_PATH_TO_IMAGE_FOLDER = '../public/images/products';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -31,7 +31,7 @@ class ProductImage
     #[Vich\UploadableField(mapping: "images", fileNameProperty: "imageUrl")]
     private ?File $file = null;
 
-    #[ORM\Column(type: "integer", nullable: true, options: ["unsigned"=>true])]
+    #[ORM\Column(type: "integer", nullable: true, options: ["unsigned" => true])]
     private ?int $position = 0;
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]

@@ -24,7 +24,13 @@ class Filter
     #[ORM\Column(type: "string")]
     private string $title = "";
 
-    #[ORM\OneToMany(mappedBy: "filter", targetEntity: "App\Entity\FilterAttribute", cascade: ["all"], fetch: "EAGER", orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: "App\Entity\FilterAttribute",
+        mappedBy: "filter",
+        cascade: ["all"],
+        fetch: "EAGER",
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(["priority" => "ASC"])]
     private $attributes;
 

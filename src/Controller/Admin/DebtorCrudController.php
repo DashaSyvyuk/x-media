@@ -51,7 +51,9 @@ class DebtorCrudController extends AbstractCrudController
         yield TextField::new('total', 'Борг')
             ->formatValue(function ($value) {
                 $value = number_format($value, 0, '.', ' ');
-                return $value >= 0 ? '<span class="green">' . $value . '</span>' : '<span class="red">' . $value . '</span>';
+                return $value >= 0 ?
+                    sprintf('<span class="green">%s</span>', $value) :
+                    sprintf('<span class="red">%s</span>', $value);
             })
             ->setColumns(4)
             ->setDisabled();
@@ -65,13 +67,24 @@ class DebtorCrudController extends AbstractCrudController
         ;
     }
 
-    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
-    {
+    public function createIndexQueryBuilder(
+        SearchDto $searchDto,
+        EntityDto $entityDto,
+        FieldCollection $fields,
+        FilterCollection $filters
+    ): QueryBuilder {
         $queryBuilder = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
 
         if (0 === count($searchDto->getSort())) {
             $queryBuilder
-                ->addSelect('(SELECT SUM(payment.sum) FROM App\Entity\DebtorPayment payment WHERE payment.debtor=entity) AS HIDDEN total')
+                ->addSelect(<<<SQL
+                (
+                    SELECT
+                        SUM(payment.sum)
+                    FROM App\Entity\DebtorPayment payment
+                    WHERE payment.debtor=entity
+                ) AS HIDDEN total
+                SQL)
                 ->addOrderBy('total', 'DESC');
         }
 

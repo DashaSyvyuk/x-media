@@ -15,12 +15,12 @@ class Feed
 {
     use DateStorageTrait;
 
-    const FEED_ROZETKA = 'ROZETKA';
-    const FEED_PROM = 'PROM';
-    const FEED_HOTLINE = 'HOTLINE';
-    const FEED_EKATALOG = 'EKATALOG';
+    public const FEED_ROZETKA = 'ROZETKA';
+    public const FEED_PROM = 'PROM';
+    public const FEED_HOTLINE = 'HOTLINE';
+    public const FEED_EKATALOG = 'EKATALOG';
 
-    const TYPES = [
+    public const TYPES = [
         'Rozetka'   => self::FEED_ROZETKA,
         'Prom'      => self::FEED_PROM,
         'Hotline'   => self::FEED_HOTLINE,

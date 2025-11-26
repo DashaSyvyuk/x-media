@@ -77,7 +77,7 @@ class Currency
         return $this->exchangeRate;
     }
 
-    public function __toString():string
+    public function __toString(): string
     {
         return '' . $this->title;
     }

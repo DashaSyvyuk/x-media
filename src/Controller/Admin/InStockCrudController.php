@@ -64,9 +64,15 @@ class InStockCrudController extends AbstractCrudController
                 $city  = trim((string) ($w->getCity()  ?? ''));
                 $title = trim((string) ($w->getTitle() ?? ''));
 
-                if ($city === '' && $title === '') return '—';
-                if ($city === '')  return $title;
-                if ($title === '') return $city;
+                if ($city === '' && $title === '') {
+                    return '—';
+                }
+                if ($city === '') {
+                    return $title;
+                }
+                if ($title === '') {
+                    return $city;
+                }
 
                 return $city . ' (' . $title . ')';
             });

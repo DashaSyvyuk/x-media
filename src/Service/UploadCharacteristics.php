@@ -25,9 +25,14 @@ class UploadCharacteristics
             if ($characteristics = $this->rozetkaCharacteristicsRepository->findOneBy(['rozetkaId' => $row[0]])) {
                 $characteristicsValue = $this->valueRepository->findOneBy(['rozetkaId' => $row[5]]);
 
-                if ($characteristics->getTitle() !== $row[1] || $characteristics->getType() !== $row[2] ||
-                    $characteristics->getFilterType() !== !('disable' === $row[3]) || $characteristics->getUnit() !== $row[4] ||
-                    $characteristics->getEndToEndParameter() !== ($row[7] === 'Так') || !$characteristicsValue || $characteristicsValue->getTitle() !== $row[6]
+                if (
+                    $characteristics->getTitle() !== $row[1] ||
+                    $characteristics->getType() !== $row[2] ||
+                    $characteristics->getFilterType() !== !('disable' === $row[3]) ||
+                    $characteristics->getUnit() !== $row[4] ||
+                    $characteristics->getEndToEndParameter() !== ($row[7] === 'Так') ||
+                    !$characteristicsValue ||
+                    $characteristicsValue->getTitle() !== $row[6]
                 ) {
                     $characteristics->setTitle($row[1]);
                     $characteristics->setType($row[2]);

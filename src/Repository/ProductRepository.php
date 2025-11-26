@@ -33,8 +33,7 @@ class ProductRepository extends ServiceEntityRepository
         ?string $direction,
         ?int $priceFrom,
         ?int $priceTo
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $query = $this->prepareQuery($category, $attributes, $search, $priceFrom, $priceTo);
 
         if ($order && $direction) {
@@ -50,8 +49,7 @@ class ProductRepository extends ServiceEntityRepository
         ?string $search,
         ?int $priceFrom,
         ?int $priceTo
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $query = $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'category');
 
@@ -67,7 +65,10 @@ class ProductRepository extends ServiceEntityRepository
             foreach ($attributes as $filter => $values) {
                 $query
                     ->leftJoin('p.filterAttributes', sprintf('productFilterAttribute%d', $filter))
-                    ->leftJoin(sprintf('productFilterAttribute%d.filterAttribute', $filter), sprintf('filterAttribute%d', $filter))
+                    ->leftJoin(
+                        sprintf('productFilterAttribute%d.filterAttribute', $filter),
+                        sprintf('filterAttribute%d', $filter)
+                    )
                     ->andWhere(sprintf('filterAttribute%d.id IN (:ids%d)', $filter, $filter))
                     ->setParameter(sprintf('ids%d', $filter), $values);
             }
@@ -100,8 +101,7 @@ class ProductRepository extends ServiceEntityRepository
         ?string $search,
         ?int $priceFrom,
         ?int $priceTo
-    ): array
-    {
+    ): array {
         $query = $this->prepareQuery($category, $attributes, $search, $priceFrom, $priceTo);
 
         $query->select('MIN(p.price) AS min_price, MAX(p.price) AS max_price');
@@ -132,8 +132,18 @@ class ProductRepository extends ServiceEntityRepository
                 $images[] = 'https://x-media.com.ua/images/products/' . $item->getImageUrl();
             }
 
-            $vendor = array_values(array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])));
-            $warranty = array_values(array_filter($product->getFilterAttributes()->toArray(), fn ($item) => $item->getFilter()->getTitle() == 'Гарантія'));
+            $vendor = array_values(
+                array_filter(
+                    $product->getFilterAttributes()->toArray(),
+                    fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
+                )
+            );
+            $warranty = array_values(
+                array_filter(
+                    $product->getFilterAttributes()->toArray(),
+                    fn ($item) => $item->getFilter()->getTitle() == 'Гарантія'
+                )
+            );
 
             if (!empty($vendor)) {
                 $row = [
@@ -218,8 +228,7 @@ class ProductRepository extends ServiceEntityRepository
         ?string $vendors,
         ?string $order,
         ?string $direction,
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $query = $this->createQueryBuilder('p')
             ->leftJoin('p.promotionProducts', 'pp')
             ->andWhere('pp.promotion = :promotion')

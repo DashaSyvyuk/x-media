@@ -37,8 +37,7 @@ class RozetkaProductCrudController extends AbstractCrudController
         private readonly GenerateRozetkaXmlService $generateRozetkaXmlService,
         private readonly RequestStack $requestStack,
         private readonly RozetkaProductRepository $rozetkaProductRepository,
-    )
-    {
+    ) {
         ini_set('memory_limit', '512M');
     }
 
@@ -150,7 +149,8 @@ class RozetkaProductCrudController extends AbstractCrudController
 
                     ],
                     'attr' => ['rows' => '40'],
-                ])
+                ]
+            )
             ->setColumns(12)
             ->hideOnIndex();
 
@@ -175,18 +175,33 @@ class RozetkaProductCrudController extends AbstractCrudController
     {
         $this->generateRozetkaXmlService->execute();
 
-        $this->addFlash('success', 'Document is generated <a href="/rozetka_for_a/products.xml" target="_blank">here</a>');
+        $this->addFlash(
+            'success',
+            'Document is generated <a href="/rozetka_for_a/products.xml" target="_blank">here</a>'
+        );
 
-        return $this->redirect($this->adminUrlGenerator->setController(RozetkaProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+        return $this->redirect(
+            $this->adminUrlGenerator->setController(
+                RozetkaProductCrudController::class
+            )->setAction(Action::INDEX)->generateUrl()
+        );
     }
 
     public function rozetkaForPXmlAction(AdminContext $adminContext): RedirectResponse
     {
         $this->generateRozetkaXmlService->execute('active_for_p');
 
-        $this->addFlash('success', 'Document is generated <a href="/rozetka_for_p/products.xml" target="_blank">here</a>');
+        $this->addFlash(
+            'success',
+            'Document is generated <a href="/rozetka_for_p/products.xml" target="_blank">here</a>'
+        );
 
-        return $this->redirect($this->adminUrlGenerator->setController(RozetkaProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+        return $this->redirect(
+            $this->adminUrlGenerator
+                ->setController(RozetkaProductCrudController::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl()
+        );
     }
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
@@ -209,14 +224,14 @@ class RozetkaProductCrudController extends AbstractCrudController
                         $entityInstance->removeValue($value);
                     }
                 }
-                foreach($rozetkaProduct->getValues() as $value) {
+                foreach ($rozetkaProduct->getValues() as $value) {
                     $productValue = new ProductRozetkaCharacteristicValue();
                     $productValue->setRozetkaProduct($entityInstance);
                     $productValue->setCharacteristic($value->getCharacteristic());
                     $productValue->setValue($value->getValue());
                     $productValue->setStringValue($value->getStringValue());
                     if ($value->getValues()) {
-                        foreach($value->getValues() as $itemValue) {
+                        foreach ($value->getValues() as $itemValue) {
                             $productValue->addValue($itemValue);
                         }
                     }

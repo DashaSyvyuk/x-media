@@ -15,20 +15,15 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class OrderRepository extends ServiceEntityRepository
 {
-    private ProductRepository $productRepository;
-    private PaymentTypeRepository $paymentTypeRepository;
-    private DeliveryTypeRepository $deliveryTypeRepository;
-    private NovaPoshtaCityRepository $novaPoshtaCityRepository;
-    private NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository;
-
-    public function __construct(ManagerRegistry $registry, ProductRepository $productRepository, PaymentTypeRepository $paymentTypeRepository, DeliveryTypeRepository $deliveryTypeRepository, NovaPoshtaCityRepository $novaPoshtaCityRepository, NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly ProductRepository $productRepository,
+        private readonly PaymentTypeRepository $paymentTypeRepository,
+        private readonly DeliveryTypeRepository $deliveryTypeRepository,
+        private readonly NovaPoshtaCityRepository $novaPoshtaCityRepository,
+        private readonly NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
+    ) {
         parent::__construct($registry, Order::class);
-        $this->productRepository = $productRepository;
-        $this->paymentTypeRepository = $paymentTypeRepository;
-        $this->deliveryTypeRepository = $deliveryTypeRepository;
-        $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
-        $this->novaPoshtaOfficeRepository = $novaPoshtaOfficeRepository;
     }
 
     public function fill(array $data): Order

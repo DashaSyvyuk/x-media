@@ -14,10 +14,10 @@ class Promotion
 {
     use DateStorageTrait;
 
-    const ACTIVE = 'active';
-    const BLOCKED =  'blocked';
+    public const ACTIVE = 'active';
+    public const BLOCKED =  'blocked';
 
-    const STATUSES = [
+    public const STATUSES = [
         self::ACTIVE  => 'Активна',
         self::BLOCKED => 'Заблокована',
     ];
@@ -45,7 +45,12 @@ class Promotion
     #[ORM\Column(type: "datetime")]
     private DateTime $activeTo;
 
-    #[ORM\OneToMany(mappedBy: "promotion", targetEntity: "App\Entity\PromotionProduct", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: "App\Entity\PromotionProduct",
+        mappedBy: "promotion",
+        cascade: ["all"],
+        orphanRemoval: true
+    )]
     private $products;
 
     #[ORM\Column(type: "datetime")]

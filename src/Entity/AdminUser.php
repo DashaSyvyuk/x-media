@@ -10,11 +10,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: AdminUserRepository::class)]
 class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    const ROLE_USER = 'ROLE_USER';
-    const ROLE_ADMIN = 'ROLE_ADMIN';
-    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+    public const ROLE_USER = 'ROLE_USER';
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
+    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
-    const ROLES = [
+    public const ROLES = [
         'Холоп'  => self::ROLE_USER,
         'Кріпак' => self::ROLE_ADMIN,
         'Бог'    => self::ROLE_SUPER_ADMIN,

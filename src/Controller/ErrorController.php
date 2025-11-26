@@ -9,6 +9,6 @@ class ErrorController extends BaseController
 {
     public function show(Request $request): Response
     {
-        return $this->renderTemplate($request,'bundles/TwigBundle/Exception/error404.html.twig', []);
+        return $this->renderTemplate($request, 'bundles/TwigBundle/Exception/error404.html.twig', []);
     }
 }

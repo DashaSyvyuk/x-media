@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use \DateTime;
+use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,10 +20,10 @@ class Category
 {
     use DateStorageTrait;
 
-    const ACTIVE = 'ACTIVE';
-    const DISABLED = 'DISABLED';
+    public const ACTIVE = 'ACTIVE';
+    public const DISABLED = 'DISABLED';
 
-    const STATUSES = [
+    public const STATUSES = [
         'Активний'     => self::ACTIVE,
         'Заблокований' => self::DISABLED
     ];
@@ -82,10 +82,22 @@ class Category
     #[ORM\Column(type: 'boolean')]
     private bool $showInHotlineFeed = true;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: 'App\Entity\Product', cascade: ['all'], fetch: 'EAGER', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: 'App\Entity\Product',
+        mappedBy: 'category',
+        cascade: ['all'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
     private $products;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: 'App\Entity\CategoryFeedPrice', cascade: ['all'], fetch: 'EAGER', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: 'App\Entity\CategoryFeedPrice',
+        mappedBy: 'category',
+        cascade: ['all'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
     private $feedPrices;
 
     #[ORM\Column(type: 'datetime')]
@@ -317,7 +329,7 @@ class Category
 
     public function getActiveProducts()
     {
-        return $this->products->filter(function(Product $product) {
+        return $this->products->filter(function (Product $product) {
             return $product->getStatus() === Product::STATUS_ACTIVE;
         });
     }

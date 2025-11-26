@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use \DateTime;
+use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 

@@ -14,7 +14,8 @@ class NovaPoshtaOfficeController extends AbstractController
     /**
      * @param NovaPoshtaOfficeRepository $repository
      */
-    public function __construct(NovaPoshtaOfficeRepository $repository) {
+    public function __construct(NovaPoshtaOfficeRepository $repository)
+    {
         $this->repository = $repository;
     }
 

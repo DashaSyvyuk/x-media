@@ -39,8 +39,11 @@ class AdminAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): RedirectResponse
-    {
+    public function onAuthenticationSuccess(
+        Request $request,
+        TokenInterface $token,
+        string $firewallName
+    ): RedirectResponse {
         $targetPath = $this->getTargetPath($request->getSession(), $firewallName);
         if ($targetPath) {
             return new RedirectResponse($targetPath);

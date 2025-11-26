@@ -30,7 +30,12 @@ class Circulation
     #[ORM\ManyToOne(targetEntity: "App\Entity\Currency")]
     private Currency $currency;
 
-    #[ORM\OneToMany(mappedBy: "circulation", targetEntity: "App\Entity\CirculationPayment", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: "App\Entity\CirculationPayment",
+        mappedBy: "circulation",
+        cascade: ["all"],
+        orphanRemoval: true
+    )]
     private $payments;
 
     public ?string $total = '';

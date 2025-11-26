@@ -22,11 +22,10 @@ class GenerateHotlineXmlService
 
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
-        private readonly ProductRepository  $productRepository,
+        private readonly ProductRepository $productRepository,
         private readonly FeedRepository $feedRepository,
         private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
-    )
-    {
+    ) {
         $this->xmlWriterService = new XMLWriterService();
         $this->xmlBuilder = new XMLBuilder($this->xmlWriterService);
     }
@@ -61,16 +60,34 @@ class GenerateHotlineXmlService
                     ->end()
                     ->startLoop('items', [], function (XMLArray $XMLArray) use ($products, $feed) {
                         foreach ($products as $product) {
-                            $vendor = array_values(array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])));
+                            $vendor = array_values(
+                                array_filter(
+                                    $product->getFilterAttributes()->toArray(),
+                                    fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
+                                )
+                            );
 
                             if (!empty($vendor)) {
-                                if ($feed && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feed->getIgnoreBrands()))) {
+                                if (
+                                    $feed && in_array(
+                                        $vendor[0]->getFilterAttribute()->getValue(),
+                                        explode(';', $feed->getIgnoreBrands())
+                                    )
+                                ) {
                                     continue;
                                 }
                                 $images = $product->getImages();
                                 $characteristics = $product->getCharacteristics();
-                                $warranty = array_values(array_filter($product->getCharacteristics()->toArray(), fn ($item) => $item->getTitle() == 'Гарантія'));
-                                $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $product->getCategory()]) : null;
+                                $warranty = array_values(
+                                    array_filter(
+                                        $product->getCharacteristics()->toArray(),
+                                        fn ($item) => $item->getTitle() == 'Гарантія'
+                                    )
+                                );
+                                $priceParameters = $feed ?
+                                    $this->categoryFeedPriceRepository->findOneBy(
+                                        ['feed' => $feed, 'category' => $product->getCategory()]
+                                    ) : null;
 
                                 $XMLArray->start('item')
                                     ->add('id', $product->getId())
@@ -81,7 +98,13 @@ class GenerateHotlineXmlService
                                     ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
                                     ->loop(function (XMLArray $XMLArray) use ($images) {
                                         foreach ($images as $image) {
-                                            $XMLArray->add('image', 'https://x-media.com.ua/images/products/' . $image->getImageUrl());
+                                            $XMLArray->add(
+                                                'image',
+                                                sprintf(
+                                                    'https://x-media.com.ua/images/products/%s',
+                                                    $image->getImageUrl()
+                                                )
+                                            );
                                         }
                                     })
                                     ->add('priceRUAH', $this->getPrice($product, $feed, $priceParameters))
@@ -91,9 +114,13 @@ class GenerateHotlineXmlService
                                     ])
                                     ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
                                         foreach ($characteristics as $characteristic) {
-                                            $XMLArray->add('param', $this->formatString($characteristic->getValue(), $feed), [
-                                                'name' => $this->formatString($characteristic->getTitle(), $feed)
-                                            ]);
+                                            $XMLArray->add(
+                                                'param',
+                                                $this->formatString($characteristic->getValue(), $feed),
+                                                [
+                                                    'name' => $this->formatString($characteristic->getTitle(), $feed)
+                                                ]
+                                            );
                                         }
                                     })
                                     ->add('condition', 0)
@@ -106,7 +133,7 @@ class GenerateHotlineXmlService
                 ->end();
 
             file_put_contents(__DIR__ . '/../../public/hotline/products.xml', $this->xmlBuilder->getXML());
-        } catch (XMLArrayException|XMLBuilderException $e) {
+        } catch (XMLArrayException | XMLBuilderException $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
         }
     }

@@ -47,7 +47,12 @@ class RozetkaProduct
     #[Assert\GreaterThan(propertyPath: "price", message: "Too low value")]
     private ?int $crossedOutPrice = 0;
 
-    #[ORM\OneToMany(mappedBy: "rozetkaProduct", targetEntity: "App\Entity\ProductRozetkaCharacteristicValue", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: "App\Entity\ProductRozetkaCharacteristicValue",
+        mappedBy: "rozetkaProduct",
+        cascade: ["all"],
+        orphanRemoval: true
+    )]
     private $values;
 
     #[ORM\OneToOne(targetEntity: "App\Entity\Product")]

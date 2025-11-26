@@ -22,8 +22,13 @@ class HydratorService
      * @param bool $skipNull
      * @return object|array
      */
-    public function hydrate(object $sourceObject, string $destinationClass, array $groups = [], Closure $callback = null, bool $skipNull = false): object|array
-    {
+    public function hydrate(
+        object $sourceObject,
+        string $destinationClass,
+        array $groups = [],
+        Closure $callback = null,
+        bool $skipNull = false
+    ): object|array {
         $context = $this->getSerializationContext($groups);
 
         $normalize = $this->serializer->toArray($sourceObject, $context);
@@ -41,8 +46,12 @@ class HydratorService
      * @param bool $skipNull
      * @return object|array
      */
-    public function fromArray(array $array, string $destinationClass, array $groups = [], bool $skipNull = false): object|array
-    {
+    public function fromArray(
+        array $array,
+        string $destinationClass,
+        array $groups = [],
+        bool $skipNull = false
+    ): object|array {
         $context = $this->getDeserializationContext($groups);
 
         $destinationObject = $this->serializer->fromArray($array, $destinationClass, $context);

@@ -57,7 +57,10 @@ class OrderSubscriber
                 }
 
                 if ($order->getPhone() && $order->getSendNotification()) {
-                    TurboSms::send($order->getPhone(), sprintf('Ваше замовлення %s відправлено! ТТН: %s', $order->getOrderNumber(), $new));
+                    TurboSms::send(
+                        $order->getPhone(),
+                        sprintf('Ваше замовлення %s відправлено! ТТН: %s', $order->getOrderNumber(), $new)
+                    );
                 }
             }
         }

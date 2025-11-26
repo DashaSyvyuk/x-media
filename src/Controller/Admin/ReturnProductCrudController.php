@@ -17,8 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 #[Security("is_granted('ROLE_SUPER_ADMIN')")]
-class
-ReturnProductCrudController extends AbstractCrudController
+class ReturnProductCrudController extends AbstractCrudController
 {
     public function __construct()
     {

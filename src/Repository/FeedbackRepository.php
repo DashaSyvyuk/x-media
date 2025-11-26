@@ -42,6 +42,5 @@ class FeedbackRepository extends ServiceEntityRepository
              ->where('f.status = :status')
              ->setParameter('status', 'CONFIRMED')
              ->orderBy('f.createdAt', 'DESC');
-
     }
 }

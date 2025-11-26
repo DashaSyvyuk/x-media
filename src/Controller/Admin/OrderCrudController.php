@@ -25,14 +25,12 @@ use SM\Factory\Factory;
 use SM\SMException;
 
 #[Security("is_granted('ROLE_SUPER_ADMIN')")]
-class
-OrderCrudController extends AbstractCrudController
+class OrderCrudController extends AbstractCrudController
 {
     public function __construct(
         private readonly Factory $stateFactory,
         private readonly OrderNumber $orderNumber,
-    )
-    {
+    ) {
         ini_set('memory_limit', '256M');
     }
 

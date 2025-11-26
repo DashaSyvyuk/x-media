@@ -16,16 +16,16 @@ use App\Repository\ProductRepository;
 class GeneratePromXmlService
 {
     use PriceTrait;
+
     private XMLWriterService $xmlWriterService;
     private XMLBuilder $xmlBuilder;
 
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
-        private readonly ProductRepository  $productRepository,
+        private readonly ProductRepository $productRepository,
         private readonly FeedRepository $feedRepository,
         private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
-    )
-    {
+    ) {
         $this->xmlWriterService = new XMLWriterService();
         $this->xmlBuilder = new XMLBuilder($this->xmlWriterService);
     }
@@ -56,10 +56,23 @@ class GeneratePromXmlService
                             $productItem = $this->productRepository->findOneBy(['id' => $product['id']]);
                             $images = $product['images'];
                             $characteristics = $product['characteristics'];
-                            $vendor = array_values(array_filter($productItem->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])));
-                            $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $productItem->getCategory()]) : null;
+                            $vendor = array_values(
+                                array_filter(
+                                    $productItem->getFilterAttributes()->toArray(),
+                                    fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
+                                )
+                            );
+                            $priceParameters = $feed ?
+                                $this->categoryFeedPriceRepository->findOneBy(
+                                    ['feed' => $feed, 'category' => $productItem->getCategory()]
+                                ) : null;
 
-                            if (!empty($vendor) && $feed && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feed->getIgnoreBrands()))) {
+                            if (
+                                !empty($vendor) && $feed && in_array(
+                                    $vendor[0]->getFilterAttribute()->getValue(),
+                                    explode(';', $feed->getIgnoreBrands())
+                                )
+                            ) {
                                 continue;
                             }
 
@@ -85,9 +98,13 @@ class GeneratePromXmlService
                                 ->add('vendor', substr($product['vendor'], 0, 25))
                                 ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
                                     foreach ($characteristics as $characteristic) {
-                                        $XMLArray->add('param', $this->formatString($characteristic->getValue(), $feed), [
-                                            'name' => $this->formatString($characteristic->getTitle(), $feed)
-                                        ]);
+                                        $XMLArray->add(
+                                            'param',
+                                            $this->formatString($characteristic->getValue(), $feed),
+                                            [
+                                                'name' => $this->formatString($characteristic->getTitle(), $feed)
+                                            ]
+                                        );
                                     }
                                 })
                                 ->add('description', $product['description'])
@@ -100,7 +117,7 @@ class GeneratePromXmlService
                 ->end();
 
             file_put_contents(__DIR__ . '/../../public/prom/products.xml', $this->xmlBuilder->getXML());
-        } catch (XMLArrayException|XMLBuilderException $e) {
+        } catch (XMLArrayException | XMLBuilderException $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
         }
     }

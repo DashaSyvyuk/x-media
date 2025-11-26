@@ -20,26 +20,25 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks()]
 class Product
 {
-    const STATUS_ACTIVE = 'Активний';
-    const STATUS_BLOCKED = 'Заблокований';
+    use DateStorageTrait;
 
-    const AVAILABILITY_AVAILABLE = 'в наявності';
-    const AVAILABILITY_TO_ORDER = 'під замовлення (1-3 дні)';
-    const AVAILABILITY_PRE_ORDER = 'передзамовлення';
+    public const STATUS_ACTIVE = 'Активний';
+    public const STATUS_BLOCKED = 'Заблокований';
+    public const AVAILABILITY_AVAILABLE = 'в наявності';
+    public const AVAILABILITY_TO_ORDER = 'під замовлення (1-3 дні)';
+    public const AVAILABILITY_PRE_ORDER = 'передзамовлення';
 
-    const AVAILABILITIES = [
+    public const AVAILABILITIES = [
         self::AVAILABILITY_AVAILABLE => self::AVAILABILITY_AVAILABLE,
         self::AVAILABILITY_TO_ORDER => self::AVAILABILITY_TO_ORDER,
         self::AVAILABILITY_PRE_ORDER => self::AVAILABILITY_PRE_ORDER,
     ];
 
-    const AVAILABILITY_ICONS = [
+    public const AVAILABILITY_ICONS = [
         self::AVAILABILITY_AVAILABLE => 'images/available.svg',
         self::AVAILABILITY_PRE_ORDER => 'images/pre_order.svg',
         self::AVAILABILITY_TO_ORDER => 'images/to_order.svg',
     ];
-
-    use DateStorageTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -79,27 +78,37 @@ class Product
     #[ORM\ManyToOne(targetEntity: "Category", inversedBy: "products")]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(mappedBy: "product", targetEntity: "ProductImage", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: "ProductImage", mappedBy: "product", cascade: ["all"], orphanRemoval: true)]
     #[ORM\OrderBy(["position" => "ASC"])]
     private $images;
 
-    #[ORM\OneToMany(mappedBy: "product", targetEntity: "ProductCharacteristic", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: "ProductCharacteristic", mappedBy: "product", cascade: ["all"], orphanRemoval: true)]
     #[ORM\OrderBy(["position" => "ASC"])]
     private $characteristics;
 
-    #[ORM\OneToMany(mappedBy: "product", targetEntity: "ProductFilterAttribute", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: "ProductFilterAttribute", mappedBy: "product", cascade: ["all"], orphanRemoval: true)]
     private $filterAttributes;
 
-    #[ORM\OneToOne(mappedBy: "product", targetEntity: "App\Entity\RozetkaProduct", cascade: ["remove"], orphanRemoval: true)]
+    #[ORM\OneToOne(
+        targetEntity: "App\Entity\RozetkaProduct",
+        mappedBy: "product",
+        cascade: ["remove"],
+        orphanRemoval: true
+    )]
     private $rozetka;
 
-    #[ORM\OneToMany(mappedBy: "product", targetEntity: "Comment", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: "Comment", mappedBy: "product", cascade: ["all"], orphanRemoval: true)]
     private $comments;
 
-    #[ORM\OneToMany(mappedBy: "product", targetEntity: "ProductRating", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: "ProductRating", mappedBy: "product", cascade: ["all"], orphanRemoval: true)]
     private $ratings;
 
-    #[ORM\OneToMany(mappedBy: "product", targetEntity: "App\Entity\PromotionProduct", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: "App\Entity\PromotionProduct",
+        mappedBy: "product",
+        cascade: ["all"],
+        orphanRemoval: true
+    )]
     private $promotionProducts;
 
     #[ORM\Column(type: "string")]
@@ -468,7 +477,7 @@ class Product
             $count++;
         }
 
-        return $count > 0 ? $total/$count : 0;
+        return $count > 0 ? $total / $count : 0;
     }
 
     public function getPromotionProducts()
@@ -498,7 +507,8 @@ class Product
 
         foreach ($this->promotionProducts as $product) {
             $promotion = $product->getPromotion();
-            if ($promotion->getStatus() === Promotion::ACTIVE &&
+            if (
+                $promotion->getStatus() === Promotion::ACTIVE &&
                 $promotion->getActiveFrom() <= $now && $promotion->getActiveTo() >= $now
             ) {
                 $promotionExists = true;

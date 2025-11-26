@@ -67,8 +67,7 @@ class RozetkaCharacteristicType extends AbstractType
     public function __construct(
         private readonly AdminContextProvider $adminContextProvider,
         private readonly RozetkaCharacteristicsRepository $rozetkaCharacteristicsRepository
-    )
-    {
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -90,13 +89,19 @@ class RozetkaCharacteristicType extends AbstractType
         ;
 
         $formModifier = function (FormInterface $form, RozetkaCharacteristics $characteristics = null) {
-            $attributes = null === $characteristics ? [] : $characteristics->getValues()->filter(function (RozetkaCharacteristicsValue $value) {
-                return $value->getActive() === true;
-            });
+            $attributes = null === $characteristics ?
+                [] :
+                $characteristics->getValues()->filter(function (RozetkaCharacteristicsValue $value) {
+                    return $value->getActive() === true;
+                });
             $type = $characteristics?->getType();
 
             if (in_array($type, self::NEED_TEXT_FIELD)) {
-                $form->add('stringValue', self::TEXT_FIELD_TYPES[$type]['type'], self::TEXT_FIELD_TYPES[$type]['attributes']);
+                $form->add(
+                    'stringValue',
+                    self::TEXT_FIELD_TYPES[$type]['type'],
+                    self::TEXT_FIELD_TYPES[$type]['attributes']
+                );
             } else {
                 $form->add(in_array($type, self::ONE_VALUE_LIST) ? 'value' : 'values', EntityType::class, [
                     'class' => RozetkaCharacteristicsValue::class,

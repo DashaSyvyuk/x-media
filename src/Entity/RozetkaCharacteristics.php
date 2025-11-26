@@ -51,7 +51,13 @@ class RozetkaCharacteristics
     #[ORM\Column(type: "boolean")]
     private bool $active = true;
 
-    #[ORM\OneToMany(mappedBy: "characteristic", targetEntity: "App\Entity\RozetkaCharacteristicsValue", cascade: ["all"], fetch: "EAGER", orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: "App\Entity\RozetkaCharacteristicsValue",
+        mappedBy: "characteristic",
+        cascade: ["all"],
+        fetch: "EAGER",
+        orphanRemoval: true
+    )]
     private $values;
 
     #[ORM\Column(type: "datetime")]

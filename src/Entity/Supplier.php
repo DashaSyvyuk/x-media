@@ -49,7 +49,12 @@ class Supplier
     #[ORM\Column(type: "boolean")]
     private bool $active = true;
 
-    #[ORM\OneToMany(mappedBy: "supplier", targetEntity: "App\Entity\SupplierProduct", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: "App\Entity\SupplierProduct",
+        mappedBy: "supplier",
+        cascade: ["all"],
+        orphanRemoval: true
+    )]
     private $products;
 
     #[ORM\Column(type: "datetime")]

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SearchPageController extends BaseController
 {
-    const VENDOR_FILTER_TITLE = 'Марка';
+    public const VENDOR_FILTER_TITLE = 'Марка';
 
     /**
      * @param CategoryRepository $categoryRepository
@@ -91,7 +91,11 @@ class SearchPageController extends BaseController
                 'vendors'         => explode(',', $vendors),
                 'order'           => $order,
                 'direction'       => $direction,
-                'filters'         => $this->productFilterAttributeRepository->findFilterParameterByTitleAndSearchString(self::VENDOR_FILTER_TITLE, $search, $category)
+                'filters'         => $this->productFilterAttributeRepository->findFilterParameterByTitleAndSearchString(
+                    self::VENDOR_FILTER_TITLE,
+                    $search,
+                    $category
+                )
             ]);
         }
     }

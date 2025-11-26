@@ -23,8 +23,7 @@ class ProductSubscriber
         private readonly RozetkaProductRepository $repository,
         private readonly FeedRepository $feedRepository,
         private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository
-    )
-    {
+    ) {
     }
 
     /**
@@ -34,7 +33,9 @@ class ProductSubscriber
     {
         $rozetkaProduct = $product->getRozetka();
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_ROZETKA]);
-        $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $product->getCategory()]) : null;
+        $priceParameters = $feed ?
+            $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $product->getCategory()]) :
+            null;
 
         $rozetkaProduct->setTitle($product->getTitle());
 
@@ -53,7 +54,11 @@ class ProductSubscriber
     public function postPersist(Product $product): void
     {
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_ROZETKA]);
-        $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $product->getCategory()]) : null;
+        $priceParameters = $feed ?
+            $this->categoryFeedPriceRepository->findOneBy([
+                'feed' => $feed,
+                'category' => $product->getCategory()
+            ]) : null;
 
         $rozetkaProduct = new RozetkaProduct();
         $rozetkaProduct->setTitle($product->getTitle());

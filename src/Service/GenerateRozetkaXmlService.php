@@ -25,11 +25,10 @@ class GenerateRozetkaXmlService
 
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
-        private readonly ProductRepository  $productRepository,
+        private readonly ProductRepository $productRepository,
         private readonly FeedRepository $feedRepository,
         private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
-    )
-    {
+    ) {
         $this->xmlWriterService = new XMLWriterService();
         $this->xmlBuilder = new XMLBuilder($this->xmlWriterService);
     }
@@ -81,16 +80,28 @@ class GenerateRozetkaXmlService
                             foreach ($products as $product) {
                                 /** @var $rozetkaProduct RozetkaProduct */
                                 $rozetkaProduct = $product->getRozetka();
-                                $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
+                                $vendor = array_filter(
+                                    $product->getFilterAttributes()->toArray(),
+                                    fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
+                                );
 
                                 if (!empty($vendor)) {
-                                    if ($feed && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feed->getIgnoreBrands()))) {
+                                    if (
+                                        $feed && in_array(
+                                            $vendor[0]->getFilterAttribute()->getValue(),
+                                            explode(';', $feed->getIgnoreBrands())
+                                        )
+                                    ) {
                                         continue;
                                     }
 
                                     $images = $product->getImages();
                                     $characteristics = $rozetkaProduct->getValues();
-                                    $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $product->getCategory()]) : null;
+                                    $priceParameters = $feed ?
+                                        $this->categoryFeedPriceRepository->findOneBy([
+                                            'feed'     => $feed,
+                                            'category' => $product->getCategory()
+                                        ]) : null;
                                     $promoPrice = $rozetkaProduct->getPromoPrice();
                                     $hasPromo   = $rozetkaProduct->getPromoPriceActive() && $promoPrice !== null;
 
@@ -100,7 +111,11 @@ class GenerateRozetkaXmlService
                                     ])
                                         ->add('stock_quantity', $rozetkaProduct->getStockQuantity() ?: 3)
                                         ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
-                                        ->add('price', $rozetkaProduct->getPrice() ?: $this->getPrice($product, $feed, $priceParameters))
+                                        ->add('price', $rozetkaProduct->getPrice() ?: $this->getPrice(
+                                            $product,
+                                            $feed,
+                                            $priceParameters
+                                        ))
                                         ->add('old_price', $rozetkaProduct->getCrossedOutPrice())
                                         ->loop(function (XMLArray $XMLArray) use ($hasPromo, $promoPrice) {
                                             if ($hasPromo) {
@@ -111,11 +126,24 @@ class GenerateRozetkaXmlService
                                         ->add('categoryId', $product->getCategory()->getId())
                                         ->loop(function (XMLArray $XMLArray) use ($images) {
                                             foreach ($images as $image) {
-                                                $XMLArray->add('picture', 'https://x-media.com.ua/images/products/' . $image->getImageUrl());
+                                                $XMLArray->add(
+                                                    'picture',
+                                                    sprintf(
+                                                        'https://x-media.com.ua/images/products/%s',
+                                                        $image->getImageUrl()
+                                                    )
+                                                );
                                             }
                                         })
                                         ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
-                                        ->add('name', sprintf('%s (%s)', strip_tags(addslashes($rozetkaProduct->getTitle())), $product->getProductCode()))
+                                        ->add(
+                                            'name',
+                                            sprintf(
+                                                '%s (%s)',
+                                                strip_tags(addslashes($rozetkaProduct->getTitle())),
+                                                $product->getProductCode()
+                                            )
+                                        )
                                         ->add('description', $this->formatString($rozetkaProduct->getDescription()))
                                         ->add('article', $product->getId())
                                         ->add('series', $rozetkaProduct->getSeries())
@@ -126,7 +154,10 @@ class GenerateRozetkaXmlService
 
                                                 if (is_array($values)) {
                                                     $XMLArray->startLoop('param', [
-                                                        'name' => $this->convertString($characteristic->getCharacteristic()->getTitle(), $feed)
+                                                        'name' => $this->convertString(
+                                                            $characteristic->getCharacteristic()->getTitle(),
+                                                            $feed
+                                                        )
                                                     ], function (XMLArray $XMLArray) use ($values) {
                                                         foreach ($values as $value) {
                                                             $XMLArray->add('value', htmlspecialchars($value));
@@ -135,7 +166,10 @@ class GenerateRozetkaXmlService
                                                     ->end();
                                                 } else {
                                                     $XMLArray->add('param', $this->convertString($values, $feed), [
-                                                        'name' => $this->convertString($characteristic->getCharacteristic()->getTitle(), $feed)
+                                                        'name' => $this->convertString(
+                                                            $characteristic->getCharacteristic()->getTitle(),
+                                                            $feed
+                                                        )
                                                     ]);
                                                 }
                                             }
@@ -148,8 +182,14 @@ class GenerateRozetkaXmlService
                     ->end()
                 ->end();
 
-            file_put_contents(__DIR__ . sprintf('/../../public/rozetka_for_%s/products.xml', substr($activeFor, -1)), $this->xmlBuilder->getXML());
-        } catch (XMLArrayException|XMLBuilderException $e) {
+            file_put_contents(
+                __DIR__ . sprintf(
+                    '/../../public/rozetka_for_%s/products.xml',
+                    substr($activeFor, -1)
+                ),
+                $this->xmlBuilder->getXML()
+            );
+        } catch (XMLArrayException | XMLBuilderException $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
         }
     }
@@ -176,9 +216,13 @@ class GenerateRozetkaXmlService
         $type = $characteristic->getType();
 
         return match ($type) {
-            'ListValues', 'CheckBoxGroupValues' => $value->getValues()->map(fn ($value) => $value->getTitle())->toArray(),
-            'List' => implode(',', $value->getValues()->map(fn ($value) => $value->getTitle())->toArray()),
-            'ComboBox' => $value->getValue() ? $value->getValue()->getTitle() : '',
+            'ListValues'          => $value->getValues()->map(fn ($value) => $value->getTitle())->toArray(),
+            'CheckBoxGroupValues' => $value->getValues()->map(fn ($value) => $value->getTitle())->toArray(),
+            'List'                => implode(
+                ',',
+                $value->getValues()->map(fn ($value) => $value->getTitle())->toArray()
+            ),
+            'ComboBox'            => $value->getValue() ? $value->getValue()->getTitle() : '',
             'Integer', 'Decimal', 'TextInput', 'TextArea' => $value->getStringValue(),
         };
     }

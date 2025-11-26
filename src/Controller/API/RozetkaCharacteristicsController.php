@@ -35,7 +35,12 @@ class RozetkaCharacteristicsController extends AbstractController
         }
 
         $values = [];
-        foreach ($this->rozetkaCharacteristicsValueRepository->findBy(['characteristic' => $characteristics, 'active' => true], ['title' => 'ASC']) as $value) {
+        foreach (
+            $this->rozetkaCharacteristicsValueRepository->findBy(
+                ['characteristic' => $characteristics, 'active' => true],
+                ['title' => 'ASC']
+            ) as $value
+        ) {
             $values[] = [
                 'id' => $value->getId(),
                 'value' => $value->getTitle()

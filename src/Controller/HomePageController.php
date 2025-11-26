@@ -49,7 +49,11 @@ class HomePageController extends BaseController
 
         return $this->renderTemplate($request, 'home_page/index.html.twig', [
             'sliders'    => $this->sliderRepository->getActiveItems(),
-            'products'   => $this->productRepository->findBy(['status' => Product::STATUS_ACTIVE], ['createdAt' => 'DESC'], 10),
+            'products'   => $this->productRepository->findBy(
+                ['status' => Product::STATUS_ACTIVE],
+                ['createdAt' => 'DESC'],
+                10
+            ),
             'totalCount' => $_COOKIE['totalCount'] ?? 0,
             'feedbacks'  => $this->feedbackRepository->findBy(['status' => 'CONFIRMED'], ['createdAt' => 'DESC']),
             'order'      => $this->orderRepository->findOneBy(['user' => $user], ['createdAt' => 'DESC']),

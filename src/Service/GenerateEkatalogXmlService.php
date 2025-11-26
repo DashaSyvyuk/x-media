@@ -23,11 +23,10 @@ class GenerateEkatalogXmlService
 
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
-        private readonly ProductRepository  $productRepository,
+        private readonly ProductRepository $productRepository,
         private readonly FeedRepository $feedRepository,
         private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
-    )
-    {
+    ) {
         $this->xmlWriterService = new XMLWriterService();
         $this->xmlBuilder = new XMLBuilder($this->xmlWriterService);
     }
@@ -76,14 +75,25 @@ class GenerateEkatalogXmlService
                         ->end()
                         ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feed) {
                             foreach ($products as $product) {
-                                $vendor = array_filter($product->getFilterAttributes()->toArray(), fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник']));
+                                $vendor = array_filter(
+                                    $product->getFilterAttributes()->toArray(),
+                                    fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
+                                );
 
                                 if (!empty($vendor)) {
-                                    if ($feed && in_array($vendor[0]->getFilterAttribute()->getValue(), explode(';', $feed->getIgnoreBrands()))) {
+                                    if (
+                                        $feed && in_array(
+                                            $vendor[0]->getFilterAttribute()->getValue(),
+                                            explode(';', $feed->getIgnoreBrands())
+                                        )
+                                    ) {
                                         continue;
                                     }
                                     $images = $product->getImages();
-                                    $priceParameters = $feed ? $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $product->getCategory()]) : null;
+                                    $priceParameters = $feed ?
+                                        $this->categoryFeedPriceRepository->findOneBy(
+                                            ['feed' => $feed, 'category' => $product->getCategory()]
+                                        ) : null;
 
                                     $XMLArray->start('offer', [
                                         'id' => $product->getId(),
@@ -98,7 +108,13 @@ class GenerateEkatalogXmlService
                                         ->add('description', htmlspecialchars(strip_tags($product->getDescription())))
                                         ->loop(function (XMLArray $XMLArray) use ($images) {
                                             foreach ($images as $image) {
-                                                $XMLArray->add('image', 'https://x-media.com.ua/images/products/' . $image->getImageUrl());
+                                                $XMLArray->add(
+                                                    'image',
+                                                    sprintf(
+                                                        'https://x-media.com.ua/images/products/%s',
+                                                        $image->getImageUrl()
+                                                    )
+                                                );
                                             }
                                         })
                                         ->add('manufacturer_warranty', true)
@@ -111,7 +127,7 @@ class GenerateEkatalogXmlService
                 ->end();
 
             file_put_contents(__DIR__ . '/../../public/e-katalog/products.xml', $this->xmlBuilder->getXML());
-        } catch (XMLArrayException|XMLBuilderException $e) {
+        } catch (XMLArrayException | XMLBuilderException $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
         }
     }

@@ -39,7 +39,13 @@ class SupplierOrder
     #[ORM\ManyToOne(targetEntity: "App\Entity\AdminUser")]
     private AdminUser $adminUser;
 
-    #[ORM\OneToMany(mappedBy: "supplierOrder", targetEntity: "App\Entity\SupplierOrderProduct", cascade: ["all"], fetch: "EAGER", orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: "App\Entity\SupplierOrderProduct",
+        mappedBy: "supplierOrder",
+        cascade: ["all"],
+        fetch: "EAGER",
+        orphanRemoval: true
+    )]
     private $products;
 
     #[ORM\Column(type: "datetime")]

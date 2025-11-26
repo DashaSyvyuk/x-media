@@ -11,7 +11,11 @@ trait PriceTrait
     private function getPrice(Product $product, ?Feed $feed, ?CategoryFeedPrice $priceParameters): float|int
     {
         if ($priceParameters && ($priceParameters->getOurPercent() != 0 || $priceParameters->getFee() != 0)) {
-            return $this->adjustPrice($product->getPrice(), $priceParameters->getOurPercent(), $priceParameters->getFee());
+            return $this->adjustPrice(
+                $product->getPrice(),
+                $priceParameters->getOurPercent(),
+                $priceParameters->getFee()
+            );
         }
 
         return $product->getPrice();

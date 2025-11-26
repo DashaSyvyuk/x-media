@@ -16,19 +16,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks()]
 class ReturnProduct
 {
-    const STATUS_NEW = 'new';
-    const STATUS_PROCESSING = 'processing';
-    const STATUS_COMPLETED = 'completed';
-    const STATUS_REFUSED = 'refused';
+    use DateStorageTrait;
 
-    const STATUSES = [
+    public const STATUS_NEW = 'new';
+    public const STATUS_PROCESSING = 'processing';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_REFUSED = 'refused';
+
+    public const STATUSES = [
         self::STATUS_NEW => 'Нове',
         self::STATUS_PROCESSING => 'В процесі отримання',
         self::STATUS_COMPLETED => 'Повернуто',
         self::STATUS_REFUSED => 'Відмовлено',
     ];
-
-    use DateStorageTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

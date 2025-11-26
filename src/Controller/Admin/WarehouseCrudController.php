@@ -21,7 +21,8 @@ class WarehouseCrudController extends AbstractCrudController
 {
     public function __construct(
         private readonly InStockRepository $inStockRepo
-    ) {}
+    ) {
+    }
 
     public static function getEntityFqcn(): string
     {

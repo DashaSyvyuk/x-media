@@ -34,7 +34,7 @@ class CurrencyCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('title', 'Назва');
         yield TextField::new('shortTitle', 'Скорочення');
-        yield TextField::new('code','Код');
+        yield TextField::new('code', 'Код');
         yield NumberField::new('exchangeRate', 'Обмінний курс');
     }
 }

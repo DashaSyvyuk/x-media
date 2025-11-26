@@ -21,7 +21,6 @@ use App\Entity\RozetkaProduct;
 use App\Entity\Setting;
 use App\Entity\Slider;
 use App\Entity\Supplier;
-use App\Entity\SupplierOrder;
 use App\Entity\User;
 use App\Entity\Warehouse;
 use App\Entity\InStock;
@@ -46,8 +45,7 @@ class DashboardController extends AbstractDashboardController
         private readonly OrderRepository $orderRepository,
         private readonly CommentRepository $commentRepository,
         private readonly FeedbackRepository $feedbackRepository,
-    )
-    {
+    ) {
     }
 
     /**
@@ -102,8 +100,10 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Категорії', 'fas fa-comment', Category::class),
             MenuItem::linkToCrud('Слайдер', 'fas fa-image', Slider::class)->setPermission('ROLE_ADMIN'),
             MenuItem::linkToCrud('Акції', 'fa fa-percent', Promotion::class)->setPermission('ROLE_ADMIN'),
-            MenuItem::linkToCrud(sprintf('Коментарі (%s)', $commentsCount), 'fas fa-comment', Comment::class)->setPermission('ROLE_ADMIN'),
-            MenuItem::linkToCrud(sprintf('Відгуки (%s)', $feedbacksCount), 'fas fa-comment', Feedback::class)->setPermission('ROLE_ADMIN'),
+            MenuItem::linkToCrud(sprintf('Коментарі (%s)', $commentsCount), 'fas fa-comment', Comment::class)
+                ->setPermission('ROLE_ADMIN'),
+            MenuItem::linkToCrud(sprintf('Відгуки (%s)', $feedbacksCount), 'fas fa-comment', Feedback::class)
+                ->setPermission('ROLE_ADMIN'),
         ]);
 
         yield MenuItem::subMenu('Фінанси', 'fa fa-coins')->setSubItems([

@@ -18,7 +18,7 @@ class User
 {
     use DateStorageTrait;
 
-    const MONTH_NAMES = [
+    public const MONTH_NAMES = [
         '01' => 'січня',
         '02' => 'лютого',
         '03' => 'березня',
@@ -68,7 +68,13 @@ class User
     #[ORM\Column(type: "string", nullable: true)]
     private ?string $hash;
 
-    #[ORM\OneToMany(mappedBy: "user", targetEntity: "App\Entity\Order", cascade: ["all"], fetch: "EAGER", orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: "App\Entity\Order",
+        mappedBy: "user",
+        cascade: ["all"],
+        fetch: "EAGER",
+        orphanRemoval: true
+    )]
     private $orders;
 
     #[ORM\Column(type: "datetime")]

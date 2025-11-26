@@ -73,5 +73,4 @@ class ProductFilterAttribute
     {
         return $this->getFilter()->getTitle() . ': ' . $this->getFilterAttribute()->getValue();
     }
-
 }

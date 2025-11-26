@@ -16,16 +16,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks()]
 class Warranty
 {
-    const STATUS_NEW = 'new';
-    const STATUS_RECEIVED_FROM_CLIENT = 'received_from_client';
-    const STATUS_PROCESSING_IN_SERVICE = 'processing_service';
-    const STATUS_FIXED = 'fixed';
-    const STATUS_SENT_BY_NOVA_POSHTA = 'sent_by_novaposhta';
-    const STATUS_COMPLETED = 'completed';
-    const STATUS_NOT_FIXED = 'not_fixed';
-    const STATUS_NOT_FIXED_RETURNED = 'not_fixed_returned';
+    use DateStorageTrait;
 
-    const STATUSES = [
+    public const STATUS_NEW = 'new';
+    public const STATUS_RECEIVED_FROM_CLIENT = 'received_from_client';
+    public const STATUS_PROCESSING_IN_SERVICE = 'processing_service';
+    public const STATUS_FIXED = 'fixed';
+    public const STATUS_SENT_BY_NOVA_POSHTA = 'sent_by_novaposhta';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_NOT_FIXED = 'not_fixed';
+    public const STATUS_NOT_FIXED_RETURNED = 'not_fixed_returned';
+
+    public const STATUSES = [
         self::STATUS_NEW => 'Нове',
         self::STATUS_RECEIVED_FROM_CLIENT => 'Отримане від клієнта',
         self::STATUS_PROCESSING_IN_SERVICE => 'Обслуговується в сервісі',
@@ -35,8 +37,6 @@ class Warranty
         self::STATUS_NOT_FIXED => 'Невідремонтовано. Повернуто кошти',
         self::STATUS_NOT_FIXED_RETURNED => 'Невідремонтовано. Повернуто покупцеві',
     ];
-
-    use DateStorageTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

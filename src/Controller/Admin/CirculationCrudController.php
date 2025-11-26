@@ -16,7 +16,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN')")]
 class CirculationCrudController extends AbstractCrudController
 {

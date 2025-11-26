@@ -20,8 +20,7 @@ class ProductFilterAttributeType extends AbstractType
     public function __construct(
         private readonly AdminContextProvider $adminContextProvider,
         private readonly FilterRepository $filterRepository
-    )
-    {
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

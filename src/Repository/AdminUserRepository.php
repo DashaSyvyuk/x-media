@@ -28,9 +28,9 @@ class AdminUserRepository extends ServiceEntityRepository implements PasswordUpg
      */
     public function add(AdminUser $entity, bool $flush = true): void
     {
-        $this->_em->persist($entity);
+        $this->getEntityManager()->persist($entity);
         if ($flush) {
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
     }
 
@@ -38,9 +38,9 @@ class AdminUserRepository extends ServiceEntityRepository implements PasswordUpg
      */
     public function remove(AdminUser $entity, bool $flush = true): void
     {
-        $this->_em->remove($entity);
+        $this->getEntityManager()->remove($entity);
         if ($flush) {
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
     }
 
@@ -54,7 +54,7 @@ class AdminUserRepository extends ServiceEntityRepository implements PasswordUpg
         }
 
         $user->setPassword($newHashedPassword);
-        $this->_em->persist($user);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
     }
 }

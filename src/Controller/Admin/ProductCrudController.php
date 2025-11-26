@@ -43,14 +43,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 class ProductCrudController extends AbstractCrudController
 {
     public function __construct(
-        private readonly AdminUrlGenerator          $adminUrlGenerator,
-        private readonly ProductRepository          $productRepository,
-        private readonly GenerateHotlineXmlService  $generateHotlineXmlService,
-        private readonly GeneratePromXmlService     $generatePromXmlService,
-        private readonly CategoryRepository         $categoryRepository,
+        private readonly AdminUrlGenerator $adminUrlGenerator,
+        private readonly ProductRepository $productRepository,
+        private readonly GenerateHotlineXmlService $generateHotlineXmlService,
+        private readonly GeneratePromXmlService $generatePromXmlService,
+        private readonly CategoryRepository $categoryRepository,
         private readonly GenerateEkatalogXmlService $generateEkatalogXmlService,
-    )
-    {
+    ) {
         ini_set('memory_limit', '256M');
     }
 
@@ -145,7 +144,8 @@ class ProductCrudController extends AbstractCrudController
 
                     ],
                     'attr' => ['rows' => '40'],
-                ])
+                ]
+            )
             ->setColumns(12)
             ->hideOnIndex();
 
@@ -229,7 +229,7 @@ class ProductCrudController extends AbstractCrudController
         $clone->setTitle(sprintf('%s (Copy)', $entity->getTitle()));
 
         if ($entity->getCharacteristics()) {
-            foreach($entity->getCharacteristics() as $characteristic) {
+            foreach ($entity->getCharacteristics() as $characteristic) {
                 $productCharacteristic = new ProductCharacteristic();
                 $productCharacteristic->setTitle($characteristic->getTitle());
                 $productCharacteristic->setValue($characteristic->getValue());
@@ -252,7 +252,12 @@ class ProductCrudController extends AbstractCrudController
         $this->persistEntity($this->get('doctrine')->getManagerForClass($context->getEntity()->getFqcn()), $clone);
         $this->addFlash('success', 'Product duplicated');
 
-        return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+        return $this->redirect(
+            $this->adminUrlGenerator
+                ->setController(ProductCrudController::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl()
+        );
     }
 
     public function hotlineXmlAction(AdminContext $adminContext): RedirectResponse
@@ -261,7 +266,12 @@ class ProductCrudController extends AbstractCrudController
 
         $this->addFlash('success', 'Document is generated <a href="/hotline/products.xml" target="_blank">here</a>');
 
-        return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+        return $this->redirect(
+            $this->adminUrlGenerator
+                ->setController(ProductCrudController::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl()
+        );
     }
 
     public function promXmlAction(AdminContext $adminContext): RedirectResponse
@@ -270,7 +280,12 @@ class ProductCrudController extends AbstractCrudController
 
         $this->addFlash('success', 'Document is generated <a href="/prom/products.xml" target="_blank">here</a>');
 
-        return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+        return $this->redirect(
+            $this->adminUrlGenerator
+                ->setController(ProductCrudController::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl()
+        );
     }
 
     public function ekatalogXmlAction(AdminContext $adminContext): RedirectResponse
@@ -279,7 +294,12 @@ class ProductCrudController extends AbstractCrudController
 
         $this->addFlash('success', 'Document is generated <a href="/e-katalog/products.xml" target="_blank">here</a>');
 
-        return $this->redirect($this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl());
+        return $this->redirect(
+            $this->adminUrlGenerator
+                ->setController(ProductCrudController::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl()
+        );
     }
 
     public function createIndexQueryBuilder(

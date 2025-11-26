@@ -45,7 +45,10 @@ class CreateService
         }
 
         if ($phone = $order->getPhone()) {
-            TurboSms::send($phone, sprintf('Дякуємо за замовлення у нашому магазині! Номер замовлення %s :)', $order->getOrderNumber()));
+            TurboSms::send(
+                $phone,
+                sprintf('Дякуємо за замовлення у нашому магазині! Номер замовлення %s :)', $order->getOrderNumber())
+            );
         }
 
         $managerMessage = (new Email())
@@ -57,7 +60,7 @@ class CreateService
                     'emails/manager-order.html.twig',
                     [
                         'mainUrl' => $mainUrl,
-                        'order' => $order
+                        'order'   => $order
                     ]
                 )
             )

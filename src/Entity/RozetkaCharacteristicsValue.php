@@ -18,7 +18,12 @@ class RozetkaCharacteristicsValue
     #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $id;
 
-    #[ORM\JoinColumn(name: "characteristic_id", referencedColumnName: "rozetka_id", nullable: true, onDelete: "SET NULL")]
+    #[ORM\JoinColumn(
+        name: "characteristic_id",
+        referencedColumnName: "rozetka_id",
+        nullable: true,
+        onDelete: "SET NULL"
+    )]
     #[ORM\ManyToOne(targetEntity: "RozetkaCharacteristics", inversedBy: "values")]
     private RozetkaCharacteristics $characteristic;
 

@@ -98,8 +98,12 @@ class InStock
 
     public function __toString(): string
     {
-        $p = method_exists($this->product ?? null, 'getTitle') ? $this->product->getTitle() : (string)($this->product->getId() ?? '');
-        $w = method_exists($this->warehouse ?? null, 'getTitle') ? $this->warehouse->getTitle() : (string)($this->warehouse->getId() ?? '');
+        $p = method_exists($this->product ?? null, 'getTitle') ?
+            $this->product->getTitle() :
+            (string)($this->product->getId() ?? '');
+        $w = method_exists($this->warehouse ?? null, 'getTitle') ?
+            $this->warehouse->getTitle() :
+            (string)($this->warehouse->getId() ?? '');
         return sprintf('%s @ %s (%d)', $p, $w, $this->quantity);
     }
 }

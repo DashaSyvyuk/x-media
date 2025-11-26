@@ -19,8 +19,7 @@ class PriorityListener
         private readonly FilterRepository $filterRepository,
         private readonly FilterAttributeRepository $filterAttributeRepository,
         private readonly SliderRepository $sliderRepository,
-    )
-    {
+    ) {
     }
 
     public function postPersist(PostPersistEventArgs $args): void
@@ -36,7 +35,10 @@ class PriorityListener
         }
 
         if ($entity instanceof FilterAttribute) {
-            $filterAttribute = $this->filterAttributeRepository->findOneBy(['filter' => $entity->getFilter()], ['priority' => 'DESC']);
+            $filterAttribute = $this->filterAttributeRepository->findOneBy(
+                ['filter' => $entity->getFilter()],
+                ['priority' => 'DESC']
+            );
 
             $entity->setPriority($filterAttribute->getPriority() + 1);
             $entityManager->flush();

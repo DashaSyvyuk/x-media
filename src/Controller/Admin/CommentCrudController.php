@@ -35,7 +35,7 @@ class CommentCrudController extends AbstractCrudController
     {
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('author', 'Автор');
-        yield TextField::new('email','Email');
+        yield TextField::new('email', 'Email');
         yield ChoiceField::new('status', 'Статус')->setChoices(Comment::STATUSES);
         yield TextareaField::new('comment', 'Коментар')->hideOnIndex();
         yield TextareaField::new('answer', 'Відповідь')->hideOnIndex();

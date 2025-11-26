@@ -23,13 +23,13 @@ class TurboSms
                     'recipients' => [
                         $to
                     ],
-                   'sms' => [
+                    'sms' => [
                        'sender' => $_SERVER['TURBO_SMS_SENDER'],
                        'text' => $text
-                   ]
+                    ]
                 ]
             ]);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage() . PHP_EOL;
         }
     }

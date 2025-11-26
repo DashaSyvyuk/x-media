@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use \DateTime;
+use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
@@ -18,7 +18,7 @@ class ProductCharacteristic
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: "integer", options: ["unsigned"=>true])]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private ?int $id = 0;
 
     #[ORM\Column(type: "string")]

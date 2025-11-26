@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PromotionController extends BaseController
 {
-    const VENDOR_FILTER_TITLE = 'Марка';
+    public const VENDOR_FILTER_TITLE = 'Марка';
 
     /**
      * @param CategoryRepository $categoryRepository
@@ -26,7 +26,7 @@ class PromotionController extends BaseController
      */
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
-        private readonly ProductRepository  $productRepository,
+        private readonly ProductRepository $productRepository,
         private readonly SettingRepository $settingRepository,
         private readonly PromotionRepository $promotionRepository,
         private readonly ProductFilterAttributeRepository $productFilterAttributeRepository,
@@ -38,8 +38,12 @@ class PromotionController extends BaseController
      * @throws NonUniqueResultException
      * @throws Exception
      */
-    public function getPromotion(string $slug, ?string $categorySlug, PaginatorInterface $paginator, Request $request): Response
-    {
+    public function getPromotion(
+        string $slug,
+        ?string $categorySlug,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response {
         $order = $request->query->get('order') ?? 'createdAt';
         $direction = $request->query->get('direction') ?? 'desc';
         $limit = $this->settingRepository->findOneBy(['slug' => 'pagination_limit']);
@@ -61,7 +65,11 @@ class PromotionController extends BaseController
         }
 
         $products = $this->productRepository->findByPromotionAndVendor(
-            $promotion, $category, $vendors, $order, $direction
+            $promotion,
+            $category,
+            $vendors,
+            $order,
+            $direction
         );
 
         $pagination = $paginator->paginate(
@@ -92,7 +100,11 @@ class PromotionController extends BaseController
         } else {
             return $this->renderTemplate($request, 'promotion_page/index.html.twig', [
                 'promotion'       => $promotion,
-                'filters'         => $this->productFilterAttributeRepository->findFilterParameterByTitle(self::VENDOR_FILTER_TITLE, $promotion, $category),
+                'filters'         => $this->productFilterAttributeRepository->findFilterParameterByTitle(
+                    self::VENDOR_FILTER_TITLE,
+                    $promotion,
+                    $category
+                ),
                 'pagination'      => $pagination,
                 'order'           => $order,
                 'direction'       => $direction,

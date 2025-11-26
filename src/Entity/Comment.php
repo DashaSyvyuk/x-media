@@ -16,11 +16,11 @@ class Comment
 {
     use DateStorageTrait;
 
-    const STATUS_NEW = 'NEW';
-    const STATUS_CONFIRMED = 'CONFIRMED';
-    const STATUS_DISABLED = 'DISABLED';
+    public const STATUS_NEW = 'NEW';
+    public const STATUS_CONFIRMED = 'CONFIRMED';
+    public const STATUS_DISABLED = 'DISABLED';
 
-    const STATUSES = [
+    public const STATUSES = [
         'Новий'         => self::STATUS_NEW,
         'Підтверджено'  => self::STATUS_CONFIRMED,
         'Заблокований'  => self::STATUS_DISABLED,
@@ -160,7 +160,7 @@ class Comment
         $this->updatedAt = $updatedAt;
     }
 
-    public function __toString():string
+    public function __toString(): string
     {
         return $this->comment;
     }

@@ -4,8 +4,8 @@ namespace App\Utils;
 
 use App\Repository\OrderRepository;
 
-class OrderNumber {
-
+class OrderNumber
+{
     /**
      * @param OrderRepository $orderRepository
      */

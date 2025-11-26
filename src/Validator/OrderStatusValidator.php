@@ -43,7 +43,9 @@ class OrderStatusValidator extends ConstraintValidator
 
         $orderSM = $this->stateFactory->get($oldOrder, 'simple');
         if (!$orderSM->can($value->getStatus())) {
-            $this->context->buildViolation('Неможливо змінити на статус ' . Order::STATUSES[$value->getStatus()])->addViolation();
+            $this->context
+                ->buildViolation(sprintf('Неможливо змінити на статус %s', Order::STATUSES[$value->getStatus()]))
+                ->addViolation();
 
             return false;
         }
