@@ -27,14 +27,6 @@ envs:
   value: ${{ secrets.DATABASE_URL }}
 features:
 - buildpack-stack=ubuntu-22
-ingress:
-  rules:
-  - component:
-      name: x-media
-    match:
-      authority: {}
-      path:
-        prefix: /
 maintenance: {}
 name: xmedia-app
 region: fra
