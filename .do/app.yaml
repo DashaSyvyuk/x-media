@@ -9,6 +9,7 @@ databases:
   name: db-mysql-fra1-79654
   production: true
   version: "8"
+envs:
 - key: APP_ENV
   scope: RUN_AND_BUILD_TIME
   value: prod
