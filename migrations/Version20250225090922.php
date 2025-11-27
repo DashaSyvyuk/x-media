@@ -20,7 +20,8 @@ final class Version20250225090922 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE rozetka_characteristic_category (rozetka_characteristic_id INT UNSIGNED NOT NULL, category_id INT UNSIGNED NOT NULL, INDEX IDX_C8621C811DF33789 (rozetka_characteristic_id), INDEX IDX_C8621C8112469DE2 (category_id), PRIMARY KEY(rozetka_characteristic_id, category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');$this->addSql('ALTER TABLE rozetka_characteristic_category ADD CONSTRAINT FK_C8621C811DF33789 FOREIGN KEY (rozetka_characteristic_id) REFERENCES characteristics_rozetka (id)');
+        $this->addSql('CREATE TABLE rozetka_characteristic_category (rozetka_characteristic_id INT UNSIGNED NOT NULL, category_id INT UNSIGNED NOT NULL, INDEX IDX_C8621C811DF33789 (rozetka_characteristic_id), INDEX IDX_C8621C8112469DE2 (category_id), PRIMARY KEY(rozetka_characteristic_id, category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE rozetka_characteristic_category ADD CONSTRAINT FK_C8621C811DF33789 FOREIGN KEY (rozetka_characteristic_id) REFERENCES characteristics_rozetka (rozetka_id)');
         $this->addSql('ALTER TABLE rozetka_characteristic_category ADD CONSTRAINT FK_C8621C8112469DE2 FOREIGN KEY (category_id) REFERENCES category (id)');
         $this->addSql('INSERT INTO rozetka_characteristic_category (rozetka_characteristic_id, category_id) SELECT characteristics_rozetka.id, characteristics_rozetka.category_id FROM characteristics_rozetka;');
         $this->addSql('ALTER TABLE characteristics_rozetka DROP FOREIGN KEY FK_CE49F77012469DE2');
@@ -45,6 +46,20 @@ final class Version20250225090922 extends AbstractMigration
         $this->addSql('ALTER TABLE characteristics_rozetka DROP id');
         $this->addSql('ALTER TABLE characteristics_rozetka ADD PRIMARY KEY (rozetka_id)');
         $this->addSql('ALTER TABLE rozetka_characteristics_values ADD CONSTRAINT FK_22AC030BDEE9D12B FOREIGN KEY (characteristic_id) REFERENCES characteristics_rozetka (rozetka_id) ON DELETE SET NULL');
+
+
+
+
+        $this->addSql('ALTER TABLE characteristics_rozetka MODIFY id INT UNSIGNED NOT NULL');
+        $this->addSql('ALTER TABLE characteristics_rozetka DROP id, DROP PRIMARY KEY, ADD PRIMARY KEY (rozetka_id)');
+        $this->addSql('ALTER TABLE rozetka_characteristic_category ADD CONSTRAINT FK_C8621C811DF33789 FOREIGN KEY (rozetka_characteristic_id) REFERENCES characteristics_rozetka (rozetka_id)');
+        $this->addSql('ALTER TABLE product_rozetka_characteristic_value DROP FOREIGN KEY `FK_AD0154AEDEE9D12B`');
+        $this->addSql('DROP INDEX IDX_AD0154AEA0EAF80ADEE9D12B ON product_rozetka_characteristic_value');
+        $this->addSql('ALTER TABLE product_rozetka_characteristic_value ADD CONSTRAINT FK_AD0154AEDEE9D12B FOREIGN KEY (characteristic_id) REFERENCES characteristics_rozetka (rozetka_id)');
+        $this->addSql('ALTER TABLE rozetka_characteristics_values ADD CONSTRAINT FK_22AC030BDEE9D12B FOREIGN KEY (characteristic_id) REFERENCES characteristics_rozetka (rozetka_id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE rozetka_product ADD promo_price INT DEFAULT NULL, ADD crossed_out_price INT DEFAULT NULL, ADD active_for_a TINYINT(1) NOT NULL, ADD active_for_p TINYINT(1) NOT NULL, ADD rozetka_product_id INT UNSIGNED DEFAULT NULL, CHANGE active promo_price_active TINYINT(1) NOT NULL');
+        $this->addSql('ALTER TABLE rozetka_product ADD CONSTRAINT FK_7DDE2317A0EAF80A FOREIGN KEY (rozetka_product_id) REFERENCES rozetka_product (id)');
+        $this->addSql('CREATE INDEX IDX_7DDE2317A0EAF80A ON rozetka_product (rozetka_product_id)');
     }
 
     public function down(Schema $schema): void

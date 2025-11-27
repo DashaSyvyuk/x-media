@@ -30,8 +30,6 @@ final class Version20231110085659 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_E52FFDEE7B00651C ON orders (status)');
         $this->addSql('CREATE INDEX IDX_E52FFDEEE7769B0F ON orders (surname)');
         $this->addSql('CREATE INDEX IDX_E52FFDEEE7927C74 ON orders (email)');
-        $this->addSql('ALTER TABLE orders RENAME INDEX fk_e52ffdeeb5e4a15f TO IDX_E52FFDEEB5E4A15F');
-        $this->addSql('ALTER TABLE orders RENAME INDEX fk_e52ffdeef216ee8e TO IDX_E52FFDEEF216EE8E');
         $this->addSql('ALTER TABLE orders ADD send_notification TINYINT(1) NOT NULL');
         $this->addSql('ALTER TABLE orders ADD labels LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:simple_array)\'');
     }
@@ -49,8 +47,6 @@ final class Version20231110085659 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_E52FFDEE444F97DD ON orders (phone(191))');
         $this->addSql('CREATE INDEX IDX_E52FFDEEE7927C74 ON orders (email(191))');
         $this->addSql('CREATE INDEX IDX_E52FFDEE7B00651C ON orders (status(191))');
-        $this->addSql('ALTER TABLE orders RENAME INDEX idx_e52ffdeeb5e4a15f TO FK_E52FFDEEB5E4A15F');
-        $this->addSql('ALTER TABLE orders RENAME INDEX idx_e52ffdeef216ee8e TO FK_E52FFDEEF216EE8E');
         $this->addSql('ALTER TABLE orders DROP send_notification');
         $this->addSql('ALTER TABLE orders DROP labels');
     }

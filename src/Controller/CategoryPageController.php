@@ -58,8 +58,8 @@ class CategoryPageController extends BaseController
             $search,
             $order,
             $direction,
-            $priceFrom,
-            $priceTo
+            intval($priceFrom),
+            intval($priceTo)
         );
 
         $pagination = $paginator->paginate(
@@ -72,8 +72,8 @@ class CategoryPageController extends BaseController
             $category,
             $filters,
             $search,
-            $priceFrom,
-            $priceTo
+            intval($priceFrom),
+            intval($priceTo)
         );
 
         $query['price_from'] = $priceFrom;
