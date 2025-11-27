@@ -39,6 +39,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 
+/**
+ * @extends AbstractCrudController<Product>
+ */
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')")]
 class ProductCrudController extends AbstractCrudController
 {
@@ -228,7 +231,7 @@ class ProductCrudController extends AbstractCrudController
         $clone->setCreatedAt(new \DateTime('now'));
         $clone->setTitle(sprintf('%s (Copy)', $entity->getTitle()));
 
-        if ($entity->getCharacteristics()) {
+        if (! $entity->getCharacteristics()->isEmpty()) {
             foreach ($entity->getCharacteristics() as $characteristic) {
                 $productCharacteristic = new ProductCharacteristic();
                 $productCharacteristic->setTitle($characteristic->getTitle());
@@ -239,7 +242,7 @@ class ProductCrudController extends AbstractCrudController
             }
         }
 
-        if ($entity->getFilterAttributes()) {
+        if (! $entity->getFilterAttributes()->isEmpty()) {
             foreach ($entity->getFilterAttributes() as $filterAttribute) {
                 $productFilterAttribute = new ProductFilterAttribute();
                 $productFilterAttribute->setFilter($filterAttribute->getFilter());
@@ -249,7 +252,10 @@ class ProductCrudController extends AbstractCrudController
             }
         }
 
-        $this->persistEntity($this->get('doctrine')->getManagerForClass($context->getEntity()->getFqcn()), $clone);
+        $this->persistEntity(
+            $this->get('doctrine')->getManagerForClass($context->getEntity()->getFqcn()), // @phpstan-ignore-line
+            $clone
+        );
         $this->addFlash('success', 'Product duplicated');
 
         return $this->redirect(

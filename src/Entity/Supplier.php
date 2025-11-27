@@ -2,15 +2,17 @@
 
 namespace App\Entity;
 
+use App\Repository\SupplierRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table("suppliers", indexes: [
     new ORM\Index(columns: ["title", "surname"])
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\SupplierRepository")]
+#[ORM\Entity(repositoryClass: SupplierRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Supplier
 {
@@ -43,19 +45,20 @@ class Supplier
     private ?string $bankAccount = "";
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Currency")]
+    #[ORM\ManyToOne(targetEntity: Currency::class)]
     private Currency $currency;
 
     #[ORM\Column(type: "boolean")]
     private bool $active = true;
 
+    /** @var ArrayCollection<int, SupplierProduct>|PersistentCollection<int, SupplierProduct> $products */
     #[ORM\OneToMany(
-        targetEntity: "App\Entity\SupplierProduct",
+        targetEntity: SupplierProduct::class,
         mappedBy: "supplier",
         cascade: ["all"],
         orphanRemoval: true
     )]
-    private $products;
+    private ArrayCollection|PersistentCollection $products;
 
     #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
@@ -68,164 +71,118 @@ class Supplier
         $this->products = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param string $title
-     */
     public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string|null $name
-     */
     public function setName(?string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string|null
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param string|null $surname
-     */
     public function setSurname(?string $surname): void
     {
         $this->surname = $surname;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSurname(): ?string
     {
         return $this->surname;
     }
 
-    /**
-     * @param string|null $phone
-     */
     public function setPhone(?string $phone): void
     {
         $this->phone = $phone;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    /**
-     * @param string|null $email
-     */
     public function setEmail(?string $email): void
     {
         $this->email = $email;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param string|null $address
-     */
     public function setAddress(?string $address): void
     {
         $this->address = $address;
     }
 
-    /**
-     * @return string|null
-     */
     public function getAddress(): ?string
     {
         return $this->address;
     }
 
-    /**
-     * @param string|null $bankAccount
-     */
     public function setBankAccount(?string $bankAccount): void
     {
         $this->bankAccount = $bankAccount;
     }
 
-    /**
-     * @return string|null
-     */
     public function getBankAccount(): ?string
     {
         return $this->bankAccount;
     }
 
-    /**
-     * @param Currency $currency
-     */
     public function setCurrency(Currency $currency): void
     {
         $this->currency = $currency;
     }
 
-    /**
-     * @return Currency
-     */
     public function getCurrency(): Currency
     {
         return $this->currency;
     }
 
-    /**
-     * @param bool $active
-     */
     public function setActive(bool $active): void
     {
         $this->active = $active;
     }
 
-    /**
-     * @return bool
-     */
     public function getActive(): bool
     {
         return $this->active;
     }
 
-    public function getProducts()
+    /**
+     * @return ArrayCollection<int, SupplierProduct>|PersistentCollection<int, SupplierProduct>
+     */
+    public function getProducts(): ArrayCollection|PersistentCollection
     {
         return $this->products;
     }
 
-    public function setProducts($products): void
+    /**
+     * @param ArrayCollection<int, SupplierProduct>|PersistentCollection<int, SupplierProduct> $products
+     */
+    public function setProducts(ArrayCollection|PersistentCollection $products): void
     {
         if (count($products) > 0) {
             foreach ($products as $product) {
@@ -254,7 +211,7 @@ class Supplier
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt): void
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -264,13 +221,13 @@ class Supplier
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt): void
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
     public function __toString(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 }

@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
+use App\Repository\RozetkaProductRepository;
 use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table("rozetka_product")]
-#[ORM\Entity(repositoryClass: "App\Repository\RozetkaProductRepository")]
+#[ORM\Entity(repositoryClass: RozetkaProductRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class RozetkaProduct
 {
@@ -47,19 +49,20 @@ class RozetkaProduct
     #[Assert\GreaterThan(propertyPath: "price", message: "Too low value")]
     private ?int $crossedOutPrice = 0;
 
+    /** @var ArrayCollection<int, ProductRozetkaCharacteristicValue>|PersistentCollection<int, ProductRozetkaCharacteristicValue> $values */
     #[ORM\OneToMany(
-        targetEntity: "App\Entity\ProductRozetkaCharacteristicValue",
+        targetEntity: ProductRozetkaCharacteristicValue::class,
         mappedBy: "rozetkaProduct",
         cascade: ["all"],
         orphanRemoval: true
     )]
-    private $values;
+    private ArrayCollection|PersistentCollection $values;
 
-    #[ORM\OneToOne(targetEntity: "App\Entity\Product")]
+    #[ORM\OneToOne(targetEntity: Product::class)]
     #[ORM\JoinColumn(name: "product_id", referencedColumnName: "id")]
     private Product $product;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\RozetkaProduct")]
+    #[ORM\ManyToOne(targetEntity: RozetkaProduct::class)]
     #[ORM\JoinColumn(name: "rozetka_product_id", referencedColumnName: "id")]
     private ?RozetkaProduct $rozetkaProduct = null;
 
@@ -81,6 +84,11 @@ class RozetkaProduct
     public function __construct()
     {
         $this->values = new ArrayCollection();
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getId(): int
@@ -158,15 +166,16 @@ class RozetkaProduct
         $this->crossedOutPrice = $crossedOutPrice;
     }
 
-    public function getValues()
+    public function getValues(): ArrayCollection|PersistentCollection // @phpstan-ignore-line
     {
+        // @phpstan-ignore-next-line
         return $this->values->filter(function ($value) {
             $characteristic = $value->getCharacteristic();
             return $characteristic && $characteristic->getActive();
         });
     }
 
-    public function setValues($values): void
+    public function setValues(ArrayCollection|PersistentCollection $values): void // @phpstan-ignore-line
     {
         if (count($values) > 0) {
             foreach ($values as $value) {
@@ -175,18 +184,12 @@ class RozetkaProduct
         }
     }
 
-    /**
-     * @param ProductRozetkaCharacteristicValue $value
-     */
     public function addValue(ProductRozetkaCharacteristicValue $value): void
     {
         $value->setRozetkaProduct($this);
         $this->values[] = $value;
     }
 
-    /**
-     * @param ProductRozetkaCharacteristicValue $value
-     */
     public function removeValue(ProductRozetkaCharacteristicValue $value): void
     {
         if ($this->values->contains($value)) {

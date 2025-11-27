@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use App\Repository\ProductFilterAttributeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
 #[ORM\Table("product_filter_attribute", indexes: [
     new ORM\Index(columns: ["product_id", "filter_id", "filter_attribute_id"])
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\ProductFilterAttributeRepository")]
+#[ORM\Entity(repositoryClass: ProductFilterAttributeRepository::class)]
 class ProductFilterAttribute
 {
     #[ORM\Id]
@@ -18,16 +19,16 @@ class ProductFilterAttribute
 
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "filterAttributes")]
     #[ORM\JoinColumn(nullable: false)]
-    private $product;
+    private Product $product;
 
     #[ORM\ManyToOne(targetEntity: Filter::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $filter;
+    private Filter $filter;
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     #[ORM\ManyToOne(targetEntity: FilterAttribute::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $filterAttribute;
+    private FilterAttribute $filterAttribute;
 
     public function getId(): int
     {

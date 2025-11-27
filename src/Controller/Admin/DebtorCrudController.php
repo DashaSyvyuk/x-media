@@ -20,6 +20,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+/**
+ * @extends AbstractCrudController<Debtor>
+ */
 #[Security("is_granted('ROLE_SUPER_ADMIN')")]
 class DebtorCrudController extends AbstractCrudController
 {

@@ -7,10 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method CirculationPayment|null find($id, $lockMode = null, $lockVersion = null)
- * @method CirculationPayment|null findOneBy(array $criteria, array $orderBy = null)
- * @method CirculationPayment[]    findAll()
- * @method CirculationPayment[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<CirculationPayment>
  */
 class CirculationPaymentRepository extends ServiceEntityRepository
 {

@@ -16,6 +16,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+/**
+ * @extends AbstractCrudController<Warranty>
+ */
 #[Security("is_granted('ROLE_SUPER_ADMIN')")]
 class WarrantyCrudController extends AbstractCrudController
 {

@@ -7,10 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method OrderItem|null find($id, $lockMode = null, $lockVersion = null)
- * @method OrderItem|null findOneBy(array $criteria, array $orderBy = null)
- * @method OrderItem[]    findAll()
- * @method OrderItem[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<OrderItem>
  */
 class OrderItemRepository extends ServiceEntityRepository
 {
@@ -19,7 +16,7 @@ class OrderItemRepository extends ServiceEntityRepository
         parent::__construct($registry, OrderItem::class);
     }
 
-    public function create(OrderItem $orderItem)
+    public function create(OrderItem $orderItem): void
     {
         $entityManager = $this->getEntityManager();
         $entityManager->persist($orderItem);

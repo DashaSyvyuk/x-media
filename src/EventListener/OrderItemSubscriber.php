@@ -4,6 +4,7 @@ namespace App\EventListener;
 
 use App\Entity\OrderItem;
 use Doctrine\ORM\Events;
+use Doctrine\Persistence\ObjectManager;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -11,6 +12,9 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\EventSubscriber;
 
+/**
+ * @param LifecycleEventArgs<ObjectManager, object> $args
+ */
 class OrderItemSubscriber implements EventSubscriber
 {
     public function getSubscribedEvents(): array
@@ -28,6 +32,8 @@ class OrderItemSubscriber implements EventSubscriber
      * @throws NotFoundExceptionInterface
      * @throws TransportExceptionInterface
      * @throws Exception
+     *
+     * @param LifecycleEventArgs<ObjectManager> $args
      */
     public function postPersist(LifecycleEventArgs $args): void
     {
@@ -55,6 +61,8 @@ class OrderItemSubscriber implements EventSubscriber
      * @throws NotFoundExceptionInterface
      * @throws TransportExceptionInterface
      * @throws Exception
+     *
+     * @param LifecycleEventArgs<ObjectManager> $args
      */
     public function postUpdate(LifecycleEventArgs $args): void
     {
@@ -81,6 +89,8 @@ class OrderItemSubscriber implements EventSubscriber
      * @throws NotFoundExceptionInterface
      * @throws TransportExceptionInterface
      * @throws Exception
+     *
+     * @param LifecycleEventArgs<ObjectManager> $args
      */
     public function postRemove(LifecycleEventArgs $args): void
     {

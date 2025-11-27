@@ -9,10 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Slider|null find($id, $lockMode = null, $lockVersion = null)
- * @method Slider|null findOneBy(array $criteria, array $orderBy = null)
- * @method Slider[]    findAll()
- * @method Slider[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Slider>
  */
 class SliderRepository extends ServiceEntityRepository
 {
@@ -21,7 +18,7 @@ class SliderRepository extends ServiceEntityRepository
         parent::__construct($registry, Slider::class);
     }
 
-    public function getActiveItems(): array
+    public function getActiveItems(): mixed
     {
         $now = Carbon::now();
 

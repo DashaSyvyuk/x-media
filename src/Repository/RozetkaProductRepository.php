@@ -7,10 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method RozetkaProduct|null find($id, $lockMode = null, $lockVersion = null)
- * @method RozetkaProduct|null findOneBy(array $criteria, array $orderBy = null)
- * @method RozetkaProduct[]    findAll()
- * @method RozetkaProduct[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<RozetkaProduct>
  */
 class RozetkaProductRepository extends ServiceEntityRepository
 {
@@ -28,10 +25,10 @@ class RozetkaProductRepository extends ServiceEntityRepository
         return $rozetkaProduct;
     }
 
-    public function update(RozetkaProduct $rozetkaProduct)
+    public function update(RozetkaProduct $rozetkaProduct): void
     {
         $entityManager = $this->getEntityManager();
-        $entityManager->merge($rozetkaProduct);
+        $entityManager->refresh($rozetkaProduct);
         $entityManager->flush();
     }
 }

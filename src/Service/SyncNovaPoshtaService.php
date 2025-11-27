@@ -24,9 +24,13 @@ class SyncNovaPoshtaService
         NovaPoshtaCityRepository $novaPoshtaCityRepository,
         NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
     ) {
+        $apiKey = $settingRepository->findOneBy(['slug' => 'nova_poshta_api_key']);
+        if (empty($apiKey)) {
+            throw new \Exception('Set NovaPoshta api key');
+        }
         $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
         $this->novaPoshtaOfficeRepository = $novaPoshtaOfficeRepository;
-        $this->key = $settingRepository->findOneBy(['slug' => 'nova_poshta_api_key'])->getValue();
+        $this->key = $apiKey->getValue();
         $this->client = new Client(['base_uri' => 'https://api.novaposhta.ua']);
     }
 
@@ -110,6 +114,11 @@ class SyncNovaPoshtaService
         }
     }
 
+    /**
+     * @param array<string, string> $item
+     *
+     * @return void
+     */
     private function saveCity(array $item): void
     {
         if ($city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $item['Ref']])) {
@@ -123,6 +132,11 @@ class SyncNovaPoshtaService
         }
     }
 
+    /**
+     * @param array<string, string> $item
+     *
+     * @return void
+     */
     private function saveOffice(array $item): void
     {
         $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $item['CityRef']]);

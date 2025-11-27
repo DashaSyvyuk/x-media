@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\SupplierOrderProductRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table("supplier_order_product")]
-#[ORM\Entity(repositoryClass: "App\Repository\SupplierOrderProductRepository")]
+#[ORM\Entity(repositoryClass: SupplierOrderProductRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class SupplierOrderProduct
 {
@@ -19,11 +20,11 @@ class SupplierOrderProduct
     private int $id;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\SupplierOrder")]
+    #[ORM\ManyToOne(targetEntity: SupplierOrder::class)]
     private SupplierOrder $supplierOrder;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\SupplierProduct")]
+    #[ORM\ManyToOne(targetEntity: SupplierProduct::class)]
     private SupplierProduct $product;
 
     #[ORM\Column(type: "integer")]
@@ -38,83 +39,62 @@ class SupplierOrderProduct
     #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
-    /**
-     * @return int
-     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param SupplierOrder $supplierOrder
-     */
     public function setSupplierOrder(SupplierOrder $supplierOrder): void
     {
         $this->supplierOrder = $supplierOrder;
     }
 
-    /**
-     * @return SupplierOrder
-     */
     public function getSupplierOrder(): SupplierOrder
     {
         return $this->supplierOrder;
     }
 
-    /**
-     * @param SupplierProduct $product
-     */
     public function setProduct(SupplierProduct $product): void
     {
         $this->product = $product;
     }
 
-    /**
-     * @return SupplierProduct
-     */
     public function getProduct(): SupplierProduct
     {
         return $this->product;
     }
 
-    /**
-     * @param int $quantity
-     */
     public function setQuantity(int $quantity): void
     {
         $this->quantity = $quantity;
     }
 
-    /**
-     * @return int
-     */
     public function getQuantity(): int
     {
         return $this->quantity;
     }
 
-    /**
-     * @param int $price
-     */
     public function setPrice(int $price): void
     {
         $this->price = $price;
     }
 
-    /**
-     * @return int
-     */
     public function getPrice(): int
     {
         return $this->price;
     }
+
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt): void
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -124,26 +104,18 @@ class SupplierOrderProduct
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt): void
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
     public function getSupplierProductPrice(): ?int
     {
-        if (!$this->product) {
-            return null;
-        }
-
         return $this->product->getPrice();
     }
 
     public function getProductPrice(): ?int
     {
-        if (!$this->product) {
-            return null;
-        }
-
         return $this->product->getProduct()->getPrice();
     }
 }

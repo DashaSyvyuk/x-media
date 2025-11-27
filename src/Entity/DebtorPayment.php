@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\DebtorPaymentRepository;
 use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table("debtor_payments")]
-#[ORM\Entity(repositoryClass: "App\Repository\DebtorPaymentRepository")]
+#[ORM\Entity(repositoryClass: DebtorPaymentRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class DebtorPayment
 {
@@ -28,7 +29,7 @@ class DebtorPayment
     private ?string $description = '';
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Debtor")]
+    #[ORM\ManyToOne(targetEntity: Debtor::class)]
     private Debtor $debtor;
 
     #[ORM\Column(type: "datetime")]
@@ -40,6 +41,11 @@ class DebtorPayment
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getSum(): int

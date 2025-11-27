@@ -41,7 +41,7 @@ class ProductFilterAttributeType extends AbstractType
             ])
         ;
 
-        $formModifier = function (FormInterface $form, Filter $filter = null) {
+        $formModifier = function (FormInterface $form, ?Filter $filter = null) {
             $attributes = null === $filter ? [] : $filter->getFilterAttributes();
 
             $form->add('filterAttribute', EntityType::class, [

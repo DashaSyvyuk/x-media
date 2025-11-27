@@ -5,3 +5,6 @@ phpcs:
 
 phpcbf:
 	docker container exec -it $(PHP_SERVICE) vendor/bin/phpcbf --standard=PSR12 src
+
+phpstan:
+	docker container exec -it $(PHP_SERVICE) vendor/bin/phpstan analyse src --memory-limit=2G

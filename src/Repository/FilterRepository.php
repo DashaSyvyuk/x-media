@@ -10,10 +10,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Filter|null find($id, $lockMode = null, $lockVersion = null)
- * @method Filter|null findOneBy(array $criteria, array $orderBy = null)
- * @method Filter[]    findAll()
- * @method Filter[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Filter>
  */
 class FilterRepository extends ServiceEntityRepository
 {
@@ -22,7 +19,7 @@ class FilterRepository extends ServiceEntityRepository
         parent::__construct($registry, Filter::class);
     }
 
-    public function findByCategory(string $slug)
+    public function findByCategory(string $slug): mixed
     {
         return $this->createQueryBuilder('fp')
             ->leftJoin('fp.category', 'category')
@@ -35,6 +32,10 @@ class FilterRepository extends ServiceEntityRepository
 
     /**
      * @throws NonUniqueResultException
+     *
+     * @param array<int, string> $attributes
+     *
+     * @return array<int, array<mixed>>
      */
     public function findByFilterAttributes(?array $attributes): array
     {

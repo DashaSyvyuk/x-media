@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
+use App\Repository\ProductCharacteristicRepository;
 use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 
 #[ORM\Table('product_characteristic', indexes: [
     new ORM\Index(columns: ["product_id", "position"])
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\ProductCharacteristicRepository")]
+#[ORM\Entity(repositoryClass: ProductCharacteristicRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class ProductCharacteristic
 {
@@ -31,7 +31,7 @@ class ProductCharacteristic
     private ?int $position = 0;
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Product", inversedBy: "characteristics")]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "characteristics")]
     private Product $product;
 
     #[ORM\Column(type: "datetime")]
@@ -45,54 +45,41 @@ class ProductCharacteristic
         return $this->id;
     }
 
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getProduct(): Product
     {
         return $this->product;
     }
 
-    /**
-     * @param Product $product
-     */
-    public function setProduct(Product $product)
+    public function setProduct(Product $product): void
     {
         $this->product = $product;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     */
     public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         return $this->value;
     }
 
-    /**
-     * @param string $value
-     */
     public function setValue(string $value): void
     {
         $this->value = $value;
     }
 
-    /**
-     * @return int|null
-     */
     public function getPosition(): ?int
     {
         return $this->position;

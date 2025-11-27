@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\FeedbackRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
     new ORM\Index(columns: ["email"]),
     new ORM\Index(columns: ["created_at"]),
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\FeedbackRepository")]
+#[ORM\Entity(repositoryClass: FeedbackRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Feedback
 {
@@ -57,7 +58,7 @@ class Feedback
         return $this->id;
     }
 
-    public function setId(int $id): int
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -107,7 +108,7 @@ class Feedback
         return $this->answer;
     }
 
-    public function setAnswer(?string $answer)
+    public function setAnswer(?string $answer): void
     {
         $this->answer = $answer;
     }
@@ -117,7 +118,7 @@ class Feedback
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -127,7 +128,7 @@ class Feedback
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

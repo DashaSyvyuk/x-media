@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\ProductImageRepository;
 use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\File\File;
 #[ORM\Table('product_image', indexes: [
     new ORM\Index(columns: ["product_id", "position"])
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\ProductImageRepository")]
+#[ORM\Entity(repositoryClass: ProductImageRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 #[Vich\Uploadable]
 class ProductImage
@@ -26,7 +27,7 @@ class ProductImage
     private ?int $id = null;
 
     #[ORM\Column(type: "text")]
-    private $imageUrl;
+    private ?string $imageUrl;
 
     #[Vich\UploadableField(mapping: "images", fileNameProperty: "imageUrl")]
     private ?File $file = null;
@@ -35,7 +36,7 @@ class ProductImage
     private ?int $position = 0;
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Product", inversedBy: "images")]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "images")]
     private Product $product;
 
     #[ORM\Column(type: "datetime")]
@@ -54,38 +55,31 @@ class ProductImage
         return $this->id;
     }
 
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getProduct(): Product
     {
         return $this->product;
     }
 
-    /**
-     * @param Product $product
-     */
     public function setProduct(Product $product): void
     {
         $this->product = $product;
     }
 
-    /**
-     * @return string|null
-     */
     public function getImageUrl(): ?string
     {
         return $this->imageUrl;
     }
 
-    /**
-     * @param $imageUrl
-     */
-    public function setImageUrl($imageUrl): void
+    public function setImageUrl(?string $imageUrl): void
     {
         $this->imageUrl = $imageUrl;
     }
 
-    /**
-     * @return int|null
-     */
     public function getPosition(): ?int
     {
         return $this->position;
@@ -96,7 +90,7 @@ class ProductImage
         $this->position = $position;
     }
 
-    public function setFile($file)
+    public function setFile(?File $file): void
     {
         $this->file = $file;
         if ($file) {
@@ -104,7 +98,7 @@ class ProductImage
         }
     }
 
-    public function getFile()
+    public function getFile(): ?File
     {
         return $this->file;
     }

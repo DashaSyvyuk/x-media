@@ -37,7 +37,7 @@ class ThankYouController extends BaseController
             }
 
             unset($_COOKIE['orderId']);
-            setcookie('orderId', null, -1, '/');
+            setcookie('orderId', '', -1, '/');
 
             return $this->renderTemplate($request, 'thank_page/index.html.twig', [
                 'order' => $order,

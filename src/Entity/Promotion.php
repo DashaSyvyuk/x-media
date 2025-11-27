@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use App\Repository\PromotionRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table("promotions")]
-#[ORM\Entity(repositoryClass: "App\Repository\PromotionRepository")]
+#[ORM\Entity(repositoryClass: PromotionRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Promotion
 {
@@ -45,13 +47,14 @@ class Promotion
     #[ORM\Column(type: "datetime")]
     private DateTime $activeTo;
 
+    /** @var ArrayCollection<int, PromotionProduct>|PersistentCollection<int, PromotionProduct> $products */
     #[ORM\OneToMany(
-        targetEntity: "App\Entity\PromotionProduct",
+        targetEntity: PromotionProduct::class,
         mappedBy: "promotion",
         cascade: ["all"],
         orphanRemoval: true
     )]
-    private $products;
+    private ArrayCollection|PersistentCollection $products;
 
     #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
@@ -62,6 +65,11 @@ class Promotion
     public function __construct()
     {
         $this->products = new ArrayCollection();
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getId(): int
@@ -129,7 +137,10 @@ class Promotion
         return $this->activeTo;
     }
 
-    public function getProducts()
+    /**
+     * @return ArrayCollection<int, PromotionProduct>|PersistentCollection<int, PromotionProduct>
+     */
+    public function getProducts(): ArrayCollection|PersistentCollection
     {
         return $this->products;
     }
@@ -149,6 +160,9 @@ class Promotion
         }
     }
 
+    /**
+     * @return array<int, PromotionProduct>
+     */
     public function getActiveProducts(int $maxCount = 10): array
     {
         $result = [];

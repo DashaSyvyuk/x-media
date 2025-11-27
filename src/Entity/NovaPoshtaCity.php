@@ -2,17 +2,19 @@
 
 namespace App\Entity;
 
+use App\Repository\NovaPoshtaCityRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table("nova_poshta_city", indexes: [
     new ORM\Index(columns: ["title"]),
     new ORM\Index(columns: ["ref"]),
     new ORM\Index(columns: ["created_at"]),
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\NovaPoshtaCityRepository")]
+#[ORM\Entity(repositoryClass: NovaPoshtaCityRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class NovaPoshtaCity
 {
@@ -29,8 +31,9 @@ class NovaPoshtaCity
     #[ORM\Column(type: "string")]
     private string $title = "";
 
-    #[ORM\OneToMany(mappedBy: "city", targetEntity: "NovaPoshtaOffice", cascade: ["all"], orphanRemoval: true)]
-    private $offices;
+    /** @var ArrayCollection<int, NovaPoshtaOffice>|PersistentCollection<int, NovaPoshtaOffice> $offices */
+    #[ORM\OneToMany(targetEntity: NovaPoshtaOffice::class, mappedBy: "city", cascade: ["all"], orphanRemoval: true)]
+    private ArrayCollection|PersistentCollection $offices;
 
     #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
@@ -48,7 +51,7 @@ class NovaPoshtaCity
         return $this->id;
     }
 
-    public function setId(int $id): int
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -73,12 +76,18 @@ class NovaPoshtaCity
         return $this->ref;
     }
 
-    public function getOffices()
+    /**
+     * @return ArrayCollection<int, NovaPoshtaOffice>|PersistentCollection<int, NovaPoshtaOffice>
+     */
+    public function getOffices(): ArrayCollection|PersistentCollection
     {
         return $this->offices;
     }
 
-    public function setOffices($offices)
+    /**
+     * @param ArrayCollection<int, NovaPoshtaOffice>|PersistentCollection<int, NovaPoshtaOffice> $offices
+     */
+    public function setOffices(ArrayCollection|PersistentCollection $offices): void
     {
         if (count($offices) > 0) {
             foreach ($offices as $office) {
@@ -87,7 +96,7 @@ class NovaPoshtaCity
         }
     }
 
-    public function addOffice(NovaPoshtaOffice $office)
+    public function addOffice(NovaPoshtaOffice $office): void
     {
         if (!$this->offices->contains($office)) {
             $office->setCity($this);
@@ -95,7 +104,7 @@ class NovaPoshtaCity
         }
     }
 
-    public function removeOffice(NovaPoshtaOffice $office)
+    public function removeOffice(NovaPoshtaOffice $office): void
     {
         if ($this->offices->contains($office)) {
             $this->offices->removeElement($office);
@@ -107,7 +116,7 @@ class NovaPoshtaCity
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -117,13 +126,13 @@ class NovaPoshtaCity
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
     public function __toString(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 }

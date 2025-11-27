@@ -82,6 +82,11 @@ class UploadCharacteristics
         }
     }
 
+    /**
+     * @param UploadedFile $file
+     *
+     * @return array<int, array<int, string>>
+     */
     private function readFile(UploadedFile $file): iterable
     {
         $xlsxReader = new Xlsx();

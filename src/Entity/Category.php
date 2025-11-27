@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use App\Repository\CategoryRepository;
 use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table('category', indexes: [
     new ORM\Index(columns: ['title']),
@@ -14,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
     new ORM\Index(columns: ['created_at']),
     new ORM\Index(columns: ['updated_at'])
  ])]
-#[ORM\Entity(repositoryClass: "App\Repository\CategoryRepository")]
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Category
 {
@@ -34,7 +36,7 @@ class Category
     private int $id;
 
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    #[ORM\ManyToOne(targetEntity: 'Category')]
+    #[ORM\ManyToOne(targetEntity: Category::class)]
     private ?Category $parent = null;
 
     #[ORM\Column(type: 'string')]
@@ -82,23 +84,25 @@ class Category
     #[ORM\Column(type: 'boolean')]
     private bool $showInHotlineFeed = true;
 
+    /** @var ArrayCollection<int, Product>|PersistentCollection<int, Product> $products */
     #[ORM\OneToMany(
-        targetEntity: 'App\Entity\Product',
+        targetEntity: Product::class,
         mappedBy: 'category',
         cascade: ['all'],
         fetch: 'EAGER',
         orphanRemoval: true
     )]
-    private $products;
+    private ArrayCollection|PersistentCollection $products;
 
+    /** @var ArrayCollection<int, CategoryFeedPrice>|PersistentCollection<int, CategoryFeedPrice> $feedPrices */
     #[ORM\OneToMany(
-        targetEntity: 'App\Entity\CategoryFeedPrice',
+        targetEntity: CategoryFeedPrice::class,
         mappedBy: 'category',
         cascade: ['all'],
         fetch: 'EAGER',
         orphanRemoval: true
     )]
-    private $feedPrices;
+    private ArrayCollection|PersistentCollection $feedPrices;
 
     #[ORM\Column(type: 'datetime')]
     public DateTime $createdAt;
@@ -110,6 +114,11 @@ class Category
     {
         $this->products = new ArrayCollection();
         $this->feedPrices = new ArrayCollection();
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getId(): int
@@ -277,9 +286,6 @@ class Category
         return $this->showInHotlineFeed;
     }
 
-    /**
-     * @param Product $product
-     */
     public function addProduct(Product $product): void
     {
         $product->setCategory($this);
@@ -288,23 +294,19 @@ class Category
         }
     }
 
-    /**
-     * @param Product $product
-     * @return bool
-     */
     public function removeProduct(Product $product): bool
     {
         return $this->products->removeElement($product);
     }
 
-    public function getProducts()
+    /**
+     * @return ArrayCollection<int, Product>|PersistentCollection<int, Product>
+     */
+    public function getProducts(): ArrayCollection|PersistentCollection
     {
         return $this->products;
     }
 
-    /**
-     * @param CategoryFeedPrice $feedPrice
-     */
     public function addFeedPrice(CategoryFeedPrice $feedPrice): void
     {
         $feedPrice->setCategory($this);
@@ -313,21 +315,23 @@ class Category
         }
     }
 
-    /**
-     * @param CategoryFeedPrice $feedPrice
-     * @return bool
-     */
     public function removeFeedPrice(CategoryFeedPrice $feedPrice): bool
     {
         return $this->feedPrices->removeElement($feedPrice);
     }
 
-    public function getFeedPrices()
+    /**
+     * @return ArrayCollection<int, CategoryFeedPrice>|PersistentCollection<int, CategoryFeedPrice>
+     */
+    public function getFeedPrices(): ArrayCollection|PersistentCollection
     {
         return $this->feedPrices;
     }
 
-    public function getActiveProducts()
+    /**
+     * @return ArrayCollection<int, Product>|PersistentCollection<int, Product>
+     */
+    public function getActiveProducts(): ArrayCollection|PersistentCollection
     {
         return $this->products->filter(function (Product $product) {
             return $product->getStatus() === Product::STATUS_ACTIVE;

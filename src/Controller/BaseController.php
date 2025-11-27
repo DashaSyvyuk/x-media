@@ -24,6 +24,9 @@ class BaseController extends AbstractController
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function renderTemplate(Request $request, string $view, array $parameters): Response
     {
         return $this->render($this->isMobile($request) ? "m/{$view}" : $view, array_merge($parameters, [
@@ -52,11 +55,11 @@ class BaseController extends AbstractController
             return true;
         }
 
-        if ($session->get('page-type') && $session->get('page-type') === 'mobile') {
+        if ($session->get('page-type') && strval($session->get('page-type')) === 'mobile') {
             return true;
         }
 
-        if ($session->get('page-type') && $session->get('page-type') !== 'mobile') {
+        if ($session->get('page-type') && strval($session->get('page-type')) !== 'mobile') {
             return false;
         }
 
@@ -69,6 +72,9 @@ class BaseController extends AbstractController
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getTotalCart(): array
     {
         $products = [];
@@ -87,7 +93,7 @@ class BaseController extends AbstractController
                     );
 
                     if ($product) {
-                        $product->count = $item->count;
+                        $product->setCount($item->count);
                         $totalCount += $item->count;
                         $totalPrice += $product->getPrice() * $item->count;
                         $cart = [
@@ -104,7 +110,7 @@ class BaseController extends AbstractController
         }
 
         setcookie('cart', json_encode($cart), time() + (3600 * 24));
-        setcookie('totalCount', $totalCount, time() + (3600 * 24));
+        setcookie('totalCount', strval($totalCount), time() + (3600 * 24));
 
         return [
             'products'   => $products,
@@ -113,6 +119,9 @@ class BaseController extends AbstractController
         ];
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getFilters(?string $filters): array
     {
         if ($filters) {

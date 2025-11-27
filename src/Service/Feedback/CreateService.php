@@ -12,6 +12,9 @@ class CreateService
     ) {
     }
 
+    /**
+     * @param array<string, string> $data
+     */
     public function run(array $data): Feedback
     {
         return $this->feedbackRepository->create([

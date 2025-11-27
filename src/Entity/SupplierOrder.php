@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use App\Repository\SupplierOrderRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table("supplier_orders")]
-#[ORM\Entity(repositoryClass: "App\Repository\SupplierOrderRepository")]
+#[ORM\Entity(repositoryClass: SupplierOrderRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class SupplierOrder
 {
@@ -23,7 +25,7 @@ class SupplierOrder
     private ?string $orderNumber = null;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Supplier")]
+    #[ORM\ManyToOne(targetEntity: Supplier::class)]
     private Supplier $supplier;
 
     #[ORM\Column(type: "datetime", nullable: true)]
@@ -36,17 +38,18 @@ class SupplierOrder
     private bool $status = true;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\AdminUser")]
+    #[ORM\ManyToOne(targetEntity: AdminUser::class)]
     private AdminUser $adminUser;
 
+    /** @var ArrayCollection<int, SupplierOrderProduct>|PersistentCollection<int, SupplierOrderProduct> $products */
     #[ORM\OneToMany(
-        targetEntity: "App\Entity\SupplierOrderProduct",
+        targetEntity: SupplierOrderProduct::class,
         mappedBy: "supplierOrder",
         cascade: ["all"],
         fetch: "EAGER",
         orphanRemoval: true
     )]
-    private $products;
+    private ArrayCollection|PersistentCollection $products;
 
     #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
@@ -59,113 +62,76 @@ class SupplierOrder
         $this->products = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param null|string $orderNumber
-     */
     public function setOrderNumber(?string $orderNumber): void
     {
         $this->orderNumber = $orderNumber;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOrderNumber(): ?string
     {
         return $this->orderNumber;
     }
 
-    /**
-     * @param Supplier $supplier
-     */
     public function setSupplier(Supplier $supplier): void
     {
         $this->supplier = $supplier;
     }
 
-    /**
-     * @return Supplier
-     */
     public function getSupplier(): Supplier
     {
         return $this->supplier;
     }
 
-    /**
-     * @param DateTime|null $dateTime
-     */
     public function setDateTime(?DateTime $dateTime): void
     {
         $this->dateTime = $dateTime;
     }
 
-    /**
-     * @return DateTime|null
-     */
     public function getDateTime(): ?DateTime
     {
         return $this->dateTime;
     }
 
-    /**
-     * @param DateTime|null $expectedDate
-     */
     public function setExpectedDate(?DateTime $expectedDate): void
     {
         $this->expectedDate = $expectedDate;
     }
 
-    /**
-     * @return DateTime|null
-     */
     public function getExpectedDate(): ?DateTime
     {
         return $this->expectedDate;
     }
 
-    /**
-     * @param bool $status
-     */
     public function setStatus(bool $status): void
     {
         $this->status = $status;
     }
 
-    /**
-     * @return bool
-     */
     public function getStatus(): bool
     {
         return $this->status;
     }
 
-    /**
-     * @param AdminUser $adminUser
-     */
     public function setAdminUser(AdminUser $adminUser): void
     {
         $this->adminUser = $adminUser;
     }
 
-    /**
-     * @return AdminUser
-     */
     public function getAdminUser(): AdminUser
     {
         return $this->adminUser;
     }
 
-    /**
-     * @param SupplierOrderProduct $product
-     */
     public function addProduct(SupplierOrderProduct $product): void
     {
         $product->setSupplierOrder($this);
@@ -174,16 +140,15 @@ class SupplierOrder
         }
     }
 
-    /**
-     * @param SupplierOrderProduct $product
-     * @return bool
-     */
     public function removeProduct(SupplierOrderProduct $product): bool
     {
         return $this->products->removeElement($product);
     }
 
-    public function getProducts()
+    /**
+     * @return ArrayCollection<int, SupplierOrderProduct>|PersistentCollection<int, SupplierOrderProduct>
+     */
+    public function getProducts(): ArrayCollection|PersistentCollection
     {
         return $this->products;
     }
@@ -193,7 +158,7 @@ class SupplierOrder
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt): void
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -203,7 +168,7 @@ class SupplierOrder
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt): void
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

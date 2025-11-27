@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+use App\Repository\ProductRatingRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: "App\Repository\ProductRatingRepository")]
+#[ORM\Entity(repositoryClass: ProductRatingRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 #[ORM\Table(name: "product_rating")]
 class ProductRating
@@ -19,7 +20,7 @@ class ProductRating
     private int $id;
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Product", inversedBy: "characteristics")]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "characteristics")]
     private Product $product;
 
     #[ORM\Column(type: "decimal", precision: 8, scale: 2)]
@@ -66,7 +67,7 @@ class ProductRating
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -76,7 +77,7 @@ class ProductRating
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

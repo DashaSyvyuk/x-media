@@ -44,14 +44,14 @@ class Comment
     private string $comment = "";
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: "Product", inversedBy: "comments")]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "comments")]
     private Product $product;
 
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $answer;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
-    #[ORM\OneToOne(targetEntity: "App\Entity\ProductRating")]
+    #[ORM\OneToOne(targetEntity: ProductRating::class)]
     private ?ProductRating $productRating;
 
     #[ORM\Column(type: "datetime")]
@@ -65,7 +65,7 @@ class Comment
         return $this->id;
     }
 
-    public function setId(int $id): int
+    public function setId(int $id): void
     {
         $this->id = $id;
     }

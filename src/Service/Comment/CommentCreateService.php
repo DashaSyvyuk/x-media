@@ -16,6 +16,9 @@ class CommentCreateService
     ) {
     }
 
+    /**
+     * @param array<string, string> $data
+     */
     public function run(array $data): Comment
     {
         $product = $this->productRepository->findOneBy(['id' => $data['product']]);
