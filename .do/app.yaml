@@ -1,18 +1,44 @@
-name: x-media
-region: nyc
+name: xmedia-app
+region: fra
+features:
+  - buildpack-stack=ubuntu-22
 services:
-  - name: web
+  - name: x-media
+    run_command: heroku-php-apache2 public/
+    build_command: yarn build
     github:
       repo: DashaSyvyuk/x-media
       branch: master
     environment_slug: php
+    http_port: 8080
+    source_dir: /
     envs:
+      - key: COMPOSER_NO_SCRIPTS
+        value: 'true'
       - key: APP_ENV
-        value: "prod"
+        value: prod
+        scope: RUN_AND_BUILD_TIME
+      - key: APP_DEBUG
+        value: '1'
       - key: APP_SECRET
-        value: "5ea3114a349591bd131296e00f21c20a"
-    run_command: "php-fpm"
-    instance_size_slug: basic-xxs
+        value: 5ea3114a349591bd131296e00f21c20a
+        scope: RUN_AND_BUILD_TIME
+    instance_size_slug: apps-s-1vcpu-0.5gb
     instance_count: 1
-databases: []
-static_sites: []
+databases:
+  - name: db-mysql-fra1-79654
+    version: '8'
+    engine: MYSQL
+    production: true
+    cluster_name: db-mysql-fra1-79654
+    db_name: defaultdb
+    db_user: doadmin
+ingress:
+  rules:
+    - match:
+        path:
+          prefix: /
+          authority:
+            exact: ''
+      component:
+        name: x-media
