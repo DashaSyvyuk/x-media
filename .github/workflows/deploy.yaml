@@ -37,8 +37,3 @@ jobs:
       - name: Deploy to App Platform
         run: |
           doctl apps update ${{ secrets.DO_APP_ID }} --spec .do/app.yaml
-
-      - name: Run migrations on App Platform
-        run: |
-          doctl apps run ${{ secrets.DO_APP_ID }} --command "php bin/console doctrine:migrations:migrate --no-interaction"
-
