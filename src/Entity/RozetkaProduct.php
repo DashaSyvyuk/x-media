@@ -58,7 +58,7 @@ class RozetkaProduct
     )]
     private ArrayCollection|PersistentCollection $values;
 
-    #[ORM\OneToOne(targetEntity: Product::class)]
+    #[ORM\OneToOne(targetEntity: Product::class, inversedBy: "rozetkaProduct")]
     #[ORM\JoinColumn(name: "product_id", referencedColumnName: "id")]
     private Product $product;
 

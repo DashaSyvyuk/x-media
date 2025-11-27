@@ -21,7 +21,22 @@
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
         </testsuite>
+        <testsuite name="Unit Tests">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration Tests">
+            <directory>tests/Integration</directory>
+        </testsuite>
+        <testsuite name="Functional Tests">
+            <directory>tests/Functional</directory>
+        </testsuite>
     </testsuites>
+
+    <groups>
+        <exclude>
+            <group>skip</group>
+        </exclude>
+    </groups>
 
     <coverage processUncoveredFiles="true">
         <include>

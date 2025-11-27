@@ -20,7 +20,7 @@ class CategoryFeedPrice
     private int $id;
 
     #[ORM\JoinColumn(onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: "feedPrices")]
     private Category $category;
 
     #[ORM\JoinColumn(onDelete: "CASCADE")]

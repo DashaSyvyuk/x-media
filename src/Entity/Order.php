@@ -184,7 +184,7 @@ class Order
     private ArrayCollection|PersistentCollection $items;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "orders")]
     private ?User $user;
 
     #[ORM\Column(type: "boolean")]
