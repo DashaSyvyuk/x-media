@@ -35,5 +35,8 @@ jobs:
       # Using the app spec file: .do/app.yaml
       # ---------------------------------------------------------
       - name: Deploy to App Platform
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          MAILER_DSN: ${{ secrets.MAILER_DSN }}
         run: |
           doctl apps update ${{ secrets.DO_APP_ID }} --spec .do/app.yaml
