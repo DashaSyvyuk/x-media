@@ -25,9 +25,8 @@ class ProductFilterAttribute
     #[ORM\JoinColumn(nullable: false)]
     private Filter $filter;
 
-    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     #[ORM\ManyToOne(targetEntity: FilterAttribute::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "filter_attribute_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
     private FilterAttribute $filterAttribute;
 
     public function getId(): int

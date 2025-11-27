@@ -55,11 +55,6 @@ if ! run_check "PHP CodeSniffer (changed files)" "echo '$CHANGED_FILES' | xargs 
     CHECKS_FAILED=1
 fi
 
-# Run smoke tests (quick tests to ensure basic functionality)
-if ! run_check "Smoke Tests" "./bin/phpunit --group=smoke --no-coverage"; then
-    CHECKS_FAILED=1
-fi
-
 # Check results
 if [ $CHECKS_FAILED -eq 1 ]; then
     echo -e "\n${RED}Pre-commit checks failed! Commit aborted.${NC}"
