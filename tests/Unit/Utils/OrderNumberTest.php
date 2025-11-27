@@ -18,7 +18,9 @@ class OrderNumberTest extends TestCase
         $orderRepository = $this->createMock(OrderRepository::class);
         $orderRepository->expects($this->once())
             ->method('findOneBy')
-            ->with(['orderNumber' => $this->isType('string')])
+            ->with($this->callback(function ($criteria) {
+                return isset($criteria['orderNumber']) && is_string($criteria['orderNumber']);
+            }))
             ->willReturn(null);
         
         $orderNumber = new OrderNumber($orderRepository);
@@ -64,7 +66,7 @@ class OrderNumberTest extends TestCase
         $orderNumber = new OrderNumber($orderRepository);
         
         $number1 = $orderNumber->generateOrderNumber();
-        usleep(100); // Small delay to ensure different timestamps
+        sleep(1); // Wait 1 second to ensure different timestamps (time() has 1-second precision)
         $number2 = $orderNumber->generateOrderNumber();
         
         $this->assertNotEquals($number1, $number2);

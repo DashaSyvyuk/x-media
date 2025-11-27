@@ -12,6 +12,8 @@ This installs pre-commit hooks that automatically check your code before each co
 
 ### 2. Run Tests
 
+**Important:** Tests must be run inside Docker container.
+
 ```bash
 # Run all tests
 make test
