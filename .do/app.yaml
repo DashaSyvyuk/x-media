@@ -38,7 +38,5 @@ ingress:
     - match:
         path:
           prefix: /
-          authority:
-            exact: ''
       component:
         name: x-media
