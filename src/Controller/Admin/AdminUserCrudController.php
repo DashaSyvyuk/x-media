@@ -8,7 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Security\Http\Attribute\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * @extends AbstractCrudController<AdminUser>
