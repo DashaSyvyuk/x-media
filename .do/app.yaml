@@ -21,10 +21,12 @@ envs:
   value: "0"
 - key: DATABASE_URL
   scope: RUN_AND_BUILD_TIME
-  value: "database_url"
+  value: ${DATABASE_URL}
+  type: SECRET
 - key: MAILER_DSN
   scope: RUN_AND_BUILD_TIME
-  value: "mailer_dsn"
+  value: ${MAILER_DSN}
+  type: SECRET
 features:
 - buildpack-stack=ubuntu-22
 maintenance: {}
