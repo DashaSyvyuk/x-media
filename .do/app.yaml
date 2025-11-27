@@ -14,8 +14,5 @@ services:
     run_command: "php-fpm"
     instance_size_slug: basic-xxs
     instance_count: 1
-  - name: Run migrations
-    run: |
-      doctl apps run ${{ secrets.DO_APP_ID }} --command "php bin/console doctrine:migrations:migrate --no-interaction"
 databases: []
 static_sites: []
