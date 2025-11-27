@@ -136,6 +136,9 @@ class OrderPageController extends BaseController
         }
     }
 
+    /**
+     * @param InputBag<bool|float|int|string|null> $data
+     */
     private function getAddress(InputBag $data): ?string
     {
         $address = trim($data->get('address') ?? '');
