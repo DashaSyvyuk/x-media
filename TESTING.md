@@ -88,10 +88,18 @@ Quick tests tagged with `@group smoke` that verify critical functionality.
 
 ### Prerequisites
 
+**Important:** All tests must be run inside the Docker container.
+
 Ensure your development environment is running:
 
 ```bash
 docker-compose up -d
+```
+
+Verify the container is running:
+
+```bash
+docker ps | grep xmedia-app
 ```
 
 ### Using Makefile (Recommended)

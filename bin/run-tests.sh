@@ -15,6 +15,9 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 echo -e "${GREEN}X-Media Test Runner${NC}"
 echo "================================"
 
+# PHP flags to suppress PHPUnit 9.5 deprecations on PHP 8.4
+PHP_FLAGS="-d error_reporting=32757"
+
 # Function to run tests
 run_tests() {
     local test_type=$1
@@ -23,7 +26,7 @@ run_tests() {
     echo -e "\n${YELLOW}Running $test_type...${NC}"
     cd "$PROJECT_ROOT" || exit 1
     
-    if $test_command; then
+    if php $PHP_FLAGS $test_command; then
         echo -e "${GREEN}✓ $test_type passed${NC}"
         return 0
     else
@@ -52,7 +55,7 @@ case "${1:-all}" in
         ;;
     coverage)
         echo "Generating code coverage report..."
-        ./bin/phpunit --coverage-html var/coverage
+        php $PHP_FLAGS ./bin/phpunit --coverage-html var/coverage
         echo -e "${GREEN}Coverage report generated at var/coverage/index.html${NC}"
         ;;
     *)
