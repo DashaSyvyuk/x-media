@@ -13,6 +13,7 @@ envs:
 - key: MAILER_DSN
   scope: RUN_AND_BUILD_TIME
   value: <rewritten>
+  type: secret
 - key: APP_ENV
   scope: RUN_AND_BUILD_TIME
   value: prod
@@ -25,6 +26,7 @@ envs:
 - key: DATABASE_URL
   scope: RUN_AND_BUILD_TIME
   value: <rewritten>
+  type: secret
 features:
 - buildpack-stack=ubuntu-22
 maintenance: {}
