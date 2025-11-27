@@ -9,10 +9,6 @@ databases:
   name: db-mysql-fra1-79654
   production: true
   version: "8"
-envs:
-- key: MAILER_DSN
-  scope: RUN_AND_BUILD_TIME
-  value: <rewritten>
 - key: APP_ENV
   scope: RUN_AND_BUILD_TIME
   value: prod
@@ -22,9 +18,6 @@ envs:
 - key: APP_DEBUG
   scope: RUN_AND_BUILD_TIME
   value: "0"
-- key: DATABASE_URL
-  scope: RUN_AND_BUILD_TIME
-  value: <rewritten>
 features:
 - buildpack-stack=ubuntu-22
 maintenance: {}
