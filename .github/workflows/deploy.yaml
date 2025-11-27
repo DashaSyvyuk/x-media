@@ -1,0 +1,39 @@
+name: Deploy to DigitalOcean App Platform
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------
+      # Copy doctrine.yaml and .env from a safe location in the repo
+      # For example, store them in a folder like .github/prod-config/
+      # ---------------------------------------------------------
+      - name: Copy production config files
+        run: |
+          cp config/packages/doctrine.yaml config/packages/doctrine.yaml
+          cp .github/prod-config/.env .env
+
+      # ---------------------------------------------------------
+      # Install doctl CLI
+      # ---------------------------------------------------------
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_API_TOKEN }}
+
+      # ---------------------------------------------------------
+      # Deploy to DigitalOcean App Platform
+      # Using the app spec file: .do/app.yaml
+      # ---------------------------------------------------------
+      - name: Deploy to App Platform
+        run: |
+          doctl apps update ${{ secrets.DO_APP_ID }} --spec .do/app.yaml
