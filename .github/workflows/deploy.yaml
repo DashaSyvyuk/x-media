@@ -19,8 +19,8 @@ jobs:
       # ---------------------------------------------------------
       - name: Copy production config files
         run: |
-          cp config/packages/doctrine.yaml config/packages/doctrine.yaml
-          cp .github/prod-config/.env .env
+          cp config/packages/doctrine.yaml.dist config/packages/doctrine.yaml
+          cp .env.prod .env
 
       # ---------------------------------------------------------
       # Install doctl CLI
