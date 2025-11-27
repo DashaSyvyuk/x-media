@@ -33,12 +33,3 @@ databases:
     cluster_name: db-mysql-fra1-79654
     db_name: defaultdb
     db_user: doadmin
-ingress:
-  rules:
-    - match:
-        path:
-          prefix: /
-          authority:
-            exact: ''
-      component:
-        name: x-media
