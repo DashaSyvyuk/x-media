@@ -37,9 +37,3 @@ jobs:
       - name: Deploy to App Platform
         run: |
           doctl apps update ${{ secrets.DO_APP_ID }} --spec .do/app.yaml
-
-      - name: Update App spec
-        run: |
-          doctl apps update ${{ secrets.DO_APP_ID }} --spec .do/app.yaml \
-          --env MAILER_DSN=${{ secrets.MAILER_DSN }} \
-          --env DATABASE_URL=${{ secrets.DATABASE_URL }}
