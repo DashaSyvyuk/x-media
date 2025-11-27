@@ -6,9 +6,11 @@ services:
       repo: DashaSyvyuk/x-media
       branch: master
     environment_slug: php
-    environment_variables:
-      APP_ENV: "prod"
-      APP_SECRET: "5ea3114a349591bd131296e00f21c20a"
+    envs:
+      - key: APP_ENV
+        value: "prod"
+      - key: APP_SECRET
+        value: "5ea3114a349591bd131296e00f21c20a"
     run_command: "php-fpm"
     instance_size_slug: basic-xxs
     instance_count: 1
