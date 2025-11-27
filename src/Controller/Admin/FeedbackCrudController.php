@@ -11,6 +11,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+/**
+ * @extends AbstractCrudController<Feedback>
+ */
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN')")]
 class FeedbackCrudController extends AbstractCrudController
 {

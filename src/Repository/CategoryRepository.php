@@ -14,10 +14,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Category|null find($id, $lockMode = null, $lockVersion = null)
- * @method Category|null findOneBy(array $criteria, array $orderBy = null)
- * @method Category[]    findAll()
- * @method Category[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Category>
  */
 class CategoryRepository extends ServiceEntityRepository
 {
@@ -26,7 +23,10 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
-    public function getCategoriesTree(int $parent = null): array
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public function getCategoriesTree(?int $parent = null): array
     {
         $result = [];
         $query = $this->createQueryBuilder('c');
@@ -59,6 +59,9 @@ class CategoryRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * @return array<int, array<string, string>>
+     */
     public function getCategoriesForProm(): array
     {
         $result = [];
@@ -86,7 +89,7 @@ class CategoryRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function getCategoriesForHotline()
+    public function getCategoriesForHotline(): mixed
     {
         return $this->createQueryBuilder('c')
             ->leftJoin('c.products', 'p')
@@ -103,7 +106,7 @@ class CategoryRepository extends ServiceEntityRepository
         ;
     }
 
-    public function getCategoriesForRozetka(string $activeFor)
+    public function getCategoriesForRozetka(string $activeFor): mixed
     {
         return $this->createQueryBuilder('c')
             ->leftJoin('c.products', 'p')
@@ -123,7 +126,7 @@ class CategoryRepository extends ServiceEntityRepository
             ;
     }
 
-    public function getCategoriesForEkatalog()
+    public function getCategoriesForEkatalog(): mixed
     {
         return $this->createQueryBuilder('c')
             ->leftJoin('c.products', 'p')
@@ -139,6 +142,9 @@ class CategoryRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function getCategoriesIdsWithoutChildren(): array
     {
         $categories = $this->getCategoriesTree();
@@ -146,6 +152,11 @@ class CategoryRepository extends ServiceEntityRepository
         return $this->getCategoriesId($categories);
     }
 
+    /**
+     * @param array<int, array<string, mixed>> $categories
+     *
+     * @return array<int, array<string, mixed>>
+     */
     private function getCategoriesId(array $categories): array
     {
         $result = [];

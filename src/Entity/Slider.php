@@ -35,7 +35,7 @@ class Slider
     private bool $active;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Promotion")]
+    #[ORM\ManyToOne(targetEntity: Promotion::class)]
     private ?Promotion $promotion = null;
 
     #[ORM\Column(type: "datetime")]
@@ -43,6 +43,11 @@ class Slider
 
     #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 
     public function getId(): ?int
     {

@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
+use App\Repository\CirculationRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table("circulations")]
-#[ORM\Entity(repositoryClass: "App\Repository\CirculationRepository")]
+#[ORM\Entity(repositoryClass: CirculationRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Circulation
 {
@@ -23,20 +25,21 @@ class Circulation
     private ?int $id = 0;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\AdminUser")]
+    #[ORM\ManyToOne(targetEntity: AdminUser::class)]
     private ?AdminUser $adminUser = null;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Currency")]
+    #[ORM\ManyToOne(targetEntity: Currency::class)]
     private Currency $currency;
 
+    /** @var ArrayCollection<int, CirculationPayment>|PersistentCollection<int, CirculationPayment> $payments */
     #[ORM\OneToMany(
-        targetEntity: "App\Entity\CirculationPayment",
+        targetEntity: CirculationPayment::class,
         mappedBy: "circulation",
         cascade: ["all"],
         orphanRemoval: true
     )]
-    private $payments;
+    private ArrayCollection|PersistentCollection $payments;
 
     public ?string $total = '';
 
@@ -52,6 +55,11 @@ class Circulation
     public function __construct()
     {
         $this->payments = new ArrayCollection();
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getId(): ?int
@@ -84,7 +92,10 @@ class Circulation
         $this->showAllPayments = $flag;
     }
 
-    public function getPayments(): ArrayCollection
+    /**
+     * @return ArrayCollection<int, CirculationPayment>|PersistentCollection<int, CirculationPayment>
+     */
+    public function getPayments(): ArrayCollection|PersistentCollection
     {
         if ($this->showAllPayments) {
             return $this->payments;
@@ -114,6 +125,16 @@ class Circulation
         if ($this->payments->contains($payment)) {
             $this->payments->removeElement($payment);
         }
+    }
+
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
     }
 
     public function getCreatedAt(): DateTime

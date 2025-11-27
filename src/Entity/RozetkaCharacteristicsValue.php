@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\RozetkaCharacteristicsValueRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table("rozetka_characteristics_values")]
-#[ORM\Entity(repositoryClass: "App\Repository\RozetkaCharacteristicsValueRepository")]
+#[ORM\Entity(repositoryClass: RozetkaCharacteristicsValueRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class RozetkaCharacteristicsValue
 {
@@ -24,7 +25,7 @@ class RozetkaCharacteristicsValue
         nullable: true,
         onDelete: "SET NULL"
     )]
-    #[ORM\ManyToOne(targetEntity: "RozetkaCharacteristics", inversedBy: "values")]
+    #[ORM\ManyToOne(targetEntity: RozetkaCharacteristics::class, inversedBy: "values")]
     private RozetkaCharacteristics $characteristic;
 
     #[ORM\Column(type: "string")]
@@ -42,73 +43,51 @@ class RozetkaCharacteristicsValue
     #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
-    /**
-     * @return int
-     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param null|RozetkaCharacteristics $characteristic
-     */
     public function setCharacteristic(?RozetkaCharacteristics $characteristic): void
     {
         $this->characteristic = $characteristic;
     }
 
-    /**
-     * @return RozetkaCharacteristics|null
-     */
     public function getCharacteristic(): ?RozetkaCharacteristics
     {
         return $this->characteristic;
     }
 
-    /**
-     * @param string $rozetkaId
-     */
     public function setRozetkaId(string $rozetkaId): void
     {
         $this->rozetkaId = $rozetkaId;
     }
 
-    /**
-     * @return string
-     */
     public function getRozetkaId(): string
     {
         return $this->rozetkaId;
     }
 
-    /**
-     * @param string $title
-     */
     public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param bool $active
-     */
     public function setActive(bool $active): void
     {
         $this->active = $active;
     }
 
-    /**
-     * @return bool
-     */
     public function getActive(): bool
     {
         return $this->active;

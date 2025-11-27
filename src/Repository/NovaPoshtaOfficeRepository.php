@@ -7,10 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method NovaPoshtaOffice|null find($id, $lockMode = null, $lockVersion = null)
- * @method NovaPoshtaOffice|null findOneBy(array $criteria, array $orderBy = null)
- * @method NovaPoshtaOffice[]    findAll()
- * @method NovaPoshtaOffice[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<NovaPoshtaOffice>
  */
 class NovaPoshtaOfficeRepository extends ServiceEntityRepository
 {
@@ -19,20 +16,23 @@ class NovaPoshtaOfficeRepository extends ServiceEntityRepository
         parent::__construct($registry, NovaPoshtaOffice::class);
     }
 
-    public function create(NovaPoshtaOffice $office)
+    public function create(NovaPoshtaOffice $office): void
     {
         $entityManager = $this->getEntityManager();
         $entityManager->persist($office);
         $entityManager->flush();
     }
 
-    public function update(NovaPoshtaOffice $office)
+    public function update(NovaPoshtaOffice $office): void
     {
         $entityManager = $this->getEntityManager();
-        $entityManager->merge($office);
+        $entityManager->refresh($office);
         $entityManager->flush();
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getOfficesByCityRef(string $cityRef): array
     {
         return $this->createQueryBuilder('office')

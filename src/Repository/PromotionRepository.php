@@ -9,10 +9,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Promotion|null find($id, $lockMode = null, $lockVersion = null)
- * @method Promotion|null findOneBy(array $criteria, array $orderBy = null)
- * @method Promotion[]    findAll()
- * @method Promotion[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Promotion>
  */
 class PromotionRepository extends ServiceEntityRepository
 {
@@ -41,7 +38,7 @@ class PromotionRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function getActivePromotions()
+    public function getActivePromotions(): mixed
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.activeFrom <= :now')

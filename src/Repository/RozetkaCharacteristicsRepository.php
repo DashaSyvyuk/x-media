@@ -9,10 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method RozetkaCharacteristics|null find($id, $lockMode = null, $lockVersion = null)
- * @method RozetkaCharacteristics|null findOneBy(array $criteria, array $orderBy = null)
- * @method RozetkaCharacteristics[] findAll()
- * @method RozetkaCharacteristics[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<RozetkaCharacteristics>
  */
 class RozetkaCharacteristicsRepository extends ServiceEntityRepository
 {
@@ -23,10 +20,13 @@ class RozetkaCharacteristicsRepository extends ServiceEntityRepository
         parent::__construct($registry, RozetkaCharacteristics::class);
     }
 
+    /**
+     * @param array<string, Category|bool|list<array<string, bool|string>>|string> $data
+     */
     public function fill(array $data): RozetkaCharacteristics
     {
         $characteristics = new RozetkaCharacteristics();
-        $characteristics->setRozetkaId($data['rozetkaId']);
+        $characteristics->setRozetkaId(intval($data['rozetkaId']));
         $characteristics->setTitle($data['title']);
         $characteristics->setType($data['type']);
         $characteristics->setFilterType($data['filterType']);
@@ -62,18 +62,18 @@ class RozetkaCharacteristicsRepository extends ServiceEntityRepository
         return $characteristics;
     }
 
-    public function update(RozetkaCharacteristics $characteristics)
+    public function update(RozetkaCharacteristics $characteristics): void
     {
         $entityManager = $this->getEntityManager();
-        $entityManager->merge($characteristics);
+        $entityManager->refresh($characteristics);
         $entityManager->flush();
     }
 
-    public function getCharacteristicsForCategory(Category $category)
+    public function getCharacteristicsForCategory(Category $category): mixed
     {
         return $this->createQueryBuilder('char')
             ->where(':category MEMBER OF char.categories')
-            ->setParameters(['category' => $category])
+            ->setParameter('category', $category)
             ->andWhere('char.active = :active')
             ->setParameter('active', true)
             ->getQuery()

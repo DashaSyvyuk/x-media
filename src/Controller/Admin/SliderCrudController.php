@@ -13,6 +13,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+/**
+ * @extends AbstractCrudController<Slider>
+ */
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN')")]
 class SliderCrudController extends AbstractCrudController
 {

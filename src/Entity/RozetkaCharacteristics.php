@@ -2,16 +2,18 @@
 
 namespace App\Entity;
 
+use App\Repository\RozetkaCharacteristicsRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table("characteristics_rozetka", indexes: [
     new ORM\Index(columns: ["title"]),
     new ORM\Index(columns: ["rozetka_id"])
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\RozetkaCharacteristicsRepository")]
+#[ORM\Entity(repositoryClass: RozetkaCharacteristicsRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class RozetkaCharacteristics
 {
@@ -21,7 +23,8 @@ class RozetkaCharacteristics
     #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $rozetkaId = 0;
 
-    #[ORM\ManyToMany(targetEntity: "App\Entity\Category")]
+    /** @var ArrayCollection<int, Category>|PersistentCollection<int, Category> $categories */
+    #[ORM\ManyToMany(targetEntity: Category::class)]
     #[ORM\JoinTable(
         name: "rozetka_characteristic_category",
         joinColumns: [
@@ -31,7 +34,7 @@ class RozetkaCharacteristics
             new ORM\JoinColumn(name: "category_id", referencedColumnName: "id")
         ]
     )]
-    private $categories;
+    private ArrayCollection|PersistentCollection $categories;
 
     #[ORM\Column(type: "string")]
     private string $title = "";
@@ -51,14 +54,15 @@ class RozetkaCharacteristics
     #[ORM\Column(type: "boolean")]
     private bool $active = true;
 
+    /** @var ArrayCollection<int, RozetkaCharacteristicsValue>|PersistentCollection<int, RozetkaCharacteristicsValue> $values  */
     #[ORM\OneToMany(
-        targetEntity: "App\Entity\RozetkaCharacteristicsValue",
+        targetEntity: RozetkaCharacteristicsValue::class,
         mappedBy: "characteristic",
         cascade: ["all"],
         fetch: "EAGER",
         orphanRemoval: true
     )]
-    private $values;
+    private ArrayCollection|PersistentCollection $values;
 
     #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
@@ -72,25 +76,16 @@ class RozetkaCharacteristics
         $this->categories = new ArrayCollection();
     }
 
-    /**
-     * @param int $rozetkaId
-     */
     public function setRozetkaId(int $rozetkaId): void
     {
         $this->rozetkaId = $rozetkaId;
     }
 
-    /**
-     * @return int
-     */
     public function getRozetkaId(): int
     {
         return $this->rozetkaId;
     }
 
-    /**
-     * @param Category $category
-     */
     public function addCategory(Category $category): void
     {
         if (!$this->categories->contains($category)) {
@@ -98,119 +93,79 @@ class RozetkaCharacteristics
         }
     }
 
-    /**
-     * @param Category $category
-     * @return bool
-     */
     public function removeCategory(Category $category): bool
     {
         return $this->categories->removeElement($category);
     }
 
-    public function getCategories()
+    /**
+     * @return ArrayCollection<int, Category>|PersistentCollection<int, Category>
+     */
+    public function getCategories(): ArrayCollection|PersistentCollection
     {
         return $this->categories;
     }
 
-    /**
-     * @param string $title
-     */
     public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $type
-     */
     public function setType(string $type): void
     {
         $this->type = $type;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param bool $filterType
-     */
     public function setFilterType(bool $filterType): void
     {
         $this->filterType = $filterType;
     }
 
-    /**
-     * @return bool
-     */
     public function getFilterType(): bool
     {
         return $this->filterType;
     }
 
-    /**
-     * @param string|null $unit
-     */
     public function setUnit(?string $unit): void
     {
         $this->unit = $unit;
     }
 
-    /**
-     * @return string|null
-     */
     public function getUnit(): ?string
     {
         return $this->unit;
     }
 
-    /**
-     * @param bool $endToEndParameter
-     */
     public function setEndToEndParameter(bool $endToEndParameter): void
     {
         $this->endToEndParameter = $endToEndParameter;
     }
 
-    /**
-     * @return bool
-     */
     public function getEndToEndParameter(): bool
     {
         return $this->endToEndParameter;
     }
 
-    /**
-     * @param bool $active
-     */
     public function setActive(bool $active): void
     {
         $this->active = $active;
     }
 
-    /**
-     * @return bool
-     */
     public function getActive(): bool
     {
         return $this->active;
     }
 
-    /**
-     * @param RozetkaCharacteristicsValue $value
-     */
     public function addValue(RozetkaCharacteristicsValue $value): void
     {
         $value->setCharacteristic($this);
@@ -219,16 +174,15 @@ class RozetkaCharacteristics
         }
     }
 
-    /**
-     * @param RozetkaCharacteristicsValue $value
-     * @return bool
-     */
     public function removeValue(RozetkaCharacteristicsValue $value): bool
     {
         return $this->values->removeElement($value);
     }
 
-    public function getValues()
+    /**
+     * @return ArrayCollection<int, RozetkaCharacteristicsValue>|PersistentCollection<int, RozetkaCharacteristicsValue>
+     */
+    public function getValues(): ArrayCollection|PersistentCollection
     {
         return $this->values;
     }
@@ -238,7 +192,7 @@ class RozetkaCharacteristics
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt): void
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -248,7 +202,7 @@ class RozetkaCharacteristics
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt): void
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

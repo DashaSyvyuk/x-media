@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use App\Repository\ProductRozetkaCharacteristicValueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table("product_rozetka_characteristic_value", indexes: [
     new ORM\Index(columns: ["rozetka_product_id", "characteristic_id"])
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\ProductRozetkaCharacteristicValueRepository")]
+#[ORM\Entity(repositoryClass: ProductRozetkaCharacteristicValueRepository::class)]
 class ProductRozetkaCharacteristicValue
 {
     #[ORM\Id]
@@ -18,16 +20,17 @@ class ProductRozetkaCharacteristicValue
 
     #[ORM\ManyToOne(targetEntity: RozetkaProduct::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $rozetkaProduct;
+    private RozetkaProduct $rozetkaProduct;
 
     #[ORM\ManyToOne(targetEntity: RozetkaCharacteristics::class)]
     #[ORM\JoinColumn(referencedColumnName: "rozetka_id", nullable: false)]
-    private $characteristic;
+    private RozetkaCharacteristics $characteristic;
 
     #[ORM\ManyToOne(targetEntity: RozetkaCharacteristicsValue::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?RozetkaCharacteristicsValue $value = null;
 
+    /** @var ArrayCollection<int, RozetkaCharacteristicsValue>|PersistentCollection<int, RozetkaCharacteristicsValue> $values  */
     #[ORM\ManyToMany(targetEntity: RozetkaCharacteristicsValue::class)]
     #[ORM\JoinTable(
         name: 'product_rozetka_characteristic_value_value',
@@ -44,7 +47,7 @@ class ProductRozetkaCharacteristicValue
             )
         ]
     )]
-    private $values;
+    private ArrayCollection|PersistentCollection $values;
 
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $stringValue = "";
@@ -94,9 +97,6 @@ class ProductRozetkaCharacteristicValue
         $this->value = $value;
     }
 
-    /**
-     * @param RozetkaCharacteristicsValue $value
-     */
     public function addValue(RozetkaCharacteristicsValue $value): void
     {
         if (!$this->values->contains($value)) {
@@ -104,16 +104,15 @@ class ProductRozetkaCharacteristicValue
         }
     }
 
-    /**
-     * @param RozetkaCharacteristicsValue $value
-     * @return bool
-     */
     public function removeValue(RozetkaCharacteristicsValue $value): bool
     {
         return $this->values->removeElement($value);
     }
 
-    public function getValues()
+    /**
+     * @return ArrayCollection<int, RozetkaCharacteristicsValue>|PersistentCollection<int, RozetkaCharacteristicsValue>
+     */
+    public function getValues(): ArrayCollection|PersistentCollection
     {
         return $this->values;
     }

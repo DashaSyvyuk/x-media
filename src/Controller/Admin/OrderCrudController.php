@@ -24,6 +24,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use SM\Factory\Factory;
 use SM\SMException;
 
+/**
+ * @extends AbstractCrudController<Order>
+ */
 #[Security("is_granted('ROLE_SUPER_ADMIN')")]
 class OrderCrudController extends AbstractCrudController
 {
@@ -136,6 +139,9 @@ class OrderCrudController extends AbstractCrudController
         ])->hideOnIndex();
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getAvailableStatuses(): array
     {
         $currentOrder = $this->getContext()?->getEntity()->getInstance();

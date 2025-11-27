@@ -7,10 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Debtor|null find($id, $lockMode = null, $lockVersion = null)
- * @method Debtor|null findOneBy(array $criteria, array $orderBy = null)
- * @method Debtor[]    findAll()
- * @method Debtor[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Debtor>
  */
 class DebtorRepository extends ServiceEntityRepository
 {

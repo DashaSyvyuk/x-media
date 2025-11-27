@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\CategoryFeedPriceRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table("category_feed_price")]
-#[ORM\Entity(repositoryClass: "App\Repository\CategoryFeedPriceRepository")]
+#[ORM\Entity(repositoryClass: CategoryFeedPriceRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class CategoryFeedPrice
 {
@@ -19,11 +20,11 @@ class CategoryFeedPrice
     private int $id;
 
     #[ORM\JoinColumn(onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: "Category")]
+    #[ORM\ManyToOne(targetEntity: Category::class)]
     private Category $category;
 
     #[ORM\JoinColumn(onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: "Feed")]
+    #[ORM\ManyToOne(targetEntity: Feed::class)]
     private Feed $feed;
 
     #[ORM\Column(type: "integer")]
@@ -43,7 +44,7 @@ class CategoryFeedPrice
         return $this->id;
     }
 
-    public function setId(int $id): int
+    public function setId(int $id): void
     {
         $this->id = $id;
     }

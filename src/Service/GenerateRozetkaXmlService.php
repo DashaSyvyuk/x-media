@@ -33,7 +33,7 @@ class GenerateRozetkaXmlService
         $this->xmlBuilder = new XMLBuilder($this->xmlWriterService);
     }
 
-    public function execute($activeFor = 'active_for_a'): void
+    public function execute(string $activeFor = 'active_for_a'): void
     {
         $activeForInCamelCase = lcfirst(str_replace('_', '', ucwords($activeFor, '_')));
         ini_set('memory_limit', '1024M');
@@ -78,7 +78,7 @@ class GenerateRozetkaXmlService
                         ->end()
                         ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feed) {
                             foreach ($products as $product) {
-                                /** @var $rozetkaProduct RozetkaProduct */
+                                /** @var RozetkaProduct $rozetkaProduct */
                                 $rozetkaProduct = $product->getRozetka();
                                 $vendor = array_filter(
                                     $product->getFilterAttributes()->toArray(),
@@ -89,7 +89,7 @@ class GenerateRozetkaXmlService
                                     if (
                                         $feed && in_array(
                                             $vendor[0]->getFilterAttribute()->getValue(),
-                                            explode(';', $feed->getIgnoreBrands())
+                                            explode(';', $feed->getIgnoreBrands() ?? '')
                                         )
                                     ) {
                                         continue;
@@ -155,7 +155,7 @@ class GenerateRozetkaXmlService
                                                 if (is_array($values)) {
                                                     $XMLArray->startLoop('param', [
                                                         'name' => $this->convertString(
-                                                            $characteristic->getCharacteristic()->getTitle(),
+                                                            $characteristic->getCharacteristic()?->getTitle() ?? '',
                                                             $feed
                                                         )
                                                     ], function (XMLArray $XMLArray) use ($values) {
@@ -167,7 +167,7 @@ class GenerateRozetkaXmlService
                                                 } else {
                                                     $XMLArray->add('param', $this->convertString($values, $feed), [
                                                         'name' => $this->convertString(
-                                                            $characteristic->getCharacteristic()->getTitle(),
+                                                            $characteristic->getCharacteristic()?->getTitle() ?? '',
                                                             $feed
                                                         )
                                                     ]);
@@ -210,10 +210,15 @@ class GenerateRozetkaXmlService
         return $text;
     }
 
+    /**
+     * @param ProductRozetkaCharacteristicValue $value
+     *
+     * @return string|array<string>
+     */
     private function getCharacteristicValue(ProductRozetkaCharacteristicValue $value): string|array
     {
         $characteristic = $value->getCharacteristic();
-        $type = $characteristic->getType();
+        $type = $characteristic?->getType() ?? '';
 
         return match ($type) {
             'ListValues'          => $value->getValues()->map(fn ($value) => $value->getTitle())->toArray(),
@@ -224,6 +229,7 @@ class GenerateRozetkaXmlService
             ),
             'ComboBox'            => $value->getValue() ? $value->getValue()->getTitle() : '',
             'Integer', 'Decimal', 'TextInput', 'TextArea' => $value->getStringValue(),
+            default               => '',
         };
     }
 }

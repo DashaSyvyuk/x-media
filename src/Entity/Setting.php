@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+use App\Repository\SettingRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: "App\Repository\SettingRepository")]
+#[ORM\Entity(repositoryClass: SettingRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 #[ORM\Table(name: "setting", indexes: [
     new ORM\Index(columns: ["title"]),
@@ -80,7 +81,7 @@ class Setting
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -90,13 +91,13 @@ class Setting
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
     public function __toString(): string
     {
-        return '' . $this->title;
+        return $this->title;
     }
 }

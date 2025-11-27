@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\ProductRepository;
 use Carbon\Carbon;
 use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table('product', indexes: [
@@ -16,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     new ORM\Index(columns: ['created_at']),
     new ORM\Index(columns: ['updated_at'])
 ])]
-#[ORM\Entity(repositoryClass: 'App\Repository\ProductRepository')]
+#[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Product
 {
@@ -75,41 +76,67 @@ class Product
     private ?string $metaDescription = "";
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "Category", inversedBy: "products")]
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: "products")]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(targetEntity: "ProductImage", mappedBy: "product", cascade: ["all"], orphanRemoval: true)]
+    /** @var ArrayCollection<int, ProductImage>|PersistentCollection<int, ProductImage> $images */
+    #[ORM\OneToMany(targetEntity: ProductImage::class, mappedBy: "product", cascade: ["all"], orphanRemoval: true)]
     #[ORM\OrderBy(["position" => "ASC"])]
-    private $images;
+    private ArrayCollection|PersistentCollection $images;
 
-    #[ORM\OneToMany(targetEntity: "ProductCharacteristic", mappedBy: "product", cascade: ["all"], orphanRemoval: true)]
-    #[ORM\OrderBy(["position" => "ASC"])]
-    private $characteristics;
-
-    #[ORM\OneToMany(targetEntity: "ProductFilterAttribute", mappedBy: "product", cascade: ["all"], orphanRemoval: true)]
-    private $filterAttributes;
-
-    #[ORM\OneToOne(
-        targetEntity: "App\Entity\RozetkaProduct",
-        mappedBy: "product",
-        cascade: ["remove"],
-        orphanRemoval: true
-    )]
-    private $rozetka;
-
-    #[ORM\OneToMany(targetEntity: "Comment", mappedBy: "product", cascade: ["all"], orphanRemoval: true)]
-    private $comments;
-
-    #[ORM\OneToMany(targetEntity: "ProductRating", mappedBy: "product", cascade: ["all"], orphanRemoval: true)]
-    private $ratings;
-
+    /** @var ArrayCollection<int, ProductCharacteristic>|PersistentCollection<int, ProductCharacteristic> $characteristics */
     #[ORM\OneToMany(
-        targetEntity: "App\Entity\PromotionProduct",
+        targetEntity: ProductCharacteristic::class,
         mappedBy: "product",
         cascade: ["all"],
         orphanRemoval: true
     )]
-    private $promotionProducts;
+    #[ORM\OrderBy(["position" => "ASC"])]
+    private ArrayCollection|PersistentCollection $characteristics;
+
+    /** @var ArrayCollection<int, ProductFilterAttribute>|PersistentCollection<int, ProductFilterAttribute> $filterAttributes */
+    #[ORM\OneToMany(
+        targetEntity: ProductFilterAttribute::class,
+        mappedBy: "product",
+        cascade: ["all"],
+        orphanRemoval: true
+    )]
+    private ArrayCollection|PersistentCollection $filterAttributes;
+
+    #[ORM\OneToOne(
+        targetEntity: RozetkaProduct::class,
+        mappedBy: "product",
+        cascade: ["remove"],
+        orphanRemoval: true
+    )]
+    private ?RozetkaProduct $rozetka;
+
+    /** @var ArrayCollection<int, Comment>|PersistentCollection<int, Comment> $comments */
+    #[ORM\OneToMany(
+        targetEntity: Comment::class,
+        mappedBy: "product",
+        cascade: ["all"],
+        orphanRemoval: true
+    )]
+    private ArrayCollection|PersistentCollection $comments;
+
+    /** @var ArrayCollection<int, ProductRating>|PersistentCollection<int, ProductRating> */
+    #[ORM\OneToMany(
+        targetEntity: ProductRating::class,
+        mappedBy: "product",
+        cascade: ["all"],
+        orphanRemoval: true
+    )]
+    private ArrayCollection|PersistentCollection $ratings;
+
+    /** @var ArrayCollection<int, PromotionProduct>|PersistentCollection<int, PromotionProduct> $promotionProducts */
+    #[ORM\OneToMany(
+        targetEntity: PromotionProduct::class,
+        mappedBy: "product",
+        cascade: ["all"],
+        orphanRemoval: true
+    )]
+    private ArrayCollection|PersistentCollection $promotionProducts;
 
     #[ORM\Column(type: "string")]
     private string $productCode = "";
@@ -126,6 +153,8 @@ class Product
     #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
+    public int $count;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -139,6 +168,11 @@ class Product
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getStatus(): string
@@ -241,12 +275,18 @@ class Product
         return $this->category;
     }
 
-    public function getImages()
+    /**
+     * @return ArrayCollection<int, ProductImage>|PersistentCollection<int, ProductImage>
+     */
+    public function getImages(): ArrayCollection|PersistentCollection
     {
         return $this->images;
     }
 
-    public function setImages($images): void
+    /**
+     * @param ArrayCollection<int, ProductImage>|PersistentCollection<int, ProductImage> $images
+     */
+    public function setImages(ArrayCollection|PersistentCollection $images): void
     {
         if (count($images) > 0) {
             foreach ($images as $image) {
@@ -255,18 +295,12 @@ class Product
         }
     }
 
-    /**
-     * @param ProductImage $image
-     */
     public function addImage(ProductImage $image): void
     {
         $image->setProduct($this);
         $this->images[] = $image;
     }
 
-    /**
-     * @param ProductImage $image
-     */
     public function removeImage(ProductImage $image): void
     {
         if ($this->images->contains($image)) {
@@ -274,17 +308,26 @@ class Product
         }
     }
 
-    public function getComments()
+    /**
+     * @return ArrayCollection<int, Comment>|PersistentCollection<int, Comment>
+     */
+    public function getComments(): ArrayCollection|PersistentCollection
     {
         return $this->comments;
     }
 
-    public function getConfirmedComments()
+    /**
+     * @return ArrayCollection<int, Comment>|PersistentCollection<int, Comment>
+     */
+    public function getConfirmedComments(): ArrayCollection|PersistentCollection
     {
         return $this->comments->filter(fn (Comment $comment) => $comment->getStatus() == Comment::STATUS_CONFIRMED);
     }
 
-    public function setComments($comments): void
+    /**
+     * @param ArrayCollection<int, Comment>|PersistentCollection<int, Comment> $comments
+     */
+    public function setComments(ArrayCollection|PersistentCollection $comments): void
     {
         if (count($comments) > 0) {
             foreach ($comments as $comment) {
@@ -293,18 +336,12 @@ class Product
         }
     }
 
-    /**
-     * @param Comment $comment
-     */
     public function addComment(Comment $comment): void
     {
         $comment->setProduct($this);
         $this->comments[] = $comment;
     }
 
-    /**
-     * @param Comment $comment
-     */
     public function removeComment(Comment $comment): void
     {
         if ($this->comments->contains($comment)) {
@@ -312,13 +349,17 @@ class Product
         }
     }
 
-    public function getCharacteristics()
+    /**
+     * @return ArrayCollection<int, ProductCharacteristic>|PersistentCollection<int, ProductCharacteristic>
+     */
+    public function getCharacteristics(): ArrayCollection|PersistentCollection
     {
         return $this->characteristics;
     }
 
-    public function setCharacteristics($characteristics): void
+    public function setCharacteristics($characteristics): void // @phpstan-ignore-line
     {
+        /** @var ArrayCollection<int, ProductCharacteristic>|PersistentCollection<int, ProductCharacteristic> $characteristics */
         if (count($characteristics) > 0) {
             foreach ($characteristics as $characteristic) {
                 $this->addCharacteristic($characteristic);
@@ -326,18 +367,12 @@ class Product
         }
     }
 
-    /**
-     * @param ProductCharacteristic $characteristic
-     */
     public function addCharacteristic(ProductCharacteristic $characteristic): void
     {
         $characteristic->setProduct($this);
         $this->characteristics[] = $characteristic;
     }
 
-    /**
-     * @param ProductCharacteristic $characteristic
-     */
     public function removeCharacteristic(ProductCharacteristic $characteristic): void
     {
         if ($this->characteristics->contains($characteristic)) {
@@ -345,9 +380,6 @@ class Product
         }
     }
 
-    /**
-     * @param ProductFilterAttribute $filterAttribute
-     */
     public function addFilterAttribute(ProductFilterAttribute $filterAttribute): void
     {
         if ($this->filterAttributes->contains($filterAttribute)) {
@@ -358,9 +390,6 @@ class Product
         $this->filterAttributes->add($filterAttribute);
     }
 
-    /**
-     * @param ProductFilterAttribute $filterAttribute
-     */
     public function removeFilterAttribute(ProductFilterAttribute $filterAttribute): void
     {
         if (!$this->filterAttributes->contains($filterAttribute)) {
@@ -370,7 +399,10 @@ class Product
         $this->filterAttributes->removeElement($filterAttribute);
     }
 
-    public function getFilterAttributes()
+    /**
+     * @return ArrayCollection<int, ProductFilterAttribute>|PersistentCollection<int, ProductFilterAttribute>
+     */
+    public function getFilterAttributes(): ArrayCollection|PersistentCollection
     {
         return $this->filterAttributes;
     }
@@ -390,7 +422,7 @@ class Product
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -400,7 +432,7 @@ class Product
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -435,12 +467,18 @@ class Product
         return $this->olx;
     }
 
-    public function getRatings()
+    /**
+     * @return ArrayCollection<int, ProductRating>|PersistentCollection<int, ProductRating>
+     */
+    public function getRatings(): ArrayCollection|PersistentCollection
     {
         return $this->ratings;
     }
 
-    public function setRatings($ratings)
+    /**
+     * @param ArrayCollection<int, ProductRating>|PersistentCollection<int, ProductRating> $ratings
+     */
+    public function setRatings(ArrayCollection|PersistentCollection $ratings): void
     {
         if (count($ratings) > 0) {
             foreach ($ratings as $rating) {
@@ -449,26 +487,20 @@ class Product
         }
     }
 
-    /**
-     * @param ProductRating $rating
-     */
-    public function addRating(ProductRating $rating)
+    public function addRating(ProductRating $rating): void
     {
         $rating->setProduct($this);
         $this->ratings[] = $rating;
     }
 
-    /**
-     * @param ProductRating $rating
-     */
-    public function removeRating(ProductRating $rating)
+    public function removeRating(ProductRating $rating): void
     {
         if ($this->ratings->contains($rating)) {
             $this->ratings->removeElement($rating);
         }
     }
 
-    public function getAverageRating()
+    public function getAverageRating(): float|int
     {
         $total = 0;
         $count = 0;
@@ -480,7 +512,10 @@ class Product
         return $count > 0 ? $total / $count : 0;
     }
 
-    public function getPromotionProducts()
+    /**
+     * @return ArrayCollection<int, PromotionProduct>|PersistentCollection<int, PromotionProduct>
+     */
+    public function getPromotionProducts(): ArrayCollection|PersistentCollection
     {
         return $this->promotionProducts;
     }
@@ -516,6 +551,16 @@ class Product
         }
 
         return $promotionExists ? $this->crossedOutPrice : 0;
+    }
+
+    public function setCount(int $count): void
+    {
+        $this->count = $count;
+    }
+
+    public function getCount(): int
+    {
+        return $this->count;
     }
 
     public function __toString(): string

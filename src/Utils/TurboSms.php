@@ -10,12 +10,12 @@ class TurboSms
     /**
      * @throws Exception
      */
-    public static function send(string $to, string $text)
+    public static function send(string $to, string $text): void
     {
         try {
             $client = new Client(['base_uri' => $_SERVER['TURBO_SMS_ENDPOINT']]);
 
-            $result = $client->request('GET', 'message/send.json', [
+            $client->request('GET', 'message/send.json', [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $_SERVER['TURBO_SMS_TOKEN'])
                 ],

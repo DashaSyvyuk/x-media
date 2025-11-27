@@ -29,6 +29,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * @extends AbstractCrudController<RozetkaProduct>
+ */
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')")]
 class RozetkaProductCrudController extends AbstractCrudController
 {
@@ -210,6 +213,7 @@ class RozetkaProductCrudController extends AbstractCrudController
         $request = $this->requestStack->getCurrentRequest();
 
         if ($request->request->has('ea_custom_action')) {
+            /** @var array<string, int> $parentRozetkaProduct */
             $parentRozetkaProduct = $request->request->get('RozetkaProduct');
             $rozetkaProductId = $parentRozetkaProduct['rozetkaProduct'];
 
@@ -218,8 +222,8 @@ class RozetkaProductCrudController extends AbstractCrudController
             $entityInstance->setSeries($rozetkaProduct->getSeries());
             $entityInstance->setDescription($rozetkaProduct->getDescription());
 
-            if ($rozetkaProduct->getValues()) {
-                if ($entityInstance->getValues()) {
+            if (! $rozetkaProduct->getValues()->isEmpty()) {
+                if (! $entityInstance->getValues()->isEmpty()) {
                     foreach ($entityInstance->getValues() as $value) {
                         $entityInstance->removeValue($value);
                     }
@@ -230,7 +234,7 @@ class RozetkaProductCrudController extends AbstractCrudController
                     $productValue->setCharacteristic($value->getCharacteristic());
                     $productValue->setValue($value->getValue());
                     $productValue->setStringValue($value->getStringValue());
-                    if ($value->getValues()) {
+                    if (! $value->getValues()->isEmpty()) {
                         foreach ($value->getValues() as $itemValue) {
                             $productValue->addValue($itemValue);
                         }
@@ -248,7 +252,7 @@ class RozetkaProductCrudController extends AbstractCrudController
 
     public function isDisabled(): bool
     {
-        /** @var RozetkaProduct $rozetkaProduct */
+        /** @var RozetkaProduct|null $rozetkaProduct */
         $rozetkaProduct = $this->getContext()?->getEntity()->getInstance();
 
         if ($rozetkaProduct && $rozetkaProduct->getId()) {

@@ -2,15 +2,17 @@
 
 namespace App\Entity;
 
+use App\Repository\DeliveryTypeRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table("delivery_type", indexes: [
     new ORM\Index(columns: ["title"]),
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\DeliveryTypeRepository")]
+#[ORM\Entity(repositoryClass: DeliveryTypeRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class DeliveryType
 {
@@ -42,6 +44,7 @@ class DeliveryType
     #[ORM\Column(type: "string", nullable: true)]
     private ?string $icon = "";
 
+    /** @var ArrayCollection<int, PaymentType>|PersistentCollection<int, PaymentType> $paymentTypes */
     #[ORM\ManyToMany(targetEntity: PaymentType::class)]
     #[ORM\JoinTable(
         name: 'delivery_payment',
@@ -58,7 +61,7 @@ class DeliveryType
             )
         ]
     )]
-    private $paymentTypes;
+    private ArrayCollection|PersistentCollection $paymentTypes;
 
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $priority = 0;
@@ -79,7 +82,7 @@ class DeliveryType
         return $this->id;
     }
 
-    public function setId(int $id): int
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -159,7 +162,7 @@ class DeliveryType
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -169,14 +172,11 @@ class DeliveryType
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    /**
-     * @param PaymentType $paymentType
-     */
     public function addPaymentType(PaymentType $paymentType): void
     {
         if (!$this->paymentTypes->contains($paymentType)) {
@@ -184,16 +184,15 @@ class DeliveryType
         }
     }
 
-    /**
-     * @param PaymentType $paymentType
-     * @return bool
-     */
     public function removePaymentType(PaymentType $paymentType): bool
     {
         return $this->paymentTypes->removeElement($paymentType);
     }
 
-    public function getPaymentTypes()
+    /**
+     * @return ArrayCollection<int, PaymentType>|PersistentCollection<int, PaymentType>
+     */
+    public function getPaymentTypes(): ArrayCollection|PersistentCollection
     {
         return $this->paymentTypes;
     }
@@ -208,7 +207,7 @@ class DeliveryType
         return $this->priority;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->title;
     }

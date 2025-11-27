@@ -7,10 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method DeliveryType|null find($id, $lockMode = null, $lockVersion = null)
- * @method DeliveryType|null findOneBy(array $criteria, array $orderBy = null)
- * @method DeliveryType[]    findAll()
- * @method DeliveryType[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<DeliveryType>
  */
 class DeliveryTypeRepository extends ServiceEntityRepository
 {

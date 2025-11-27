@@ -88,7 +88,7 @@ class RozetkaCharacteristicType extends AbstractType
             ])
         ;
 
-        $formModifier = function (FormInterface $form, RozetkaCharacteristics $characteristics = null) {
+        $formModifier = function (FormInterface $form, ?RozetkaCharacteristics $characteristics = null) {
             $attributes = null === $characteristics ?
                 [] :
                 $characteristics->getValues()->filter(function (RozetkaCharacteristicsValue $value) {

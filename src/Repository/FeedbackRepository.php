@@ -8,10 +8,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Feedback|null find($id, $lockMode = null, $lockVersion = null)
- * @method Feedback|null findOneBy(array $criteria, array $orderBy = null)
- * @method Feedback[]    findAll()
- * @method Feedback[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Feedback>
  */
 class FeedbackRepository extends ServiceEntityRepository
 {
@@ -20,6 +17,9 @@ class FeedbackRepository extends ServiceEntityRepository
         parent::__construct($registry, Feedback::class);
     }
 
+    /**
+     * @param array<string, string> $data
+     */
     public function create(array $data): Feedback
     {
         $feedback = new Feedback();

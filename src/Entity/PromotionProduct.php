@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\PromotionProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table("promotion_product")]
-#[ORM\Entity(repositoryClass: "App\Repository\PromotionProductRepository")]
+#[ORM\Entity(repositoryClass: PromotionProductRepository::class)]
 class PromotionProduct
 {
     #[ORM\Id]
@@ -14,16 +15,21 @@ class PromotionProduct
     private int $id;
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Product")]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
     private Product $product;
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Promotion", inversedBy: "products")]
+    #[ORM\ManyToOne(targetEntity: Promotion::class, inversedBy: "products")]
     private Promotion $promotion;
 
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getProduct(): Product

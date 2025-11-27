@@ -3,14 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<User>
  */
 class UserRepository extends ServiceEntityRepository
 {
@@ -19,6 +17,9 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /**
+     * @param array<string, string|bool|DateTime> $data
+     */
     public function create(array $data): User
     {
         $user = new User();
@@ -38,10 +39,10 @@ class UserRepository extends ServiceEntityRepository
         return $user;
     }
 
-    public function update(User $user)
+    public function update(User $user): void
     {
         $entityManager = $this->getEntityManager();
-        $entityManager->merge($user);
+        $entityManager->refresh($user);
         $entityManager->flush();
     }
 }

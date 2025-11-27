@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\SupplierProductRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table("supplier_product")]
-#[ORM\Entity(repositoryClass: "App\Repository\SupplierProductRepository")]
+#[ORM\Entity(repositoryClass: SupplierProductRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class SupplierProduct
 {
@@ -19,11 +20,11 @@ class SupplierProduct
     private int $id;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Product")]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
     private ?Product $product = null;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Supplier", inversedBy: "products")]
+    #[ORM\ManyToOne(targetEntity: Supplier::class, inversedBy: "products")]
     private ?Supplier $supplier = null;
 
     #[ORM\Column(type: "integer")]
@@ -38,73 +39,51 @@ class SupplierProduct
     #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param Product|null $product
-     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function setProduct(?Product $product): void
     {
         $this->product = $product;
     }
 
-    /**
-     * @return Product|null
-     */
     public function getProduct(): ?Product
     {
         return $this->product;
     }
 
-    /**
-     * @param Supplier|null $supplier
-     */
     public function setSupplier(?Supplier $supplier): void
     {
         $this->supplier = $supplier;
     }
 
-    /**
-     * @return Supplier|null
-     */
     public function getSupplier(): ?Supplier
     {
         return $this->supplier;
     }
 
-    /**
-     * @param int $price
-     */
     public function setPrice(int $price): void
     {
         $this->price = $price;
     }
 
-    /**
-     * @return int
-     */
     public function getPrice(): int
     {
         return $this->price;
     }
 
-    /**
-     * @param string|null $spending
-     */
     public function setSpending(?string $spending): void
     {
         $this->spending = $spending;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSpending(): ?string
     {
         return $this->spending;
@@ -115,7 +94,7 @@ class SupplierProduct
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt): void
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -125,7 +104,7 @@ class SupplierProduct
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt): void
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

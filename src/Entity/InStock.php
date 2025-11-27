@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\InStockRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(
@@ -16,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
         new ORM\UniqueConstraint(columns: ["product_id", "warehouse_id"])
     ]
 )]
-#[ORM\Entity(repositoryClass: "App\Repository\InStockRepository")]
+#[ORM\Entity(repositoryClass: InStockRepository::class)]
 class InStock
 {
     #[ORM\Id]
@@ -25,11 +26,11 @@ class InStock
     private int $id;
 
     #[ORM\JoinColumn(name: "product_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Product")]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
     private Product $product;
 
     #[ORM\JoinColumn(name: "warehouse_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Warehouse")]
+    #[ORM\ManyToOne(targetEntity: Warehouse::class)]
     private Warehouse $warehouse;
 
     #[ORM\Column(type: "integer", options: ["unsigned" => true])]
@@ -40,6 +41,11 @@ class InStock
 
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $note = null;
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 
     public function getId(): int
     {
@@ -100,10 +106,10 @@ class InStock
     {
         $p = method_exists($this->product ?? null, 'getTitle') ?
             $this->product->getTitle() :
-            (string)($this->product->getId() ?? '');
+            (string) ($this->product->getId());
         $w = method_exists($this->warehouse ?? null, 'getTitle') ?
             $this->warehouse->getTitle() :
-            (string)($this->warehouse->getId() ?? '');
+            (string) ($this->warehouse->getId());
         return sprintf('%s @ %s (%d)', $p, $w, $this->quantity);
     }
 }

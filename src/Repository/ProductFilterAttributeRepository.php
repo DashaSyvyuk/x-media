@@ -10,10 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ProductFilterAttribute|null find($id, $lockMode = null, $lockVersion = null)
- * @method ProductFilterAttribute|null findOneBy(array $criteria, array $orderBy = null)
- * @method ProductFilterAttribute[]    findAll()
- * @method ProductFilterAttribute[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<ProductFilterAttribute>
  */
 class ProductFilterAttributeRepository extends ServiceEntityRepository
 {
@@ -22,6 +19,9 @@ class ProductFilterAttributeRepository extends ServiceEntityRepository
         parent::__construct($registry, ProductFilterAttribute::class);
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function findFilterParameterByTitle(string $title, Promotion $promotion, ?Category $category): array
     {
         $result = [];
@@ -53,6 +53,9 @@ class ProductFilterAttributeRepository extends ServiceEntityRepository
         return array_unique($result);
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function findFilterParameterByTitleAndSearchString(string $title, string $search, ?Category $category): array
     {
         $result = [];
@@ -92,6 +95,9 @@ class ProductFilterAttributeRepository extends ServiceEntityRepository
         return array_unique($result);
     }
 
+    /**
+     * @return string[]
+     */
     private function prepareSearchString(string $search): array
     {
         $words = explode(' ', trim($search));

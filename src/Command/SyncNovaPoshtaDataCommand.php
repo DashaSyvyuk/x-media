@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SyncNovaPoshtaDataCommand extends Command
 {
-    protected static $defaultName = 'app:sync-nova-poshta';
+    protected static $defaultName = 'app:sync-nova-poshta'; // @phpstan-ignore-line
 
     private SyncNovaPoshtaService $syncNovaPoshtaService;
 

@@ -2,15 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Product;
 use App\Entity\ProductRating;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ProductRating|null find($id, $lockMode = null, $lockVersion = null)
- * @method ProductRating|null findOneBy(array $criteria, array $orderBy = null)
- * @method ProductRating[]    findAll()
- * @method ProductRating[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<ProductRating>
  */
 class ProductRatingRepository extends ServiceEntityRepository
 {
@@ -19,6 +17,9 @@ class ProductRatingRepository extends ServiceEntityRepository
         parent::__construct($registry, ProductRating::class);
     }
 
+    /**
+     * @param array<string, string|Product> $data
+     */
     public function create(array $data): ProductRating
     {
         $productRating = new ProductRating();

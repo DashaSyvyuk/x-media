@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use App\Repository\OrderRepository;
 use App\Traits\DateStorageTrait;
 use App\Validator\OrderAddress;
 use App\Validator\OrderStatus;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table("orders", indexes: [
@@ -18,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     new ORM\Index(columns: ["status"]),
     new ORM\Index(columns: ["created_at"]),
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\OrderRepository")]
+#[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[OrderStatus]
 #[OrderAddress]
@@ -136,11 +138,11 @@ class Order
     private ?string $address = "";
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\NovaPoshtaCity")]
+    #[ORM\ManyToOne(targetEntity: NovaPoshtaCity::class)]
     private ?NovaPoshtaCity $novaPoshtaCity = null;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\NovaPoshtaOffice")]
+    #[ORM\ManyToOne(targetEntity: NovaPoshtaOffice::class)]
     private ?NovaPoshtaOffice $novaPoshtaOffice = null;
 
     #[ORM\Column(type: "string")]
@@ -152,11 +154,11 @@ class Order
     private ?string $email = null;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\PaymentType")]
+    #[ORM\ManyToOne(targetEntity: PaymentType::class)]
     private ?PaymentType $paytype;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\DeliveryType")]
+    #[ORM\ManyToOne(targetEntity: DeliveryType::class)]
     private ?DeliveryType $deltype;
 
     #[ORM\Column(type: "string")]
@@ -177,16 +179,18 @@ class Order
     #[ORM\Column(type: "integer")]
     private int $total = 0;
 
-    #[ORM\OneToMany(mappedBy: "order", targetEntity: "App\Entity\OrderItem", cascade: ["all"], orphanRemoval: true)]
-    private $items;
+    /** @var ArrayCollection<int, OrderItem>|PersistentCollection<int, OrderItem> $items */
+    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: "order", cascade: ["all"], orphanRemoval: true)]
+    private ArrayCollection|PersistentCollection $items;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\User")]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $user;
 
     #[ORM\Column(type: "boolean")]
     private bool $sendNotification = false;
 
+    /** @var array<string>|null $labels */
     #[ORM\Column(type: "simple_array", nullable: true)]
     private ?array $labels = [];
 
@@ -199,6 +203,11 @@ class Order
     public function __construct()
     {
         $this->items = new ArrayCollection();
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getId(): ?int
@@ -366,14 +375,14 @@ class Order
         return $this->total;
     }
 
-    public function getItems()
+    /**
+     * @return ArrayCollection<int, OrderItem>|PersistentCollection<int, OrderItem>
+     */
+    public function getItems(): ArrayCollection|PersistentCollection
     {
         return $this->items;
     }
 
-    /**
-     * @param OrderItem $item
-     */
     public function addItem(OrderItem $item): void
     {
         if (!$this->items->contains($item)) {
@@ -382,9 +391,6 @@ class Order
         }
     }
 
-    /**
-     * @param OrderItem $item
-     */
     public function removeItem(OrderItem $item): void
     {
         if ($this->items->contains($item)) {
@@ -412,11 +418,17 @@ class Order
         return $this->user;
     }
 
+    /**
+     * @param array<string>|null $labels
+     */
     public function setLabels(?array $labels): void
     {
         $this->labels = $labels;
     }
 
+    /**
+     * @return array<string>|null
+     */
     public function getLabels(): ?array
     {
         return $this->labels;

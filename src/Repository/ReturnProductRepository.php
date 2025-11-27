@@ -7,10 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ReturnProduct|null find($id, $lockMode = null, $lockVersion = null)
- * @method ReturnProduct|null findOneBy(array $criteria, array $orderBy = null)
- * @method ReturnProduct[]    findAll()
- * @method ReturnProduct[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<ReturnProduct>
  */
 class ReturnProductRepository extends ServiceEntityRepository
 {

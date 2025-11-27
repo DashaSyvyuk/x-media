@@ -59,7 +59,7 @@ class SearchPageController extends BaseController
         $pagination = $paginator->paginate(
             $products,
             $request->query->getInt('page', 1),
-            $limit->getValue()
+            intval($limit->getValue())
         );
 
         $categories = $this->categoryRepository->getCategoriesTree();

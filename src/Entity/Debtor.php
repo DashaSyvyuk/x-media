@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use App\Repository\DebtorRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table("debtors")]
-#[ORM\Entity(repositoryClass: "App\Repository\DebtorRepository")]
+#[ORM\Entity(repositoryClass: DebtorRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Debtor
 {
@@ -23,11 +25,12 @@ class Debtor
     private string $name = "";
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Currency")]
+    #[ORM\ManyToOne(targetEntity: Currency::class)]
     private Currency $currency;
 
-    #[ORM\OneToMany(mappedBy: "debtor", targetEntity: "DebtorPayment", cascade: ["all"], orphanRemoval: true)]
-    private $payments;
+    /** @var ArrayCollection<int, DebtorPayment>|PersistentCollection<int, DebtorPayment> $payments */
+    #[ORM\OneToMany(targetEntity: DebtorPayment::class, mappedBy: "debtor", cascade: ["all"], orphanRemoval: true)]
+    private ArrayCollection|PersistentCollection $payments;
 
     public ?string $total = '';
 
@@ -43,6 +46,11 @@ class Debtor
     public function __construct()
     {
         $this->payments = new ArrayCollection();
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getId(): ?int
@@ -70,7 +78,10 @@ class Debtor
         return $this->currency;
     }
 
-    public function getPayments()
+    /**
+     * @return ArrayCollection<int, DebtorPayment>|PersistentCollection<int, DebtorPayment>
+     */
+    public function getPayments(): ArrayCollection|PersistentCollection
     {
         return $this->payments;
     }
@@ -88,6 +99,16 @@ class Debtor
         if ($this->payments->contains($payment)) {
             $this->payments->removeElement($payment);
         }
+    }
+
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
     }
 
     public function getCreatedAt(): DateTime

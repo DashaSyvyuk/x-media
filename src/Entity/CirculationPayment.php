@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\CirculationPaymentRepository;
 use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table("circulation_payments")]
-#[ORM\Entity(repositoryClass: "App\Repository\CirculationPaymentRepository")]
+#[ORM\Entity(repositoryClass: CirculationPaymentRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class CirculationPayment
 {
@@ -28,7 +29,7 @@ class CirculationPayment
     private ?string $description = '';
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Circulation")]
+    #[ORM\ManyToOne(targetEntity: Circulation::class)]
     private Circulation $circulation;
 
     #[ORM\Column(type: "datetime")]
@@ -36,6 +37,11 @@ class CirculationPayment
 
     #[ORM\Column(type: "datetime")]
     private DateTime $updatedAt;
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 
     public function getId(): int
     {

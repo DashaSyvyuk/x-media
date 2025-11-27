@@ -43,7 +43,7 @@ class PaymentType
         return $this->id;
     }
 
-    public function setId(int $id): int
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -93,7 +93,7 @@ class PaymentType
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -103,7 +103,7 @@ class PaymentType
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

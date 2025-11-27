@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\NovaPoshtaOfficeRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
     new ORM\Index(columns: ["ref"]),
     new ORM\Index(columns: ["created_at"]),
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\NovaPoshtaOfficeRepository")]
+#[ORM\Entity(repositoryClass: NovaPoshtaOfficeRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class NovaPoshtaOffice
 {
@@ -28,8 +29,8 @@ class NovaPoshtaOffice
     #[ORM\Column(type: "string")]
     private string $title = "";
 
-    #[ORM\ManyToOne(targetEntity: "NovaPoshtaCity")]
-    private $city;
+    #[ORM\ManyToOne(targetEntity: NovaPoshtaCity::class)]
+    private NovaPoshtaCity $city;
 
     #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
@@ -42,7 +43,7 @@ class NovaPoshtaOffice
         return $this->id;
     }
 
-    public function setId(int $id): int
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -67,12 +68,12 @@ class NovaPoshtaOffice
         return $this->ref;
     }
 
-    public function getCity()
+    public function getCity(): NovaPoshtaCity
     {
         return $this->city;
     }
 
-    public function setCity(NovaPoshtaCity $city)
+    public function setCity(NovaPoshtaCity $city): void
     {
         $this->city = $city;
     }
@@ -82,7 +83,7 @@ class NovaPoshtaOffice
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -92,7 +93,7 @@ class NovaPoshtaOffice
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

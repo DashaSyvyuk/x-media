@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\FeedRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table("feed", indexes: [
     new ORM\Index(columns: ["type"]),
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\FeedRepository")]
+#[ORM\Entity(repositoryClass: FeedRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Feed
 {
@@ -58,7 +59,7 @@ class Feed
         return $this->id;
     }
 
-    public function setId(int $id): int
+    public function setId(int $id): void
     {
         $this->id = $id;
     }

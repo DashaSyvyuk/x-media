@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\WarrantyRepository;
 use DateTime;
 use App\Traits\DateStorageTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     new ORM\Index(columns: ["created_at"]),
     new ORM\Index(columns: ["updated_at"])
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\WarrantyRepository")]
+#[ORM\Entity(repositoryClass: WarrantyRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Warranty
 {
@@ -59,7 +60,7 @@ class Warranty
     private ?string $email = null;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "Supplier")]
+    #[ORM\ManyToOne(targetEntity: Supplier::class)]
     private Supplier $supplier;
 
     #[ORM\Column(type: "string", nullable: true)]
@@ -75,7 +76,7 @@ class Warranty
     private ?string $orderNumber = null;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "Product")]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
     private Product $product;
 
     #[ORM\Column(type: "integer")]
@@ -94,6 +95,11 @@ class Warranty
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getStatus(): string
@@ -231,7 +237,7 @@ class Warranty
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -241,7 +247,7 @@ class Warranty
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

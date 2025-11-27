@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use App\Repository\UserRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
-#[ORM\Entity(repositoryClass: "App\Repository\UserRepository")]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 #[ORM\Table(name: "user", indexes: [
     new ORM\Index(columns: ["email"]),
@@ -68,14 +70,17 @@ class User
     #[ORM\Column(type: "string", nullable: true)]
     private ?string $hash;
 
+    /**
+     * @var ArrayCollection<int, Order>|PersistentCollection<int, Order> $orders
+     */
     #[ORM\OneToMany(
-        targetEntity: "App\Entity\Order",
+        targetEntity: Order::class,
         mappedBy: "user",
         cascade: ["all"],
         fetch: "EAGER",
         orphanRemoval: true
     )]
-    private $orders;
+    private ArrayCollection|PersistentCollection $orders;
 
     #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
@@ -201,12 +206,15 @@ class User
         $this->hash = $hash;
     }
 
-    public function getOrders()
+    /**
+     * @return ArrayCollection<int, Order>|PersistentCollection<int, Order>
+     */
+    public function getOrders(): ArrayCollection|PersistentCollection
     {
         return $this->orders;
     }
 
-    public function addOrder(Order $order)
+    public function addOrder(Order $order): void
     {
         if (!$this->orders->contains($order)) {
             $order->setUser($this);
@@ -214,7 +222,7 @@ class User
         }
     }
 
-    public function removeOrder(Order $order)
+    public function removeOrder(Order $order): void
     {
         if ($this->orders->contains($order)) {
             $this->orders->removeElement($order);

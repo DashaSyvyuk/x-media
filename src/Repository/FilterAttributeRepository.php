@@ -7,10 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method FilterAttribute|null find($id, $lockMode = null, $lockVersion = null)
- * @method FilterAttribute|null findOneBy(array $criteria, array $orderBy = null)
- * @method FilterAttribute[]    findAll()
- * @method FilterAttribute[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<FilterAttribute>
  */
 class FilterAttributeRepository extends ServiceEntityRepository
 {

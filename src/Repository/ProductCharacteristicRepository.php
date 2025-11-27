@@ -7,10 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ProductCharacteristic|null find($id, $lockMode = null, $lockVersion = null)
- * @method ProductCharacteristic|null findOneBy(array $criteria, array $orderBy = null)
- * @method ProductCharacteristic[]    findAll()
- * @method ProductCharacteristic[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<ProductCharacteristic>
  */
 class ProductCharacteristicRepository extends ServiceEntityRepository
 {

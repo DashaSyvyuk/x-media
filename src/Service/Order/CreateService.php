@@ -22,6 +22,9 @@ class CreateService
     {
         $templating = $this->container->get('twig');
         $managerEmail = $this->settingRepository->findOneBy(['slug' => 'email']);
+        if (! $managerEmail) {
+            throw new \Exception('Service manager email is missing');
+        }
         $mainUrl = sprintf('https://%s/', $host);
 
         if ($order->getEmail()) {

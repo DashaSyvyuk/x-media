@@ -6,17 +6,13 @@ use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Promotion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Product|null find($id, $lockMode = null, $lockVersion = null)
- * @method Product|null findOneBy(array $criteria, array $orderBy = null)
- * @method Product[]    findAll()
- * @method Product[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Product>
  */
 class ProductRepository extends ServiceEntityRepository
 {
@@ -25,6 +21,9 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    /**
+     * @param array<int, array<mixed>> $attributes
+     */
     public function findByCategoryAndAttributes(
         ?Category $category,
         array $attributes,
@@ -43,6 +42,9 @@ class ProductRepository extends ServiceEntityRepository
         return $query;
     }
 
+    /**
+     * @param array<int, array<mixed>> $attributes
+     */
     private function prepareQuery(
         ?Category $category,
         array $attributes,
@@ -95,6 +97,11 @@ class ProductRepository extends ServiceEntityRepository
         return $query;
     }
 
+    /**
+     * @param array<int, array<mixed>> $attributes
+     *
+     * @return array<string, string>
+     */
     public function getMinAndMaxPriceInCategory(
         ?Category $category,
         array $attributes,
@@ -109,6 +116,9 @@ class ProductRepository extends ServiceEntityRepository
         return $query->getQuery()->getArrayResult()[0];
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function getProductsForProm(): array
     {
         $result = [];
@@ -169,6 +179,9 @@ class ProductRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * @return mixed
+     */
     public function getProductsForHotline()
     {
         return $this->createQueryBuilder('p')
@@ -186,6 +199,9 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return mixed
+     */
     public function getProductsForEkatalog()
     {
         return $this->createQueryBuilder('p')
@@ -202,6 +218,9 @@ class ProductRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @return mixed
+     */
     public function getProductsForRozetka(string $activeFor)
     {
         return $this->createQueryBuilder('p')
@@ -262,6 +281,10 @@ class ProductRepository extends ServiceEntityRepository
     /**
      * @throws NonUniqueResultException
      * @throws NoResultException
+     *
+     * @param array<int, array<string, mixed>> $categories
+     *
+     * @return array<int, array<string, mixed>>
      */
     public function getCategoriesTreeForPromotion(array $categories, Promotion $promotion): array
     {
@@ -304,6 +327,10 @@ class ProductRepository extends ServiceEntityRepository
     /**
      * @throws NonUniqueResultException
      * @throws NoResultException
+     *
+     * @param array<int, array<string, mixed>> $categories
+     *
+     * @return array<int, array<string, mixed>>
      */
     public function getCategoriesTreeForSearch(array $categories, string $search): array
     {
@@ -370,6 +397,9 @@ class ProductRepository extends ServiceEntityRepository
         return $query;
     }
 
+    /**
+     * @return string[]
+     */
     private function prepareSearchString(string $search): array
     {
         $words = explode(' ', trim($search));

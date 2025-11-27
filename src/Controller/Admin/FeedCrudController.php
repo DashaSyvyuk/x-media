@@ -12,6 +12,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+/**
+ * @extends AbstractCrudController<Feed>
+ */
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN')")]
 class FeedCrudController extends AbstractCrudController
 {

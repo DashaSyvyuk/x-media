@@ -32,7 +32,7 @@ class Currency
         return $this->id;
     }
 
-    public function setId(int $id): int
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -67,7 +67,7 @@ class Currency
         return $this->code;
     }
 
-    public function setExchangeRate(float $exchangeRate)
+    public function setExchangeRate(float $exchangeRate): void
     {
         $this->exchangeRate = $exchangeRate;
     }
@@ -79,6 +79,6 @@ class Currency
 
     public function __toString(): string
     {
-        return '' . $this->title;
+        return $this->title;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\WarehouseRepository;
 use App\Traits\DateStorageTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
     new ORM\Index(columns: ["title"]),
     new ORM\Index(columns: ["city"])
 ])]
-#[ORM\Entity(repositoryClass: "App\Repository\WarehouseRepository")]
+#[ORM\Entity(repositoryClass: WarehouseRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Warehouse
 {
@@ -25,7 +26,7 @@ class Warehouse
     private string $title = "";
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\AdminUser")]
+    #[ORM\ManyToOne(targetEntity: AdminUser::class)]
     private AdminUser $adminUser;
 
     #[ORM\Column(type: "string")]
@@ -46,105 +47,71 @@ class Warehouse
     #[ORM\Column(type: "datetime")]
     public DateTime $updatedAt;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param string $title
-     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param AdminUser $adminUser
-     */
     public function setAdminUser(AdminUser $adminUser): void
     {
         $this->adminUser = $adminUser;
     }
 
-    /**
-     * @return AdminUser
-     */
     public function getAdminUser(): AdminUser
     {
         return $this->adminUser;
     }
 
-    /**
-     * @param string $address
-     */
     public function setAddress(string $address): void
     {
         $this->address = $address;
     }
 
-    /**
-     * @return string
-     */
     public function getAddress(): string
     {
         return $this->address;
     }
 
-    /**
-     * @param string $city
-     */
     public function setCity(string $city): void
     {
         $this->city = $city;
     }
 
-    /**
-     * @return string
-     */
     public function getCity(): string
     {
         return $this->city;
     }
 
-    /**
-     * @param string|null $notes
-     */
     public function setNotes(?string $notes): void
     {
         $this->notes = $notes;
     }
 
-    /**
-     * @return string|null
-     */
     public function getNotes(): ?string
     {
         return $this->notes;
     }
 
-    /**
-     * @param bool $active
-     */
     public function setActive(bool $active): void
     {
         $this->active = $active;
     }
 
-    /**
-     * @return bool
-     */
     public function getActive(): bool
     {
         return $this->active;
@@ -155,7 +122,7 @@ class Warehouse
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt): void
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -165,7 +132,7 @@ class Warehouse
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt): void
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }

@@ -3,14 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\Comment;
+use App\Entity\Product;
+use App\Entity\ProductRating;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Comment|null find($id, $lockMode = null, $lockVersion = null)
- * @method Comment|null findOneBy(array $criteria, array $orderBy = null)
- * @method Comment[]    findAll()
- * @method Comment[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Comment>
  */
 class CommentRepository extends ServiceEntityRepository
 {
@@ -19,6 +18,9 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
+    /**
+     * @param array<string, string|Product|ProductRating|null> $data
+     */
     public function create(array $data): Comment
     {
         $comment = new Comment();
