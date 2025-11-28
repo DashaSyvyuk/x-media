@@ -48,7 +48,7 @@ class ProductPageControllerTest extends WebTestCase
         $entityManager->flush();
 
         // Make request to product page
-        $crawler = $client->request('GET', '/products/' . $product->getId());
+        $client->request('GET', '/products/' . $product->getId());
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);

@@ -57,15 +57,13 @@ test-functional:
 	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit --testsuite="Functional Tests"
 
 test-smoke:
-	@echo "⚠️  Smoke tests require test database setup. See TEST_DATABASE_SETUP.md"
-	@echo "Run: make db-test-setup first"
 	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit --group=smoke
 
 test-coverage:
-	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit --coverage-html var/coverage --testsuite="Unit Tests"
+	docker container exec $(PHP_SERVICE) vendor/bin/phpunit --coverage-html var/coverage --testsuite="Unit Tests"
 
-test-verbose:
-	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit --verbose --testsuite="Unit Tests"
+test-coverage-text:
+	docker container exec $(PHP_SERVICE) vendor/bin/phpunit --coverage-text --testsuite="Unit Tests"
 
 # Combined Commands
 qa: phpcs phpstan test-unit

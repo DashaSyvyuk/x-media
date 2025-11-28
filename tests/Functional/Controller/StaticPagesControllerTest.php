@@ -60,8 +60,21 @@ class StaticPagesControllerTest extends WebTestCase
     public function testSearchPageIsAccessible(): void
     {
         $client = static::createClient();
-        // Don't test search page as it requires complex database setup
-        // This should be tested separately as a search functionality test
-        $this->markTestSkipped('Search page requires additional database fixtures for products and categories');
+
+        // Test that search page loads without errors
+        // Note: Full search functionality requires complex database setup with
+        // product characteristics, filters, and other related entities.
+        // The fixtures provide basic data (products, categories, settings) which
+        // is sufficient for basic page loading tests.
+        $client->request('GET', '/search?search=test');
+
+        // We check for either success or redirect (app may redirect on empty search)
+        $response = $client->getResponse();
+        $statusCode = $response->getStatusCode();
+
+        $this->assertTrue(
+            $statusCode === 200 || $statusCode === 302,
+            "Search page should be accessible (got status code: $statusCode)"
+        );
     }
 }

@@ -37,7 +37,7 @@ class CategoryPageControllerTest extends WebTestCase
         $entityManager->flush();
 
         // Make request to category page
-        $crawler = $client->request('GET', '/categories/' . $uniqueSlug);
+        $client->request('GET', '/categories/' . $uniqueSlug);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
