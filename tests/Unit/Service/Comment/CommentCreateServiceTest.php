@@ -21,6 +21,9 @@ use PHPUnit\Framework\TestCase;
  */
 class CommentCreateServiceTest extends TestCase
 {
+    private const AUTHOR = 'John Doe';
+    private const EMAIL = 'john@example.com';
+    private const COMMENT = 'Great product!';
     private CommentCreateService $service;
     /** @var CommentRepository&\PHPUnit\Framework\MockObject\MockObject */
     private CommentRepository $commentRepository;
@@ -75,9 +78,9 @@ class CommentCreateServiceTest extends TestCase
         $this->commentRepository->expects($this->once())
             ->method('create')
             ->with($this->callback(function ($commentData) {
-                return $commentData['author'] === 'John Doe'
-                    && $commentData['email'] === 'john@example.com'
-                    && $commentData['comment'] === 'Great product!'
+                return $commentData['author'] === self::AUTHOR
+                    && $commentData['email'] === self::EMAIL
+                    && $commentData['comment'] === self::COMMENT
                     && $commentData['status'] === Comment::STATUS_NEW
                     && isset($commentData['product'])
                     && isset($commentData['productRating']);
@@ -258,9 +261,9 @@ class CommentCreateServiceTest extends TestCase
     {
         return [
             'product' => 1,
-            'author' => 'John Doe',
-            'email' => 'john@example.com',
-            'comment' => 'Great product!',
+            'author' => self::AUTHOR,
+            'email' => self::EMAIL,
+            'comment' => self::COMMENT,
             'rating' => 5,
         ];
     }
@@ -268,9 +271,9 @@ class CommentCreateServiceTest extends TestCase
     private function createComment(): Comment
     {
         $comment = new Comment();
-        $comment->setAuthor('John Doe');
-        $comment->setEmail('john@example.com');
-        $comment->setComment('Great product!');
+        $comment->setAuthor(self::AUTHOR);
+        $comment->setEmail(self::EMAIL);
+        $comment->setComment(self::COMMENT);
         $comment->setStatus(Comment::STATUS_NEW);
         $comment->setProduct($this->testProduct);
         return $comment;

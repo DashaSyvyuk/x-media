@@ -107,26 +107,6 @@ class OrderCreateServiceTest extends TestCase
     }
 
     /**
-     * Setup before all tests in class
-     * Best practice: Initialize expensive resources once
-     */
-    public static function setUpBeforeClass(): void
-    {
-        parent::setUpBeforeClass();
-        // Could initialize database connections, load fixtures, etc.
-    }
-
-    /**
-     * Teardown after all tests in class
-     * Best practice: Clean up expensive resources
-     */
-    public static function tearDownAfterClass(): void
-    {
-        parent::tearDownAfterClass();
-        // Could close database connections, clean temp files, etc.
-    }
-
-    /**
      * Test service sends email to customer with order
      *
      * Note: TurboSms::send() is stubbed in tests/Stubs/TurboSms.php to prevent

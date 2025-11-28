@@ -93,7 +93,7 @@ final class Version20210706202442 extends AbstractMigration
                 created_at DATETIME NOT NULL,
                 updated_at DATETIME NOT NULL,
                 INDEX IDX_64617F034584665A (product_id),
-                INDEX IDX_64617F034584665A462CE4F5 (product_id, position), 
+                INDEX IDX_64617F034584665A462CE4F5 (product_id, position),
                 PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
             SQL
         );
@@ -111,28 +111,28 @@ final class Version20210706202442 extends AbstractMigration
         $this->addSql(
             <<<SQL
             ALTER TABLE filter_parameter_value
-                ADD CONSTRAINT FK_63F720858DFB3B41 
+                ADD CONSTRAINT FK_63F720858DFB3B41
                     FOREIGN KEY (filter_parameter_id) REFERENCES filter_parameter (id) ON DELETE SET NULL
             SQL
         );
         $this->addSql(
             <<<SQL
-            ALTER TABLE filter_parameter_value 
-                ADD CONSTRAINT FK_63F720854584665A 
+            ALTER TABLE filter_parameter_value
+                ADD CONSTRAINT FK_63F720854584665A
                     FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE SET NULL
             SQL
         );
         $this->addSql(
             <<<SQL
-            ALTER TABLE product 
-                ADD CONSTRAINT FK_D34A04AD12469DE2 
+            ALTER TABLE product
+                ADD CONSTRAINT FK_D34A04AD12469DE2
                     FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE SET NULL
             SQL
         );
         $this->addSql(
             <<<SQL
-            ALTER TABLE product_image 
-                ADD CONSTRAINT FK_64617F034584665A 
+            ALTER TABLE product_image
+                ADD CONSTRAINT FK_64617F034584665A
                     FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE
             SQL
         );
