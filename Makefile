@@ -54,8 +54,6 @@ test-integration:
 	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit --testsuite="Integration Tests"
 
 test-functional:
-	@echo "⚠️  Functional tests require test database setup. See TEST_DATABASE_SETUP.md"
-	@echo "Run: make db-test-setup first"
 	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit --testsuite="Functional Tests"
 
 test-smoke:

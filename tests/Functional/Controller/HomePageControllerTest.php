@@ -12,6 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class HomePageControllerTest extends WebTestCase
 {
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Restore exception handler to avoid risky test warnings
+        restore_exception_handler();
+    }
+
     public function testHomePageIsAccessible(): void
     {
         $client = static::createClient();

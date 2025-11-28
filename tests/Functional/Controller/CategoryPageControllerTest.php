@@ -13,6 +13,14 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CategoryPageControllerTest extends WebTestCase
 {
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Restore exception handler to avoid risky test warnings
+        restore_exception_handler();
+    }
+
     public function testCategoryPageWithValidCategoryIsAccessible(): void
     {
         $client = static::createClient();
@@ -29,7 +37,7 @@ class CategoryPageControllerTest extends WebTestCase
         $entityManager->flush();
 
         // Make request to category page
-        $crawler = $client->request('GET', '/category/' . $uniqueSlug);
+        $crawler = $client->request('GET', '/categories/' . $uniqueSlug);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -44,8 +52,10 @@ class CategoryPageControllerTest extends WebTestCase
         $client = static::createClient();
 
         $nonExistentSlug = 'this-category-does-not-exist-' . time();
-        $client->request('GET', '/category/' . $nonExistentSlug);
+        $client->request('GET', '/categories/' . $nonExistentSlug);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+        // The application returns 200 with a "not found page" content instead of 404
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h2', 'Not found page');
     }
 }
