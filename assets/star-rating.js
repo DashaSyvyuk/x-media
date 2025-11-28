@@ -98,38 +98,37 @@ import jQuery from 'jquery';
         },
 
         applyRating: function(rating){
-            var index = rating - 1;
+            const index = rating - 1;
             // paint selected and remove hovered color
             this.paintStars(index, 'active');
             this._state.rating = index + 1;
         },
 
         restoreState: function(e){
-            var index = this.getIndex(e);
-            var rating = this._state.rating || -1;
+            const index = this.getIndex(e);
+            const rating = this._state.rating || -1;
             this.paintStars(rating - 1, 'active');
             this.settings.onLeave(index + 1, this._state.rating, this.$el);
         },
 
         getIndex: function(e){
-            var $target = $(e.currentTarget);
-            var width = $target.width();
-            var side = $(e.target).attr('data-side');
+            const $target = $(e.currentTarget);
+            const width = $target.width();
+            let side = $(e.target).attr('data-side');
 
-            // hovered outside the star, calculate by pixel instead
             side = (!side) ? this.getOffsetByPixel(e, $target, width) : side;
             side = (this.settings.useFullStars) ? 'right' : side ;
 
             // get index for half or whole star
-            var index = $target.index() - ((side === 'left') ? 0.5 : 0);
-
+            let index = $target.index() - ((side === 'left') ? 0.5 : 0);
             // pointer is way to the left, rating should be none
             index = ( index < 0.5 && (e.offsetX < width / 4) ) ? -1 : index;
+
             return index;
         },
 
         getOffsetByPixel: function(e, $target, width){
-            var leftX = e.pageX - $target.offset().left;
+            const leftX = e.pageX - $target.offset().left;
             return ( leftX <= (width / 2) && !this.settings.useFullStars) ? 'left' : 'right';
         },
 
@@ -138,10 +137,10 @@ import jQuery from 'jquery';
         },
 
         paintStars: function(endIndex, stateClass){
-            var $polygonLeft;
-            var $polygonRight;
-            var leftClass;
-            var rightClass;
+            let $polygonLeft;
+            let $polygonRight;
+            let leftClass;
+            let rightClass;
 
             $.each(this.$stars, function(index, star){
                 $polygonLeft = $(star).find('polygon[data-side="left"]');
@@ -168,7 +167,7 @@ import jQuery from 'jquery';
 
             // inject svg markup
             let starsMarkup = '';
-            for( var i = 0; i < this.settings.totalStars; i++){
+            for (let i = 0; i < this.settings.totalStars; i++) {
                 starsMarkup += star;
             }
             this.$el.append(starsMarkup);

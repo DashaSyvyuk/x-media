@@ -15,19 +15,11 @@ $('#add-feedback').on('submit', (e) => {
     const email = $('#email').val();
     const comment = $('#comment').val();
 
-    if (!author) {
-        $('#author').addClass('red');
-    } else {
-        $('#author').removeClass('red');
-    }
+    if (author) { $('#author').removeClass('red'); } else { $('#author').addClass('red'); }
 
-    if (!comment) {
-        $('#comment').addClass('red');
-    } else {
-        $('#comment').removeClass('red');
-    }
+    if (comment) { $('#comment').removeClass('red'); } else { $('#comment').addClass('red'); }
 
-    if (email && !validateEmail(email)) {
+    if (email && ! validateEmail(email)) {
         $('#email').addClass('red');
     } else {
         $('#email').removeClass('red');

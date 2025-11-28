@@ -4,19 +4,18 @@ import $ from 'jquery';
 import './star-rating';
 
 $('#filters input[type=checkbox]').on('change', (e) => {
-    const url = window.location.pathname;
+    const url = globalThis.location.pathname;
     const newUrl = url + getUrl();
-    const filter = $(e.currentTarget).attr('name');
 
-    window.location.replace(newUrl);
+    globalThis.location.replace(newUrl);
 });
 
 $(document).on('click', '#filter-form .selected-filters .item, #filters-mobile-form .selected-filters .item', (e) => {
     const filter = $(e.currentTarget).data('filter-id');
 
-    if (filter == 'price_to') {
+    if (filter === 'price_to') {
         $('#price_to').val('').trigger('change');
-    } else if (filter == 'price_from') {
+    } else if (filter === 'price_from') {
         $('#price_from').val('').trigger('change');
     } else {
         $('#filters input[name='+filter+']').trigger('click');
@@ -27,26 +26,26 @@ $(document).on('click', '#filter-form .selected-filters .item, #filters-mobile-f
 });
 
 $('#products-block .order-by select').on('change', () => {
-    const url = window.location.pathname;
+    const url = globalThis.location.pathname;
     const newUrl = url + getUrl();
 
     getProducts(newUrl);
 
-    window.location.replace(newUrl);
+    globalThis.location.replace(newUrl);
 });
 
 $('#filters input[name=price_from]').on('change', (e) => {
-    const url = window.location.pathname;
+    const url = globalThis.location.pathname;
     const newUrl = url + getUrl();
 
-    window.location.replace(newUrl);
+    globalThis.location.replace(newUrl);
 });
 
 $('#filters input[name=price_to]').on('change', (e) => {
-    const url = window.location.pathname;
+    const url = globalThis.location.pathname;
     const newUrl = url + getUrl();
 
-    window.location.replace(newUrl);
+    globalThis.location.replace(newUrl);
 });
 
 function getUrl() {
@@ -219,7 +218,7 @@ $('#show-sort').on('click', () => {
 });
 
 $('.cancel').on('click', () => {
-    $(window).scrollTop(0);
+    $(globalThis).scrollTop(0);
     $('.filter-buttons').show();
     $('#mobile-sorting').hide();
     $('#mobile-filters').hide();
@@ -229,8 +228,8 @@ $('.cancel').on('click', () => {
 });
 
 $('.use').on('click', () => {
-    const url = window.location.pathname;
+    const url = globalThis.location.pathname;
     const newUrl = url + getUrl();
 
-    window.location.replace(newUrl);
+    globalThis.location.replace(newUrl);
 });

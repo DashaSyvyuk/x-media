@@ -5,10 +5,10 @@
         <div class="inner">
             <table>
                 <tr>
-                    <td class="product-name bold">Назва</td>
-                    <td class="price bold">Ціна</td>
-                    <td class="total-count bold">Кількість</td>
-                    <td class="remove bold">Видалити</td>
+                    <th class="product-name bold">Назва</th>
+                    <th class="price bold">Ціна</th>
+                    <th class="total-count bold">Кількість</th>
+                    <th class="remove bold">Видалити</th>
                 </tr>
                 {% for product in products %}
                     <tr data-id="{{ product.id }}" data-name="{{ product.title|raw }}" class="product-row">

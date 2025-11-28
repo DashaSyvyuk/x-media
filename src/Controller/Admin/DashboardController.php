@@ -41,6 +41,8 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')")]
 class DashboardController extends AbstractDashboardController
 {
+    private const COMMENT_STYLE = 'fas fa-comment';
+
     public function __construct(
         private readonly OrderRepository $orderRepository,
         private readonly CommentRepository $commentRepository,
@@ -97,12 +99,12 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Контент', 'fas fa-box-open')->setSubItems([
             MenuItem::linkToCrud('Товари', 'fas fa-box-open', Product::class),
             MenuItem::linkToCrud('Фільтри', 'fas fa-filter', Filter::class),
-            MenuItem::linkToCrud('Категорії', 'fas fa-comment', Category::class),
+            MenuItem::linkToCrud('Категорії', self::COMMENT_STYLE, Category::class),
             MenuItem::linkToCrud('Слайдер', 'fas fa-image', Slider::class)->setPermission('ROLE_ADMIN'),
             MenuItem::linkToCrud('Акції', 'fa fa-percent', Promotion::class)->setPermission('ROLE_ADMIN'),
-            MenuItem::linkToCrud(sprintf('Коментарі (%s)', $commentsCount), 'fas fa-comment', Comment::class)
+            MenuItem::linkToCrud(sprintf('Коментарі (%s)', $commentsCount), self::COMMENT_STYLE, Comment::class)
                 ->setPermission('ROLE_ADMIN'),
-            MenuItem::linkToCrud(sprintf('Відгуки (%s)', $feedbacksCount), 'fas fa-comment', Feedback::class)
+            MenuItem::linkToCrud(sprintf('Відгуки (%s)', $feedbacksCount), self::COMMENT_STYLE, Feedback::class)
                 ->setPermission('ROLE_ADMIN'),
         ]);
 
@@ -122,13 +124,12 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::subMenu('Постачальники', 'fa fa-truck')->setSubItems([
             MenuItem::linkToCrud('Постачальники', 'fas fa-truck', Supplier::class)->setPermission('ROLE_ADMIN'),
-//            MenuItem::linkToCrud('Замовлення', 'fa fa-shopping-cart', SupplierOrder::class),
             MenuItem::linkToCrud('Наявність', 'fas fa-layer-group', InStock::class),
             MenuItem::linkToCrud('Склади', 'fa fa-archive', Warehouse::class)->setPermission('ROLE_ADMIN')
         ]);
 
         yield MenuItem::subMenu('Налаштування', 'fa fa-cog')->setSubItems([
-            MenuItem::linkToCrud('Валюти', 'fas fa-comment', Currency::class),
+            MenuItem::linkToCrud('Валюти', self::COMMENT_STYLE, Currency::class),
             MenuItem::linkToCrud('Налаштування', 'fa fa-cog', Setting::class)->setPermission('ROLE_SUPER_ADMIN'),
             MenuItem::linkToCrud('Способи доставки', 'fa fa-bus', DeliveryType::class),
             MenuItem::linkToCrud('Способи оплати', 'fa fa-dollar', PaymentType::class),

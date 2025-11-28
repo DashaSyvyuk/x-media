@@ -3,7 +3,7 @@ import './bootstrap';
 import $ from 'jquery';
 
 $(document).on('click', '.add2cart div', (e) => {
-    let cart = JSON.parse(getCookie('cart') !== undefined ? getCookie('cart') : '[]');
+    let cart = JSON.parse(getCookie('cart') === undefined ? '[]' : getCookie('cart'));
     let count = 1;
     const id = $(e.currentTarget).data('id');
 
@@ -93,11 +93,6 @@ $(document).on('click', '#close-cart', () => {
 });
 
 $(document).on('click', '#menu .cart .cart-ico, #menu-fixed .cart .cart-ico', () => showCart());
-
-$(window).click((e) => {
-    if(!$('#cart-block').has(e.target)) {
-    }
-});
 
 function getCookie(name) {
     let matches = document.cookie.match(new RegExp(

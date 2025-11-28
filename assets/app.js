@@ -46,10 +46,7 @@ $('#search').on('submit', (e) => {
     } else {
         $('#search input').removeClass('red');
         $('#search .error').text('');
-        if (searchString.length === 0) {
-            return false;
-        } else {
-            return true;
-        }
+
+        return searchString.length !== 0;
     }
 });

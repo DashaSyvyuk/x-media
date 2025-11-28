@@ -38,3 +38,5 @@ services:
     App\EventListener\OrderItemSubscriber:
         tags: [ 'doctrine.event_subscriber' ]
 
+    App\Command\SyncNovaPoshtaDataCommand:
+        lazy: true
