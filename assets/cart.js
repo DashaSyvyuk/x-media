@@ -9,7 +9,7 @@ $(document).on('click', '.add2cart div', (e) => {
 
     if (cart.length > 0) {
         cart.map((item) => {
-            if (parseInt(item.id) === parseInt(id)) {
+            if (Number.parseInt(item.id) === Number.parseInt(id)) {
                 count = item.count + 1;
             }
 
@@ -28,8 +28,7 @@ $(document).on('click', '.add2cart div', (e) => {
 $(document).on('click', '.product', (e) => {
     const addToCartClicked = $(e.target).closest('.add2cart').length > 0;
     if (!addToCartClicked) {
-        const productLink = $(e.currentTarget).find('.product-title a').attr('href');
-        window.location.href = productLink;
+        globalThis.location.href = $(e.currentTarget).find('.product-title a').attr('href');
     }
 });
 
@@ -41,7 +40,7 @@ $(document).on('click', '#cart-block .delete', (e) => {
 });
 
 $(document).on('change', '#cart-block input', (e) => {
-    const count = parseInt($(e.currentTarget).val());
+    const count = Number.parseInt($(e.currentTarget).val());
     const id = $(e.currentTarget).closest('tr').data('id');
 
     if (count <= 0) {
@@ -54,7 +53,7 @@ $(document).on('change', '#cart-block input', (e) => {
 $(document).on('click', '#cart-block .plus', (e) => {
     const id = $(e.currentTarget).closest('[data-id]').data('id');
     let input = $('#item-amount-' + id);
-    let count = parseInt(input.val());
+    let count = Number.parseInt(input.val());
     let total = $("#cart-block .title span").text();
     count++;
     total++;
@@ -67,7 +66,7 @@ $(document).on('click', '#cart-block .minus', (e) => {
     let product = $(e.currentTarget).closest('[data-id]')
     const id = product.data('id');
     let input = $('#item-amount-' + id);
-    let count = parseInt(input.val());
+    let count = Number.parseInt(input.val());
     let total = $("#cart-block .title span").text();
     count--;
     total--;
@@ -147,7 +146,7 @@ function getTotalCount(cart) {
 function removeProduct(id) {
     let cart = JSON.parse(getCookie('cart') !== undefined ? getCookie('cart') : '[]');
 
-    const result = cart.filter((product) => parseInt(product.id) !== parseInt(id));
+    const result = cart.filter((product) => Number.parseInt(product.id) !== Number.parseInt(id));
     const totalCount = getTotalCount(result);
 
     getTotalPrice();
@@ -179,7 +178,7 @@ function addProduct(id, count) {
 
     if (cart.length > 0) {
         cart.map((item) => {
-            if (parseInt(item.id) === parseInt(id)) {
+            if (Number.parseInt(item.id) === Number.parseInt(id)) {
                 alreadyExists = 1;
                 item.count = count;
             }
