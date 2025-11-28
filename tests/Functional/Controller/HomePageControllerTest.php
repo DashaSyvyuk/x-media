@@ -16,7 +16,7 @@ class HomePageControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/');
-        
+
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -25,9 +25,9 @@ class HomePageControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/');
-        
+
         $this->assertResponseIsSuccessful();
-        
+
         // Check that the page has HTML structure
         $this->assertSelectorExists('html');
         $this->assertSelectorExists('body');
@@ -37,7 +37,7 @@ class HomePageControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('GET', '/');
-        
+
         $response = $client->getResponse();
         $this->assertResponseIsSuccessful();
         $this->assertTrue(
@@ -46,4 +46,3 @@ class HomePageControllerTest extends WebTestCase
         );
     }
 }
-

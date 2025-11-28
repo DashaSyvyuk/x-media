@@ -19,11 +19,14 @@ class StaticPagesControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('GET', $url);
-        
+
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
+    /**
+     * @return array<string, array{string}>
+     */
     public function staticPagesProvider(): array
     {
         return [
@@ -38,7 +41,7 @@ class StaticPagesControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('GET', '/login');
-        
+
         $response = $client->getResponse();
         $this->assertTrue(
             $response->isSuccessful() || $response->isRedirection(),
@@ -50,7 +53,7 @@ class StaticPagesControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('GET', '/search');
-        
+
         $response = $client->getResponse();
         $this->assertTrue(
             $response->isSuccessful() || $response->isRedirection(),
@@ -58,4 +61,3 @@ class StaticPagesControllerTest extends WebTestCase
         );
     }
 }
-

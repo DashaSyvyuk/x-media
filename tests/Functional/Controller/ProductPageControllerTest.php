@@ -19,13 +19,13 @@ class ProductPageControllerTest extends WebTestCase
         $client = static::createClient();
         $container = static::getContainer();
         $entityManager = $container->get('doctrine')->getManager();
-        
+
         // Create a test category
         $category = new Category();
         $category->setTitle('Test Category');
         $category->setSlug('test-category-' . time());
         $entityManager->persist($category);
-        
+
         // Create a test product
         $product = new Product();
         $product->setTitle('Test Product');
@@ -35,16 +35,16 @@ class ProductPageControllerTest extends WebTestCase
         $product->setProductCode('TEST-FUNC-001');
         $product->setCategory($category);
         $product->setDescription('Test description');
-        
+
         $entityManager->persist($product);
         $entityManager->flush();
-        
+
         // Make request to product page
         $crawler = $client->request('GET', '/product/' . $product->getId());
-        
+
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        
+
         // Clean up
         $entityManager->remove($product);
         $entityManager->remove($category);
@@ -54,12 +54,11 @@ class ProductPageControllerTest extends WebTestCase
     public function testProductPageWithInvalidProductReturnsNotFound(): void
     {
         $client = static::createClient();
-        
+
         // Use a very large ID that likely doesn't exist
         $nonExistentId = 999999999;
         $client->request('GET', '/product/' . $nonExistentId);
-        
+
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 }
-

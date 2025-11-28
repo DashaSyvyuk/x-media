@@ -5,3 +5,10 @@ parameters:
     reportUnmatchedIgnoredErrors: true
     excludePaths:
         - src/Service/HydratorService.php
+    ignoreErrors:
+        # TurboSms stub in tests has different signature than production class
+        - '#Call to an undefined static method App\\Utils\\TurboSms::reset\(\)#'
+        - '#Access to an undefined static property App\\Utils\\TurboSms::\$wasCalled#'
+        - '#Access to an undefined static property App\\Utils\\TurboSms::\$lastRecipient#'
+        # Integration tests need to call protected getEntityManager() method
+        - '#Call to protected method getEntityManager\(\) of class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository#'

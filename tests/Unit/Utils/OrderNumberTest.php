@@ -22,11 +22,10 @@ class OrderNumberTest extends TestCase
                 return isset($criteria['orderNumber']) && is_string($criteria['orderNumber']);
             }))
             ->willReturn(null);
-        
+
         $orderNumber = new OrderNumber($orderRepository);
         $generatedNumber = $orderNumber->generateOrderNumber();
-        
-        $this->assertIsString($generatedNumber);
+
         $this->assertGreaterThan(0, (int) $generatedNumber);
         $this->assertMatchesRegularExpression('/^\d+$/', $generatedNumber);
     }
@@ -34,27 +33,26 @@ class OrderNumberTest extends TestCase
     public function testGenerateOrderNumberHandlesCollision(): void
     {
         $orderRepository = $this->createMock(OrderRepository::class);
-        
+
         // First call returns an order (collision), second call returns null
         $orderRepository->expects($this->exactly(2))
             ->method('findOneBy')
             ->willReturnCallback(function ($criteria) {
                 static $callCount = 0;
                 $callCount++;
-                
+
                 if ($callCount === 1) {
                     $order = new Order();
                     $order->setOrderNumber($criteria['orderNumber']);
                     return $order;
                 }
-                
+
                 return null;
             });
-        
+
         $orderNumber = new OrderNumber($orderRepository);
         $generatedNumber = $orderNumber->generateOrderNumber();
-        
-        $this->assertIsString($generatedNumber);
+
         $this->assertGreaterThan(0, (int) $generatedNumber);
     }
 
@@ -62,13 +60,13 @@ class OrderNumberTest extends TestCase
     {
         $orderRepository = $this->createMock(OrderRepository::class);
         $orderRepository->method('findOneBy')->willReturn(null);
-        
+
         $orderNumber = new OrderNumber($orderRepository);
-        
+
         $number1 = $orderNumber->generateOrderNumber();
         sleep(1); // Wait 1 second to ensure different timestamps (time() has 1-second precision)
         $number2 = $orderNumber->generateOrderNumber();
-        
+
         $this->assertNotEquals($number1, $number2);
     }
 
@@ -76,12 +74,11 @@ class OrderNumberTest extends TestCase
     {
         $orderRepository = $this->createMock(OrderRepository::class);
         $orderRepository->method('findOneBy')->willReturn(null);
-        
+
         $orderNumber = new OrderNumber($orderRepository);
         $generatedNumber = $orderNumber->generateOrderNumber();
-        
+
         // Timestamp should be 10 digits (current Unix timestamp)
         $this->assertEquals(10, strlen($generatedNumber));
     }
 }
-

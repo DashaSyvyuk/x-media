@@ -23,19 +23,13 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class OrderRepositoryTest extends KernelTestCase
 {
     private OrderRepository $orderRepository;
-    private ProductRepository $productRepository;
-    private PaymentTypeRepository $paymentTypeRepository;
-    private DeliveryTypeRepository $deliveryTypeRepository;
 
     protected function setUp(): void
     {
         self::bootKernel();
         $container = static::getContainer();
-        
+
         $this->orderRepository = $container->get(OrderRepository::class);
-        $this->productRepository = $container->get(ProductRepository::class);
-        $this->paymentTypeRepository = $container->get(PaymentTypeRepository::class);
-        $this->deliveryTypeRepository = $container->get(DeliveryTypeRepository::class);
     }
 
     public function testFillMethodCreatesOrderFromArrayData(): void
@@ -48,22 +42,22 @@ class OrderRepositoryTest extends KernelTestCase
         $product->setPrice(1000);
         $product->setProductCode('TEST-001');
         $product->count = 2;
-        
+
         $entityManager = $this->orderRepository->getEntityManager();
         $entityManager->persist($product);
         $entityManager->flush();
-        
+
         // Create test payment and delivery types
         $paymentType = new PaymentType();
         $paymentType->setTitle('Test Payment');
         $entityManager->persist($paymentType);
-        
+
         $deliveryType = new DeliveryType();
         $deliveryType->setTitle('Test Delivery');
         $entityManager->persist($deliveryType);
-        
+
         $entityManager->flush();
-        
+
         $data = [
             'name' => 'John',
             'surname' => 'Doe',
@@ -81,9 +75,9 @@ class OrderRepositoryTest extends KernelTestCase
             'office' => null,
             'products' => [$product],
         ];
-        
+
         $order = $this->orderRepository->fill($data);
-        
+
         $this->assertInstanceOf(Order::class, $order);
         $this->assertSame('John', $order->getName());
         $this->assertSame('Doe', $order->getSurname());
@@ -93,7 +87,7 @@ class OrderRepositoryTest extends KernelTestCase
         $this->assertSame(Order::NEW, $order->getStatus());
         $this->assertFalse($order->getPaymentStatus());
         $this->assertCount(1, $order->getItems());
-        
+
         // Clean up
         $entityManager->remove($product);
         $entityManager->remove($paymentType);
@@ -112,18 +106,18 @@ class OrderRepositoryTest extends KernelTestCase
         $order->setStatus(Order::NEW);
         $order->setPaymentStatus(false);
         $order->setTotal(3000);
-        
+
         $createdOrder = $this->orderRepository->create($order);
-        
+
         $this->assertNotNull($createdOrder->getId());
         $this->assertGreaterThan(0, $createdOrder->getId());
-        
+
         // Verify order was persisted
         $foundOrder = $this->orderRepository->find($createdOrder->getId());
         $this->assertNotNull($foundOrder);
         $this->assertSame('Jane', $foundOrder->getName());
         $this->assertSame(3000, $foundOrder->getTotal());
-        
+
         // Clean up
         $entityManager = $this->orderRepository->getEntityManager();
         $entityManager->remove($foundOrder);
@@ -133,7 +127,7 @@ class OrderRepositoryTest extends KernelTestCase
     public function testFindOneByOrderNumber(): void
     {
         $uniqueOrderNumber = 'UNIQUE-' . time();
-        
+
         $order = new Order();
         $order->setOrderNumber($uniqueOrderNumber);
         $order->setName('Test');
@@ -143,19 +137,18 @@ class OrderRepositoryTest extends KernelTestCase
         $order->setStatus(Order::NEW);
         $order->setPaymentStatus(false);
         $order->setTotal(1500);
-        
+
         $this->orderRepository->create($order);
-        
+
         $foundOrder = $this->orderRepository->findOneBy(['orderNumber' => $uniqueOrderNumber]);
-        
+
         $this->assertNotNull($foundOrder);
         $this->assertSame($uniqueOrderNumber, $foundOrder->getOrderNumber());
         $this->assertSame('Test', $foundOrder->getName());
-        
+
         // Clean up
         $entityManager = $this->orderRepository->getEntityManager();
         $entityManager->remove($foundOrder);
         $entityManager->flush();
     }
 }
-
