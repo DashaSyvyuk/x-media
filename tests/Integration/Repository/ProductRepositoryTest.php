@@ -22,6 +22,14 @@ class ProductRepositoryTest extends KernelTestCase
         $this->productRepository = $container->get(ProductRepository::class);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Restore exception handler to avoid risky test warnings
+        restore_exception_handler();
+    }
+
     public function testFindActiveProducts(): void
     {
         $entityManager = $this->productRepository->getEntityManager();
@@ -64,7 +72,9 @@ class ProductRepositoryTest extends KernelTestCase
         $this->assertNotNull($foundActiveProduct);
         $this->assertSame(Product::STATUS_ACTIVE, $foundActiveProduct->getStatus());
 
-        // Clean up
+        // Clean up - refresh to load relationships and handle cascade delete
+        $entityManager->refresh($activeProduct);
+        $entityManager->refresh($blockedProduct);
         $entityManager->remove($activeProduct);
         $entityManager->remove($blockedProduct);
         $entityManager->flush();
@@ -98,7 +108,8 @@ class ProductRepositoryTest extends KernelTestCase
         $this->assertGreaterThanOrEqual(1, count($products));
         $this->assertSame($category->getId(), $products[0]->getCategory()->getId());
 
-        // Clean up
+        // Clean up - refresh to load relationships and handle cascade delete
+        $entityManager->refresh($product);
         $entityManager->remove($product);
         $entityManager->remove($category);
         $entityManager->flush();
@@ -126,7 +137,8 @@ class ProductRepositoryTest extends KernelTestCase
         $this->assertSame($uniqueCode, $foundProduct->getProductCode());
         $this->assertSame('Unique Code Product', $foundProduct->getTitle());
 
-        // Clean up
+        // Clean up - refresh to load relationships
+        $entityManager->refresh($foundProduct);
         $entityManager->remove($foundProduct);
         $entityManager->flush();
     }
@@ -183,7 +195,9 @@ class ProductRepositoryTest extends KernelTestCase
         $this->assertTrue($foundProduct2);
         $this->assertTrue($foundProduct1);
 
-        // Clean up
+        // Clean up - refresh to load relationships
+        $entityManager->refresh($product1);
+        $entityManager->refresh($product2);
         $entityManager->remove($product1);
         $entityManager->remove($product2);
         $entityManager->flush();

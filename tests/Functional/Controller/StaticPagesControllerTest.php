@@ -27,7 +27,7 @@ class StaticPagesControllerTest extends WebTestCase
     /**
      * @return array<string, array{string}>
      */
-    public function staticPagesProvider(): array
+    public static function staticPagesProvider(): array
     {
         return [
             'about us page' => ['/about-us'],

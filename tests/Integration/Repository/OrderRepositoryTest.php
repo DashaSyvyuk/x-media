@@ -32,6 +32,14 @@ class OrderRepositoryTest extends KernelTestCase
         $this->orderRepository = $container->get(OrderRepository::class);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Restore exception handler to avoid risky test warnings
+        restore_exception_handler();
+    }
+
     public function testFillMethodCreatesOrderFromArrayData(): void
     {
         // Create test product

@@ -24,9 +24,6 @@ test:
 test-unit:
 	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit --testsuite="Unit Tests"
 
-test-all:
-	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit
-
 # Test by groups
 test-critical:
 	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit --group=critical
@@ -54,8 +51,6 @@ test-feedback-service:
 	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit tests/Unit/Service/Feedback/
 
 test-integration:
-	@echo "⚠️  Integration tests require test database setup. See TEST_DATABASE_SETUP.md"
-	@echo "Run: make db-test-setup first"
 	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit --testsuite="Integration Tests"
 
 test-functional:
