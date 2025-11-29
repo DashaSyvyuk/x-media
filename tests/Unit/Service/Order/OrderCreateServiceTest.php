@@ -8,7 +8,6 @@ use App\Repository\SettingRepository;
 use App\Service\Order\CreateService;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
