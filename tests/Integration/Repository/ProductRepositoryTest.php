@@ -2,8 +2,6 @@
 
 namespace App\Tests\Integration\Repository;
 
-use App\DataFixtures\CategoryFixtures;
-use App\DataFixtures\ProductFixtures;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
