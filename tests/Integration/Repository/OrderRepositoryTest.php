@@ -14,6 +14,7 @@ use App\Repository\NovaPoshtaOfficeRepository;
 use App\Repository\OrderRepository;
 use App\Repository\PaymentTypeRepository;
 use App\Repository\ProductRepository;
+use App\Tests\Traits\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -22,11 +23,14 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class OrderRepositoryTest extends KernelTestCase
 {
+    use FixturesTrait;
+
     private OrderRepository $orderRepository;
 
     protected function setUp(): void
     {
         self::bootKernel();
+        $this->loadFixtures();
         $container = static::getContainer();
 
         $this->orderRepository = $container->get(OrderRepository::class);
@@ -42,29 +46,22 @@ class OrderRepositoryTest extends KernelTestCase
 
     public function testFillMethodCreatesOrderFromArrayData(): void
     {
-        // Create test product
-        $product = new Product();
-        $product->setTitle('Test Product');
-        $product->setStatus(Product::STATUS_ACTIVE);
-        $product->setAvailability(Product::AVAILABILITY_AVAILABLE);
-        $product->setPrice(1000);
-        $product->setProductCode('TEST-001');
+        $entityManager = $this->orderRepository->getEntityManager();
+
+        // Use product from fixtures (MacBook Pro)
+        $productRepository = $entityManager->getRepository(Product::class);
+        $product = $productRepository->findOneBy(['productCode' => 'MBP-16-001']);
+        $this->assertNotNull($product);
         $product->count = 2;
 
-        $entityManager = $this->orderRepository->getEntityManager();
-        $entityManager->persist($product);
-        $entityManager->flush();
+        // Use payment and delivery types from fixtures
+        $paymentTypeRepository = $entityManager->getRepository(PaymentType::class);
+        $paymentType = $paymentTypeRepository->findOneBy(['title' => 'Готівка']);
+        $this->assertNotNull($paymentType);
 
-        // Create test payment and delivery types
-        $paymentType = new PaymentType();
-        $paymentType->setTitle('Test Payment');
-        $entityManager->persist($paymentType);
-
-        $deliveryType = new DeliveryType();
-        $deliveryType->setTitle('Test Delivery');
-        $entityManager->persist($deliveryType);
-
-        $entityManager->flush();
+        $deliveryTypeRepository = $entityManager->getRepository(DeliveryType::class);
+        $deliveryType = $deliveryTypeRepository->findOneBy(['title' => 'Нова Пошта']);
+        $this->assertNotNull($deliveryType);
 
         $data = [
             'name' => 'John',
@@ -95,12 +92,6 @@ class OrderRepositoryTest extends KernelTestCase
         $this->assertSame(Order::NEW, $order->getStatus());
         $this->assertFalse($order->getPaymentStatus());
         $this->assertCount(1, $order->getItems());
-
-        // Clean up
-        $entityManager->remove($product);
-        $entityManager->remove($paymentType);
-        $entityManager->remove($deliveryType);
-        $entityManager->flush();
     }
 
     public function testCreateMethodPersistsOrderToDatabase(): void

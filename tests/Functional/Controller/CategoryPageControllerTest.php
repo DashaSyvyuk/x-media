@@ -3,6 +3,7 @@
 namespace App\Tests\Functional\Controller;
 
 use App\Entity\Category;
+use App\Tests\Traits\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CategoryPageControllerTest extends WebTestCase
 {
+    use FixturesTrait;
+
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -24,27 +27,24 @@ class CategoryPageControllerTest extends WebTestCase
     public function testCategoryPageWithValidCategoryIsAccessible(): void
     {
         $client = static::createClient();
+
+        // Load fixtures after client is created
+        self::getContainer()->get('kernel')->boot();
+        $this->loadFixtures();
+
         $container = static::getContainer();
         $entityManager = $container->get('doctrine')->getManager();
 
-        // Create a test category
-        $category = new Category();
-        $category->setTitle('Test Category for Page');
-        $uniqueSlug = 'test-category-page-' . time();
-        $category->setSlug($uniqueSlug);
-
-        $entityManager->persist($category);
-        $entityManager->flush();
+        // Use notebooks category from fixtures
+        $categoryRepository = $entityManager->getRepository(Category::class);
+        $category = $categoryRepository->findOneBy(['slug' => 'notebooks']);
+        $this->assertNotNull($category);
 
         // Make request to category page
-        $client->request('GET', '/categories/' . $uniqueSlug);
+        $client->request('GET', '/categories/' . $category->getSlug());
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-
-        // Clean up
-        $entityManager->remove($category);
-        $entityManager->flush();
     }
 
     public function testCategoryPageWithInvalidSlugReturnsNotFound(): void

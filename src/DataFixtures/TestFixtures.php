@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use App\Entity\DeliveryType;
+use App\Entity\PaymentType;
 use App\Entity\Product;
 use App\Entity\Setting;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -30,6 +32,24 @@ class TestFixtures extends Fixture
             $setting->setValue($settingData['value']);
             $manager->persist($setting);
         }
+
+        // Create payment types
+        $paymentType1 = new PaymentType();
+        $paymentType1->setTitle('Готівка');
+        $manager->persist($paymentType1);
+
+        $paymentType2 = new PaymentType();
+        $paymentType2->setTitle('Карткою при отриманні');
+        $manager->persist($paymentType2);
+
+        // Create delivery types
+        $deliveryType1 = new DeliveryType();
+        $deliveryType1->setTitle('Нова Пошта');
+        $manager->persist($deliveryType1);
+
+        $deliveryType2 = new DeliveryType();
+        $deliveryType2->setTitle('Самовивіз');
+        $manager->persist($deliveryType2);
 
         // Create categories
         $categories = [];

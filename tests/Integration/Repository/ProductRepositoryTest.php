@@ -5,6 +5,7 @@ namespace App\Tests\Integration\Repository;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
+use App\Tests\Traits\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -13,11 +14,14 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class ProductRepositoryTest extends KernelTestCase
 {
+    use FixturesTrait;
+
     private ProductRepository $productRepository;
 
     protected function setUp(): void
     {
         self::bootKernel();
+        $this->loadFixtures();
         $container = static::getContainer();
         $this->productRepository = $container->get(ProductRepository::class);
     }
@@ -34,17 +38,7 @@ class ProductRepositoryTest extends KernelTestCase
     {
         $entityManager = $this->productRepository->getEntityManager();
 
-        // Create test active product
-        $activeProduct = new Product();
-        $activeProduct->setTitle('Active Product');
-        $activeProduct->setStatus(Product::STATUS_ACTIVE);
-        $activeProduct->setAvailability(Product::AVAILABILITY_AVAILABLE);
-        $activeProduct->setPrice(1000);
-        $activeProduct->setProductCode('ACTIVE-001');
-
-        $entityManager->persist($activeProduct);
-
-        // Create test blocked product
+        // Create test blocked product to verify filtering
         $blockedProduct = new Product();
         $blockedProduct->setTitle('Blocked Product');
         $blockedProduct->setStatus(Product::STATUS_BLOCKED);
@@ -55,151 +49,86 @@ class ProductRepositoryTest extends KernelTestCase
         $entityManager->persist($blockedProduct);
         $entityManager->flush();
 
-        // Find only active products
+        // Find only active products (fixtures loaded 7 active products)
         $activeProducts = $this->productRepository->findBy(['status' => Product::STATUS_ACTIVE]);
 
-        $this->assertGreaterThanOrEqual(1, count($activeProducts));
+        $this->assertGreaterThanOrEqual(7, count($activeProducts));
 
-        // Verify that found product is active
-        $foundActiveProduct = null;
+        // Verify that MacBook Pro from fixtures is active
+        $foundMacBook = null;
         foreach ($activeProducts as $product) {
-            if ($product->getProductCode() === 'ACTIVE-001') {
-                $foundActiveProduct = $product;
+            if ($product->getProductCode() === 'MBP-16-001') {
+                $foundMacBook = $product;
                 break;
             }
         }
 
-        $this->assertNotNull($foundActiveProduct);
-        $this->assertSame(Product::STATUS_ACTIVE, $foundActiveProduct->getStatus());
+        $this->assertNotNull($foundMacBook);
+        $this->assertSame(Product::STATUS_ACTIVE, $foundMacBook->getStatus());
+        $this->assertSame('Apple MacBook Pro 16', $foundMacBook->getTitle());
 
-        // Clean up - refresh to load relationships and handle cascade delete
-        $entityManager->refresh($activeProduct);
-        $entityManager->refresh($blockedProduct);
-        $entityManager->remove($activeProduct);
-        $entityManager->remove($blockedProduct);
-        $entityManager->flush();
+        // No cleanup needed - fixtures will be reloaded for the next test
     }
 
     public function testFindProductsByCategory(): void
     {
         $entityManager = $this->productRepository->getEntityManager();
 
-        // Create test category
-        $category = new Category();
-        $category->setTitle('Test Category');
-        $category->setSlug('test-category-' . time());
-        $entityManager->persist($category);
+        // Use the notebooks category from fixtures (slug: 'notebooks')
+        $categoryRepository = $entityManager->getRepository(Category::class);
+        $notebooksCategory = $categoryRepository->findOneBy(['slug' => 'notebooks']);
 
-        // Create product in category
-        $product = new Product();
-        $product->setTitle('Category Product');
-        $product->setStatus(Product::STATUS_ACTIVE);
-        $product->setAvailability(Product::AVAILABILITY_AVAILABLE);
-        $product->setPrice(2000);
-        $product->setProductCode('CAT-001');
-        $product->setCategory($category);
+        $this->assertNotNull($notebooksCategory);
 
-        $entityManager->persist($product);
-        $entityManager->flush();
+        // Find products by category (fixtures have 3 notebooks)
+        $products = $this->productRepository->findBy(['category' => $notebooksCategory]);
 
-        // Find products by category
-        $products = $this->productRepository->findBy(['category' => $category]);
+        $this->assertGreaterThanOrEqual(3, count($products));
 
-        $this->assertGreaterThanOrEqual(1, count($products));
-        $this->assertSame($category->getId(), $products[0]->getCategory()->getId());
+        // Verify products are in the correct category
+        foreach ($products as $product) {
+            $this->assertSame($notebooksCategory->getId(), $product->getCategory()->getId());
+        }
 
-        // Clean up - refresh to load relationships and handle cascade delete
-        $entityManager->refresh($product);
-        $entityManager->remove($product);
-        $entityManager->remove($category);
-        $entityManager->flush();
+        // Verify specific products from fixtures
+        $productCodes = array_map(fn($p) => $p->getProductCode(), $products);
+        $this->assertContains('MBP-16-001', $productCodes);
+        $this->assertContains('LEN-X1-002', $productCodes);
+        $this->assertContains('DELL-XPS-003', $productCodes);
     }
 
     public function testFindProductByProductCode(): void
     {
-        $entityManager = $this->productRepository->getEntityManager();
-
-        $uniqueCode = 'UNIQUE-' . time();
-
-        $product = new Product();
-        $product->setTitle('Unique Code Product');
-        $product->setStatus(Product::STATUS_ACTIVE);
-        $product->setAvailability(Product::AVAILABILITY_AVAILABLE);
-        $product->setPrice(3000);
-        $product->setProductCode($uniqueCode);
-
-        $entityManager->persist($product);
-        $entityManager->flush();
-
-        $foundProduct = $this->productRepository->findOneBy(['productCode' => $uniqueCode]);
+        // Use iPhone from fixtures (code: 'IPH-15P-004')
+        $foundProduct = $this->productRepository->findOneBy(['productCode' => 'IPH-15P-004']);
 
         $this->assertNotNull($foundProduct);
-        $this->assertSame($uniqueCode, $foundProduct->getProductCode());
-        $this->assertSame('Unique Code Product', $foundProduct->getTitle());
-
-        // Clean up - refresh to load relationships
-        $entityManager->refresh($foundProduct);
-        $entityManager->remove($foundProduct);
-        $entityManager->flush();
+        $this->assertSame('IPH-15P-004', $foundProduct->getProductCode());
+        $this->assertSame('iPhone 15 Pro', $foundProduct->getTitle());
+        $this->assertSame(42999, $foundProduct->getPrice());
     }
 
     public function testFindRecentProducts(): void
     {
-        $entityManager = $this->productRepository->getEntityManager();
-
-        $product1 = new Product();
-        $product1->setTitle('Recent Product 1');
-        $product1->setStatus(Product::STATUS_ACTIVE);
-        $product1->setAvailability(Product::AVAILABILITY_AVAILABLE);
-        $product1->setPrice(1000);
-        $product1->setProductCode('RECENT-001');
-
-        $entityManager->persist($product1);
-        $entityManager->flush();
-
-        // Small delay
-        usleep(100000);
-
-        $product2 = new Product();
-        $product2->setTitle('Recent Product 2');
-        $product2->setStatus(Product::STATUS_ACTIVE);
-        $product2->setAvailability(Product::AVAILABILITY_AVAILABLE);
-        $product2->setPrice(1200);
-        $product2->setProductCode('RECENT-002');
-
-        $entityManager->persist($product2);
-        $entityManager->flush();
-
-        // Get products ordered by creation date
+        // Get products ordered by creation date (fixtures loaded 7 products)
         $recentProducts = $this->productRepository->findBy(
             ['status' => Product::STATUS_ACTIVE],
             ['createdAt' => 'DESC'],
             10
         );
 
-        $this->assertGreaterThanOrEqual(2, count($recentProducts));
+        $this->assertGreaterThanOrEqual(7, count($recentProducts));
 
-        // The most recently created should be first
-        $foundProduct2 = false;
-        $foundProduct1 = false;
+        // Verify products from fixtures are in results
+        $productCodes = array_map(fn($p) => $p->getProductCode(), $recentProducts);
 
+        $this->assertContains('MBP-16-001', $productCodes);
+        $this->assertContains('IPH-15P-004', $productCodes);
+        $this->assertContains('IPAD-PRO-006', $productCodes);
+
+        // Verify all returned products are active
         foreach ($recentProducts as $product) {
-            if ($product->getProductCode() === 'RECENT-002') {
-                $foundProduct2 = true;
-            }
-            if ($product->getProductCode() === 'RECENT-001') {
-                $foundProduct1 = true;
-            }
+            $this->assertSame(Product::STATUS_ACTIVE, $product->getStatus());
         }
-
-        $this->assertTrue($foundProduct2);
-        $this->assertTrue($foundProduct1);
-
-        // Clean up - refresh to load relationships
-        $entityManager->refresh($product1);
-        $entityManager->refresh($product2);
-        $entityManager->remove($product1);
-        $entityManager->remove($product2);
-        $entityManager->flush();
     }
 }
