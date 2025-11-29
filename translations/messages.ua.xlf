@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="ua" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="w1mMd.F" resname="home.new_products">
+        <source>home.new_products</source>
+        <target>Новинки</target>
+      </trans-unit>
+      <trans-unit id="vNA8b7O" resname="home.shop_feedbacks">
+        <source>home.shop_feedbacks</source>
+        <target>Відгуки про магазин</target>
+      </trans-unit>
+      <trans-unit id="CDGH7nI" resname="home.add_feedback">
+        <source>home.add_feedback</source>
+        <target>Додати відгук</target>
+      </trans-unit>
+      <trans-unit id="AJTbWFu" resname="home.see_feedback">
+        <source>home.see_feedback</source>
+        <target>Переглянути відгуки</target>
+      </trans-unit>
+      <trans-unit id=".VS1C40" resname="home.promotion">
+        <source>home.promotion</source>
+        <target>Акція!</target>
+      </trans-unit>
+      <trans-unit id="Jf.a4Kd" resname="about_us">
+        <source>about_us</source>
+        <target>Про нас</target>
+      </trans-unit>
+      <trans-unit id="v10rPj." resname="about_us.home">
+        <source>about_us.home</source>
+        <target>Головна</target>
+      </trans-unit>
+      <trans-unit id="sWw5MDD" resname="action.toggle_dropdown">
+        <source>action.toggle_dropdown</source>
+        <target>__action.toggle_dropdown</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

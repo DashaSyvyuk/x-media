@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="ua" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id=".y5gOvn" resname="Too low value">
+        <source>Too low value</source>
+        <target>__Too low value</target>
+      </trans-unit>
+      <trans-unit id="EMLHJf2" resname="Поле обов'язкове">
+        <source>Поле обов'язкове</source>
+        <target>__Поле обов'язкове</target>
+      </trans-unit>
+      <trans-unit id="Mpj3KXv" resname="Неправильний формат">
+        <source>Неправильний формат</source>
+        <target>__Неправильний формат</target>
+      </trans-unit>
+      <trans-unit id="B9r0Hn5" resname="Error">
+        <source>Error</source>
+        <target>__Error</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
