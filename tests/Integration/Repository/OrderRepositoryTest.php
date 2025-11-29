@@ -2,6 +2,9 @@
 
 namespace App\Tests\Integration\Repository;
 
+use App\DataFixtures\DeliveryTypeFixtures;
+use App\DataFixtures\PaymentTypeFixtures;
+use App\DataFixtures\ProductFixtures;
 use App\Entity\DeliveryType;
 use App\Entity\Order;
 use App\Entity\OrderItem;

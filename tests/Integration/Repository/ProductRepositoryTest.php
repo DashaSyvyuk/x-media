@@ -2,6 +2,8 @@
 
 namespace App\Tests\Integration\Repository;
 
+use App\DataFixtures\CategoryFixtures;
+use App\DataFixtures\ProductFixtures;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
@@ -74,7 +76,7 @@ class ProductRepositoryTest extends KernelTestCase
     {
         $entityManager = $this->productRepository->getEntityManager();
 
-        // Use the notebooks category from fixtures (slug: 'notebooks')
+        // Use the notebooks category from fixtures
         $categoryRepository = $entityManager->getRepository(Category::class);
         $notebooksCategory = $categoryRepository->findOneBy(['slug' => 'notebooks']);
 
@@ -99,7 +101,7 @@ class ProductRepositoryTest extends KernelTestCase
 
     public function testFindProductByProductCode(): void
     {
-        // Use iPhone from fixtures (code: 'IPH-15P-004')
+        // Use iPhone from fixtures
         $foundProduct = $this->productRepository->findOneBy(['productCode' => 'IPH-15P-004']);
 
         $this->assertNotNull($foundProduct);

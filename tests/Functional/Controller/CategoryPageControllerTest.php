@@ -2,6 +2,7 @@
 
 namespace App\Tests\Functional\Controller;
 
+use App\DataFixtures\CategoryFixtures;
 use App\Entity\Category;
 use App\Tests\Traits\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -20,7 +21,6 @@ class CategoryPageControllerTest extends WebTestCase
     {
         parent::tearDown();
 
-        // Restore exception handler to avoid risky test warnings
         restore_exception_handler();
     }
 
@@ -28,7 +28,6 @@ class CategoryPageControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        // Load fixtures after client is created
         self::getContainer()->get('kernel')->boot();
         $this->loadFixtures();
 

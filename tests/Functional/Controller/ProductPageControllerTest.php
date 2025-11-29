@@ -2,6 +2,7 @@
 
 namespace App\Tests\Functional\Controller;
 
+use App\DataFixtures\ProductFixtures;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Tests\Traits\FixturesTrait;

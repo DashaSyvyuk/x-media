@@ -2,6 +2,7 @@
 
 namespace App\Tests\Traits;
 
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -13,16 +14,13 @@ trait FixturesTrait
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('doctrine')->getManager();
 
-        // Purge the database
-        $purger = new ORMPurger($entityManager);
-        $purger->purge();
-
-        // Load fixtures
+        // Get the fixture loader
         $fixturesLoader = $container->get('doctrine.fixtures.loader');
         $fixtures = $fixturesLoader->getFixtures();
 
-        foreach ($fixtures as $fixture) {
-            $fixture->load($entityManager);
-        }
+        // Use ORMExecutor to properly load fixtures with reference support
+        $purger = new ORMPurger($entityManager);
+        $executor = new ORMExecutor($entityManager, $purger);
+        $executor->execute($fixtures, false); // false = append mode (don't purge before loading)
     }
 }
