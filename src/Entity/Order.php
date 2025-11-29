@@ -121,17 +121,17 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer", options: ["unsigned" => true])]
-    private ?int $id = 0;
+    private int $id = 0;
 
     #[ORM\Column(type: "string")]
     private string $orderNumber = "";
 
     #[ORM\Column(type: "string")]
-    #[Assert\NotBlank(message: "Поле обов'язкове")]
+    #[Assert\NotBlank(message: 'order.field.required')]
     private string $name = "";
 
     #[ORM\Column(type: "string", nullable: true)]
-    #[Assert\NotBlank(message: "Поле обов'язкове")]
+    #[Assert\NotBlank(message: 'order.field.required')]
     private ?string $surname = "";
 
     #[ORM\Column(type: "text", nullable: true)]
@@ -146,11 +146,11 @@ class Order
     private ?NovaPoshtaOffice $novaPoshtaOffice = null;
 
     #[ORM\Column(type: "string")]
-    #[Assert\NotBlank(message: "Поле обов'язкове")]
+    #[Assert\NotBlank(message: 'order.field.required')]
     private string $phone = "";
 
     #[ORM\Column(type: "string", nullable: true)]
-    #[Assert\Email(message: "Неправильний формат")]
+    #[Assert\Email(message: 'order.wrong_format')]
     private ?string $email = null;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]

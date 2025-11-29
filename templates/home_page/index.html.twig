@@ -22,7 +22,7 @@
         <section>
             {% if promotions|length > 0 %}
                 {% for promotion in promotions %}
-                    <p class="title"><span class="green">Акція! </span> <a href="{{ path('promotion', {'slug': promotion.getSlug()}) }}" target="_blank" class="link">{{ promotion.getTitle() }}</a></p>
+                    <p class="title"><span class="green">{{ 'home.promotion'|trans }} </span> <a href="{{ path('promotion', {'slug': promotion.getSlug()}) }}" target="_blank" class="link">{{ promotion.getTitle() }}</a></p>
                     <div class="promotion-carousel">
                         {% for promotionProduct in promotion.getActiveProducts() %}
                             {% set product = promotionProduct.getProduct() %}
@@ -31,7 +31,7 @@
                     </div>
                 {% endfor %}
             {% endif %}
-            <p class="title">Новинки</p>
+            <p class="title">{{ 'home.new_products'|trans }}</p>
             <div id="new-products">
                 {% for product in products %}
                     {% include 'partials/product-item.html.twig' %}
@@ -39,7 +39,7 @@
             </div>
 
             {% if feedbacks|length > 0 %}
-                <p class="title">Відгуки про магазин</p>
+                <p class="title">{{ 'home.shop_feedbacks'|trans }}</p>
                 <div id="feedbacks">
                     {% for comment in feedbacks %}
                         <div class="comment">
@@ -48,8 +48,8 @@
                     {% endfor %}
                 </div>
                 <div id="feedback-buttons">
-                    <a href="/feedbacks#add" class="green-button">Додати відгук</a>
-                    <a href="/feedbacks" class="green-button">Переглянути відгуки</a>
+                    <a href="/feedbacks#add" class="green-button">{{ 'home.add_feedback'|trans }}</a>
+                    <a href="/feedbacks" class="green-button">{{ 'home.see_feedback'|trans }}</a>
                 </div>
             {% endif %}
         </section>

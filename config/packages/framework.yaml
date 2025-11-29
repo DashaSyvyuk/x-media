@@ -1,6 +1,7 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
+    default_locale: ua
     #csrf_protection: true
     #http_method_override: true
 
@@ -18,6 +19,10 @@ framework:
     php_errors:
         log: true
     # error_controller: App\Controller\ErrorController::show
+
+    translator:
+      default_path: '%kernel.project_dir%/translations'
+      fallbacks: ['ua']
 
 when@test:
     framework:
