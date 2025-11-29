@@ -3,7 +3,6 @@ import './bootstrap';
 import $ from 'jquery';
 
 $(document).ready(function () {
-    const display_width = $(window).width();
     const hamburger = $('#hamburger-menu');
     const menu = $('#menu-body');
 
@@ -49,10 +48,7 @@ $('#search').on('submit', (e) => {
     } else {
         $('#search input').removeClass('red');
         $('#search .error').text('');
-        if (searchString.length === 0) {
-            return false;
-        } else {
-            return true;
-        }
+
+        return searchString.length !== 0;
     }
 });

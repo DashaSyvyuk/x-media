@@ -12,6 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class StaticPagesControllerTest extends WebTestCase
 {
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Restore exception handler to avoid risky test warnings
+        restore_exception_handler();
+    }
+
     /**
      * @dataProvider staticPagesProvider
      */
@@ -19,12 +27,15 @@ class StaticPagesControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('GET', $url);
-        
+
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-    public function staticPagesProvider(): array
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function staticPagesProvider(): array
     {
         return [
             'about us page' => ['/about-us'],
@@ -38,7 +49,7 @@ class StaticPagesControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('GET', '/login');
-        
+
         $response = $client->getResponse();
         $this->assertTrue(
             $response->isSuccessful() || $response->isRedirection(),
@@ -49,13 +60,21 @@ class StaticPagesControllerTest extends WebTestCase
     public function testSearchPageIsAccessible(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/search');
-        
+
+        // Test that search page loads without errors
+        // Note: Full search functionality requires complex database setup with
+        // product characteristics, filters, and other related entities.
+        // The fixtures provide basic data (products, categories, settings) which
+        // is sufficient for basic page loading tests.
+        $client->request('GET', '/search?search=test');
+
+        // We check for either success or redirect (app may redirect on empty search)
         $response = $client->getResponse();
+        $statusCode = $response->getStatusCode();
+
         $this->assertTrue(
-            $response->isSuccessful() || $response->isRedirection(),
-            'Search page should be accessible'
+            $statusCode === 200 || $statusCode === 302,
+            "Search page should be accessible (got status code: $statusCode)"
         );
     }
 }
-

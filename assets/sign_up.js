@@ -6,7 +6,7 @@ import Inputmask from 'inputmask';
 Inputmask('+38 (999) 999-99-99').mask('#sign_up input[name=phone]');
 
 function validateEmail(email) {
-    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     return regex.test(email);
 }
@@ -23,6 +23,8 @@ $('#sign_up .password input, #sign_up .password_confirm input').on('input', () =
 });
 
 $('#sign_up').on('submit', (e) => {
+    e.preventDefault();
+
     const email = $('#sign_up input[name=email]').val();
     const name = $('#sign_up input[name=name]').val();
     const surname = $('#sign_up input[name=surname]').val();
@@ -46,19 +48,17 @@ $('#sign_up').on('submit', (e) => {
         $('#sign_up .password .error').text('');
     }
 
-    if (password != passwordConfirm) {
-        $('#sign_up input[name=password]').addClass('red-border');
-        $('#sign_up input[name=password_confirm]').addClass('red-border');
-        $('#sign_up .password .error').text('Паролі не співпадають').slideDown(200);;
-    } else {
+    if (password === passwordConfirm) {
         $('#sign_up input[name=password]').removeClass('red-border');
         $('#sign_up input[name=password_confirm]').removeClass('red-border');
         $('#sign_up .password .error').text('');
+    } else {
+        $('#sign_up input[name=password]').addClass('red-border');
+        $('#sign_up input[name=password_confirm]').addClass('red-border');
+        $('#sign_up .password .error').text('Паролі не співпадають').slideDown(200);
     }
 
-    if ((email && !validateEmail(email)) || password.length < 6 || password != passwordConfirm) {
-        return false;
-    } else {
+    if (email && validateEmail(email) && password.length >= 6 && password !== passwordConfirm) {
         $.post( '/sign-up', { email, name, surname, phone, password }, (data) => {
             const response = JSON.parse(data);
 
@@ -69,7 +69,5 @@ $('#sign_up').on('submit', (e) => {
                 $('#sign_up').html('<p style="text-align: center; margin-top: 50px; line-height: 2;">Інструкція для підтвердження email<br> відправлена вам на пошту</p>')
             }
         });
-
-        return false;
     }
 });

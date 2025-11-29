@@ -21,6 +21,6 @@
         <input type="checkbox" class="form-check-input" id="{{ field.uniqueId }}" {{ field.value == true ? 'checked' }}
                data-toggle-url="{{ field.customOptions.get('toggleUrl') }}"
                 {{ (field.customOptions.get('dependent') == true and entity.instance.ready == false) or field.formTypeOption('disabled') == true ? 'disabled' }} autocomplete="off">
-        <label class="form-check-label" for="{{ field.uniqueId }}"></label>
+        <label class="form-check-label" htmlFor="{{ field.uniqueId }}"></label>
     </div>
 {% endif %}

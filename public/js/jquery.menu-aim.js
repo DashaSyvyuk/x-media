@@ -92,7 +92,7 @@
     };
 
     function init(opts) {
-        var $menu = $(this),
+        let $menu = $(this),
             activeRow = null,
             mouseLocs = [],
             lastDelayLoc = null,
@@ -109,13 +109,13 @@
                 exitMenu: $.noop
             }, opts);
 
-        var MOUSE_LOCS_TRACKED = 3,  // number of past mouse locations to track
-            DELAY = 300;  // ms delay when user appears to be entering submenu
+        const MOUSE_LOCS_TRACKED = 3,  // number of past mouse locations to track
+              DELAY = 300;  // ms delay when user appears to be entering submenu
 
         /**
          * Keep track of the last few locations of the mouse.
          */
-        var mousemoveDocument = function(e) {
+        const mousemoveDocument = function(e) {
                 mouseLocs.push({x: e.pageX, y: e.pageY});
 
                 if (mouseLocs.length > MOUSE_LOCS_TRACKED) {
@@ -126,7 +126,7 @@
         /**
          * Cancel possible row activations when leaving the menu entirely
          */
-        var mouseleaveMenu = function() {
+        const mouseleaveMenu = function() {
                 if (timeoutId) {
                     clearTimeout(timeoutId);
                 }
@@ -145,7 +145,7 @@
         /**
          * Trigger a possible row activation whenever entering a new row.
          */
-        var mouseenterRow = function() {
+        const mouseenterRow = function() {
                 if (timeoutId) {
                     // Cancel any previous activation delays
                     clearTimeout(timeoutId);
@@ -161,15 +161,15 @@
         /*
          * Immediately activate a row if the user clicks on it.
          */
-        var clickRow = function() {
+        const clickRow = function() {
                 activate(this);
             };
 
         /**
          * Activate a menu row.
          */
-        var activate = function(row) {
-                if (row == activeRow) {
+        const activate = function(row) {
+                if (row === activeRow) {
                     return;
                 }
 
@@ -186,8 +186,8 @@
          * shouldn't activate yet because user may be trying to enter
          * a submenu's content, then delay and check again later.
          */
-        var possiblyActivate = function(row) {
-                var delay = activationDelay();
+        const possiblyActivate = function(row) {
+                const delay = activationDelay();
 
                 if (delay) {
                     timeoutId = setTimeout(function() {
@@ -206,14 +206,14 @@
          * returns the number of milliseconds that should be delayed before
          * checking again to see if the row should be activated.
          */
-        var activationDelay = function() {
+        const activationDelay = function() {
                 if (!activeRow || !$(activeRow).is(options.submenuSelector)) {
                     // If there is no other submenu row already active, then
                     // go ahead and activate immediately.
                     return 0;
                 }
 
-                var offset = $menu.offset(),
+                let offset = $menu.offset(),
                     upperLeft = {
                         x: offset.left,
                         y: offset.top - options.tolerance
@@ -249,7 +249,7 @@
                 }
 
                 if (lastDelayLoc &&
-                        loc.x == lastDelayLoc.x && loc.y == lastDelayLoc.y) {
+                        loc.x === lastDelayLoc.x && loc.y === lastDelayLoc.y) {
                     // If the mouse hasn't moved since the last time we checked
                     // for activation status, immediately activate.
                     return 0;
@@ -278,7 +278,7 @@
                     return (b.y - a.y) / (b.x - a.x);
                 };
 
-                var decreasingCorner = upperRight,
+                let decreasingCorner = upperRight,
                     increasingCorner = lowerRight;
 
                 // Our expectations for decreasing or increasing slope values
@@ -288,18 +288,18 @@
                 // corner to decrease over time, as explained above. If the
                 // submenu opens in a different direction, we change our slope
                 // expectations.
-                if (options.submenuDirection == "left") {
+                if (options.submenuDirection === "left") {
                     decreasingCorner = lowerLeft;
                     increasingCorner = upperLeft;
-                } else if (options.submenuDirection == "below") {
+                } else if (options.submenuDirection === "below") {
                     decreasingCorner = lowerRight;
                     increasingCorner = lowerLeft;
-                } else if (options.submenuDirection == "above") {
+                } else if (options.submenuDirection === "above") {
                     decreasingCorner = upperLeft;
                     increasingCorner = upperRight;
                 }
 
-                var decreasingSlope = slope(loc, decreasingCorner),
+                let decreasingSlope = slope(loc, decreasingCorner),
                     increasingSlope = slope(loc, increasingCorner),
                     prevDecreasingSlope = slope(prevLoc, decreasingCorner),
                     prevIncreasingSlope = slope(prevLoc, increasingCorner);

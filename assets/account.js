@@ -61,9 +61,9 @@ $('#nova-poshta-city').on('change', (e) => {
         const obj = JSON.parse(data);
         let options = '';
 
-        obj.forEach((item) => {
-            options += '<option value="' + item.ref + '">' + item.title + '</option>'
-        });
+        for (const item of obj) {
+            options += '<option value="' + item.ref + '">' + item.title + '</option>';
+        }
 
         $('#nova-poshta-office').html('<p>Відділення:</p><select name="office">' + options + '</select>');
         $('#nova-poshta-office select').select2();
@@ -75,7 +75,7 @@ $('#logout').on('click', (e) => {
 
     $.post( '/logout', {}, (data) => {
         if (data) {
-            window.location.href = '/login';
+            globalThis.location.href = '/login';
         }
     });
 });

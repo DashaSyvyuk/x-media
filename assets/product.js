@@ -5,7 +5,7 @@ import './star-rating';
 import 'slick-carousel';
 
 function validateEmail(email) {
-    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     return regex.test(email);
 }
@@ -116,6 +116,8 @@ $('.readonly-rating').each(function() {
 });
 
 $('#add-review').on('submit', (e) => {
+    e.preventDefault();
+
     const author = $('#author').val();
     const email = $('#email').val();
     const comment = $('#comment').val();
@@ -140,19 +142,15 @@ $('#add-review').on('submit', (e) => {
         $('#email').removeClass('red');
     }
 
-    if (!author || !comment || (email && !validateEmail(email))) {
-        return false;
-    } else {
+    if (author && comment && email && validateEmail(email)) {
         $.post( '/comment', { author, email, comment, rating, product }, (data) => {
-            if (data) {
+            if (data?.success) {
                 $('#comment-popup').show();
                 $('#author').val('');
                 $('#email').val('');
                 $('#comment').val('');
             }
         });
-
-        return false;
     }
 });
 

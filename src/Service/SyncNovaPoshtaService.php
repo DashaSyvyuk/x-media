@@ -4,10 +4,11 @@ namespace App\Service;
 
 use App\Entity\NovaPoshtaCity;
 use App\Entity\NovaPoshtaOffice;
+use App\Entity\Setting;
 use App\Repository\NovaPoshtaCityRepository;
 use App\Repository\NovaPoshtaOfficeRepository;
-use App\Repository\SettingRepository;
 use GuzzleHttp\Client;
+use Psr\Container\ContainerInterface;
 
 class SyncNovaPoshtaService
 {
@@ -19,17 +20,15 @@ class SyncNovaPoshtaService
 
     private NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository;
 
-    public function __construct(
-        SettingRepository $settingRepository,
-        NovaPoshtaCityRepository $novaPoshtaCityRepository,
-        NovaPoshtaOfficeRepository $novaPoshtaOfficeRepository
-    ) {
+    public function __construct(ContainerInterface $container)
+    {
+        $settingRepository = $container->get('doctrine')->getRepository(Setting::class);
         $apiKey = $settingRepository->findOneBy(['slug' => 'nova_poshta_api_key']);
         if (empty($apiKey)) {
             throw new \Exception('Set NovaPoshta api key');
         }
-        $this->novaPoshtaCityRepository = $novaPoshtaCityRepository;
-        $this->novaPoshtaOfficeRepository = $novaPoshtaOfficeRepository;
+        $this->novaPoshtaCityRepository = $container->get('doctrine')->getRepository(NovaPoshtaCity::class);
+        $this->novaPoshtaOfficeRepository = $container->get('doctrine')->getRepository(NovaPoshtaOffice::class);
         $this->key = $apiKey->getValue();
         $this->client = new Client(['base_uri' => 'https://api.novaposhta.ua']);
     }

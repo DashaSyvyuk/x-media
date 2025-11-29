@@ -3,6 +3,8 @@ import './bootstrap';
 import $ from 'jquery';
 
 $('#update-password').on('submit', (e) => {
+    e.preventDefault();
+
     const urlParams = new URLSearchParams(window.location.search);
     const hash = urlParams.get('hash');
 
@@ -14,15 +16,13 @@ $('#update-password').on('submit', (e) => {
         $('#update-password .password .error').text('Мінімальна довжина пароля 6 символів');
     }
 
-    if (password != password2) {
+    if (password !== password2) {
         $('#update-password input[name=password]').addClass('red');
         $('#update-password input[name=password2]').addClass('red');
         $('#update-password .password .error').text('Паролі не співпадають');
     }
 
-    if (password.length < 6 || password != password2) {
-        return false;
-    } else {
+    if (password.length >= 6 && password !== password2) {
         $('#update-password input[name=password]').removeClass('red');
         $('#update-password input[name=password2]').removeClass('red');
         $('#update-password .password .error').text('');
@@ -34,10 +34,8 @@ $('#update-password').on('submit', (e) => {
                 $('#update-password input[name=password]').addClass('red');
                 $('#update-password .password .error').text(response.error);
             } else {
-                window.location.href = '/login';
+                globalThis.location.href = '/login';
             }
         });
     }
-
-    return false;
 });

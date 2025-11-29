@@ -9,11 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class RozetkaCharacteristicsController extends AbstractController
 {
+    private const MULTI_SELECT = 'form/multi-select.html.twig';
     public const FORM_FIELDS = [
-        'List'                => 'form/multi-select.html.twig',
-        'ListValues'          => 'form/multi-select.html.twig',
+        'List'                => self::MULTI_SELECT,
+        'ListValues'          => self::MULTI_SELECT,
         'ComboBox'            => 'form/select.html.twig',
-        'CheckBoxGroupValues' => 'form/multi-select.html.twig',
+        'CheckBoxGroupValues' => self::MULTI_SELECT,
         'Integer'             => 'form/integer.html.twig',
         'Decimal'             => 'form/decimal.html.twig',
         'TextInput'           => 'form/text-input.html.twig',

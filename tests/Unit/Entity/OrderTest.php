@@ -6,7 +6,6 @@ use App\Entity\DeliveryType;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\PaymentType;
-use App\Entity\Product;
 use App\Entity\User;
 use DateTime;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +19,7 @@ class OrderTest extends TestCase
     public function testOrderCreationWithDefaultValues(): void
     {
         $order = new Order();
-        
+
         $this->assertSame(0, $order->getId());
         $this->assertSame("", $order->getOrderNumber());
         $this->assertSame("", $order->getName());
@@ -62,7 +61,6 @@ class OrderTest extends TestCase
         $this->assertCount(1, $order->getItems());
         $this->assertSame($order, $orderItem->getOrder());
 
-        // Adding the same item again should not duplicate it
         $order->addItem($orderItem);
         $this->assertCount(1, $order->getItems());
 
@@ -82,8 +80,7 @@ class OrderTest extends TestCase
     public function testOrderStatusesArray(): void
     {
         $statuses = Order::STATUSES;
-        
-        $this->assertIsArray($statuses);
+
         $this->assertArrayHasKey(Order::NEW, $statuses);
         $this->assertArrayHasKey(Order::APPROVED, $statuses);
         $this->assertArrayHasKey(Order::COMPLETED, $statuses);
@@ -93,14 +90,12 @@ class OrderTest extends TestCase
     public function testOrderGroupedStatuses(): void
     {
         $groupedStatuses = Order::GROUPED_STATUSES;
-        
-        $this->assertIsArray($groupedStatuses);
+
         $this->assertArrayHasKey(Order::NEW, $groupedStatuses);
         $this->assertArrayHasKey('id', $groupedStatuses[Order::NEW]);
         $this->assertArrayHasKey('color', $groupedStatuses[Order::NEW]);
         $this->assertArrayHasKey('title', $groupedStatuses[Order::NEW]);
-        
-        // New and Not Approved should have the same grouped status
+
         $this->assertEquals(
             $groupedStatuses[Order::NEW]['id'],
             $groupedStatuses[Order::NOT_APPROVED]['id']
@@ -111,7 +106,7 @@ class OrderTest extends TestCase
     {
         $order = new Order();
         $labels = [Order::LABEL_XMEDIA, Order::LABEL_PROM, Order::LABEL_ROZETKA];
-        
+
         $order->setLabels($labels);
         $this->assertSame($labels, $order->getLabels());
         $this->assertCount(3, $order->getLabels());
@@ -121,7 +116,7 @@ class OrderTest extends TestCase
     {
         $order = new Order();
         $user = new User();
-        
+
         $order->setUser($user);
         $this->assertSame($user, $order->getUser());
     }
@@ -131,10 +126,10 @@ class OrderTest extends TestCase
         $order = new Order();
         $paymentType = new PaymentType();
         $deliveryType = new DeliveryType();
-        
+
         $order->setPaytype($paymentType);
         $order->setDeltype($deliveryType);
-        
+
         $this->assertSame($paymentType, $order->getPaytype());
         $this->assertSame($deliveryType, $order->getDeltype());
     }
@@ -144,12 +139,11 @@ class OrderTest extends TestCase
         $order = new Order();
         $createdAt = new DateTime('2024-01-15 10:30:00');
         $updatedAt = new DateTime('2024-01-15 11:30:00');
-        
+
         $order->setCreatedAt($createdAt);
         $order->setUpdatedAt($updatedAt);
-        
+
         $this->assertSame($createdAt, $order->getCreatedAt());
         $this->assertSame($updatedAt, $order->getUpdatedAt());
     }
 }
-

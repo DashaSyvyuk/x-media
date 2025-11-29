@@ -421,7 +421,7 @@ hr {
     display: inline-block;
     position: relative;
     vertical-align: top;
-    font-family: Helvetica, Arial, Verdana;
+    font-family: Helvetica, Arial, Verdana, sans-serif;
 }
 .jq-star {
     width: 100px;

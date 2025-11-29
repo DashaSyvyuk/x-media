@@ -3,37 +3,29 @@ import './bootstrap';
 import $ from 'jquery';
 
 function validateEmail(email) {
-    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     return regex.test(email);
 }
 
 $('#add-feedback').on('submit', (e) => {
+    e.preventDefault();
+
     const author = $('#author').val();
     const email = $('#email').val();
     const comment = $('#comment').val();
 
-    if (!author) {
-        $('#author').addClass('red');
-    } else {
-        $('#author').removeClass('red');
-    }
+    if (author) { $('#author').removeClass('red'); } else { $('#author').addClass('red'); }
 
-    if (!comment) {
-        $('#comment').addClass('red');
-    } else {
-        $('#comment').removeClass('red');
-    }
+    if (comment) { $('#comment').removeClass('red'); } else { $('#comment').addClass('red'); }
 
-    if (email && !validateEmail(email)) {
+    if (email && ! validateEmail(email)) {
         $('#email').addClass('red');
     } else {
         $('#email').removeClass('red');
     }
 
-    if (!author || !comment || (email && !validateEmail(email))) {
-        return false;
-    } else {
+    if (author && comment && email && validateEmail(email)) {
         $.post( '/feedbacks', { author, email, comment }, (data) => {
             if (data) {
                 $('#feedback-popup').show();
@@ -42,8 +34,6 @@ $('#add-feedback').on('submit', (e) => {
                 $('#comment').val('');
             }
         });
-
-        return false;
     }
 });
 

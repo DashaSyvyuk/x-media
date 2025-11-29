@@ -212,38 +212,41 @@ class RozetkaProductCrudController extends AbstractCrudController
         /** @var RozetkaProduct $entityInstance */
         $request = $this->requestStack->getCurrentRequest();
 
-        if ($request->request->has('ea_custom_action')) {
-            /** @var array<string, int> $parentRozetkaProduct */
-            $parentRozetkaProduct = $request->request->get('RozetkaProduct');
-            $rozetkaProductId = $parentRozetkaProduct['rozetkaProduct'];
+        if (! $request->request->has('ea_custom_action')) {
+            return;
+        }
 
-            $rozetkaProduct = $this->rozetkaProductRepository->findOneBy(['id' => $rozetkaProductId]);
+        /** @var array<string, int> $parentRozetkaProduct */
+        $parentRozetkaProduct = $request->request->get('RozetkaProduct');
+        $rozetkaProductId = $parentRozetkaProduct['rozetkaProduct'];
 
-            $entityInstance->setSeries($rozetkaProduct->getSeries());
-            $entityInstance->setDescription($rozetkaProduct->getDescription());
+        $rozetkaProduct = $this->rozetkaProductRepository->findOneBy(['id' => $rozetkaProductId]);
 
-            if (! $rozetkaProduct->getValues()->isEmpty()) {
-                if (! $entityInstance->getValues()->isEmpty()) {
-                    foreach ($entityInstance->getValues() as $value) {
-                        $entityInstance->removeValue($value);
-                    }
-                }
-                foreach ($rozetkaProduct->getValues() as $value) {
-                    $productValue = new ProductRozetkaCharacteristicValue();
-                    $productValue->setRozetkaProduct($entityInstance);
-                    $productValue->setCharacteristic($value->getCharacteristic());
-                    $productValue->setValue($value->getValue());
-                    $productValue->setStringValue($value->getStringValue());
-                    if (! $value->getValues()->isEmpty()) {
-                        foreach ($value->getValues() as $itemValue) {
-                            $productValue->addValue($itemValue);
-                        }
-                    }
+        $entityInstance->setSeries($rozetkaProduct->getSeries());
+        $entityInstance->setDescription($rozetkaProduct->getDescription());
 
-                    $productValue->setStringValue($value->getStringValue());
-                    $entityInstance->addValue($productValue);
+        if ($rozetkaProduct->getValues()->isEmpty()) {
+            return;
+        }
+        if (! $entityInstance->getValues()->isEmpty()) {
+            foreach ($entityInstance->getValues() as $value) {
+                $entityInstance->removeValue($value);
+            }
+        }
+        foreach ($rozetkaProduct->getValues() as $value) {
+            $productValue = new ProductRozetkaCharacteristicValue();
+            $productValue->setRozetkaProduct($entityInstance);
+            $productValue->setCharacteristic($value->getCharacteristic());
+            $productValue->setValue($value->getValue());
+            $productValue->setStringValue($value->getStringValue());
+            if (! $value->getValues()->isEmpty()) {
+                foreach ($value->getValues() as $itemValue) {
+                    $productValue->addValue($itemValue);
                 }
             }
+
+            $productValue->setStringValue($value->getStringValue());
+            $entityInstance->addValue($productValue);
         }
 
         $entityManager->persist($entityInstance);
