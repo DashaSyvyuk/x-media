@@ -60,10 +60,10 @@ test-smoke:
 	docker container exec -it $(PHP_SERVICE) vendor/bin/phpunit --group=smoke
 
 test-coverage:
-	docker container exec $(PHP_SERVICE) vendor/bin/phpunit --coverage-html var/coverage --testsuite="Unit Tests"
+	docker container exec $(PHP_SERVICE) vendor/bin/phpunit --coverage-html var/coverage
 
 test-coverage-text:
-	docker container exec $(PHP_SERVICE) vendor/bin/phpunit --coverage-text --testsuite="Unit Tests"
+	docker container exec $(PHP_SERVICE) vendor/bin/phpunit --coverage-text | grep -E "Lines:"
 
 # Combined Commands
 qa: phpcs phpstan test-unit
