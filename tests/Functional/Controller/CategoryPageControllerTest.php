@@ -2,7 +2,6 @@
 
 namespace App\Tests\Functional\Controller;
 
-use App\DataFixtures\CategoryFixtures;
 use App\Entity\Category;
 use App\Tests\Traits\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
