@@ -112,6 +112,7 @@ class OrderCrudController extends AbstractCrudController
         yield NumberField::new('total', 'Загальна вартість')
             ->setThousandsSeparator(' ')
             ->setDisabled()
+            ->formatValue(fn() => null)
             ->setColumns(7);
         yield ChoiceField::new('labels', 'Мітка')
             ->setChoices(Order::LABELS)
