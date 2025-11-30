@@ -6,8 +6,8 @@ use App\Entity\Order;
 use App\Entity\Setting;
 use App\Repository\SettingRepository;
 use App\Service\Order\CreateService;
+use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
@@ -28,8 +28,6 @@ use Twig\Environment;
 class OrderCreateServiceTest extends TestCase
 {
     private CreateService $service;
-    /** @var ContainerInterface&\PHPUnit\Framework\MockObject\MockObject */
-    private ContainerInterface $container;
     /** @var SettingRepository&\PHPUnit\Framework\MockObject\MockObject */
     private SettingRepository $settingRepository;
     /** @var MailerInterface&\PHPUnit\Framework\MockObject\MockObject */
@@ -48,7 +46,6 @@ class OrderCreateServiceTest extends TestCase
         parent::setUp();
 
         // Mock dependencies
-        $this->container = $this->createMock(ContainerInterface::class);
         $this->settingRepository = $this->createMock(SettingRepository::class);
         $this->mailer = $this->createMock(MailerInterface::class);
         $this->twig = $this->createMock(Environment::class);
@@ -73,7 +70,7 @@ class OrderCreateServiceTest extends TestCase
 
         // Create service instance
         $this->service = new CreateService(
-            $this->container,
+            $this->twig,
             $this->settingRepository,
             $this->mailer
         );
@@ -120,7 +117,6 @@ class OrderCreateServiceTest extends TestCase
         $order = $this->createOrderWithEmail();
         $host = 'xmedia.com';
 
-        $this->setupContainerMock();
         $this->setupSettingRepositoryMock();
         $this->setupTwigMock();
 
@@ -148,7 +144,6 @@ class OrderCreateServiceTest extends TestCase
         // Arrange
         $order = $this->createOrderWithEmail();
 
-        $this->container->method('get')->willReturn($this->twig);
         $this->settingRepository->method('findOneBy')
             ->with(['slug' => 'email'])
             ->willReturn(null);
@@ -171,7 +166,6 @@ class OrderCreateServiceTest extends TestCase
         // Arrange
         $order = $this->createOrderWithoutEmail();
 
-        $this->setupContainerMock();
         $this->setupSettingRepositoryMock();
         $this->setupTwigMock();
 
@@ -198,7 +192,6 @@ class OrderCreateServiceTest extends TestCase
         $host = 'test.xmedia.com';
         $expectedUrl = 'https://test.xmedia.com/';
 
-        $this->setupContainerMock();
         $this->setupSettingRepositoryMock();
 
         // Assert - using callback matcher to check URL generation
@@ -228,7 +221,6 @@ class OrderCreateServiceTest extends TestCase
         $order = $this->createOrderWithEmail();
         $order->setOrderNumber($orderNumber);
 
-        $this->setupContainerMock();
         $this->setupSettingRepositoryMock();
         $this->setupTwigMock();
 
@@ -268,7 +260,6 @@ class OrderCreateServiceTest extends TestCase
         $order = $this->createOrderWithEmail();
         $expectedFrom = 'x-media@x-media.com.ua';
 
-        $this->setupContainerMock();
         $this->setupSettingRepositoryMock();
         $this->setupTwigMock();
 
@@ -292,7 +283,6 @@ class OrderCreateServiceTest extends TestCase
         // Arrange
         $order = $this->createOrderWithEmail();
 
-        $this->setupContainerMock();
         $this->setupSettingRepositoryMock();
 
         // Track render calls to verify both templates are rendered
@@ -329,8 +319,6 @@ class OrderCreateServiceTest extends TestCase
     {
         // Arrange
         $order = $this->createOrderWithEmail();
-
-        $this->setupContainerMock();
 
         // Setup setting repository to return both email and phone
         $this->settingRepository->method('findOneBy')
@@ -408,16 +396,6 @@ class OrderCreateServiceTest extends TestCase
     }
 
     /**
-     * Setup container mock with twig
-     */
-    private function setupContainerMock(): void
-    {
-        $this->container->method('get')
-            ->with('twig')
-            ->willReturn($this->twig);
-    }
-
-    /**
      * Setup setting repository mock
      */
     private function setupSettingRepositoryMock(): void
@@ -449,9 +427,9 @@ class OrderCreateServiceTest extends TestCase
 
     /**
      * Custom matcher: Check email from address
-     * @return \PHPUnit\Framework\Constraint\Callback<Email>
+     * @return Callback<Email>
      */
-    private function emailFromAddress(string $expectedAddress): \PHPUnit\Framework\Constraint\Callback
+    private function emailFromAddress(string $expectedAddress): Callback
     {
         return $this->callback(function (Email $email) use ($expectedAddress) {
             $from = $email->getFrom();

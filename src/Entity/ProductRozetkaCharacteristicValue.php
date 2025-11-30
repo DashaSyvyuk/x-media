@@ -18,7 +18,7 @@ class ProductRozetkaCharacteristicValue
     #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private ?int $id = 0;
 
-    #[ORM\ManyToOne(targetEntity: RozetkaProduct::class)]
+    #[ORM\ManyToOne(targetEntity: RozetkaProduct::class, inversedBy: "values")]
     #[ORM\JoinColumn(nullable: false)]
     private RozetkaProduct $rozetkaProduct;
 
