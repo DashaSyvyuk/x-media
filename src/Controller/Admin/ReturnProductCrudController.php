@@ -74,6 +74,7 @@ class ReturnProductCrudController extends AbstractCrudController
         yield AssociationField::new('product', 'Продукт')->hideOnIndex()->setColumns(7);
         yield NumberField::new('amount', 'Сума')
             ->setThousandsSeparator(' ')
+            ->formatValue(fn() => null)
             ->setColumns(7);
         yield TextareaField::new('reason', 'Причина')->setColumns(7);
     }
