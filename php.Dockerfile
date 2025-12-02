@@ -6,12 +6,16 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libpng-dev \
     libjpeg-dev \
+    libwebp-dev \
+    libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
     curl \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl pdo pdo_mysql zip opcache \
+    && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
+    && docker-php-ext-install gd \
     && rm -rf /var/lib/apt/lists/*
 
 # ---------------------------------------------
@@ -77,7 +81,13 @@ WORKDIR /app
 # Install needed PHP extensions in the runtime layer
 RUN apt-get update && apt-get install -y \
     libicu-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libwebp-dev \
+    libfreetype6-dev \
     && docker-php-ext-install intl pdo pdo_mysql opcache \
+    && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
+    && docker-php-ext-install gd \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy built app from builder
