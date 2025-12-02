@@ -57,3 +57,5 @@ RUN useradd -G www-data,root -u $uid -d /home/$user $user \
 # Set working directory
 WORKDIR /var/www
 USER $user
+
+RUN composer install --no-dev --optimize-autoloader
