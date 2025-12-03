@@ -58,6 +58,10 @@ RUN yarn build
 # ---------------------------------------------
 # Final Composer install (prod)
 # ---------------------------------------------
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV SYMFONY_SKIP_AUTOLOAD=1
+ENV SYMFONY_SKIP_PACKAGES="symfony/flex"
+
 RUN composer install --optimize-autoloader --no-dev --no-interaction \
     && composer dump-autoload --optimize
 
@@ -65,6 +69,7 @@ RUN composer install --optimize-autoloader --no-dev --no-interaction \
 # Symfony cache warmup
 # ---------------------------------------------
 RUN php bin/console cache:warmup
+RUN php bin/console cache:clear
 
 # ---------------------------------------------
 # Permissions (important for Symfony)
