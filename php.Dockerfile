@@ -68,8 +68,8 @@ RUN composer install --optimize-autoloader --no-dev --no-interaction \
 # ---------------------------------------------
 # Symfony cache warmup
 # ---------------------------------------------
-RUN php bin/console cache:warmup
-RUN php bin/console cache:clear
+RUN php bin/console cache:clear --env=prod --no-debug
+RUN php bin/console cache:warmup --env=prod --no-debug
 
 # ---------------------------------------------
 # Permissions (important for Symfony)
