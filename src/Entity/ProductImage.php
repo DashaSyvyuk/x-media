@@ -19,8 +19,6 @@ class ProductImage
 {
     use DateStorageTrait;
 
-    public const SERVER_PATH_TO_IMAGE_FOLDER = '../public/images/products';
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer", options: ["unsigned" => true])]

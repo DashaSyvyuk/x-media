@@ -12,7 +12,8 @@
         "webpack-notifier": "^1.15.0"
     },
     "dependencies": {
-        "ckeditor4": "^4.21.0",
+        "@ckeditor/ckeditor5-build-classic": "^44.3.0",
+        "ckeditor4": "4.22.1",
         "file-loader": "^6.2.0",
         "inputmask": "^5.0.7",
         "jquery": "^3.6.0",

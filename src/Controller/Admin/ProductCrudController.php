@@ -129,28 +129,16 @@ class ProductCrudController extends AbstractCrudController
         yield FormField::addPanel('Ціни');
         yield NumberField::new('price', 'Ціна (грн)')
             ->setThousandsSeparator(' ')
-            ->formatValue(fn() => null)
             ->setColumns(6);
         yield NumberField::new('crossedOutPrice', 'Перекреслена ціна (грн)')
             ->setThousandsSeparator(' ')
-            ->formatValue(fn() => null)
             ->hideOnIndex()
             ->setColumns(6);
 
         yield FormField::addPanel('Опис');
         yield TextareaField::new('description', 'Опис')
             ->setFormType(CKEditorType::class)
-            ->setFormTypeOptions(
-                [
-                    'config' => [
-                        'toolbar' => 'full',
-                        'extraPlugins' => 'templates',
-                        'rows' => '40',
 
-                    ],
-                    'attr' => ['rows' => '40'],
-                ]
-            )
             ->setColumns(12)
             ->hideOnIndex();
 

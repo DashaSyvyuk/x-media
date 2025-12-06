@@ -40,7 +40,7 @@ class SliderCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('title', 'Заголовок');
         yield TextField::new('url', 'Посилання')->hideOnIndex();
-        yield NumberField::new('priority', 'Пріоритет')->formatValue(fn() => null)->hideOnIndex();
+        yield NumberField::new('priority', 'Пріоритет')->hideOnIndex();
         yield BooleanField::new('active', 'Показувати');
         yield AssociationField::new('promotion', 'Акція')->hideOnIndex();
         yield ImageField::new('imageUrl')

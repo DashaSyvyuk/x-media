@@ -98,17 +98,14 @@ class RozetkaProductCrudController extends AbstractCrudController
         yield TextField::new('title', 'Назва')->setColumns(6);
         yield NumberField::new('stock_quantity', 'Кількість')
             ->setThousandsSeparator(' ')
-            ->formatValue(fn() => null)
             ->setColumns(6)
             ->hideOnIndex();
         yield TextField::new('series', 'Серія')->setColumns(6);
         yield NumberField::new('price', 'Ціна')
             ->setThousandsSeparator(' ')
-            ->formatValue(fn() => null)
             ->setColumns(6);
         yield NumberField::new('crossedOutPrice', 'Перекреслена ціна (грн)')
             ->setThousandsSeparator(' ')
-            ->formatValue(fn() => null)
             ->hideOnIndex()
             ->setColumns(6);
         yield NumberField::new('promoPrice', 'Промо-ціна (грн)')
@@ -116,7 +113,6 @@ class RozetkaProductCrudController extends AbstractCrudController
             ->setNumDecimals(0)
             ->hideOnIndex()
             ->setRequired(false)
-            ->formatValue(fn() => null)
             ->setHelp('Працює лише якщо увімкнено перемикач')
             ->setColumns(3);
         yield BooleanField::new('promoPriceActive', 'Активувати промо-ціну')
