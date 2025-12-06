@@ -80,7 +80,6 @@ class WarrantyCrudController extends AbstractCrudController
         yield AssociationField::new('supplier', 'Потачальник')->hideOnIndex()->setColumns(7);
         yield AssociationField::new('product', 'Продукт')->hideOnIndex()->setColumns(7);
         yield NumberField::new('expenses', 'Витрати (грн)')
-            ->formatValue(fn() => null)
             ->setThousandsSeparator(' ')
             ->setColumns(7);
         yield TextareaField::new('reason', 'Причина')->setColumns(7)->hideOnIndex();

@@ -39,7 +39,7 @@ class FeedCrudController extends AbstractCrudController
         yield ChoiceField::new('type', 'Тип')->setChoices(Feed::TYPES);
         yield BooleanField::new('cutCharacteristics', 'Обрізати характеристики до 255 символів');
         yield TextField::new('ignoreBrands', 'Ігнорувати бренди')->setHelp('Розділення \';\'');
-        yield NumberField::new('ourPercent')->formatValue(fn() => null);
-        yield NumberField::new('fee')->formatValue(fn() => null);
+        yield NumberField::new('ourPercent');
+        yield NumberField::new('fee');
     }
 }

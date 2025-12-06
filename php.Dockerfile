@@ -1,105 +1,61 @@
-FROM php:8.4-fpm AS base
+FROM php:8.4-fpm
 
+# Arguments from docker-compose.yml
+ARG user
+ARG uid
+
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libicu-dev \
+    curl \
     libpng-dev \
-    libjpeg-dev \
-    libwebp-dev \
-    libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
-    curl \
-    && docker-php-ext-configure intl \
-    && docker-php-ext-install intl pdo pdo_mysql zip opcache \
-    && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
-    && docker-php-ext-install gd \
-    && rm -rf /var/lib/apt/lists/*
-
-# ---------------------------------------------
-# Install Node 18 + Yarn for frontend build
-# ---------------------------------------------
-FROM base AS node_setup
-
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get update \
-    && apt-get install -y nodejs \
-    && npm install -g yarn \
-    && rm -rf /var/lib/apt/lists/*
-
-# ---------------------------------------------
-# Composer install
-# ---------------------------------------------
-FROM node_setup AS composer_setup
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-WORKDIR /app
-
-# Copy only dependency files first (cache layers)
-COPY composer.json composer.lock ./
-COPY package.json yarn.lock ./
-
-RUN yarn install
-RUN composer install --no-scripts --no-dev --prefer-dist --no-interaction
-
-# ---------------------------------------------
-# Copy the full project
-# ---------------------------------------------
-COPY . .
-
-# ---------------------------------------------
-# Build assets (Webpack, Vite, Encore, etc.)
-# ---------------------------------------------
-RUN yarn build
-
-# ---------------------------------------------
-# Final Composer install (prod)
-# ---------------------------------------------
-ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV SYMFONY_SKIP_AUTOLOAD=1
-ENV SYMFONY_SKIP_PACKAGES="symfony/flex"
-
-RUN composer install --optimize-autoloader --no-dev --no-interaction \
-    && composer dump-autoload --optimize
-
-# ---------------------------------------------
-# Symfony cache warmup
-# ---------------------------------------------
-RUN php bin/console cache:clear --env=prod --no-debug
-RUN php bin/console cache:warmup --env=prod --no-debug
-
-# ---------------------------------------------
-# Permissions (important for Symfony)
-# ---------------------------------------------
-RUN mkdir -p var && chmod -R 777 var
-
-# ---------------------------------------------
-# Final runtime container
-# ---------------------------------------------
-FROM php:8.4-fpm AS runtime
-
-WORKDIR /app
-
-# Install needed PHP extensions in the runtime layer
-RUN apt-get update && apt-get install -y \
-    libicu-dev \
-    libpng-dev \
-    libjpeg-dev \
-    libwebp-dev \
+    zip \
+    unzip \
     libfreetype6-dev \
-    && docker-php-ext-install intl pdo pdo_mysql opcache \
-    && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
-    && docker-php-ext-install gd \
-    && rm -rf /var/lib/apt/lists/*
+    libjpeg62-turbo-dev \
+    libicu-dev \
+    libxml2-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy built app from builder
-COPY --from=composer_setup /app /app
+# Configure GD before install
+RUN docker-php-ext-configure gd \
+    --with-freetype=/usr/include/ \
+    --with-jpeg=/usr/include/
 
-# Expose the HTTP port for DO App Platform
-EXPOSE 8080
+# Install PHP extensions
+RUN docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    soap \
+    zip \
+    intl
 
-# Run Symfony using PHP built-in web server
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
+# Install Redis
+RUN pecl install redis && docker-php-ext-enable redis
+
+# Install PCOV for code coverage
+RUN pecl install pcov && docker-php-ext-enable pcov
+
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Create system user
+RUN useradd -G www-data,root -u $uid -d /home/$user $user \
+    && mkdir -p /home/$user/.composer \
+    && chown -R $user:$user /home/$user
+
+# Set working directory
+WORKDIR /var/www
+USER $user
+
+RUN composer install

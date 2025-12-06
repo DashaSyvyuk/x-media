@@ -83,7 +83,6 @@ class InStockCrudController extends AbstractCrudController
         yield NumberField::new('purchasePrice', 'Закупівельна ціна')
             ->setColumns(7)
             ->setFormTypeOption('attr', ['min' => 0, 'step' => 1])
-            ->formatValue(fn() => null)
             ->setThousandsSeparator(' ');
 
         yield TextareaField::new('note', 'Нотатка')
