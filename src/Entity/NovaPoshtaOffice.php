@@ -29,7 +29,7 @@ class NovaPoshtaOffice
     #[ORM\Column(type: "string")]
     private string $title = "";
 
-    #[ORM\ManyToOne(targetEntity: NovaPoshtaCity::class)]
+    #[ORM\ManyToOne(targetEntity: NovaPoshtaCity::class, inversedBy: "offices")]
     private NovaPoshtaCity $city;
 
     #[ORM\Column(type: "datetime")]

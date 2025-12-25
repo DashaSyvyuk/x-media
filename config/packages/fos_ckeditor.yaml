@@ -3,6 +3,9 @@
 fos_ck_editor:
     base_path: 'https://cdn.ckeditor.com/4.22.1/standard'
     js_path: 'https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js'
+    configs:
+        default:
+            versionCheck: false
 
 twig:
     form_themes:

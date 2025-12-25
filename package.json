@@ -13,7 +13,6 @@
     },
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^44.3.0",
-        "ckeditor4": "4.22.1",
         "file-loader": "^6.2.0",
         "inputmask": "^5.0.7",
         "jquery": "^3.6.0",
