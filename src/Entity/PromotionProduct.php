@@ -15,7 +15,7 @@ class PromotionProduct
     private int $id;
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: Product::class)]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "promotionProducts")]
     private Product $product;
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]

@@ -20,7 +20,7 @@ class ProductRating
     private int $id;
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
-    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "characteristics")]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "ratings")]
     private Product $product;
 
     #[ORM\Column(type: "decimal", precision: 8, scale: 2)]
