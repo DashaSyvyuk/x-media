@@ -1545,6 +1545,10 @@ section .feedbacks {
     table-layout: fixed;
 }
 
+#cart-popup #cart-block table th {
+    font-size: 12px;
+}
+
 #cart-popup #cart-block table td {
     padding: 7px;
     font-size: 12px;
