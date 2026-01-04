@@ -20,6 +20,9 @@ class ProductImageType extends AbstractType
                         'mimeTypes' => ['image/jpg', 'image/jpeg', 'image/png']
                     ])
                 ],
+                'required' => false,
+                'allow_delete' => false,
+                'image_uri' => true,
             ])
             ->add('position')
         ;
