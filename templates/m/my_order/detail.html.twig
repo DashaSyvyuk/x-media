@@ -58,7 +58,7 @@
                             <div class="order-product">
                                 <div class="image">
                                     <img
-                                        src="/images/products/{% if item.product.images|length > 0 %}{{ item.product.images[0].imageUrl }}{% endif %}"
+                                        src="{% if item.product.images|length > 0 %}{{ item.product.images[0].getImageUri() }}{% endif %}"
                                         onerror="this.src='/images/no_image.png';"
                                     />
                                 </div>

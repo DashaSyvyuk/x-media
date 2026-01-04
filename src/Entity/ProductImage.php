@@ -71,11 +71,6 @@ class ProductImage
     public function getImageUrl(): ?string
     {
         return $this->imageUrl;
-        if (! $this->imageUrl) {
-            return null;
-        }
-
-        return $_ENV['BUNNY_CDN_URL'] . '/products/' . $this->imageUrl;
     }
 
     public function setImageUrl(?string $imageUrl): void
@@ -129,5 +124,14 @@ class ProductImage
     public function __toString()
     {
         return $this->imageUrl;
+    }
+
+    public function getImageUri(): ?string
+    {
+        if (! $this->imageUrl) {
+            return null;
+        }
+
+        return $_ENV['BUNNY_CDN_URL'] . '/products/' . $this->imageUrl;
     }
 }
