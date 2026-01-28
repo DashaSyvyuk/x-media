@@ -29,7 +29,7 @@
                         <td class="image">
                             <a href="/products/{{ item.product.id }}">
                                 <img
-                                    src="/images/products/{{ item.product.getImages()[0].imageUrl }}"
+                                    src="{{ item.product.getImages()[0].getImageUri() }}"
                                     onerror="this.src='/images/no_image.png';"
                                 >
                             </a>
@@ -49,4 +49,5 @@
         </div>
     </section>
 
+    
 {% endblock %}

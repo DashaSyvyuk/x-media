@@ -125,4 +125,13 @@ class ProductImage
     {
         return $this->imageUrl;
     }
+
+    public function getImageUri(): ?string
+    {
+        if (! $this->imageUrl) {
+            return null;
+        }
+
+        return $_ENV['BUNNY_CDN_URL'] . '/products/' . $this->imageUrl;
+    }
 }

@@ -9,6 +9,7 @@
         "aaronddm/xml-builder": "^2.0",
         "aws/aws-sdk-php": "^3.366",
         "beberlei/doctrineextensions": "^1.3",
+        "bunnycdn/storage": "^3.4",
         "composer/package-versions-deprecated": "*",
         "doctrine/doctrine-migrations-bundle": "*",
         "doctrine/orm": "*",

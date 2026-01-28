@@ -2,7 +2,7 @@
     <div class="inner">
         <img
             class="product-image"
-            src="/images/products/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}"
+            src="{% if product.images|length > 0 %}{{ product.images[0].getImageUri() }}{% endif %}"
             onerror="this.src='/images/no_image.png';"
         >
         <div class="product-title"><a href="/products/{{ product.id }}">{{ product.title|raw }}</a></div>
