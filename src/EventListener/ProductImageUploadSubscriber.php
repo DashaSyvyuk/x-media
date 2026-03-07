@@ -11,6 +11,9 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 
 class ProductImageUploadSubscriber
 {
+    /**
+     * @var array<object>
+     */
     private array $queue = [];
 
     public function __construct(
