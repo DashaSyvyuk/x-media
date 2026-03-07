@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\RozetkaProduct;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Repository\RozetkaProductRepository;
@@ -15,9 +16,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class ControlPriceController extends AbstractController
 {
-    /**
-     * @param ProductRepository $productRepository
-     */
     public function __construct(
         private readonly ProductRepository $productRepository,
         private readonly CategoryRepository $categoryRepository,
@@ -70,8 +68,8 @@ class ControlPriceController extends AbstractController
         }
 
         // --- price ---
-        $price = $this->toNullableFloat($data['price'] ?? null);
-        $oldPrice = $this->toNullableFloat($data['crossed_out_price'] ?? null);
+        $price = $this->toNullableInt($data['price'] ?? null);
+        $oldPrice = $this->toNullableInt($data['crossed_out_price'] ?? null);
 
         if ($price === null) {
             return new JsonResponse(['ok' => false, 'error' => 'Price is required'], 400);
@@ -84,8 +82,8 @@ class ControlPriceController extends AbstractController
         }
 
         // --- rozetka ---
-        $rzPrice = $this->toNullableFloat($data['rozetka_price'] ?? null);
-        $rzOld   = $this->toNullableFloat($data['rozetka_crossed_out_price'] ?? null);
+        $rzPrice = $this->toNullableInt($data['rozetka_price'] ?? null);
+        $rzOld = $this->toNullableInt($data['rozetka_crossed_out_price'] ?? null);
 
         if ($rzPrice !== null && $rzPrice < 0) {
             return new JsonResponse(['ok' => false, 'error' => 'Rozetka price must be >= 0'], 400);
@@ -96,31 +94,43 @@ class ControlPriceController extends AbstractController
 
         $rozetka = $rozetkaRepository->findOneBy(['product' => $product]);
 
-        if (!$rozetka && ($rzPrice !== null || $rzOld !== null)) {
-            // create...
-        }
+//        if (!$rozetka && ($rzPrice !== null || $rzOld !== null)) {
+//            $rozetka = new RozetkaProduct();
+//            $rozetka->setProduct($product);
+//            $em->persist($rozetka);
+//        }
 
         $product->setStatus($status);
         $product->setPrice($price);
         $product->setCrossedOutPrice($oldPrice);
 
-        $rozetka->setPrice($rzPrice);
-        $rozetka->setCrossedOutPrice($rzOld);
+        if ($rozetka) {
+            $rozetka->setPrice($rzPrice);
+            $rozetka->setCrossedOutPrice($rzOld);
+        }
 
         $em->flush();
 
         return new JsonResponse(['ok' => true]);
     }
 
-    private function toNullableFloat(mixed $v): ?float
+    private function toNullableInt(mixed $v): ?int
     {
-        if ($v === null) return null;
+        if ($v === null) {
+            return null;
+        }
+
         if (is_string($v)) {
             $v = trim($v);
-            if ($v === '') return null;
-            $v = str_replace(',', '.', $v);
+            if ($v === '') {
+                return null;
+            }
         }
-        if (!is_numeric($v)) return null;
-        return (float)$v;
+
+        if (!is_numeric($v)) {
+            return null;
+        }
+
+        return (int)$v;
     }
 }
