@@ -11,12 +11,16 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 
 class ProductImageUploadSubscriber
 {
+    /**
+     * @var array<object>
+     */
     private array $queue = [];
 
     public function __construct(
         private BunnyStorageClient $bunny,
         private string $uploadDir
-    ) {}
+    ) {
+    }
 
     public function postPersist(PostPersistEventArgs $args): void
     {
@@ -59,8 +63,8 @@ class ProductImageUploadSubscriber
             return;
         }
 
-        $localPath  = $this->uploadDir.'/'. $entity->getImageUrl();
-        $remotePath = 'products/'. $entity->getImageUrl();
+        $localPath  = $this->uploadDir . '/' . $entity->getImageUrl();
+        $remotePath = 'products/' . $entity->getImageUrl();
 
         if (! file_exists($localPath)) {
             return;
