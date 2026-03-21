@@ -10,6 +10,8 @@
 .DS_Store
 .idea/
 .env
+/.env
+
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
