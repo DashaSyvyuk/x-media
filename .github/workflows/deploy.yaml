@@ -36,4 +36,4 @@ jobs:
       # ---------------------------------------------------------
       - name: Deploy to App Platform
         run: |
-          doctl apps update ${{ secrets.DO_APP_ID }} --spec .do/app.yaml
+          doctl apps create-deployment ${{ secrets.DO_APP_ID }}
