@@ -103,19 +103,9 @@
         "symfony/polyfill-php56": "*"
     },
     "scripts": {
-        "auto-scripts": {
-            "cache:warmup --no-optional-warmers": "symfony-cmd",
-            "cache:clear --no-warmup --no-optional-warmers": "symfony-cmd",
-            "ckeditor:install --clear=drop": "symfony-cmd",
-            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
-        ]
+        "auto-scripts": {},
+        "post-install-cmd": [],
+        "post-update-cmd": []
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
