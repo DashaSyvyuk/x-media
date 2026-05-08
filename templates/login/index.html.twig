@@ -23,6 +23,7 @@
         </div>
 
         <form method="POST" action="/log-in" id="login">
+            <input type="hidden" name="_token" value="{{ csrf_token('login') }}">
             <div class="email">
                 <p>Логін (email):</p>
                 <input type="text" name="email" autocomplete="off" required>

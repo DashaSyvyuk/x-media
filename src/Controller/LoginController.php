@@ -8,6 +8,9 @@ use App\Repository\SettingRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class LoginController extends BaseController
 {
@@ -31,8 +34,16 @@ class LoginController extends BaseController
         return $this->renderTemplate($request, 'login/index.html.twig', []);
     }
 
-    public function post(Request $request): Response
+    public function post(Request $request, CsrfTokenManagerInterface $csrfManager): Response
     {
+        $submittedToken = $request->request->get('_token');
+
+        if (! $csrfManager->isTokenValid(new CsrfToken('login', $submittedToken))) {
+            return new Response(json_encode([
+                'error' => 'Invalid CSRF token.'
+            ]));
+        }
+
         $password = $request->request->get('password');
 
         $user = $this->userRepository->findOneBy([
@@ -40,13 +51,32 @@ class LoginController extends BaseController
             'confirmed' => true
         ]);
 
-        if (!$user) {
+        if (! $user) {
             return new Response(json_encode([
                 'error' => 'Користувача з даним email не існує'
             ]));
         }
 
-        if (!password_verify($password, $user->getPassword())) {
+        $cache = new FilesystemAdapter();
+        $key = 'login_attempts_' . $user->getId();
+
+        $attempts = $cache->getItem($key);
+
+        if (!$attempts->isHit()) {
+            $attempts->set(0);
+        }
+
+        if ($attempts->get() >= 5) {
+            return new Response(json_encode([
+                'error' => 'Too many login attempts. Try again later.'
+            ]));
+        }
+
+        $attempts->set($attempts->get() + 1);
+        $attempts->expiresAfter(900);
+        $cache->save($attempts);
+
+        if (! password_verify($password, $user->getPassword())) {
             return new Response(json_encode([
                 'error' => 'Пароль або email невірні'
             ]));
@@ -55,6 +85,8 @@ class LoginController extends BaseController
         $session = $request->getSession();
 
         $session->set('user', $request->request->get('email'));
+
+        $cache->deleteItem($key);
 
         return new Response(json_encode([
             'success' => true

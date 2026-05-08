@@ -9,12 +9,12 @@ use Symfony\Component\Mime\Email;
 use Twig\Environment;
 use Symfony\Component\Mailer\MailerInterface;
 
-class CreateService
+readonly class CreateService
 {
     public function __construct(
-        private readonly Environment $twig,
-        private readonly SettingRepository $settingRepository,
-        private readonly MailerInterface $mailer
+        private Environment       $twig,
+        private SettingRepository $settingRepository,
+        private MailerInterface   $mailer,
     ) {
     }
 
@@ -27,7 +27,7 @@ class CreateService
         $mainUrl = sprintf('https://%s/', $host);
 
         if ($order->getEmail()) {
-            $message = (new Email())
+            $message = new Email()
                 ->subject(sprintf('Нове замовлення %s', $order->getOrderNumber()))
                 ->from('x-media@x-media.com.ua')
                 ->to($order->getEmail())
@@ -53,7 +53,7 @@ class CreateService
             );
         }
 
-        $managerMessage = (new Email())
+        $managerMessage = new Email()
             ->subject(sprintf('Нове замовлення %s', $order->getOrderNumber()))
             ->from('x-media@x-media.com.ua')
             ->to($managerEmail->getValue())
