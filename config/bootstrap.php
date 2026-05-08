@@ -8,12 +8,7 @@ if (!class_exists(Dotenv::class)) {
     throw new LogicException('Please run "composer require symfony/dotenv" to load the ".env" files configuring the application.');
 }
 
-if (!isset($_SERVER['APP_ENV']) && !isset($_ENV['APP_ENV'])) {
-    if (class_exists(Dotenv::class)) {
-        (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
-    }
-}
-
-if ($_SERVER['APP_DEBUG'] ?? $_ENV['APP_DEBUG'] ?? false) {
-    umask(0000);
+// Only load .env locally if it exists
+if (file_exists(dirname(__DIR__).'/.env')) {
+    (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
 }
