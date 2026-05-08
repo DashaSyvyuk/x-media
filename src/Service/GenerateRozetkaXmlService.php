@@ -20,6 +20,8 @@ class GenerateRozetkaXmlService
 {
     use PriceTrait;
 
+    private const FILE_NAME = 'products.xml';
+
     private XMLWriterService $xmlWriterService;
     private XMLBuilder $xmlBuilder;
 
@@ -28,12 +30,13 @@ class GenerateRozetkaXmlService
         private readonly ProductRepository $productRepository,
         private readonly FeedRepository $feedRepository,
         private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
+        private readonly BunnyStorageClient $bunny,
     ) {
         $this->xmlWriterService = new XMLWriterService();
         $this->xmlBuilder = new XMLBuilder($this->xmlWriterService);
     }
 
-    public function execute(string $activeFor = 'active_for_a'): void
+    public function execute(string $activeFor = 'active_for_a'): ?string
     {
         $activeForInCamelCase = lcfirst(str_replace('_', '', ucwords($activeFor, '_')));
         ini_set('memory_limit', '1024M');
@@ -80,9 +83,11 @@ class GenerateRozetkaXmlService
                             foreach ($products as $product) {
                                 /** @var RozetkaProduct $rozetkaProduct */
                                 $rozetkaProduct = $product->getRozetka();
-                                $vendor = array_filter(
-                                    $product->getFilterAttributes()->toArray(),
-                                    fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
+                                $vendor = array_values(
+                                    array_filter(
+                                        $product->getFilterAttributes()->toArray(),
+                                        fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
+                                    )
                                 );
 
                                 if (!empty($vendor)) {
@@ -182,15 +187,21 @@ class GenerateRozetkaXmlService
                     ->end()
                 ->end();
 
-            file_put_contents(
-                __DIR__ . sprintf(
-                    '/../../public/rozetka_for_%s/products.xml',
-                    substr($activeFor, -1)
-                ),
-                $this->xmlBuilder->getXML()
-            );
+            $folder    = sprintf('rozetka_for_%s', substr($activeFor, -1));
+            $localPath = __DIR__ . '/../../public/' . $folder . '/' . self::FILE_NAME;
+            $localDir  = dirname($localPath);
+
+            if (! is_dir($localDir)) {
+                @mkdir($localDir, 0775, true);
+            }
+
+            file_put_contents($localPath, $this->xmlBuilder->getXML());
+
+            return $this->bunny->uploadAndGetUrl($localPath, $folder, self::FILE_NAME);
         } catch (XMLArrayException | XMLBuilderException $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
+
+            return null;
         }
     }
 

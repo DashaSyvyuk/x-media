@@ -160,7 +160,7 @@
                     <h4>Доставка:</h4>
                     <div class="info">
                         <div class="delivery-payment-block">
-                            <img src="/images/delivery/{% if order.delType %}{{ order.delType.icon }}{% endif %}">{{ order.delType.title }}
+                            <img src="{% if order.delType %}{{ order.delType.getIconUri() }}{% endif %}">{{ order.delType.title }}
                         </div>
                     </div>
                     <div class="delivery-data">
@@ -185,7 +185,7 @@
                     <h4>Оплата:</h4>
                     <div class="info">
                         <div class="delivery-payment-block">
-                            <img src="/images/payment/{{ order.payType.icon }}">{{ order.payType.title }} {% if order.paymentStatus %}<span class="green">(Оплачено)</span>{% else %}<span class="red">(Очікує на оплату)</span>{% endif %}
+                            <img src="{{ order.payType.getIconUri() }}">{{ order.payType.title }} {% if order.paymentStatus %}<span class="green">(Оплачено)</span>{% else %}<span class="red">(Очікує на оплату)</span>{% endif %}
                         </div>
                     </div>
                     <h4>Замовлення:</h4>

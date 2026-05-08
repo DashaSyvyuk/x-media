@@ -30,7 +30,7 @@
                         Спосіб доставки
                     </div>
                     <div class="delivery-payment-info">
-                        <img src="/images/delivery/{{ order.delType.icon }}">
+                        <img src="{{ order.delType.getIconUri() }}">
                         <div>
                             <b>{{ order.delType.title }}</b><br>
                             <div class="span-text">Дані для отримання:</div>
@@ -44,7 +44,7 @@
                         Спосіб оплати
                     </div>
                     <div class="delivery-payment-info">
-                        <img src="/images/payment/{{ order.payType.icon }}">
+                        <img src="{{ order.payType.getIconUri() }}">
                         <div>
                             <b>{{ order.payType.title }}</b><br><br>
                             Статус оплати - <b>{% if order.paymentStatus %}<span class="green">Оплачено</span>{% else %}<span class="red">Очікує на оплату</span>{% endif %}</b>

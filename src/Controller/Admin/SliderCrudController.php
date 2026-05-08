@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Slider;
+use App\EventListener\ImageUploadSubscriber;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -19,6 +20,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN')")]
 class SliderCrudController extends AbstractCrudController
 {
+    public function __construct(private ImageUploadSubscriber $imageUploadSubscriber)
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return Slider::class;
@@ -37,6 +42,8 @@ class SliderCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        $this->imageUploadSubscriber->ensureLocalDirFor(Slider::class);
+
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('title', 'Заголовок');
         yield TextField::new('url', 'Посилання')->hideOnIndex();
@@ -46,6 +53,6 @@ class SliderCrudController extends AbstractCrudController
         yield ImageField::new('imageUrl')
             ->setLabel('Картинка')
             ->setUploadDir('/public/images/slider/')
-            ->setBasePath('images/slider/');
+            ->setBasePath($this->imageUploadSubscriber->cdnBaseUrlFor(Slider::class));
     }
 }

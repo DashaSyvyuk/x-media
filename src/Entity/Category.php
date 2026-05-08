@@ -89,7 +89,6 @@ class Category
         targetEntity: Product::class,
         mappedBy: 'category',
         cascade: ['all'],
-        fetch: 'EAGER',
         orphanRemoval: true
     )]
     private ArrayCollection|PersistentCollection $products;
@@ -99,7 +98,6 @@ class Category
         targetEntity: CategoryFeedPrice::class,
         mappedBy: 'category',
         cascade: ['all'],
-        fetch: 'EAGER',
         orphanRemoval: true
     )]
     private ArrayCollection|PersistentCollection $feedPrices;
@@ -154,6 +152,15 @@ class Category
     public function getImage(): ?string
     {
         return $this->image;
+    }
+
+    public function getImageUri(): ?string
+    {
+        if (! $this->image) {
+            return null;
+        }
+
+        return $_ENV['BUNNY_CDN_URL'] . '/category/' . $this->image;
     }
 
     public function setMetaKeyword(?string $metaKeyword): void
