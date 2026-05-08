@@ -12,9 +12,9 @@ use Symfony\Component\Mailer\MailerInterface;
 readonly class CreateService
 {
     public function __construct(
-        private Environment       $twig,
+        private Environment $twig,
         private SettingRepository $settingRepository,
-        private MailerInterface   $mailer,
+        private MailerInterface $mailer,
     ) {
     }
 
