@@ -176,12 +176,9 @@ class RozetkaProductCrudController extends AbstractCrudController
 
     public function rozetkaForAXmlAction(AdminContext $adminContext): RedirectResponse
     {
-        $this->generateRozetkaXmlService->execute();
+        $url = $this->generateRozetkaXmlService->execute();
 
-        $this->addFlash(
-            'success',
-            'Document is generated <a href="/rozetka_for_a/products.xml" target="_blank">here</a>'
-        );
+        $this->addFlash('success', $this->buildGeneratedFlash($url));
 
         return $this->redirect(
             $this->adminUrlGenerator->setController(
@@ -192,12 +189,9 @@ class RozetkaProductCrudController extends AbstractCrudController
 
     public function rozetkaForPXmlAction(AdminContext $adminContext): RedirectResponse
     {
-        $this->generateRozetkaXmlService->execute('active_for_p');
+        $url = $this->generateRozetkaXmlService->execute('active_for_p');
 
-        $this->addFlash(
-            'success',
-            'Document is generated <a href="/rozetka_for_p/products.xml" target="_blank">here</a>'
-        );
+        $this->addFlash('success', $this->buildGeneratedFlash($url));
 
         return $this->redirect(
             $this->adminUrlGenerator
@@ -205,6 +199,15 @@ class RozetkaProductCrudController extends AbstractCrudController
                 ->setAction(Action::INDEX)
                 ->generateUrl()
         );
+    }
+
+    private function buildGeneratedFlash(?string $url): string
+    {
+        if ($url === null) {
+            return 'Document generation failed. Check logs for details.';
+        }
+
+        return sprintf('Document is generated <a href="%s" target="_blank">here</a>', htmlspecialchars($url));
     }
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void

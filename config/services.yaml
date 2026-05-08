@@ -7,7 +7,9 @@ parameters:
     bunny.storage.zone: '%env(BUNNY_STORAGE_ZONE)%'
     bunny.storage.api_key: '%env(BUNNY_STORAGE_API_KEY)%'
     bunny.storage.region: '%env(BUNNY_STORAGE_REGION)%'
+    bunny.cdn.url: '%env(BUNNY_CDN_URL)%'
     product_images_dir: '%kernel.project_dir%/public/images/products'
+    public_images_dir: '%kernel.project_dir%/public/images'
 
 services:
     # default configuration for services in *this* file
@@ -16,6 +18,8 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             string $uploadDir: '%product_images_dir%'
+            string $publicImagesDir: '%public_images_dir%'
+            string $cdnUrl: '%bunny.cdn.url%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -54,6 +58,13 @@ services:
             - { name: doctrine.event_listener, event: preRemove }
             - { name: doctrine.event_listener, event: postFlush }
 
+    App\EventListener\ImageUploadSubscriber:
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: preRemove }
+            - { name: doctrine.event_listener, event: postFlush }
+
     App\Command\SyncNovaPoshtaDataCommand:
         lazy: true
 
@@ -62,3 +73,4 @@ services:
             $zone: '%bunny.storage.zone%'
             $apiKey: '%bunny.storage.api_key%'
             $region: '%bunny.storage.region%'
+            $cdnUrl: '%bunny.cdn.url%'

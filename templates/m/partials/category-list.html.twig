@@ -4,7 +4,7 @@
         <div class="category-item">
             <a class="no-link-style" href="/categories/{{ category.slug }}">
                 <div class="category-image">
-                    <img src="/images/category/{{ category.image }}">
+                    <img src="{{ category.imageUri }}">
                 </div>
                 <div class="category-title">
                     {{ category.title }} <span class="category-title-gray">({{ category.productsCount }})</span>

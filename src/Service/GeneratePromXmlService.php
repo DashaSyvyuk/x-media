@@ -17,6 +17,9 @@ class GeneratePromXmlService
 {
     use PriceTrait;
 
+    private const FOLDER = 'prom';
+    private const FILE_NAME = 'products.xml';
+
     private XMLWriterService $xmlWriterService;
     private XMLBuilder $xmlBuilder;
 
@@ -25,12 +28,13 @@ class GeneratePromXmlService
         private readonly ProductRepository $productRepository,
         private readonly FeedRepository $feedRepository,
         private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
+        private readonly BunnyStorageClient $bunny,
     ) {
         $this->xmlWriterService = new XMLWriterService();
         $this->xmlBuilder = new XMLBuilder($this->xmlWriterService);
     }
 
-    public function execute(): void
+    public function execute(): ?string
     {
         ini_set('memory_limit', '512M');
 
@@ -116,9 +120,20 @@ class GeneratePromXmlService
                 ->end()
                 ->end();
 
-            file_put_contents(__DIR__ . '/../../public/prom/products.xml', $this->xmlBuilder->getXML());
+            $localPath = __DIR__ . '/../../public/' . self::FOLDER . '/' . self::FILE_NAME;
+            $localDir  = dirname($localPath);
+
+            if (! is_dir($localDir)) {
+                @mkdir($localDir, 0775, true);
+            }
+
+            file_put_contents($localPath, $this->xmlBuilder->getXML());
+
+            return $this->bunny->uploadAndGetUrl($localPath, self::FOLDER, self::FILE_NAME);
         } catch (XMLArrayException | XMLBuilderException $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
+
+            return null;
         }
     }
 

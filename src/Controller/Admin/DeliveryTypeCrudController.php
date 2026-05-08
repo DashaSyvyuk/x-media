@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\DeliveryType;
+use App\EventListener\ImageUploadSubscriber;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -19,6 +20,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN')")]
 class DeliveryTypeCrudController extends AbstractCrudController
 {
+    public function __construct(private ImageUploadSubscriber $imageUploadSubscriber)
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return DeliveryType::class;
@@ -38,6 +43,8 @@ class DeliveryTypeCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        $this->imageUploadSubscriber->ensureLocalDirFor(DeliveryType::class);
+
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('title', 'Назва');
         yield IntegerField::new('cost', 'Вартість');
@@ -50,6 +57,6 @@ class DeliveryTypeCrudController extends AbstractCrudController
         yield ImageField::new('icon')
             ->setLabel('Іконка')
             ->setUploadDir('/public/images/delivery/')
-            ->setBasePath('images/delivery/');
+            ->setBasePath($this->imageUploadSubscriber->cdnBaseUrlFor(DeliveryType::class));
     }
 }

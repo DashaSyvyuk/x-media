@@ -84,6 +84,15 @@ class Slider
         $this->image_url = $image_url;
     }
 
+    public function getImageUri(): ?string
+    {
+        if (! $this->image_url) {
+            return null;
+        }
+
+        return $_ENV['BUNNY_CDN_URL'] . '/slider/' . $this->image_url;
+    }
+
     public function getPriority(): ?int
     {
         return $this->priority;

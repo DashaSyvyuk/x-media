@@ -88,6 +88,15 @@ class PaymentType
         return $this->icon;
     }
 
+    public function getIconUri(): ?string
+    {
+        if (! $this->icon) {
+            return null;
+        }
+
+        return $_ENV['BUNNY_CDN_URL'] . '/payment/' . $this->icon;
+    }
+
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;

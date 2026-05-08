@@ -258,9 +258,9 @@ class ProductCrudController extends AbstractCrudController
 
     public function hotlineXmlAction(AdminContext $adminContext): RedirectResponse
     {
-        $this->generateHotlineXmlService->execute();
+        $url = $this->generateHotlineXmlService->execute();
 
-        $this->addFlash('success', 'Document is generated <a href="/hotline/products.xml" target="_blank">here</a>');
+        $this->addFlash('success', $this->buildGeneratedFlash($url));
 
         return $this->redirect(
             $this->adminUrlGenerator
@@ -272,9 +272,9 @@ class ProductCrudController extends AbstractCrudController
 
     public function promXmlAction(AdminContext $adminContext): RedirectResponse
     {
-        $this->generatePromXmlService->execute();
+        $url = $this->generatePromXmlService->execute();
 
-        $this->addFlash('success', 'Document is generated <a href="/prom/products.xml" target="_blank">here</a>');
+        $this->addFlash('success', $this->buildGeneratedFlash($url));
 
         return $this->redirect(
             $this->adminUrlGenerator
@@ -286,9 +286,9 @@ class ProductCrudController extends AbstractCrudController
 
     public function ekatalogXmlAction(AdminContext $adminContext): RedirectResponse
     {
-        $this->generateEkatalogXmlService->execute();
+        $url = $this->generateEkatalogXmlService->execute();
 
-        $this->addFlash('success', 'Document is generated <a href="/e-katalog/products.xml" target="_blank">here</a>');
+        $this->addFlash('success', $this->buildGeneratedFlash($url));
 
         return $this->redirect(
             $this->adminUrlGenerator
@@ -296,6 +296,15 @@ class ProductCrudController extends AbstractCrudController
                 ->setAction(Action::INDEX)
                 ->generateUrl()
         );
+    }
+
+    private function buildGeneratedFlash(?string $url): string
+    {
+        if ($url === null) {
+            return 'Document generation failed. Check logs for details.';
+        }
+
+        return sprintf('Document is generated <a href="%s" target="_blank">here</a>', htmlspecialchars($url));
     }
 
     public function createIndexQueryBuilder(

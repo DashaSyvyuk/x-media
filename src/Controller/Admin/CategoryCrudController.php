@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Category;
+use App\EventListener\ImageUploadSubscriber;
 use App\Form\FeedPriceType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -23,6 +24,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')")]
 class CategoryCrudController extends AbstractCrudController
 {
+    public function __construct(private ImageUploadSubscriber $imageUploadSubscriber)
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return Category::class;
@@ -41,6 +46,8 @@ class CategoryCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        $this->imageUploadSubscriber->ensureLocalDirFor(Category::class);
+
         yield IdField::new('id')->hideOnForm();
         yield AssociationField::new('parent', 'Батьківська категорія')->hideOnIndex();
         yield TextField::new('title', 'Назва');
@@ -59,7 +66,7 @@ class CategoryCrudController extends AbstractCrudController
         yield BooleanField::new('showInHotlineFeed', 'Показувати категорію у Hotline feed *.yml')->hideOnIndex();
         yield ImageField::new('image', 'Картинка')
             ->setUploadDir('/public/images/category/')
-            ->setBasePath('images/category/');
+            ->setBasePath($this->imageUploadSubscriber->cdnBaseUrlFor(Category::class));
         yield TextField::new('slug', 'Slug');
         yield ChoiceField::new('status', 'Статус')->setChoices(Category::STATUSES);
         yield TextareaField::new('metaKeyword', 'Ключові слова')->hideOnIndex();

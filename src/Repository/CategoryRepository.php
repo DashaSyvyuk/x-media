@@ -49,6 +49,7 @@ class CategoryRepository extends ServiceEntityRepository
             $categoryArray['id'] = $category->getId();
             $categoryArray['title'] = $category->getTitle();
             $categoryArray['image'] = $category->getImage();
+            $categoryArray['imageUri'] = $category->getImageUri();
             $categoryArray['slug'] = $category->getSlug();
             $categoryArray['showInHeader'] = $category->getShowInHeader();
             $categoryArray['children'] = $this->getCategoriesTree($category->getId());

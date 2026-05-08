@@ -157,6 +157,15 @@ class DeliveryType
         return $this->icon;
     }
 
+    public function getIconUri(): ?string
+    {
+        if (! $this->icon) {
+            return null;
+        }
+
+        return $_ENV['BUNNY_CDN_URL'] . '/delivery/' . $this->icon;
+    }
+
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
