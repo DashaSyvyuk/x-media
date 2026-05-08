@@ -22,7 +22,7 @@
                             <div class="product-title">
                                 <a class="no-link-style" href="/products/{{ product.id }}">
                                     <img
-                                        src="/images/products/{% if product.images|length > 0 %}{{ product.images[0].imageUrl }}{% endif %}"
+                                        src="{% if product.images|length > 0 %}{{ product.images[0].getImageUri() }}{% endif %}"
                                         onerror="this.src='/images/no_image.png';"
                                     />
                                 </a>

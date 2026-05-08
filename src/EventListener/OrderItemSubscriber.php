@@ -57,9 +57,6 @@ class OrderItemSubscriber implements EventSubscriber
     }
 
     /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws TransportExceptionInterface
      * @throws Exception
      *
      * @param LifecycleEventArgs<ObjectManager> $args
@@ -85,9 +82,6 @@ class OrderItemSubscriber implements EventSubscriber
     }
 
     /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws TransportExceptionInterface
      * @throws Exception
      *
      * @param LifecycleEventArgs<ObjectManager> $args

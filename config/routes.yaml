@@ -182,3 +182,13 @@ upload_characteristics:
     path: /upload-characteristics
     controller: App\Controller\UploadCharacteristicsController::upload
     methods: POST
+
+control_price:
+    path: /admin/control-price
+    controller: App\Controller\Admin\ControlPriceController::index
+    methods: GET
+
+control_price_update:
+    path: /admin/control-price/update
+    controller: App\Controller\Admin\ControlPriceController::update
+    methods: POST

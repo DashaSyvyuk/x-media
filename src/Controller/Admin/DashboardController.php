@@ -98,6 +98,8 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::subMenu('Контент', 'fas fa-box-open')->setSubItems([
             MenuItem::linkToCrud('Товари', 'fas fa-box-open', Product::class),
+            MenuItem::linkToRoute('Контроль цін', 'fas fa-chart-line', 'control_price')
+                ->setLinkTarget('_blank'),
             MenuItem::linkToCrud('Фільтри', 'fas fa-filter', Filter::class),
             MenuItem::linkToCrud('Категорії', self::COMMENT_STYLE, Category::class),
             MenuItem::linkToCrud('Слайдер', 'fas fa-image', Slider::class)->setPermission('ROLE_ADMIN'),

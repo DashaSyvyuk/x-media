@@ -4,11 +4,13 @@
 /.env.local.php
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
 /var/
 /vendor/
 .DS_Store
 .idea/
+.env
+/.env
+
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###

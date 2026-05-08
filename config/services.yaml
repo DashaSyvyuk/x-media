@@ -4,12 +4,18 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    bunny.storage.zone: '%env(BUNNY_STORAGE_ZONE)%'
+    bunny.storage.api_key: '%env(BUNNY_STORAGE_API_KEY)%'
+    bunny.storage.region: '%env(BUNNY_STORAGE_REGION)%'
+    product_images_dir: '%kernel.project_dir%/public/images/products'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            string $uploadDir: '%product_images_dir%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -27,6 +33,9 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
+    App\EventListener\:
+        resource: '../src/EventListener'
+
     App\EventListener\OrderSubscriber:
         tags:
             - name: 'doctrine.orm.entity_listener'
@@ -38,5 +47,18 @@ services:
     App\EventListener\OrderItemSubscriber:
         tags: [ 'doctrine.event_subscriber' ]
 
+    App\EventListener\ProductImageUploadSubscriber:
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: preRemove }
+            - { name: doctrine.event_listener, event: postFlush }
+
     App\Command\SyncNovaPoshtaDataCommand:
         lazy: true
+
+    App\Service\BunnyStorageClient:
+        arguments:
+            $zone: '%bunny.storage.zone%'
+            $apiKey: '%bunny.storage.api_key%'
+            $region: '%bunny.storage.region%'
