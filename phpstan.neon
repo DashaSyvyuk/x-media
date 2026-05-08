@@ -5,6 +5,7 @@ parameters:
     reportUnmatchedIgnoredErrors: true
     excludePaths:
         - src/Service/HydratorService.php
+        - config/bootstrap.php
     ignoreErrors:
         # TurboSms stub in tests has different signature than production class
         - '#Call to an undefined static method App\\Utils\\TurboSms::reset\(\)#'

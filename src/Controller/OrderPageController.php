@@ -70,7 +70,7 @@ class OrderPageController extends BaseController
                 'products' => $totalCart['products'],
                 'deliveryTypes' => $this->deliveryTypeRepository->findBy(['enabled' => true], ['priority' => 'ASC']),
                 'cities' => $this->novaPoshtaCityRepository->getCitiesWithOffices(),
-                'offices' => $city ? $city->getOffices() : null,
+                'offices' => $city?->getOffices(),
                 'user' => $user ?? null
             ]);
         } else {
