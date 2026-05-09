@@ -45,11 +45,23 @@ class AdminAuthenticator extends AbstractLoginFormAuthenticator
         string $firewallName
     ): RedirectResponse {
         $targetPath = $this->getTargetPath($request->getSession(), $firewallName);
-        if ($targetPath) {
+        $loginPath  = $this->urlGenerator->generate(self::LOGIN_ROUTE);
+
+        // Ignore a saved target that points back at the login page itself —
+        // otherwise we would redirect the just-authenticated user straight
+        // back to the form and bounce again.
+        if ($targetPath && ! $this->isLoginUrl($targetPath, $loginPath)) {
             return new RedirectResponse($targetPath);
         }
 
         return new RedirectResponse($this->urlGenerator->generate('admin_dashboard'));
+    }
+
+    private function isLoginUrl(string $candidate, string $loginPath): bool
+    {
+        $candidatePath = parse_url($candidate, \PHP_URL_PATH) ?: $candidate;
+
+        return rtrim($candidatePath, '/') === rtrim($loginPath, '/');
     }
 
     protected function getLoginUrl(Request $request): string
