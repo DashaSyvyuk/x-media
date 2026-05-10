@@ -103,9 +103,15 @@
         "symfony/polyfill-php56": "*"
     },
     "scripts": {
-        "auto-scripts": {},
-        "post-install-cmd": [],
-        "post-update-cmd": []
+        "auto-scripts": {
+            "cache:clear --env=prod --no-debug": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
