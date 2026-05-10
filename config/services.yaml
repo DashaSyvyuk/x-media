@@ -11,6 +11,10 @@ parameters:
     product_images_dir: '%kernel.project_dir%/public/images/products'
     public_images_dir: '%kernel.project_dir%/public/images'
 
+    # Default value for framework.trusted_proxies when TRUSTED_PROXIES env is unset.
+    # See config/packages/framework.yaml.
+    default_trusted_proxies: '127.0.0.1,REMOTE_ADDR,private_ranges'
+
 services:
     # default configuration for services in *this* file
     _defaults:
