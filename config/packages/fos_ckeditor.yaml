@@ -1,11 +1,12 @@
 # Read the documentation: https://symfony.com/doc/current/bundles/FOSCKEditorBundle/index.html
 
 fos_ck_editor:
-    base_path: 'https://cdn.ckeditor.com/4.22.1/standard'
-    js_path: 'https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js'
+    # base_path: 'https://cdn.ckeditor.com/4.22.1/standard'
+    # js_path: 'https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js'
+    default_config: full
     configs:
-        default:
-            versionCheck: false
+        full:
+            toolbar: full
 
 twig:
     form_themes:

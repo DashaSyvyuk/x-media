@@ -138,7 +138,6 @@ class ProductCrudController extends AbstractCrudController
         yield FormField::addPanel('Опис');
         yield TextareaField::new('description', 'Опис')
             ->setFormType(CKEditorType::class)
-
             ->setColumns(12)
             ->hideOnIndex();
 
