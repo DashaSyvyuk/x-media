@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @extends AbstractCrudController<AdminUser>
@@ -16,9 +17,39 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN')")]
 class AdminUserCrudController extends AbstractCrudController
 {
+    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher)
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return AdminUser::class;
+    }
+
+    public function persistEntity(\Doctrine\ORM\EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $this->hashPasswordIfNeeded($entityInstance);
+        parent::persistEntity($entityManager, $entityInstance);
+    }
+
+    public function updateEntity(\Doctrine\ORM\EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $this->hashPasswordIfNeeded($entityInstance);
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+
+    private function hashPasswordIfNeeded(mixed $entityInstance): void
+    {
+        if (!$entityInstance instanceof AdminUser) {
+            return;
+        }
+
+        $plain = $entityInstance->getPassword();
+        if ($plain !== '' && !str_starts_with($plain, '$')) {
+            $entityInstance->setPassword(
+                $this->passwordHasher->hashPassword($entityInstance, $plain)
+            );
+        }
     }
 
     public function configureCrud(Crud $crud): Crud
