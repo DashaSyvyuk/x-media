@@ -31,7 +31,7 @@ class Filter
         targetEntity: FilterAttribute::class,
         mappedBy: "filter",
         cascade: ["all"],
-        fetch: "EAGER",
+        fetch: "LAZY",
         orphanRemoval: true
     )]
     #[ORM\OrderBy(["priority" => "ASC"])]

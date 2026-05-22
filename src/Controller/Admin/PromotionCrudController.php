@@ -57,7 +57,7 @@ class PromotionCrudController extends AbstractCrudController
         yield CollectionField::new('products', 'Товари')
             ->allowAdd()
             ->allowDelete()
-            ->renderExpanded()
+            ->renderExpanded(false)
             ->setEntryType(PromotionProductType::class)
             ->hideOnIndex()
             ->setColumns(7)

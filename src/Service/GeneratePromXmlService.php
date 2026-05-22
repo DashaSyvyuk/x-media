@@ -39,6 +39,10 @@ class GeneratePromXmlService
         $categories = $this->categoryRepository->getCategoriesForProm();
         $products = $this->productRepository->getProductsForProm();
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_PROM]);
+        $ignoredBrands = $this->getIgnoredBrandsLookup($feed);
+        $priceParametersByCategoryId = $feed
+            ? $this->categoryFeedPriceRepository->findByFeedIndexedByCategoryId($feed)
+            : [];
 
         try {
             $this->xmlBuilder
@@ -53,68 +57,63 @@ class GeneratePromXmlService
                         }
                     })
                     ->end()
-                    ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feed) {
-                        foreach ($products as $product) {
-                            $productItem = $this->productRepository->findOneBy(['id' => $product['id']]);
-                            $images = $product['images'];
-                            $characteristics = $product['characteristics'];
-                            $vendor = array_values(
-                                array_filter(
-                                    $productItem->getFilterAttributes()->toArray(),
-                                    fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
-                                )
-                            );
-                            $priceParameters = $feed ?
-                                $this->categoryFeedPriceRepository->findOneBy(
-                                    ['feed' => $feed, 'category' => $productItem->getCategory()]
-                                ) : null;
+                    ->startLoop(
+                        'offers',
+                        [],
+                        function (XMLArray $XMLArray) use (
+                            $products,
+                            $feed,
+                            $ignoredBrands,
+                            $priceParametersByCategoryId
+                        ) {
+                            foreach ($products as $product) {
+                                $images = $product['images'];
+                                $characteristics = $product['characteristics'];
+                                $vendor = (string) ($product['vendor'] ?? '');
+                                if ($vendor !== '' && isset($ignoredBrands[$vendor])) {
+                                    continue;
+                                }
 
-                            if (
-                                !empty($vendor) && $feed && in_array(
-                                    $vendor[0]->getFilterAttribute()->getValue(),
-                                    explode(';', $feed->getIgnoreBrands())
-                                )
-                            ) {
-                                continue;
-                            }
+                                $priceParameters = $priceParametersByCategoryId[$product['categoryId']] ?? null;
 
-                            $XMLArray->start('offer', [
+                                $XMLArray->start('offer', [
                                 'id' => $product['id'],
                                 'selling_type' => 'r',
                                 'available' => true
-                            ])
-                                ->add('name', sprintf('%s (%s)', $product['title'], $product['productCode']))
-                                ->add('name_ua', sprintf('%s (%s)', $product['title'], $product['productCode']))
-                                ->add('categoryId', $product['categoryId'])
-                                ->add('portal_category_url', $product['promCategoryLink'])
-                                ->add('price', $this->getPrice($productItem, $feed, $priceParameters))
-                                ->add('quantity_in_stock', 10)
-                                ->add('currencyId', 'UAH')
-                                ->loop(function (XMLArray $XMLArray) use ($images) {
-                                    foreach ($images as $key => $image) {
-                                        if ($key < 10) {
-                                            $XMLArray->add('picture', $image);
+                                ])
+                                    ->add('name', sprintf('%s (%s)', $product['title'], $product['productCode']))
+                                    ->add('name_ua', sprintf('%s (%s)', $product['title'], $product['productCode']))
+                                    ->add('categoryId', $product['categoryId'])
+                                    ->add('portal_category_url', $product['promCategoryLink'])
+                                    ->add('price', $this->getPriceFromValue((int) $product['price'], $priceParameters))
+                                    ->add('quantity_in_stock', 10)
+                                    ->add('currencyId', 'UAH')
+                                    ->loop(function (XMLArray $XMLArray) use ($images) {
+                                        foreach ($images as $key => $image) {
+                                            if ($key < 10) {
+                                                $XMLArray->add('picture', $image);
+                                            }
                                         }
-                                    }
-                                })
-                                ->add('vendor', substr($product['vendor'], 0, 25))
-                                ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
-                                    foreach ($characteristics as $characteristic) {
-                                        $XMLArray->add(
-                                            'param',
-                                            $this->formatString($characteristic->getValue(), $feed),
-                                            [
+                                    })
+                                    ->add('vendor', substr($vendor, 0, 25))
+                                    ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
+                                        foreach ($characteristics as $characteristic) {
+                                            $XMLArray->add(
+                                                'param',
+                                                $this->formatString($characteristic->getValue(), $feed),
+                                                [
                                                 'name' => $this->formatString($characteristic->getTitle(), $feed)
-                                            ]
-                                        );
-                                    }
-                                })
-                                ->add('description', $product['description'])
-                                ->add('description_ua', $product['description'])
-                                ->add('article', $product['article'])
-                            ;
+                                                ]
+                                            );
+                                        }
+                                    })
+                                    ->add('description', $product['description'])
+                                    ->add('description_ua', $product['description'])
+                                    ->add('article', $product['article'])
+                                ;
+                            }
                         }
-                    })
+                    )
                 ->end()
                 ->end();
 
@@ -144,5 +143,43 @@ class GeneratePromXmlService
         }
 
         return $text;
+    }
+
+    /**
+     * @return array<string, true>
+     */
+    private function getIgnoredBrandsLookup(?Feed $feed): array
+    {
+        if ($feed === null) {
+            return [];
+        }
+
+        $ignoreBrands = $feed->getIgnoreBrands();
+        if ($ignoreBrands === null || trim($ignoreBrands) === '') {
+            return [];
+        }
+
+        $result = [];
+        foreach (explode(';', $ignoreBrands) as $brand) {
+            $normalizedBrand = trim($brand);
+            if ($normalizedBrand !== '') {
+                $result[$normalizedBrand] = true;
+            }
+        }
+
+        return $result;
+    }
+
+    private function getPriceFromValue(int $price, ?\App\Entity\CategoryFeedPrice $priceParameters): float|int
+    {
+        if ($priceParameters && ($priceParameters->getOurPercent() !== 0 || $priceParameters->getFee() !== 0)) {
+            return $this->adjustPrice(
+                $price,
+                $priceParameters->getOurPercent(),
+                $priceParameters->getFee()
+            );
+        }
+
+        return $price;
     }
 }

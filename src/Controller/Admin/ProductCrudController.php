@@ -119,7 +119,10 @@ class ProductCrudController extends AbstractCrudController
                 return $entityRepository->createQueryBuilder('c')
                     ->where('c.id IN (:ids)')
                     ->setParameter('ids', $this->categoryRepository->getCategoriesIdsWithoutChildren());
-            })->setColumns(6)->hideOnIndex();
+            })
+            ->autocomplete()
+            ->setColumns(6)
+            ->hideOnIndex();
         yield TextField::new('note', 'Нотатки')->setColumns(6)->hideOnIndex();
         yield TextField::new('productCode', 'Код товару')->setColumns(6);
         yield TextField::new('productCode2', 'Код товару 2')->setColumns(6)->hideOnIndex();
@@ -322,7 +325,7 @@ class ProductCrudController extends AbstractCrudController
             $alias = $qb->getRootAliases()[0];
             $orX = $qb->expr()->orX();
 
-            foreach (['title', 'productCode', 'id'] as $field) {
+            foreach (['title', 'productCode'] as $field) {
                 $andX = $qb->expr()->andX();
                 foreach ($words as $k => $word) {
                     $paramName = ":{$field}_word{$k}";
@@ -330,6 +333,11 @@ class ProductCrudController extends AbstractCrudController
                     $qb->setParameter($paramName, '%' . $word . '%');
                 }
                 $orX->add($andX);
+            }
+
+            if (ctype_digit($search)) {
+                $orX->add($qb->expr()->eq("$alias.id", ':searchId'));
+                $qb->setParameter('searchId', (int) $search);
             }
 
             $qb->andWhere($orX);

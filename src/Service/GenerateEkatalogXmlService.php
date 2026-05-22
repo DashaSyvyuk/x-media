@@ -40,6 +40,10 @@ class GenerateEkatalogXmlService
         $categories = $this->categoryRepository->getCategoriesForEkatalog();
         $products = $this->productRepository->getProductsForEkatalog();
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_EKATALOG]);
+        $ignoredBrands = $this->getIgnoredBrandsLookup($feed);
+        $priceParametersByCategoryId = $feed
+            ? $this->categoryFeedPriceRepository->findByFeedIndexedByCategoryId($feed)
+            : [];
         $currencies = [
             [
                 'code' => 'UAH',
@@ -76,57 +80,70 @@ class GenerateEkatalogXmlService
                             }
                         })
                         ->end()
-                        ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feed) {
-                            foreach ($products as $product) {
-                                $vendor = array_values(
-                                    array_filter(
-                                        $product->getFilterAttributes()->toArray(),
-                                        fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
-                                    )
-                                );
-
-                                if (!empty($vendor)) {
-                                    if (
-                                        $feed && in_array(
-                                            $vendor[0]->getFilterAttribute()->getValue(),
-                                            explode(';', $feed->getIgnoreBrands())
+                        ->startLoop(
+                            'offers',
+                            [],
+                            function (XMLArray $XMLArray) use (
+                                $products,
+                                $feed,
+                                $ignoredBrands,
+                                $priceParametersByCategoryId
+                            ) {
+                                foreach ($products as $product) {
+                                    $vendor = array_values(
+                                        array_filter(
+                                            $product->getFilterAttributes()->toArray(),
+                                            fn ($item) => in_array(
+                                                $item->getFilter()->getTitle(),
+                                                ['Марка', 'Виробник']
+                                            )
                                         )
-                                    ) {
-                                        continue;
-                                    }
-                                    $images = $product->getImages();
-                                    $priceParameters = $feed ?
-                                        $this->categoryFeedPriceRepository->findOneBy(
-                                            ['feed' => $feed, 'category' => $product->getCategory()]
-                                        ) : null;
+                                    );
 
-                                    $XMLArray->start('offer', [
+                                    if (!empty($vendor)) {
+                                        $vendorValue = $vendor[0]->getFilterAttribute()->getValue();
+                                        if (isset($ignoredBrands[$vendorValue])) {
+                                            continue;
+                                        }
+
+                                        $categoryId = $product->getCategory()->getId();
+                                        $images = $product->getImages();
+                                        $priceParameters = $priceParametersByCategoryId[$categoryId] ?? null;
+
+                                        $XMLArray->start('offer', [
                                         'id' => $product->getId(),
                                         'available' => true
-                                    ])
-                                        ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
-                                        ->add('price', $this->getPrice($product, $feed, $priceParameters))
-                                        ->add('currencyId', 'UAH')
-                                        ->add('categoryId', $product->getCategory()->getId())
-                                        ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
-                                        ->add('name', $this->formatString($product->getTitle(), $feed))
-                                        ->add('description', htmlspecialchars(strip_tags($product->getDescription())))
-                                        ->loop(function (XMLArray $XMLArray) use ($images) {
-                                            foreach ($images as $image) {
-                                                $XMLArray->add(
-                                                    'image',
-                                                    sprintf(
-                                                        'https://x-media.com.ua/images/products/%s',
-                                                        $image->getImageUrl()
-                                                    )
-                                                );
-                                            }
-                                        })
-                                        ->add('manufacturer_warranty', true)
-                                    ;
+                                        ])
+                                            ->add(
+                                                'url',
+                                                sprintf('https://x-media.com.ua/products/%s', $product->getId())
+                                            )
+                                            ->add('price', $this->getPrice($product, $feed, $priceParameters))
+                                            ->add('currencyId', 'UAH')
+                                            ->add('categoryId', $categoryId)
+                                            ->add('vendor', $vendorValue)
+                                            ->add('name', $this->formatString($product->getTitle(), $feed))
+                                            ->add(
+                                                'description',
+                                                htmlspecialchars(strip_tags($product->getDescription()))
+                                            )
+                                            ->loop(function (XMLArray $XMLArray) use ($images) {
+                                                foreach ($images as $image) {
+                                                    $XMLArray->add(
+                                                        'image',
+                                                        sprintf(
+                                                            'https://x-media.com.ua/images/products/%s',
+                                                            $image->getImageUrl()
+                                                        )
+                                                    );
+                                                }
+                                            })
+                                            ->add('manufacturer_warranty', true)
+                                        ;
+                                    }
                                 }
                             }
-                        })
+                        )
                     ->end()
                 ->end()
                 ->end();
@@ -157,5 +174,30 @@ class GenerateEkatalogXmlService
         }
 
         return $text;
+    }
+
+    /**
+     * @return array<string, true>
+     */
+    private function getIgnoredBrandsLookup(?Feed $feed): array
+    {
+        if ($feed === null) {
+            return [];
+        }
+
+        $ignoreBrands = $feed->getIgnoreBrands();
+        if ($ignoreBrands === null || trim($ignoreBrands) === '') {
+            return [];
+        }
+
+        $result = [];
+        foreach (explode(';', $ignoreBrands) as $brand) {
+            $normalizedBrand = trim($brand);
+            if ($normalizedBrand !== '') {
+                $result[$normalizedBrand] = true;
+            }
+        }
+
+        return $result;
     }
 }

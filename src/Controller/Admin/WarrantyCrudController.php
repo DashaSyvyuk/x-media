@@ -73,8 +73,14 @@ class WarrantyCrudController extends AbstractCrudController
         yield TextField::new('toClientTtn', 'До клієнта ТТН')->hideOnIndex()->setColumns(7);
         yield TextField::new('supplierOrderNumber', 'Номер замовлення постачальника')->hideOnIndex()->setColumns(7);
         yield TextField::new('orderNumber', 'Номер замовлення')->hideOnIndex()->setColumns(7);
-        yield AssociationField::new('supplier', 'Потачальник')->hideOnIndex()->setColumns(7);
-        yield AssociationField::new('product', 'Продукт')->hideOnIndex()->setColumns(7);
+        yield AssociationField::new('supplier', 'Потачальник')
+            ->hideOnIndex()
+            ->setColumns(7)
+            ->autocomplete();
+        yield AssociationField::new('product', 'Продукт')
+            ->hideOnIndex()
+            ->setColumns(7)
+            ->autocomplete();
         yield NumberField::new('expenses', 'Витрати (грн)')
             ->setThousandsSeparator(' ')
             ->setColumns(7);

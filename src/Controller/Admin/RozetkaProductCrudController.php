@@ -129,7 +129,9 @@ class RozetkaProductCrudController extends AbstractCrudController
                         ->andWhere('rp.ready = :ready')
                         ->setParameter('ready', true);
                 })
-                ->setColumns(6)->hideOnIndex();
+                ->autocomplete()
+                ->setColumns(6)
+                ->hideOnIndex();
         }
         yield BooleanField::new('ready', 'Готовий')->setColumns(7);
         yield BooleanField::new('activeForA', 'Активний для A')
@@ -160,7 +162,7 @@ class RozetkaProductCrudController extends AbstractCrudController
         yield CollectionField::new('values', 'Характеристики')
             ->setColumns(12)
             ->setEntryType(RozetkaCharacteristicType::class)
-            ->renderExpanded()
+            ->renderExpanded(false)
             ->onlyOnForms();
 
         /*yield FormField::addPanel('Характеристики Товару');

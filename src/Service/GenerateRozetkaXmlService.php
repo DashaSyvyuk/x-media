@@ -41,13 +41,17 @@ class GenerateRozetkaXmlService
         $activeForInCamelCase = lcfirst(str_replace('_', '', ucwords($activeFor, '_')));
         $categories = $this->categoryRepository->getCategoriesForRozetka($activeForInCamelCase);
         $products = $this->productRepository->getProductsForRozetka($activeForInCamelCase);
+        $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_ROZETKA]);
+        $ignoredBrands = $this->getIgnoredBrandsLookup($feed);
+        $priceParametersByCategoryId = $feed
+            ? $this->categoryFeedPriceRepository->findByFeedIndexedByCategoryId($feed)
+            : [];
         $currencies = [
             [
                 'code' => 'UAH',
                 'rate' => '1',
             ]
         ];
-        $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_ROZETKA]);
 
         try {
             $this->xmlBuilder
@@ -78,110 +82,121 @@ class GenerateRozetkaXmlService
                             }
                         })
                         ->end()
-                        ->startLoop('offers', [], function (XMLArray $XMLArray) use ($products, $feed) {
-                            foreach ($products as $product) {
-                                /** @var RozetkaProduct $rozetkaProduct */
-                                $rozetkaProduct = $product->getRozetka();
-                                $vendor = array_values(
-                                    array_filter(
-                                        $product->getFilterAttributes()->toArray(),
-                                        fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
-                                    )
-                                );
-
-                                if (!empty($vendor)) {
-                                    if (
-                                        $feed && in_array(
-                                            $vendor[0]->getFilterAttribute()->getValue(),
-                                            explode(';', $feed->getIgnoreBrands() ?? '')
-                                        )
-                                    ) {
-                                        continue;
-                                    }
-
-                                    $images = $product->getImages();
-                                    $characteristics = $rozetkaProduct->getValues();
-                                    $priceParameters = $feed ?
-                                        $this->categoryFeedPriceRepository->findOneBy([
-                                            'feed'     => $feed,
-                                            'category' => $product->getCategory()
-                                        ]) : null;
-                                    $promoPrice = $rozetkaProduct->getPromoPrice();
-                                    $hasPromo   = $rozetkaProduct->getPromoPriceActive() && $promoPrice !== null;
-
-                                    $XMLArray->start('offer', [
-                                        'id' => $product->getId(),
-                                        'available' => 'true',
-                                    ])
-                                        ->add('stock_quantity', $rozetkaProduct->getStockQuantity() ?: 3)
-                                        ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
-                                        ->add('price', $rozetkaProduct->getPrice() ?: $this->getPrice(
-                                            $product,
-                                            $feed,
-                                            $priceParameters
-                                        ))
-                                        ->add('old_price', $rozetkaProduct->getCrossedOutPrice())
-                                        ->loop(function (XMLArray $XMLArray) use ($hasPromo, $promoPrice) {
-                                            if ($hasPromo) {
-                                                $XMLArray->add('price_promo', number_format($promoPrice, 0, '.', ''));
-                                            }
-                                        })
-                                        ->add('currencyId', 'UAH')
-                                        ->add('categoryId', $product->getCategory()->getId())
-                                        ->loop(function (XMLArray $XMLArray) use ($images) {
-                                            foreach ($images as $image) {
-                                                $XMLArray->add(
-                                                    'picture',
-                                                    sprintf(
-                                                        'https://x-media.com.ua/images/products/%s',
-                                                        $image->getImageUrl()
-                                                    )
-                                                );
-                                            }
-                                        })
-                                        ->add('vendor', $vendor[0]->getFilterAttribute()->getValue())
-                                        ->add(
-                                            'name',
-                                            sprintf(
-                                                '%s (%s)',
-                                                strip_tags(addslashes($rozetkaProduct->getTitle())),
-                                                $product->getProductCode()
+                        ->startLoop(
+                            'offers',
+                            [],
+                            function (XMLArray $XMLArray) use (
+                                $products,
+                                $feed,
+                                $ignoredBrands,
+                                $priceParametersByCategoryId
+                            ) {
+                                foreach ($products as $product) {
+                                    /** @var RozetkaProduct $rozetkaProduct */
+                                    $rozetkaProduct = $product->getRozetka();
+                                    $vendor = array_values(
+                                        array_filter(
+                                            $product->getFilterAttributes()->toArray(),
+                                            fn ($item) => in_array(
+                                                $item->getFilter()->getTitle(),
+                                                ['Марка', 'Виробник']
                                             )
                                         )
-                                        ->add('description', $this->formatString($rozetkaProduct->getDescription()))
-                                        ->add('article', $product->getId())
-                                        ->add('series', $rozetkaProduct->getSeries())
-                                        ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
-                                            /** @var ProductRozetkaCharacteristicValue $characteristic */
-                                            foreach ($characteristics as $characteristic) {
-                                                $values = $this->getCharacteristicValue($characteristic);
+                                    );
 
-                                                if (is_array($values)) {
-                                                    $XMLArray->startLoop('param', [
-                                                        'name' => $this->convertString(
-                                                            $characteristic->getCharacteristic()?->getTitle() ?? '',
-                                                            $feed
-                                                        )
-                                                    ], function (XMLArray $XMLArray) use ($values) {
-                                                        foreach ($values as $value) {
-                                                            $XMLArray->add('value', htmlspecialchars($value));
-                                                        }
-                                                    })
-                                                    ->end();
-                                                } else {
-                                                    $XMLArray->add('param', $this->convertString($values, $feed), [
-                                                        'name' => $this->convertString(
-                                                            $characteristic->getCharacteristic()?->getTitle() ?? '',
-                                                            $feed
-                                                        )
-                                                    ]);
+                                    if (!empty($vendor)) {
+                                        $vendorValue = $vendor[0]->getFilterAttribute()->getValue();
+                                        if (isset($ignoredBrands[$vendorValue])) {
+                                            continue;
+                                        }
+
+                                        $categoryId = $product->getCategory()->getId();
+                                        $images = $product->getImages();
+                                        $characteristics = $rozetkaProduct->getValues();
+                                        $priceParameters = $priceParametersByCategoryId[$categoryId] ?? null;
+                                        $promoPrice = $rozetkaProduct->getPromoPrice();
+                                        $hasPromo   = $rozetkaProduct->getPromoPriceActive() && $promoPrice !== null;
+
+                                        $XMLArray->start('offer', [
+                                        'id' => $product->getId(),
+                                        'available' => 'true',
+                                        ])
+                                            ->add('stock_quantity', $rozetkaProduct->getStockQuantity() ?: 3)
+                                            ->add(
+                                                'url',
+                                                sprintf('https://x-media.com.ua/products/%s', $product->getId())
+                                            )
+                                            ->add('price', $rozetkaProduct->getPrice() ?: $this->getPrice(
+                                                $product,
+                                                $feed,
+                                                $priceParameters
+                                            ))
+                                            ->add('old_price', $rozetkaProduct->getCrossedOutPrice())
+                                            ->loop(function (XMLArray $XMLArray) use ($hasPromo, $promoPrice) {
+                                                if ($hasPromo) {
+                                                    $XMLArray->add(
+                                                        'price_promo',
+                                                        number_format($promoPrice, 0, '.', '')
+                                                    );
                                                 }
-                                            }
-                                        })
-                                        ->end();
+                                            })
+                                            ->add('currencyId', 'UAH')
+                                            ->add('categoryId', $categoryId)
+                                            ->loop(function (XMLArray $XMLArray) use ($images) {
+                                                foreach ($images as $image) {
+                                                    $XMLArray->add(
+                                                        'picture',
+                                                        sprintf(
+                                                            'https://x-media.com.ua/images/products/%s',
+                                                            $image->getImageUrl()
+                                                        )
+                                                    );
+                                                }
+                                            })
+                                            ->add('vendor', $vendorValue)
+                                            ->add(
+                                                'name',
+                                                sprintf(
+                                                    '%s (%s)',
+                                                    strip_tags(addslashes($rozetkaProduct->getTitle())),
+                                                    $product->getProductCode()
+                                                )
+                                            )
+                                            ->add('description', $this->formatString($rozetkaProduct->getDescription()))
+                                            ->add('article', $product->getId())
+                                            ->add('series', $rozetkaProduct->getSeries())
+                                            ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
+                                                /** @var ProductRozetkaCharacteristicValue $characteristic */
+                                                foreach ($characteristics as $characteristic) {
+                                                    $values = $this->getCharacteristicValue($characteristic);
+
+                                                    if (is_array($values)) {
+                                                        $XMLArray->startLoop('param', [
+                                                        'name' => $this->convertString(
+                                                            $characteristic->getCharacteristic()?->getTitle() ?? '',
+                                                            $feed
+                                                        )
+                                                        ], function (XMLArray $XMLArray) use ($values) {
+                                                            foreach ($values as $value) {
+                                                                $XMLArray->add('value', htmlspecialchars($value));
+                                                            }
+                                                        })
+                                                        ->end();
+                                                    } else {
+                                                        $XMLArray->add('param', $this->convertString($values, $feed), [
+                                                        'name' => $this->convertString(
+                                                            $characteristic->getCharacteristic()?->getTitle() ?? '',
+                                                            $feed
+                                                        )
+                                                        ]);
+                                                    }
+                                                }
+                                            })
+                                            ->end();
+                                    }
                                 }
                             }
-                        })
+                        )
                         ->end()
                     ->end()
                 ->end();
@@ -218,6 +233,31 @@ class GenerateRozetkaXmlService
         }
 
         return $text;
+    }
+
+    /**
+     * @return array<string, true>
+     */
+    private function getIgnoredBrandsLookup(?Feed $feed): array
+    {
+        if ($feed === null) {
+            return [];
+        }
+
+        $ignoreBrands = $feed->getIgnoreBrands();
+        if ($ignoreBrands === null || trim($ignoreBrands) === '') {
+            return [];
+        }
+
+        $result = [];
+        foreach (explode(';', $ignoreBrands) as $brand) {
+            $normalizedBrand = trim($brand);
+            if ($normalizedBrand !== '') {
+                $result[$normalizedBrand] = true;
+            }
+        }
+
+        return $result;
     }
 
     /**

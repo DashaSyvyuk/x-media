@@ -144,6 +144,20 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return array<int, array{id: int, title: string}>
+     */
+    public function getUploadCharacteristicCategories(): array
+    {
+        /** @var array<int, array{id: int, title: string}> $result */
+        $result = $this->createQueryBuilder('c')
+            ->select('c.id', 'c.title')
+            ->getQuery()
+            ->getArrayResult();
+
+        return $result;
+    }
+
+    /**
      * @return array<int, array<string, mixed>>
      */
     public function getCategoriesIdsWithoutChildren(): array

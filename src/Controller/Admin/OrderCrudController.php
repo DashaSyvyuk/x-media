@@ -103,8 +103,14 @@ class OrderCrudController extends AbstractCrudController
         yield FormField::addPanel('Інформація про доставку');
 
         yield TextField::new('address', 'Адреса')->hideOnIndex()->setColumns(7);
-        yield AssociationField::new('paytype', 'Спосіб оплати')->hideOnIndex()->setColumns(7);
-        yield AssociationField::new('deltype', 'Спосіб доставки')->hideOnIndex()->setColumns(7);
+        yield AssociationField::new('paytype', 'Спосіб оплати')
+            ->hideOnIndex()
+            ->setColumns(7)
+            ->autocomplete();
+        yield AssociationField::new('deltype', 'Спосіб доставки')
+            ->hideOnIndex()
+            ->setColumns(7)
+            ->autocomplete();
 
         yield BooleanField::new('sendNotification', 'Відправляти сповіщення')->hideOnIndex()->setColumns(7);
         yield BooleanField::new('paymentStatus', 'Статус оплати')->hideOnIndex()->setColumns(7);
@@ -131,7 +137,8 @@ class OrderCrudController extends AbstractCrudController
             ->allowAdd()
             ->allowDelete()
             ->renderExpanded()
-            ->setEntryType(OrderItemType::class);
+            ->setEntryType(OrderItemType::class)
+            ->hideOnIndex();
 
         yield HiddenField::new('source')->setFormTypeOptions([
             'data' => 'Admin',

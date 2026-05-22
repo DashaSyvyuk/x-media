@@ -20,7 +20,7 @@ class UploadCharacteristicsController extends AbstractController
 
     public function index(): Response
     {
-        $categories = $this->categoryRepository->findAll();
+        $categories = $this->categoryRepository->getUploadCharacteristicCategories();
 
         return $this->render('upload_characteristics/index.html.twig', [
             'categories' => $categories,
@@ -29,13 +29,18 @@ class UploadCharacteristicsController extends AbstractController
 
     public function upload(Request $request, UploadCharacteristics $service): Response
     {
-        $categoryId = $request->request->get('category');
+        $categoryId = (int) $request->request->get('category', 0);
+        $file = $request->files->get('file');
 
-        if (!$category = $this->categoryRepository->findOneBy(['id' => $categoryId])) {
+        if ($categoryId <= 0 || $file === null) {
             return $this->redirectToRoute('upload_characteristics');
         }
 
-        $file = $request->files->get('file');
+        $category = $this->categoryRepository->find($categoryId);
+        if ($category === null) {
+            return $this->redirectToRoute('upload_characteristics');
+        }
+
         $service->upload($file, $category);
 
         return $this->redirectToRoute('upload_characteristics');

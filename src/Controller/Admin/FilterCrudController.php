@@ -43,7 +43,9 @@ class FilterCrudController extends AbstractCrudController
 
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('title')->setLabel('Назва параметру');
-        yield AssociationField::new('category')->setLabel('Категорія');
+        yield AssociationField::new('category')
+            ->setLabel('Категорія')
+            ->autocomplete();
         yield NumberField::new('priority')->setLabel('Пріоритет');
         yield NumberField::new('openedCount')->setLabel('Кількість відкритих параметрів');
         yield BooleanField::new('isOpened')->setLabel('Закритий');

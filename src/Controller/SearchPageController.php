@@ -43,9 +43,8 @@ class SearchPageController extends BaseController
         $direction = $request->query->get('direction') ?? 'desc';
         $limit = $this->settingRepository->findOneBy(['slug' => 'pagination_limit']);
         $vendors = $request->query->get('vendors') ?? '';
-        $search = $request->query->get('search');
+        $search = trim((string) $request->query->get('search', ''));
         $category = null;
-        $categoryTree = [];
 
         if ($categorySlug) {
             $category = $this->categoryRepository->findOneBy(['slug' => $categorySlug, 'status' => 'ACTIVE']);
@@ -61,6 +60,15 @@ class SearchPageController extends BaseController
             intval($limit->getValue())
         );
 
+        if ($request->isXmlHttpRequest()) {
+            return new Response(json_encode([
+                'products' => $this->renderView('partials/product-list.html.twig', [
+                    'pagination' => $pagination
+                ])
+            ]));
+        }
+
+        $categoryTree = [];
         $categories = $this->categoryRepository->getCategoriesTree();
         $categoriesTree = $this->productRepository->getCategoriesTreeForSearch($categories, $search);
 
@@ -74,28 +82,20 @@ class SearchPageController extends BaseController
             }
         }
 
-        if ($request->isXmlHttpRequest()) {
-            return new Response(json_encode([
-                'products' => $this->renderView('partials/product-list.html.twig', [
-                    'pagination' => $pagination
-                ])
-            ]));
-        } else {
-            return $this->renderTemplate($request, 'search_page/index.html.twig', [
-                'pagination'      => $pagination,
-                'searchString'    => $search,
-                'categoriesTree'  => $categoriesTree,
-                'categoryTree'    => $categoryTree,
-                'currentCategory' => $category,
-                'vendors'         => explode(',', $vendors),
-                'order'           => $order,
-                'direction'       => $direction,
-                'filters'         => $this->productFilterAttributeRepository->findFilterParameterByTitleAndSearchString(
-                    self::VENDOR_FILTER_TITLE,
-                    $search,
-                    $category
-                )
-            ]);
-        }
+        return $this->renderTemplate($request, 'search_page/index.html.twig', [
+            'pagination'      => $pagination,
+            'searchString'    => $search,
+            'categoriesTree'  => $categoriesTree,
+            'categoryTree'    => $categoryTree,
+            'currentCategory' => $category,
+            'vendors'         => $vendors === '' ? [] : explode(',', $vendors),
+            'order'           => $order,
+            'direction'       => $direction,
+            'filters'         => $this->productFilterAttributeRepository->findFilterParameterByTitleAndSearchString(
+                self::VENDOR_FILTER_TITLE,
+                $search,
+                $category
+            )
+        ]);
     }
 }

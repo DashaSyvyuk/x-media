@@ -66,8 +66,14 @@ class ReturnProductCrudController extends AbstractCrudController
         yield TextField::new('phone', 'Номер телефону')->setColumns(7);
         yield TextField::new('email', 'Email')->hideOnIndex()->setColumns(7);
         yield TextField::new('ttn', 'ТТН')->hideOnIndex()->setColumns(7);
-        yield AssociationField::new('supplier', 'Потачальник')->hideOnIndex()->setColumns(7);
-        yield AssociationField::new('product', 'Продукт')->hideOnIndex()->setColumns(7);
+        yield AssociationField::new('supplier', 'Потачальник')
+            ->hideOnIndex()
+            ->setColumns(7)
+            ->autocomplete();
+        yield AssociationField::new('product', 'Продукт')
+            ->hideOnIndex()
+            ->setColumns(7)
+            ->autocomplete();
         yield NumberField::new('amount', 'Сума')
             ->setThousandsSeparator(' ')
             ->setColumns(7);

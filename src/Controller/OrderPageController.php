@@ -50,16 +50,11 @@ class OrderPageController extends BaseController
     public function index(Request $request): Response
     {
         if (!empty($_COOKIE['cart'])) {
-            $city = null;
-
             $session = $request->getSession();
+            $user = null;
 
             if ($email = $session->get('user')) {
                 $user = $this->userRepository->findOneBy(['email' => $email]);
-
-                if ($user->getNovaPoshtaCity()) {
-                    $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $user->getNovaPoshtaCity()]);
-                }
             }
 
             $totalCart = $this->getTotalCart();
@@ -68,9 +63,7 @@ class OrderPageController extends BaseController
                 'totalPrice' => $totalCart['totalPrice'],
                 'products' => $totalCart['products'],
                 'deliveryTypes' => $this->deliveryTypeRepository->findBy(['enabled' => true], ['priority' => 'ASC']),
-                'cities' => $this->novaPoshtaCityRepository->getCitiesWithOffices(),
-                'offices' => $city?->getOffices(),
-                'user' => $user ?? null
+                'user' => $user,
             ]);
         } else {
             return $this->redirectToRoute('index');
@@ -141,10 +134,27 @@ class OrderPageController extends BaseController
     private function getAddress(InputBag $data): ?string
     {
         $address = trim($data->get('address') ?? '');
-        $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => trim($data->get('city') ?? '')]);
-        $office = $this->novaPoshtaOfficeRepository->findOneBy(['ref' => trim($data->get('office') ?? '')]);
-        $delType = $this->deliveryTypeRepository->findOneBy(['id' => $data->get('deltype')]);
+        $cityRef = trim($data->get('city') ?? '');
 
-        return $city ? $city . ', ' . $office : (!empty($address) ? $address : $delType->getAddress() ?? null);
+        if ($cityRef !== '') {
+            $city = $this->novaPoshtaCityRepository->findOneBy(['ref' => $cityRef]);
+            if ($city !== null) {
+                $officeRef = trim($data->get('office') ?? '');
+                $office = $officeRef !== ''
+                    ? $this->novaPoshtaOfficeRepository->findOneBy(['ref' => $officeRef])
+                    : null;
+
+                return $city . ($office ? ', ' . $office : '');
+            }
+        }
+
+        if ($address !== '') {
+            return $address;
+        }
+
+        $delTypeId = $data->get('deltype');
+        $delType = $delTypeId ? $this->deliveryTypeRepository->find($delTypeId) : null;
+
+        return $delType?->getAddress();
     }
 }
