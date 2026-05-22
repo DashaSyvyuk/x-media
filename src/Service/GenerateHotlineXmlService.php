@@ -36,7 +36,6 @@ class GenerateHotlineXmlService
 
     public function execute(): ?string
     {
-        ini_set('memory_limit', '512M');
         $categories = $this->categoryRepository->getCategoriesForHotline();
         $products = $this->productRepository->getProductsForHotline();
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_HOTLINE]);

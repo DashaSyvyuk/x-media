@@ -41,7 +41,6 @@ class RozetkaProductCrudController extends AbstractCrudController
         private readonly RequestStack $requestStack,
         private readonly RozetkaProductRepository $rozetkaProductRepository,
     ) {
-        ini_set('memory_limit', '512M');
     }
 
     public static function getEntityFqcn(): string

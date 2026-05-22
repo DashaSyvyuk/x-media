@@ -37,7 +37,6 @@ class GenerateEkatalogXmlService
 
     public function execute(): ?string
     {
-        ini_set('memory_limit', '256M');
         $categories = $this->categoryRepository->getCategoriesForEkatalog();
         $products = $this->productRepository->getProductsForEkatalog();
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_EKATALOG]);

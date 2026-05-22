@@ -34,7 +34,6 @@ class OrderCrudController extends AbstractCrudController
         private readonly Factory $stateFactory,
         private readonly OrderNumber $orderNumber,
     ) {
-        ini_set('memory_limit', '256M');
     }
 
     public static function getEntityFqcn(): string

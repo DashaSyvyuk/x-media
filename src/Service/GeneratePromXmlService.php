@@ -36,8 +36,6 @@ class GeneratePromXmlService
 
     public function execute(): ?string
     {
-        ini_set('memory_limit', '512M');
-
         $categories = $this->categoryRepository->getCategoriesForProm();
         $products = $this->productRepository->getProductsForProm();
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_PROM]);
