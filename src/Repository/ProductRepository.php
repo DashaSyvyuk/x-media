@@ -119,10 +119,9 @@ class ProductRepository extends ServiceEntityRepository
     /**
      * @return array<int, array<string, mixed>>
      */
-    public function getProductsForProm(): array
+    public function getProductsForProm(): iterable
     {
-        $result = [];
-        $products = $this->createQueryBuilder('p')
+        return $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'c')
             ->andWhere('c.status = :status')
             ->andWhere('c.promCategoryLink IS NOT NULL')
@@ -133,50 +132,8 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('showInPromFeed', true)
             ->orderBy('p.title', 'ASC')
             ->getQuery()
-            ->getResult()
+            ->toIterable()
         ;
-
-        foreach ($products as $product) {
-            $images = [];
-            foreach ($product->getImages() as $item) {
-                $images[] = 'https://x-media.com.ua/images/products/' . $item->getImageUrl();
-            }
-
-            $vendor = array_values(
-                array_filter(
-                    $product->getFilterAttributes()->toArray(),
-                    fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
-                )
-            );
-            $warranty = array_values(
-                array_filter(
-                    $product->getFilterAttributes()->toArray(),
-                    fn ($item) => $item->getFilter()->getTitle() == 'Гарантія'
-                )
-            );
-
-            if (!empty($vendor)) {
-                $row = [
-                    'id' => $product->getId(),
-                    'title' => strip_tags(addslashes($product->getTitle())),
-                    'categoryId' => $product->getCategory()->getId(),
-                    'price' => $product->getPrice(),
-                    'images' => $images,
-                    'characteristics' => $product->getCharacteristics(),
-                    'description' => htmlentities($product->getDescription(), ENT_XML1),
-                    'keywords' => addslashes($product->getMetaKeyword()),
-                    'vendor' => $vendor[0]->getFilterAttribute()->getValue(),
-                    'promCategoryLink' => $product->getCategory()->getPromCategoryLink(),
-                    'article' => $product->getProductCode(),
-                    'warranty' => $warranty ? $warranty[0]->getFilterAttribute()->getValue() : 12,
-                    'productCode' => $product?->getProductCode(),
-                ];
-
-                $result[] = $row;
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -195,7 +152,7 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('showInHotlineFeed', true)
             ->orderBy('p.title', 'ASC')
             ->getQuery()
-            ->getResult()
+            ->toIterable()
         ;
     }
 
@@ -214,7 +171,7 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('showInEkatalogFeed', true)
             ->orderBy('p.title', 'ASC')
             ->getQuery()
-            ->getResult()
+            ->toIterable()
             ;
     }
 
@@ -237,7 +194,7 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('active', true)
             ->orderBy('p.title', 'ASC')
             ->getQuery()
-            ->getResult()
+            ->toIterable()
             ;
     }
 

@@ -2,16 +2,12 @@
 
 namespace App\Service;
 
-use AaronDDM\XMLBuilder\Exception\XMLBuilderException;
-use AaronDDM\XMLBuilder\XMLArray;
-use AaronDDM\XMLBuilder\XMLBuilder;
-use AaronDDM\XMLBuilder\Writer\XMLWriterService;
-use AaronDDM\XMLBuilder\Exception\XMLArrayException;
 use App\Entity\Feed;
 use App\Repository\CategoryFeedPriceRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\FeedRepository;
 use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class GenerateHotlineXmlService
 {
@@ -20,18 +16,14 @@ class GenerateHotlineXmlService
     private const FOLDER = 'hotline';
     private const FILE_NAME = 'products.xml';
 
-    private XMLWriterService $xmlWriterService;
-    private XMLBuilder $xmlBuilder;
-
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
         private readonly ProductRepository $productRepository,
         private readonly FeedRepository $feedRepository,
         private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
         private readonly BunnyStorageClient $bunny,
+        private readonly EntityManagerInterface $entityManager,
     ) {
-        $this->xmlWriterService = new XMLWriterService();
-        $this->xmlBuilder = new XMLBuilder($this->xmlWriterService);
     }
 
     public function execute(): ?string
@@ -43,117 +35,124 @@ class GenerateHotlineXmlService
         $priceParametersByCategoryId = $feed
             ? $this->categoryFeedPriceRepository->findByFeedIndexedByCategoryId($feed)
             : [];
+        $localPath = __DIR__ . '/../../public/' . self::FOLDER . '/' . self::FILE_NAME;
+        $localDir  = dirname($localPath);
+
+        if (! is_dir($localDir)) {
+            @mkdir($localDir, 0775, true);
+        }
 
         try {
-            $this->xmlBuilder
-                ->createXMLArray()
-                ->start('price')
-                    ->add('date', date('Y-m-d H:i:s'))
-                    ->add('firmName', 'X-media')
-                    ->add('firmId', 41387)
-                    ->add('delivery', null, [
-                            'delivery_id' => 1,
-                            'type'        => 'warehouse',
-                            'carrier'     => 'NP'
-                        ])
-                    ->startLoop('categories', [], function (XMLArray $XMLArray) use ($categories) {
-                        foreach ($categories as $category) {
-                            $XMLArray->start('category')
-                                ->add('id', $category->getId())
-                                ->add('name', $category->getHotlineCategory())
-                            ->end();
-                        }
-                    })
-                    ->end()
-                    ->startLoop(
-                        'items',
-                        [],
-                        function (XMLArray $XMLArray) use (
-                            $products,
-                            $feed,
-                            $ignoredBrands,
-                            $priceParametersByCategoryId
-                        ) {
-                            foreach ($products as $product) {
-                                $vendor = array_values(
-                                    array_filter(
-                                        $product->getFilterAttributes()->toArray(),
-                                        fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
-                                    )
-                                );
-
-                                if (!empty($vendor)) {
-                                    $vendorValue = $vendor[0]->getFilterAttribute()->getValue();
-                                    if (isset($ignoredBrands[$vendorValue])) {
-                                        continue;
-                                    }
-
-                                    $categoryId = $product->getCategory()->getId();
-                                    $images = $product->getImages();
-                                    $characteristics = $product->getCharacteristics();
-                                    $warranty = array_values(
-                                        array_filter(
-                                            $characteristics->toArray(),
-                                            fn ($item) => $item->getTitle() == 'Гарантія'
-                                        )
-                                    );
-                                    $priceParameters = $priceParametersByCategoryId[$categoryId] ?? null;
-
-                                    $XMLArray->start('item')
-                                        ->add('id', $product->getId())
-                                        ->add('categoryId', $categoryId)
-                                        ->add('vendor', $vendorValue)
-                                        ->add('name', strip_tags(addslashes($product->getTitle())))
-                                        ->add('description', htmlentities($product->getDescription(), ENT_XML1))
-                                        ->add('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()))
-                                        ->loop(function (XMLArray $XMLArray) use ($images) {
-                                            foreach ($images as $image) {
-                                                $XMLArray->add(
-                                                    'image',
-                                                    sprintf(
-                                                        'https://x-media.com.ua/images/products/%s',
-                                                        $image->getImageUrl()
-                                                    )
-                                                );
-                                            }
-                                        })
-                                        ->add('priceRUAH', $this->getPrice($product, $feed, $priceParameters))
-                                        ->add('stock', 'В наявності')
-                                        ->add('guarantee', $warranty ? (int) $warranty[0]->getValue() : 12, [
-                                            'type' => 'manufacturer'
-                                        ])
-                                        ->loop(function (XMLArray $XMLArray) use ($characteristics, $feed) {
-                                            foreach ($characteristics as $characteristic) {
-                                                $XMLArray->add(
-                                                    'param',
-                                                    $this->formatString($characteristic->getValue(), $feed),
-                                                    [
-                                                    'name' => $this->formatString($characteristic->getTitle(), $feed)
-                                                    ]
-                                                );
-                                            }
-                                        })
-                                        ->add('condition', 0)
-                                        ->add('code', $product->getProductCode())
-                                    ;
-                                }
-                            }
-                        }
-                    )
-                    ->end()
-                ->end();
-
-            $localPath = __DIR__ . '/../../public/' . self::FOLDER . '/' . self::FILE_NAME;
-            $localDir  = dirname($localPath);
-
-            if (! is_dir($localDir)) {
-                @mkdir($localDir, 0775, true);
+            $writer = new \XMLWriter();
+            if (! $writer->openUri($localPath)) {
+                return null;
             }
 
-            file_put_contents($localPath, $this->xmlBuilder->getXML());
+            $writer->startDocument('1.0', 'UTF-8');
+            $writer->setIndent(true);
+            $writer->startElement('price');
+            $writer->writeElement('date', date('Y-m-d H:i:s'));
+            $writer->writeElement('firmName', 'X-media');
+            $writer->writeElement('firmId', '41387');
+            $writer->startElement('delivery');
+            $writer->writeAttribute('delivery_id', '1');
+            $writer->writeAttribute('type', 'warehouse');
+            $writer->writeAttribute('carrier', 'NP');
+            $writer->endElement();
+
+            $writer->startElement('categories');
+            foreach ($categories as $category) {
+                $writer->startElement('category');
+                $writer->writeElement('id', (string) $category->getId());
+                $writer->writeElement('name', (string) $category->getHotlineCategory());
+                $writer->endElement();
+            }
+            $writer->endElement();
+
+            $writer->startElement('items');
+            $processed = 0;
+            foreach ($products as $product) {
+                ++$processed;
+                $vendor = array_values(
+                    array_filter(
+                        $product->getFilterAttributes()->toArray(),
+                        fn ($item) => in_array($item->getFilter()->getTitle(), ['Марка', 'Виробник'])
+                    )
+                );
+
+                if (empty($vendor)) {
+                    if ($processed % 100 === 0) {
+                        $this->entityManager->clear();
+                        gc_collect_cycles();
+                    }
+                    continue;
+                }
+
+                $vendorValue = $vendor[0]->getFilterAttribute()->getValue();
+                if (isset($ignoredBrands[$vendorValue])) {
+                    if ($processed % 100 === 0) {
+                        $this->entityManager->clear();
+                        gc_collect_cycles();
+                    }
+                    continue;
+                }
+
+                $categoryId = $product->getCategory()->getId();
+                $images = $product->getImages();
+                $characteristics = $product->getCharacteristics();
+                $warranty = array_values(
+                    array_filter(
+                        $characteristics->toArray(),
+                        fn ($item) => $item->getTitle() == 'Гарантія'
+                    )
+                );
+                $priceParameters = $priceParametersByCategoryId[$categoryId] ?? null;
+
+                $writer->startElement('item');
+                $writer->writeElement('id', (string) $product->getId());
+                $writer->writeElement('categoryId', (string) $categoryId);
+                $writer->writeElement('vendor', (string) $vendorValue);
+                $writer->writeElement('name', $this->formatString($product->getTitle(), $feed));
+                $writer->writeElement('description', strip_tags((string) $product->getDescription()));
+                $writer->writeElement('url', sprintf('https://x-media.com.ua/products/%s', $product->getId()));
+
+                foreach ($images as $image) {
+                    $writer->writeElement(
+                        'image',
+                        sprintf('https://x-media.com.ua/images/products/%s', $image->getImageUrl())
+                    );
+                }
+
+                $writer->writeElement('priceRUAH', (string) $this->getPrice($product, $feed, $priceParameters));
+                $writer->writeElement('stock', 'В наявності');
+                $writer->startElement('guarantee');
+                $writer->writeAttribute('type', 'manufacturer');
+                $writer->text((string) ($warranty ? (int) $warranty[0]->getValue() : 12));
+                $writer->endElement();
+
+                foreach ($characteristics as $characteristic) {
+                    $writer->startElement('param');
+                    $writer->writeAttribute('name', $this->formatString($characteristic->getTitle(), $feed));
+                    $writer->text($this->formatString($characteristic->getValue(), $feed));
+                    $writer->endElement();
+                }
+
+                $writer->writeElement('condition', '0');
+                $writer->writeElement('code', (string) $product->getProductCode());
+                $writer->endElement();
+
+                if ($processed % 100 === 0) {
+                    $this->entityManager->clear();
+                    gc_collect_cycles();
+                }
+            }
+            $writer->endElement();
+            $writer->endElement();
+            $writer->endDocument();
+            $writer->flush();
 
             return $this->bunny->uploadAndGetUrl($localPath, self::FOLDER, self::FILE_NAME);
-        } catch (XMLArrayException | XMLBuilderException $e) {
+        } catch (\Throwable $e) {
             var_dump('An exception occurred: ' . $e->getMessage());
 
             return null;
@@ -162,7 +161,7 @@ class GenerateHotlineXmlService
 
     private function formatString(string $text, ?Feed $feed): string
     {
-        $text = htmlspecialchars(strip_tags(addslashes($text)));
+        $text = strip_tags($text);
 
         if ($feed && $feed->getCutCharacteristics()) {
             $text = mb_substr($text, 0, 255, 'UTF-8');
