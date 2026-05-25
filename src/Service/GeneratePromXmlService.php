@@ -28,6 +28,8 @@ class GeneratePromXmlService
 
     public function execute(): ?string
     {
+        $this->allowLongRunningProcess();
+
         $categories = $this->categoryRepository->getCategoriesForProm();
         $products = $this->productRepository->getProductsForProm();
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_PROM]);
@@ -159,6 +161,16 @@ class GeneratePromXmlService
         }
 
         return $text;
+    }
+
+    private function allowLongRunningProcess(): void
+    {
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(0);
+        }
+
+        @ini_set('max_execution_time', '0');
+        ignore_user_abort(true);
     }
 
     /**

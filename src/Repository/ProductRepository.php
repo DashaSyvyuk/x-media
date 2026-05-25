@@ -117,7 +117,7 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return iterable<Product>
      */
     public function getProductsForProm(): iterable
     {
@@ -137,9 +137,9 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return mixed
+     * @return iterable<Product>
      */
-    public function getProductsForHotline()
+    public function getProductsForHotline(): iterable
     {
         return $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'c')
@@ -157,9 +157,9 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return mixed
+     * @return iterable<Product>
      */
-    public function getProductsForEkatalog()
+    public function getProductsForEkatalog(): iterable
     {
         return $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'c')
@@ -176,9 +176,9 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return mixed
+     * @return iterable<Product>
      */
-    public function getProductsForRozetka(string $activeFor)
+    public function getProductsForRozetka(string $activeFor): iterable
     {
         return $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'c')

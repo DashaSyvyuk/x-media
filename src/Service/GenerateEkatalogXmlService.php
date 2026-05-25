@@ -29,6 +29,8 @@ class GenerateEkatalogXmlService
 
     public function execute(): ?string
     {
+        $this->allowLongRunningProcess();
+
         $categories = $this->categoryRepository->getCategoriesForEkatalog();
         $products = $this->productRepository->getProductsForEkatalog();
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_EKATALOG]);
@@ -154,6 +156,16 @@ class GenerateEkatalogXmlService
         }
 
         return $text;
+    }
+
+    private function allowLongRunningProcess(): void
+    {
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(0);
+        }
+
+        @ini_set('max_execution_time', '0');
+        ignore_user_abort(true);
     }
 
     /**

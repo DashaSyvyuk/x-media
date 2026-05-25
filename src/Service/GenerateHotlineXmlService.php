@@ -28,6 +28,8 @@ class GenerateHotlineXmlService
 
     public function execute(): ?string
     {
+        $this->allowLongRunningProcess();
+
         $categories = $this->categoryRepository->getCategoriesForHotline();
         $products = $this->productRepository->getProductsForHotline();
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_HOTLINE]);
@@ -168,6 +170,16 @@ class GenerateHotlineXmlService
         }
 
         return $text;
+    }
+
+    private function allowLongRunningProcess(): void
+    {
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(0);
+        }
+
+        @ini_set('max_execution_time', '0');
+        ignore_user_abort(true);
     }
 
     /**

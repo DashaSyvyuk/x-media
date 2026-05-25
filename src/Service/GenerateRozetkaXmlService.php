@@ -30,6 +30,8 @@ class GenerateRozetkaXmlService
 
     public function execute(string $activeFor = 'active_for_a'): ?string
     {
+        $this->allowLongRunningProcess();
+
         $activeForInCamelCase = lcfirst(str_replace('_', '', ucwords($activeFor, '_')));
         $categories = $this->categoryRepository->getCategoriesForRozetka($activeForInCamelCase);
         $products = $this->productRepository->getProductsForRozetka($activeForInCamelCase);
@@ -198,6 +200,16 @@ class GenerateRozetkaXmlService
         }
 
         return $text;
+    }
+
+    private function allowLongRunningProcess(): void
+    {
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(0);
+        }
+
+        @ini_set('max_execution_time', '0');
+        ignore_user_abort(true);
     }
 
     /**
