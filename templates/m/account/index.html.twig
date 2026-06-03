@@ -57,7 +57,7 @@
                         </a>
                     </li>
                 {% else %}
-                    <p class="no-orders">{{ noOrder.getValue() }}</p>
+                    <p class="no-orders">{{ noOrder ? noOrder.getValue() : '' }}</p>
                 {% endif %}
             </ul>
         </div>

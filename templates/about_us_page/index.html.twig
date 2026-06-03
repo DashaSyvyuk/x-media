@@ -53,9 +53,9 @@
                 Більш детальна інформація розміщена на сторінці <a href="/delivery-and-pay" target="_blank">доставки та оплати</a>.
             </p>
 
-            <p>Також ви можете зробити замовлення за телефоном: <span>{{ phoneNumber.getValue() }}</span> </p>
+            <p>Також ви можете зробити замовлення за телефоном: <span>{{ phoneNumber ? phoneNumber.getValue() : '' }}</span> </p>
 
-            <p>Отримати консультацію можна за email: <span>{{ email.getValue() }}</span></p>
+            <p>Отримати консультацію можна за email: <span>{{ email ? email.getValue() : '' }}</span></p>
 
             <p class="social-network">Також ми в соцмережах:
                 <a href="viber://chat?number=380968642188">

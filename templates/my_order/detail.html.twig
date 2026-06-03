@@ -167,10 +167,10 @@
                         <div class="delivery-option">
                             <h5>Дані для отримання:</h5>
                             <div class="info">
-                                <p class="name">{{ shopName.getValue() }}</p>
+                                <p class="name">{{ shopName ? shopName.getValue() : '' }}</p>
                                 <p>{{ order.address }}<br><br></p>
-                                <p>Тел.: {{ phoneNumber.getValue() }}</p>
-                                <p>email: {{ email.getValue() }}</p>
+                                <p>Тел.: {{ phoneNumber ? phoneNumber.getValue() : '' }}</p>
+                                <p>email: {{ email ? email.getValue() : '' }}</p>
                             </div>
                         </div>
                         <div class="delivery-option">

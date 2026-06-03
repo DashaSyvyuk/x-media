@@ -34,10 +34,10 @@
                         <div>
                             <b>{{ order.delType.title }}</b><br>
                             <div class="span-text">Дані для отримання:</div>
-                            {{ shopName.getValue() }}<br>
+                            {{ shopName ? shopName.getValue() : '' }}<br>
                             {{ order.address }}<br><br>
-                            Тел.: {{ phoneNumber.getValue() }}<br>
-                            email: {{ email.getValue() }}
+                            Тел.: {{ phoneNumber ? phoneNumber.getValue() : '' }}<br>
+                            email: {{ email ? email.getValue() : '' }}
                         </div>
                     </div>
                     <div class="delivery-payment">

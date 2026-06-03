@@ -58,7 +58,7 @@
                         {{ knp_pagination_render(pagination) }}
                     </div>
                 {% else %}
-                    <p>{{ noOrder.getValue() }}</p>
+                    <p>{{ noOrder ? noOrder.getValue() : '' }}</p>
                 {% endif %}
             </ul>
         </div>

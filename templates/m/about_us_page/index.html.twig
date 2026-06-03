@@ -38,9 +38,9 @@
             Доставка здійснюється через служби доставки в будь-який куточок України.
         </p>
 
-        <p>Також ви можете зробити замовлення за телефоном: <a class="no-link-style" href="tel:"><span>{{ phoneNumber.getValue() }}</span></a></p>
+        <p>Також ви можете зробити замовлення за телефоном: <a class="no-link-style" href="tel:"><span>{{ phoneNumber ? phoneNumber.getValue() : '' }}</span></a></p>
 
-        <p>Отримати консультацію можна за email: <span>{{ email.getValue() }} </span></p>
+        <p>Отримати консультацію можна за email: <span>{{ email ? email.getValue() : '' }} </span></p>
 
         <h4>Ми будемо щиро раді кожному з Вас :)</h4>
     </div>
