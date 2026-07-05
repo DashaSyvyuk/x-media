@@ -115,12 +115,12 @@ class ProductCrudController extends AbstractCrudController
         yield ChoiceField::new('availability', 'Наявність')
             ->setChoices(Product::AVAILABILITIES)->setColumns(6)->hideOnIndex();
         yield AssociationField::new('category', 'Категорія')
-            ->setFormTypeOption('query_builder', function (EntityRepository $entityRepository) {
-                return $entityRepository->createQueryBuilder('c')
-                    ->where('c.id IN (:ids)')
-                    ->setParameter('ids', $this->categoryRepository->getCategoriesIdsWithoutChildren());
-            })
             ->autocomplete()
+            ->setQueryBuilder(
+                fn (QueryBuilder $qb) => $qb
+                    ->where('entity.id IN (:ids)')
+                    ->setParameter('ids', $this->categoryRepository->getCategoriesIdsWithoutChildren())
+            )
             ->setColumns(6)
             ->hideOnIndex();
         yield TextField::new('note', 'Нотатки')->setColumns(6)->hideOnIndex();
