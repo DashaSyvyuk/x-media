@@ -12,10 +12,13 @@ class OrderItemType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var OrderItem $item */
+        $item = $options['data'];
+
         $builder
             ->add('product', TextType::class, [
                 'mapped' => false,
-                'data' => $options['data']->getProduct()->getTitle(),
+                'data' => $item?->getProduct()?->getTitle(),
                 'disabled' => true,
             ])
             ->add('count')
