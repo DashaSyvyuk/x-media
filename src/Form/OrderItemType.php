@@ -3,9 +3,8 @@
 namespace App\Form;
 
 use App\Entity\OrderItem;
-use App\Entity\Product;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,10 +13,10 @@ class OrderItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('product', EntityType::class, [
-                'class' => Product::class,
-                'choice_label' => 'title',
-                'autocomplete' => true,
+            ->add('product', TextType::class, [
+                'mapped' => false,
+                'data' => $options['data']->getProduct()->getTitle(),
+                'disabled' => true,
             ])
             ->add('count')
             ->add('price')
