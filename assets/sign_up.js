@@ -32,7 +32,7 @@ $('#sign_up').on('submit', (e) => {
     const password = $('#sign_up input[name=password]').val();
     const passwordConfirm = $('#sign_up input[name=password_confirm]').val();
 
-    if (email && !validateEmail(email)) {
+    if (email && ! validateEmail(email)) {
         $('#sign_up input[name=email]').addClass('red-border');
         $('#sign_up .email .error').text('Невалідний email').slideDown(200);
     } else {
@@ -58,7 +58,7 @@ $('#sign_up').on('submit', (e) => {
         $('#sign_up .password .error').text('Паролі не співпадають').slideDown(200);
     }
 
-    if (email && validateEmail(email) && password.length >= 6 && password !== passwordConfirm) {
+    if (email && validateEmail(email) && password.length >= 6 && password === passwordConfirm) {
         $.post( '/sign-up', { email, name, surname, phone, password }, (data) => {
             const response = JSON.parse(data);
 
