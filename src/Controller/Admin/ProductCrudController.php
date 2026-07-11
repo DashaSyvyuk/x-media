@@ -14,7 +14,7 @@ use App\Repository\ProductRepository;
 use App\Service\GenerateEkatalogXmlService;
 use App\Service\GenerateHotlineXmlService;
 use App\Service\GeneratePromXmlService;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -52,6 +52,7 @@ class ProductCrudController extends AbstractCrudController
         private readonly GeneratePromXmlService $generatePromXmlService,
         private readonly CategoryRepository $categoryRepository,
         private readonly GenerateEkatalogXmlService $generateEkatalogXmlService,
+        private readonly EntityManagerInterface $entityManager
     ) {
     }
 
@@ -244,7 +245,7 @@ class ProductCrudController extends AbstractCrudController
         }
 
         $this->persistEntity(
-            $this->get('doctrine')->getManagerForClass($context->getEntity()->getFqcn()), // @phpstan-ignore-line
+            $this->entityManager,
             $clone
         );
         $this->addFlash('success', 'Product duplicated');
