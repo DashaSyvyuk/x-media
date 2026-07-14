@@ -43,7 +43,9 @@ class PriceControlController extends AbstractController
         $sort       = (string) $request->query->get('sort', 'id');
         $direction  = (string) $request->query->get('dir', 'DESC');
         $page       = max(1, $this->toNullableInt($request->query->get('page')) ?? 1);
-        $perPage    = $this->admin2Paginator->normalizePerPage($this->toNullableInt($request->query->get('perPage')) ?? 50);
+        $perPage = $this->admin2Paginator->normalizePerPage(
+            $this->toNullableInt($request->query->get('perPage')) ?? 50,
+        );
 
         $query = $this->productRepository->createPriceControlQueryBuilder(
             $search,
@@ -114,7 +116,12 @@ class PriceControlController extends AbstractController
         if ($price === null) {
             return new JsonResponse(['ok' => false, 'error' => 'Price is required'], 400);
         }
-        if ($price < 0 || ($oldPrice !== null && $oldPrice < 0) || ($rzPrice !== null && $rzPrice < 0) || ($rzOld !== null && $rzOld < 0)) {
+        if (
+            $price < 0
+            || ($oldPrice !== null && $oldPrice < 0)
+            || ($rzPrice !== null && $rzPrice < 0)
+            || ($rzOld !== null && $rzOld < 0)
+        ) {
             return new JsonResponse(['ok' => false, 'error' => 'Price must be >= 0'], 400);
         }
 

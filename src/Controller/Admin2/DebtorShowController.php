@@ -94,7 +94,11 @@ class DebtorShowController extends AbstractController
         return $this->redirectToRoute('admin2_debtors_show', ['id' => $debtor->getId()]);
     }
 
-    #[Route('/admin2/debtors/{id}/payments/{paymentId}/delete', name: 'admin2_debtors_payments_delete', methods: ['POST'])]
+    #[Route(
+        '/admin2/debtors/{id}/payments/{paymentId}/delete',
+        name: 'admin2_debtors_payments_delete',
+        methods: ['POST'],
+    )]
     public function deletePayment(Request $request, int $id, int $paymentId): Response
     {
         if (! $this->isCsrfTokenValid('admin2_debtor_payment_action', (string) $request->request->get('_token'))) {

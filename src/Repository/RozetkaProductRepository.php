@@ -92,10 +92,14 @@ class RozetkaProductRepository extends ServiceEntityRepository
     public function getSummaryCounts(): array
     {
         return [
-            'total'   => (int) $this->createQueryBuilder('rp')->select('COUNT(rp.id)')->getQuery()->getSingleScalarResult(),
-            'ready'   => (int) $this->createQueryBuilder('rp')->select('COUNT(rp.id)')->andWhere('rp.ready = 1')->getQuery()->getSingleScalarResult(),
-            'activeA' => (int) $this->createQueryBuilder('rp')->select('COUNT(rp.id)')->andWhere('rp.activeForA = 1')->getQuery()->getSingleScalarResult(),
-            'activeP' => (int) $this->createQueryBuilder('rp')->select('COUNT(rp.id)')->andWhere('rp.activeForP = 1')->getQuery()->getSingleScalarResult(),
+            'total'   => (int) $this->createQueryBuilder('rp')->select('COUNT(rp.id)')->getQuery()
+                ->getSingleScalarResult(),
+            'ready'   => (int) $this->createQueryBuilder('rp')->select('COUNT(rp.id)')->andWhere('rp.ready = 1')
+                ->getQuery()->getSingleScalarResult(),
+            'activeA' => (int) $this->createQueryBuilder('rp')->select('COUNT(rp.id)')->andWhere('rp.activeForA = 1')
+                ->getQuery()->getSingleScalarResult(),
+            'activeP' => (int) $this->createQueryBuilder('rp')->select('COUNT(rp.id)')->andWhere('rp.activeForP = 1')
+                ->getQuery()->getSingleScalarResult(),
         ];
     }
 }

@@ -62,7 +62,12 @@ class VendorOrder
     private string $status = self::STATUS_NEW;
 
     /** @var ArrayCollection<int, VendorOrderItem>|PersistentCollection<int, VendorOrderItem> $items */
-    #[ORM\OneToMany(targetEntity: VendorOrderItem::class, mappedBy: 'vendorOrder', cascade: ['all'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: VendorOrderItem::class,
+        mappedBy: 'vendorOrder',
+        cascade: ['all'],
+        orphanRemoval: true,
+    )]
     private ArrayCollection|PersistentCollection $items;
 
     #[ORM\Column(type: 'datetime')]

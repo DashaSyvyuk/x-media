@@ -42,7 +42,11 @@ class SettingsDeliveryTypeController extends AbstractController
         return $this->handleForm($request, $deliveryType, true);
     }
 
-    #[Route('/admin2/settings/delivery-types/{id}/edit', name: 'admin2_settings_delivery_edit', methods: ['GET', 'POST'])]
+    #[Route(
+        '/admin2/settings/delivery-types/{id}/edit',
+        name: 'admin2_settings_delivery_edit',
+        methods: ['GET', 'POST'],
+    )]
     public function edit(Request $request, int $id): Response
     {
         $this->imageUploadSubscriber->ensureLocalDirFor(DeliveryType::class);

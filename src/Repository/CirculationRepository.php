@@ -44,7 +44,8 @@ class CirculationRepository extends ServiceEntityRepository
 
         if ($sort === 'total') {
             $qb->addSelect(
-                '(SELECT COALESCE(SUM(p.sum), 0) FROM ' . CirculationPayment::class . ' p WHERE p.circulation = c) AS HIDDEN balanceSort',
+                '(SELECT COALESCE(SUM(p.sum), 0) FROM ' . CirculationPayment::class
+                . ' p WHERE p.circulation = c) AS HIDDEN balanceSort',
             )->orderBy('balanceSort', $direction);
         } elseif ($sort === 'currency') {
             $qb->orderBy('currency.code', $direction);
@@ -102,7 +103,8 @@ class CirculationRepository extends ServiceEntityRepository
             ->select(
                 'currency.id AS currencyId',
                 'currency.code AS currencyCode',
-                '(SELECT COALESCE(SUM(p.sum), 0) FROM ' . CirculationPayment::class . ' p WHERE p.circulation = c) AS balance',
+                '(SELECT COALESCE(SUM(p.sum), 0) FROM ' . CirculationPayment::class
+                . ' p WHERE p.circulation = c) AS balance',
             )
             ->join('c.currency', 'currency');
 

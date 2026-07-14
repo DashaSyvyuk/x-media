@@ -50,8 +50,13 @@ final class OrderInvoiceGenerator
      * @param array<string, string> $values
      * @param list<array{no: int, title: string, qty: int, price: int, sum: int}> $items
      */
-    private function fillTemplate(string $templatePath, string $outputPath, array $values, array $items, bool $withTableTotal): void
-    {
+    private function fillTemplate(
+        string $templatePath,
+        string $outputPath,
+        array $values,
+        array $items,
+        bool $withTableTotal,
+    ): void {
         $processor = new TemplateProcessor($templatePath);
 
         $processor->cloneRow('item_title', max(1, count($items)));

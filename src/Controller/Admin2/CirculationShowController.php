@@ -73,7 +73,11 @@ class CirculationShowController extends AbstractController
         return $this->redirectToRoute('admin2_circulations_show', ['id' => $circulation->getId()]);
     }
 
-    #[Route('/admin2/circulations/{id}/payments/{paymentId}/edit', name: 'admin2_circulations_payments_edit', methods: ['POST'])]
+    #[Route(
+        '/admin2/circulations/{id}/payments/{paymentId}/edit',
+        name: 'admin2_circulations_payments_edit',
+        methods: ['POST'],
+    )]
     public function editPayment(Request $request, int $id, int $paymentId): Response
     {
         $circulation = $this->findCirculation($id);
@@ -92,7 +96,11 @@ class CirculationShowController extends AbstractController
         return $this->redirectToRoute('admin2_circulations_show', ['id' => $circulation->getId()]);
     }
 
-    #[Route('/admin2/circulations/{id}/payments/{paymentId}/delete', name: 'admin2_circulations_payments_delete', methods: ['POST'])]
+    #[Route(
+        '/admin2/circulations/{id}/payments/{paymentId}/delete',
+        name: 'admin2_circulations_payments_delete',
+        methods: ['POST'],
+    )]
     public function deletePayment(Request $request, int $id, int $paymentId): Response
     {
         if (! $this->isCsrfTokenValid('admin2_circulation_payment_action', (string) $request->request->get('_token'))) {

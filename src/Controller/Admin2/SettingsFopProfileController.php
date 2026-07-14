@@ -83,4 +83,3 @@ final class SettingsFopProfileController extends AbstractController
         return $this->redirectToRoute('admin2_settings', ['tab' => 'fops']);
     }
 }
-

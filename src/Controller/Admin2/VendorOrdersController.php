@@ -37,9 +37,17 @@ class VendorOrdersController extends AbstractController
         $sort       = (string) $request->query->get('sort', 'id');
         $direction  = (string) $request->query->get('dir', 'DESC');
         $page       = $request->query->getInt('page', 1);
-        $perPage    = $this->admin2Paginator->normalizePerPage($request->query->getInt('perPage', Admin2Paginator::DEFAULT_PER_PAGE));
+        $perPage = $this->admin2Paginator->normalizePerPage(
+            $request->query->getInt('perPage', Admin2Paginator::DEFAULT_PER_PAGE),
+        );
 
-        $query = $this->vendorOrderRepository->createAdminListQueryBuilder($search, $status, $supplierId, $sort, $direction);
+        $query = $this->vendorOrderRepository->createAdminListQueryBuilder(
+            $search,
+            $status,
+            $supplierId,
+            $sort,
+            $direction,
+        );
 
         return $this->render('admin2/vendor_orders/index.html.twig', [
             'pagination'     => $this->admin2Paginator->paginate($query, $page, $perPage),

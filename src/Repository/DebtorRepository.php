@@ -42,7 +42,8 @@ class DebtorRepository extends ServiceEntityRepository
 
         if ($sort === 'total') {
             $qb->addSelect(
-                '(SELECT COALESCE(SUM(p.sum), 0) FROM ' . DebtorPayment::class . ' p WHERE p.debtor = d) AS HIDDEN balanceSort',
+                '(SELECT COALESCE(SUM(p.sum), 0) FROM ' . DebtorPayment::class
+                . ' p WHERE p.debtor = d) AS HIDDEN balanceSort',
             )->orderBy('balanceSort', $direction);
         } elseif ($sort === 'currency') {
             $qb->orderBy('currency.title', $direction);

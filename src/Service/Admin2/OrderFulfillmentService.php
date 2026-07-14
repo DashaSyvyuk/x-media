@@ -12,7 +12,9 @@ use Psr\Log\LoggerInterface;
 final class OrderFulfillmentService
 {
     /** @var string[] */
-    private const LINK_COLORS = ['#0d9488', '#2563eb', '#d97706', '#7c3aed', '#db2777', '#059669', '#dc2626', '#0891b2'];
+    private const LINK_COLORS = [
+        '#0d9488', '#2563eb', '#d97706', '#7c3aed', '#db2777', '#059669', '#dc2626', '#0891b2',
+    ];
 
     public function __construct(
         private readonly OrderFulfillmentLinkRepository $linkRepository,

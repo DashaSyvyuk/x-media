@@ -35,7 +35,9 @@ class DebtorsController extends AbstractController
         $sort      = (string) $request->query->get('sort', 'total');
         $direction = (string) $request->query->get('dir', 'DESC');
         $page      = $request->query->getInt('page', 1);
-        $perPage   = $this->admin2Paginator->normalizePerPage($request->query->getInt('perPage', Admin2Paginator::DEFAULT_PER_PAGE));
+        $perPage = $this->admin2Paginator->normalizePerPage(
+            $request->query->getInt('perPage', Admin2Paginator::DEFAULT_PER_PAGE),
+        );
 
         $query = $this->debtorRepository->createAdminListQueryBuilder($search, $active, $sort, $direction);
         $pagination = $this->admin2Paginator->paginate($query, $page, $perPage);

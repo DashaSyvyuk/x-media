@@ -19,7 +19,11 @@ class DebtorType extends AbstractType
             ->add('currency', EntityType::class, [
                 'class'        => Currency::class,
                 'label'        => 'Валюта',
-                'choice_label' => fn(Currency $currency): string => sprintf('%s (%s)', $currency->getTitle(), $currency->getCode()),
+                'choice_label' => fn (Currency $currency): string => sprintf(
+                    '%s (%s)',
+                    $currency->getTitle(),
+                    $currency->getCode(),
+                ),
                 'required'     => true,
             ])
             ->add('active', SwitchType::class, [

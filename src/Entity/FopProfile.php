@@ -84,4 +84,3 @@ class FopProfile
         $this->address = trim($address);
     }
 }
-

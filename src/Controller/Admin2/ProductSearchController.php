@@ -29,7 +29,12 @@ class ProductSearchController extends AbstractController
         return new JsonResponse($this->productRepository->searchForAdminPicker($query));
     }
 
-    #[Route('/admin2/api/products/{id}', name: 'admin2_api_products_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[Route(
+        '/admin2/api/products/{id}',
+        name: 'admin2_api_products_show',
+        requirements: ['id' => '\d+'],
+        methods: ['GET'],
+    )]
     public function show(int $id): JsonResponse
     {
         $product = $this->productRepository->findAdminPickerItem($id);

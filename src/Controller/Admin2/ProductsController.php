@@ -38,7 +38,9 @@ class ProductsController extends AbstractController
         $sort      = (string) $request->query->get('sort', 'id');
         $direction = (string) $request->query->get('dir', 'DESC');
         $page      = $request->query->getInt('page', 1);
-        $perPage   = $this->admin2Paginator->normalizePerPage($request->query->getInt('perPage', Admin2Paginator::DEFAULT_PER_PAGE));
+        $perPage = $this->admin2Paginator->normalizePerPage(
+            $request->query->getInt('perPage', Admin2Paginator::DEFAULT_PER_PAGE),
+        );
 
         $query = $this->productRepository->createAdminListQueryBuilder(
             $search,
@@ -136,7 +138,10 @@ class ProductsController extends AbstractController
         } else {
             $this->addFlash(
                 'success',
-                sprintf('XML згенеровано: <a href="%s" target="_blank" class="alert-link">відкрити файл</a>', htmlspecialchars($url)),
+                sprintf(
+                    'XML згенеровано: <a href="%s" target="_blank" class="alert-link">відкрити файл</a>',
+                    htmlspecialchars($url),
+                ),
             );
         }
 

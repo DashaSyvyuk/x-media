@@ -78,7 +78,7 @@ class ProductType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 'label'        => false,
-                'entry_options'=> ['label' => false],
+                'entry_options' => ['label' => false],
             ])
             ->add('characteristics', CollectionType::class, [
                 'entry_type'   => ProductCharacteristicType::class,
@@ -86,7 +86,7 @@ class ProductType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 'label'        => false,
-                'entry_options'=> ['label' => false],
+                'entry_options' => ['label' => false],
             ])
             ->add('promotionProducts', CollectionType::class, [
                 'entry_type'   => Admin2PromotionProductType::class,
@@ -94,7 +94,7 @@ class ProductType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 'label'        => false,
-                'entry_options'=> ['label' => false],
+                'entry_options' => ['label' => false],
             ])
         ;
 

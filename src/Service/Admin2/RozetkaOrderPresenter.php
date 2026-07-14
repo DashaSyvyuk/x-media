@@ -36,7 +36,10 @@ final class RozetkaOrderPresenter
         return [
             'id'        => (int) ($apiOrder['id'] ?? 0),
             'created'   => (string) ($apiOrder['created'] ?? ''),
-            'status'    => $this->asString($statusData['name_uk'] ?? $statusData['name_ua'] ?? $statusData['name'] ?? $statusData['title'] ?? null, '—'),
+            'status'    => $this->asString(
+                $statusData['name_uk'] ?? $statusData['name_ua'] ?? $statusData['name'] ?? $statusData['title'] ?? null,
+                '—',
+            ),
             'statusId'  => (int) ($apiOrder['status'] ?? 0),
             'total'     => (int) round((float) ($apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0)),
             'phone'     => $this->asString($apiOrder['user_phone'] ?? null),

@@ -16,4 +16,3 @@ final class FopProfileRepository extends ServiceEntityRepository
         parent::__construct($registry, FopProfile::class);
     }
 }
-

@@ -32,7 +32,9 @@ class SuppliersController extends AbstractController
         $sort      = (string) $request->query->get('sort', 'title');
         $direction = (string) $request->query->get('dir', 'ASC');
         $page      = $request->query->getInt('page', 1);
-        $perPage   = $this->admin2Paginator->normalizePerPage($request->query->getInt('perPage', Admin2Paginator::DEFAULT_PER_PAGE));
+        $perPage = $this->admin2Paginator->normalizePerPage(
+            $request->query->getInt('perPage', Admin2Paginator::DEFAULT_PER_PAGE),
+        );
 
         $query = $this->supplierRepository->createAdminListQueryBuilder($search, $active, $sort, $direction);
 

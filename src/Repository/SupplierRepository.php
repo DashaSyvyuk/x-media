@@ -29,7 +29,8 @@ class SupplierRepository extends ServiceEntityRepository
         $search = trim($search);
         if ($search !== '') {
             $qb->andWhere(
-                'LOWER(s.title) LIKE :search OR LOWER(s.name) LIKE :search OR LOWER(s.surname) LIKE :search OR LOWER(s.email) LIKE :search',
+                'LOWER(s.title) LIKE :search OR LOWER(s.name) LIKE :search OR LOWER(s.surname) LIKE :search '
+                . 'OR LOWER(s.email) LIKE :search',
             )->setParameter('search', '%' . mb_strtolower($search) . '%');
         }
 

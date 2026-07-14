@@ -30,7 +30,8 @@ class VendorOrderRepository extends ServiceEntityRepository
         $search = trim($search);
         if ($search !== '') {
             $qb->andWhere(
-                'LOWER(v.supplierOrderNumber) LIKE :search OR LOWER(v.productTitle) LIKE :search OR LOWER(supplier.title) LIKE :search',
+                'LOWER(v.supplierOrderNumber) LIKE :search OR LOWER(v.productTitle) LIKE :search '
+                . 'OR LOWER(supplier.title) LIKE :search',
             )->setParameter('search', '%' . mb_strtolower($search) . '%');
         }
 

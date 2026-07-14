@@ -8,7 +8,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class XKomPriceFetcher
 {
-    private const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+    private const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+        . '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
     private const CACHE_TTL_SECONDS = 3 * 60 * 60;
 
     public function __construct(
@@ -147,9 +148,21 @@ final class XKomPriceFetcher
         }
 
         $text = null;
-        if (preg_match('/"availabilityCode"\s*:\s*"unavailable".{0,1200}?"availabilityText"\s*:\s*"([^"]+)"/s', $html, $match)) {
+        if (
+            preg_match(
+                '/"availabilityCode"\s*:\s*"unavailable".{0,1200}?"availabilityText"\s*:\s*"([^"]+)"/s',
+                $html,
+                $match,
+            )
+        ) {
             $text = $match[1];
-        } elseif (preg_match('/"availabilityText"\s*:\s*"([^"]+)".{0,1200}?"availabilityCode"\s*:\s*"unavailable"/s', $html, $match)) {
+        } elseif (
+            preg_match(
+                '/"availabilityText"\s*:\s*"([^"]+)".{0,1200}?"availabilityCode"\s*:\s*"unavailable"/s',
+                $html,
+                $match,
+            )
+        ) {
             $text = $match[1];
         } elseif (preg_match('/"availabilityText"\s*:\s*"([^"]+)"/', $html, $match)) {
             $text = $match[1];

@@ -17,7 +17,8 @@ final class RozetkaSellerApiClient
     /** @var int[] New + in processing */
     public const ACTIVE_TYPES = [4, 2];
 
-    private const ORDER_EXPAND = 'user,delivery,delivery_service,purchases,status_data,status_available,is_access_change_order,total_quantity,item_details';
+    private const ORDER_EXPAND = 'user,delivery,delivery_service,purchases,status_data,status_available,'
+        . 'is_access_change_order,total_quantity,item_details';
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,

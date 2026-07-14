@@ -85,7 +85,10 @@ final class OrderInvoiceController extends AbstractController
 
             $response = new Response((string) file_get_contents($zipPath));
             $response->headers->set('Content-Type', 'application/zip');
-            $response->headers->set('Content-Disposition', 'attachment; filename="invoice_' . $order->getOrderNumber() . '.zip"');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="invoice_' . $order->getOrderNumber() . '.zip"',
+            );
 
             return $response;
         } catch (\Throwable $e) {
@@ -93,4 +96,3 @@ final class OrderInvoiceController extends AbstractController
         }
     }
 }
-

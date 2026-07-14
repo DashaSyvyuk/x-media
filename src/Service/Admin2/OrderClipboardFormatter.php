@@ -129,11 +129,13 @@ final class OrderClipboardFormatter
      */
     private function resolveRozetkaPhone(array $delivery, array $apiOrder): string
     {
-        foreach ([
-            $delivery['recipient_phone'] ?? null,
-            $delivery['phone'] ?? null,
-            $apiOrder['user_phone'] ?? null,
-        ] as $value) {
+        foreach (
+            [
+                $delivery['recipient_phone'] ?? null,
+                $delivery['phone'] ?? null,
+                $apiOrder['user_phone'] ?? null,
+            ] as $value
+        ) {
             $phone = $this->asString($value);
             if ($phone !== '') {
                 return $this->formatRozetkaPhone($phone);
@@ -213,13 +215,16 @@ final class OrderClipboardFormatter
         }
 
         $name = mb_strtolower($this->asString($apiOrder['payment_type_name'] ?? null));
-        if ($name !== '' && (
-            str_contains($name, 'рахунок')
-            || str_contains($name, 'карт')
-            || str_contains($name, 'онлайн')
-            || str_contains($name, 'передоплат')
-            || str_contains($name, 'безгот')
-        )) {
+        if (
+            $name !== ''
+            && (
+                str_contains($name, 'рахунок')
+                || str_contains($name, 'карт')
+                || str_contains($name, 'онлайн')
+                || str_contains($name, 'передоплат')
+                || str_contains($name, 'безгот')
+            )
+        ) {
             return true;
         }
 
