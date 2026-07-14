@@ -20,7 +20,6 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
-    libreoffice-writer \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Configure GD before install
@@ -46,8 +45,6 @@ RUN pecl install redis && docker-php-ext-enable redis
 
 # Install PCOV for code coverage
 RUN pecl install pcov && docker-php-ext-enable pcov
-
-COPY docker/php/memory.ini /usr/local/etc/php/conf.d/99-memory.ini
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
