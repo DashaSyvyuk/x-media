@@ -15,8 +15,7 @@ class BunnyStorageClient
         private string $zone,
         private string $apiKey,
         private string $region,
-        private string $cdnUrl = '',
-        private string $localBaseUrl = '',
+        private string $cdnUrl = ''
     ) {
         $this->client = new Client($this->apiKey, $this->zone, $this->region);
     }
@@ -36,9 +35,6 @@ class BunnyStorageClient
      * `{folder}/{fileName}`, remove the local copy, and return the public CDN
      * URL. Used for generator outputs (XML feeds) so callers can advertise
      * a single source of truth instead of an app-served local URL.
-     *
-     * In local dev (fake Bunny credentials) the file stays in `public/` and
-     * a local URL is returned instead of uploading to CDN.
      */
     public function uploadAndGetUrl(
         string $localPath,
@@ -46,10 +42,6 @@ class BunnyStorageClient
         string $fileName
     ): string {
         $remotePath = trim($folder, '/') . '/' . $fileName;
-
-        if ($this->shouldServeLocally()) {
-            return $this->buildLocalUrl($remotePath);
-        }
 
         try {
             $this->client->upload($localPath, $remotePath);
@@ -65,30 +57,11 @@ class BunnyStorageClient
      */
     public function delete(string $remotePath): void
     {
-        if ($this->shouldServeLocally()) {
-            return;
-        }
-
         try {
             $this->client->delete($remotePath);
         } catch (AuthenticationException $e) {
         } catch (FileNotFoundException $e) {
         } catch (Exception $e) {
         }
-    }
-
-    private function shouldServeLocally(): bool
-    {
-        return $this->apiKey === 'local-dev-no-upload'
-            || $this->zone === 'local-dev';
-    }
-
-    private function buildLocalUrl(string $remotePath): string
-    {
-        if ($this->localBaseUrl !== '') {
-            return rtrim($this->localBaseUrl, '/') . '/' . ltrim($remotePath, '/');
-        }
-
-        return '/' . ltrim($remotePath, '/');
     }
 }

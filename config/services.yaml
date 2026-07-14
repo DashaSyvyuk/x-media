@@ -82,7 +82,6 @@ services:
             $apiKey: '%bunny.storage.api_key%'
             $region: '%bunny.storage.region%'
             $cdnUrl: '%bunny.cdn.url%'
-            $localBaseUrl: '%env(default::DEFAULT_URI)%'
 
     App\Service\Admin2\RozetkaSellerApiClient:
         arguments:
