@@ -38,7 +38,7 @@ final class PlnExchangeRateProvider
             ]);
 
             $data = $response->toArray(false);
-            if (! is_array($data) || $data === []) {
+            if ($data === []) {
                 return null;
             }
 

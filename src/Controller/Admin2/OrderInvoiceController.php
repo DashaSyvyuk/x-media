@@ -30,9 +30,6 @@ final class OrderInvoiceController extends AbstractController
     {
         $items = [];
         foreach ($this->entityManager->getRepository(FopProfile::class)->findBy([], ['id' => 'DESC']) as $fop) {
-            if (! $fop instanceof FopProfile) {
-                continue;
-            }
             $items[] = [
                 'id' => $fop->getId(),
                 'title' => $fop->getTitle(),

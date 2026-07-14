@@ -22,7 +22,7 @@ class RozetkaProductType extends AbstractType
     {
         /** @var RozetkaProduct $rozetkaProduct */
         $rozetkaProduct = $options['data'];
-        $category       = $rozetkaProduct->getProduct()?->getCategory();
+        $category       = $rozetkaProduct->getProduct()->getCategory();
 
         $builder
             ->add('title', TextType::class, ['label' => 'Назва'])

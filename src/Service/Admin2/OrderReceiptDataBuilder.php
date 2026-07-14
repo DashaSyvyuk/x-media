@@ -171,7 +171,7 @@ final class OrderReceiptDataBuilder
             'filename'    => $filename,
             'checkNumber' => $checkNumber,
             'dateDay'     => $date->format('d'),
-            'dateMonth'   => ' ' . (self::MONTHS_GENITIVE[(int) $date->format('n')] ?? $date->format('m')) . ' ',
+            'dateMonth'   => ' ' . self::MONTHS_GENITIVE[(int) $date->format('n')] . ' ',
             'dateYear'    => $date->format('Y'),
             'items'       => $items,
             'total'       => $total,

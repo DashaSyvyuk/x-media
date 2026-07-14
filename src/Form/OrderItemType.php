@@ -18,7 +18,7 @@ class OrderItemType extends AbstractType
         $builder
             ->add('product', TextType::class, [
                 'mapped' => false,
-                'data' => $item?->getProduct()?->getTitle(),
+                'data' => $item->getProduct()->getTitle(),
                 'disabled' => true,
             ])
             ->add('count')

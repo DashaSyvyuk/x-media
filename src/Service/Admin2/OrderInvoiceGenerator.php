@@ -4,7 +4,6 @@ namespace App\Service\Admin2;
 
 use App\Entity\FopProfile;
 use App\Entity\Order;
-use App\Entity\OrderItem;
 use NumberFormatter;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Symfony\Component\Filesystem\Filesystem;
@@ -85,10 +84,6 @@ final class OrderInvoiceGenerator
         $no = 0;
 
         foreach ($order->getItems() as $item) {
-            if (! $item instanceof OrderItem) {
-                continue;
-            }
-
             $qty = max(1, $item->getCount());
             $price = (int) ($item->getPrice() ?? $item->getProduct()->getPrice());
             $items[] = [

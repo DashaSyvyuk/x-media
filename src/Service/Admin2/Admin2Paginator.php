@@ -20,6 +20,9 @@ final readonly class Admin2Paginator
         return in_array($perPage, self::PER_PAGE_OPTIONS, true) ? $perPage : self::DEFAULT_PER_PAGE;
     }
 
+    /**
+     * @return PaginationInterface<int, mixed>
+     */
     public function paginate(mixed $target, int $page, int $perPage): PaginationInterface
     {
         return $this->paginator->paginate(
