@@ -1,0 +1,79 @@
+.settings-page .settings-tabs {
+    border-bottom: none;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+}
+
+.settings-page .settings-tabs .nav-link {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+}
+
+.settings-page .settings-tabs .nav-link:hover {
+    background: #f8fafc;
+    color: var(--color-slate, #0f172a);
+}
+
+.settings-page .settings-tabs .nav-link.active {
+    background: var(--color-slate, #0f172a);
+    border-color: var(--color-slate, #0f172a);
+    color: #fff;
+    font-weight: 600;
+}
+
+.settings-card {
+    border: 0;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.settings-card > .card-header {
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 1.25rem 0;
+}
+
+.settings-card > .card-body {
+    padding: 1.25rem;
+}
+
+.settings-tab-toolbar {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.settings-table-scroll {
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+}
+
+@media (max-width: 767.98px) {
+    .settings-table-scroll {
+        margin-left: -0.25rem;
+        margin-right: -0.25rem;
+    }
+
+    .settings-table-scroll > .table {
+        min-width: 36rem;
+    }
+}
+
+.settings-icon-preview {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    height: 40px;
+    object-fit: contain;
+    width: 40px;
+}

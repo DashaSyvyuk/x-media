@@ -1,0 +1,73 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+
+{% block title %}Постачальники — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set query = { q: search, active: activeFilter, sort: sort, dir: direction, perPage: perPage } %}
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 page-header-row">
+        <div>
+            <h1 class="page-title mb-1">Постачальники</h1>
+            <p class="text-muted mb-0 small">Контакти постачальників і термін зберігання замовлень</p>
+        </div>
+        <a href="{{ path('admin2_suppliers_new') }}" class="btn btn-teal"><i class="bi bi-plus-lg"></i> Новий постачальник</a>
+    </div>
+
+    <div class="card border-0 shadow-sm products-table-card">
+        <div class="card-body p-3 border-bottom">
+            <form method="get" class="products-toolbar">
+                <div class="products-toolbar__search">
+                    <input type="search" name="q" value="{{ search }}" class="form-control" placeholder="Пошук...">
+                </div>
+                <select name="active" class="form-select" style="width:auto;">
+                    <option value="">Усі</option>
+                    <option value="1" {{ activeFilter == '1' ? 'selected' : '' }}>Активні</option>
+                    <option value="0" {{ activeFilter == '0' ? 'selected' : '' }}>Неактивні</option>
+                </select>
+                <button class="btn btn-teal" type="submit">Фільтр</button>
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 products-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Назва</th>
+                        <th>Телефон</th>
+                        <th>Email</th>
+                        <th>Зберігання (днів)</th>
+                        <th>Статус</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for supplier in pagination %}
+                        <tr>
+                            <td>{{ supplier.id }}</td>
+                            <td><strong>{{ supplier.title }}</strong></td>
+                            <td>{{ supplier.phone ?: '—' }}</td>
+                            <td>{{ supplier.email ?: '—' }}</td>
+                            <td>{{ supplier.orderStorageDays ?? '—' }}</td>
+                            <td>
+                                {% if supplier.active %}
+                                    <span class="badge bg-success-subtle text-success-emphasis">Активний</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Неактивний</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <a href="{{ path('admin2_suppliers_edit', {id: supplier.id}) }}" class="btn btn-sm btn-outline-secondary">Редагувати</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="7" class="text-center text-muted py-5">Постачальників не знайдено</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

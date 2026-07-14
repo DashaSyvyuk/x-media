@@ -1,0 +1,200 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+
+{% import 'admin2/products/_collapsible_collection_item.html.twig' as collapsible %}
+
+{% block title %}{{ isNew|default(false) ? 'Новий товар' : 'Редагування #' ~ product.id }} — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/product-edit.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="product-edit-header">
+        <div>
+            <a href="{{ path('admin2_products') }}" class="text-decoration-none text-muted small d-inline-flex align-items-center gap-1 mb-2">
+                <i class="bi bi-arrow-left"></i> До списку товарів
+            </a>
+            <h1 class="page-title mb-1">{{ product.title ?: (isNew|default(false) ? 'Новий товар' : 'Товар #' ~ product.id) }}</h1>
+            {% if isNew|default(false) %}
+                <div class="product-edit-meta">Заповніть поля та натисніть «Зберегти»</div>
+            {% else %}
+                <div class="product-edit-meta">ID #{{ product.id }} · оновлено {{ product.updatedAt|date('d.m.Y H:i') }}</div>
+            {% endif %}
+        </div>
+        {% if not isNew|default(false) %}
+        <a href="/products/{{ product.id }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-box-arrow-up-right"></i> На сайті
+        </a>
+        {% endif %}
+    </div>
+
+    {% if form.vars.errors|length > 0 %}
+        <div class="alert alert-danger">{{ form_errors(form) }}</div>
+    {% endif %}
+
+    {{ form_start(form, { attr: { class: 'product-edit-form', enctype: 'multipart/form-data' } }) }}
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Загальна інформація</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-8">{{ form_row(form.title) }}</div>
+                <div class="col-md-4 d-flex align-items-end">{{ form_row(form.status) }}</div>
+                <div class="col-md-6">{{ form_row(form.availability) }}</div>
+                <div class="col-md-6">{{ form_row(form.category) }}</div>
+                <div class="col-md-4">{{ form_row(form.productCode) }}</div>
+                <div class="col-md-4">{{ form_row(form.productCode2) }}</div>
+                <div class="col-md-4">{{ form_row(form.olx) }}</div>
+                <div class="col-12">{{ form_row(form.note) }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Ціни</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">{{ form_row(form.price) }}</div>
+                <div class="col-md-6">{{ form_row(form.crossedOutPrice) }}</div>
+                <div class="col-12">{{ form_row(form.xkomUrl) }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Опис</div>
+        <div class="card-body">
+            {{ form_row(form.description) }}
+        </div>
+    </div>
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Зображення</div>
+        <div class="card-body">
+            {% set imageBody %}
+            <div class="row g-3 align-items-start">
+                <div class="col-md-8">
+                    {{ form_row(form.images.vars.prototype.file) }}
+                    {{ form_row(form.images.vars.prototype.position) }}
+                </div>
+                <div class="col-md-4" data-image-preview></div>
+            </div>
+            {% endset %}
+            <div id="images-collection"
+                 data-collapsible-type="image"
+                 data-prototype="{{ imageBody|e('html_attr') }}">
+                {% for imageField in form.images %}
+                    {% set body %}
+                    <div class="row g-3 align-items-start">
+                        <div class="col-md-8">
+                            {{ form_row(imageField.file) }}
+                            {{ form_row(imageField.position) }}
+                        </div>
+                        <div class="col-md-4" data-image-preview>
+                            {% if imageField.vars.data and imageField.vars.data.imageUri %}
+                                <img src="{{ imageField.vars.data.imageUri }}" alt="" class="product-image-preview">
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endset %}
+                    {{ collapsible.item('image', body, true) }}
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline-teal btn-sm add-collection-row" data-collection-add="#images-collection">
+                <i class="bi bi-plus-lg"></i> Додати зображення
+            </button>
+        </div>
+    </div>
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Характеристики</div>
+        <div class="card-body">
+            {% set characteristicBody %}
+            <div class="row g-3">
+                <div class="col-md-4">{{ form_row(form.characteristics.vars.prototype.title) }}</div>
+                <div class="col-md-6">{{ form_row(form.characteristics.vars.prototype.value) }}</div>
+                <div class="col-md-2">{{ form_row(form.characteristics.vars.prototype.position) }}</div>
+            </div>
+            {% endset %}
+            <div id="characteristics-collection"
+                 data-collapsible-type="characteristic"
+                 data-prototype="{{ characteristicBody|e('html_attr') }}">
+                {% for characteristicField in form.characteristics %}
+                    {% set body %}
+                    <div class="row g-3">
+                        <div class="col-md-4">{{ form_row(characteristicField.title) }}</div>
+                        <div class="col-md-6">{{ form_row(characteristicField.value) }}</div>
+                        <div class="col-md-2">{{ form_row(characteristicField.position) }}</div>
+                    </div>
+                    {% endset %}
+                    {{ collapsible.item('characteristic', body, true) }}
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline-teal btn-sm add-collection-row" data-collection-add="#characteristics-collection">
+                <i class="bi bi-plus-lg"></i> Додати характеристику
+            </button>
+        </div>
+    </div>
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Фільтри</div>
+        <div class="card-body">
+            {% set filterBody %}
+            <div class="row g-3">
+                <div class="col-md-6">{{ form_row(form.filterAttributes.vars.prototype.filter) }}</div>
+                <div class="col-md-6">{{ form_row(form.filterAttributes.vars.prototype.filterAttribute) }}</div>
+            </div>
+            {% endset %}
+            <div id="filters-collection"
+                 data-collapsible-type="filter"
+                 data-prototype="{{ filterBody|e('html_attr') }}">
+                {% for filterField in form.filterAttributes %}
+                    {% set body %}
+                    <div class="row g-3">
+                        <div class="col-md-6">{{ form_row(filterField.filter) }}</div>
+                        <div class="col-md-6">{{ form_row(filterField.filterAttribute) }}</div>
+                    </div>
+                    {% endset %}
+                    {{ collapsible.item('filter', body, true) }}
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline-teal btn-sm add-collection-row" data-collection-add="#filters-collection">
+                <i class="bi bi-plus-lg"></i> Додати фільтр
+            </button>
+        </div>
+    </div>
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Акції</div>
+        <div class="card-body">
+            <div id="promotions-collection" data-prototype="{{ form_widget(form.promotionProducts.vars.prototype)|e('html_attr') }}">
+                {% for promotionField in form.promotionProducts %}
+                    <div class="collection-item">
+                        <button type="button" class="btn btn-sm btn-outline-danger collection-item__remove" data-collection-remove>
+                            <i class="bi bi-trash"></i>
+                        </button>
+                        {{ form_row(promotionField.promotion) }}
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline-teal btn-sm add-collection-row" data-collection-add="#promotions-collection">
+                <i class="bi bi-plus-lg"></i> Додати акцію
+            </button>
+        </div>
+    </div>
+
+    <div class="product-edit-actions">
+        <div class="card border-0 px-3 py-2 product-edit-actions__bar">
+            <button type="submit" class="btn btn-teal">
+                <i class="bi bi-check2"></i> Зберегти
+            </button>
+            <a href="{{ path('admin2_products') }}" class="btn btn-outline-secondary">Скасувати</a>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin2-collection.js') }}" defer></script>
+{% endblock %}

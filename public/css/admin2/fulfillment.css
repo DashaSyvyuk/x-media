@@ -1,0 +1,277 @@
+.fulfillment-page {
+    --fulfillment-teal: #0d9488;
+}
+
+.fulfillment-board {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    align-items: start;
+}
+
+@media (max-width: 992px) {
+    .fulfillment-board {
+        grid-template-columns: 1fr;
+    }
+}
+
+.fulfillment-column__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1rem;
+    background: #fff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 14px 14px 0 0;
+}
+
+.fulfillment-column__header h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.fulfillment-column__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-top: 0;
+    border-radius: 0 0 14px 14px;
+    min-height: 420px;
+    max-height: calc(100vh - 220px);
+    overflow-y: auto;
+}
+
+.fulfillment-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    transition: box-shadow 0.15s ease, border-color 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+}
+
+.fulfillment-board--link-hover .fulfillment-card:not(.fulfillment-card--linked-hover) {
+    opacity: 0.55;
+}
+
+.fulfillment-card--linked-hover {
+    z-index: 2;
+    border-color: var(--link-color, var(--fulfillment-teal));
+    box-shadow:
+        0 0 0 2px color-mix(in srgb, var(--link-color, var(--fulfillment-teal)) 70%, #fff),
+        0 8px 22px color-mix(in srgb, var(--link-color, var(--fulfillment-teal)) 28%, transparent);
+    transform: translateY(-1px);
+}
+
+.fulfillment-card--linked-hover.fulfillment-card--tone-new {
+    background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--link-color, #119e00) 18%, #fff));
+}
+
+.fulfillment-card--linked-hover.fulfillment-card--tone-processing {
+    background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--link-color, #ff8c00) 18%, #fff));
+}
+
+.fulfillment-card--linked-hover.fulfillment-card--tone-packing {
+    background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--link-color, #22c55e) 22%, #fff));
+}
+
+.fulfillment-card--linked-hover.fulfillment-card--tone-shipping {
+    background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--link-color, #2563eb) 18%, #fff));
+}
+
+.fulfillment-card--linked-hover.fulfillment-card--vendor {
+    background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--link-color, #2563eb) 20%, #eff6ff));
+}
+
+.fulfillment-card[style*="--link-color"] {
+    border-left: 4px solid var(--link-color, var(--fulfillment-teal));
+}
+
+.fulfillment-card--tone-new {
+    background: linear-gradient(135deg, #fff, rgba(17, 158, 0, 0.09));
+}
+
+.fulfillment-card--tone-processing {
+    background: linear-gradient(135deg, #fff, rgba(255, 140, 0, 0.11));
+}
+
+.fulfillment-card--tone-packing {
+    background: linear-gradient(135deg, #fff, rgba(34, 197, 94, 0.16));
+}
+
+.fulfillment-card--tone-shipping {
+    background: linear-gradient(135deg, #fff, rgba(37, 99, 235, 0.1));
+}
+
+.fulfillment-card--tone-done {
+    background: linear-gradient(135deg, #fff, rgba(15, 23, 42, 0.06));
+}
+
+.fulfillment-card--tone-canceled {
+    background: linear-gradient(135deg, #fff, rgba(128, 128, 128, 0.1));
+}
+
+.fulfillment-card--tone-default {
+    background: #fff;
+}
+
+.fulfillment-card--has-ttn:not([style*="--link-color"]) {
+    border-left: 4px solid #2563eb;
+}
+
+.fulfillment-card--has-ttn.fulfillment-card--tone-new {
+    background: linear-gradient(135deg, #fff, color-mix(in srgb, #2563eb 22%, rgba(17, 158, 0, 0.09)));
+}
+
+.fulfillment-card--has-ttn.fulfillment-card--tone-processing {
+    background: linear-gradient(135deg, #fff, color-mix(in srgb, #2563eb 28%, rgba(255, 140, 0, 0.11)));
+}
+
+.fulfillment-card--has-ttn.fulfillment-card--tone-packing {
+    background: linear-gradient(135deg, #fff, color-mix(in srgb, #2563eb 24%, rgba(34, 197, 94, 0.16)));
+}
+
+.fulfillment-card--has-ttn.fulfillment-card--tone-shipping,
+.fulfillment-card--has-ttn.fulfillment-card--tone-default {
+    background: linear-gradient(135deg, #fff, rgba(37, 99, 235, 0.16));
+}
+
+.fulfillment-card--has-ttn .fulfillment-ttn-input {
+    border-color: rgba(37, 99, 235, 0.45);
+    background: rgba(37, 99, 235, 0.06);
+    font-weight: 600;
+}
+
+.fulfillment-card--rozetka {
+    box-shadow: inset 0 0 0 1px rgba(22, 163, 74, 0.08);
+}
+
+.fulfillment-card--vendor {
+    background: linear-gradient(135deg, #fff, #eff6ff);
+}
+
+.fulfillment-card__link-dot {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.fulfillment-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.fulfillment-card__top a {
+    color: #0f172a;
+    text-decoration: none;
+}
+
+.fulfillment-card__top a:hover {
+    color: var(--fulfillment-teal);
+}
+
+.fulfillment-card__top-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+
+.fulfillment-card__status {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #d97706;
+    margin-bottom: 0.25rem;
+}
+
+.fulfillment-status-form {
+    margin-bottom: 0.35rem;
+}
+
+.fulfillment-status-form .fulfillment-status-select,
+.fulfillment-status-form .fulfillment-ttn-input {
+    display: block;
+    width: 50%;
+    max-width: 100%;
+    font-size: 0.78rem;
+}
+
+.fulfillment-card__meta,
+.fulfillment-card__product {
+    font-size: 0.82rem;
+    color: #64748b;
+}
+
+.fulfillment-card__product {
+    margin: 0.35rem 0 0.5rem;
+    color: #334155;
+}
+
+.fulfillment-card__items {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0;
+    font-size: 0.78rem;
+    color: #475569;
+}
+
+.fulfillment-card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.fulfillment-empty {
+    text-align: center;
+    color: #94a3b8;
+    padding: 2rem 1rem;
+}
+
+.fulfillment-complete-btn {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+}
+
+.fulfillment-link-current {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.45rem;
+}
+
+.fulfillment-link-list {
+    margin-bottom: 0.45rem;
+}
+
+.fulfillment-link-list .fulfillment-link-current:last-child {
+    margin-bottom: 0;
+}
+
+.fulfillment-unlink-btn {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+}
+
+.bg-teal {
+    background: var(--fulfillment-teal) !important;
+}

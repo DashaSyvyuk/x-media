@@ -43,4 +43,33 @@ class FeedbackRepository extends ServiceEntityRepository
              ->setParameter('status', 'CONFIRMED')
              ->orderBy('f.createdAt', 'DESC');
     }
+
+    public function createAdminListQueryBuilder(
+        string $search = '',
+        ?string $status = null,
+        string $sort = 'id',
+        string $direction = 'DESC',
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('f');
+
+        $search = trim($search);
+        if ($search !== '') {
+            $qb->andWhere('LOWER(f.author) LIKE :search OR LOWER(f.email) LIKE :search')
+                ->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
+        if ($status !== null && $status !== '') {
+            $qb->andWhere('f.status = :status')->setParameter('status', $status);
+        }
+
+        $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
+        $allowedSorts = ['id', 'author', 'status', 'createdAt'];
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = 'id';
+        }
+
+        $qb->orderBy('f.' . $sort, $direction);
+
+        return $qb;
+    }
 }

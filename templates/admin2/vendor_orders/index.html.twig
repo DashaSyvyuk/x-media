@@ -1,0 +1,87 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/orders/_macros.html.twig' as order_macros %}
+{% import 'admin2/vendor_orders/_macros.html.twig' as vendor_macros %}
+
+{% block title %}Замовлення постачальника — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/vendor-orders.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 page-header-row">
+        <div>
+            <h1 class="page-title mb-1">Замовлення постачальника</h1>
+            <p class="text-muted mb-0 small">Замовлення у постачальників для комплектації</p>
+        </div>
+        <a href="{{ path('admin2_vendor_orders_new') }}" class="btn btn-teal"><i class="bi bi-plus-lg"></i> Нове замовлення</a>
+    </div>
+
+    <div class="card border-0 shadow-sm products-table-card">
+        <div class="card-body p-3 border-bottom">
+            <form method="get" class="products-toolbar">
+                <div class="products-toolbar__search">
+                    <input type="search" name="q" value="{{ search }}" class="form-control" placeholder="Номер, товар, постачальник...">
+                </div>
+                <select name="status" class="form-select" style="width:auto; min-width:180px;">
+                    <option value="">Усі статуси</option>
+                    {% for code, label in statusChoices %}
+                        <option value="{{ code }}" {{ status == code ? 'selected' : '' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <select name="supplier" class="form-select" style="width:auto; min-width:180px;">
+                    <option value="">Усі постачальники</option>
+                    {% for s in suppliers %}
+                        <option value="{{ s.id }}" {{ supplierId == s.id ? 'selected' : '' }}>{{ s.title }}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-teal" type="submit">Фільтр</button>
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 products-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Постачальник</th>
+                        <th>№ постачальника</th>
+                        <th>Товар</th>
+                        <th class="text-end">Ціна</th>
+                        <th>Статус</th>
+                        <th>Дата</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in pagination %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.supplier.title }}</td>
+                            <td>{{ item.supplierOrderNumber }}</td>
+                            <td>
+                                {% for line in item.productTitle|split('\n')|filter(v => v|trim != '')|slice(0, 2) %}
+                                    <div>{{ line|slice(0, 50) }}{% if line|length > 50 %}…{% endif %}</div>
+                                {% else %}
+                                    —
+                                {% endfor %}
+                                {% set productLines = item.productTitle|split('\n')|filter(v => v|trim != '') %}
+                                {% if productLines|length > 2 %}
+                                    <div class="text-muted small">+{{ productLines|length - 2 }} ще</div>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">{{ order_macros.money(item.price) }}</td>
+                            <td>{{ vendor_macros.status_badge(item.status) }}</td>
+                            <td>{{ item.createdAt|date('d.m.Y H:i') }}</td>
+                            <td class="text-end">
+                                <a href="{{ path('admin2_vendor_orders_edit', {id: item.id}) }}" class="btn btn-sm btn-outline-secondary">Редагувати</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="8" class="text-center text-muted py-5">Замовлень не знайдено</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

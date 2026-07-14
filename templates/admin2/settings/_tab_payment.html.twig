@@ -1,0 +1,65 @@
+{% import 'admin2/settings/_macros.html.twig' as settings_macros %}
+
+<div class="settings-tab-toolbar">
+    <h2 class="h5 mb-0">Способи оплати</h2>
+    <button type="button" class="btn btn-teal btn-sm" data-bs-toggle="modal" data-bs-target="#createPaymentTypeModal">
+        <i class="bi bi-plus-lg"></i> Додати спосіб
+    </button>
+</div>
+
+<div class="settings-table-scroll">
+    <table class="table products-table align-middle mb-0">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Назва</th>
+                <th>Вартість</th>
+                <th>Стан</th>
+                <th class="text-end">Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paymentType in paymentTypes %}
+                <tr>
+                    <td>
+                        {% if paymentType.iconUri %}
+                            <img src="{{ paymentType.iconUri }}" alt="" class="settings-icon-preview">
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="fw-semibold">{{ paymentType.title }}</td>
+                    <td>{{ paymentType.cost ?? 0 }}</td>
+                    <td>{{ settings_macros.bool_badge(paymentType.enabled, 'Активний', 'Вимкнено') }}</td>
+                    <td class="text-end text-nowrap">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-teal js-edit-payment-type"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editPaymentTypeModal"
+                                data-id="{{ paymentType.id }}"
+                                data-title="{{ paymentType.title|e('html_attr') }}"
+                                data-cost="{{ paymentType.cost ?? 0 }}"
+                                data-enabled="{{ paymentType.enabled ? '1' : '0' }}"
+                                data-icon="{{ paymentType.iconUri|e('html_attr') }}">
+                            Редагувати
+                        </button>
+                        <form method="post"
+                              action="{{ path('admin2_settings_payment_delete', {id: paymentType.id}) }}"
+                              class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_payment') }}">
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    data-confirm="Видалити «{{ paymentType.title|e('html_attr') }}»?">
+                                Видалити
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">Способів оплати ще немає</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

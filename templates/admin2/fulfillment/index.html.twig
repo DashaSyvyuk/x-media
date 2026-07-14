@@ -1,0 +1,127 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/orders/_macros.html.twig' as order_macros %}
+{% import 'admin2/vendor_orders/_macros.html.twig' as vendor_macros %}
+
+{% block title %}Управління замовленнями — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/orders.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/fulfillment.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/vendor-orders.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="fulfillment-page">
+        <div class="mb-4">
+            <h1 class="page-title mb-1">Управління замовленнями</h1>
+            <p class="text-muted mb-0 small">Замовлення клієнтів (наші + Rozetka) та постачальників. Пов'язуйте картки однаковим кольором.</p>
+        </div>
+
+        <div class="fulfillment-board" data-link-peers="{{ linkPeerMap|json_encode|e('html_attr') }}">
+            <div class="fulfillment-column">
+                <div class="fulfillment-column__header">
+                    <h2>Клієнтські замовлення</h2>
+                    <span class="badge bg-secondary">{{ customerOrders|length }}</span>
+                </div>
+                <div class="fulfillment-column__list">
+                    {% for order in customerOrders %}
+                        {% include 'admin2/fulfillment/_customer_order_card.html.twig' with {
+                            order: order,
+                            linkColor: linkColors[order.key]|default(null),
+                            statusFormRoute: statusFormRoute,
+                        } %}
+                    {% else %}
+                        <div class="fulfillment-empty">Немає активних клієнтських замовлень</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="fulfillment-column">
+                <div class="fulfillment-column__header">
+                    <h2>Постачальники</h2>
+                    <span class="badge bg-teal">{{ vendorOrders|length }}</span>
+                </div>
+                <div class="fulfillment-column__list">
+                    {% for order in vendorOrders %}
+                        {% set color = linkColors[order.key]|default(null) %}
+                        <article class="fulfillment-card fulfillment-card--vendor"
+                                 style="{{ color ? '--link-color:' ~ color : '' }}"
+                                 data-card-key="{{ order.key }}"
+                                 data-vendor-id="{{ order.id }}">
+                            {% if color %}
+                                <span class="fulfillment-card__link-dot" style="background: {{ color }}"></span>
+                            {% endif %}
+                            <div class="fulfillment-card__top">
+                                <strong><a href="{{ order.editUrl }}">#{{ order.id }}</a></strong>
+                                <div class="fulfillment-card__top-actions">
+                                    {{ order_macros.copy_button(order.copyText|default(null)) }}
+                                    <form method="post" action="{{ path('admin2_fulfillment_vendor_complete', {id: order.id}) }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('fulfillment_action') }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-success fulfillment-complete-btn" title="Привезено — закрити">
+                                            <i class="bi bi-check-lg"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="fulfillment-card__status">{{ vendor_macros.status_badge(order.statusCode) }}</div>
+                            <div class="fulfillment-card__meta">{{ order.supplier }} · № {{ order.supplierOrderNumber }}</div>
+                            <ul class="fulfillment-card__items">
+                                {% for item in order.items|default([])|slice(0, 3) %}
+                                    <li>{{ item.qty }}× {{ item.name|slice(0, 50) }}</li>
+                                {% else %}
+                                    <li>{{ order.productTitle|slice(0, 80) }}</li>
+                                {% endfor %}
+                            </ul>
+                            <div class="fulfillment-card__footer">
+                                <span class="text-muted small">{{ order.created }}</span>
+                                <strong>{{ order_macros.money(order.price) }}</strong>
+                            </div>
+                            <div class="fulfillment-link-form mt-2">
+                                {% if order.linkedCustomers is not empty %}
+                                    <div class="fulfillment-link-list">
+                                        {% for linked in order.linkedCustomers %}
+                                            <div class="fulfillment-link-current">
+                                                <span class="small text-muted"><strong>{{ linked.label }}</strong></span>
+                                                <form method="post" action="{{ path('admin2_fulfillment_unlink') }}" class="d-inline">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('fulfillment_action') }}">
+                                                    <input type="hidden" name="vendor_order_id" value="{{ order.id }}">
+                                                    <input type="hidden" name="customer_type" value="{{ linked.type }}">
+                                                    <input type="hidden" name="customer_id" value="{{ linked.id }}">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger fulfillment-unlink-btn" title="Відв'язати">
+                                                        <i class="bi bi-x-lg"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                {% if order.linkableCustomers is not empty %}
+                                    <select class="form-select form-select-sm fulfillment-link-target" data-vendor-id="{{ order.id }}">
+                                        <option value="">{{ order.isLinked ? 'Додати прив\'язку...' : 'Пов\'язати з...' }}</option>
+                                        {% for customer in order.linkableCustomers %}
+                                            <option value="{{ customer.type }}:{{ customer.id }}">{{ customer.label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                            </div>
+                        </article>
+                    {% else %}
+                        <div class="fulfillment-empty">Немає активних замовлень постачальника</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="fulfillmentLinkForm" method="post" action="{{ path('admin2_fulfillment_link') }}" class="d-none">
+        <input type="hidden" name="_token" value="{{ csrf_token('fulfillment_action') }}">
+        <input type="hidden" name="vendor_order_id" id="linkVendorId">
+        <input type="hidden" name="customer_type" id="linkCustomerType">
+        <input type="hidden" name="customer_id" id="linkCustomerId">
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin2-fulfillment.js') }}" defer></script>
+    <script src="{{ asset('js/admin2-order-copy.js') }}" defer></script>
+{% endblock %}

@@ -185,4 +185,40 @@ class CategoryRepository extends ServiceEntityRepository
 
         return $result;
     }
+
+    public function createAdminListQueryBuilder(
+        string $search = '',
+        ?string $status = null,
+        string $sort = 'title',
+        string $direction = 'ASC',
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('c')
+            ->leftJoin('c.parent', 'parent')
+            ->addSelect('parent');
+
+        $search = trim($search);
+        if ($search !== '') {
+            $qb->andWhere('LOWER(c.title) LIKE :search OR LOWER(c.slug) LIKE :search')
+                ->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
+        if ($status !== null && $status !== '') {
+            $qb->andWhere('c.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        $direction = strtoupper($direction) === 'DESC' ? 'DESC' : 'ASC';
+
+        if ($sort === 'parent') {
+            $qb->orderBy('parent.title', $direction);
+        } else {
+            $allowedSorts = ['id', 'title', 'slug', 'position', 'status'];
+            if (! in_array($sort, $allowedSorts, true)) {
+                $sort = 'title';
+            }
+            $qb->orderBy('c.' . $sort, $direction);
+        }
+
+        return $qb;
+    }
 }

@@ -1,0 +1,34 @@
+{% block product_picker_row %}
+<div{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' admin2-product-picker-row')|trim})} %}{{ block('attributes') }}{% endwith %}>
+    {{- form_widget(form) -}}
+    {{- form_errors(form) -}}
+</div>
+{% endblock %}
+
+{% block product_picker_widget %}
+{% set showUrl = show_url_template|replace({'/0': '/__ID__'}) %}
+<div class="admin2-product-picker"
+     data-search-url="{{ search_url }}"
+     data-show-url-template="{{ showUrl }}">
+    <input type="hidden" {{ block('widget_attributes') }}{% if value is not empty %} value="{{ value }}"{% endif %}>
+
+    <div class="admin2-product-picker__selected{% if not selected_product %} d-none{% endif %}">
+        <div class="admin2-product-picker__selected-main">
+            <span class="admin2-product-picker__id-badge">#{{ selected_product.id|default('') }}</span>
+            <span class="admin2-product-picker__title">{{ selected_product.title|default('') }}</span>
+        </div>
+        <button type="button" class="admin2-product-picker__clear" title="Змінити товар" aria-label="Змінити товар">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <div class="admin2-product-picker__panel{% if selected_product %} d-none{% endif %}">
+        <label class="form-label">{{ label|default('Товар') }}</label>
+        <input type="search"
+               class="form-control admin2-product-picker__query-input"
+               placeholder="ID, назва або код товару"
+               autocomplete="off">
+        <div class="admin2-product-picker__results"></div>
+    </div>
+</div>
+{% endblock %}

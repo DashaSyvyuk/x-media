@@ -1,0 +1,240 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/products/_macros.html.twig' as product_macros %}
+
+{% block title %}Товари — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set query = {
+        q: search,
+        status: status,
+        sort: sort,
+        dir: direction,
+        perPage: perPage,
+    } %}
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h1 class="page-title mb-1">Товари</h1>
+            <p class="text-muted mb-0 small">Керування каталогом інтернет-магазину</p>
+        </div>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <form method="post" action="{{ path('admin2_products_generate_hotline') }}" class="d-inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_products_generate') }}">
+                {% for key, value in query %}{% if value %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endif %}{% endfor %}
+                <button type="submit" class="btn btn-outline-teal btn-sm">
+                    <i class="bi bi-filetype-xml"></i> Hotline *.xml
+                </button>
+            </form>
+            <form method="post" action="{{ path('admin2_products_generate_prom') }}" class="d-inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_products_generate') }}">
+                {% for key, value in query %}{% if value %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endif %}{% endfor %}
+                <button type="submit" class="btn btn-outline-teal btn-sm">
+                    <i class="bi bi-filetype-xml"></i> Prom *.xml
+                </button>
+            </form>
+            <form method="post" action="{{ path('admin2_products_generate_ekatalog') }}" class="d-inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_products_generate') }}">
+                {% for key, value in query %}{% if value %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endif %}{% endfor %}
+                <button type="submit" class="btn btn-outline-teal btn-sm">
+                    <i class="bi bi-filetype-xml"></i> E-Katalog *.xml
+                </button>
+            </form>
+            <a href="{{ path('admin2_products_new') }}" class="btn btn-teal">
+                <i class="bi bi-plus-lg"></i> Новий товар
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm products-table-card">
+        <div class="card-body p-3 p-md-4 border-bottom">
+            <form method="get" action="{{ path('admin2_products') }}" class="products-toolbar">
+                <div class="products-toolbar__search">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="search"
+                               name="q"
+                               value="{{ search }}"
+                               class="form-control border-start-0"
+                               placeholder="ID, назва або код товару">
+                    </div>
+                </div>
+
+                <select name="status" class="form-select" style="width: auto; min-width: 160px;">
+                    <option value="">Усі статуси</option>
+                    {% for value, label in statuses %}
+                        <option value="{{ value }}" {{ status == value ? 'selected' : '' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="perPage" class="form-select" style="width: auto; min-width: 110px;">
+                    {% for option in perPageOptions %}
+                        <option value="{{ option }}" {{ perPage == option ? 'selected' : '' }}>{{ option }} / стор.</option>
+                    {% endfor %}
+                </select>
+
+                <input type="hidden" name="sort" value="{{ sort }}">
+                <input type="hidden" name="dir" value="{{ direction }}">
+
+                <button type="submit" class="btn btn-teal">Знайти</button>
+
+                {% if search or status %}
+                    <a href="{{ path('admin2_products') }}" class="btn btn-outline-secondary">Скинути</a>
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table products-table products-table--mobile-cards align-middle">
+                <thead>
+                    <tr>
+                        <th style="width: 64px;"></th>
+                        <th>{{ product_macros.sort_link('ID', 'id', sort, direction, query) }}</th>
+                        <th>{{ product_macros.sort_link('Назва', 'title', sort, direction, query) }}</th>
+                        <th>Код</th>
+                        <th>Категорія</th>
+                        <th>{{ product_macros.sort_link('Ціна', 'price', sort, direction, query) }}</th>
+                        <th>Статус</th>
+                        <th style="width: 130px;" class="text-end">Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in pagination %}
+                        {% set image = product.images|first %}
+                        <tr>
+                            <td data-label="">
+                                {% if image %}
+                                    <img src="{{ image.imageUri }}" alt="" class="product-thumb">
+                                {% else %}
+                                    <span class="product-thumb product-thumb--empty"><i class="bi bi-image"></i></span>
+                                {% endif %}
+                            </td>
+                            <td class="text-muted" data-label="ID">#{{ product.id }}</td>
+                            <td data-label="Назва">
+                                <div class="product-title">{{ product.title }}</div>
+                                <div class="product-title__meta">
+                                    <a href="/products/{{ product.id }}" target="_blank" class="text-decoration-none">
+                                        Переглянути на сайті <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                            </td>
+                            <td data-label="Код"><code class="small">{{ product.productCode ?: '—' }}</code></td>
+                            <td class="text-muted small" data-label="Категорія">{{ product.category ? product.category.title : '—' }}</td>
+                            <td class="fw-semibold" data-label="Ціна">{{ product.price|number_format(0, '.', ' ') }} ₴</td>
+                            <td data-label="Статус">
+                                {% if product.status == constant('App\\Entity\\Product::STATUS_ACTIVE') %}
+                                    <span class="status-badge status-badge--active">{{ product.status }}</span>
+                                {% else %}
+                                    <span class="status-badge status-badge--blocked">{{ product.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end col-actions" data-label="">
+                                <div class="table-actions">
+                                    <form method="post"
+                                          action="{{ path('admin2_products_clone', {id: product.id}) ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}"
+                                          class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('admin2_product_action') }}">
+                                        <button type="submit"
+                                                class="table-action table-action--teal"
+                                                title="Копіювати"
+                                                data-confirm="Скопіювати товар #{{ product.id }}?">
+                                            <i class="bi bi-copy"></i>
+                                        </button>
+                                    </form>
+
+                                    <a href="{{ path('admin2_products_edit', {id: product.id}) }}"
+                                       class="table-action table-action--teal"
+                                       title="Редагувати">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <form method="post"
+                                          action="{{ path('admin2_products_delete', {id: product.id}) ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}"
+                                          class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('admin2_product_action') }}">
+                                        <button type="submit"
+                                                class="table-action table-action--danger"
+                                                title="Видалити"
+                                                data-confirm="Видалити товар «{{ product.title|e('html_attr') }}»? Цю дію не можна скасувати.">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-5">
+                                <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                                Товарів не знайдено
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if pagination.getTotalItemCount() > 0 %}
+            <div class="products-footer">
+                <div class="products-summary">
+                    Показано {{ pagination.getPaginationData()['firstItemNumber'] }}–{{ pagination.getPaginationData()['lastItemNumber'] }}
+                    з {{ pagination.getTotalItemCount() }}
+                </div>
+
+                {% if pagination.pageCount > 1 %}
+                    {% set currentPage = pagination.currentPageNumber %}
+                    {% set pageCount = pagination.pageCount %}
+                    {% set startPage = max(1, currentPage - 2) %}
+                    {% set endPage = min(pageCount, currentPage + 2) %}
+
+                    <ul class="products-pagination">
+                        <li class="page-item {{ currentPage == 1 ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ path('admin2_products', query|merge({page: currentPage - 1})) }}">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+
+                        {% if startPage > 1 %}
+                            {{ product_macros.page_link(pagination, 1, query) }}
+                            {% if startPage > 2 %}
+                                <li class="page-item disabled"><span class="page-link">…</span></li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% for page in startPage..endPage %}
+                            {{ product_macros.page_link(pagination, page, query) }}
+                        {% endfor %}
+
+                        {% if endPage < pageCount %}
+                            {% if endPage < pageCount - 1 %}
+                                <li class="page-item disabled"><span class="page-link">…</span></li>
+                            {% endif %}
+                            {{ product_macros.page_link(pagination, pageCount, query) }}
+                        {% endif %}
+
+                        <li class="page-item {{ currentPage == pageCount ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ path('admin2_products', query|merge({page: currentPage + 1})) }}">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.querySelectorAll('[data-confirm]').forEach((button) => {
+            button.closest('form')?.addEventListener('submit', (event) => {
+                if (!window.confirm(button.dataset.confirm)) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+{% endblock %}

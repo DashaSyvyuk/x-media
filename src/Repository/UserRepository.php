@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\User;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -44,5 +45,33 @@ class UserRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
         $entityManager->refresh($user);
         $entityManager->flush();
+    }
+
+    public function createAdminListQueryBuilder(
+        string $search = '',
+        string $sort = 'id',
+        string $direction = 'DESC',
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('u');
+
+        $search = trim($search);
+        if ($search !== '') {
+            $qb->andWhere(
+                'LOWER(u.phone) LIKE :search
+                OR LOWER(u.email) LIKE :search
+                OR LOWER(u.name) LIKE :search
+                OR LOWER(u.surname) LIKE :search',
+            )->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
+        $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
+        $allowedSorts = ['id', 'name', 'surname', 'phone', 'email', 'createdAt'];
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = 'id';
+        }
+
+        $qb->orderBy('u.' . $sort, $direction);
+
+        return $qb;
     }
 }

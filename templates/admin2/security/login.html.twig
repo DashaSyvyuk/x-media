@@ -1,0 +1,42 @@
+{% extends 'admin2/layouts/guest.html.twig' %}
+
+{% block body %}
+    {% if error %}
+        <div class="alert alert-danger py-2 small">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+    {% endif %}
+
+    <form method="post" action="{{ path('admin2_login') }}">
+        <div class="mb-3">
+            <label for="inputEmail" class="form-label">Email</label>
+            <input type="email"
+                   value="{{ last_username }}"
+                   name="email"
+                   id="inputEmail"
+                   class="form-control"
+                   autocomplete="email"
+                   required
+                   autofocus>
+        </div>
+
+        <div class="mb-3">
+            <label for="inputPassword" class="form-label">Пароль</label>
+            <input type="password"
+                   name="password"
+                   id="inputPassword"
+                   class="form-control"
+                   autocomplete="current-password"
+                   required>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin2_authenticate') }}">
+
+        <div class="form-check mb-4">
+            <input type="checkbox" class="form-check-input" id="remember_me" name="_remember_me">
+            <label class="form-check-label" for="remember_me">Запамʼятати мене</label>
+        </div>
+
+        <button class="btn btn-teal w-100" type="submit">Увійти</button>
+    </form>
+{% endblock %}

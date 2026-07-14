@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -74,5 +75,118 @@ class OrderRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
         $entityManager->refresh($order);
         $entityManager->flush();
+    }
+
+    public function createAdminListQueryBuilder(
+        string $search = '',
+        ?string $status = null,
+        string $sort = 'id',
+        string $direction = 'DESC',
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('o')
+            ->leftJoin('o.paytype', 'paytype')->addSelect('paytype')
+            ->leftJoin('o.deltype', 'deltype')->addSelect('deltype');
+
+        $search = trim($search);
+        if ($search !== '') {
+            $qb->andWhere(
+                'LOWER(o.orderNumber) LIKE :search
+                OR LOWER(o.surname) LIKE :search
+                OR LOWER(o.phone) LIKE :search
+                OR LOWER(o.email) LIKE :search
+                OR LOWER(o.name) LIKE :search',
+            )->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
+        if ($status !== null && $status !== '') {
+            $qb->andWhere('o.status = :status')->setParameter('status', $status);
+        }
+
+        $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
+        $allowedSorts = ['id', 'orderNumber', 'surname', 'phone', 'status', 'total', 'createdAt'];
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = 'id';
+        }
+
+        $qb->orderBy('o.' . $sort, $direction);
+
+        return $qb;
+    }
+
+    /**
+     * @return array{
+     *     total: int,
+     *     new: int,
+     *     inProgress: int,
+     *     shipped: int,
+     *     completed: int,
+     *     canceled: int,
+     *     totalSum: int
+     * }
+     */
+    public function getStatusSummary(?string $statusFilter = null): array
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->select('o.status', 'COUNT(o.id) AS cnt', 'COALESCE(SUM(o.total), 0) AS sumTotal');
+
+        if ($statusFilter !== null && $statusFilter !== '') {
+            $qb->where('o.status = :status')->setParameter('status', $statusFilter);
+        }
+
+        $rows = $qb->groupBy('o.status')->getQuery()->getScalarResult();
+
+        $summary = [
+            'total'      => 0,
+            'new'        => 0,
+            'inProgress' => 0,
+            'shipped'    => 0,
+            'completed'  => 0,
+            'canceled'   => 0,
+            'totalSum'   => 0,
+        ];
+
+        foreach ($rows as $row) {
+            $count = (int) $row['cnt'];
+            $sum   = (int) $row['sumTotal'];
+            $summary['total']    += $count;
+            $summary['totalSum'] += $sum;
+
+            $groupId = Order::GROUPED_STATUSES[$row['status']]['id'] ?? 0;
+            match ($groupId) {
+                1       => $summary['new'] += $count,
+                2       => $summary['inProgress'] += $count,
+                3       => $summary['shipped'] += $count,
+                4       => $summary['completed'] += $count,
+                5       => $summary['canceled'] += $count,
+                default => null,
+            };
+        }
+
+        return $summary;
+    }
+
+    /**
+     * @return Order[]
+     */
+    public function findActiveForFulfillmentBoard(int $limit = 100): array
+    {
+        $statuses = [
+            Order::NEW,
+            Order::NOT_APPROVED,
+            Order::APPROVED,
+            Order::PACKING,
+        ];
+
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.items', 'items')->addSelect('items')
+            ->leftJoin('items.product', 'product')->addSelect('product')
+            ->leftJoin('o.novaPoshtaCity', 'novaPoshtaCity')->addSelect('novaPoshtaCity')
+            ->leftJoin('o.novaPoshtaOffice', 'novaPoshtaOffice')->addSelect('novaPoshtaOffice')
+            ->where('o.status IN (:statuses)')
+            ->setParameter('statuses', $statuses)
+            ->orderBy('o.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 }

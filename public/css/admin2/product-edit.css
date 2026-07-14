@@ -1,0 +1,167 @@
+.product-edit-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.product-edit-section {
+    border: 0;
+    border-radius: 14px;
+    margin-bottom: 1rem;
+}
+
+.product-edit-section .card-header {
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: 600;
+    padding: 1rem 1.25rem;
+}
+
+.product-edit-section .card-body {
+    padding: 1.25rem;
+}
+
+.collection-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    background: #f8fafc;
+}
+
+.collection-item--collapsible.is-collapsed {
+    padding: 0.625rem 1rem;
+}
+
+.collection-item__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.collection-item--collapsible:not(.is-collapsed) .collection-item__toolbar {
+    margin-bottom: 0.75rem;
+}
+
+.collection-item__toggle {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #0f172a;
+    text-align: left;
+    cursor: pointer;
+}
+
+.collection-item__toggle:hover,
+.collection-item__toggle:focus {
+    color: #0d9488;
+}
+
+.collection-item__chevron {
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    color: #64748b;
+    transition: transform 0.2s ease;
+}
+
+.collection-item--collapsible.is-collapsed .collection-item__chevron {
+    transform: rotate(-90deg);
+}
+
+.collection-item__summary {
+    font-size: 0.9375rem;
+    font-weight: 500;
+}
+
+.collection-item--collapsible:not(.is-collapsed) .collection-item__summary {
+    display: none;
+}
+
+.collection-item--collapsible.is-collapsed .collection-item__body {
+    display: none;
+}
+
+.collection-item__remove {
+    flex-shrink: 0;
+}
+
+.collection-item:not(.collection-item--collapsible) .collection-item__remove {
+    float: right;
+}
+
+.product-image-preview {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    margin-top: 0.5rem;
+}
+
+.product-edit-actions {
+    position: sticky;
+    bottom: 1rem;
+    z-index: 20;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 0;
+}
+
+.product-edit-actions .card {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.product-edit-actions__bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.product-edit-meta {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.product-edit-form .mb-3 {
+    margin-bottom: 0 !important;
+}
+
+.product-edit-form .form-label {
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.35rem;
+}
+
+.product-edit-form .form-control,
+.product-edit-form .form-select {
+    font-size: 0.9375rem;
+}
+
+.product-edit-form .admin2-switch-row {
+    margin-bottom: 0 !important;
+}
+
+.product-edit-form .vich-image img {
+    max-width: 120px;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    margin-top: 0.5rem;
+}
+
+.add-collection-row {
+    margin-top: 0.5rem;
+}

@@ -1,0 +1,38 @@
+{% macro money(value, symbol) %}
+    {% set formatted = value|number_format(0, '.', ' ') %}
+    {% if value > 0 %}
+        <span class="debt-money debt-money--positive">+{{ formatted }}{% if symbol %} {{ symbol }}{% endif %}</span>
+    {% elseif value < 0 %}
+        <span class="debt-money debt-money--negative">{{ formatted }}{% if symbol %} {{ symbol }}{% endif %}</span>
+    {% else %}
+        <span class="debt-money debt-money--zero">{{ formatted }}{% if symbol %} {{ symbol }}{% endif %}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro balance_label(value) %}
+    {% if value > 0 %}
+        Вам винні
+    {% elseif value < 0 %}
+        Ви винні
+    {% else %}
+        Баланс нульовий
+    {% endif %}
+{% endmacro %}
+
+{% macro sort_link(label, field, currentSort, currentDir, query) %}
+    {% set nextDir = (currentSort == field and currentDir == 'ASC') ? 'DESC' : 'ASC' %}
+    {% set params = query|merge({sort: field, dir: nextDir, page: 1}) %}
+    <a href="{{ path('admin2_debtors', params) }}" class="sort-link {{ currentSort == field ? 'active' : '' }}">
+        {{ label }}
+        {% if currentSort == field %}
+            <i class="bi bi-chevron-{{ currentDir == 'ASC' ? 'up' : 'down' }}"></i>
+        {% endif %}
+    </a>
+{% endmacro %}
+
+{% macro page_link(pagination, page, query) %}
+    {% set params = query|merge({page: page}) %}
+    <li class="page-item {{ page == pagination.currentPageNumber ? 'active' : '' }}">
+        <a class="page-link" href="{{ path('admin2_debtors', params) }}">{{ page }}</a>
+    </li>
+{% endmacro %}

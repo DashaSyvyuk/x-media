@@ -1,0 +1,17 @@
+{% macro role_label(roles) %}
+    {% if constant('App\\Entity\\AdminUser::ROLE_SUPER_ADMIN') in roles %}
+        Бог
+    {% elseif constant('App\\Entity\\AdminUser::ROLE_ADMIN') in roles %}
+        Кріпак
+    {% else %}
+        Холоп
+    {% endif %}
+{% endmacro %}
+
+{% macro bool_badge(value, trueLabel, falseLabel) %}
+    {% if value %}
+        <span class="status-badge status-badge--active">{{ trueLabel|default('Так') }}</span>
+    {% else %}
+        <span class="status-badge status-badge--blocked">{{ falseLabel|default('Ні') }}</span>
+    {% endif %}
+{% endmacro %}

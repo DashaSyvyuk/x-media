@@ -4,6 +4,7 @@ namespace App\Controller\API;
 
 use App\Repository\RozetkaCharacteristicsRepository;
 use App\Repository\RozetkaCharacteristicsValueRepository;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -23,7 +24,8 @@ class RozetkaCharacteristicsController extends AbstractController
 
     public function __construct(
         private readonly RozetkaCharacteristicsRepository $rozetkaCharacteristicsRepository,
-        private readonly RozetkaCharacteristicsValueRepository $rozetkaCharacteristicsValueRepository
+        private readonly RozetkaCharacteristicsValueRepository $rozetkaCharacteristicsValueRepository,
+        private readonly RequestStack $requestStack,
     ) {
     }
 
@@ -49,8 +51,16 @@ class RozetkaCharacteristicsController extends AbstractController
         }
 
         return $this->render(self::FORM_FIELDS[$characteristics->getType()], [
-            'values' => $values,
-            'valueId' => $valueId
+            'values'     => $values,
+            'valueId'    => $valueId,
+            'formPrefix' => $this->getFormPrefix(),
         ]);
+    }
+
+    private function getFormPrefix(): string
+    {
+        $prefix = trim((string) $this->requestStack->getCurrentRequest()?->query->get('prefix', 'RozetkaProduct'));
+
+        return $prefix !== '' ? $prefix : 'RozetkaProduct';
     }
 }

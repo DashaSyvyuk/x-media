@@ -1,0 +1,62 @@
+{% import 'admin2/settings/_macros.html.twig' as settings_macros %}
+
+<div class="settings-tab-toolbar">
+    <h2 class="h5 mb-0">Способи доставки</h2>
+    <a href="{{ path('admin2_settings_delivery_new') }}" class="btn btn-teal btn-sm">
+        <i class="bi bi-plus-lg"></i> Додати спосіб
+    </a>
+</div>
+
+<div class="settings-table-scroll">
+    <table class="table products-table align-middle mb-0">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Назва</th>
+                <th>Вартість</th>
+                <th>Пріоритет</th>
+                <th>Стан</th>
+                <th>Нова Пошта</th>
+                <th class="text-end">Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for deliveryType in deliveryTypes %}
+                <tr>
+                    <td>
+                        {% if deliveryType.iconUri %}
+                            <img src="{{ deliveryType.iconUri }}" alt="" class="settings-icon-preview">
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="fw-semibold">{{ deliveryType.title }}</td>
+                    <td>{{ deliveryType.cost ?? 0 }}</td>
+                    <td>{{ deliveryType.priority ?? '—' }}</td>
+                    <td>{{ settings_macros.bool_badge(deliveryType.enabled, 'Активний', 'Вимкнено') }}</td>
+                    <td>{{ settings_macros.bool_badge(deliveryType.isNovaPoshta) }}</td>
+                    <td class="text-end text-nowrap">
+                        <a href="{{ path('admin2_settings_delivery_edit', {id: deliveryType.id}) }}"
+                           class="btn btn-sm btn-outline-teal">
+                            Редагувати
+                        </a>
+                        <form method="post"
+                              action="{{ path('admin2_settings_delivery_delete', {id: deliveryType.id}) }}"
+                              class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_delivery') }}">
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    data-confirm="Видалити «{{ deliveryType.title|e('html_attr') }}»?">
+                                Видалити
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">Способів доставки ще немає</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

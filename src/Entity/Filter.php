@@ -41,11 +41,11 @@ class Filter
     private ?int $priority = 0;
 
     #[ORM\Column(type: "boolean")]
-    private bool $isOpened = true;
+    private bool $isOpened = false;
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     #[ORM\ManyToOne(targetEntity: Category::class)]
-    private Category $category;
+    private ?Category $category = null;
 
     #[ORM\Column(type: "integer")]
     private int $openedCount = 0;
@@ -81,12 +81,12 @@ class Filter
         return $this->title;
     }
 
-    public function setCategory(Category $category): void
+    public function setCategory(?Category $category): void
     {
         $this->category = $category;
     }
 
-    public function getCategory(): Category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }

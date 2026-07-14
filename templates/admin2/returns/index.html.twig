@@ -1,0 +1,159 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/orders/_macros.html.twig' as order_macros %}
+
+{% block title %}Повернення — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/orders.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set query = { q: search, status: status, sort: sort, dir: direction, perPage: perPage } %}
+
+    <div class="orders-page">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 page-header-row">
+            <div>
+                <h1 class="page-title mb-1">Повернення</h1>
+                <p class="text-muted mb-0 small">Повернення товарів від клієнтів</p>
+            </div>
+            <div class="page-header-actions">
+                <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#createReturnModal">
+                    <i class="bi bi-plus-lg"></i> Нове повернення
+                </button>
+            </div>
+        </div>
+
+        <div class="order-stat-grid order-stat-grid--compact-5" style="grid-template-columns: repeat(5, minmax(0, 1fr));">
+            <div class="card order-stat-card order-stat-card--new"><div class="order-stat-card__body"><div class="order-stat-card__label">Нові</div><div class="order-stat-card__value">{{ summary.new }}</div></div></div>
+            <div class="card order-stat-card order-stat-card--progress"><div class="order-stat-card__body"><div class="order-stat-card__label">В процесі</div><div class="order-stat-card__value">{{ summary.processing }}</div></div></div>
+            <div class="card order-stat-card order-stat-card--done"><div class="order-stat-card__body"><div class="order-stat-card__label">Повернуто</div><div class="order-stat-card__value">{{ summary.completed }}</div></div></div>
+            <div class="card order-stat-card order-stat-card--canceled"><div class="order-stat-card__body"><div class="order-stat-card__label">Відмовлено</div><div class="order-stat-card__value">{{ summary.refused }}</div></div></div>
+            <div class="card order-stat-card"><div class="order-stat-card__body"><div class="order-stat-card__label">Всього</div><div class="order-stat-card__value">{{ summary.total }}</div></div></div>
+        </div>
+
+        <div class="card border-0 shadow-sm products-table-card">
+            <div class="card-body p-3 p-md-4 border-bottom">
+                <form method="get" action="{{ path('admin2_returns') }}" class="products-toolbar">
+                    <div class="products-toolbar__search">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="search" name="q" value="{{ search }}" class="form-control border-start-0" placeholder="Ім'я, телефон, email">
+                        </div>
+                    </div>
+                    <select name="status" class="form-select" style="width: auto; min-width: 200px;">
+                        <option value="">Усі статуси</option>
+                        {% for value, label in statusChoices %}
+                            <option value="{{ value }}" {{ status == value ? 'selected' : '' }}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="perPage" class="form-select" style="width: auto; min-width: 110px;">
+                        {% for option in perPageOptions %}
+                            <option value="{{ option }}" {{ perPage == option ? 'selected' : '' }}>{{ option }} / стор.</option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" name="sort" value="{{ sort }}">
+                    <input type="hidden" name="dir" value="{{ direction }}">
+                    <button type="submit" class="btn btn-teal">Знайти</button>
+                    {% if search or status %}
+                        <a href="{{ path('admin2_returns') }}" class="btn btn-outline-secondary">Скинути</a>
+                    {% endif %}
+                </form>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table products-table products-table--mobile-cards align-middle">
+                    <thead>
+                        <tr>
+                            <th>{{ order_macros.sort_link('ID', 'id', sort, direction, query, 'admin2_returns') }}</th>
+                            <th>{{ order_macros.sort_link('Клієнт', 'name', sort, direction, query, 'admin2_returns') }}</th>
+                            <th>Товар</th>
+                            <th>{{ order_macros.sort_link('Статус', 'status', sort, direction, query, 'admin2_returns') }}</th>
+                            <th>{{ order_macros.sort_link('Сума', 'amount', sort, direction, query, 'admin2_returns') }}</th>
+                            <th>{{ order_macros.sort_link('Дата', 'createdAt', sort, direction, query, 'admin2_returns') }}</th>
+                            <th style="width: 100px;" class="text-end">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in pagination %}
+                            <tr>
+                                <td class="text-muted" data-label="ID">#{{ item.id }}</td>
+                                <td data-label="Клієнт">
+                                    <div class="product-title">{{ item.name }} {{ item.surname }}</div>
+                                    <div class="product-title__meta">{{ item.phone }}</div>
+                                </td>
+                                <td class="small" data-label="Товар">{{ item.product ? item.product.title : '—' }}</td>
+                                <td data-label="Статус">{{ order_macros.return_status_badge(item.status) }}</td>
+                                <td data-label="Сума">{{ order_macros.money(item.amount) }}</td>
+                                <td class="small text-muted" data-label="Дата">{{ item.createdAt|date('d.m.Y H:i') }}</td>
+                                <td class="text-end col-actions" data-label="">
+                                    <div class="table-actions">
+                                        <a href="{{ path('admin2_returns_edit', {id: item.id}) }}" class="table-action table-action--teal" title="Редагувати"><i class="bi bi-pencil"></i></a>
+                                        <form method="post" action="{{ path('admin2_returns_delete', {id: item.id}) ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}" class="d-inline">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('admin2_return_action') }}">
+                                            <button type="submit" class="table-action table-action--danger" title="Видалити" data-confirm="Видалити повернення #{{ item.id }}?"><i class="bi bi-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="7" class="text-center text-muted py-5"><i class="bi bi-arrow-return-left fs-2 d-block mb-2"></i>Повернень не знайдено</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if pagination.getTotalItemCount() > 0 %}
+                <div class="products-footer">
+                    <div class="products-summary">Показано {{ pagination.getPaginationData()['firstItemNumber'] }}–{{ pagination.getPaginationData()['lastItemNumber'] }} з {{ pagination.getTotalItemCount() }}</div>
+                    {% if pagination.pageCount > 1 %}
+                        {% set currentPage = pagination.currentPageNumber %}
+                        {% set pageCount = pagination.pageCount %}
+                        {% set startPage = max(1, currentPage - 2) %}
+                        {% set endPage = min(pageCount, currentPage + 2) %}
+                        <ul class="products-pagination">
+                            <li class="page-item {{ currentPage == 1 ? 'disabled' : '' }}"><a class="page-link" href="{{ path('admin2_returns', query|merge({page: currentPage - 1})) }}"><i class="bi bi-chevron-left"></i></a></li>
+                            {% for page in startPage..endPage %}{{ order_macros.page_link(pagination, page, query, 'admin2_returns') }}{% endfor %}
+                            <li class="page-item {{ currentPage == pageCount ? 'disabled' : '' }}"><a class="page-link" href="{{ path('admin2_returns', query|merge({page: currentPage + 1})) }}"><i class="bi bi-chevron-right"></i></a></li>
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="modal fade" id="createReturnModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-fullscreen-sm-down">
+            <div class="modal-content">
+                {{ form_start(createForm, { action: path('admin2_returns_new'), method: 'POST' }) }}
+                <div class="modal-header">
+                    <h5 class="modal-title">Нове повернення</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">{{ form_row(createForm.name) }}</div>
+                        <div class="col-md-6">{{ form_row(createForm.phone) }}</div>
+                        <div class="col-md-6">{{ form_row(createForm.product) }}</div>
+                        <div class="col-md-6">{{ form_row(createForm.amount) }}</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Створити</button>
+                </div>
+                {{ form_end(createForm) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.querySelectorAll('[data-confirm]').forEach((button) => {
+            button.closest('form')?.addEventListener('submit', (event) => {
+                if (!window.confirm(button.dataset.confirm)) event.preventDefault();
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% import 'admin2/orders/_macros.html.twig' as order_macros %}
+
+{% set hasTtn = order.ttn|default('')|trim != '' %}
+
+<article class="fulfillment-card fulfillment-card--tone-{{ order.statusTone|default('default') }}{{ order.type == 'rozetka' ? ' fulfillment-card--rozetka' : '' }}{{ hasTtn ? ' fulfillment-card--has-ttn' : '' }}"
+         {% if order.key is defined %}data-card-key="{{ order.key }}"{% endif %}
+         data-customer-type="{{ order.type }}"
+         data-customer-id="{{ order.id }}"
+         {% if linkColor is defined and linkColor %}style="--link-color: {{ linkColor }}"{% endif %}>
+    {% if linkColor is defined and linkColor %}
+        <span class="fulfillment-card__link-dot" style="background: {{ linkColor }}"></span>
+    {% endif %}
+    <div class="fulfillment-card__top">
+        <strong>
+            {% if order.editUrl %}
+                <a href="{{ order.editUrl }}">{{ order.label }}</a>
+            {% else %}
+                {{ order.label }}
+            {% endif %}
+        </strong>
+        <div class="fulfillment-card__top-actions">
+            {{ order_macros.copy_button(order.copyText|default(null)) }}
+            {{ order_macros.receipt_button(order.type, order.id) }}
+            {% if order.isRozetka or order.type == 'rozetka' %}
+                <span class="badge bg-success-subtle text-success-emphasis">Rozetka</span>
+            {% endif %}
+        </div>
+    </div>
+    <form method="post"
+          action="{{ path(statusFormRoute) }}"
+          class="fulfillment-status-form mt-1">
+        <input type="hidden" name="_token" value="{{ csrf_token('fulfillment_action') }}">
+        <input type="hidden" name="customer_type" value="{{ order.type }}">
+        <input type="hidden" name="customer_id" value="{{ order.id }}">
+        {% set allowStatusChange = showStatusSelect is not defined or showStatusSelect %}
+        {% if allowStatusChange %}
+            {% if order.type == 'rozetka' %}
+                <select name="status"
+                        class="form-select form-select-sm fulfillment-status-select"
+                        {{ order.canEditStatus ? '' : 'disabled' }}>
+                    {% for option in order.statusAvailable %}
+                        <option value="{{ option.id }}" {{ option.id == order.statusId ? 'selected' : '' }}>
+                            {{ option.label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <select name="status" class="form-select form-select-sm fulfillment-status-select">
+                    {% for code, label in order.statusChoices %}
+                        <option value="{{ code }}" {{ code == order.statusCode ? 'selected' : '' }}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+        {% else %}
+            <div class="fulfillment-card__status">{{ order.status }}</div>
+            {% if order.type == 'rozetka' %}
+                <input type="hidden" name="status" value="{{ order.statusId }}">
+            {% else %}
+                <input type="hidden" name="status" value="{{ order.statusCode }}">
+            {% endif %}
+        {% endif %}
+        <input type="text"
+               name="ttn"
+               value="{{ order.ttn|default('') }}"
+               class="form-control form-control-sm fulfillment-ttn-input mt-1"
+               placeholder="ТТН Нової Пошти"
+               inputmode="numeric"
+               autocomplete="off"
+               {{ order.type == 'rozetka' and not order.canEditStatus ? 'disabled' : '' }}>
+    </form>
+    <div class="fulfillment-card__meta">{{ order.recipient }} · {{ order.phone }}</div>
+    <ul class="fulfillment-card__items">
+        {% for item in order.items|slice(0, 3) %}
+            <li>{{ item.qty }}× {{ item.name|slice(0, 50) }}</li>
+        {% endfor %}
+    </ul>
+    <div class="fulfillment-card__footer">
+        <span class="text-muted small">{{ order.created }}</span>
+        <strong>{{ order_macros.money(order.total) }}</strong>
+    </div>
+</article>

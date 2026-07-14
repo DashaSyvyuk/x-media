@@ -1,6 +1,7 @@
+{% set prefix = formPrefix|default('RozetkaProduct') %}
 <textarea
-        id="RozetkaProduct_values_{{ valueId }}_stringValue"
-        name="RozetkaProduct[values][{{ valueId }}][stringValue]"
+        id="{{ prefix }}_values_{{ valueId }}_stringValue"
+        name="{{ prefix }}[values][{{ valueId }}][stringValue]"
         class="rozetka-characteristics-values form-control"
 >
 </textarea>

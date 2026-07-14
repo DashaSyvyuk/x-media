@@ -1,0 +1,90 @@
+.moderation-page .moderation-card {
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+}
+
+.moderation-tabs {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem;
+    margin: 1rem 1.25rem 0;
+    background: #f1f5f9;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.moderation-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    border-radius: 9px;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    white-space: nowrap;
+}
+
+.moderation-tab i {
+    font-size: 1rem;
+    opacity: 0.85;
+}
+
+.moderation-tab:hover {
+    background: rgba(255, 255, 255, 0.72);
+    color: #334155;
+}
+
+.moderation-tab--active {
+    background: #fff;
+    color: #0f172a;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(15, 23, 42, 0.04);
+}
+
+.moderation-tab--active i {
+    color: var(--color-teal, #0d9488);
+    opacity: 1;
+}
+
+.moderation-tab__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.35rem;
+    height: 1.35rem;
+    padding: 0 0.35rem;
+    border-radius: 999px;
+    background: #f59e0b;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.moderation-tab--active .moderation-tab__badge {
+    background: var(--color-teal, #0d9488);
+}
+
+@media (max-width: 576px) {
+    .moderation-tabs {
+        display: flex;
+        width: calc(100% - 2rem);
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .moderation-tab {
+        flex: 1 1 0;
+        justify-content: center;
+        padding: 0.55rem 0.65rem;
+    }
+
+    .moderation-tab span:not(.moderation-tab__badge) {
+        font-size: 0.8rem;
+    }
+}

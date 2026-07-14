@@ -1,0 +1,72 @@
+<div class="modal fade" id="createFopModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="{{ path('admin2_settings_fops_store') }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_fop') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Новий ФОП</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">ФОП / Назва</label>
+                        <input type="text" name="fop_profile[title]" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">ЄДРПОУ</label>
+                        <input type="text" name="fop_profile[edrpou]" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Рахунок / Банк</label>
+                        <input type="text" name="fop_profile[bankAccount]" class="form-control" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Адреса</label>
+                        <input type="text" name="fop_profile[address]" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editFopModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" id="editFopForm" action="">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_fop') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редагувати ФОП</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">ФОП / Назва</label>
+                        <input type="text" name="fop_profile[title]" id="editFopTitle" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">ЄДРПОУ</label>
+                        <input type="text" name="fop_profile[edrpou]" id="editFopEdrpou" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Рахунок / Банк</label>
+                        <input type="text" name="fop_profile[bankAccount]" id="editFopBankAccount" class="form-control" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Адреса</label>
+                        <input type="text" name="fop_profile[address]" id="editFopAddress" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

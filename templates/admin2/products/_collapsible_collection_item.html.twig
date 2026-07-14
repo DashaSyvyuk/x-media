@@ -1,0 +1,16 @@
+{% macro item(type, body, collapsed) %}
+<div class="collection-item collection-item--collapsible{% if collapsed %} is-collapsed{% endif %}" data-collapsible data-collapsible-type="{{ type }}">
+    <div class="collection-item__toolbar">
+        <button type="button" class="collection-item__toggle" data-collapsible-toggle aria-expanded="{{ collapsed ? 'false' : 'true' }}">
+            <i class="bi bi-chevron-down collection-item__chevron" aria-hidden="true"></i>
+            <span class="collection-item__summary text-truncate" data-collapsible-summary>—</span>
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-danger collection-item__remove" data-collection-remove aria-label="Видалити">
+            <i class="bi bi-trash"></i>
+        </button>
+    </div>
+    <div class="collection-item__body" data-collapsible-body>
+        {{ body|raw }}
+    </div>
+</div>
+{% endmacro %}

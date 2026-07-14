@@ -1,0 +1,105 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+
+{% block title %}Головна — X-media Admin{% endblock %}
+
+{% block body %}
+    <div class="mb-4">
+        <h1 class="page-title mb-1">Вітаємо, {{ user.name }}</h1>
+        <p class="text-muted mb-0">Панель керування інтернет-магазином X-media</p>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <a href="{{ path('admin2_products') }}" class="text-decoration-none text-body">
+                <div class="card stat-card shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <span class="stat-card__icon"><i class="bi bi-box-seam"></i></span>
+                        <div>
+                            <div class="text-muted small">Контент</div>
+                            <div class="fw-semibold text-teal">Товари та каталог</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <div class="col-md-4">
+                <a href="{{ path('admin2_orders') }}" class="text-decoration-none text-body">
+                    <div class="card stat-card shadow-sm h-100">
+                        <div class="card-body d-flex align-items-center gap-3">
+                            <span class="stat-card__icon"><i class="bi bi-cart3"></i></span>
+                            <div>
+                                <div class="text-muted small">Замовлення</div>
+                                <div class="fw-semibold text-teal">
+                                    {% set newOrdersCount = admin2_new_orders_count() %}
+                                    {% if newOrdersCount > 0 %}
+                                        {{ newOrdersCount }} нових
+                                    {% else %}
+                                        Переглянути
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+
+        <div class="col-md-4">
+            <a href="{{ path('admin2_settings') }}" class="text-decoration-none text-body">
+                <div class="card stat-card shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <span class="stat-card__icon"><i class="bi bi-gear"></i></span>
+                        <div>
+                            <div class="text-muted small">Профіль</div>
+                            <div class="fw-semibold text-teal">Налаштування</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        {% if is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
+            <div class="col-md-4">
+                <a href="{{ path('admin2_price_control') }}" class="text-decoration-none text-body">
+                    <div class="card stat-card shadow-sm h-100">
+                        <div class="card-body d-flex align-items-center gap-3">
+                            <span class="stat-card__icon"><i class="bi bi-graph-up-arrow"></i></span>
+                            <div>
+                                <div class="text-muted small">Ціни</div>
+                                <div class="fw-semibold text-teal">Контроль цін</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{{ path('admin2_in_stock') }}" class="text-decoration-none text-body">
+                    <div class="card stat-card shadow-sm h-100">
+                        <div class="card-body d-flex align-items-center gap-3">
+                            <span class="stat-card__icon"><i class="bi bi-boxes"></i></span>
+                            <div>
+                                <div class="text-muted small">Склад</div>
+                                <div class="fw-semibold text-teal">Наявність</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{{ path('admin2_rozetka') }}" class="text-decoration-none text-body">
+                    <div class="card stat-card shadow-sm h-100">
+                        <div class="card-body d-flex align-items-center gap-3">
+                            <span class="stat-card__icon"><i class="bi bi-shop-window"></i></span>
+                            <div>
+                                <div class="text-muted small">Feeds</div>
+                                <div class="fw-semibold text-teal">Rozetka</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

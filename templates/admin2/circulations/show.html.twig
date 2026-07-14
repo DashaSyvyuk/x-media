@@ -1,0 +1,158 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/circulations/_macros.html.twig' as circ_macros %}
+
+{% block title %}{{ circulation.adminUser ? circulation.adminUser.email : 'Каса #' ~ circulation.id }} — Обіг — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/product-edit.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/debtors.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set code = circulation.currency.code %}
+
+    <div class="debtors-page">
+        <div class="mb-4">
+            <a href="{{ path('admin2_circulations') }}" class="back-link">
+                <i class="bi bi-arrow-left"></i>
+                <span>Назад до обігу</span>
+            </a>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-lg-8">
+                <div class="debt-balance-hero h-100 d-flex flex-column justify-content-center">
+                    <div class="debt-balance-hero__label">Баланс ({{ code }})</div>
+                    <div class="debt-balance-hero__amount {{ balance > 0 ? 'debt-balance-hero__amount--positive' : (balance < 0 ? 'debt-balance-hero__amount--negative' : '') }}">
+                        {% if balance > 0 %}+{% endif %}{{ balance|number_format(0, '.', ' ') }} {{ code }}
+                    </div>
+                    <div class="debt-balance-hero__hint">{{ circ_macros.balance_label(balance) }}</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header">Каса</div>
+                    <div class="card-body">
+                        <h1 class="h5 mb-3">{{ circulation.adminUser ? circulation.adminUser.email : 'Без адміна' }}</h1>
+                        {{ form_start(settingsForm, { action: path('admin2_circulations_settings', {id: circulation.id}), attr: { class: 'product-edit-form' } }) }}
+                        {{ form_row(settingsForm.adminUser) }}
+                        {{ form_row(settingsForm.currency) }}
+                        <div class="debt-contact-footer">
+                            {{ form_row(settingsForm.active) }}
+                            <button type="submit" class="btn btn-outline-teal btn-sm">
+                                <i class="bi bi-check2"></i> Зберегти
+                            </button>
+                        </div>
+                        {{ form_end(settingsForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm debt-add-card">
+                    <div class="card-header">Додати операцію</div>
+                    <div class="card-body">
+                        {{ form_start(paymentForm, { action: path('admin2_circulations_payments_create', {id: circulation.id}) }) }}
+                        {{ form_row(paymentForm.sum) }}
+                        {{ form_row(paymentForm.note) }}
+                        <button type="submit" class="btn btn-teal w-100">
+                            <i class="bi bi-plus-lg"></i> Зберегти операцію
+                        </button>
+                        {{ form_end(paymentForm) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm debt-history-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Історія операцій</span>
+                        <span class="text-muted small">{{ payments|length }} запис(ів)</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="debt-entry-list">
+                            {% for payment in payments %}
+                                <div class="debt-entry">
+                                    <div class="debt-entry__main">
+                                        <span class="debt-entry__line">{{ payment.description }}</span>
+                                        {% if payment.note %}
+                                            <span class="debt-entry__comment">{{ payment.note }}</span>
+                                        {% endif %}
+                                        <div class="debt-entry__meta">{{ payment.createdAt|date('d.m.Y H:i') }}</div>
+                                        <div class="debt-entry__actions">
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-outline-secondary"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editPaymentModal"
+                                                data-action="{{ path('admin2_circulations_payments_edit', {id: circulation.id, paymentId: payment.id}) }}"
+                                                data-sum="{{ payment.sum }}"
+                                                data-note="{{ payment.note|e('html_attr') }}"
+                                            >
+                                                Редагувати
+                                            </button>
+                                            <form method="post" action="{{ path('admin2_circulations_payments_delete', {id: circulation.id, paymentId: payment.id}) }}" class="d-inline" data-confirm-form>
+                                                <input type="hidden" name="_token" value="{{ csrf_token('admin2_circulation_payment_action') }}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Видалити</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="debt-entry__amount">
+                                        {{ circ_macros.money(payment.sum, code) }}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="text-center text-muted py-5">
+                                    <i class="bi bi-journal-text fs-2 d-block mb-2"></i>
+                                    Операцій ще немає
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editPaymentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" id="editPaymentForm" action="">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Редагувати операцію</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="editPaymentSum">Сума</label>
+                            <input type="number" step="1" name="circulation_payment_entry[sum]" id="editPaymentSum" class="form-control" required>
+                        </div>
+                        <div>
+                            <label class="form-label" for="editPaymentNote">Коментар</label>
+                            <input type="text" name="circulation_payment_entry[note]" id="editPaymentNote" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                        <button type="submit" class="btn btn-teal">Зберегти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin2-debtors.js') }}" defer></script>
+    <script>
+        document.querySelectorAll('[data-confirm-form]').forEach((form) => {
+            form.addEventListener('submit', (event) => {
+                if (!window.confirm('Видалити операцію?')) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+{% endblock %}

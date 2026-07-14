@@ -1,0 +1,25 @@
+{% block admin2_switch_row %}
+<div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+    {{- form_widget(form) -}}
+    {{- form_errors(form) -}}
+</div>
+{% endblock %}
+
+{% block admin2_switch_widget %}
+{% set switch_attr = {
+    id: id,
+    name: full_name,
+    class: 'admin2-switch__input',
+} %}
+<div class="admin2-switch">
+    {%- if label is not same as(false) -%}
+        <span class="admin2-switch__label">{{ label|trans(label_translation_parameters, translation_domain) }}</span>
+    {%- endif -%}
+    <label class="admin2-switch__control" for="{{ id }}">
+        <input type="checkbox"{% for name, value in switch_attr %} {{ name }}="{{ value }}"{% endfor %}{% if checked %} checked="checked"{% endif %}{% if disabled %} disabled="disabled"{% endif %}{% if required %} required="required"{% endif %}>
+        <span class="admin2-switch__track" aria-hidden="true">
+            <span class="admin2-switch__thumb"></span>
+        </span>
+    </label>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+<div class="modal fade" id="createCurrencyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="{{ path('admin2_settings_currencies_store') }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_currency') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Нова валюта</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Назва</label>
+                        <input type="text" name="currency[title]" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Скорочення</label>
+                        <input type="text" name="currency[shortTitle]" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Код</label>
+                        <input type="text" name="currency[code]" class="form-control" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Обмінний курс</label>
+                        <input type="number" name="currency[exchangeRate]" class="form-control" step="0.01" min="0" value="0" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editCurrencyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" id="editCurrencyForm" action="">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_currency') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редагувати валюту</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Назва</label>
+                        <input type="text" name="currency[title]" id="editCurrencyTitle" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Скорочення</label>
+                        <input type="text" name="currency[shortTitle]" id="editCurrencyShortTitle" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Код</label>
+                        <input type="text" name="currency[code]" id="editCurrencyCode" class="form-control" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Обмінний курс</label>
+                        <input type="number" name="currency[exchangeRate]" id="editCurrencyRate" class="form-control" step="0.01" min="0" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

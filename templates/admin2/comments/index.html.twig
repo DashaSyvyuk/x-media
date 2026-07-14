@@ -1,0 +1,144 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/comments/_macros.html.twig' as comment_macros %}
+
+{% block title %}Модерація — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/moderation.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set query = { q: search, status: status, sort: sort, dir: direction, perPage: perPage } %}
+
+    <div class="moderation-page">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 page-header-row">
+            <div>
+                <h1 class="page-title mb-1">Модерація</h1>
+                <p class="text-muted mb-0 small">Коментарі до товарів та відгуки про магазин</p>
+            </div>
+        </div>
+
+        <div class="card moderation-card products-table-card">
+            {% include 'admin2/moderation/_tabs.html.twig' %}
+
+            <div class="card-body p-3 p-md-4 border-bottom">
+            <form method="get" action="{{ path('admin2_comments') }}" class="products-toolbar">
+                <div class="products-toolbar__search">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="search" name="q" value="{{ search }}" class="form-control border-start-0" placeholder="Автор, email або товар">
+                    </div>
+                </div>
+                <select name="status" class="form-select" style="width: auto; min-width: 160px;">
+                    <option value="">Усі статуси</option>
+                    {% for label, value in statusChoices %}
+                        <option value="{{ value }}" {{ status == value ? 'selected' : '' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <select name="perPage" class="form-select" style="width: auto; min-width: 110px;">
+                    {% for option in perPageOptions %}
+                        <option value="{{ option }}" {{ perPage == option ? 'selected' : '' }}>{{ option }} / стор.</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" name="sort" value="{{ sort }}">
+                <input type="hidden" name="dir" value="{{ direction }}">
+                <button type="submit" class="btn btn-teal">Знайти</button>
+                {% if search or status %}
+                    <a href="{{ path('admin2_comments') }}" class="btn btn-outline-secondary">Скинути</a>
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table products-table align-middle">
+                <thead>
+                    <tr>
+                        <th>{{ comment_macros.sort_link('ID', 'id', sort, direction, query) }}</th>
+                        <th>{{ comment_macros.sort_link('Автор', 'author', sort, direction, query) }}</th>
+                        <th>Email</th>
+                        <th>{{ comment_macros.sort_link('Товар', 'product', sort, direction, query) }}</th>
+                        <th>{{ comment_macros.sort_link('Статус', 'status', sort, direction, query) }}</th>
+                        <th>{{ comment_macros.sort_link('Дата', 'createdAt', sort, direction, query) }}</th>
+                        <th style="width: 100px;" class="text-end">Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in pagination %}
+                        <tr>
+                            <td class="text-muted">#{{ comment.id }}</td>
+                            <td><div class="product-title">{{ comment.author }}</div></td>
+                            <td class="text-muted small">{{ comment.email ?: '—' }}</td>
+                            <td class="text-muted small">{{ comment.product.title }}</td>
+                            <td>{{ comment_macros.status_badge(comment.status) }}</td>
+                            <td class="small text-muted">{{ comment.createdAt|date('d.m.Y H:i') }}</td>
+                            <td class="text-end">
+                                <div class="table-actions">
+                                    <a href="{{ path('admin2_comments_edit', {id: comment.id}) }}" class="table-action table-action--teal" title="Редагувати">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="post" action="{{ path('admin2_comments_delete', {id: comment.id}) ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('admin2_comment_action') }}">
+                                        <button type="submit" class="table-action table-action--danger" title="Видалити" data-confirm="Видалити коментар #{{ comment.id }}?">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-5">
+                                <i class="bi bi-chat-left-text fs-2 d-block mb-2"></i>
+                                Коментарів не знайдено
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if pagination.getTotalItemCount() > 0 %}
+            <div class="products-footer">
+                <div class="products-summary">
+                    Показано {{ pagination.getPaginationData()['firstItemNumber'] }}–{{ pagination.getPaginationData()['lastItemNumber'] }}
+                    з {{ pagination.getTotalItemCount() }}
+                </div>
+                {% if pagination.pageCount > 1 %}
+                    {% set currentPage = pagination.currentPageNumber %}
+                    {% set pageCount = pagination.pageCount %}
+                    {% set startPage = max(1, currentPage - 2) %}
+                    {% set endPage = min(pageCount, currentPage + 2) %}
+                    <ul class="products-pagination">
+                        <li class="page-item {{ currentPage == 1 ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ path('admin2_comments', query|merge({page: currentPage - 1})) }}"><i class="bi bi-chevron-left"></i></a>
+                        </li>
+                        {% if startPage > 1 %}
+                            {{ comment_macros.page_link(pagination, 1, query) }}
+                            {% if startPage > 2 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                        {% endif %}
+                        {% for page in startPage..endPage %}{{ comment_macros.page_link(pagination, page, query) }}{% endfor %}
+                        {% if endPage < pageCount %}
+                            {% if endPage < pageCount - 1 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                            {{ comment_macros.page_link(pagination, pageCount, query) }}
+                        {% endif %}
+                        <li class="page-item {{ currentPage == pageCount ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ path('admin2_comments', query|merge({page: currentPage + 1})) }}"><i class="bi bi-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.querySelectorAll('[data-confirm]').forEach((button) => {
+            button.closest('form')?.addEventListener('submit', (event) => {
+                if (!window.confirm(button.dataset.confirm)) event.preventDefault();
+            });
+        });
+    </script>
+{% endblock %}

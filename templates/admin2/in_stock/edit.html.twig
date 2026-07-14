@@ -1,0 +1,57 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+
+{% block title %}{{ isNew|default(false) ? 'Новий запис наявності' : 'Наявність #' ~ stock.id }} — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/product-edit.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/product-picker.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="product-edit-header">
+        <div>
+            <a href="{{ path('admin2_in_stock') }}" class="text-decoration-none text-muted small d-inline-flex align-items-center gap-1 mb-2">
+                <i class="bi bi-arrow-left"></i> До списку наявності
+            </a>
+            <h1 class="page-title mb-1">{{ isNew|default(false) ? 'Новий запис наявності' : 'Наявність #' ~ stock.id }}</h1>
+            {% if not isNew|default(false) and stock.product %}
+                <div class="product-edit-meta">{{ stock.product.title }} · {{ stock.warehouse.title }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if form.vars.errors|length > 0 %}
+        <div class="alert alert-danger">{{ form_errors(form) }}</div>
+    {% endif %}
+
+    {{ form_start(form, { attr: { class: 'product-edit-form' } }) }}
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Залишок на складі</div>
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-6">
+                    {{ form_widget(form.product) }}
+                    {{ form_errors(form.product) }}
+                </div>
+                <div class="col-md-6">{{ form_row(form.warehouse) }}</div>
+                <div class="col-md-3">{{ form_row(form.quantity) }}</div>
+                <div class="col-md-3">{{ form_row(form.purchasePrice) }}</div>
+                <div class="col-12">{{ form_row(form.note) }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-edit-actions">
+        <div class="card border-0 px-3 py-2 product-edit-actions__bar">
+            <button type="submit" class="btn btn-teal"><i class="bi bi-check2"></i> Зберегти</button>
+            <a href="{{ path('admin2_in_stock') }}" class="btn btn-outline-secondary">Скасувати</a>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin2-product-picker.js') }}" defer></script>
+{% endblock %}

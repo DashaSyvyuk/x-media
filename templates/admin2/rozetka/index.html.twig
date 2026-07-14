@@ -1,0 +1,166 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/rozetka/_macros.html.twig' as rozetka_macros %}
+
+{% block title %}Rozetka — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/rozetka.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set query = { q: search, ready: ready, feed: feed, sort: sort, dir: direction, perPage: perPage } %}
+
+    <div class="rozetka-page">
+        <div class="rozetka-hero card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex flex-wrap align-items-start justify-content-between gap-3">
+                    <div>
+                        <div class="rozetka-hero__badge mb-2"><i class="bi bi-shop-window"></i> Marketplace feed</div>
+                        <h1 class="page-title mb-1">Rozetka</h1>
+                        <p class="text-muted mb-0">Картки товарів, характеристики та XML-фіди для A / P</p>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <form method="post" action="{{ path('admin2_rozetka_generate_a') }}" class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin2_rozetka_generate') }}">
+                            {% for key, value in query %}{% if value %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endif %}{% endfor %}
+                            <button type="submit" class="btn btn-teal">
+                                <i class="bi bi-filetype-xml"></i> Feed A *.xml
+                            </button>
+                        </form>
+                        <form method="post" action="{{ path('admin2_rozetka_generate_p') }}" class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin2_rozetka_generate') }}">
+                            {% for key, value in query %}{% if value %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endif %}{% endfor %}
+                            <button type="submit" class="btn btn-outline-teal">
+                                <i class="bi bi-filetype-xml"></i> Feed P *.xml
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="rozetka-stat-grid mt-4">
+                    <div class="rozetka-stat">
+                        <div class="rozetka-stat__label">Усього</div>
+                        <div class="rozetka-stat__value">{{ summary.total }}</div>
+                    </div>
+                    <div class="rozetka-stat">
+                        <div class="rozetka-stat__label">Готові</div>
+                        <div class="rozetka-stat__value text-teal">{{ summary.ready }}</div>
+                    </div>
+                    <div class="rozetka-stat">
+                        <div class="rozetka-stat__label">Active A</div>
+                        <div class="rozetka-stat__value">{{ summary.activeA }}</div>
+                    </div>
+                    <div class="rozetka-stat">
+                        <div class="rozetka-stat__label">Active P</div>
+                        <div class="rozetka-stat__value">{{ summary.activeP }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm products-table-card">
+            <div class="card-body p-3 p-md-4 border-bottom">
+                <form method="get" action="{{ path('admin2_rozetka') }}" class="products-toolbar">
+                    <div class="products-toolbar__search">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="search" name="q" value="{{ search }}" class="form-control border-start-0" placeholder="ID, назва, код, категорія">
+                        </div>
+                    </div>
+                    <select name="ready" class="form-select" style="width: auto; min-width: 140px;">
+                        <option value="">Усі статуси</option>
+                        <option value="1" {{ ready == '1' ? 'selected' : '' }}>Готові</option>
+                        <option value="0" {{ ready == '0' ? 'selected' : '' }}>Не готові</option>
+                    </select>
+                    <select name="feed" class="form-select" style="width: auto; min-width: 130px;">
+                        <option value="">Усі фіди</option>
+                        <option value="a" {{ feed == 'a' ? 'selected' : '' }}>Active A</option>
+                        <option value="p" {{ feed == 'p' ? 'selected' : '' }}>Active P</option>
+                    </select>
+                    <select name="perPage" class="form-select" style="width: auto; min-width: 110px;">
+                        {% for option in perPageOptions %}
+                            <option value="{{ option }}" {{ perPage == option ? 'selected' : '' }}>{{ option }} / стор.</option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" name="sort" value="{{ sort }}">
+                    <input type="hidden" name="dir" value="{{ direction }}">
+                    <button type="submit" class="btn btn-teal">Знайти</button>
+                    {% if search or ready or feed %}
+                        <a href="{{ path('admin2_rozetka') }}" class="btn btn-outline-secondary">Скинути</a>
+                    {% endif %}
+                </form>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table products-table products-table--mobile-cards align-middle">
+                    <thead>
+                        <tr>
+                            <th>{{ rozetka_macros.sort_link('ID', 'productId', sort, direction, query) }}</th>
+                            <th>{{ rozetka_macros.sort_link('Назва', 'title', sort, direction, query) }}</th>
+                            <th>Категорія</th>
+                            <th>{{ rozetka_macros.sort_link('Ціна', 'price', sort, direction, query) }}</th>
+                            <th>Готовий</th>
+                            <th>A</th>
+                            <th>P</th>
+                            <th class="text-end">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in pagination %}
+                            <tr>
+                                <td data-label="ID" class="text-muted">#{{ item.product.id }}</td>
+                                <td data-label="Назва">
+                                    <div class="product-title">{{ item.title }}</div>
+                                    <div class="product-title__meta">{{ item.product.productCode ?: '—' }}</div>
+                                </td>
+                                <td data-label="Категорія" class="small text-muted">{{ item.product.category ? item.product.category.title : '—' }}</td>
+                                <td data-label="Ціна">{{ rozetka_macros.money(item.price) }}</td>
+                                <td data-label="Готовий">{{ rozetka_macros.inline_switch(item.id, 'ready', item.ready, false) }}</td>
+                                <td data-label="A">{{ rozetka_macros.inline_switch(item.id, 'activeForA', item.activeForA, not item.ready) }}</td>
+                                <td data-label="P">{{ rozetka_macros.inline_switch(item.id, 'activeForP', item.activeForP, not item.ready) }}</td>
+                                <td class="text-end col-actions" data-label="">
+                                    <a href="{{ path('admin2_rozetka_edit', {id: item.id}) }}" class="btn btn-sm btn-outline-teal">Редагувати</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="8" class="text-center text-muted py-5">Товарів Rozetka не знайдено</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if pagination.getTotalItemCount() > 0 %}
+                <div class="products-footer">
+                    <div class="products-summary">
+                        Показано {{ pagination.getPaginationData()['firstItemNumber'] }}–{{ pagination.getPaginationData()['lastItemNumber'] }}
+                        з {{ pagination.getTotalItemCount() }}
+                    </div>
+                    {% if pagination.pageCount > 1 %}
+                        {% set currentPage = pagination.currentPageNumber %}
+                        {% set pageCount = pagination.pageCount %}
+                        {% set startPage = max(1, currentPage - 2) %}
+                        {% set endPage = min(pageCount, currentPage + 2) %}
+                        <ul class="products-pagination">
+                            <li class="page-item {{ currentPage == 1 ? 'disabled' : '' }}">
+                                <a class="page-link" href="{{ path('admin2_rozetka', query|merge({page: currentPage - 1})) }}"><i class="bi bi-chevron-left"></i></a>
+                            </li>
+                            {% if startPage > 1 %}{{ rozetka_macros.page_link(pagination, 1, query) }}{% if startPage > 2 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}{% endif %}
+                            {% for page in startPage..endPage %}{{ rozetka_macros.page_link(pagination, page, query) }}{% endfor %}
+                            {% if endPage < pageCount %}{% if endPage < pageCount - 1 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}{{ rozetka_macros.page_link(pagination, pageCount, query) }}{% endif %}
+                            <li class="page-item {{ currentPage == pageCount ? 'disabled' : '' }}">
+                                <a class="page-link" href="{{ path('admin2_rozetka', query|merge({page: currentPage + 1})) }}"><i class="bi bi-chevron-right"></i></a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <meta name="rozetka-toggle-token" content="{{ csrf_token('admin2_rozetka_toggle') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin2-rozetka.js') }}" defer></script>
+{% endblock %}

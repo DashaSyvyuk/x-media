@@ -6,6 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Product;
 use App\Entity\ProductRating;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -36,5 +37,41 @@ class CommentRepository extends ServiceEntityRepository
         $entityManager->flush();
 
         return $comment;
+    }
+
+    public function createAdminListQueryBuilder(
+        string $search = '',
+        ?string $status = null,
+        string $sort = 'id',
+        string $direction = 'DESC',
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('c')
+            ->leftJoin('c.product', 'product')
+            ->addSelect('product');
+
+        $search = trim($search);
+        if ($search !== '') {
+            $qb->andWhere(
+                'LOWER(c.author) LIKE :search OR LOWER(c.email) LIKE :search OR LOWER(product.title) LIKE :search',
+            )->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
+        if ($status !== null && $status !== '') {
+            $qb->andWhere('c.status = :status')->setParameter('status', $status);
+        }
+
+        $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
+
+        if ($sort === 'product') {
+            $qb->orderBy('product.title', $direction);
+        } else {
+            $allowedSorts = ['id', 'author', 'status', 'createdAt'];
+            if (! in_array($sort, $allowedSorts, true)) {
+                $sort = 'id';
+            }
+            $qb->orderBy('c.' . $sort, $direction);
+        }
+
+        return $qb;
     }
 }

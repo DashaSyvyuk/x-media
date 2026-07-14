@@ -1,0 +1,91 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/settings/_macros.html.twig' as settings_macros %}
+
+{% block title %}Налаштування — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/settings.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="settings-page">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+            <div>
+                <h1 class="page-title mb-1">Налаштування</h1>
+                <p class="text-muted mb-0 small">Профіль та системні параметри магазину</p>
+            </div>
+            <a href="/" target="_blank" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-box-arrow-up-right"></i> Відкрити сайт
+            </a>
+        </div>
+
+        <div class="card settings-card">
+            <div class="card-header">
+                <ul class="nav nav-tabs settings-tabs" role="tablist">
+                    {% for tabId, tabLabel in tabs %}
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link {{ activeTab == tabId ? 'active' : '' }}"
+                               href="{{ path('admin2_settings', {tab: tabId}) }}">
+                                {{ tabLabel }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card-body">
+                {% if activeTab == 'profile' %}
+                    {% include 'admin2/settings/_tab_profile.html.twig' %}
+                {% elseif activeTab == 'currencies' %}
+                    {% include 'admin2/settings/_tab_currencies.html.twig' %}
+                {% elseif activeTab == 'fops' %}
+                    {% include 'admin2/settings/_tab_fops.html.twig' %}
+                {% elseif activeTab == 'shop' %}
+                    {% include 'admin2/settings/_tab_shop.html.twig' %}
+                {% elseif activeTab == 'delivery' %}
+                    {% include 'admin2/settings/_tab_delivery.html.twig' %}
+                {% elseif activeTab == 'payment' %}
+                    {% include 'admin2/settings/_tab_payment.html.twig' %}
+                {% elseif activeTab == 'admins' %}
+                    {% include 'admin2/settings/_tab_admins.html.twig' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if activeTab == 'currencies' %}
+        {% include 'admin2/settings/_modals_currencies.html.twig' %}
+    {% elseif activeTab == 'fops' %}
+        {% include 'admin2/settings/_modals_fops.html.twig' %}
+    {% elseif activeTab == 'shop' %}
+        {% include 'admin2/settings/_modals_shop.html.twig' %}
+    {% elseif activeTab == 'payment' %}
+        {% include 'admin2/settings/_modals_payment.html.twig' %}
+    {% elseif activeTab == 'admins' %}
+        {% include 'admin2/settings/_modals_admins.html.twig' %}
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.querySelectorAll('[data-confirm]').forEach((button) => {
+            button.closest('form')?.addEventListener('submit', (event) => {
+                if (!window.confirm(button.dataset.confirm)) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+    {% if activeTab == 'currencies' %}
+        <script src="{{ asset('js/admin2-settings-currencies.js') }}" defer></script>
+    {% elseif activeTab == 'fops' %}
+        <script src="{{ asset('js/admin2-settings-fops.js') }}" defer></script>
+    {% elseif activeTab == 'shop' %}
+        <script src="{{ asset('js/admin2-settings-shop.js') }}" defer></script>
+    {% elseif activeTab == 'payment' %}
+        <script src="{{ asset('js/admin2-settings-payment.js') }}" defer></script>
+    {% elseif activeTab == 'admins' %}
+        <script src="{{ asset('js/admin2-settings-admins.js') }}" defer></script>
+    {% endif %}
+{% endblock %}
