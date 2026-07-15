@@ -20,13 +20,18 @@ final class RozetkaSellerApiClient
     private const ORDER_EXPAND = 'user,delivery,delivery_service,purchases,status_data,status_available,'
         . 'is_access_change_order,total_quantity,item_details';
 
+    private readonly string $username;
+    private readonly string $password;
+
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         private readonly CacheItemPoolInterface $cache,
         private readonly LoggerInterface $logger,
-        private readonly string $username,
-        private readonly string $password,
+        ?string $username = null,
+        ?string $password = null,
     ) {
+        $this->username = trim((string) ($username ?? ''));
+        $this->password = (string) ($password ?? '');
     }
 
     public function isConfigured(): bool
