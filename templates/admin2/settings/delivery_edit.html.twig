@@ -1,0 +1,59 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+
+{% block title %}{{ isNew|default(false) ? 'Новий спосіб доставки' : 'Доставка #' ~ deliveryType.id }} — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/product-edit.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/settings.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="product-edit-header">
+        <div>
+            <a href="{{ path('admin2_settings', {tab: 'delivery'}) }}"
+               class="text-decoration-none text-muted small d-inline-flex align-items-center gap-1 mb-2">
+                <i class="bi bi-arrow-left"></i> До налаштувань · Доставка
+            </a>
+            <h1 class="page-title mb-1">
+                {{ deliveryType.title ?: (isNew|default(false) ? 'Новий спосіб доставки' : 'Доставка #' ~ deliveryType.id) }}
+            </h1>
+        </div>
+    </div>
+
+    {% if form.vars.errors|length > 0 %}
+        <div class="alert alert-danger">{{ form_errors(form) }}</div>
+    {% endif %}
+
+    {{ form_start(form, { attr: { class: 'product-edit-form', enctype: 'multipart/form-data' } }) }}
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Основне</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">{{ form_row(form.title) }}</div>
+                <div class="col-md-3">{{ form_row(form.cost) }}</div>
+                <div class="col-md-3">{{ form_row(form.priority) }}</div>
+                <div class="col-md-4 d-flex align-items-end">{{ form_row(form.enabled) }}</div>
+                <div class="col-md-4 d-flex align-items-end">{{ form_row(form.needAddressField) }}</div>
+                <div class="col-md-4 d-flex align-items-end">{{ form_row(form.isNovaPoshta) }}</div>
+                <div class="col-12">{{ form_row(form.address) }}</div>
+                <div class="col-md-6">{{ form_row(form.paymentTypes) }}</div>
+                <div class="col-md-6">
+                    {{ form_row(form.iconFile) }}
+                    {% if deliveryType.iconUri %}
+                        <img src="{{ deliveryType.iconUri }}" alt="" class="settings-icon-preview mt-2">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-edit-actions">
+        <div class="card border-0 px-3 py-2 product-edit-actions__bar">
+            <button type="submit" class="btn btn-teal"><i class="bi bi-check2"></i> Зберегти</button>
+            <a href="{{ path('admin2_settings', {tab: 'delivery'}) }}" class="btn btn-outline-secondary">Скасувати</a>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,75 @@
+<div class="modal fade" id="createPaymentTypeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="{{ path('admin2_settings_payment_store') }}" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_payment') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Новий спосіб оплати</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Назва</label>
+                        <input type="text" name="payment_type[title]" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Вартість</label>
+                        <input type="number" name="payment_type[cost]" class="form-control" min="0" value="0">
+                    </div>
+                    <div class="mb-3 d-flex align-items-center gap-3">
+                        <span class="fw-semibold">Активний</span>
+                        <input type="checkbox" name="payment_type[enabled]" value="1" class="form-check-input m-0" checked>
+                    </div>
+                    <div>
+                        <label class="form-label">Іконка</label>
+                        <input type="file" name="payment_type[iconFile]" class="form-control" accept="image/*">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editPaymentTypeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" id="editPaymentTypeForm" action="" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_payment') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редагувати спосіб оплати</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Назва</label>
+                        <input type="text" name="payment_type[title]" id="editPaymentTypeTitle" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Вартість</label>
+                        <input type="number" name="payment_type[cost]" id="editPaymentTypeCost" class="form-control" min="0">
+                    </div>
+                    <div class="mb-3 d-flex align-items-center gap-3">
+                        <span class="fw-semibold">Активний</span>
+                        <input type="checkbox" name="payment_type[enabled]" id="editPaymentTypeEnabled" value="1" class="form-check-input m-0">
+                    </div>
+                    <div class="mb-3" id="editPaymentTypeIconWrap" hidden>
+                        <label class="form-label">Поточна іконка</label>
+                        <div><img src="" alt="" id="editPaymentTypeIcon" class="settings-icon-preview"></div>
+                    </div>
+                    <div>
+                        <label class="form-label">Нова іконка</label>
+                        <input type="file" name="payment_type[iconFile]" class="form-control" accept="image/*">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

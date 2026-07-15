@@ -3,9 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Promotion;
+use App\Entity\PromotionProduct;
 use Carbon\Carbon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -48,5 +50,57 @@ class PromotionRepository extends ServiceEntityRepository
             ->setParameter('status', Promotion::ACTIVE)
             ->getQuery()
             ->getResult();
+    }
+
+    public function createAdminListQueryBuilder(
+        string $search = '',
+        string $sort = 'id',
+        string $direction = 'DESC',
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('p');
+
+        $search = trim($search);
+        if ($search !== '') {
+            $qb->andWhere('LOWER(p.title) LIKE :search OR LOWER(p.slug) LIKE :search')
+                ->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
+        $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
+        $allowedSorts = ['id', 'title', 'slug', 'status', 'activeFrom', 'activeTo'];
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = 'id';
+        }
+
+        $qb->orderBy('p.' . $sort, $direction);
+
+        return $qb;
+    }
+
+    /**
+     * @param array<int, int> $promotionIds
+     *
+     * @return array<int, int>
+     */
+    public function countProductsByPromotionIds(array $promotionIds): array
+    {
+        if ($promotionIds === []) {
+            return [];
+        }
+
+        $rows = $this->getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(pp.promotion) AS promotionId', 'COUNT(pp.id) AS productsCount')
+            ->from(PromotionProduct::class, 'pp')
+            ->where('pp.promotion IN (:ids)')
+            ->groupBy('pp.promotion')
+            ->setParameter('ids', $promotionIds)
+            ->getQuery()
+            ->getScalarResult();
+
+        $counts = [];
+        foreach ($rows as $row) {
+            $counts[(int) $row['promotionId']] = (int) $row['productsCount'];
+        }
+
+        return $counts;
     }
 }

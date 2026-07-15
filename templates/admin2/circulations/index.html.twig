@@ -1,0 +1,234 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/circulations/_macros.html.twig' as circ_macros %}
+
+{% block title %}Обіг — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/debtors.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set query = { q: search, active: activeFilter, sort: sort, dir: direction, perPage: perPage } %}
+
+    <div class="debtors-page">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+            <div>
+                <h1 class="page-title mb-1">Обіг</h1>
+                <p class="text-muted mb-0 small">Каси адмінів — позитивний баланс на рахунку, негативний у мінусі</p>
+            </div>
+            <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#createCirculationModal">
+                <i class="bi bi-plus-lg"></i> Додати касу
+            </button>
+        </div>
+
+        <div class="debt-stat-grid">
+            <div class="card debt-stat-card">
+                <div class="debt-stat-card__body">
+                    <div class="debt-stat-card__label">Кас</div>
+                    <div class="debt-stat-card__value">{{ summary.accounts|number_format(0, '.', ' ') }}</div>
+                </div>
+            </div>
+            <div class="card debt-stat-card debt-stat-card--positive">
+                <div class="debt-stat-card__body">
+                    <div class="debt-stat-card__label">На рахунку</div>
+                    {% if summary.owedToYouByCurrency %}
+                        <div class="debt-stat-card__values">
+                            {% for item in summary.owedToYouByCurrency %}
+                                <div class="debt-stat-card__value-line">+{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}</div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="debt-stat-card__value debt-stat-card__value--empty">—</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card debt-stat-card debt-stat-card--negative">
+                <div class="debt-stat-card__body">
+                    <div class="debt-stat-card__label">У мінусі</div>
+                    {% if summary.youOweByCurrency %}
+                        <div class="debt-stat-card__values">
+                            {% for item in summary.youOweByCurrency %}
+                                <div class="debt-stat-card__value-line">{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}</div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="debt-stat-card__value debt-stat-card__value--empty">—</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm products-table-card">
+            <div class="card-body p-3 p-md-4 border-bottom">
+                <form method="get" action="{{ path('admin2_circulations') }}" class="products-toolbar">
+                    <div class="products-toolbar__search">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="search" name="q" value="{{ search }}" class="form-control border-start-0" placeholder="Email або ім'я адміна">
+                        </div>
+                    </div>
+                    <input type="hidden" name="active" value="{{ activeFilter }}" id="circulationsActiveValue">
+                    <div class="admin2-switch debtors-active-filter">
+                        <span class="admin2-switch__label" id="circulationsActiveLabel">{{ activeFilter == '1' ? 'Активні' : 'Неактивні' }}</span>
+                        <label class="admin2-switch__control" for="circulationsActiveSwitch">
+                            <input type="checkbox"
+                                   id="circulationsActiveSwitch"
+                                   class="admin2-switch__input"
+                                   {{ activeFilter == '1' ? 'checked' : '' }}>
+                            <span class="admin2-switch__track" aria-hidden="true">
+                                <span class="admin2-switch__thumb"></span>
+                            </span>
+                        </label>
+                    </div>
+                    <select name="perPage" class="form-select" style="width: auto; min-width: 110px;">
+                        {% for option in perPageOptions %}
+                            <option value="{{ option }}" {{ perPage == option ? 'selected' : '' }}>{{ option }} / стор.</option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" name="sort" value="{{ sort }}">
+                    <input type="hidden" name="dir" value="{{ direction }}">
+                    <button type="submit" class="btn btn-teal">Знайти</button>
+                    {% if search or activeFilter == '0' %}
+                        <a href="{{ path('admin2_circulations') }}" class="btn btn-outline-secondary">Скинути</a>
+                    {% endif %}
+                </form>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table products-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>{{ circ_macros.sort_link('ID', 'id', sort, direction, query) }}</th>
+                            <th>{{ circ_macros.sort_link('Адмін', 'admin', sort, direction, query) }}</th>
+                            <th>{{ circ_macros.sort_link('Валюта', 'currency', sort, direction, query) }}</th>
+                            <th>{{ circ_macros.sort_link('Баланс', 'total', sort, direction, query) }}</th>
+                            <th>{{ circ_macros.sort_link('Статус', 'active', sort, direction, query) }}</th>
+                            <th style="width: 120px;" class="text-end">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for circulation in pagination %}
+                            {% set balance = balances[circulation.id]|default(0) %}
+                            <tr>
+                                <td class="text-muted">#{{ circulation.id }}</td>
+                                <td>
+                                    <div class="product-title">{{ circulation.adminUser ? circulation.adminUser.email : '—' }}</div>
+                                </td>
+                                <td class="text-muted small">{{ circulation.currency.code }}</td>
+                                <td>{{ circ_macros.money(balance, circulation.currency.code) }}</td>
+                                <td>
+                                    {% if circulation.active %}
+                                        <span class="status-badge status-badge--active">Активний</span>
+                                    {% else %}
+                                        <span class="status-badge status-badge--blocked">Неактивний</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <div class="table-actions">
+                                        <a href="{{ path('admin2_circulations_show', {id: circulation.id}) }}" class="table-action table-action--teal" title="Деталі">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <form method="post" action="{{ path('admin2_circulations_delete', {id: circulation.id}) ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}" class="d-inline">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('admin2_circulation_action') }}">
+                                            <button type="submit" class="table-action table-action--danger" title="Видалити" data-confirm="Видалити касу #{{ circulation.id }}?">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-5">
+                                    <i class="bi bi-wallet2 fs-2 d-block mb-2"></i>
+                                    Кас не знайдено
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if pagination.getTotalItemCount() > 0 %}
+                <div class="products-footer">
+                    <div class="products-summary">
+                        Показано {{ pagination.getPaginationData()['firstItemNumber'] }}–{{ pagination.getPaginationData()['lastItemNumber'] }}
+                        з {{ pagination.getTotalItemCount() }}
+                    </div>
+                    {% if pagination.pageCount > 1 %}
+                        {% set currentPage = pagination.currentPageNumber %}
+                        {% set pageCount = pagination.pageCount %}
+                        {% set startPage = max(1, currentPage - 2) %}
+                        {% set endPage = min(pageCount, currentPage + 2) %}
+                        <ul class="products-pagination">
+                            <li class="page-item {{ currentPage == 1 ? 'disabled' : '' }}">
+                                <a class="page-link" href="{{ path('admin2_circulations', query|merge({page: currentPage - 1})) }}"><i class="bi bi-chevron-left"></i></a>
+                            </li>
+                            {% if startPage > 1 %}
+                                {{ circ_macros.page_link(pagination, 1, query) }}
+                                {% if startPage > 2 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                            {% endif %}
+                            {% for page in startPage..endPage %}{{ circ_macros.page_link(pagination, page, query) }}{% endfor %}
+                            {% if endPage < pageCount %}
+                                {% if endPage < pageCount - 1 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                                {{ circ_macros.page_link(pagination, pageCount, query) }}
+                            {% endif %}
+                            <li class="page-item {{ currentPage == pageCount ? 'disabled' : '' }}">
+                                <a class="page-link" href="{{ path('admin2_circulations', query|merge({page: currentPage + 1})) }}"><i class="bi bi-chevron-right"></i></a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="modal fade" id="createCirculationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {{ form_start(createForm, { action: path('admin2_circulations_new'), method: 'POST' }) }}
+                <div class="modal-header">
+                    <h5 class="modal-title">Нова каса</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(createForm.adminUser) }}
+                    {{ form_row(createForm.currency) }}
+                    {{ form_row(createForm.active) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Створити</button>
+                </div>
+                {{ form_end(createForm) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.querySelectorAll('[data-confirm]').forEach((button) => {
+            button.closest('form')?.addEventListener('submit', (event) => {
+                if (!window.confirm(button.dataset.confirm)) event.preventDefault();
+            });
+        });
+
+        const activeSwitch = document.getElementById('circulationsActiveSwitch');
+        const activeValue = document.getElementById('circulationsActiveValue');
+        const activeLabel = document.getElementById('circulationsActiveLabel');
+        const toolbarForm = activeSwitch?.closest('form');
+
+        if (activeSwitch && activeValue && toolbarForm) {
+            activeSwitch.addEventListener('change', () => {
+                const isActive = activeSwitch.checked;
+                activeValue.value = isActive ? '1' : '0';
+                if (activeLabel) {
+                    activeLabel.textContent = isActive ? 'Активні' : 'Неактивні';
+                }
+                toolbarForm.requestSubmit();
+            });
+        }
+    </script>
+{% endblock %}

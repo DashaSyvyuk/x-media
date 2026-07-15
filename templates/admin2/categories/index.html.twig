@@ -1,0 +1,196 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/categories/_macros.html.twig' as category_macros %}
+
+{% block title %}Категорії — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set query = {
+        q: search,
+        status: status,
+        sort: sort,
+        dir: direction,
+        perPage: perPage,
+    } %}
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h1 class="page-title mb-1">Категорії</h1>
+            <p class="text-muted mb-0 small">Структура каталогу інтернет-магазину</p>
+        </div>
+        <a href="{{ path('admin2_categories_new') }}" class="btn btn-teal">
+            <i class="bi bi-plus-lg"></i> Нова категорія
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm products-table-card">
+        <div class="card-body p-3 p-md-4 border-bottom">
+            <form method="get" action="{{ path('admin2_categories') }}" class="products-toolbar">
+                <div class="products-toolbar__search">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="search"
+                               name="q"
+                               value="{{ search }}"
+                               class="form-control border-start-0"
+                               placeholder="Назва або slug">
+                    </div>
+                </div>
+
+                <select name="status" class="form-select" style="width: auto; min-width: 160px;">
+                    <option value="">Усі статуси</option>
+                    {% for label, value in statuses %}
+                        <option value="{{ value }}" {{ status == value ? 'selected' : '' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="perPage" class="form-select" style="width: auto; min-width: 110px;">
+                    {% for option in perPageOptions %}
+                        <option value="{{ option }}" {{ perPage == option ? 'selected' : '' }}>{{ option }} / стор.</option>
+                    {% endfor %}
+                </select>
+
+                <input type="hidden" name="sort" value="{{ sort }}">
+                <input type="hidden" name="dir" value="{{ direction }}">
+
+                <button type="submit" class="btn btn-teal">Знайти</button>
+
+                {% if search or status %}
+                    <a href="{{ path('admin2_categories') }}" class="btn btn-outline-secondary">Скинути</a>
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table products-table align-middle">
+                <thead>
+                    <tr>
+                        <th style="width: 64px;"></th>
+                        <th>{{ category_macros.sort_link('ID', 'id', sort, direction, query) }}</th>
+                        <th>{{ category_macros.sort_link('Назва', 'title', sort, direction, query) }}</th>
+                        <th>{{ category_macros.sort_link('Slug', 'slug', sort, direction, query) }}</th>
+                        <th>{{ category_macros.sort_link('Батько', 'parent', sort, direction, query) }}</th>
+                        <th>{{ category_macros.sort_link('Пріоритет', 'position', sort, direction, query) }}</th>
+                        <th>{{ category_macros.sort_link('Статус', 'status', sort, direction, query) }}</th>
+                        <th style="width: 100px;" class="text-end">Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in pagination %}
+                        <tr>
+                            <td>
+                                {% if category.imageUri %}
+                                    <img src="{{ category.imageUri }}" alt="" class="product-thumb">
+                                {% else %}
+                                    <span class="product-thumb product-thumb--empty"><i class="bi bi-folder2"></i></span>
+                                {% endif %}
+                            </td>
+                            <td class="text-muted">#{{ category.id }}</td>
+                            <td>
+                                <div class="product-title">{{ category.title }}</div>
+                                {% if category.showInHeader %}
+                                    <div class="product-title__meta">В хедері</div>
+                                {% endif %}
+                            </td>
+                            <td><code class="small">{{ category.slug ?: '—' }}</code></td>
+                            <td class="text-muted small">{{ category.parent ? category.parent.title : '—' }}</td>
+                            <td>{{ category.position ?? '—' }}</td>
+                            <td>{{ category_macros.status_badge(category.status) }}</td>
+                            <td class="text-end">
+                                <div class="table-actions">
+                                    <a href="{{ path('admin2_categories_edit', {id: category.id}) }}"
+                                       class="table-action table-action--teal"
+                                       title="Редагувати">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <form method="post"
+                                          action="{{ path('admin2_categories_delete', {id: category.id}) ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}"
+                                          class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('admin2_category_action') }}">
+                                        <button type="submit"
+                                                class="table-action table-action--danger"
+                                                title="Видалити"
+                                                data-confirm="Видалити категорію «{{ category.title|e('html_attr') }}»? Повʼязані товари також будуть видалені.">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-5">
+                                <i class="bi bi-folder2-open fs-2 d-block mb-2"></i>
+                                Категорій не знайдено
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if pagination.getTotalItemCount() > 0 %}
+            <div class="products-footer">
+                <div class="products-summary">
+                    Показано {{ pagination.getPaginationData()['firstItemNumber'] }}–{{ pagination.getPaginationData()['lastItemNumber'] }}
+                    з {{ pagination.getTotalItemCount() }}
+                </div>
+
+                {% if pagination.pageCount > 1 %}
+                    {% set currentPage = pagination.currentPageNumber %}
+                    {% set pageCount = pagination.pageCount %}
+                    {% set startPage = max(1, currentPage - 2) %}
+                    {% set endPage = min(pageCount, currentPage + 2) %}
+
+                    <ul class="products-pagination">
+                        <li class="page-item {{ currentPage == 1 ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ path('admin2_categories', query|merge({page: currentPage - 1})) }}">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+
+                        {% if startPage > 1 %}
+                            {{ category_macros.page_link(pagination, 1, query) }}
+                            {% if startPage > 2 %}
+                                <li class="page-item disabled"><span class="page-link">…</span></li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% for page in startPage..endPage %}
+                            {{ category_macros.page_link(pagination, page, query) }}
+                        {% endfor %}
+
+                        {% if endPage < pageCount %}
+                            {% if endPage < pageCount - 1 %}
+                                <li class="page-item disabled"><span class="page-link">…</span></li>
+                            {% endif %}
+                            {{ category_macros.page_link(pagination, pageCount, query) }}
+                        {% endif %}
+
+                        <li class="page-item {{ currentPage == pageCount ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ path('admin2_categories', query|merge({page: currentPage + 1})) }}">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.querySelectorAll('[data-confirm]').forEach((button) => {
+            button.closest('form')?.addEventListener('submit', (event) => {
+                if (!window.confirm(button.dataset.confirm)) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+{% endblock %}

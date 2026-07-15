@@ -1,0 +1,113 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/vendor_orders/_macros.html.twig' as vendor_macros %}
+{% import 'admin2/orders/_macros.html.twig' as order_macros %}
+
+{% block title %}{{ isNew ? 'Нове замовлення постачальника' : 'Замовлення #' ~ vendorOrder.id }} — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/vendor-orders.css') }}">
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('admin2_vendor_orders') }}" class="text-decoration-none text-muted small d-inline-flex align-items-center gap-1 mb-3">
+        <i class="bi bi-arrow-left"></i> До списку
+    </a>
+
+    <div class="vendor-order-edit-hero">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 w-100">
+            <h1 class="page-title mb-0">{{ isNew ? 'Нове замовлення постачальника' : 'Замовлення #' ~ vendorOrder.id }}</h1>
+            {% if not isNew %}
+                <div class="d-flex align-items-center gap-2">
+                    {{ order_macros.copy_button(copyText|default(null)) }}
+                    {{ vendor_macros.status_badge(vendorOrder.status) }}
+                    <div class="text-end">
+                        <div class="text-muted small">Сума</div>
+                        <strong>{{ order_macros.money(vendorOrder.price) }}</strong>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            {{ form_start(form) }}
+            <div class="row g-3">
+                <div class="col-md-6">{{ form_row(form.supplier) }}</div>
+                <div class="col-md-6">{{ form_row(form.supplierOrderNumber) }}</div>
+                <div class="col-md-4">{{ form_row(form.status) }}</div>
+                <div class="col-12">{{ form_row(form.notes) }}</div>
+            </div>
+
+            <div class="vendor-items-section mt-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h2 class="h6 mb-0">Товари</h2>
+                    <button type="button" class="btn btn-sm btn-outline-teal" id="addVendorItem">
+                        <i class="bi bi-plus-lg"></i> Додати товар
+                    </button>
+                </div>
+
+                <div id="vendorItems"
+                     data-prototype="{{ form_widget(form.items.vars.prototype)|e('html_attr') }}"
+                     data-index="{{ form.items|length }}">
+                    {% for itemForm in form.items %}
+                        <div class="vendor-item-entry">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-6">{{ form_row(itemForm.title) }}</div>
+                                <div class="col-md-2">{{ form_row(itemForm.quantity) }}</div>
+                                <div class="col-md-3">{{ form_row(itemForm.price) }}</div>
+                                <div class="col-md-1">
+                                    <button type="button" class="btn btn-outline-danger btn-sm w-100 remove-vendor-item" title="Видалити">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-teal">Зберегти</button>
+                <a href="{{ path('admin2_vendor_orders') }}" class="btn btn-outline-secondary">Скасувати</a>
+            </div>
+            {% do form.items.setRendered() %}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin2-order-copy.js') }}" defer></script>
+    <script>
+        const vendorItemsContainer = document.getElementById('vendorItems');
+        const addVendorItemButton = document.getElementById('addVendorItem');
+
+        if (vendorItemsContainer && addVendorItemButton) {
+            addVendorItemButton.addEventListener('click', () => {
+                const prototype = vendorItemsContainer.dataset.prototype;
+                const index = parseInt(vendorItemsContainer.dataset.index || '0', 10);
+                const html = prototype.replace(/__name__/g, index);
+                const wrapper = document.createElement('div');
+                wrapper.className = 'vendor-item-entry';
+                wrapper.innerHTML = `<div class="row g-3 align-items-end">${html}<div class="col-md-1"><button type="button" class="btn btn-outline-danger btn-sm w-100 remove-vendor-item" title="Видалити"><i class="bi bi-trash"></i></button></div></div>`;
+                vendorItemsContainer.appendChild(wrapper);
+                vendorItemsContainer.dataset.index = String(index + 1);
+            });
+
+            vendorItemsContainer.addEventListener('click', (event) => {
+                const button = event.target.closest('.remove-vendor-item');
+                if (!button) {
+                    return;
+                }
+
+                const entries = vendorItemsContainer.querySelectorAll('.vendor-item-entry');
+                if (entries.length <= 1) {
+                    return;
+                }
+
+                button.closest('.vendor-item-entry')?.remove();
+            });
+        }
+    </script>
+{% endblock %}

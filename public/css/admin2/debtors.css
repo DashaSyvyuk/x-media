@@ -1,0 +1,231 @@
+.debtors-page {
+    --debt-positive: #059669;
+    --debt-negative: #dc2626;
+    --debt-positive-bg: rgba(16, 185, 129, 0.12);
+    --debt-negative-bg: rgba(239, 68, 68, 0.12);
+}
+
+.debt-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .debt-stat-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.debt-stat-card {
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+}
+
+.debt-stat-card__body {
+    padding: 1.15rem 1.25rem;
+}
+
+.debt-stat-card__label {
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.35rem;
+}
+
+.debt-stat-card__value {
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #0f172a;
+}
+
+.debt-stat-card__values {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.debt-stat-card__value-line {
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.debt-stat-card--positive .debt-stat-card__value-line {
+    color: var(--debt-positive);
+}
+
+.debt-stat-card--negative .debt-stat-card__value-line {
+    color: var(--debt-negative);
+}
+
+.debt-stat-card__value--empty {
+    color: #94a3b8;
+}
+
+.debt-stat-card--positive .debt-stat-card__value {
+    color: var(--debt-positive);
+}
+
+.debt-stat-card--negative .debt-stat-card__value {
+    color: var(--debt-negative);
+}
+
+.debt-money {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.debt-money--positive {
+    color: var(--debt-positive);
+}
+
+.debt-money--negative {
+    color: var(--debt-negative);
+}
+
+.debt-money--zero {
+    color: #64748b;
+}
+
+.debt-balance-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #134e4a 100%);
+    color: #fff;
+    border-radius: 18px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+}
+
+.debt-balance-hero__label {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.85rem;
+    margin-bottom: 0.35rem;
+}
+
+.debt-balance-hero__amount {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.05;
+}
+
+.debt-balance-hero__amount--positive {
+    color: #6ee7b7;
+}
+
+.debt-balance-hero__amount--negative {
+    color: #fca5a5;
+}
+
+.debt-balance-hero__hint {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.85rem;
+    margin-top: 0.35rem;
+}
+
+.debt-entry-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.debt-entry {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background: #fff;
+}
+
+.debt-entry__main {
+    min-width: 0;
+    flex: 1;
+}
+
+.debt-entry__line {
+    display: block;
+    font-size: 0.92rem;
+    color: #0f172a;
+    font-weight: 500;
+}
+
+.debt-entry__comment {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.debt-entry__meta {
+    margin-top: 0.45rem;
+    font-size: 0.78rem;
+    color: #94a3b8;
+}
+
+.debt-entry__amount {
+    flex-shrink: 0;
+    text-align: right;
+    font-size: 1rem;
+}
+
+.debt-entry__actions {
+    display: flex;
+    gap: 0.35rem;
+    margin-top: 0.65rem;
+}
+
+.debt-add-card .card-header,
+.debt-history-card .card-header {
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: 600;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.back-link:hover {
+    color: var(--color-teal);
+}
+
+.debt-contact-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+}
+
+.debt-contact-footer .admin2-switch-row {
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.debt-contact-footer .btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.debtors-active-filter {
+    flex-shrink: 0;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #fff;
+}

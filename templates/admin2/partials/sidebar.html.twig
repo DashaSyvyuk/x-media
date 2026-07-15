@@ -1,0 +1,251 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set ordersOpen = currentRoute starts with 'admin2_order'
+    or currentRoute starts with 'admin2_rozetka_order'
+    or currentRoute starts with 'admin2_fulfillment'
+    or currentRoute starts with 'admin2_user'
+    or currentRoute starts with 'admin2_return'
+    or currentRoute starts with 'admin2_warrant' %}
+{% set ordersListActive = currentRoute == 'admin2_orders'
+    or currentRoute == 'admin2_orders_new'
+    or currentRoute starts with 'admin2_orders_edit' %}
+{% set ordersProcessingActive = currentRoute starts with 'admin2_orders_processing' %}
+{% set stockOpen = currentRoute starts with 'admin2_in_stock' or currentRoute starts with 'admin2_warehouse' %}
+{% set supplyOpen = currentRoute starts with 'admin2_vendor_order' or currentRoute starts with 'admin2_supplier' %}
+{% set contentOpen = currentRoute starts with 'admin2_product'
+    or currentRoute starts with 'admin2_price_control'
+    or currentRoute starts with 'admin2_filter'
+    or currentRoute starts with 'admin2_categor'
+    or currentRoute starts with 'admin2_slider'
+    or currentRoute starts with 'admin2_promotion' %}
+{% set moderationOpen = currentRoute starts with 'admin2_comment' or currentRoute starts with 'admin2_feedback' %}
+{% set financeOpen = currentRoute starts with 'admin2_debtor' or currentRoute starts with 'admin2_circulation' %}
+{% set feedsOpen = currentRoute starts with 'admin2_feeds'
+    or (currentRoute starts with 'admin2_rozetka' and not (currentRoute starts with 'admin2_rozetka_order')) %}
+{% set newCommentsCount = is_granted('ROLE_USER') ? admin2_new_comments_count() : 0 %}
+{% set newFeedbacksCount = is_granted('ROLE_USER') ? admin2_new_feedbacks_count() : 0 %}
+{% set newOrdersCount = is_granted('ROLE_SUPER_ADMIN') ? admin2_new_orders_count() : 0 %}
+
+<aside id="sidebar" class="sidebar">
+    <a href="{{ path('admin2_dashboard') }}"
+       class="sidebar-link {{ currentRoute == 'admin2_dashboard' ? 'active' : '' }}">
+        <i class="bi bi-house-door"></i>
+        <span class="sidebar-text">Головна</span>
+    </a>
+
+    <div class="sidebar-group {{ contentOpen or moderationOpen ? 'open' : '' }}">
+        <button type="button" class="sidebar-link sidebar-group-toggle {{ contentOpen ? 'active' : '' }}">
+            <i class="bi bi-box-seam"></i>
+            <span class="sidebar-text">Контент</span>
+            <i class="bi bi-chevron-down sidebar-chevron"></i>
+        </button>
+
+        <div class="sidebar-submenu">
+            <a href="{{ path('admin2_products') }}"
+               class="sidebar-sublink {{ currentRoute starts with 'admin2_product' and currentRoute != 'admin2_price_control' ? 'active' : '' }}">
+                <i class="bi bi-circle-fill"></i>
+                <span>Товари</span>
+            </a>
+            <a href="{{ path('admin2_price_control') }}"
+               class="sidebar-sublink sidebar-sublink--featured {{ currentRoute starts with 'admin2_price_control' ? 'active' : '' }}">
+                <i class="bi bi-graph-up-arrow"></i>
+                <span>Контроль цін</span>
+            </a>
+            <a href="{{ path('admin2_filters') }}"
+               class="sidebar-sublink {{ currentRoute starts with 'admin2_filter' ? 'active' : '' }}">
+                <i class="bi bi-circle-fill"></i>
+                <span>Фільтри</span>
+            </a>
+            <a href="{{ path('admin2_categories') }}"
+               class="sidebar-sublink {{ currentRoute starts with 'admin2_categor' ? 'active' : '' }}">
+                <i class="bi bi-circle-fill"></i>
+                <span>Категорії</span>
+            </a>
+            <a href="{{ path('admin2_sliders') }}"
+               class="sidebar-sublink {{ currentRoute starts with 'admin2_slider' ? 'active' : '' }}">
+                <i class="bi bi-circle-fill"></i>
+                <span>Слайдер</span>
+            </a>
+            <a href="{{ path('admin2_promotions') }}"
+               class="sidebar-sublink {{ currentRoute starts with 'admin2_promotion' ? 'active' : '' }}">
+                <i class="bi bi-circle-fill"></i>
+                <span>Акції</span>
+            </a>
+            <a href="{{ path('admin2_comments') }}"
+               class="sidebar-sublink {{ currentRoute starts with 'admin2_comment' or currentRoute starts with 'admin2_feedback' ? 'active' : '' }}">
+                <i class="bi bi-chat-dots"></i>
+                <span>Модерація</span>
+                {% set totalModeration = newCommentsCount + newFeedbacksCount %}
+                {% if totalModeration > 0 %}
+                    <span class="sidebar-badge">{{ totalModeration }}</span>
+                {% endif %}
+            </a>
+        </div>
+    </div>
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="sidebar-group {{ ordersOpen ? 'open' : '' }}">
+            <button type="button" class="sidebar-link sidebar-group-toggle {{ ordersOpen ? 'active' : '' }}">
+                <i class="bi bi-bag-check"></i>
+                <span class="sidebar-text">
+                    Замовлення{% if newOrdersCount > 0 %} ({{ newOrdersCount }}){% endif %}
+                </span>
+                <i class="bi bi-chevron-down sidebar-chevron"></i>
+            </button>
+
+            <div class="sidebar-submenu">
+                <a href="{{ path('admin2_orders') }}"
+                   class="sidebar-sublink {{ ordersListActive ? 'active' : '' }}">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Замовлення</span>
+                    {% if newOrdersCount > 0 %}
+                        <span class="sidebar-badge">{{ newOrdersCount }}</span>
+                    {% endif %}
+                </a>
+                <a href="{{ path('admin2_fulfillment') }}"
+                   class="sidebar-sublink sidebar-sublink--featured {{ currentRoute starts with 'admin2_fulfillment' ? 'active' : '' }}">
+                    <i class="bi bi-kanban"></i>
+                    <span>Управління</span>
+                </a>
+                <a href="{{ path('admin2_orders_processing') }}"
+                   class="sidebar-sublink {{ ordersProcessingActive ? 'active' : '' }}">
+                    <i class="bi bi-kanban-fill"></i>
+                    <span>Обробка</span>
+                </a>
+                <a href="{{ path('admin2_rozetka_orders') }}"
+                   class="sidebar-sublink {{ currentRoute starts with 'admin2_rozetka_order' ? 'active' : '' }}">
+                    <i class="bi bi-shop-window"></i>
+                    <span>Rozetka</span>
+                </a>
+                <a href="{{ path('admin2_users') }}"
+                   class="sidebar-sublink {{ currentRoute starts with 'admin2_user' ? 'active' : '' }}">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Користувачі</span>
+                </a>
+                <a href="{{ path('admin2_returns') }}"
+                   class="sidebar-sublink {{ currentRoute starts with 'admin2_return' ? 'active' : '' }}">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Повернення</span>
+                </a>
+                <a href="{{ path('admin2_warranties') }}"
+                   class="sidebar-sublink {{ currentRoute starts with 'admin2_warrant' ? 'active' : '' }}">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Гарантія</span>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_USER') and not is_granted('ROLE_SUPER_ADMIN') and not is_granted('ROLE_ADMIN') %}
+        <div class="sidebar-group {{ ordersOpen ? 'open' : '' }}">
+            <button type="button" class="sidebar-link sidebar-group-toggle {{ ordersOpen ? 'active' : '' }}">
+                <i class="bi bi-bag-check"></i>
+                <span class="sidebar-text">Замовлення</span>
+                <i class="bi bi-chevron-down sidebar-chevron"></i>
+            </button>
+
+            <div class="sidebar-submenu">
+                <a href="{{ path('admin2_orders_processing') }}"
+                   class="sidebar-sublink {{ ordersProcessingActive ? 'active' : '' }}">
+                    <i class="bi bi-kanban-fill"></i>
+                    <span>Обробка</span>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') %}
+        <div class="sidebar-group {{ financeOpen ? 'open' : '' }}">
+            <button type="button" class="sidebar-link sidebar-group-toggle {{ financeOpen ? 'active' : '' }}">
+                <i class="bi bi-cash-coin"></i>
+                <span class="sidebar-text">Фінанси</span>
+                <i class="bi bi-chevron-down sidebar-chevron"></i>
+            </button>
+
+            <div class="sidebar-submenu">
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <a href="{{ path('admin2_debtors') }}"
+                       class="sidebar-sublink {{ currentRoute starts with 'admin2_debtor' ? 'active' : '' }}">
+                        <i class="bi bi-circle-fill"></i>
+                        <span>Борги</span>
+                    </a>
+                {% endif %}
+                <a href="{{ path('admin2_circulations') }}"
+                   class="sidebar-sublink {{ currentRoute starts with 'admin2_circulation' ? 'active' : '' }}">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Обіг</span>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="sidebar-group {{ stockOpen ? 'open' : '' }}">
+        <button type="button" class="sidebar-link sidebar-group-toggle {{ stockOpen ? 'active' : '' }}">
+            <i class="bi bi-boxes"></i>
+            <span class="sidebar-text">Наявність</span>
+            <i class="bi bi-chevron-down sidebar-chevron"></i>
+        </button>
+
+        <div class="sidebar-submenu">
+            <a href="{{ path('admin2_in_stock') }}"
+               class="sidebar-sublink {{ currentRoute starts with 'admin2_in_stock' ? 'active' : '' }}">
+                <i class="bi bi-circle-fill"></i>
+                <span>Товари</span>
+            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin2_warehouses') }}"
+                   class="sidebar-sublink {{ currentRoute starts with 'admin2_warehouse' ? 'active' : '' }}">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Склади</span>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="sidebar-group {{ supplyOpen ? 'open' : '' }}">
+            <button type="button" class="sidebar-link sidebar-group-toggle {{ supplyOpen ? 'active' : '' }}">
+                <i class="bi bi-truck"></i>
+                <span class="sidebar-text">Постачання</span>
+                <i class="bi bi-chevron-down sidebar-chevron"></i>
+            </button>
+
+            <div class="sidebar-submenu">
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <a href="{{ path('admin2_vendor_orders') }}"
+                       class="sidebar-sublink {{ currentRoute starts with 'admin2_vendor_order' ? 'active' : '' }}">
+                        <i class="bi bi-circle-fill"></i>
+                        <span>Замовлення</span>
+                    </a>
+                {% endif %}
+                <a href="{{ path('admin2_suppliers') }}"
+                   class="sidebar-sublink {{ currentRoute starts with 'admin2_supplier' ? 'active' : '' }}">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Постачальники</span>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="sidebar-group {{ feedsOpen ? 'open' : '' }}">
+        <button type="button" class="sidebar-link sidebar-group-toggle {{ feedsOpen ? 'active' : '' }}">
+            <i class="bi bi-rss"></i>
+            <span class="sidebar-text">Feeds</span>
+            <i class="bi bi-chevron-down sidebar-chevron"></i>
+        </button>
+
+        <div class="sidebar-submenu">
+            <a href="{{ path('admin2_rozetka') }}"
+               class="sidebar-sublink sidebar-sublink--featured {{ currentRoute == 'admin2_rozetka' or currentRoute starts with 'admin2_rozetka_' and not (currentRoute starts with 'admin2_rozetka_order') ? 'active' : '' }}">
+                <i class="bi bi-shop-window"></i>
+                <span>Rozetka</span>
+            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin2_feeds') }}"
+                   class="sidebar-sublink {{ currentRoute starts with 'admin2_feeds' ? 'active' : '' }}">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Feeds</span>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</aside>

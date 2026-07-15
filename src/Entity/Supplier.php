@@ -51,6 +51,9 @@ class Supplier
     #[ORM\Column(type: "boolean")]
     private bool $active = true;
 
+    #[ORM\Column(type: "integer", nullable: true, options: ["unsigned" => true])]
+    private ?int $orderStorageDays = null;
+
     /** @var ArrayCollection<int, SupplierProduct>|PersistentCollection<int, SupplierProduct> $products */
     #[ORM\OneToMany(
         targetEntity: SupplierProduct::class,
@@ -169,6 +172,16 @@ class Supplier
     public function getActive(): bool
     {
         return $this->active;
+    }
+
+    public function setOrderStorageDays(?int $orderStorageDays): void
+    {
+        $this->orderStorageDays = $orderStorageDays;
+    }
+
+    public function getOrderStorageDays(): ?int
+    {
+        return $this->orderStorageDays;
     }
 
     /**

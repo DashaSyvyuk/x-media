@@ -21,6 +21,7 @@
         "nesbot/carbon": "*",
         "phpdocumentor/reflection-docblock": "*",
         "phpoffice/phpspreadsheet": "^3.9",
+        "phpoffice/phpword": "^1.4",
         "ramsey/uuid": "*",
         "sensio/framework-extra-bundle": "*",
         "symfony/asset": "^7.3",

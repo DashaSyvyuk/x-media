@@ -1,0 +1,130 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/orders/_macros.html.twig' as order_macros %}
+
+{% block title %}Rozetka #{{ order.id }} — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/orders.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/rozetka-orders.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="order-edit-page">
+        <a href="{{ path('admin2_rozetka_orders') }}" class="text-decoration-none text-muted small d-inline-flex align-items-center gap-1 mb-3">
+            <i class="bi bi-arrow-left"></i> До списку Rozetka
+        </a>
+
+        <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-4">
+            <div>
+                <h1 class="page-title mb-1">Rozetka #{{ order.id }}</h1>
+                <p class="text-muted mb-0">{{ order.created|slice(0, 16)|replace({'T': ' '}) }} · {{ order.deliveryName }}</p>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                {{ order_macros.copy_button(copyText|default(null)) }}
+                {{ order_macros.receipt_button('rozetka', order.id) }}
+                <span class="badge bg-warning-subtle text-warning-emphasis fs-6">{{ order.status }}</span>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white fw-semibold">Клієнт і доставка</div>
+                    <div class="card-body">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Отримувач</dt>
+                            <dd class="col-sm-8">{{ order.recipient ?: '—' }}</dd>
+                            <dt class="col-sm-4">Телефон</dt>
+                            <dd class="col-sm-8">{{ order.phone ?: '—' }}</dd>
+                            <dt class="col-sm-4">Email</dt>
+                            <dd class="col-sm-8">{{ order.email ?: '—' }}</dd>
+                            <dt class="col-sm-4">Адреса</dt>
+                            <dd class="col-sm-8">{{ order.address ?: '—' }}</dd>
+                            <dt class="col-sm-4">Коментар</dt>
+                            <dd class="col-sm-8">{{ order.comment ?: '—' }}</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white fw-semibold">Товари</div>
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead><tr><th>Товар</th><th>ID</th><th>К-сть</th><th class="text-end">Ціна</th></tr></thead>
+                            <tbody>
+                                {% for item in order.items %}
+                                    <tr>
+                                        <td>{{ item.name }}</td>
+                                        <td class="text-nowrap">
+                                            {% if item.productId %}
+                                                <span class="text-muted">#{{ item.productId }}</span>
+                                                {% if item.productUrl %}
+                                                    <a href="{{ item.productUrl }}" target="_blank" rel="noopener" class="rozetka-product-site-link ms-1" title="Відкрити на сайті">
+                                                        <i class="bi bi-box-arrow-up-right"></i>
+                                                    </a>
+                                                {% endif %}
+                                            {% else %}
+                                                —
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ item.qty }}</td>
+                                        <td class="text-end">{{ order_macros.money(item.price) }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr><td colspan="4" class="text-muted">Без товарів</td></tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">Разом</th>
+                                    <th class="text-end">{{ order_macros.money(order.total) }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white fw-semibold">Статус і ТТН</div>
+                    <div class="card-body">
+                        <form method="post" action="{{ path('admin2_rozetka_orders_update', {id: order.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('rozetka_order_update') }}">
+
+                            <div class="mb-3">
+                                <label class="form-label">Статус Rozetka</label>
+                                <select name="status" class="form-select" {{ order.canEdit ? '' : 'disabled' }}>
+                                    {% for option in order.statusAvailable %}
+                                        <option value="{{ option.id }}" {{ option.id == order.statusId ? 'selected' : '' }}>
+                                            {{ option.label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">ТТН Нової Пошти</label>
+                                <input type="text" name="ttn" class="form-control" value="{{ order.ttn }}" placeholder="20400000000000">
+                                <div class="form-text">Для статусу «Передано до служби доставки» (3) ТТН обов'язкове в API Rozetka.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Коментар продавця</label>
+                                <textarea name="seller_comment" class="form-control" rows="3">{{ order.sellerComment }}</textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-teal w-100" {{ order.canEdit ? '' : 'disabled' }}>
+                                <i class="bi bi-check-lg"></i> Зберегти зміни
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin2-order-copy.js') }}" defer></script>
+{% endblock %}

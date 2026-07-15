@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>{% block title %}X-media Admin{% endblock %}</title>
+    {% include 'admin2/partials/pwa-head.html.twig' %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ asset('css/admin2/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/receipt.css') }}">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="bg-light">
+    {% include 'admin2/partials/header.html.twig' %}
+
+    <div id="sidebarBackdrop" class="sidebar-backdrop" aria-hidden="true"></div>
+
+    <div class="app-shell">
+        {% include 'admin2/partials/sidebar.html.twig' %}
+
+        <div class="app-main container py-4">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show mb-4" role="alert">
+                        {{ message|raw }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+
+    {% include 'admin2/partials/receipt-modal.html.twig' with {csrf_token: csrf_token('receipt_generate')} only %}
+    {% include 'admin2/partials/invoice-modal.html.twig' with {csrf_token: csrf_token('invoice_generate')} only %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/admin2-sidebar.js') }}" defer></script>
+    <script src="{{ asset('js/admin2-pwa.js') }}" defer></script>
+    <script src="{{ asset('js/admin2-receipt.js') }}" defer></script>
+    <script src="{{ asset('js/admin2-invoice.js') }}" defer></script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

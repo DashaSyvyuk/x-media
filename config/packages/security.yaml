@@ -4,7 +4,21 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        main:
+        admin2:
+            pattern: ^/admin
+            context: admin_shared
+            provider: app_user_provider
+            lazy: true
+            custom_authenticators:
+                - App\Security\Admin2Authenticator
+            logout:
+                path: admin2_logout
+                target: admin2_login
+
+        admin:
+            pattern: ^/admin2
+            context: admin_shared
+            provider: app_user_provider
             lazy: true
             custom_authenticators:
                 - App\Security\AdminAuthenticator
@@ -24,8 +38,9 @@ security:
 
     access_control:
         - { path: ^/admin/login, roles: PUBLIC_ACCESS }
-        - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_USER, ROLE_SUPER_ADMIN] }
-        - { path: ^/admin, roles: [ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_USER] }
+        - { path: ^/admin, roles: ROLE_USER }
+        - { path: ^/admin2/login, roles: PUBLIC_ACCESS }
+        - { path: ^/admin2, roles: ROLE_USER }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER

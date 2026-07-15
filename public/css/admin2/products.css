@@ -1,0 +1,229 @@
+.products-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.products-toolbar__search {
+    flex: 1 1 280px;
+    max-width: 420px;
+}
+
+.products-table-card {
+    border: 0;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.products-table {
+    margin-bottom: 0;
+    font-size: 0.875rem;
+}
+
+.products-table thead th {
+    background: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.products-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.products-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.products-table td {
+    vertical-align: middle;
+    border-color: #f1f5f9;
+}
+
+.product-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+}
+
+.product-thumb--empty {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 1.1rem;
+}
+
+.product-title {
+    font-weight: 600;
+    color: #0f172a;
+    line-height: 1.35;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.product-title__meta {
+    color: #64748b;
+    font-size: 0.75rem;
+    margin-top: 0.15rem;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-badge--active {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+
+.status-badge--blocked {
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+}
+
+.status-badge--pending {
+    background: rgba(245, 158, 11, 0.12);
+    color: #d97706;
+}
+
+.table-actions {
+    display: inline-flex;
+    gap: 0.35rem;
+}
+
+.table-action {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #475569;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.table-action:hover {
+    border-color: #cbd5e1;
+    color: #0f172a;
+    background: #f8fafc;
+}
+
+.table-action--teal:hover {
+    border-color: var(--color-teal);
+    color: var(--color-teal);
+    background: var(--color-teal-soft);
+}
+
+.table-action--danger:hover {
+    border-color: #fca5a5;
+    color: #dc2626;
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.sort-link {
+    color: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.sort-link:hover {
+    color: var(--color-teal);
+}
+
+.sort-link.active {
+    color: var(--color-teal);
+}
+
+.products-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #e2e8f0;
+    background: #fff;
+}
+
+.products-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.products-pagination .page-link {
+    min-width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0 0.65rem;
+    background: #fff;
+}
+
+.products-pagination .page-link:hover {
+    border-color: var(--color-teal);
+    color: var(--color-teal);
+    background: var(--color-teal-soft);
+}
+
+.products-pagination .page-item.active .page-link {
+    background: var(--color-teal);
+    border-color: var(--color-teal);
+    color: #fff;
+}
+
+.products-pagination .page-item.disabled .page-link {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+.products-summary {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+    .products-table-card:not(:has(.products-table--mobile-cards)) {
+        overflow-x: auto;
+    }
+
+    .products-table-card:not(:has(.products-table--mobile-cards)) .products-table {
+        min-width: 860px;
+    }
+}

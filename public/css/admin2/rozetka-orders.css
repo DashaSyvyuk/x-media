@@ -1,0 +1,14 @@
+.rozetka-orders-page .products-table td,
+.rozetka-orders-page .products-table th {
+    vertical-align: middle;
+}
+
+.rozetka-product-site-link {
+    color: #64748b;
+    text-decoration: none;
+    line-height: 1;
+}
+
+.rozetka-product-site-link:hover {
+    color: #0d9488;
+}

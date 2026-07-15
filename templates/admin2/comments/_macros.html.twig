@@ -1,0 +1,33 @@
+{% macro sort_link(label, field, currentSort, currentDir, query) %}
+    {% set nextDir = (currentSort == field and currentDir == 'ASC') ? 'DESC' : 'ASC' %}
+    {% set params = query|merge({sort: field, dir: nextDir, page: 1}) %}
+    <a href="{{ path('admin2_comments', params) }}" class="sort-link {{ currentSort == field ? 'active' : '' }}">
+        {{ label }}
+        {% if currentSort == field %}
+            <i class="bi bi-chevron-{{ currentDir == 'ASC' ? 'up' : 'down' }}"></i>
+        {% endif %}
+    </a>
+{% endmacro %}
+
+{% macro page_link(pagination, page, query) %}
+    {% set params = query|merge({page: page}) %}
+    <li class="page-item {{ page == pagination.currentPageNumber ? 'active' : '' }}">
+        <a class="page-link" href="{{ path('admin2_comments', params) }}">{{ page }}</a>
+    </li>
+{% endmacro %}
+
+{% macro status_badge(status) %}
+    {% if status == 'NEW' %}
+        <span class="status-badge status-badge--pending">Новий</span>
+    {% elseif status == 'CONFIRMED' %}
+        <span class="status-badge status-badge--active">Підтверджено</span>
+    {% else %}
+        <span class="status-badge status-badge--blocked">Заблокований</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro status_label(status, choices) %}
+    {% for label, value in choices %}
+        {% if value == status %}{{ label }}{% endif %}
+    {% endfor %}
+{% endmacro %}

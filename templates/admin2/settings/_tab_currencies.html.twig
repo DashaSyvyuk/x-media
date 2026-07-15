@@ -1,0 +1,59 @@
+<div class="settings-tab-toolbar">
+    <h2 class="h5 mb-0">Валюти</h2>
+    <button type="button" class="btn btn-teal btn-sm" data-bs-toggle="modal" data-bs-target="#createCurrencyModal">
+        <i class="bi bi-plus-lg"></i> Додати валюту
+    </button>
+</div>
+
+<div class="settings-table-scroll">
+    <table class="table products-table align-middle mb-0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Назва</th>
+                <th>Скорочення</th>
+                <th>Код</th>
+                <th>Курс</th>
+                <th class="text-end">Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for currency in currencies %}
+                <tr>
+                    <td class="text-muted">#{{ currency.id }}</td>
+                    <td class="fw-semibold">{{ currency.title }}</td>
+                    <td>{{ currency.shortTitle ?: '—' }}</td>
+                    <td><code>{{ currency.code }}</code></td>
+                    <td>{{ currency.exchangeRate|number_format(2, '.', ' ') }}</td>
+                    <td class="text-end text-nowrap">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-teal js-edit-currency"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editCurrencyModal"
+                                data-id="{{ currency.id }}"
+                                data-title="{{ currency.title|e('html_attr') }}"
+                                data-short-title="{{ currency.shortTitle|e('html_attr') }}"
+                                data-code="{{ currency.code|e('html_attr') }}"
+                                data-rate="{{ currency.exchangeRate }}">
+                            Редагувати
+                        </button>
+                        <form method="post"
+                              action="{{ path('admin2_settings_currencies_delete', {id: currency.id}) }}"
+                              class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_currency') }}">
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    data-confirm="Видалити валюту «{{ currency.title|e('html_attr') }}»?">
+                                Видалити
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">Валют ще немає</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,80 @@
+<div class="modal fade" id="orderReceiptModal" tabindex="-1" aria-labelledby="orderReceiptModalLabel" aria-hidden="true" data-csrf-token="{{ csrf_token|e('html_attr') }}">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderReceiptModalLabel">Товарний чек</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="orderReceiptError" class="alert alert-danger d-none"></div>
+                <form id="orderReceiptForm" class="receipt-form">
+                    <input type="hidden" name="template" id="receiptTemplate">
+                    <input type="hidden" name="filename" id="receiptFilename">
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="receiptCheckNumber">Номер чека</label>
+                            <input type="text" class="form-control" id="receiptCheckNumber" name="checkNumber" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="receiptDateDay">День</label>
+                            <input type="text" class="form-control" id="receiptDateDay" name="dateDay" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="receiptDateMonth">Місяць</label>
+                            <input type="text" class="form-control" id="receiptDateMonth" name="dateMonth" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="receiptDateYear">Рік</label>
+                            <input type="text" class="form-control" id="receiptDateYear" name="dateYear" required>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive mb-3">
+                        <table class="table table-sm align-middle receipt-items-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:3rem">№</th>
+                                    <th>Найменування</th>
+                                    <th style="width:6rem">Гарантія</th>
+                                    <th style="width:5rem">К-ть</th>
+                                    <th style="width:7rem">Ціна</th>
+                                    <th style="width:7rem">Сума</th>
+                                    <th style="width:2.5rem"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="receiptItemsBody"></tbody>
+                        </table>
+                    </div>
+
+                    <button type="button" class="btn btn-sm btn-outline-secondary mb-3" id="receiptAddItem">
+                        <i class="bi bi-plus-lg"></i> Додати товар
+                    </button>
+
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="receiptTotal">Загальна сума (грн)</label>
+                            <input type="number" class="form-control" id="receiptTotal" name="total" min="0" step="1" required>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label" for="receiptTotalWords">Всього прописом</label>
+                            <input type="text" class="form-control" id="receiptTotalWords" name="totalWords" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer flex-wrap gap-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <button type="button" class="btn btn-outline-primary" id="receiptSaveBtn">
+                    <i class="bi bi-download"></i> Зберегти
+                </button>
+                <button type="button" class="btn btn-outline-dark" id="receiptPrintBtn">
+                    <i class="bi bi-printer"></i> Друкувати
+                </button>
+                <button type="button" class="btn btn-teal" id="receiptGenerateBtn">
+                    <i class="bi bi-file-earmark-pdf"></i> Відкрити PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+.price-control-page .price-control-table th,
+.price-control-page .price-control-table td {
+    vertical-align: middle;
+}
+
+.price-control-page .col-price { background: rgba(245, 158, 11, 0.12); }
+.price-control-page .col-old-price { background: rgba(239, 68, 68, 0.08); }
+.price-control-page .col-rozetka { background: rgba(13, 148, 136, 0.1); }
+.price-control-page .col-rozetka-old { background: rgba(13, 148, 136, 0.06); }
+.price-control-page .col-xkom { background: rgba(59, 130, 246, 0.08); white-space: nowrap; }
+
+.price-control-page .cell-input {
+    min-width: 110px;
+    max-width: 140px;
+}
+
+.price-control-page .strike {
+    text-decoration: line-through;
+}
+
+.price-control-page tr.is-dirty > td {
+    background-color: #fff7ed !important;
+}
+
+.price-control-page tr.is-saved > td {
+    background-color: #ecfdf5 !important;
+}
+
+.price-control-page tr.is-error > td {
+    background-color: #fef2f2 !important;
+}
+
+.price-control-page td.cell-bad {
+    background-color: #fee2e2 !important;
+}
+
+.price-control-page .code-cell {
+    line-height: 1.25;
+    font-size: 0.85rem;
+}
+
+.price-control-page .product-title-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.35rem;
+    min-width: 220px;
+}
+
+.price-control-page .product-title {
+    font-weight: 600;
+    color: #0f172a;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.35;
+    -webkit-line-clamp: unset;
+    display: block;
+    overflow: visible;
+}
+
+.price-control-page .product-title-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.35rem;
+    height: 1.35rem;
+    margin-top: 0.1rem;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.75rem;
+}
+
+.price-control-page .product-title-link:hover {
+    color: #0d9488;
+}
+
+.price-control-page .xkom-unavailable {
+    color: #dc2626;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.price-control-page .xkom-old-price {
+    display: block;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    text-decoration: line-through;
+}
+
+.price-control-page .xkom-calc {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    margin-top: 0.15rem;
+}
+
+.price-control-page .save-btn.btn-success,
+.price-control-page .save-btn.btn-danger {
+    color: #fff;
+}
+
+@media (max-width: 1200px) {
+    .price-control-page .price-control-table {
+        min-width: 1100px;
+    }
+}

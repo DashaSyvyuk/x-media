@@ -147,6 +147,9 @@ class Product
     #[ORM\Column(type: "string", nullable: true)]
     private ?string $olx;
 
+    #[ORM\Column(type: "string", length: 2048, nullable: true)]
+    private ?string $xkomUrl = null;
+
     #[ORM\Column(type: "datetime")]
     public DateTime $createdAt;
 
@@ -465,6 +468,16 @@ class Product
     public function getOlx(): ?string
     {
         return $this->olx;
+    }
+
+    public function setXkomUrl(?string $xkomUrl): void
+    {
+        $this->xkomUrl = $xkomUrl !== null && trim($xkomUrl) === '' ? null : $xkomUrl;
+    }
+
+    public function getXkomUrl(): ?string
+    {
+        return $this->xkomUrl;
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\FeedRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class GeneratePromXmlService
 {
@@ -23,6 +24,7 @@ class GeneratePromXmlService
         private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
         private readonly BunnyStorageClient $bunny,
         private readonly EntityManagerInterface $entityManager,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -146,7 +148,7 @@ class GeneratePromXmlService
 
             return $this->bunny->uploadAndGetUrl($localPath, self::FOLDER, self::FILE_NAME);
         } catch (\Throwable $e) {
-            var_dump('An exception occurred: ' . $e->getMessage());
+            $this->logger->error('Prom XML generation failed.', ['exception' => $e]);
 
             return null;
         }
@@ -161,16 +163,6 @@ class GeneratePromXmlService
         }
 
         return $text;
-    }
-
-    private function allowLongRunningProcess(): void
-    {
-        if (function_exists('set_time_limit')) {
-            @set_time_limit(0);
-        }
-
-        @ini_set('max_execution_time', '0');
-        ignore_user_abort(true);
     }
 
     /**

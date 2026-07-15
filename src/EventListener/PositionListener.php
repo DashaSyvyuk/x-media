@@ -53,7 +53,7 @@ class PositionListener
                 ['position' => 'DESC']
             );
 
-            $entity->setPosition($category->getPosition() + 1);
+            $entity->setPosition(($category?->getPosition() ?? 0) + 1);
             $entityManager->flush();
         }
     }

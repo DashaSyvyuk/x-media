@@ -1,4 +1,5 @@
-<select id="RozetkaProduct_values_{{ valueId }}_values" name="RozetkaProduct[values][{{ valueId }}][values][]" class="rozetka-characteristics-values form-select" multiple="multiple">
+{% set prefix = formPrefix|default('RozetkaProduct') %}
+<select id="{{ prefix }}_values_{{ valueId }}_values" name="{{ prefix }}[values][{{ valueId }}][values][]" class="rozetka-characteristics-values form-select" multiple="multiple">
     {% for value in values %}
         <option value="{{ value.id }}">{{ value.value }}</option>
     {% endfor %}

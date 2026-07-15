@@ -6,6 +6,7 @@ use App\Entity\Promotion;
 use App\Entity\Slider;
 use Carbon\Carbon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -34,5 +35,31 @@ class SliderRepository extends ServiceEntityRepository
             ->orderBy('s.priority', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function createAdminListQueryBuilder(
+        string $search = '',
+        string $sort = 'id',
+        string $direction = 'DESC',
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('s')
+            ->leftJoin('s.promotion', 'promotion')
+            ->addSelect('promotion');
+
+        $search = trim($search);
+        if ($search !== '') {
+            $qb->andWhere('LOWER(s.title) LIKE :search')
+                ->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
+        $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
+        $allowedSorts = ['id', 'title', 'priority', 'active'];
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = 'id';
+        }
+
+        $qb->orderBy('s.' . $sort, $direction);
+
+        return $qb;
     }
 }

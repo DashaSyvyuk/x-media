@@ -1,0 +1,157 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+
+{% import 'admin2/products/_collapsible_collection_item.html.twig' as collapsible %}
+
+{% block title %}Rozetka #{{ product.id }} — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/product-edit.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/rozetka.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="product-edit-header">
+        <div>
+            <a href="{{ path('admin2_rozetka') }}" class="text-decoration-none text-muted small d-inline-flex align-items-center gap-1 mb-2">
+                <i class="bi bi-arrow-left"></i> До списку Rozetka
+            </a>
+            <h1 class="page-title mb-1">{{ rozetkaProduct.title ?: 'Rozetka #' ~ product.id }}</h1>
+            <div class="product-edit-meta">
+                Товар #{{ product.id }}
+                {% if product.category %} · {{ product.category.title }}{% endif %}
+                {% if product.productCode %} · {{ product.productCode }}{% endif %}
+            </div>
+        </div>
+        <a href="/products/{{ product.id }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-box-arrow-up-right"></i> На сайті
+        </a>
+    </div>
+
+    {% if form.vars.errors|length > 0 %}
+        <div class="alert alert-danger">{{ form_errors(form) }}</div>
+    {% endif %}
+
+    {{ form_start(form, { attr: { class: 'product-edit-form rozetka-edit-form', id: 'rozetka-edit-form' } }) }}
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Основне</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-8">{{ form_row(form.title) }}</div>
+                <div class="col-md-4">{{ form_row(form.stockQuantity) }}</div>
+                <div class="col-md-6">{{ form_row(form.series) }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Ціни</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">{{ form_row(form.price) }}</div>
+                <div class="col-md-4">{{ form_row(form.crossedOutPrice) }}</div>
+                <div class="col-md-4">{{ form_row(form.promoPrice) }}</div>
+                <div class="col-md-4 d-flex align-items-end">{{ form_row(form.promoPriceActive) }}</div>
+            </div>
+        </div>
+    </div>
+
+    {% if form.rozetkaProduct is defined %}
+        <div class="card product-edit-section shadow-sm rozetka-copy-card">
+            <div class="card-header">Копіювання характеристик</div>
+            <div class="card-body">
+                <p class="text-muted small mb-3">Товар ще не готовий — можна скопіювати серію, опис і характеристики з іншого готового товару тієї ж категорії.</p>
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-8">{{ form_row(form.rozetkaProduct) }}</div>
+                    <div class="col-md-4">
+                        <button type="submit" name="copy_characteristics" value="1" class="btn btn-outline-teal w-100">
+                            <i class="bi bi-copy"></i> Копіювати характеристики
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Статуси фідів</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4 d-flex align-items-end">{{ form_row(form.ready) }}</div>
+                <div class="col-md-4 d-flex align-items-end">{{ form_row(form.activeForA) }}</div>
+                <div class="col-md-4 d-flex align-items-end">{{ form_row(form.activeForP) }}</div>
+            </div>
+            {% if not rozetkaProduct.ready %}
+                <p class="text-muted small mb-0 mt-2">Прапорці A / P стануть доступні після позначення товару як «Готовий».</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Опис</div>
+        <div class="card-body">
+            {{ form_row(form.description) }}
+        </div>
+    </div>
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Характеристики Rozetka</div>
+        <div class="card-body">
+            {% set valueBody %}
+            <div class="row g-3 rozetka-value-row">
+                <div class="col-md-5">{{ form_row(form.values.vars.prototype.characteristic) }}</div>
+                <div class="col-md-7 rozetka-value-field" data-rozetka-value-slot>
+                    {% if form.values.vars.prototype.value is defined %}
+                        {{ form_row(form.values.vars.prototype.value) }}
+                    {% elseif form.values.vars.prototype.values is defined %}
+                        {{ form_row(form.values.vars.prototype.values) }}
+                    {% elseif form.values.vars.prototype.stringValue is defined %}
+                        {{ form_row(form.values.vars.prototype.stringValue) }}
+                    {% endif %}
+                </div>
+            </div>
+            {% endset %}
+            <div id="rozetka-values-collection"
+                 data-collapsible-type="rozetka-characteristic"
+                 data-prototype="{{ valueBody|e('html_attr') }}"
+                 data-form-prefix="{{ form.vars.name }}">
+                {% for valueField in form.values %}
+                    {% set body %}
+                    <div class="row g-3 rozetka-value-row">
+                        <div class="col-md-5">{{ form_row(valueField.characteristic) }}</div>
+                        <div class="col-md-7 rozetka-value-field" data-rozetka-value-slot>
+                            {% if valueField.value is defined %}
+                                {{ form_row(valueField.value) }}
+                            {% elseif valueField.values is defined %}
+                                {{ form_row(valueField.values) }}
+                            {% elseif valueField.stringValue is defined %}
+                                {{ form_row(valueField.stringValue) }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endset %}
+                    {{ collapsible.item('rozetka-characteristic', body, true) }}
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline-teal btn-sm add-collection-row" data-collection-add="#rozetka-values-collection">
+                <i class="bi bi-plus-lg"></i> Додати характеристику
+            </button>
+        </div>
+    </div>
+
+    <div class="product-edit-actions">
+        <div class="card border-0 px-3 py-2 product-edit-actions__bar">
+            <button type="submit" class="btn btn-teal">
+                <i class="bi bi-check2"></i> Зберегти
+            </button>
+            <a href="{{ path('admin2_rozetka') }}" class="btn btn-outline-secondary">Скасувати</a>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin2-collection.js') }}" defer></script>
+    <script src="{{ asset('js/admin2-rozetka.js') }}" defer></script>
+{% endblock %}

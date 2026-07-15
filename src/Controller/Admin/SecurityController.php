@@ -9,7 +9,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route(path: '/admin/login', name: 'app_login')]
+    #[Route(path: '/admin2/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // Already-authenticated users hitting /admin/login (e.g. because the
@@ -26,7 +26,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/admin/logout', name: 'app_logout')]
+    #[Route(path: '/admin2/logout', name: 'app_logout')]
     public function logout(): void
     {
         throw new \LogicException(

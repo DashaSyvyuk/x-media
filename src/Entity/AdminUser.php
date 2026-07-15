@@ -37,7 +37,7 @@ class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private string $phone;
 
-    /** @var array<string, string> $roles  */
+    /** @var list<string> $roles */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
@@ -123,12 +123,13 @@ class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
+        $roles[] = self::ROLE_USER;
 
-        return array_unique($roles);
+        return array_values(array_unique($roles));
     }
 
     /**
-     * @param array<string, string> $roles
+     * @param list<string> $roles
      */
     public function setRoles(array $roles): self
     {

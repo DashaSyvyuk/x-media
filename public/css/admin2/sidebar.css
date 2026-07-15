@@ -1,0 +1,212 @@
+.app-shell {
+    display: flex;
+    min-height: calc(100vh - var(--app-navbar-height));
+}
+
+.app-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: var(--app-navbar-height) 0 0 0;
+    z-index: 1045;
+    background: rgba(15, 23, 42, 0.45);
+    opacity: 0;
+    transition: opacity 0.22s ease;
+    pointer-events: none;
+}
+
+.sidebar-backdrop.show {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.sidebar-open {
+    overflow: hidden;
+    touch-action: none;
+}
+
+.sidebar {
+    flex: 0 0 240px;
+    width: 240px;
+    background: #0f172a;
+    padding: 16px 8px;
+    transition: flex-basis .22s cubic-bezier(.4,0,.2,1),
+        width .22s cubic-bezier(.4,0,.2,1),
+        transform .22s cubic-bezier(.4,0,.2,1);
+}
+
+.sidebar.collapsed {
+    flex-basis: 72px;
+    width: 72px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #94a3b8;
+    text-decoration: none;
+    border-radius: 10px;
+    white-space: nowrap;
+    font-weight: 500;
+    font-size: 0.92rem;
+    margin-bottom: 4px;
+    border: 0;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.sidebar-link:hover {
+    background: #1e293b;
+    color: #fff;
+}
+
+.sidebar-link.active {
+    background: rgba(13, 148, 136, 0.18);
+    color: #5eead4;
+}
+
+.sidebar-link i {
+    font-size: 20px;
+    min-width: 24px;
+    text-align: center;
+}
+
+.sidebar-text {
+    transition: opacity .18s ease, transform .18s ease, width .18s ease;
+    white-space: nowrap;
+}
+
+.sidebar.collapsed .sidebar-text,
+.sidebar.collapsed .sidebar-chevron,
+.sidebar.collapsed .sidebar-submenu {
+    opacity: 0;
+    transform: translateX(-8px);
+    width: 0;
+    overflow: hidden;
+    display: none;
+}
+
+.sidebar-group {
+    margin-bottom: 4px;
+}
+
+.sidebar-group .sidebar-submenu {
+    display: none;
+}
+
+.sidebar-group.open .sidebar-submenu {
+    display: block;
+}
+
+.sidebar-group-toggle .sidebar-chevron {
+    margin-left: auto;
+    font-size: 0.85rem;
+    transition: transform .2s ease;
+}
+
+.sidebar-group.open .sidebar-group-toggle .sidebar-chevron {
+    transform: rotate(180deg);
+}
+
+.sidebar-group.open .sidebar-group-toggle {
+    color: #e2e8f0;
+}
+
+.sidebar-submenu {
+    padding: 4px 0 4px 12px;
+}
+
+.sidebar-sublink {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px 10px 28px;
+    color: #94a3b8;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.sidebar-sublink:hover {
+    background: #1e293b;
+    color: #fff;
+}
+
+.sidebar-sublink.active {
+    background: rgba(13, 148, 136, 0.12);
+    color: #5eead4;
+}
+
+.sidebar-sublink i {
+    font-size: 0.5rem;
+}
+
+.sidebar-sublink .sidebar-badge {
+    margin-left: auto;
+    min-width: 1.25rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: #f59e0b;
+    color: #0f172a;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.sidebar-sublink--featured {
+    background: rgba(245, 158, 11, 0.12);
+    color: #fcd34d;
+}
+
+.sidebar-sublink--featured:hover {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fde68a;
+}
+
+.sidebar-sublink--featured.active {
+    background: rgba(245, 158, 11, 0.22);
+    color: #fde68a;
+}
+
+.sidebar-sublink--featured i {
+    color: #f59e0b;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: var(--app-navbar-height);
+        left: 0;
+        bottom: 0;
+        z-index: 1050;
+        transform: translateX(-100%);
+        width: min(280px, 88vw);
+        flex: none;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar.collapsed .sidebar-text,
+    .sidebar.collapsed .sidebar-chevron,
+    .sidebar.collapsed .sidebar-submenu {
+        opacity: 1;
+        transform: none;
+        width: auto;
+        overflow: visible;
+        display: block;
+    }
+}

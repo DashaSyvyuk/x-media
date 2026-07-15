@@ -1,0 +1,25 @@
+{% macro sort_link(label, field, currentSort, currentDir, query) %}
+    {% set nextDir = (currentSort == field and currentDir == 'ASC') ? 'DESC' : 'ASC' %}
+    {% set params = query|merge({sort: field, dir: nextDir, page: 1}) %}
+    <a href="{{ path('admin2_promotions', params) }}" class="sort-link {{ currentSort == field ? 'active' : '' }}">
+        {{ label }}
+        {% if currentSort == field %}
+            <i class="bi bi-chevron-{{ currentDir == 'ASC' ? 'up' : 'down' }}"></i>
+        {% endif %}
+    </a>
+{% endmacro %}
+
+{% macro page_link(pagination, page, query) %}
+    {% set params = query|merge({page: page}) %}
+    <li class="page-item {{ page == pagination.currentPageNumber ? 'active' : '' }}">
+        <a class="page-link" href="{{ path('admin2_promotions', params) }}">{{ page }}</a>
+    </li>
+{% endmacro %}
+
+{% macro status_badge(status) %}
+    {% if status == 'active' %}
+        <span class="status-badge status-badge--active">Активна</span>
+    {% else %}
+        <span class="status-badge status-badge--blocked">Заблокована</span>
+    {% endif %}
+{% endmacro %}

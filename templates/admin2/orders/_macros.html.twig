@@ -1,0 +1,85 @@
+{% macro sort_link(label, field, currentSort, currentDir, query, route) %}
+    {% set nextDir = (currentSort == field and currentDir == 'ASC') ? 'DESC' : 'ASC' %}
+    {% set params = query|merge({sort: field, dir: nextDir, page: 1}) %}
+    <a href="{{ path(route, params) }}" class="sort-link {{ currentSort == field ? 'active' : '' }}">
+        {{ label }}
+        {% if currentSort == field %}
+            <i class="bi bi-chevron-{{ currentDir == 'ASC' ? 'up' : 'down' }}"></i>
+        {% endif %}
+    </a>
+{% endmacro %}
+
+{% macro page_link(pagination, page, query, route) %}
+    {% set params = query|merge({page: page}) %}
+    <li class="page-item {{ page == pagination.currentPageNumber ? 'active' : '' }}">
+        <a class="page-link" href="{{ path(route, params) }}">{{ page }}</a>
+    </li>
+{% endmacro %}
+
+{% macro order_status_badge(status) %}
+    {% set grouped = constant('App\\Entity\\Order::GROUPED_STATUSES')[status]|default(null) %}
+    {% set label = constant('App\\Entity\\Order::STATUSES')[status]|default(status) %}
+    {% if grouped %}
+        <span class="order-status-badge" style="--status-color: {{ grouped.color }}">{{ grouped.title }}</span>
+        <span class="order-status-badge__detail">{{ label }}</span>
+    {% else %}
+        <span class="order-status-badge">{{ label }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro return_status_badge(status) %}
+    {% set labels = constant('App\\Entity\\ReturnProduct::STATUSES') %}
+    {% set label = labels[status]|default(status) %}
+    {% set class = status == 'new' ? 'order-status-badge--new' : (status == 'completed' ? 'order-status-badge--done' : (status == 'refused' ? 'order-status-badge--canceled' : 'order-status-badge--progress')) %}
+    <span class="order-status-badge {{ class }}">{{ label }}</span>
+{% endmacro %}
+
+{% macro warranty_status_badge(status) %}
+    {% set labels = constant('App\\Entity\\Warranty::STATUSES') %}
+    {% set label = labels[status]|default(status) %}
+    {% set class = status == 'new' ? 'order-status-badge--new' : (status == 'completed' ? 'order-status-badge--done' : (status in ['not_fixed', 'not_fixed_returned'] ? 'order-status-badge--canceled' : 'order-status-badge--progress')) %}
+    <span class="order-status-badge {{ class }}">{{ label }}</span>
+{% endmacro %}
+
+{% macro payment_status_badge(paid) %}
+    {% if paid %}
+        <span class="order-status-badge order-status-badge--paid">Оплачено</span>
+    {% else %}
+        <span class="order-status-badge order-status-badge--unpaid">Не оплачено</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro money(amount) %}
+    <span class="order-money">{{ amount|number_format(0, '.', ' ') }} ₴</span>
+{% endmacro %}
+
+{% macro copy_button(copyText, title) %}
+    {% if copyText %}
+        <button type="button"
+                class="btn btn-sm btn-outline-secondary order-copy-btn"
+                data-copy-text="{{ copyText|json_encode|e('html_attr') }}"
+                data-copy-title="{{ title|default('Скопіювати для відправки')|e('html_attr') }}"
+                title="{{ title|default('Скопіювати для відправки') }}">
+            <i class="bi bi-clipboard"></i>
+        </button>
+    {% endif %}
+{% endmacro %}
+
+{% macro receipt_button(type, id, title) %}
+    <button type="button"
+            class="btn btn-sm btn-outline-secondary order-receipt-btn"
+            data-receipt-type="{{ type }}"
+            data-receipt-id="{{ id }}"
+            title="{{ title|default('Товарний чек') }}">
+        <i class="bi bi-receipt"></i>
+    </button>
+{% endmacro %}
+
+{% macro invoice_button(id, title) %}
+    <button type="button"
+            class="btn btn-sm btn-outline-secondary order-invoice-btn"
+            data-order-id="{{ id }}"
+            title="{{ title|default('Рахунок + видаткова') }}">
+        <i class="bi bi-file-earmark-text"></i>
+    </button>
+{% endmacro %}

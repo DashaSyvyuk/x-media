@@ -7,6 +7,7 @@ use App\Entity\Filter;
 use App\Entity\Promotion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -55,5 +56,41 @@ class FilterRepository extends ServiceEntityRepository
         }
 
         return $result;
+    }
+
+    public function createAdminListQueryBuilder(
+        string $search = '',
+        ?int $categoryId = null,
+        string $sort = 'title',
+        string $direction = 'ASC',
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('f')
+            ->leftJoin('f.category', 'category')
+            ->addSelect('category');
+
+        $search = trim($search);
+        if ($search !== '') {
+            $qb->andWhere('LOWER(f.title) LIKE :search OR LOWER(category.title) LIKE :search')
+                ->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
+        if ($categoryId !== null && $categoryId > 0) {
+            $qb->andWhere('category.id = :categoryId')
+                ->setParameter('categoryId', $categoryId);
+        }
+
+        $direction = strtoupper($direction) === 'DESC' ? 'DESC' : 'ASC';
+
+        if ($sort === 'category') {
+            $qb->orderBy('category.title', $direction);
+        } else {
+            $allowedSorts = ['id', 'title', 'priority', 'openedCount'];
+            if (! in_array($sort, $allowedSorts, true)) {
+                $sort = 'title';
+            }
+            $qb->orderBy('f.' . $sort, $direction);
+        }
+
+        return $qb;
     }
 }

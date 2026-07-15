@@ -1,0 +1,59 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set user = app.user %}
+{% set initials = user.name|slice(0, 1)|upper ~ user.surname|slice(0, 1)|upper %}
+
+<nav class="navbar navbar-dark shadow-sm app-navbar sticky-top">
+    <div class="container-fluid px-3">
+        <button id="sidebarToggle" class="btn text-white border-0 fs-4 p-0 p-md-2" type="button" aria-label="Меню">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2 mb-0" href="{{ path('admin2_dashboard') }}">
+            <span class="brand-icon"><i class="bi bi-shop"></i></span>
+            <span>X-media</span>
+        </a>
+
+        <div class="d-flex align-items-center gap-2">
+            <div class="dropdown d-none d-md-block">
+                <button class="btn btn-dark dropdown-toggle border-0 d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                    <span class="user-avatar--initials" style="width:34px;height:34px;font-size:0.75rem;">{{ initials }}</span>
+                    <span>{{ user.name }} {{ user.surname }}</span>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                    <li>
+                        <div class="px-3 py-2 d-flex align-items-center gap-3">
+                            <span class="user-avatar--initials" style="width:48px;height:48px;font-size:1rem;">{{ initials }}</span>
+                            <div>
+                                <div class="fw-semibold">{{ user.name }} {{ user.surname }}</div>
+                                <div class="text-muted small">{{ user.email }}</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a href="{{ path('admin2_settings') }}" class="dropdown-item d-flex align-items-center gap-2">
+                            <i class="bi bi-gear"></i>
+                            <span>Налаштування</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin2_logout') }}" class="dropdown-item d-flex align-items-center gap-2">
+                            <i class="bi bi-power"></i>
+                            <span>Вийти</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="app-navbar__mobile-actions d-md-none">
+                <a href="{{ path('admin2_settings') }}" class="app-navbar__icon-btn" aria-label="Налаштування">
+                    <i class="bi bi-gear"></i>
+                </a>
+                <a href="{{ path('admin2_logout') }}" class="app-navbar__icon-btn" aria-label="Вийти">
+                    <i class="bi bi-power"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

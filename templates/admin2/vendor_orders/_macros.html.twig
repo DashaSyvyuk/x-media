@@ -1,0 +1,15 @@
+{% macro status_badge(status) %}
+    {% set labels = constant('App\\Entity\\VendorOrder::STATUSES') %}
+    {% set label = labels[status]|default(status) %}
+    {% set class = status == 'new'
+        ? 'vendor-status--new'
+        : (status == 'waiting_pickup'
+            ? 'vendor-status--waiting'
+            : (status == 'cancelled'
+                ? 'vendor-status--cancelled'
+                : (status == 'completed' ? 'vendor-status--completed' : 'vendor-status--default'))) %}
+    <span class="vendor-status {{ class }}">
+        <span class="vendor-status__dot" aria-hidden="true"></span>
+        {{ label }}
+    </span>
+{% endmacro %}

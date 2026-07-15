@@ -1,0 +1,90 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/orders/_macros.html.twig' as order_macros %}
+
+{% block title %}Rozetka замовлення — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/orders.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/rozetka-orders.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="rozetka-orders-page">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 page-header-row">
+            <div>
+                <h1 class="page-title mb-1">Rozetka замовлення</h1>
+                <p class="text-muted mb-0 small">Керування замовленнями через Rozetka Seller API (без імпорту в базу)</p>
+            </div>
+        </div>
+
+        {% if apiError %}
+            <div class="alert alert-danger">{{ apiError }}</div>
+        {% endif %}
+
+        {% if counts %}
+            <div class="order-stat-grid mb-4" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+                <div class="card order-stat-card order-stat-card--new">
+                    <div class="order-stat-card__body">
+                        <div class="order-stat-card__label">Нові</div>
+                        <div class="order-stat-card__value">{{ counts.new|default(0) }}</div>
+                    </div>
+                </div>
+                <div class="card order-stat-card order-stat-card--progress">
+                    <div class="order-stat-card__body">
+                        <div class="order-stat-card__label">В обробці</div>
+                        <div class="order-stat-card__value">{{ counts.inProgress|default(0) }}</div>
+                    </div>
+                </div>
+                <div class="card order-stat-card">
+                    <div class="order-stat-card__body">
+                        <div class="order-stat-card__label">На сторінці</div>
+                        <div class="order-stat-card__value">{{ orders|length }}</div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="card border-0 shadow-sm products-table-card">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 products-table">
+                    <thead>
+                        <tr>
+                            <th>№ Rozetka</th>
+                            <th>Дата</th>
+                            <th>Статус</th>
+                            <th>Клієнт</th>
+                            <th>Телефон</th>
+                            <th>ТТН</th>
+                            <th class="text-end">Сума</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if not configured %}
+                            <tr><td colspan="8" class="text-center text-muted py-5">Налаштуйте ROZETKA_SELLER_* у .env.local</td></tr>
+                        {% elseif orders is empty %}
+                            <tr><td colspan="8" class="text-center text-muted py-5">Активних замовлень немає</td></tr>
+                        {% else %}
+                            {% for order in orders %}
+                                <tr>
+                                    <td><strong>#{{ order.id }}</strong></td>
+                                    <td>{{ order.created|slice(0, 16)|replace({'T': ' '}) }}</td>
+                                    <td><span class="badge bg-warning-subtle text-warning-emphasis">{{ order.status }}</span></td>
+                                    <td>{{ order.recipient ?: '—' }}</td>
+                                    <td>{{ order.phone ?: '—' }}</td>
+                                    <td>{{ order.ttn ?: '—' }}</td>
+                                    <td class="text-end">{{ order_macros.money(order.total) }}</td>
+                                    <td class="text-end">
+                                        <a href="{{ path('admin2_rozetka_orders_show', {id: order.id}) }}" class="btn btn-sm btn-outline-secondary">
+                                            Деталі
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

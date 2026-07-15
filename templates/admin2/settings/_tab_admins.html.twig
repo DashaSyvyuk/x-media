@@ -1,0 +1,65 @@
+{% import 'admin2/settings/_macros.html.twig' as settings_macros %}
+{% set adminRoles = constant('App\\Entity\\AdminUser::ROLES') %}
+
+<div class="settings-tab-toolbar">
+    <h2 class="h5 mb-0">Адміністратори</h2>
+    <button type="button" class="btn btn-teal btn-sm" data-bs-toggle="modal" data-bs-target="#createAdminUserModal">
+        <i class="bi bi-plus-lg"></i> Додати адміна
+    </button>
+</div>
+
+<div class="settings-table-scroll">
+    <table class="table products-table align-middle mb-0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Логін</th>
+                <th>Імʼя</th>
+                <th>Телефон</th>
+                <th>Роль</th>
+                <th class="text-end">Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for adminUser in adminUsers %}
+                <tr>
+                    <td class="text-muted">#{{ adminUser.id }}</td>
+                    <td class="fw-semibold">{{ adminUser.email }}</td>
+                    <td>{{ adminUser.name }} {{ adminUser.surname }}</td>
+                    <td>{{ adminUser.phone ?: '—' }}</td>
+                    <td>{{ settings_macros.role_label(adminUser.roles) }}</td>
+                    <td class="text-end text-nowrap">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-teal js-edit-admin-user"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editAdminUserModal"
+                                data-id="{{ adminUser.id }}"
+                                data-email="{{ adminUser.email|e('html_attr') }}"
+                                data-name="{{ adminUser.name|e('html_attr') }}"
+                                data-surname="{{ adminUser.surname|e('html_attr') }}"
+                                data-phone="{{ adminUser.phone|e('html_attr') }}"
+                                data-roles="{{ adminUser.roles|json_encode|e('html_attr') }}">
+                            Редагувати
+                        </button>
+                        {% if adminUser.id != app.user.id %}
+                            <form method="post"
+                                  action="{{ path('admin2_settings_admins_delete', {id: adminUser.id}) }}"
+                                  class="d-inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_admin') }}">
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-danger"
+                                        data-confirm="Видалити адміна «{{ adminUser.email|e('html_attr') }}»?">
+                                    Видалити
+                                </button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">Адмінів ще немає</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

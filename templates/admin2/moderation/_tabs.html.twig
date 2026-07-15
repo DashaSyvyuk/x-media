@@ -1,0 +1,24 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set commentsActive = currentRoute starts with 'admin2_comment' %}
+{% set feedbacksActive = currentRoute starts with 'admin2_feedback' %}
+{% set newCommentsCount = admin2_new_comments_count() %}
+{% set newFeedbacksCount = admin2_new_feedbacks_count() %}
+
+<nav class="moderation-tabs" aria-label="Модерація">
+    <a href="{{ path('admin2_comments', app.request.query.all) }}"
+       class="moderation-tab {{ commentsActive ? 'moderation-tab--active' : '' }}">
+        <i class="bi bi-chat-left-text"></i>
+        <span>Коментарі</span>
+        {% if newCommentsCount > 0 %}
+            <span class="moderation-tab__badge">{{ newCommentsCount }}</span>
+        {% endif %}
+    </a>
+    <a href="{{ path('admin2_feedbacks', app.request.query.all) }}"
+       class="moderation-tab {{ feedbacksActive ? 'moderation-tab--active' : '' }}">
+        <i class="bi bi-star"></i>
+        <span>Відгуки</span>
+        {% if newFeedbacksCount > 0 %}
+            <span class="moderation-tab__badge">{{ newFeedbacksCount }}</span>
+        {% endif %}
+    </a>
+</nav>

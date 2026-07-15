@@ -8,6 +8,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\FeedRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class GenerateHotlineXmlService
 {
@@ -23,6 +24,7 @@ class GenerateHotlineXmlService
         private readonly CategoryFeedPriceRepository $categoryFeedPriceRepository,
         private readonly BunnyStorageClient $bunny,
         private readonly EntityManagerInterface $entityManager,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -155,7 +157,7 @@ class GenerateHotlineXmlService
 
             return $this->bunny->uploadAndGetUrl($localPath, self::FOLDER, self::FILE_NAME);
         } catch (\Throwable $e) {
-            var_dump('An exception occurred: ' . $e->getMessage());
+            $this->logger->error('Hotline XML generation failed.', ['exception' => $e]);
 
             return null;
         }
@@ -170,16 +172,6 @@ class GenerateHotlineXmlService
         }
 
         return $text;
-    }
-
-    private function allowLongRunningProcess(): void
-    {
-        if (function_exists('set_time_limit')) {
-            @set_time_limit(0);
-        }
-
-        @ini_set('max_execution_time', '0');
-        ignore_user_abort(true);
     }
 
     /**

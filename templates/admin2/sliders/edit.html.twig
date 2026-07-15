@@ -1,0 +1,57 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+
+{% block title %}{{ isNew|default(false) ? 'Новий слайд' : 'Редагування #' ~ slider.id }} — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/product-edit.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="product-edit-header">
+        <div>
+            <a href="{{ path('admin2_sliders') }}" class="text-decoration-none text-muted small d-inline-flex align-items-center gap-1 mb-2">
+                <i class="bi bi-arrow-left"></i> До списку слайдів
+            </a>
+            <h1 class="page-title mb-1">{{ slider.title ?: (isNew|default(false) ? 'Новий слайд' : 'Слайд #' ~ slider.id) }}</h1>
+            {% if isNew|default(false) %}
+                <div class="product-edit-meta">Заповніть поля та натисніть «Зберегти»</div>
+            {% else %}
+                <div class="product-edit-meta">ID #{{ slider.id }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if form.vars.errors|length > 0 %}
+        <div class="alert alert-danger">{{ form_errors(form) }}</div>
+    {% endif %}
+
+    {{ form_start(form, { attr: { class: 'product-edit-form', enctype: 'multipart/form-data' } }) }}
+
+    <div class="card product-edit-section shadow-sm">
+        <div class="card-header">Слайд</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">{{ form_row(form.title) }}</div>
+                <div class="col-md-6">{{ form_row(form.url) }}</div>
+                <div class="col-md-4">{{ form_row(form.priority) }}</div>
+                <div class="col-md-4 d-flex align-items-end">{{ form_row(form.active) }}</div>
+                <div class="col-md-4">{{ form_row(form.promotion) }}</div>
+                <div class="col-md-6">{{ form_row(form.imageFile) }}</div>
+                <div class="col-md-6 d-flex align-items-end">
+                    {% if slider.imageUri %}
+                        <img src="{{ slider.imageUri }}" alt="" class="product-image-preview">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-edit-actions">
+        <div class="card border-0 px-3 py-2 product-edit-actions__bar">
+            <button type="submit" class="btn btn-teal"><i class="bi bi-check2"></i> Зберегти</button>
+            <a href="{{ path('admin2_sliders') }}" class="btn btn-outline-secondary">Скасувати</a>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}

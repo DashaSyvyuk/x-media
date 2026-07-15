@@ -1,0 +1,58 @@
+<div class="settings-tab-toolbar">
+    <h2 class="h5 mb-0">Параметри магазину</h2>
+    <button type="button" class="btn btn-teal btn-sm" data-bs-toggle="modal" data-bs-target="#createShopSettingModal">
+        <i class="bi bi-plus-lg"></i> Додати параметр
+    </button>
+</div>
+
+<p class="text-muted small">Ключові значення сайту (title, slug, value). Slug змінюється лише при створенні.</p>
+
+<div class="settings-table-scroll">
+    <table class="table products-table align-middle mb-0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Назва</th>
+                <th>Slug</th>
+                <th>Значення</th>
+                <th class="text-end">Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for setting in shopSettings %}
+                <tr>
+                    <td class="text-muted">#{{ setting.id }}</td>
+                    <td class="fw-semibold">{{ setting.title }}</td>
+                    <td><code>{{ setting.slug }}</code></td>
+                    <td class="small text-muted">{{ setting.value|length > 80 ? setting.value|slice(0, 80) ~ '…' : setting.value }}</td>
+                    <td class="text-end text-nowrap">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-teal js-edit-shop-setting"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editShopSettingModal"
+                                data-id="{{ setting.id }}"
+                                data-title="{{ setting.title|e('html_attr') }}"
+                                data-slug="{{ setting.slug|e('html_attr') }}"
+                                data-value="{{ setting.value|e('html_attr') }}">
+                            Редагувати
+                        </button>
+                        <form method="post"
+                              action="{{ path('admin2_settings_shop_delete', {id: setting.id}) }}"
+                              class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_shop') }}">
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    data-confirm="Видалити параметр «{{ setting.title|e('html_attr') }}»?">
+                                Видалити
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">Параметрів ще немає</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

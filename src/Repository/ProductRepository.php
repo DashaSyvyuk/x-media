@@ -381,4 +381,186 @@ class ProductRepository extends ServiceEntityRepository
         $entityManager->persist($product);
         $entityManager->flush();
     }
+
+    public function createAdminListQueryBuilder(
+        string $search = '',
+        ?string $status = null,
+        string $sort = 'id',
+        string $direction = 'DESC',
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.category', 'category')
+            ->addSelect('category');
+
+        $search = trim($search);
+        if ($search !== '') {
+            $words = preg_split('/\s+/', $search) ?: [];
+            $orX = $qb->expr()->orX();
+
+            foreach (['title', 'productCode'] as $field) {
+                $andX = $qb->expr()->andX();
+                foreach ($words as $k => $word) {
+                    if ($word === '') {
+                        continue;
+                    }
+                    $paramName = sprintf('%s_word%d', $field, $k);
+                    $andX->add($qb->expr()->like("LOWER(p.$field)", ":$paramName"));
+                    $qb->setParameter($paramName, '%' . mb_strtolower($word) . '%');
+                }
+                if ($andX->count() > 0) {
+                    $orX->add($andX);
+                }
+            }
+
+            if (ctype_digit($search)) {
+                $orX->add($qb->expr()->eq('p.id', ':searchId'));
+                $qb->setParameter('searchId', (int) $search);
+            }
+
+            $qb->andWhere($orX);
+        }
+
+        if ($status !== null && $status !== '') {
+            $qb->andWhere('p.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        $allowedSorts = ['id', 'title', 'price', 'updatedAt', 'createdAt'];
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = 'id';
+        }
+        $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
+
+        return $qb->orderBy('p.' . $sort, $direction);
+    }
+
+    public function createPriceControlQueryBuilder(
+        string $search = '',
+        ?string $status = null,
+        ?int $categoryId = null,
+        string $sort = 'id',
+        string $direction = 'DESC',
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.category', 'category')
+            ->addSelect('category')
+            ->leftJoin('p.rozetka', 'rozetka')
+            ->addSelect('rozetka');
+
+        $search = trim($search);
+        if ($search !== '') {
+            $orX = $qb->expr()->orX();
+
+            if (ctype_digit($search)) {
+                $orX->add($qb->expr()->eq('p.id', ':searchId'));
+                $qb->setParameter('searchId', (int) $search);
+            }
+
+            $orX->add($qb->expr()->like('LOWER(p.productCode)', ':searchText'));
+            $orX->add($qb->expr()->like('LOWER(p.productCode2)', ':searchText'));
+            $orX->add($qb->expr()->like('LOWER(p.title)', ':searchText'));
+            $qb->setParameter('searchText', '%' . mb_strtolower($search) . '%');
+            $qb->andWhere($orX);
+        }
+
+        if ($status !== null && $status !== '') {
+            $qb->andWhere('p.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        if ($categoryId !== null && $categoryId > 0) {
+            $qb->andWhere('category.id = :categoryId')
+                ->setParameter('categoryId', $categoryId);
+        }
+
+        $allowedSorts = [
+            'id'    => 'p.id',
+            'title' => 'p.title',
+            'price' => 'p.price',
+        ];
+        if (! isset($allowedSorts[$sort])) {
+            $sort = 'id';
+        }
+        $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
+
+        return $qb->orderBy($allowedSorts[$sort], $direction);
+    }
+
+    /**
+     * @return list<array{id: int, title: string, price: int, productCode: string}>
+     */
+    public function searchForAdminPicker(string $search, int $limit = 15): array
+    {
+        $search = ltrim(trim($search), '#');
+        if ($search === '') {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('p')
+            ->select('p.id', 'p.title', 'p.price', 'p.productCode');
+
+        if (ctype_digit($search)) {
+            $exact = $this->findAdminPickerItem((int) $search);
+            if ($exact !== null) {
+                return [$exact];
+            }
+
+            $qb->where($qb->expr()->like('CONCAT(\'\', p.id)', ':idPrefix'))
+                ->setParameter('idPrefix', $search . '%')
+                ->orderBy('p.id', 'ASC');
+        } else {
+            $words = preg_split('/\s+/', mb_strtolower($search)) ?: [];
+            $orX   = $qb->expr()->orX();
+
+            foreach (['title', 'productCode'] as $field) {
+                $andX = $qb->expr()->andX();
+                foreach ($words as $k => $word) {
+                    if ($word === '') {
+                        continue;
+                    }
+                    $paramName = sprintf('%s_word%d', $field, $k);
+                    $andX->add($qb->expr()->like("LOWER(p.$field)", ":$paramName"));
+                    $qb->setParameter($paramName, '%' . $word . '%');
+                }
+                if ($andX->count() > 0) {
+                    $orX->add($andX);
+                }
+            }
+
+            $qb->where($orX)->orderBy('p.id', 'DESC');
+        }
+
+        $rows = $qb->setMaxResults($limit)
+            ->getQuery()
+            ->getArrayResult();
+
+        return array_map(static fn(array $row): array => [
+            'id'          => (int) $row['id'],
+            'title'       => (string) $row['title'],
+            'price'       => (int) $row['price'],
+            'productCode' => (string) $row['productCode'],
+        ], $rows);
+    }
+
+    /**
+     * @return array{id: int, title: string, price: int, productCode: string}|null
+     */
+    public function findAdminPickerItem(int $id): ?array
+    {
+        if ($id <= 0) {
+            return null;
+        }
+
+        $product = $this->find($id);
+        if ($product === null) {
+            return null;
+        }
+
+        return [
+            'id'          => $product->getId(),
+            'title'       => (string) $product->getTitle(),
+            'price'       => $product->getPrice(),
+            'productCode' => (string) $product->getProductCode(),
+        ];
+    }
 }

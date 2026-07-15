@@ -10,6 +10,8 @@ parameters:
     bunny.cdn.url: '%env(BUNNY_CDN_URL)%'
     product_images_dir: '%kernel.project_dir%/public/images/products'
     public_images_dir: '%kernel.project_dir%/public/images'
+    receipt_templates_dir: '%kernel.project_dir%/templates/admin2/receipts'
+    invoice_templates_dir: '%kernel.project_dir%/templates/admin2/invoices'
 
     # Default value for framework.trusted_proxies when TRUSTED_PROXIES env is unset.
     # See config/packages/framework.yaml.
@@ -24,6 +26,8 @@ services:
             string $uploadDir: '%product_images_dir%'
             string $publicImagesDir: '%public_images_dir%'
             string $cdnUrl: '%bunny.cdn.url%'
+            string $receiptTemplatesDir: '%receipt_templates_dir%'
+            string $invoiceTemplatesDir: '%invoice_templates_dir%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -78,3 +82,8 @@ services:
             $apiKey: '%bunny.storage.api_key%'
             $region: '%bunny.storage.region%'
             $cdnUrl: '%bunny.cdn.url%'
+
+    App\Service\Admin2\RozetkaSellerApiClient:
+        arguments:
+            $username: '%env(default::ROZETKA_SELLER_USERNAME)%'
+            $password: '%env(default::ROZETKA_SELLER_PASSWORD)%'
