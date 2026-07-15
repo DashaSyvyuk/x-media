@@ -43,7 +43,7 @@ class UserRepository extends ServiceEntityRepository
     public function update(User $user): void
     {
         $entityManager = $this->getEntityManager();
-        $entityManager->refresh($user);
+        //$entityManager->refresh($user);
         $entityManager->flush();
     }
 
