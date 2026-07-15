@@ -61,7 +61,7 @@ class Warranty
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     #[ORM\ManyToOne(targetEntity: Supplier::class)]
-    private Supplier $supplier;
+    private ?Supplier $supplier = null;
 
     #[ORM\Column(type: "string", nullable: true)]
     private ?string $fromClientTtn = null;
@@ -77,7 +77,7 @@ class Warranty
 
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     #[ORM\ManyToOne(targetEntity: Product::class)]
-    private Product $product;
+    private ?Product $product = null;
 
     #[ORM\Column(type: "integer")]
     #[Assert\GreaterThanOrEqual(value: "1", message: "Too low value")]
@@ -152,7 +152,7 @@ class Warranty
         $this->email = $email;
     }
 
-    public function setSupplier(Supplier $supplier): void
+    public function setSupplier(?Supplier $supplier): void
     {
         $this->supplier = $supplier;
     }
@@ -202,7 +202,7 @@ class Warranty
         $this->orderNumber = $orderNumber;
     }
 
-    public function setProduct(Product $product): void
+    public function setProduct(?Product $product): void
     {
         $this->product = $product;
     }
@@ -254,6 +254,6 @@ class Warranty
 
     public function __toString(): string
     {
-        return $this->product->getTitle();
+        return $this->product?->getTitle() ?? ('Гарантія #' . $this->id);
     }
 }
