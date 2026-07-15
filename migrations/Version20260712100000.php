@@ -11,7 +11,7 @@ final class Version20260712100000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Vendor orders, fulfillment links, supplier storage days; drop rozetka_order_id';
+        return 'Vendor orders, fulfillment links, supplier storage days';
     }
 
     public function up(Schema $schema): void
@@ -50,16 +50,10 @@ final class Version20260712100000 extends AbstractMigration
 
         $this->addSql('ALTER TABLE order_fulfillment_links ADD CONSTRAINT FK_FULFILLMENT_VENDOR FOREIGN KEY (vendor_order_id) REFERENCES vendor_orders (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE order_fulfillment_links ADD CONSTRAINT FK_FULFILLMENT_ORDER FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE');
-
-        $this->addSql('DROP INDEX UNIQ_E52FFDEEA7AEB58 ON orders');
-        $this->addSql('ALTER TABLE orders DROP rozetka_order_id');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE orders ADD rozetka_order_id INT UNSIGNED DEFAULT NULL');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_E52FFDEEA7AEB58 ON orders (rozetka_order_id)');
-
         $this->addSql('ALTER TABLE order_fulfillment_links DROP FOREIGN KEY FK_FULFILLMENT_VENDOR');
         $this->addSql('ALTER TABLE order_fulfillment_links DROP FOREIGN KEY FK_FULFILLMENT_ORDER');
         $this->addSql('DROP TABLE order_fulfillment_links');
