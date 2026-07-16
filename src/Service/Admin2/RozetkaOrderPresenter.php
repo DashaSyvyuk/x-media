@@ -121,7 +121,10 @@ final class RozetkaOrderPresenter
         $labelMap = $this->apiClient->getStatusLabelMap();
         $optionsById = [];
 
-        $addOption = function (int $statusId, ?string $rawLabel = null) use (
+        $addOption = function (
+            int $statusId,
+            ?string $rawLabel = null,
+        ) use (
             &$optionsById,
             $currentStatus,
             $statusData,
@@ -185,7 +188,11 @@ final class RozetkaOrderPresenter
             return self::ALLOWED_STATUS_OPTIONS[$statusId];
         }
 
-        if (isset($labelMap[$statusId]) && trim($labelMap[$statusId]) !== '' && ! str_starts_with($labelMap[$statusId], 'Статус #')) {
+        if (
+            isset($labelMap[$statusId])
+            && trim($labelMap[$statusId]) !== ''
+            && ! str_starts_with($labelMap[$statusId], 'Статус #')
+        ) {
             return $labelMap[$statusId];
         }
 

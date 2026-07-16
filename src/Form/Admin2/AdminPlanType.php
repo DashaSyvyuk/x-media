@@ -51,8 +51,11 @@ class AdminPlanType extends AbstractType
                 'label'        => 'Призначити',
                 'class'        => AdminUser::class,
                 'choices'      => $choices,
-                'choice_label' => static fn (AdminUser $user): string => trim($user->getName() . ' ' . $user->getSurname())
-                    ?: (string) $user->getEmail(),
+                'choice_label' => static function (AdminUser $user): string {
+                    $label = trim($user->getName() . ' ' . $user->getSurname());
+
+                    return $label !== '' ? $label : (string) $user->getEmail();
+                },
                 'required'     => true,
             ])
             ->add('title', TextType::class, [

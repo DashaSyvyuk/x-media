@@ -154,7 +154,12 @@ class PlanningController extends AbstractController
         return $this->redirectToRoute('admin2_planning', $this->returnQuery($request));
     }
 
-    #[Route('/admin/planning/{id}/complete', name: 'admin2_planning_complete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route(
+        '/admin/planning/{id}/complete',
+        name: 'admin2_planning_complete',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
     public function complete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_plan_action', (string) $request->request->get('_token'))) {
@@ -177,7 +182,12 @@ class PlanningController extends AbstractController
         return $this->redirectToRoute('admin2_planning', $this->returnQuery($request));
     }
 
-    #[Route('/admin/planning/{id}/delete', name: 'admin2_planning_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route(
+        '/admin/planning/{id}/delete',
+        name: 'admin2_planning_delete',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_plan_action', (string) $request->request->get('_token'))) {

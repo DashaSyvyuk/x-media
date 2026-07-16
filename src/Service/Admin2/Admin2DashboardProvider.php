@@ -39,7 +39,11 @@ final class Admin2DashboardProvider
 
     /**
      * @return array{
-     *     exchangeRates: array{updated_at: ?string, pairs: list<array{label: string, from: string, to: string, value: float|null}>, error: ?string},
+     *     exchangeRates: array{
+     *         updated_at: ?string,
+     *         pairs: list<array{label: string, from: string, to: string, value: float|null}>,
+     *         error: ?string
+     *     },
      *     today: array{orders: int, revenue: int, paid: int},
      *     month: array{orders: int, revenue: int, paid: int, cancelRate: float},
      *     monthLabel: string,
@@ -47,9 +51,26 @@ final class Admin2DashboardProvider
      *         incomeByCurrency: list<array{code: string, total: int}>,
      *         expenseByCurrency: list<array{code: string, total: int}>,
      *         netByCurrency: list<array{code: string, total: int}>,
-     *         payments: list<array{id: int, sum: int, note: string, description: string, createdAt: string, cash: string, code: string}>
+     *         payments: list<array{
+     *             id: int,
+     *             sum: int,
+     *             note: string,
+     *             description: string,
+     *             createdAt: string,
+     *             cash: string,
+     *             code: string
+     *         }>
      *     },
-     *     activeOrders: list<array{id: int, orderNumber: string, customer: string, phone: string, status: string, statusLabel: string, total: int, createdAt: string}>,
+     *     activeOrders: list<array{
+     *         id: int,
+     *         orderNumber: string,
+     *         customer: string,
+     *         phone: string,
+     *         status: string,
+     *         statusLabel: string,
+     *         total: int,
+     *         createdAt: string
+     *     }>,
      *     fops: list<array{id: int, title: string}>,
      *     debts: list<array{id: int, name: string, code: string, balance: int}>,
      *     todayPlans: list<array{id: int, title: string, body: string, assignee: string}>
@@ -136,7 +157,15 @@ final class Admin2DashboardProvider
      *     incomeByCurrency: list<array{code: string, total: int}>,
      *     expenseByCurrency: list<array{code: string, total: int}>,
      *     netByCurrency: list<array{code: string, total: int}>,
-     *     payments: list<array{id: int, sum: int, note: string, description: string, createdAt: string, cash: string, code: string}>
+     *     payments: list<array{
+     *         id: int,
+     *         sum: int,
+     *         note: string,
+     *         description: string,
+     *         createdAt: string,
+     *         cash: string,
+     *         code: string
+     *     }>
      * }
      */
     private function circulationToday(\DateTimeImmutable $from, \DateTimeImmutable $to): array
@@ -186,7 +215,11 @@ final class Admin2DashboardProvider
                 COALESCE(p.description, \'\') AS description,
                 p.created_at,
                 cur.code AS currency_code,
-                COALESCE(NULLIF(TRIM(au.name), \'\'), NULLIF(TRIM(au.email), \'\'), CONCAT(\'Каса #\', c.id)) AS cash_label
+                COALESCE(
+                    NULLIF(TRIM(au.name), \'\'),
+                    NULLIF(TRIM(au.email), \'\'),
+                    CONCAT(\'Каса #\', c.id)
+                ) AS cash_label
              FROM circulation_payments p
              INNER JOIN circulations c ON c.id = p.circulation_id
              INNER JOIN currency cur ON cur.id = c.currency_id
@@ -222,7 +255,16 @@ final class Admin2DashboardProvider
     }
 
     /**
-     * @return list<array{id: int, orderNumber: string, customer: string, phone: string, status: string, statusLabel: string, total: int, createdAt: string}>
+     * @return list<array{
+     *     id: int,
+     *     orderNumber: string,
+     *     customer: string,
+     *     phone: string,
+     *     status: string,
+     *     statusLabel: string,
+     *     total: int,
+     *     createdAt: string
+     * }>
      */
     private function activeOrders(int $limit): array
     {

@@ -267,7 +267,7 @@ final class Admin2StatisticsProvider
         $groups = [
             'Нове'       => ['count' => 0, 'color' => '#0d9488'],
             'В процесі'  => ['count' => 0, 'color' => '#f59e0b'],
-            'Відправлено'=> ['count' => 0, 'color' => '#3b82f6'],
+            'Відправлено' => ['count' => 0, 'color' => '#3b82f6'],
             'Доставлено' => ['count' => 0, 'color' => '#0f172a'],
             'Відмінено'  => ['count' => 0, 'color' => '#94a3b8'],
         ];

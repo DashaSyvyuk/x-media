@@ -86,7 +86,12 @@ class GoodsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/goods/batches/{id}', name: 'admin2_goods_batches_update', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route(
+        '/admin/goods/batches/{id}',
+        name: 'admin2_goods_batches_update',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
     public function updateBatch(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_goods', (string) $request->request->get('_token'))) {
@@ -121,7 +126,12 @@ class GoodsController extends AbstractController
         return $this->redirectToRoute('admin2_goods', $this->redirectParams($request, $id));
     }
 
-    #[Route('/admin/goods/batches/{id}/delete', name: 'admin2_goods_batches_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route(
+        '/admin/goods/batches/{id}/delete',
+        name: 'admin2_goods_batches_delete',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
     public function deleteBatch(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_goods', (string) $request->request->get('_token'))) {
@@ -266,7 +276,16 @@ class GoodsController extends AbstractController
     }
 
     /**
-     * @return array{batch: PlanningGoodBatch, warehouse: ?Warehouse, name: string, purchase_price: float, delivery_price: float, sale_price: ?float, is_sold: bool, create_count?: int}|null
+     * @return array{
+     *     batch: PlanningGoodBatch,
+     *     warehouse: ?Warehouse,
+     *     name: string,
+     *     purchase_price: float,
+     *     delivery_price: float,
+     *     sale_price: ?float,
+     *     is_sold: bool,
+     *     create_count?: int
+     * }|null
      */
     private function parseGoodRequest(Request $request, bool $isCreate): ?array
     {
@@ -337,7 +356,15 @@ class GoodsController extends AbstractController
     }
 
     /**
-     * @param array{batch: PlanningGoodBatch, warehouse: ?Warehouse, name: string, purchase_price: float, delivery_price: float, sale_price: ?float, is_sold: bool} $data
+     * @param array{
+     *     batch: PlanningGoodBatch,
+     *     warehouse: ?Warehouse,
+     *     name: string,
+     *     purchase_price: float,
+     *     delivery_price: float,
+     *     sale_price: ?float,
+     *     is_sold: bool
+     * } $data
      */
     private function applyGoodData(PlanningGood $good, array $data): void
     {
