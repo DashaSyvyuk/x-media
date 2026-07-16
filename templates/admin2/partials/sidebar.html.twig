@@ -82,7 +82,7 @@
         </div>
     </div>
 
-    {% if is_granted('ROLE_SUPER_ADMIN') %}
+{% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') %}
         <div class="sidebar-group {{ ordersOpen ? 'open' : '' }}">
             <button type="button" class="sidebar-link sidebar-group-toggle {{ ordersOpen ? 'active' : '' }}">
                 <i class="bi bi-bag-check"></i>
@@ -162,7 +162,7 @@
             </button>
 
             <div class="sidebar-submenu">
-                {% if is_granted('ROLE_SUPER_ADMIN') %}
+        {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('admin2_debtors') }}"
                        class="sidebar-sublink {{ currentRoute starts with 'admin2_debtor' ? 'active' : '' }}">
                         <i class="bi bi-circle-fill"></i>
