@@ -99,7 +99,7 @@ class SettingsAdminUserController extends AbstractController
                 return $this->redirectToRoute('admin2_settings', ['tab' => 'admins']);
             }
 
-            if ($adminUser->getRoles() === []) {
+            if ($adminUser->getAssignableRoles() === []) {
                 $adminUser->setRoles([AdminUser::ROLE_USER]);
             }
 

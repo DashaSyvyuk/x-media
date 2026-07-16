@@ -111,32 +111,32 @@
             </section>
         {% endif %}
 
-        {% if isStaff %}
-            <section class="dashboard-panel dash-reveal dash-reveal--3">
-                <div class="dashboard-panel__head">
-                    <h2 class="dashboard-panel__title">Курси валют</h2>
-                    {% if dash.exchangeRates.updated_at %}
-                        <span class="dashboard-meta">NBP · {{ dash.exchangeRates.updated_at|date('d.m.Y') }}</span>
-                    {% endif %}
-                </div>
-                {% if dash.exchangeRates.error %}
-                    <div class="alert alert-warning py-2 mb-0">{{ dash.exchangeRates.error }}</div>
-                {% else %}
-                    <div class="exchange-rates-grid">
-                        {% for pair in dash.exchangeRates.pairs %}
-                            <div class="exchange-rate-item">
-                                <div class="exchange-rate-label">{{ pair.label }}</div>
-                                <div class="exchange-rate-value">
-                                    <span class="exchange-rate-pair">1 {{ pair.from }}</span>
-                                    <strong>{{ pair.value is null ? '—' : pair.value|number_format(pair.value >= 1 ? 2 : 4, '.', ' ') }}</strong>
-                                    <span class="exchange-rate-pair">{{ pair.to }}</span>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+        <section class="dashboard-panel dash-reveal dash-reveal--3">
+            <div class="dashboard-panel__head">
+                <h2 class="dashboard-panel__title">Курси валют</h2>
+                {% if dash.exchangeRates.updated_at %}
+                    <span class="dashboard-meta">NBP · {{ dash.exchangeRates.updated_at|date('d.m.Y') }}</span>
                 {% endif %}
-            </section>
+            </div>
+            {% if dash.exchangeRates.error %}
+                <div class="alert alert-warning py-2 mb-0">{{ dash.exchangeRates.error }}</div>
+            {% else %}
+                <div class="exchange-rates-grid">
+                    {% for pair in dash.exchangeRates.pairs %}
+                        <div class="exchange-rate-item">
+                            <div class="exchange-rate-label">{{ pair.label }}</div>
+                            <div class="exchange-rate-value">
+                                <span class="exchange-rate-pair">1 {{ pair.from }}</span>
+                                <strong>{{ pair.value is null ? '—' : pair.value|number_format(pair.value >= 1 ? 2 : 4, '.', ' ') }}</strong>
+                                <span class="exchange-rate-pair">{{ pair.to }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
 
+        {% if isStaff %}
             <section class="dashboard-kpi-band dash-reveal dash-reveal--3">
                 <div class="dashboard-kpi-block">
                     <div class="dashboard-kpi-block__head">

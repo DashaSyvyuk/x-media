@@ -33,14 +33,17 @@ class AdminUserSettingsType extends AbstractType
             ->add('surname', TextType::class, ['label' => 'Прізвище'])
             ->add('phone', TextType::class, ['label' => 'Телефон'])
             ->add('active', CheckboxType::class, [
-                'label'    => 'Активний',
-                'required' => false,
+                'label'        => 'Активний',
+                'required'     => false,
+                'false_values' => [null, '', '0', 0, false],
             ])
             ->add('roles', ChoiceType::class, [
-                'label'       => 'Роль',
-                'choices'     => array_flip(AdminUser::ROLES),
-                'multiple'    => true,
-                'expanded'    => false,
+                'label'         => 'Роль',
+                'choices'       => AdminUser::ROLES,
+                'multiple'      => true,
+                'expanded'      => true,
+                'required'      => false,
+                'property_path' => 'assignableRoles',
             ])
         ;
     }
