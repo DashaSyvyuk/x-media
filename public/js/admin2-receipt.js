@@ -127,8 +127,8 @@
         };
     };
 
-    const requestPdf = async (download) => {
-        const response = await fetch(`/admin2/receipts/generate${download ? '?download=1' : ''}`, {
+    const requestReceipt = async () => {
+        const response = await fetch('/admin2/receipts/generate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -151,42 +151,15 @@
         return response.blob();
     };
 
-    const openPdfBlob = (blob) => {
-        const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
-        window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
-    };
-
-    const downloadPdfBlob = (blob, filename) => {
+    const downloadReceiptBlob = (blob, filename) => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `${filename}.pdf`;
+        link.download = `${filename}.docx`;
         document.body.appendChild(link);
         link.click();
         link.remove();
         window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
-    };
-
-    const printPdfBlob = async (blob) => {
-        const url = URL.createObjectURL(blob);
-        const frame = document.createElement('iframe');
-        frame.style.position = 'fixed';
-        frame.style.right = '0';
-        frame.style.bottom = '0';
-        frame.style.width = '0';
-        frame.style.height = '0';
-        frame.style.border = '0';
-        frame.src = url;
-        document.body.appendChild(frame);
-        frame.onload = () => {
-            frame.contentWindow?.focus();
-            frame.contentWindow?.print();
-            window.setTimeout(() => {
-                frame.remove();
-                URL.revokeObjectURL(url);
-            }, 60_000);
-        };
     };
 
     document.querySelectorAll('.order-receipt-btn').forEach((button) => {
@@ -226,31 +199,13 @@
         scheduleWordsUpdate(parseInt(event.target.value || '0', 10) || 0);
     });
 
-    const withPdf = async (callback) => {
-        clearError();
-        try {
-            const blob = await requestPdf(false);
-            await callback(blob);
-        } catch (error) {
-            showError(error.message || 'Помилка генерації');
-        }
-    };
-
-    document.getElementById('receiptGenerateBtn')?.addEventListener('click', () => {
-        withPdf(openPdfBlob);
-    });
-
     document.getElementById('receiptSaveBtn')?.addEventListener('click', async () => {
         clearError();
         try {
-            const blob = await requestPdf(true);
-            downloadPdfBlob(blob, document.getElementById('receiptFilename').value || 'receipt');
+            const blob = await requestReceipt();
+            downloadReceiptBlob(blob, document.getElementById('receiptFilename').value || 'receipt');
         } catch (error) {
             showError(error.message || 'Помилка збереження');
         }
-    });
-
-    document.getElementById('receiptPrintBtn')?.addEventListener('click', () => {
-        withPdf(printPdfBlob);
     });
 })();

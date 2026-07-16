@@ -4,20 +4,18 @@ namespace App\Service\Admin2;
 
 use PhpOffice\PhpWord\TemplateProcessor;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
 
 final class OrderReceiptGenerator
 {
     public function __construct(
         private readonly string $receiptTemplatesDir,
-        private readonly string $sofficeBinary = 'soffice',
     ) {
     }
 
     /**
      * @param array<string, mixed> $payload
      */
-    public function generatePdf(array $payload): string
+    public function generateDocx(array $payload): string
     {
         $template = ($payload['template'] ?? '') === 'rozetka' ? 'rozetka.docx' : 'x-media.docx';
         $templatePath = $this->receiptTemplatesDir . '/' . $template;
@@ -31,9 +29,7 @@ final class OrderReceiptGenerator
         $docxPath = $workDir . '/receipt.docx';
         $this->fillTemplate($templatePath, $docxPath, $payload);
 
-        $pdfPath = $this->convertToPdf($docxPath, $workDir);
-
-        return $pdfPath;
+        return $docxPath;
     }
 
     /**
@@ -67,33 +63,6 @@ final class OrderReceiptGenerator
         $processor->setValue('total_words', (string) ($payload['totalWords'] ?? ''));
 
         $processor->saveAs($outputPath);
-    }
-
-    private function convertToPdf(string $docxPath, string $workDir): string
-    {
-        $process = new Process([
-            $this->sofficeBinary,
-            '--headless',
-            '--norestore',
-            '--convert-to',
-            'pdf',
-            '--outdir',
-            $workDir,
-            $docxPath,
-        ]);
-        $process->setTimeout(120);
-        $process->run();
-
-        if (! $process->isSuccessful()) {
-            throw new \RuntimeException('Не вдалося конвертувати чек у PDF: ' . trim($process->getErrorOutput()));
-        }
-
-        $pdfPath = $workDir . '/receipt.pdf';
-        if (! is_file($pdfPath)) {
-            throw new \RuntimeException('PDF-файл чека не створено.');
-        }
-
-        return $pdfPath;
     }
 
     private function formatMoney(int $amount): string
