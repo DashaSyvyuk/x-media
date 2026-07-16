@@ -4,6 +4,7 @@ namespace App\Service\Admin2;
 
 use App\Entity\Product;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class XKomPriceFetcher
@@ -15,6 +16,7 @@ final class XKomPriceFetcher
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         private readonly CacheItemPoolInterface $cache,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -51,10 +53,32 @@ final class XKomPriceFetcher
                     'headers' => [
                         'User-Agent'      => self::USER_AGENT,
                         'Accept-Language' => 'pl-PL,pl;q=0.9',
+                        'Accept'          => 'text/html,application/xhtml+xml',
                     ],
                     'timeout' => 8,
                 ]);
-                $info = $this->parseFromHtml($response->getContent());
+                $statusCode = $response->getStatusCode();
+                $html = $response->getContent(false);
+                if ($statusCode >= 400) {
+                    $this->logger->warning('x-kom fetch returned HTTP error.', [
+                        'productId'  => $product->getId(),
+                        'url'        => $url,
+                        'statusCode' => $statusCode,
+                    ]);
+                    $result[$product->getId()] = null;
+                    continue;
+                }
+
+                $info = $this->parseFromHtml($html);
+                if ($info->price === null && $info->title === null) {
+                    $this->logger->warning('x-kom HTML parsed without product data (blocked or changed markup).', [
+                        'productId'  => $product->getId(),
+                        'url'        => $url,
+                        'statusCode' => $statusCode,
+                        'htmlLength' => strlen($html),
+                    ]);
+                }
+
                 $result[$product->getId()] = $info;
 
                 $item->set([
@@ -64,7 +88,12 @@ final class XKomPriceFetcher
                 ]);
                 $item->expiresAfter(self::CACHE_TTL_SECONDS);
                 $this->cache->save($item);
-            } catch (\Throwable) {
+            } catch (\Throwable $e) {
+                $this->logger->error('x-kom fetch failed.', [
+                    'productId' => $product->getId(),
+                    'url'       => $url,
+                    'exception' => $e,
+                ]);
                 $result[$product->getId()] = null;
             }
         }
