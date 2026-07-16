@@ -13,7 +13,7 @@ class AdminPlan
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    private int $id = 0;
 
     #[ORM\Column(type: 'date')]
     private \DateTimeInterface $scheduledDate;
@@ -49,7 +49,7 @@ class AdminPlan
         $this->updatedAt = $now;
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

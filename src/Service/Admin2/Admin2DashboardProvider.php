@@ -338,6 +338,6 @@ final class Admin2DashboardProvider
 
         $month = (int) $monthFrom->format('n');
 
-        return 'з 1 ' . ($months[$month] ?? $monthFrom->format('m')) . ' ' . $monthFrom->format('Y');
+        return 'з 1 ' . $months[$month] . ' ' . $monthFrom->format('Y');
     }
 }
