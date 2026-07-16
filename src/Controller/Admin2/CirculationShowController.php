@@ -25,13 +25,13 @@ class CirculationShowController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/circulations/{id}', name: 'admin2_circulations_show', methods: ['GET'])]
+    #[Route('/admin/circulations/{id}', name: 'admin2_circulations_show', methods: ['GET'])]
     public function show(int $id): Response
     {
         return $this->renderShow($this->findCirculation($id));
     }
 
-    #[Route('/admin2/circulations/{id}/settings', name: 'admin2_circulations_settings', methods: ['POST'])]
+    #[Route('/admin/circulations/{id}/settings', name: 'admin2_circulations_settings', methods: ['POST'])]
     public function updateSettings(Request $request, int $id): Response
     {
         $circulation = $this->findCirculation($id);
@@ -48,7 +48,7 @@ class CirculationShowController extends AbstractController
         return $this->redirectToRoute('admin2_circulations_show', ['id' => $circulation->getId()]);
     }
 
-    #[Route('/admin2/circulations/{id}/payments', name: 'admin2_circulations_payments_create', methods: ['POST'])]
+    #[Route('/admin/circulations/{id}/payments', name: 'admin2_circulations_payments_create', methods: ['POST'])]
     public function createPayment(Request $request, int $id): Response
     {
         $circulation = $this->findCirculation($id);
@@ -74,7 +74,7 @@ class CirculationShowController extends AbstractController
     }
 
     #[Route(
-        '/admin2/circulations/{id}/payments/{paymentId}/edit',
+        '/admin/circulations/{id}/payments/{paymentId}/edit',
         name: 'admin2_circulations_payments_edit',
         methods: ['POST'],
     )]
@@ -97,7 +97,7 @@ class CirculationShowController extends AbstractController
     }
 
     #[Route(
-        '/admin2/circulations/{id}/payments/{paymentId}/delete',
+        '/admin/circulations/{id}/payments/{paymentId}/delete',
         name: 'admin2_circulations_payments_delete',
         methods: ['POST'],
     )]

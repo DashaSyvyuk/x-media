@@ -4,27 +4,41 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        admin2:
-            pattern: ^/admin
-            context: admin_shared
-            provider: app_user_provider
-            lazy: true
-            custom_authenticators:
-                - App\Security\Admin2Authenticator
-            logout:
-                path: admin2_logout
-                target: admin2_login
-
+        # More specific /admin2 (old EasyAdmin) must be registered before /admin,
+        # otherwise ^/admin would also match /admin2.
         admin:
             pattern: ^/admin2
             context: admin_shared
             provider: app_user_provider
+            user_checker: App\Security\AdminUserChecker
             lazy: true
             custom_authenticators:
                 - App\Security\AdminAuthenticator
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 2592000
+                path: /
+                always_remember_me: true
             logout:
                 path: app_logout
                 target: app_login
+
+        admin2:
+            pattern: ^/admin
+            context: admin_shared
+            provider: app_user_provider
+            user_checker: App\Security\AdminUserChecker
+            lazy: true
+            custom_authenticators:
+                - App\Security\Admin2Authenticator
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 2592000
+                path: /
+                always_remember_me: true
+            logout:
+                path: admin2_logout
+                target: admin2_login
 
     password_hashers:
         App\Entity\AdminUser:
@@ -37,10 +51,12 @@ security:
                 property: email
 
     access_control:
-        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
-        - { path: ^/admin, roles: ROLE_USER }
+        # /admin2 first — otherwise ^/admin also matches /admin2
         - { path: ^/admin2/login, roles: PUBLIC_ACCESS }
         - { path: ^/admin2, roles: ROLE_USER }
+        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
+        - { path: ^/admin/sw\.js$, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_USER }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER

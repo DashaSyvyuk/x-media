@@ -21,7 +21,7 @@ class ReturnEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/returns/{id}/edit', name: 'admin2_returns_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/returns/{id}/edit', name: 'admin2_returns_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $return = $this->returnProductRepository->find($id);

@@ -5,7 +5,7 @@ document.querySelectorAll('.js-edit-currency').forEach((button) => {
             return;
         }
 
-        form.action = `/admin2/settings/currencies/${button.dataset.id}`;
+        form.action = `/admin/settings/currencies/${button.dataset.id}`;
         document.getElementById('editCurrencyTitle').value = button.dataset.title || '';
         document.getElementById('editCurrencyShortTitle').value = button.dataset.shortTitle || '';
         document.getElementById('editCurrencyCode').value = button.dataset.code || '';

@@ -23,7 +23,7 @@ class WarehousesController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/warehouses', name: 'admin2_warehouses', methods: ['GET'])]
+    #[Route('/admin/warehouses', name: 'admin2_warehouses', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -56,7 +56,7 @@ class WarehousesController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/warehouses/new', name: 'admin2_warehouses_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/warehouses/new', name: 'admin2_warehouses_new', methods: ['GET', 'POST'])]
     public function createNew(Request $request): Response
     {
         $warehouse = new Warehouse();
@@ -65,7 +65,7 @@ class WarehousesController extends AbstractController
         return $this->handleForm($request, $warehouse, true);
     }
 
-    #[Route('/admin2/warehouses/{id}/edit', name: 'admin2_warehouses_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/warehouses/{id}/edit', name: 'admin2_warehouses_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $warehouse = $this->warehouseRepository->find($id);

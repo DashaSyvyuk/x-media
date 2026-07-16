@@ -44,7 +44,7 @@
         window.clearTimeout(wordsRequestTimer);
         wordsRequestTimer = window.setTimeout(async () => {
             try {
-                const response = await fetch(`/admin2/receipts/amount-words?amount=${amount}`);
+                const response = await fetch(`/admin/receipts/amount-words?amount=${amount}`);
                 const data = await response.json();
                 if (data.totalWords) {
                     document.getElementById('receiptTotalWords').value = data.totalWords;
@@ -128,7 +128,7 @@
     };
 
     const requestReceipt = async () => {
-        const response = await fetch('/admin2/receipts/generate', {
+        const response = await fetch('/admin/receipts/generate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -173,7 +173,7 @@
 
             button.disabled = true;
             try {
-                const response = await fetch(`/admin2/receipts/data/${type}/${id}`);
+                const response = await fetch(`/admin/receipts/data/${type}/${id}`);
                 const data = await response.json();
                 if (!response.ok) {
                     throw new Error(data.error || 'Не вдалося завантажити дані чека');

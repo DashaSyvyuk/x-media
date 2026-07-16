@@ -24,7 +24,7 @@ class InStockController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/in-stock', name: 'admin2_in_stock', methods: ['GET'])]
+    #[Route('/admin/in-stock', name: 'admin2_in_stock', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search      = trim((string) $request->query->get('q', ''));
@@ -55,7 +55,7 @@ class InStockController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/in-stock/{id}/delete', name: 'admin2_in_stock_delete', methods: ['POST'])]
+    #[Route('/admin/in-stock/{id}/delete', name: 'admin2_in_stock_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_in_stock_action', (string) $request->request->get('_token'))) {

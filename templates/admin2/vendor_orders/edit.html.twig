@@ -67,12 +67,25 @@
                 </div>
             </div>
 
-            <div class="mt-4 d-flex gap-2">
+            <div class="mt-4 d-flex flex-wrap gap-2 align-items-center">
                 <button type="submit" class="btn btn-teal">Зберегти</button>
                 <a href="{{ path('admin2_vendor_orders') }}" class="btn btn-outline-secondary">Скасувати</a>
             </div>
             {% do form.items.setRendered() %}
             {{ form_end(form) }}
+
+            {% if not isNew %}
+                <form method="post"
+                      action="{{ path('admin2_vendor_orders_delete', {id: vendorOrder.id}) }}"
+                      class="mt-3 text-end">
+                    <input type="hidden" name="_token" value="{{ csrf_token('vendor_order_action') }}">
+                    <button type="submit"
+                            class="btn btn-outline-danger btn-sm"
+                            data-confirm="Видалити замовлення постачальника #{{ vendorOrder.id }}?">
+                        Видалити замовлення
+                    </button>
+                </form>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
@@ -80,6 +93,14 @@
 {% block javascripts %}
     <script src="{{ asset('js/admin2-order-copy.js') }}" defer></script>
     <script>
+        document.querySelectorAll('[data-confirm]').forEach((button) => {
+            button.closest('form')?.addEventListener('submit', (event) => {
+                if (!window.confirm(button.dataset.confirm)) {
+                    event.preventDefault();
+                }
+            });
+        });
+
         const vendorItemsContainer = document.getElementById('vendorItems');
         const addVendorItemButton = document.getElementById('addVendorItem');
 

@@ -4,6 +4,7 @@ namespace App\Form\Admin2;
 
 use App\Entity\AdminUser;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,6 +32,10 @@ class AdminUserSettingsType extends AbstractType
             ->add('name', TextType::class, ['label' => 'Ім\'я'])
             ->add('surname', TextType::class, ['label' => 'Прізвище'])
             ->add('phone', TextType::class, ['label' => 'Телефон'])
+            ->add('active', CheckboxType::class, [
+                'label'    => 'Активний',
+                'required' => false,
+            ])
             ->add('roles', ChoiceType::class, [
                 'label'       => 'Роль',
                 'choices'     => array_flip(AdminUser::ROLES),
@@ -43,8 +48,9 @@ class AdminUserSettingsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => AdminUser::class,
-            'is_edit'    => false,
+            'data_class'      => AdminUser::class,
+            'is_edit'         => false,
+            'csrf_protection' => false,
         ]);
     }
 }

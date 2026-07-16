@@ -27,7 +27,7 @@ class OrderEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/orders/new', name: 'admin2_orders_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/orders/new', name: 'admin2_orders_new', methods: ['GET', 'POST'])]
     public function createNew(Request $request): Response
     {
         $order = new Order();
@@ -61,7 +61,7 @@ class OrderEditController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/orders/{id}/edit', name: 'admin2_orders_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/orders/{id}/edit', name: 'admin2_orders_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $order = $this->orderRepository->find($id);

@@ -22,7 +22,7 @@ class FeedbacksController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/feedbacks', name: 'admin2_feedbacks', methods: ['GET'])]
+    #[Route('/admin/feedbacks', name: 'admin2_feedbacks', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -54,7 +54,7 @@ class FeedbacksController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/feedbacks/{id}/delete', name: 'admin2_feedbacks_delete', methods: ['POST'])]
+    #[Route('/admin/feedbacks/{id}/delete', name: 'admin2_feedbacks_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_feedback_action', (string) $request->request->get('_token'))) {

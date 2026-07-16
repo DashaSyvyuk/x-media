@@ -48,4 +48,19 @@ final class OrderFulfillmentStatusHelper
     {
         return in_array($tone, ['new', 'packing'], true);
     }
+
+    public function isPackingTone(string $tone): bool
+    {
+        return $tone === 'packing';
+    }
+
+    public function isNewTone(string $tone): bool
+    {
+        return $tone === 'new';
+    }
+
+    public function isProcessingTone(string $tone): bool
+    {
+        return $tone === 'processing';
+    }
 }

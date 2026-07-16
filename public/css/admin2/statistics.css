@@ -1,0 +1,167 @@
+.stats-page {
+    --stats-teal: #0d9488;
+    --stats-teal-soft: rgba(13, 148, 136, 0.12);
+    --stats-slate: #0f172a;
+    --stats-muted: #64748b;
+}
+
+.stats-period-switch {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0.25rem;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+}
+
+.stats-period-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    padding: 0.25rem 0.85rem;
+    border-radius: 999px;
+    color: var(--stats-muted);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.stats-period-btn:hover {
+    color: var(--stats-teal);
+    background: var(--stats-teal-soft);
+}
+
+.stats-period-btn.is-active {
+    color: #fff;
+    background: var(--stats-teal);
+}
+
+.stats-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.stats-kpi-card {
+    background: #fff;
+    border: 0;
+    border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    padding: 1rem 1.1rem;
+}
+
+.stats-kpi-card--accent {
+    background: linear-gradient(145deg, #0f766e 0%, #0d9488 55%, #14b8a6 100%);
+    color: #fff;
+}
+
+.stats-kpi-card--accent .stats-kpi-card__label,
+.stats-kpi-card--accent .stats-kpi-card__hint {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.stats-kpi-card__label {
+    color: var(--stats-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.stats-kpi-card__value {
+    margin-top: 0.35rem;
+    color: var(--stats-slate);
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.stats-kpi-card--accent .stats-kpi-card__value {
+    color: #fff;
+}
+
+.stats-kpi-card__hint {
+    margin-top: 0.25rem;
+    color: #94a3b8;
+    font-size: 0.75rem;
+}
+
+.stats-chart-card {
+    border-radius: 14px;
+}
+
+.stats-chart-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--stats-slate);
+}
+
+.stats-chart-wrap {
+    position: relative;
+    height: 280px;
+}
+
+.stats-chart-wrap--tall {
+    height: 320px;
+}
+
+.stats-chart-wrap--products {
+    height: 340px;
+}
+
+.stats-chart-wrap--finance {
+    height: 420px;
+}
+
+.stats-finance-section {
+    padding: 1.25rem 1.35rem 1.4rem;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.stats-finance-section .debt-stat-grid {
+    margin-bottom: 1rem;
+}
+
+.stats-finance-section .debt-stat-grid--compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stats-finance-link {
+    color: var(--stats-teal);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.stats-finance-link:hover {
+    color: #0f766e;
+    text-decoration: underline;
+}
+
+@media (max-width: 1199.98px) {
+    .stats-kpi-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767.98px) {
+    .stats-kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stats-kpi-card__value {
+        font-size: 1.2rem;
+    }
+
+    .stats-chart-wrap,
+    .stats-chart-wrap--tall,
+    .stats-chart-wrap--products,
+    .stats-chart-wrap--finance {
+        height: 260px;
+    }
+}

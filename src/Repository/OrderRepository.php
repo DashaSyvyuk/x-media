@@ -82,6 +82,8 @@ class OrderRepository extends ServiceEntityRepository
         ?string $status = null,
         string $sort = 'id',
         string $direction = 'DESC',
+        ?\DateTimeImmutable $dateFrom = null,
+        ?\DateTimeImmutable $dateTo = null,
     ): QueryBuilder {
         $qb = $this->createQueryBuilder('o')
             ->leftJoin('o.paytype', 'paytype')->addSelect('paytype')
@@ -100,6 +102,14 @@ class OrderRepository extends ServiceEntityRepository
 
         if ($status !== null && $status !== '') {
             $qb->andWhere('o.status = :status')->setParameter('status', $status);
+        }
+
+        if ($dateFrom !== null) {
+            $qb->andWhere('o.createdAt >= :dateFrom')->setParameter('dateFrom', $dateFrom);
+        }
+
+        if ($dateTo !== null) {
+            $qb->andWhere('o.createdAt <= :dateTo')->setParameter('dateTo', $dateTo);
         }
 
         $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
@@ -124,13 +134,24 @@ class OrderRepository extends ServiceEntityRepository
      *     totalSum: int
      * }
      */
-    public function getStatusSummary(?string $statusFilter = null): array
-    {
+    public function getStatusSummary(
+        ?string $statusFilter = null,
+        ?\DateTimeImmutable $dateFrom = null,
+        ?\DateTimeImmutable $dateTo = null,
+    ): array {
         $qb = $this->createQueryBuilder('o')
             ->select('o.status', 'COUNT(o.id) AS cnt', 'COALESCE(SUM(o.total), 0) AS sumTotal');
 
         if ($statusFilter !== null && $statusFilter !== '') {
-            $qb->where('o.status = :status')->setParameter('status', $statusFilter);
+            $qb->andWhere('o.status = :status')->setParameter('status', $statusFilter);
+        }
+
+        if ($dateFrom !== null) {
+            $qb->andWhere('o.createdAt >= :dateFrom')->setParameter('dateFrom', $dateFrom);
+        }
+
+        if ($dateTo !== null) {
+            $qb->andWhere('o.createdAt <= :dateTo')->setParameter('dateTo', $dateTo);
         }
 
         $rows = $qb->groupBy('o.status')->getQuery()->getScalarResult();

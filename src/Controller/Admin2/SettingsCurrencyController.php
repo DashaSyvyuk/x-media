@@ -19,13 +19,13 @@ class SettingsCurrencyController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/settings/currencies', name: 'admin2_settings_currencies_store', methods: ['POST'])]
+    #[Route('/admin/settings/currencies', name: 'admin2_settings_currencies_store', methods: ['POST'])]
     public function store(Request $request): Response
     {
         return $this->handleSave($request, new Currency(), false);
     }
 
-    #[Route('/admin2/settings/currencies/{id}', name: 'admin2_settings_currencies_update', methods: ['POST'])]
+    #[Route('/admin/settings/currencies/{id}', name: 'admin2_settings_currencies_update', methods: ['POST'])]
     public function update(Request $request, int $id): Response
     {
         $currency = $this->entityManager->getRepository(Currency::class)->find($id);
@@ -36,7 +36,7 @@ class SettingsCurrencyController extends AbstractController
         return $this->handleSave($request, $currency, true);
     }
 
-    #[Route('/admin2/settings/currencies/{id}/delete', name: 'admin2_settings_currencies_delete', methods: ['POST'])]
+    #[Route('/admin/settings/currencies/{id}/delete', name: 'admin2_settings_currencies_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_settings_currency', (string) $request->request->get('_token'))) {

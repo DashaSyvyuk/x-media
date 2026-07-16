@@ -33,6 +33,9 @@ class FopProfile
     #[ORM\Column(type: 'string')]
     private string $address = '';
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $note = null;
+
     #[ORM\Column(type: 'datetime')]
     public DateTime $createdAt;
 
@@ -82,5 +85,16 @@ class FopProfile
     public function setAddress(string $address): void
     {
         $this->address = trim($address);
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): void
+    {
+        $note = $note !== null ? trim($note) : null;
+        $this->note = $note !== '' ? $note : null;
     }
 }

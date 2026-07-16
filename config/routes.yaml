@@ -184,11 +184,11 @@ upload_characteristics:
     methods: POST
 
 control_price:
-    path: /admin/control-price
+    path: /admin2/control-price
     controller: App\Controller\Admin\ControlPriceController::index
     methods: GET
 
 control_price_update:
-    path: /admin/control-price/update
+    path: /admin2/control-price/update
     controller: App\Controller\Admin\ControlPriceController::update
     methods: POST

@@ -1,5 +1,5 @@
-/* X-media Admin2 service worker — replace icons in /admin2/pwa/icons/ when ready */
-const CACHE_VERSION = 'admin2-v1';
+/* X-media Admin service worker — icons live under /admin2/pwa/icons/ */
+const CACHE_VERSION = 'admin-v3';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PRECACHE_URLS = [
     '/admin2/manifest.webmanifest',
@@ -26,7 +26,7 @@ self.addEventListener('activate', (event) => {
         caches.keys()
             .then((keys) => Promise.all(
                 keys
-                    .filter((key) => key.startsWith('admin2-') && key !== STATIC_CACHE)
+                    .filter((key) => (key.startsWith('admin-') || key.startsWith('admin2-')) && key !== STATIC_CACHE)
                     .map((key) => caches.delete(key)),
             ))
             .then(() => self.clients.claim()),
@@ -42,7 +42,14 @@ self.addEventListener('fetch', (event) => {
 
     const url = new URL(request.url);
 
-    if (url.origin !== self.location.origin || !url.pathname.startsWith('/admin2')) {
+    if (url.origin !== self.location.origin) {
+        return;
+    }
+
+    const isAdminPage = url.pathname.startsWith('/admin') && !url.pathname.startsWith('/admin2');
+    const isAdminAsset = url.pathname.startsWith('/css/admin2/') || url.pathname.startsWith('/js/admin2');
+
+    if (!isAdminPage && !isAdminAsset) {
         return;
     }
 
@@ -50,15 +57,14 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(request)
                 .then((response) => response)
-                .catch(() => caches.match('/admin2/')),
+                .catch(() => caches.match('/admin/')),
         );
         return;
     }
 
-    if (url.pathname.startsWith('/css/admin2/') || url.pathname.startsWith('/js/admin2')) {
+    if (isAdminAsset) {
         event.respondWith(
             caches.open(STATIC_CACHE).then(async (cache) => {
-                const cached = await cache.match(request);
                 const network = fetch(request)
                     .then((response) => {
                         if (response.ok) {
@@ -66,9 +72,9 @@ self.addEventListener('fetch', (event) => {
                         }
                         return response;
                     })
-                    .catch(() => cached);
+                    .catch(async () => (await cache.match(request)) || Response.error());
 
-                return cached || network;
+                return network;
             }),
         );
     }

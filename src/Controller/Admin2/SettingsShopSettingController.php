@@ -21,7 +21,7 @@ class SettingsShopSettingController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/settings/shop-settings', name: 'admin2_settings_shop_store', methods: ['POST'])]
+    #[Route('/admin/settings/shop-settings', name: 'admin2_settings_shop_store', methods: ['POST'])]
     public function store(Request $request): Response
     {
         $setting = new Setting();
@@ -32,7 +32,7 @@ class SettingsShopSettingController extends AbstractController
         return $this->handleSave($request, $setting, false);
     }
 
-    #[Route('/admin2/settings/shop-settings/{id}', name: 'admin2_settings_shop_update', methods: ['POST'])]
+    #[Route('/admin/settings/shop-settings/{id}', name: 'admin2_settings_shop_update', methods: ['POST'])]
     public function update(Request $request, int $id): Response
     {
         $setting = $this->settingRepository->find($id);
@@ -43,7 +43,7 @@ class SettingsShopSettingController extends AbstractController
         return $this->handleSave($request, $setting, true);
     }
 
-    #[Route('/admin2/settings/shop-settings/{id}/delete', name: 'admin2_settings_shop_delete', methods: ['POST'])]
+    #[Route('/admin/settings/shop-settings/{id}/delete', name: 'admin2_settings_shop_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_settings_shop', (string) $request->request->get('_token'))) {

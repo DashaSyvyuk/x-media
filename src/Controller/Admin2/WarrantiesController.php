@@ -23,7 +23,7 @@ class WarrantiesController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/warranties', name: 'admin2_warranties', methods: ['GET'])]
+    #[Route('/admin/warranties', name: 'admin2_warranties', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -57,7 +57,7 @@ class WarrantiesController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/warranties/new', name: 'admin2_warranties_new', methods: ['POST'])]
+    #[Route('/admin/warranties/new', name: 'admin2_warranties_new', methods: ['POST'])]
     public function create(Request $request): Response
     {
         $warranty = $this->createWarranty();
@@ -78,7 +78,7 @@ class WarrantiesController extends AbstractController
         return $this->redirectToRoute('admin2_warranties');
     }
 
-    #[Route('/admin2/warranties/{id}/delete', name: 'admin2_warranties_delete', methods: ['POST'])]
+    #[Route('/admin/warranties/{id}/delete', name: 'admin2_warranties_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_warranty_action', (string) $request->request->get('_token'))) {

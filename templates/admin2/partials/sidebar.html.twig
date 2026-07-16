@@ -19,11 +19,18 @@
     or currentRoute starts with 'admin2_promotion' %}
 {% set moderationOpen = currentRoute starts with 'admin2_comment' or currentRoute starts with 'admin2_feedback' %}
 {% set financeOpen = currentRoute starts with 'admin2_debtor' or currentRoute starts with 'admin2_circulation' %}
+{% set statsOpen = currentRoute starts with 'admin2_statistics' %}
+{% set planningActive = currentRoute starts with 'admin2_planning' %}
 {% set feedsOpen = currentRoute starts with 'admin2_feeds'
     or (currentRoute starts with 'admin2_rozetka' and not (currentRoute starts with 'admin2_rozetka_order')) %}
 {% set newCommentsCount = is_granted('ROLE_USER') ? admin2_new_comments_count() : 0 %}
 {% set newFeedbacksCount = is_granted('ROLE_USER') ? admin2_new_feedbacks_count() : 0 %}
-{% set newOrdersCount = is_granted('ROLE_SUPER_ADMIN') ? admin2_new_orders_count() : 0 %}
+{% set newOrdersCount = is_granted('ROLE_ADMIN') ? admin2_new_orders_count() : 0 %}
+{% set newRozetkaOrdersCount = is_granted('ROLE_ADMIN') ? admin2_new_rozetka_orders_count() : 0 %}
+{% set newReturnsCount = is_granted('ROLE_ADMIN') ? admin2_new_returns_count() : 0 %}
+{% set newWarrantiesCount = is_granted('ROLE_ADMIN') ? admin2_new_warranties_count() : 0 %}
+{% set newOrdersMenuTotal = newOrdersCount + newRozetkaOrdersCount + newReturnsCount + newWarrantiesCount %}
+{% set todayPlansCount = is_granted('ROLE_USER') ? admin2_today_plans_count() : 0 %}
 
 <aside id="sidebar" class="sidebar">
     <a href="{{ path('admin2_dashboard') }}"
@@ -86,9 +93,10 @@
         <div class="sidebar-group {{ ordersOpen ? 'open' : '' }}">
             <button type="button" class="sidebar-link sidebar-group-toggle {{ ordersOpen ? 'active' : '' }}">
                 <i class="bi bi-bag-check"></i>
-                <span class="sidebar-text">
-                    Замовлення{% if newOrdersCount > 0 %} ({{ newOrdersCount }}){% endif %}
-                </span>
+                <span class="sidebar-text">Замовлення</span>
+                {% if newOrdersMenuTotal > 0 %}
+                    <span class="sidebar-badge">{{ newOrdersMenuTotal }}</span>
+                {% endif %}
                 <i class="bi bi-chevron-down sidebar-chevron"></i>
             </button>
 
@@ -115,6 +123,9 @@
                    class="sidebar-sublink {{ currentRoute starts with 'admin2_rozetka_order' ? 'active' : '' }}">
                     <i class="bi bi-shop-window"></i>
                     <span>Rozetka</span>
+                    {% if newRozetkaOrdersCount > 0 %}
+                        <span class="sidebar-badge">{{ newRozetkaOrdersCount }}</span>
+                    {% endif %}
                 </a>
                 <a href="{{ path('admin2_users') }}"
                    class="sidebar-sublink {{ currentRoute starts with 'admin2_user' ? 'active' : '' }}">
@@ -125,11 +136,17 @@
                    class="sidebar-sublink {{ currentRoute starts with 'admin2_return' ? 'active' : '' }}">
                     <i class="bi bi-circle-fill"></i>
                     <span>Повернення</span>
+                    {% if newReturnsCount > 0 %}
+                        <span class="sidebar-badge">{{ newReturnsCount }}</span>
+                    {% endif %}
                 </a>
                 <a href="{{ path('admin2_warranties') }}"
                    class="sidebar-sublink {{ currentRoute starts with 'admin2_warrant' ? 'active' : '' }}">
                     <i class="bi bi-circle-fill"></i>
                     <span>Гарантія</span>
+                    {% if newWarrantiesCount > 0 %}
+                        <span class="sidebar-badge">{{ newWarrantiesCount }}</span>
+                    {% endif %}
                 </a>
             </div>
         </div>
@@ -154,6 +171,38 @@
     {% endif %}
 
     {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') %}
+        <div class="sidebar-group {{ statsOpen ? 'open' : '' }}">
+            <button type="button" class="sidebar-link sidebar-group-toggle {{ statsOpen ? 'active' : '' }}">
+                <i class="bi bi-bar-chart-line"></i>
+                <span class="sidebar-text">Статистика</span>
+                <i class="bi bi-chevron-down sidebar-chevron"></i>
+            </button>
+
+            <div class="sidebar-submenu">
+                <a href="{{ path('admin2_statistics') }}"
+                   class="sidebar-sublink {{ currentRoute == 'admin2_statistics' ? 'active' : '' }}">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Замовлення</span>
+                </a>
+                <a href="{{ path('admin2_statistics_finance') }}"
+                   class="sidebar-sublink {{ currentRoute == 'admin2_statistics_finance' ? 'active' : '' }}">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Фінанси</span>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    <a href="{{ path('admin2_planning') }}"
+       class="sidebar-link {{ planningActive ? 'active' : '' }}">
+        <i class="bi bi-calendar-check"></i>
+        <span class="sidebar-text">Планування</span>
+        {% if todayPlansCount > 0 %}
+            <span class="sidebar-badge">{{ todayPlansCount }}</span>
+        {% endif %}
+    </a>
+
+    {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') %}
         <div class="sidebar-group {{ financeOpen ? 'open' : '' }}">
             <button type="button" class="sidebar-link sidebar-group-toggle {{ financeOpen ? 'active' : '' }}">
                 <i class="bi bi-cash-coin"></i>
@@ -162,7 +211,7 @@
             </button>
 
             <div class="sidebar-submenu">
-        {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') %}
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
                     <a href="{{ path('admin2_debtors') }}"
                        class="sidebar-sublink {{ currentRoute starts with 'admin2_debtor' ? 'active' : '' }}">
                         <i class="bi bi-circle-fill"></i>
@@ -248,4 +297,13 @@
             {% endif %}
         </div>
     </div>
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="sidebar-footer-sep" aria-hidden="true"></div>
+        <a href="{{ path('admin2_goods') }}"
+           class="sidebar-link sidebar-link--footer {{ currentRoute starts with 'admin2_goods' ? 'active' : '' }}">
+            <i class="bi bi-box-seam"></i>
+            <span class="sidebar-text">Товар</span>
+        </a>
+    {% endif %}
 </aside>

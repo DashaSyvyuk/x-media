@@ -1,6 +1,7 @@
 (function () {
     const toggleTokenMeta = document.querySelector('meta[name="rozetka-toggle-token"]');
     const toggleToken = toggleTokenMeta ? toggleTokenMeta.content : '';
+    const valueFetchControllers = new WeakMap();
 
     function getCollectionIndex(container) {
         if (!container) {
@@ -50,6 +51,34 @@
         });
     }
 
+    function guardFormDoubleSubmit(form) {
+        if (!form || form.dataset.doubleSubmitBound === '1') {
+            return;
+        }
+
+        form.dataset.doubleSubmitBound = '1';
+        form.addEventListener('submit', (event) => {
+            if (form.dataset.submitting === '1') {
+                event.preventDefault();
+                return;
+            }
+
+            form.dataset.submitting = '1';
+
+            const submitter = event.submitter;
+            form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach((button) => {
+                if (submitter && button === submitter && submitter.name) {
+                    const hidden = document.createElement('input');
+                    hidden.type = 'hidden';
+                    hidden.name = submitter.name;
+                    hidden.value = submitter.value;
+                    form.appendChild(hidden);
+                }
+                button.disabled = true;
+            });
+        });
+    }
+
     document.querySelectorAll('.js-rozetka-toggle').forEach((input) => {
         input.addEventListener('change', async () => {
             const id = input.dataset.id;
@@ -59,12 +88,18 @@
             const row = input.closest('tr');
             const previous = !value;
 
+            if (label?.classList.contains('is-loading')) {
+                input.checked = previous;
+                return;
+            }
+
             if (!id || !field || !toggleToken) {
                 input.checked = previous;
                 return;
             }
 
             label?.classList.add('is-loading');
+            input.disabled = true;
 
             try {
                 const body = new FormData();
@@ -72,7 +107,7 @@
                 body.append('field', field);
                 body.append('value', value ? '1' : '0');
 
-                const response = await fetch('/admin2/rozetka/' + id + '/toggle', {
+                const response = await fetch('/admin/rozetka/' + id + '/toggle', {
                     method: 'POST',
                     body,
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -94,15 +129,54 @@
                 window.alert('Помилка мережі. Спрóбуйте ще раз.');
             } finally {
                 label?.classList.remove('is-loading');
+                const readyInput = row?.querySelector('.js-rozetka-toggle[data-field="ready"]');
+                const readyOn = readyInput ? readyInput.checked : true;
+                if (field === 'activeForA' || field === 'activeForP') {
+                    input.disabled = !readyOn;
+                } else {
+                    input.disabled = false;
+                }
             }
         });
     });
+
+    function getCharacteristicSelects() {
+        const collection = document.getElementById('rozetka-values-collection');
+        if (!collection) {
+            return [];
+        }
+
+        return Array.from(collection.querySelectorAll('select.characteristic'));
+    }
+
+    /** Hide parameters already chosen in other rows on this page. */
+    function syncUsedCharacteristics() {
+        const selects = getCharacteristicSelects();
+        const used = new Set(
+            selects.map((select) => select.value).filter(Boolean),
+        );
+
+        selects.forEach((select) => {
+            const current = select.value;
+            Array.from(select.options).forEach((option) => {
+                if (!option.value) {
+                    return;
+                }
+
+                const takenElsewhere = used.has(option.value) && option.value !== current;
+                option.hidden = takenElsewhere;
+                option.disabled = takenElsewhere;
+            });
+        });
+    }
 
     document.addEventListener('change', (event) => {
         const target = event.target;
         if (!(target instanceof HTMLSelectElement) || !target.classList.contains('characteristic')) {
             return;
         }
+
+        syncUsedCharacteristics();
 
         const row = target.closest('.collection-item__body, .rozetka-value-row');
         const form = target.closest('form');
@@ -123,7 +197,17 @@
             + '/values/' + encodeURIComponent(valueIndex)
             + '?prefix=' + encodeURIComponent(prefix);
 
-        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        const previousController = valueFetchControllers.get(row);
+        previousController?.abort();
+        const controller = new AbortController();
+        valueFetchControllers.set(row, controller);
+
+        target.disabled = true;
+
+        fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            signal: controller.signal,
+        })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to load values');
@@ -138,12 +222,45 @@
                     valueContainer.outerHTML = html;
                 }
 
+                // Refresh collapsed summary without re-firing the characteristic change
+                // handler (that would loop fetch requests forever).
                 const collectionItem = row.closest('[data-collapsible]');
-                const summaryTrigger = collectionItem?.querySelector('.characteristic');
-                if (summaryTrigger) {
-                    summaryTrigger.dispatchEvent(new Event('change', { bubbles: true }));
+                if (collectionItem) {
+                    collectionItem.dispatchEvent(new Event('change', { bubbles: true }));
                 }
             })
-            .catch(() => {});
+            .catch((error) => {
+                if (error?.name === 'AbortError') {
+                    return;
+                }
+            })
+            .finally(() => {
+                if (valueFetchControllers.get(row) === controller) {
+                    target.disabled = false;
+                    syncUsedCharacteristics();
+                }
+            });
     });
+
+    document.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) {
+            return;
+        }
+
+        const addButton = target.closest('[data-collection-add="#rozetka-values-collection"]');
+        const removeButton = target.closest('[data-collection-remove]');
+        const removedFromRozetka = removeButton
+            && removeButton.closest('#rozetka-values-collection');
+
+        if (!addButton && !removedFromRozetka) {
+            return;
+        }
+
+        // Run after collection.js mutates the DOM.
+        window.setTimeout(syncUsedCharacteristics, 0);
+    });
+
+    guardFormDoubleSubmit(document.getElementById('rozetka-edit-form'));
+    syncUsedCharacteristics();
 })();

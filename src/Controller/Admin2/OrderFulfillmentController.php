@@ -36,7 +36,7 @@ class OrderFulfillmentController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/fulfillment', name: 'admin2_fulfillment', methods: ['GET'])]
+    #[Route('/admin/fulfillment', name: 'admin2_fulfillment', methods: ['GET'])]
     public function index(): Response
     {
         $customerOrders = $this->customerBoardProvider->getCustomerOrders(true);
@@ -64,7 +64,7 @@ class OrderFulfillmentController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/fulfillment/link', name: 'admin2_fulfillment_link', methods: ['POST'])]
+    #[Route('/admin/fulfillment/link', name: 'admin2_fulfillment_link', methods: ['POST'])]
     public function link(Request $request): Response
     {
         if (! $this->isCsrfTokenValid('fulfillment_action', (string) $request->request->get('_token'))) {
@@ -105,7 +105,7 @@ class OrderFulfillmentController extends AbstractController
         return $this->redirectToRoute('admin2_fulfillment');
     }
 
-    #[Route('/admin2/fulfillment/customer-status', name: 'admin2_fulfillment_customer_status', methods: ['POST'])]
+    #[Route('/admin/fulfillment/customer-status', name: 'admin2_fulfillment_customer_status', methods: ['POST'])]
     public function updateCustomerStatus(Request $request): Response
     {
         if (! $this->isCsrfTokenValid('fulfillment_action', (string) $request->request->get('_token'))) {
@@ -160,7 +160,7 @@ class OrderFulfillmentController extends AbstractController
         return $this->redirectToRoute('admin2_fulfillment');
     }
 
-    #[Route('/admin2/fulfillment/unlink', name: 'admin2_fulfillment_unlink', methods: ['POST'])]
+    #[Route('/admin/fulfillment/unlink', name: 'admin2_fulfillment_unlink', methods: ['POST'])]
     public function unlink(Request $request): Response
     {
         if (! $this->isCsrfTokenValid('fulfillment_action', (string) $request->request->get('_token'))) {
@@ -191,7 +191,7 @@ class OrderFulfillmentController extends AbstractController
         return $this->redirectToRoute('admin2_fulfillment');
     }
 
-    #[Route('/admin2/fulfillment/vendor/{id}/complete', name: 'admin2_fulfillment_vendor_complete', methods: ['POST'])]
+    #[Route('/admin/fulfillment/vendor/{id}/complete', name: 'admin2_fulfillment_vendor_complete', methods: ['POST'])]
     public function completeVendor(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('fulfillment_action', (string) $request->request->get('_token'))) {

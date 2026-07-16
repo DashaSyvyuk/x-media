@@ -15,13 +15,13 @@
         </div>
 
         <div class="fulfillment-board processing-board">
-            <div class="fulfillment-column">
+            <div class="fulfillment-column processing-board__pack">
                 <div class="fulfillment-column__header">
-                    <h2>Нові та упаковка</h2>
-                    <span class="badge bg-success">{{ greenOrders|length }}</span>
+                    <h2>Упакувати</h2>
+                    <span class="badge bg-success">{{ packingOrders|length }}</span>
                 </div>
                 <div class="fulfillment-column__list">
-                    {% for order in greenOrders %}
+                    {% for order in packingOrders %}
                         {% include 'admin2/fulfillment/_customer_order_card.html.twig' with {
                             order: order,
                             statusFormRoute: statusFormRoute,
@@ -33,21 +33,41 @@
                 </div>
             </div>
 
-            <div class="fulfillment-column">
-                <div class="fulfillment-column__header">
-                    <h2>В обробці</h2>
-                    <span class="badge bg-secondary">{{ otherOrders|length }}</span>
+            <div class="processing-board__right">
+                <div class="fulfillment-column">
+                    <div class="fulfillment-column__header">
+                        <h2>Нові</h2>
+                        <span class="badge text-bg-success">{{ newOrders|length }}</span>
+                    </div>
+                    <div class="fulfillment-column__list">
+                        {% for order in newOrders %}
+                            {% include 'admin2/fulfillment/_customer_order_card.html.twig' with {
+                                order: order,
+                                statusFormRoute: statusFormRoute,
+                                showStatusSelect: false,
+                            } %}
+                        {% else %}
+                            <div class="fulfillment-empty">Немає замовлень</div>
+                        {% endfor %}
+                    </div>
                 </div>
-                <div class="fulfillment-column__list">
-                    {% for order in otherOrders %}
-                        {% include 'admin2/fulfillment/_customer_order_card.html.twig' with {
-                            order: order,
-                            statusFormRoute: statusFormRoute,
-                            showStatusSelect: false,
-                        } %}
-                    {% else %}
-                        <div class="fulfillment-empty">Немає замовлень</div>
-                    {% endfor %}
+
+                <div class="fulfillment-column">
+                    <div class="fulfillment-column__header">
+                        <h2>В обробці</h2>
+                        <span class="badge text-bg-warning">{{ processingOrders|length }}</span>
+                    </div>
+                    <div class="fulfillment-column__list">
+                        {% for order in processingOrders %}
+                            {% include 'admin2/fulfillment/_customer_order_card.html.twig' with {
+                                order: order,
+                                statusFormRoute: statusFormRoute,
+                                showStatusSelect: false,
+                            } %}
+                        {% else %}
+                            <div class="fulfillment-empty">Немає замовлень</div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

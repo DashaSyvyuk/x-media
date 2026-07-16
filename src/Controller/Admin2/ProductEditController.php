@@ -21,7 +21,7 @@ class ProductEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/products/new', name: 'admin2_products_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/products/new', name: 'admin2_products_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $product = new Product();
@@ -50,7 +50,7 @@ class ProductEditController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/products/{id}/edit', name: 'admin2_products_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/products/{id}/edit', name: 'admin2_products_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $product = $this->productRepository->find($id);

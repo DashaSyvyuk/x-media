@@ -4,7 +4,7 @@
     }
 
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/admin2/sw.js', { scope: '/admin2/' }).catch(() => {
+        navigator.serviceWorker.register('/admin/sw.js', { scope: '/admin/' }).catch(() => {
             /* SW optional — admin still works without it */
         });
     });

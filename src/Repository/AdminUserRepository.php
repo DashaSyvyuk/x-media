@@ -40,6 +40,23 @@ class AdminUserRepository extends ServiceEntityRepository implements PasswordUpg
     }
 
     /**
+     * @return list<AdminUser>
+     */
+    public function findActiveOrderedByName(): array
+    {
+        /** @var list<AdminUser> $users */
+        $users = $this->createQueryBuilder('u')
+            ->andWhere('u.active = :active')
+            ->setParameter('active', true)
+            ->orderBy('u.name', 'ASC')
+            ->addOrderBy('u.surname', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return $users;
+    }
+
+    /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void

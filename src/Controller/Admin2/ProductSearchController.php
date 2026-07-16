@@ -18,7 +18,7 @@ class ProductSearchController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/api/products/search', name: 'admin2_api_products_search', methods: ['GET'])]
+    #[Route('/admin/api/products/search', name: 'admin2_api_products_search', methods: ['GET'])]
     public function search(Request $request): JsonResponse
     {
         $query = trim((string) $request->query->get('q', ''));
@@ -30,7 +30,7 @@ class ProductSearchController extends AbstractController
     }
 
     #[Route(
-        '/admin2/api/products/{id}',
+        '/admin/api/products/{id}',
         name: 'admin2_api_products_show',
         requirements: ['id' => '\d+'],
         methods: ['GET'],

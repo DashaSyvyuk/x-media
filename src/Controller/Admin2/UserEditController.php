@@ -21,7 +21,7 @@ class UserEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/users/{id}/edit', name: 'admin2_users_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/users/{id}/edit', name: 'admin2_users_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $user = $this->userRepository->find($id);

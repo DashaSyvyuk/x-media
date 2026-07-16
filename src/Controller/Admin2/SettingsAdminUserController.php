@@ -23,7 +23,7 @@ class SettingsAdminUserController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/settings/admins', name: 'admin2_settings_admins_store', methods: ['POST'])]
+    #[Route('/admin/settings/admins', name: 'admin2_settings_admins_store', methods: ['POST'])]
     public function store(Request $request): Response
     {
         $adminUser = new AdminUser();
@@ -33,11 +33,12 @@ class SettingsAdminUserController extends AbstractController
         $adminUser->setPhone('');
         $adminUser->setPassword('');
         $adminUser->setRoles([AdminUser::ROLE_USER]);
+        $adminUser->setActive(true);
 
         return $this->handleSave($request, $adminUser, false);
     }
 
-    #[Route('/admin2/settings/admins/{id}', name: 'admin2_settings_admins_update', methods: ['POST'])]
+    #[Route('/admin/settings/admins/{id}', name: 'admin2_settings_admins_update', methods: ['POST'])]
     public function update(Request $request, int $id): Response
     {
         $adminUser = $this->adminUserRepository->find($id);
@@ -48,7 +49,7 @@ class SettingsAdminUserController extends AbstractController
         return $this->handleSave($request, $adminUser, true);
     }
 
-    #[Route('/admin2/settings/admins/{id}/delete', name: 'admin2_settings_admins_delete', methods: ['POST'])]
+    #[Route('/admin/settings/admins/{id}/delete', name: 'admin2_settings_admins_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_settings_admin', (string) $request->request->get('_token'))) {

@@ -100,18 +100,23 @@
                         </button>
                     </div>
                     <div class="card-body">
-                        <div id="orderItems" data-prototype="{{ form_widget(form.items.vars.prototype)|e('html_attr') }}" data-index="{{ form.items|length }}">
+                        <div id="orderItems"
+                             data-prototype="{{ form_widget(form.items.vars.prototype)|e('html_attr') }}"
+                             data-index="{{ form.items|length }}">
                             {% for itemForm in form.items %}
                                 <div class="order-item-entry">
-                                    <div class="row g-3 align-items-end">
-                                        <div class="col-md-6">{{ form_widget(itemForm.product) }}{{ form_errors(itemForm.product) }}</div>
-                                        <div class="col-md-3">{{ form_row(itemForm.count) }}</div>
-                                        <div class="col-md-2">{{ form_row(itemForm.price) }}</div>
-                                        <div class="col-md-1">
-                                            <button type="button" class="btn btn-outline-danger btn-sm w-100 remove-order-item" title="Видалити">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
+                                    <div class="order-item-entry__product">
+                                        {{ form_widget(itemForm.product) }}
+                                        {{ form_errors(itemForm.product) }}
+                                    </div>
+                                    <div class="order-item-entry__meta">
+                                        {{ form_row(itemForm.count) }}
+                                        {{ form_row(itemForm.price) }}
+                                    </div>
+                                    <div class="order-item-entry__actions">
+                                        <button type="button" class="btn btn-outline-danger btn-sm remove-order-item" title="Видалити">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -164,14 +169,55 @@
         const itemsContainer = document.getElementById('orderItems');
         const addButton = document.getElementById('addOrderItem');
 
+        function buildOrderItemEntry(prototypeHtml) {
+            const temp = document.createElement('div');
+            temp.innerHTML = prototypeHtml;
+
+            const product = temp.querySelector('.admin2-product-picker-row')
+                || temp.querySelector('.admin2-product-picker')?.closest('div')
+                || temp.querySelector('[name*="[product]"]')?.closest('.mb-3');
+            const count = temp.querySelector('[name*="[count]"]')?.closest('.mb-3');
+            const price = temp.querySelector('[name*="[price]"]')?.closest('.mb-3');
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'order-item-entry';
+            wrapper.innerHTML = `
+                <div class="order-item-entry__product"></div>
+                <div class="order-item-entry__meta"></div>
+                <div class="order-item-entry__actions">
+                    <button type="button" class="btn btn-outline-danger btn-sm remove-order-item" title="Видалити">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            const productSlot = wrapper.querySelector('.order-item-entry__product');
+            const metaSlot = wrapper.querySelector('.order-item-entry__meta');
+
+            if (product) {
+                productSlot.appendChild(product);
+            }
+            if (count) {
+                metaSlot.appendChild(count);
+            }
+            if (price) {
+                metaSlot.appendChild(price);
+            }
+
+            // Fallback if structure could not be split
+            if (!productSlot.childElementCount && !metaSlot.childElementCount) {
+                productSlot.append(...temp.childNodes);
+            }
+
+            return wrapper;
+        }
+
         if (itemsContainer && addButton) {
             addButton.addEventListener('click', () => {
                 const prototype = itemsContainer.dataset.prototype;
                 const index = parseInt(itemsContainer.dataset.index || '0', 10);
-                const html = prototype.replace(/__name__/g, index);
-                const wrapper = document.createElement('div');
-                wrapper.className = 'order-item-entry';
-                wrapper.innerHTML = `<div class="row g-3 align-items-end">${html}<div class="col-md-1"><button type="button" class="btn btn-outline-danger btn-sm w-100 remove-order-item" title="Видалити"><i class="bi bi-trash"></i></button></div></div>`;
+                const html = prototype.replace(/__name__/g, String(index));
+                const wrapper = buildOrderItemEntry(html);
                 itemsContainer.appendChild(wrapper);
                 itemsContainer.dataset.index = String(index + 1);
                 window.Admin2ProductPicker?.init(wrapper);

@@ -23,7 +23,7 @@ class RozetkaProductEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/rozetka/{id}/edit', name: 'admin2_rozetka_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/rozetka/{id}/edit', name: 'admin2_rozetka_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $rozetkaProduct = $this->rozetkaProductRepository->find($id);

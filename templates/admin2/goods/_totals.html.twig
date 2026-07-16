@@ -1,0 +1,27 @@
+{% import 'admin2/goods/_macros.html.twig' as goods_macros %}
+
+<div class="planning-goods-totals-grid planning-goods-totals-grid--{{ variant|default('inline') }}">
+    <div class="planning-goods-total-item">
+        <span class="planning-goods-total-item__label">Закупка</span>
+        <strong class="planning-goods-total-item__value">{{ goods_macros.money(totals.purchase) }}</strong>
+    </div>
+    <div class="planning-goods-total-item">
+        <span class="planning-goods-total-item__label">Продаж</span>
+        <strong class="planning-goods-total-item__value">{{ goods_macros.money(totals.sale) }}</strong>
+    </div>
+    <div class="planning-goods-total-item">
+        <span class="planning-goods-total-item__label">Маржа</span>
+        <strong class="planning-goods-total-item__value {{ totals.margin >= 0 ? 'text-success' : 'text-danger' }}">
+            {{ goods_macros.money_signed(totals.margin) }}
+        </strong>
+    </div>
+    <div class="planning-goods-total-item">
+        <span class="planning-goods-total-item__label">Позицій</span>
+        <strong class="planning-goods-total-item__value">
+            {{ totals.count }}
+            {% if totals.sold_count > 0 %}
+                <span class="text-muted fw-normal">({{ totals.sold_count }} продано)</span>
+            {% endif %}
+        </strong>
+    </div>
+</div>

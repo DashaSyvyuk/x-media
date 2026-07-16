@@ -19,12 +19,7 @@
 {% macro order_status_badge(status) %}
     {% set grouped = constant('App\\Entity\\Order::GROUPED_STATUSES')[status]|default(null) %}
     {% set label = constant('App\\Entity\\Order::STATUSES')[status]|default(status) %}
-    {% if grouped %}
-        <span class="order-status-badge" style="--status-color: {{ grouped.color }}">{{ grouped.title }}</span>
-        <span class="order-status-badge__detail">{{ label }}</span>
-    {% else %}
-        <span class="order-status-badge">{{ label }}</span>
-    {% endif %}
+    <span class="order-status-badge" style="--status-color: {{ grouped.color|default('#64748b') }}">{{ label }}</span>
 {% endmacro %}
 
 {% macro return_status_badge(status) %}

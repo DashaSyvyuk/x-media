@@ -1,0 +1,118 @@
+{% import 'admin2/goods/_macros.html.twig' as goods_macros %}
+{% set showDate = showDateColumn|default(false) %}
+{% set showBlock = showBlockColumn|default(false) %}
+
+<div class="card border-0 shadow-sm planning-goods-table-card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 planning-goods-table">
+            <thead class="table-light">
+                <tr>
+                    {% if showDate %}<th class="text-nowrap">Дата</th>{% endif %}
+                    {% if showBlock %}<th>Блок</th>{% endif %}
+                    <th>Назва</th>
+                    <th class="text-end text-nowrap">Закупка</th>
+                    <th class="text-end text-nowrap">Доставка</th>
+                    <th class="text-end text-nowrap">Продаж</th>
+                    <th>Склад</th>
+                    <th class="text-center text-nowrap">Статус</th>
+                    <th class="text-end text-nowrap">Маржа</th>
+                    <th class="text-end text-nowrap">Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in goods %}
+                    <tr>
+                        {% if showDate %}
+                            <td class="text-muted small text-nowrap">
+                                {{ item.batch ? item.batch.recordedDate|date('d.m.Y') : '—' }}
+                            </td>
+                        {% endif %}
+                        {% if showBlock %}
+                            <td class="text-muted small">{{ item.batch ? item.batch.displayName : '—' }}</td>
+                        {% endif %}
+                        <td class="fw-semibold">{{ item.name }}</td>
+                        <td class="text-end text-nowrap">{{ goods_macros.money(item.purchasePrice) }}</td>
+                        <td class="text-end text-nowrap">
+                            {% if item.deliveryPrice > 0 %}
+                                {{ goods_macros.money(item.deliveryPrice) }}
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end text-nowrap">
+                            {% if item.sold and item.salePrice is not null %}
+                                {{ goods_macros.money(item.salePrice) }}
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted">{{ item.warehouse ? item.warehouse.title : '—' }}</td>
+                        <td class="text-center">
+                            {% if item.sold %}
+                                <span class="badge planning-goods-badge planning-goods-badge--sold">Продано</span>
+                            {% else %}
+                                <span class="badge planning-goods-badge planning-goods-badge--available">Не продано</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end text-nowrap">
+                            {% set margin = item.margin %}
+                            {% if margin is not null %}
+                                <span class="{{ margin >= 0 ? 'text-success' : 'text-danger' }} fw-semibold">
+                                    {{ goods_macros.money_signed(margin) }}
+                                </span>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end text-nowrap">
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editPlanningGoodModal"
+                                    data-id="{{ item.id }}"
+                                    data-batch-id="{{ item.batch.id }}"
+                                    data-warehouse-id="{{ item.warehouse ? item.warehouse.id : '' }}"
+                                    data-name="{{ item.name }}"
+                                    data-purchase-price="{{ item.purchasePrice }}"
+                                    data-delivery-price="{{ item.deliveryPrice }}"
+                                    data-sale-price="{{ item.salePrice ?? '' }}"
+                                    data-is-sold="{{ item.sold ? '1' : '0' }}"
+                                    title="Редагувати">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deletePlanningGoodModal"
+                                    data-id="{{ item.id }}"
+                                    data-name="{{ item.name }}"
+                                    title="Видалити">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot class="table-light">
+                <tr>
+                    <td colspan="{{ (showDate ? 1 : 0) + (showBlock ? 1 : 0) + 2 }}">
+                        <strong>Разом</strong>
+                    </td>
+                    <td class="text-end text-nowrap"><strong>{{ goods_macros.money(totals.purchase) }}</strong></td>
+                    <td class="text-end text-nowrap"><strong>{{ goods_macros.money(totals.delivery) }}</strong></td>
+                    <td class="text-end text-nowrap"><strong>{{ goods_macros.money(totals.sale) }}</strong></td>
+                    <td></td>
+                    <td class="text-center text-nowrap">
+                        <strong>{{ totals.sold_count }}/{{ totals.count }}</strong>
+                    </td>
+                    <td class="text-end text-nowrap">
+                        <strong class="{{ totals.margin >= 0 ? 'text-success' : 'text-danger' }}">
+                            {{ goods_macros.money_signed(totals.margin) }}
+                        </strong>
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

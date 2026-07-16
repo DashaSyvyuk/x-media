@@ -9,8 +9,34 @@
     align-items: start;
 }
 
+.processing-board {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+}
+
+.processing-board__right {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    align-items: start;
+    min-width: 0;
+}
+
+@media (max-width: 1200px) {
+    .processing-board {
+        grid-template-columns: 1fr;
+    }
+
+    .processing-board__right {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media (max-width: 992px) {
     .fulfillment-board {
+        grid-template-columns: 1fr;
+    }
+
+    .processing-board__right {
         grid-template-columns: 1fr;
     }
 }

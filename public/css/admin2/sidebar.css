@@ -35,6 +35,8 @@ body.sidebar-open {
     width: 240px;
     background: #0f172a;
     padding: 16px 8px;
+    display: flex;
+    flex-direction: column;
     transition: flex-basis .22s cubic-bezier(.4,0,.2,1),
         width .22s cubic-bezier(.4,0,.2,1),
         transform .22s cubic-bezier(.4,0,.2,1);
@@ -152,7 +154,8 @@ body.sidebar-open {
     font-size: 0.5rem;
 }
 
-.sidebar-sublink .sidebar-badge {
+.sidebar-sublink .sidebar-badge,
+.sidebar-link .sidebar-badge {
     margin-left: auto;
     min-width: 1.25rem;
     padding: 0.1rem 0.45rem;
@@ -182,6 +185,17 @@ body.sidebar-open {
 
 .sidebar-sublink--featured i {
     color: #f59e0b;
+}
+
+.sidebar-footer-sep {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.22);
+    padding-top: 0.75rem;
+}
+
+.sidebar-link--footer {
+    margin-bottom: 0;
 }
 
 @media (max-width: 768px) {

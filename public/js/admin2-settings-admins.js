@@ -5,11 +5,12 @@ document.querySelectorAll('.js-edit-admin-user').forEach((button) => {
             return;
         }
 
-        form.action = `/admin2/settings/admins/${button.dataset.id}`;
+        form.action = `/admin/settings/admins/${button.dataset.id}`;
         document.getElementById('editAdminUserEmail').value = button.dataset.email || '';
         document.getElementById('editAdminUserName').value = button.dataset.name || '';
         document.getElementById('editAdminUserSurname').value = button.dataset.surname || '';
         document.getElementById('editAdminUserPhone').value = button.dataset.phone || '';
+        document.getElementById('editAdminUserActive').checked = button.dataset.active === '1';
 
         let roles = [];
         try {

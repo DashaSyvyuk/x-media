@@ -21,7 +21,7 @@ class CommentEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/comments/{id}/edit', name: 'admin2_comments_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/comments/{id}/edit', name: 'admin2_comments_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $comment = $this->commentRepository->find($id);

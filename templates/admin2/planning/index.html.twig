@@ -1,0 +1,86 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+
+{% block title %}Планування — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/planning.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set todayKey = today|date('Y-m-d') %}
+
+    <div class="planning-page">
+        <div class="planning-page-header">
+            <div>
+                <h1 class="page-title mb-1">Планування</h1>
+                <p class="text-muted mb-0 small">Завдання за датою з призначенням на адміна</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                {% if showCompleted %}
+                    <a href="{{ path('admin2_planning') }}" class="btn btn-outline-secondary">Активні</a>
+                {% else %}
+                    <a href="{{ path('admin2_planning', {show: 'completed'}) }}" class="btn btn-outline-secondary">Виконані</a>
+                {% endif %}
+                <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#createPlanModal">
+                    <i class="bi bi-plus-lg"></i> Додати план
+                </button>
+            </div>
+        </div>
+
+        <div class="planning-mobile-tabs d-md-none">
+            <div class="planning-mobile-tabs__nav" role="tablist">
+                <button type="button" class="planning-mobile-tabs__btn is-active" data-planning-tab="left" role="tab" aria-selected="true">
+                    <i class="bi bi-calendar-day"></i>
+                    Сьогодні / минулі
+                    <span class="planning-mobile-tabs__count">{{ leftCount }}</span>
+                </button>
+                <button type="button" class="planning-mobile-tabs__btn" data-planning-tab="right" role="tab" aria-selected="false">
+                    <i class="bi bi-calendar-range"></i>
+                    Майбутні
+                    <span class="planning-mobile-tabs__count">{{ rightCount }}</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="planning-split">
+            <section class="planning-split__col planning-split__col--left is-active" data-planning-panel="left">
+                <h2 class="planning-split__heading">
+                    <i class="bi bi-calendar-day"></i>
+                    Сьогодні і минулі
+                    <span class="planning-split__count">{{ leftCount }}</span>
+                </h2>
+                <div class="text-muted small planning-split__subheading">{{ todayLabel }}</div>
+
+                {% include 'admin2/planning/_plan_list.html.twig' with {
+                    plansByDate: leftByDate,
+                    todayKey: todayKey,
+                    showCompleted: showCompleted,
+                    emptyMessage: 'На сьогодні та в минулому планів немає.',
+                    hideTodayHeader: false
+                } %}
+            </section>
+
+            <section class="planning-split__col planning-split__col--right" data-planning-panel="right">
+                <h2 class="planning-split__heading">
+                    <i class="bi bi-calendar-range"></i>
+                    Майбутні
+                    <span class="planning-split__count">{{ rightCount }}</span>
+                </h2>
+
+                {% include 'admin2/planning/_plan_list.html.twig' with {
+                    plansByDate: rightByDate,
+                    todayKey: todayKey,
+                    showCompleted: showCompleted,
+                    emptyMessage: 'Майбутніх планів немає.',
+                    hideTodayHeader: false
+                } %}
+            </section>
+        </div>
+    </div>
+
+    {% include 'admin2/planning/_modals.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin2-planning.js') }}" defer></script>
+{% endblock %}

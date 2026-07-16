@@ -25,7 +25,7 @@ class RozetkaProductsController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/rozetka', name: 'admin2_rozetka', methods: ['GET'])]
+    #[Route('/admin/rozetka', name: 'admin2_rozetka', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -59,19 +59,19 @@ class RozetkaProductsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/rozetka/generate/a', name: 'admin2_rozetka_generate_a', methods: ['POST'])]
+    #[Route('/admin/rozetka/generate/a', name: 'admin2_rozetka_generate_a', methods: ['POST'])]
     public function generateA(Request $request): Response
     {
         return $this->handleGenerate($request, 'active_for_a');
     }
 
-    #[Route('/admin2/rozetka/generate/p', name: 'admin2_rozetka_generate_p', methods: ['POST'])]
+    #[Route('/admin/rozetka/generate/p', name: 'admin2_rozetka_generate_p', methods: ['POST'])]
     public function generateP(Request $request): Response
     {
         return $this->handleGenerate($request, 'active_for_p');
     }
 
-    #[Route('/admin2/rozetka/{id}/toggle', name: 'admin2_rozetka_toggle', methods: ['POST'])]
+    #[Route('/admin/rozetka/{id}/toggle', name: 'admin2_rozetka_toggle', methods: ['POST'])]
     public function toggle(Request $request, int $id): JsonResponse
     {
         if (! $this->isCsrfTokenValid('admin2_rozetka_toggle', (string) $request->request->get('_token'))) {

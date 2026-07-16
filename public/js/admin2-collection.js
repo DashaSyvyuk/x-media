@@ -169,10 +169,16 @@ document.addEventListener('change', (event) => {
 
 document.querySelectorAll('[data-collection-add]').forEach((button) => {
     button.addEventListener('click', () => {
+        if (button.dataset.busy === '1') {
+            return;
+        }
+
         const holder = document.querySelector(button.dataset.collectionAdd);
         if (!holder || !holder.dataset.prototype) {
             return;
         }
+
+        button.dataset.busy = '1';
 
         const index = holder.querySelectorAll('.collection-item').length;
         const inner = holder.dataset.prototype.replace(/__name__/g, String(index));
@@ -182,13 +188,16 @@ document.querySelectorAll('[data-collection-add]').forEach((button) => {
             const html = wrapCollapsibleItem(inner, collapsibleType, false);
             holder.insertAdjacentHTML('beforeend', html);
             initCollapsibleItem(holder.lastElementChild);
-            return;
+        } else {
+            const html = '<div class="collection-item">' +
+                '<button type="button" class="btn btn-sm btn-outline-danger collection-item__remove" data-collection-remove>' +
+                '<i class="bi bi-trash"></i></button>' + inner + '</div>';
+            holder.insertAdjacentHTML('beforeend', html);
         }
 
-        const html = '<div class="collection-item">' +
-            '<button type="button" class="btn btn-sm btn-outline-danger collection-item__remove" data-collection-remove>' +
-            '<i class="bi bi-trash"></i></button>' + inner + '</div>';
-        holder.insertAdjacentHTML('beforeend', html);
+        window.setTimeout(() => {
+            button.dataset.busy = '';
+        }, 300);
     });
 });
 

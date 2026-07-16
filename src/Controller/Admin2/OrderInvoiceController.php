@@ -25,7 +25,7 @@ final class OrderInvoiceController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/invoices/fops', name: 'admin2_invoices_fops', methods: ['GET'])]
+    #[Route('/admin/invoices/fops', name: 'admin2_invoices_fops', methods: ['GET'])]
     public function fops(): JsonResponse
     {
         $items = [];
@@ -39,7 +39,7 @@ final class OrderInvoiceController extends AbstractController
         return $this->json(['items' => $items]);
     }
 
-    #[Route('/admin2/orders/{id}/invoice', name: 'admin2_orders_invoice_generate', methods: ['POST'])]
+    #[Route('/admin/orders/{id}/invoice', name: 'admin2_orders_invoice_generate', methods: ['POST'])]
     public function generate(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('invoice_generate', (string) $request->headers->get('X-CSRF-Token'))) {

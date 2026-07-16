@@ -4,6 +4,7 @@ namespace App\Form\Admin2;
 
 use App\Entity\FopProfile;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,6 +18,11 @@ final class FopProfileType extends AbstractType
             ->add('bankAccount', TextType::class, ['label' => 'Рахунок / Банк'])
             ->add('edrpou', TextType::class, ['label' => 'ЄДРПОУ'])
             ->add('address', TextType::class, ['label' => 'Адреса'])
+            ->add('note', TextareaType::class, [
+                'label' => 'Нотатка',
+                'required' => false,
+                'attr' => ['rows' => 4],
+            ])
         ;
     }
 
