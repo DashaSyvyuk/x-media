@@ -28,7 +28,7 @@
                     <td class="fw-semibold">{{ adminUser.email }}</td>
                     <td>{{ adminUser.name }} {{ adminUser.surname }}</td>
                     <td>{{ adminUser.phone ?: '—' }}</td>
-                    <td>{{ settings_macros.role_label(adminUser.roles) }}</td>
+                    <td>{{ settings_macros.role_label(adminUser.assignableRoles) }}</td>
                     <td>
                         {% if adminUser.active %}
                             <span class="badge text-bg-success">Активний</span>
@@ -47,7 +47,7 @@
                                 data-surname="{{ adminUser.surname|e('html_attr') }}"
                                 data-phone="{{ adminUser.phone|e('html_attr') }}"
                                 data-active="{{ adminUser.active ? '1' : '0' }}"
-                                data-roles="{{ adminUser.roles|json_encode|e('html_attr') }}">
+                                data-roles="{{ adminUser.assignableRoles|json_encode|e('html_attr') }}">
                             Редагувати
                         </button>
                         {% if adminUser.id != app.user.id %}

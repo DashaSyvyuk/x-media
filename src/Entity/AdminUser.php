@@ -121,6 +121,25 @@ class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * Roles stored in DB (without the guaranteed ROLE_USER).
+     * Used by forms so ChoiceType does not bind against getRoles().
+     *
+     * @return list<string>
+     */
+    public function getAssignableRoles(): array
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param list<string> $roles
+     */
+    public function setAssignableRoles(array $roles): self
+    {
+        return $this->setRoles($roles);
+    }
+
+    /**
      * @see UserInterface
      */
     public function getRoles(): array
@@ -136,7 +155,7 @@ class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function setRoles(array $roles): self
     {
-        $this->roles = $roles;
+        $this->roles = array_values(array_unique($roles));
 
         return $this;
     }
