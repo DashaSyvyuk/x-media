@@ -39,7 +39,7 @@ final class OrderFulfillmentStatusHelper
             1 => 'new',
             26 => 'processing',
             self::ROZETKA_STATUS_CONFIRMED => 'packing',
-            61 => 'shipping',
+            61, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 => 'shipping',
             default => 'default',
         };
     }
@@ -62,5 +62,37 @@ final class OrderFulfillmentStatusHelper
     public function isProcessingTone(string $tone): bool
     {
         return $tone === 'processing';
+    }
+
+    public function isShippingTone(string $tone): bool
+    {
+        return $tone === 'shipping';
+    }
+
+    public function isLocalCourierDelivering(string $status): bool
+    {
+        return $status === Order::COURIER_DELIVERING;
+    }
+
+    public function isLocalNovaPoshtaDelivering(string $status): bool
+    {
+        return $status === Order::NOVA_POSHTA_DELIVERING;
+    }
+
+    /**
+     * Rozetka handed to carrier — show on NP column when a waybill exists.
+     */
+    public function isRozetkaCarrierTransfer(int $statusId, string $ttn): bool
+    {
+        if (trim($ttn) === '') {
+            return false;
+        }
+
+        // 61 — заплановано/передано перевізнику; 3 — передано службі доставки.
+        if (in_array($statusId, [61, 3], true)) {
+            return true;
+        }
+
+        return $this->isShippingTone($this->toneForRozetka($statusId));
     }
 }

@@ -36,6 +36,17 @@ class RozetkaOrdersController extends AbstractController
                 foreach ($this->apiClient->fetchActiveOrders() as $apiOrder) {
                     $orders[] = $this->presenter->presentListItem($apiOrder);
                 }
+                usort(
+                    $orders,
+                    static function (array $a, array $b): int {
+                        $sort = ((int) ($a['statusSort'] ?? 50)) <=> ((int) ($b['statusSort'] ?? 50));
+                        if ($sort !== 0) {
+                            return $sort;
+                        }
+
+                        return strcmp((string) ($b['created'] ?? ''), (string) ($a['created'] ?? ''));
+                    },
+                );
             } catch (\Throwable $e) {
                 $apiError = $e->getMessage();
             }

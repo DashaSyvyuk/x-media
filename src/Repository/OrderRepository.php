@@ -210,4 +210,29 @@ class OrderRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Local orders currently in delivery (courier or Nova Poshta).
+     *
+     * @return Order[]
+     */
+    public function findShippingOrders(int $limit = 150): array
+    {
+        $statuses = [
+            Order::NOVA_POSHTA_DELIVERING,
+            Order::COURIER_DELIVERING,
+        ];
+
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.items', 'items')->addSelect('items')
+            ->leftJoin('items.product', 'product')->addSelect('product')
+            ->leftJoin('o.novaPoshtaCity', 'novaPoshtaCity')->addSelect('novaPoshtaCity')
+            ->leftJoin('o.novaPoshtaOffice', 'novaPoshtaOffice')->addSelect('novaPoshtaOffice')
+            ->where('o.status IN (:statuses)')
+            ->setParameter('statuses', $statuses)
+            ->orderBy('o.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

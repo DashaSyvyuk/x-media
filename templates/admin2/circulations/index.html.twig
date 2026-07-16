@@ -15,14 +15,14 @@
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
             <div>
                 <h1 class="page-title mb-1">Обіг</h1>
-                <p class="text-muted mb-0 small">Каси адмінів — позитивний баланс на рахунку, негативний у мінусі</p>
+                <p class="text-muted mb-0 small">Каси адмінів — сума балансів активних кас</p>
             </div>
             <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#createCirculationModal">
                 <i class="bi bi-plus-lg"></i> Додати касу
             </button>
         </div>
 
-        <div class="debt-stat-grid">
+        <div class="debt-stat-grid debt-stat-grid--2">
             <div class="card debt-stat-card">
                 <div class="debt-stat-card__body">
                     <div class="debt-stat-card__label">Кас</div>
@@ -31,24 +31,10 @@
             </div>
             <div class="card debt-stat-card debt-stat-card--positive">
                 <div class="debt-stat-card__body">
-                    <div class="debt-stat-card__label">На рахунку</div>
-                    {% if summary.owedToYouByCurrency %}
+                    <div class="debt-stat-card__label">Сума кас</div>
+                    {% if summary.balanceByCurrency %}
                         <div class="debt-stat-card__values">
-                            {% for item in summary.owedToYouByCurrency %}
-                                <div class="debt-stat-card__value-line">+{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}</div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <div class="debt-stat-card__value debt-stat-card__value--empty">—</div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="card debt-stat-card debt-stat-card--negative">
-                <div class="debt-stat-card__body">
-                    <div class="debt-stat-card__label">У мінусі</div>
-                    {% if summary.youOweByCurrency %}
-                        <div class="debt-stat-card__values">
-                            {% for item in summary.youOweByCurrency %}
+                            {% for item in summary.balanceByCurrency %}
                                 <div class="debt-stat-card__value-line">{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}</div>
                             {% endfor %}
                         </div>

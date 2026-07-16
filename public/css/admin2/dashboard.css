@@ -391,6 +391,20 @@
     font-variant-numeric: tabular-nums;
 }
 
+.dashboard-order-source {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.35rem;
+    padding: 0.08rem 0.35rem;
+    border-radius: 999px;
+    background: rgba(0, 160, 70, 0.12);
+    color: #008c3a;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    vertical-align: middle;
+}
+
 .dashboard-order-sum {
     min-width: 5.5rem;
     text-align: right;

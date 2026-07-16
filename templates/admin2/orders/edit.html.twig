@@ -26,6 +26,7 @@
                 {% if not isNew|default(false) %}
                     <div class="order-edit-hero__meta">
                         {{ order_macros.order_status_badge(order.status) }}
+                        {{ order_macros.payment_status_badge(order.paymentStatus) }}
                         <span class="text-muted">· {{ order.createdAt|date('d.m.Y H:i') }}</span>
                     </div>
                 {% endif %}

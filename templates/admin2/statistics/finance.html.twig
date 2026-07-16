@@ -32,21 +32,24 @@
             <div class="d-flex flex-wrap align-items-end justify-content-between gap-2 mb-3">
                 <div>
                     <h2 class="stats-chart-title mb-0">Активні каси</h2>
-                    <p class="text-muted small mb-0">Позитивний баланс — на рахунку, негативний — у мінусі</p>
+                    <p class="text-muted small mb-0">Сумарний баланс усіх активних кас</p>
                 </div>
                 <a href="{{ path('admin2_circulations') }}" class="stats-finance-link">Обіг →</a>
             </div>
-            <div class="debt-stat-grid debt-stat-grid--compact">
+            <div class="debt-stat-grid debt-stat-grid--2 debt-stat-grid--compact">
+                <div class="card debt-stat-card">
+                    <div class="debt-stat-card__body">
+                        <div class="debt-stat-card__label">Кас</div>
                         <div class="debt-stat-card__value">{{ stats.circulations.accounts|number_format(0, '.', ' ') }}</div>
                     </div>
                 </div>
                 <div class="card debt-stat-card debt-stat-card--positive">
                     <div class="debt-stat-card__body">
-                        <div class="debt-stat-card__label">На рахунку</div>
-                        {% if stats.circulations.owedToYouByCurrency %}
+                        <div class="debt-stat-card__label">Сума кас</div>
+                        {% if stats.circulations.balanceByCurrency %}
                             <div class="debt-stat-card__values">
-                                {% for item in stats.circulations.owedToYouByCurrency %}
-                                    <div class="debt-stat-card__value-line">+{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}</div>
+                                {% for item in stats.circulations.balanceByCurrency %}
+                                    <div class="debt-stat-card__value-line">{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}</div>
                                 {% endfor %}
                             </div>
                         {% else %}
@@ -143,10 +146,10 @@
                     <div class="col-xl-4">
                         <div class="card stats-chart-card border-0 shadow-sm h-100">
                             <div class="card-body">
-                                <h3 class="stats-chart-title mb-1">Структура боргів</h3>
-                                <p class="text-muted small mb-3">Вам винні vs ви винні</p>
-                                <div class="stats-chart-wrap">
-                                    <canvas id="statsDebtorStructureChart" aria-label="Структура боргів"></canvas>
+                                <h3 class="stats-chart-title mb-1">Борги по валютах</h3>
+                                <p class="text-muted small mb-3">Скільки вам винні і скільки винні ви</p>
+                                <div class="stats-chart-wrap stats-chart-wrap--finance">
+                                    <canvas id="statsDebtorStructureChart" aria-label="Борги по валютах"></canvas>
                                 </div>
                             </div>
                         </div>

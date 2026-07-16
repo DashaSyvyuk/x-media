@@ -93,6 +93,7 @@ class CirculationRepository extends ServiceEntityRepository
     /**
      * @return array{
      *     accounts: int,
+     *     balanceByCurrency: list<array{code: string, total: int}>,
      *     owedToYouByCurrency: list<array{code: string, total: int}>,
      *     youOweByCurrency: list<array{code: string, total: int}>
      * }
@@ -114,35 +115,22 @@ class CirculationRepository extends ServiceEntityRepository
 
         $rows = $qb->getQuery()->getScalarResult();
 
-        /** @var array<int, array{code: string, total: int}> $owedToYouByCurrency */
-        $owedToYouByCurrency = [];
-        /** @var array<int, array{code: string, total: int}> $youOweByCurrency */
-        $youOweByCurrency = [];
+        /** @var array<int, array{code: string, total: int}> $balanceByCurrency */
+        $balanceByCurrency = [];
 
         foreach ($rows as $row) {
             $currencyId = (int) $row['currencyId'];
             $balance    = (int) $row['balance'];
             $code       = (string) $row['currencyCode'];
 
-            if ($balance > 0) {
-                if (! isset($owedToYouByCurrency[$currencyId])) {
-                    $owedToYouByCurrency[$currencyId] = ['code' => $code, 'total' => 0];
-                }
-                $owedToYouByCurrency[$currencyId]['total'] += $balance;
-            } elseif ($balance < 0) {
-                if (! isset($youOweByCurrency[$currencyId])) {
-                    $youOweByCurrency[$currencyId] = ['code' => $code, 'total' => 0];
-                }
-                $youOweByCurrency[$currencyId]['total'] += abs($balance);
+            if (! isset($balanceByCurrency[$currencyId])) {
+                $balanceByCurrency[$currencyId] = ['code' => $code, 'total' => 0];
             }
+            $balanceByCurrency[$currencyId]['total'] += $balance;
         }
 
-        $sortByCode = static fn (array $a, array $b): int => strcmp($a['code'], $b['code']);
-
-        $owedList = array_values($owedToYouByCurrency);
-        $oweList  = array_values($youOweByCurrency);
-        usort($owedList, $sortByCode);
-        usort($oweList, $sortByCode);
+        $balanceList = array_values($balanceByCurrency);
+        usort($balanceList, static fn (array $a, array $b): int => strcmp($a['code'], $b['code']));
 
         $accountsQb = $this->createQueryBuilder('c')->select('COUNT(c.id)');
         if ($active !== null) {
@@ -151,8 +139,10 @@ class CirculationRepository extends ServiceEntityRepository
 
         return [
             'accounts'            => (int) $accountsQb->getQuery()->getSingleScalarResult(),
-            'owedToYouByCurrency' => $owedList,
-            'youOweByCurrency'    => $oweList,
+            'balanceByCurrency'   => $balanceList,
+            // Kept for chart/payload BC; circulations no longer split positive/negative.
+            'owedToYouByCurrency' => $balanceList,
+            'youOweByCurrency'    => [],
         ];
     }
 

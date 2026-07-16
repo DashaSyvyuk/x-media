@@ -1,5 +1,6 @@
 .debtors-page,
-.stats-page {
+.stats-page,
+.debt-stat-card {
     --debt-positive: #059669;
     --debt-negative: #dc2626;
     --debt-positive-bg: rgba(16, 185, 129, 0.12);
@@ -13,8 +14,13 @@
     margin-bottom: 1.5rem;
 }
 
+.debt-stat-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 @media (max-width: 768px) {
-    .debt-stat-grid {
+    .debt-stat-grid,
+    .debt-stat-grid--2 {
         grid-template-columns: 1fr;
     }
 }
@@ -56,34 +62,39 @@
     font-size: 1.35rem;
     font-weight: 700;
     line-height: 1.15;
+    color: #0f172a;
+}
+
+.debt-stat-card--positive {
+    background: linear-gradient(180deg, rgba(5, 150, 105, 0.08), #fff 42%);
+    box-shadow: inset 4px 0 0 #059669, 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.debt-stat-card--negative {
+    background: linear-gradient(180deg, rgba(220, 38, 38, 0.08), #fff 42%);
+    box-shadow: inset 4px 0 0 #dc2626, 0 1px 3px rgba(15, 23, 42, 0.08);
 }
 
 .debt-stat-card--positive .debt-stat-card__label {
-    color: var(--debt-positive);
+    color: #059669;
 }
 
 .debt-stat-card--negative .debt-stat-card__label {
-    color: var(--debt-negative);
+    color: #dc2626;
 }
 
+.debt-stat-card--positive .debt-stat-card__value,
 .debt-stat-card--positive .debt-stat-card__value-line {
-    color: var(--debt-positive);
+    color: #059669;
 }
 
+.debt-stat-card--negative .debt-stat-card__value,
 .debt-stat-card--negative .debt-stat-card__value-line {
-    color: var(--debt-negative);
+    color: #dc2626;
 }
 
 .debt-stat-card__value--empty {
     color: #94a3b8;
-}
-
-.debt-stat-card--positive .debt-stat-card__value {
-    color: var(--debt-positive);
-}
-
-.debt-stat-card--negative .debt-stat-card__value {
-    color: var(--debt-negative);
 }
 
 .debt-money {
@@ -92,11 +103,11 @@
 }
 
 .debt-money--positive {
-    color: var(--debt-positive);
+    color: #059669;
 }
 
 .debt-money--negative {
-    color: var(--debt-negative);
+    color: #dc2626;
 }
 
 .debt-money--zero {

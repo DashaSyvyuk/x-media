@@ -1,0 +1,32 @@
+{% import 'admin2/orders/_macros.html.twig' as order_macros %}
+
+<article class="fulfillment-card fulfillment-card--readonly fulfillment-card--tone-{{ order.statusTone|default('shipping') }}{{ order.type == 'rozetka' or order.isRozetka|default(false) ? ' fulfillment-card--rozetka' : '' }}">
+    <div class="fulfillment-card__top">
+        <strong>{{ order.label }}</strong>
+        <div class="fulfillment-card__top-actions">
+            {% if order.type == 'rozetka' or order.isRozetka|default(false) %}
+                <span class="badge bg-success-subtle text-success-emphasis">Rozetka</span>
+            {% endif %}
+            {{ order_macros.payment_status_badge(order.paymentStatus|default(false)) }}
+        </div>
+    </div>
+
+    <div class="fulfillment-card__status">{{ order.status }}</div>
+
+    {% if order.ttn|default('')|trim != '' %}
+        <div class="fulfillment-card__ttn">ТТН: <strong>{{ order.ttn }}</strong></div>
+    {% endif %}
+
+    <div class="fulfillment-card__meta">{{ order.recipient|default('—') }}{% if order.phone|default('') %} · {{ order.phone }}{% endif %}</div>
+
+    <ul class="fulfillment-card__items">
+        {% for item in order.items|default([])|slice(0, 3) %}
+            <li>{{ item.qty }}× {{ item.name|slice(0, 50) }}</li>
+        {% endfor %}
+    </ul>
+
+    <div class="fulfillment-card__footer">
+        <span class="text-muted small">{{ order.created }}</span>
+        <strong>{{ order_macros.money(order.total|default(0)) }}</strong>
+    </div>
+</article>

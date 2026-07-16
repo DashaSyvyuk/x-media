@@ -301,3 +301,31 @@
 .bg-teal {
     background: var(--fulfillment-teal) !important;
 }
+
+.delivering-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fulfillment-card--readonly {
+    cursor: default;
+}
+
+.fulfillment-card--readonly .fulfillment-card__status {
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.fulfillment-card__ttn {
+    margin-top: 0.35rem;
+    font-size: 0.82rem;
+    color: #0f766e;
+}
+
+@media (max-width: 992px) {
+    .delivering-board {
+        grid-template-columns: 1fr;
+    }
+}
+

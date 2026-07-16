@@ -7,6 +7,11 @@ use App\Entity\VendorOrder;
 
 final class OrderClipboardFormatter
 {
+    public function __construct(
+        private readonly RozetkaOrderPaymentResolver $rozetkaPaymentResolver,
+    ) {
+    }
+
     public function formatLocalOrder(Order $order): string
     {
         $items = $this->formatLocalItems($order);
@@ -60,7 +65,7 @@ final class OrderClipboardFormatter
             $this->resolveRozetkaPhone($delivery, $apiOrder),
             $this->asString($delivery['recipient_title'] ?? null),
             $this->formatRozetkaAddress($delivery),
-            $this->isRozetkaCod($apiOrder),
+            ! $this->rozetkaPaymentResolver->isPaid($apiOrder),
             (int) round((float) ($apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0)),
             true,
         );
@@ -172,65 +177,6 @@ final class OrderClipboardFormatter
         ], static fn (string $part): bool => $part !== '')));
 
         return implode(', ', $parts);
-    }
-
-    /**
-     * @param array<string, mixed> $apiOrder
-     */
-    private function isRozetkaCod(array $apiOrder): bool
-    {
-        if ($this->isRozetkaPrepaid($apiOrder)) {
-            return false;
-        }
-
-        $type = strtolower($this->asString($apiOrder['payment_type'] ?? null));
-        if (in_array($type, ['cash', 'cod'], true)) {
-            return true;
-        }
-
-        $name = mb_strtolower($this->asString($apiOrder['payment_type_name'] ?? null));
-        if ($name === '') {
-            return false;
-        }
-
-        if (str_contains($name, 'готів') || str_contains($name, 'налож') || str_contains($name, 'отриман')) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param array<string, mixed> $apiOrder
-     */
-    private function isRozetkaPrepaid(array $apiOrder): bool
-    {
-        $paymentStatus = $apiOrder['payment_status'] ?? $apiOrder['status_payment'] ?? null;
-        if ($paymentStatus === true || $paymentStatus === 1 || $paymentStatus === '1') {
-            return true;
-        }
-
-        if (is_string($paymentStatus) && in_array(strtolower($paymentStatus), ['paid', 'success', 'completed'], true)) {
-            return true;
-        }
-
-        $name = mb_strtolower($this->asString($apiOrder['payment_type_name'] ?? null));
-        if (
-            $name !== ''
-            && (
-                str_contains($name, 'рахунок')
-                || str_contains($name, 'карт')
-                || str_contains($name, 'онлайн')
-                || str_contains($name, 'передоплат')
-                || str_contains($name, 'безгот')
-            )
-        ) {
-            return true;
-        }
-
-        $type = strtolower($this->asString($apiOrder['payment_type'] ?? null));
-
-        return in_array($type, ['card', 'cashless', 'online', 'bank'], true);
     }
 
     /**

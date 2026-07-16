@@ -12,3 +12,45 @@
 .rozetka-product-site-link:hover {
     color: #0d9488;
 }
+
+.rozetka-status-badge {
+    display: inline-flex;
+    align-items: center;
+    max-width: 18rem;
+    padding: 0.28rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.25;
+    white-space: normal;
+}
+
+.rozetka-status-badge--new {
+    background: rgba(5, 150, 105, 0.14);
+    color: #047857;
+}
+
+.rozetka-status-badge--processing {
+    background: rgba(245, 158, 11, 0.16);
+    color: #b45309;
+}
+
+.rozetka-status-badge--packing {
+    background: rgba(13, 148, 136, 0.14);
+    color: #0f766e;
+}
+
+.rozetka-status-badge--shipping {
+    background: rgba(37, 99, 235, 0.14);
+    color: #1d4ed8;
+}
+
+.rozetka-status-badge--default {
+    background: rgba(100, 116, 139, 0.14);
+    color: #475569;
+}
+
+.rozetka-status-badge.fs-6 {
+    font-size: 0.9rem;
+}
+
