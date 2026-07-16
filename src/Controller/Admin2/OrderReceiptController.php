@@ -60,16 +60,15 @@ class OrderReceiptController extends AbstractController
 
         try {
             $payload = $this->normalizePayload($payload);
-            $pdfPath = $this->receiptGenerator->generatePdf($payload);
-            $filename = $this->sanitizeFilename((string) ($payload['filename'] ?? 'receipt')) . '.pdf';
-            $download = $request->query->getBoolean('download');
+            $docxPath = $this->receiptGenerator->generateDocx($payload);
+            $filename = $this->sanitizeFilename((string) ($payload['filename'] ?? 'receipt')) . '.docx';
 
-            $response = new Response((string) file_get_contents($pdfPath));
-            $response->headers->set('Content-Type', 'application/pdf');
+            $response = new Response((string) file_get_contents($docxPath));
             $response->headers->set(
-                'Content-Disposition',
-                ($download ? 'attachment' : 'inline') . '; filename="' . $filename . '"',
+                'Content-Type',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             );
+            $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
 
             return $response;
         } catch (\Throwable $e) {
