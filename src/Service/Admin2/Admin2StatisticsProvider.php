@@ -215,7 +215,9 @@ final class Admin2StatisticsProvider
                 COALESCE(SUM(CASE WHEN status NOT IN (:canceled) THEN 1 ELSE 0 END), 0) AS orders_count,
                 COALESCE(SUM(CASE WHEN status = :completed THEN total ELSE 0 END), 0) AS revenue,
                 COALESCE(SUM(CASE WHEN status IN (:canceled) THEN 1 ELSE 0 END), 0) AS canceled_count,
-                COALESCE(SUM(CASE WHEN payment_status = 1 AND status NOT IN (:canceled) THEN 1 ELSE 0 END), 0) AS paid_count
+                COALESCE(SUM(
+                    CASE WHEN payment_status = 1 AND status NOT IN (:canceled) THEN 1 ELSE 0 END
+                ), 0) AS paid_count
              FROM orders
              WHERE created_at BETWEEN :from AND :to',
             [
@@ -263,8 +265,12 @@ final class Admin2StatisticsProvider
      *
      * @return array{labels: list<string>, orders: list<int>, revenue: list<int>}
      */
-    private function buildDailySeries(\DateTimeImmutable $from, \DateTimeImmutable $to, array $rozetkaMarkers = []): array
-    {
+    private function buildDailySeries(
+        \DateTimeImmutable $from,
+        \DateTimeImmutable $to,
+        array $rozetkaMarkers = [],
+    ): array {
+
         $rows = $this->connection->fetchAllAssociative(
             'SELECT DATE(created_at) AS day,
                     COUNT(*) AS orders_count,
@@ -329,8 +335,12 @@ final class Admin2StatisticsProvider
      *
      * @return array{labels: list<string>, values: list<int>, colors: list<string>}
      */
-    private function buildStatusGroups(\DateTimeImmutable $from, \DateTimeImmutable $to, array $rozetkaMarkers = []): array
-    {
+    private function buildStatusGroups(
+        \DateTimeImmutable $from,
+        \DateTimeImmutable $to,
+        array $rozetkaMarkers = [],
+    ): array {
+
         $rows = $this->connection->fetchAllAssociative(
             'SELECT status, COUNT(*) AS cnt
              FROM orders

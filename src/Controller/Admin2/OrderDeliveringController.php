@@ -68,14 +68,11 @@ class OrderDeliveringController extends AbstractController
             }
         }
 
-        usort(
-            $courierOrders,
-            static fn (array $a, array $b): int => strcmp((string) ($b['created'] ?? ''), (string) ($a['created'] ?? '')),
-        );
-        usort(
-            $novaPoshtaOrders,
-            static fn (array $a, array $b): int => strcmp((string) ($b['created'] ?? ''), (string) ($a['created'] ?? '')),
-        );
+        $byCreatedDesc = static function (array $a, array $b): int {
+            return strcmp((string) ($b['created'] ?? ''), (string) ($a['created'] ?? ''));
+        };
+        usort($courierOrders, $byCreatedDesc);
+        usort($novaPoshtaOrders, $byCreatedDesc);
 
         return $this->render('admin2/orders/delivering.html.twig', [
             'courierOrders'    => $courierOrders,

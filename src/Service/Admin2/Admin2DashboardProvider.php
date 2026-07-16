@@ -89,8 +89,18 @@ final class Admin2DashboardProvider
 
         return [
             'exchangeRates'    => $this->exchangeRateService->dashboardRates(),
-            'today'            => $this->orderKpi($todayFrom, $todayTo, $rozetkaToday['orders'], $rozetkaToday['paid']),
-            'month'            => $this->orderMonthKpi($monthFrom, $todayTo, $rozetkaMonth['orders'], $rozetkaMonth['paid']),
+            'today'            => $this->orderKpi(
+                $todayFrom,
+                $todayTo,
+                $rozetkaToday['orders'],
+                $rozetkaToday['paid'],
+            ),
+            'month'            => $this->orderMonthKpi(
+                $monthFrom,
+                $todayTo,
+                $rozetkaMonth['orders'],
+                $rozetkaMonth['paid'],
+            ),
             'monthLabel'       => $this->monthLabel($monthFrom),
             'circulationToday' => $this->circulationToday($todayFrom, $todayTo),
             'activeOrders'     => $this->activeOrders(12),
@@ -164,7 +174,9 @@ final class Admin2DashboardProvider
             'SELECT
                 COALESCE(SUM(CASE WHEN status NOT IN (:canceled) THEN 1 ELSE 0 END), 0) AS orders_count,
                 COALESCE(SUM(CASE WHEN status = :completed THEN total ELSE 0 END), 0) AS revenue,
-                COALESCE(SUM(CASE WHEN payment_status = 1 AND status NOT IN (:canceled) THEN 1 ELSE 0 END), 0) AS paid_count
+                COALESCE(SUM(
+                    CASE WHEN payment_status = 1 AND status NOT IN (:canceled) THEN 1 ELSE 0 END
+                ), 0) AS paid_count
              FROM orders
              WHERE created_at BETWEEN :from AND :to',
             [
@@ -401,7 +413,9 @@ final class Admin2DashboardProvider
                         'phone'          => (string) ($apiOrder['user_phone'] ?? ''),
                         'status'         => 'rozetka',
                         'statusLabel'    => $statusLabel !== '' ? $statusLabel : 'Rozetka',
-                        'total'          => (int) round((float) ($apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0)),
+                        'total'          => (int) round((float) (
+                            $apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0
+                        )),
                         'createdAt'      => $created,
                         'isRozetka'      => true,
                         'statusColor'    => '#00a046',
