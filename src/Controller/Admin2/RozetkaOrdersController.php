@@ -21,7 +21,7 @@ class RozetkaOrdersController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/rozetka-orders', name: 'admin2_rozetka_orders', methods: ['GET'])]
+    #[Route('/admin/rozetka-orders', name: 'admin2_rozetka_orders', methods: ['GET'])]
     public function index(): Response
     {
         $apiError = null;
@@ -49,7 +49,7 @@ class RozetkaOrdersController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/rozetka-orders/{id}', name: 'admin2_rozetka_orders_show', methods: ['GET'])]
+    #[Route('/admin/rozetka-orders/{id}', name: 'admin2_rozetka_orders_show', methods: ['GET'])]
     public function show(int $id): Response
     {
         if (! $this->apiClient->isConfigured()) {
@@ -70,7 +70,7 @@ class RozetkaOrdersController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/rozetka-orders/{id}/update', name: 'admin2_rozetka_orders_update', methods: ['POST'])]
+    #[Route('/admin/rozetka-orders/{id}/update', name: 'admin2_rozetka_orders_update', methods: ['POST'])]
     public function update(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('rozetka_order_update', (string) $request->request->get('_token'))) {

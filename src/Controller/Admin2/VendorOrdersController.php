@@ -28,7 +28,7 @@ class VendorOrdersController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/vendor-orders', name: 'admin2_vendor_orders', methods: ['GET'])]
+    #[Route('/admin/vendor-orders', name: 'admin2_vendor_orders', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search     = trim((string) $request->query->get('q', ''));
@@ -63,7 +63,7 @@ class VendorOrdersController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/vendor-orders/new', name: 'admin2_vendor_orders_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/vendor-orders/new', name: 'admin2_vendor_orders_new', methods: ['GET', 'POST'])]
     public function createNew(Request $request): Response
     {
         $order = new VendorOrder();
@@ -73,7 +73,7 @@ class VendorOrdersController extends AbstractController
         return $this->handleForm($request, $order, true);
     }
 
-    #[Route('/admin2/vendor-orders/{id}/edit', name: 'admin2_vendor_orders_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/vendor-orders/{id}/edit', name: 'admin2_vendor_orders_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $order = $this->vendorOrderRepository->find($id);
@@ -91,7 +91,7 @@ class VendorOrdersController extends AbstractController
         return $this->handleForm($request, $order, false);
     }
 
-    #[Route('/admin2/vendor-orders/{id}/complete', name: 'admin2_vendor_orders_complete', methods: ['POST'])]
+    #[Route('/admin/vendor-orders/{id}/complete', name: 'admin2_vendor_orders_complete', methods: ['POST'])]
     public function complete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('vendor_order_action', (string) $request->request->get('_token'))) {
@@ -106,6 +106,34 @@ class VendorOrdersController extends AbstractController
             $this->entityManager->flush();
             $this->addFlash('success', 'Замовлення постачальника позначено як реалізоване.');
         }
+
+        return $this->redirectBack($request);
+    }
+
+    #[Route('/admin/vendor-orders/{id}/delete', name: 'admin2_vendor_orders_delete', methods: ['POST'])]
+    public function delete(Request $request, int $id): Response
+    {
+        if (! $this->isCsrfTokenValid('vendor_order_action', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectBack($request);
+        }
+
+        $order = $this->vendorOrderRepository->find($id);
+        if ($order === null) {
+            $this->addFlash('error', 'Замовлення постачальника не знайдено.');
+
+            return $this->redirectBack($request);
+        }
+
+        $label = $order->getSupplierOrderNumber() !== ''
+            ? $order->getSupplierOrderNumber()
+            : ('#' . $order->getId());
+
+        $this->entityManager->remove($order);
+        $this->entityManager->flush();
+
+        $this->addFlash('success', sprintf('Замовлення постачальника «%s» видалено.', $label));
 
         return $this->redirectBack($request);
     }
@@ -156,7 +184,7 @@ class VendorOrdersController extends AbstractController
     private function redirectBack(Request $request): Response
     {
         $redirect = (string) $request->request->get('_redirect', '');
-        if ($redirect !== '' && str_starts_with($redirect, '/admin2/')) {
+        if ($redirect !== '' && str_starts_with($redirect, '/admin/')) {
             return $this->redirect($redirect);
         }
 

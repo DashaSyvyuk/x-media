@@ -22,7 +22,7 @@ class CategoriesController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/categories', name: 'admin2_categories', methods: ['GET'])]
+    #[Route('/admin/categories', name: 'admin2_categories', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -55,7 +55,7 @@ class CategoriesController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/categories/{id}/delete', name: 'admin2_categories_delete', methods: ['POST'])]
+    #[Route('/admin/categories/{id}/delete', name: 'admin2_categories_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_category_action', (string) $request->request->get('_token'))) {

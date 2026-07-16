@@ -1,3 +1,5 @@
+{% import 'admin2/orders/_macros.html.twig' as order_macros %}
+
 <div class="settings-tab-toolbar">
     <h2 class="h5 mb-0">ФОП (реквізити)</h2>
     <button type="button" class="btn btn-teal btn-sm" data-bs-toggle="modal" data-bs-target="#createFopModal">
@@ -14,6 +16,7 @@
                 <th>ЄДРПОУ</th>
                 <th>Рахунок / Банк</th>
                 <th>Адреса</th>
+                <th>Нотатка</th>
                 <th class="text-end">Дії</th>
             </tr>
         </thead>
@@ -25,7 +28,9 @@
                     <td><code>{{ fop.edrpou }}</code></td>
                     <td class="small">{{ fop.bankAccount }}</td>
                     <td class="small text-muted">{{ fop.address }}</td>
+                    <td class="small">{{ fop.note ?: '—' }}</td>
                     <td class="text-end text-nowrap">
+                        {{ order_macros.copy_button(fop.note|default(null), 'Скопіювати нотатку') }}
                         <button type="button"
                                 class="btn btn-sm btn-outline-teal js-edit-fop"
                                 data-bs-toggle="modal"
@@ -34,7 +39,8 @@
                                 data-title="{{ fop.title|e('html_attr') }}"
                                 data-edrpou="{{ fop.edrpou|e('html_attr') }}"
                                 data-bank-account="{{ fop.bankAccount|e('html_attr') }}"
-                                data-address="{{ fop.address|e('html_attr') }}">
+                                data-address="{{ fop.address|e('html_attr') }}"
+                                data-note="{{ fop.note|default('')|e('html_attr') }}">
                             Редагувати
                         </button>
                         <form method="post"
@@ -51,7 +57,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="6" class="text-center text-muted py-4">ФОП ще немає</td>
+                    <td colspan="7" class="text-center text-muted py-4">ФОП ще немає</td>
                 </tr>
             {% endfor %}
         </tbody>

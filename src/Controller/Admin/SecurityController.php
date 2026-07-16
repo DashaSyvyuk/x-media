@@ -12,8 +12,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/admin2/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // Already-authenticated users hitting /admin/login (e.g. because the
-        // firewall saved /admin/login as the target path before login) would
+        // Already-authenticated users hitting /admin2/login would
         // otherwise just see the form again and bounce back here on submit.
         // Send them straight to the dashboard.
         if ($this->getUser() !== null) {

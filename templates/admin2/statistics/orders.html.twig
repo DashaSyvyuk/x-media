@@ -1,0 +1,123 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+
+{% block title %}Статистика · Замовлення — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/statistics.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="stats-page"
+         data-stats='{{ {
+             daily: stats.daily,
+             statusGroups: stats.statusGroups,
+             sources: stats.sources,
+             topProducts: stats.topProducts
+         }|json_encode|e('html_attr') }}'>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 page-header-row">
+            <div>
+                <h1 class="page-title mb-1">Замовлення</h1>
+                <p class="text-muted mb-0 small">
+                    {{ stats.from|date('d.m.Y') }} — {{ stats.to|date('d.m.Y') }} · {{ stats.periodLabel }}
+                </p>
+            </div>
+            <div class="stats-period-switch" role="group" aria-label="Період">
+                {% for value, label in periods %}
+                    <a href="{{ path('admin2_statistics', {period: value}) }}"
+                       class="stats-period-btn {{ stats.period == value ? 'is-active' : '' }}">
+                        {{ label }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="stats-kpi-grid">
+            <div class="stats-kpi-card">
+                <div class="stats-kpi-card__label">Замовлень</div>
+                <div class="stats-kpi-card__value">{{ stats.kpi.orders|number_format(0, '.', ' ') }}</div>
+                <div class="stats-kpi-card__hint">за вибраний період</div>
+            </div>
+            <div class="stats-kpi-card stats-kpi-card--accent">
+                <div class="stats-kpi-card__label">Виручка</div>
+                <div class="stats-kpi-card__value">{{ stats.kpi.revenue|number_format(0, '.', ' ') }} ₴</div>
+                <div class="stats-kpi-card__hint">доставлені замовлення</div>
+            </div>
+            <div class="stats-kpi-card">
+                <div class="stats-kpi-card__label">Середній чек</div>
+                <div class="stats-kpi-card__value">{{ stats.kpi.avgCheck|number_format(0, '.', ' ') }} ₴</div>
+                <div class="stats-kpi-card__hint">по доставлених</div>
+            </div>
+            <div class="stats-kpi-card">
+                <div class="stats-kpi-card__label">Скасування</div>
+                <div class="stats-kpi-card__value">{{ stats.kpi.cancelRate }}%</div>
+                <div class="stats-kpi-card__hint">від усіх замовлень</div>
+            </div>
+            <div class="stats-kpi-card">
+                <div class="stats-kpi-card__label">Оплачено</div>
+                <div class="stats-kpi-card__value">{{ stats.kpi.paid|number_format(0, '.', ' ') }}</div>
+                <div class="stats-kpi-card__hint">з відміткою оплати</div>
+            </div>
+            <div class="stats-kpi-card">
+                <div class="stats-kpi-card__label">Активні товари</div>
+                <div class="stats-kpi-card__value">{{ stats.kpi.activeProducts|number_format(0, '.', ' ') }}</div>
+                <div class="stats-kpi-card__hint">у каталозі зараз</div>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+            <div class="col-lg-8">
+                <div class="card stats-chart-card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                            <div>
+                                <h2 class="stats-chart-title mb-0">Динаміка</h2>
+                                <p class="text-muted small mb-0">Замовлення та виручка по днях</p>
+                            </div>
+                        </div>
+                        <div class="stats-chart-wrap stats-chart-wrap--tall">
+                            <canvas id="statsDailyChart" aria-label="Динаміка замовлень"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card stats-chart-card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h2 class="stats-chart-title mb-1">Статуси</h2>
+                        <p class="text-muted small mb-3">Розподіл замовлень</p>
+                        <div class="stats-chart-wrap">
+                            <canvas id="statsStatusChart" aria-label="Статуси замовлень"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="card stats-chart-card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h2 class="stats-chart-title mb-1">Джерела</h2>
+                        <p class="text-muted small mb-3">Звідки приходять замовлення</p>
+                        <div class="stats-chart-wrap">
+                            <canvas id="statsSourcesChart" aria-label="Джерела замовлень"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="card stats-chart-card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h2 class="stats-chart-title mb-1">Топ товарів</h2>
+                        <p class="text-muted small mb-3">Найбільше продані позиції (без скасованих)</p>
+                        <div class="stats-chart-wrap stats-chart-wrap--products">
+                            <canvas id="statsProductsChart" aria-label="Топ товарів"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="{{ asset('js/admin2-statistics.js') }}" defer></script>
+{% endblock %}

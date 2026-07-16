@@ -1,4 +1,5 @@
-.debtors-page {
+.debtors-page,
+.stats-page {
     --debt-positive: #059669;
     --debt-negative: #dc2626;
     --debt-positive-bg: rgba(16, 185, 129, 0.12);
@@ -55,6 +56,14 @@
     font-size: 1.35rem;
     font-weight: 700;
     line-height: 1.15;
+}
+
+.debt-stat-card--positive .debt-stat-card__label {
+    color: var(--debt-positive);
+}
+
+.debt-stat-card--negative .debt-stat-card__label {
+    color: var(--debt-negative);
 }
 
 .debt-stat-card--positive .debt-stat-card__value-line {

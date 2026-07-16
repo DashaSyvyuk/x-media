@@ -23,7 +23,7 @@ class SuppliersController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/suppliers', name: 'admin2_suppliers', methods: ['GET'])]
+    #[Route('/admin/suppliers', name: 'admin2_suppliers', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -49,7 +49,7 @@ class SuppliersController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/suppliers/new', name: 'admin2_suppliers_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/suppliers/new', name: 'admin2_suppliers_new', methods: ['GET', 'POST'])]
     public function createNew(Request $request): Response
     {
         $supplier = new Supplier();
@@ -58,7 +58,7 @@ class SuppliersController extends AbstractController
         return $this->handleForm($request, $supplier, true);
     }
 
-    #[Route('/admin2/suppliers/{id}/edit', name: 'admin2_suppliers_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/suppliers/{id}/edit', name: 'admin2_suppliers_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $supplier = $this->supplierRepository->find($id);

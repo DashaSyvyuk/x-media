@@ -98,7 +98,7 @@
         <div class="card-header">Характеристики Rozetka</div>
         <div class="card-body">
             {% set valueBody %}
-            <div class="row g-3 rozetka-value-row">
+            <div class="row g-3 rozetka-value-row align-items-end">
                 <div class="col-md-5">{{ form_row(form.values.vars.prototype.characteristic) }}</div>
                 <div class="col-md-7 rozetka-value-field" data-rozetka-value-slot>
                     {% if form.values.vars.prototype.value is defined %}
@@ -117,7 +117,7 @@
                  data-form-prefix="{{ form.vars.name }}">
                 {% for valueField in form.values %}
                     {% set body %}
-                    <div class="row g-3 rozetka-value-row">
+                    <div class="row g-3 rozetka-value-row align-items-end">
                         <div class="col-md-5">{{ form_row(valueField.characteristic) }}</div>
                         <div class="col-md-7 rozetka-value-field" data-rozetka-value-slot>
                             {% if valueField.value is defined %}

@@ -26,7 +26,7 @@ class SettingsPaymentTypeController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/settings/payment-types', name: 'admin2_settings_payment_store', methods: ['POST'])]
+    #[Route('/admin/settings/payment-types', name: 'admin2_settings_payment_store', methods: ['POST'])]
     public function store(Request $request): Response
     {
         $this->imageUploadSubscriber->ensureLocalDirFor(PaymentType::class);
@@ -39,7 +39,7 @@ class SettingsPaymentTypeController extends AbstractController
         return $this->handleSave($request, $paymentType, false);
     }
 
-    #[Route('/admin2/settings/payment-types/{id}', name: 'admin2_settings_payment_update', methods: ['POST'])]
+    #[Route('/admin/settings/payment-types/{id}', name: 'admin2_settings_payment_update', methods: ['POST'])]
     public function update(Request $request, int $id): Response
     {
         $this->imageUploadSubscriber->ensureLocalDirFor(PaymentType::class);
@@ -52,7 +52,7 @@ class SettingsPaymentTypeController extends AbstractController
         return $this->handleSave($request, $paymentType, true);
     }
 
-    #[Route('/admin2/settings/payment-types/{id}/delete', name: 'admin2_settings_payment_delete', methods: ['POST'])]
+    #[Route('/admin/settings/payment-types/{id}/delete', name: 'admin2_settings_payment_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_settings_payment', (string) $request->request->get('_token'))) {

@@ -31,7 +31,7 @@ class SettingsController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/settings', name: 'admin2_settings', methods: ['GET'])]
+    #[Route('/admin/settings', name: 'admin2_settings', methods: ['GET'])]
     public function index(Request $request): Response
     {
         /** @var AdminUser $user */

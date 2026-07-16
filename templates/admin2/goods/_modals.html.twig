@@ -1,0 +1,223 @@
+{# Batch modals #}
+<div class="modal fade" id="createPlanningGoodBatchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" action="{{ path('admin2_goods_batches_create') }}" class="modal-content">
+            <input type="hidden" name="_token" value="{{ csrf_token('admin2_goods') }}">
+            <input type="hidden" name="view" value="grouped">
+            <div class="modal-header">
+                <h2 class="modal-title h5 mb-0">Новий блок</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label" for="createPlanningGoodBatchDate">Дата</label>
+                    <input type="date" name="recorded_date" id="createPlanningGoodBatchDate" class="form-control" value="{{ 'now'|date('Y-m-d') }}" required>
+                </div>
+                <div class="mb-0">
+                    <label class="form-label" for="createPlanningGoodBatchName">Назва</label>
+                    <input type="text" name="name" id="createPlanningGoodBatchName" class="form-control" maxlength="255" placeholder="Необовʼязково">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <button type="submit" class="btn btn-teal">Створити</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="editPlanningGoodBatchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" id="editPlanningGoodBatchForm" action="" class="modal-content">
+            <input type="hidden" name="_token" value="{{ csrf_token('admin2_goods') }}">
+            <input type="hidden" name="view" value="{{ view }}">
+            <div class="modal-header">
+                <h2 class="modal-title h5 mb-0">Редагувати блок</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label" for="editPlanningGoodBatchDate">Дата</label>
+                    <input type="date" name="recorded_date" id="editPlanningGoodBatchDate" class="form-control" required>
+                </div>
+                <div class="mb-0">
+                    <label class="form-label" for="editPlanningGoodBatchName">Назва</label>
+                    <input type="text" name="name" id="editPlanningGoodBatchName" class="form-control" maxlength="255">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <button type="submit" class="btn btn-teal">Зберегти</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="deletePlanningGoodBatchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" id="deletePlanningGoodBatchForm" action="" class="modal-content">
+            <input type="hidden" name="_token" value="{{ csrf_token('admin2_goods') }}">
+            <input type="hidden" name="view" value="{{ view }}">
+            <div class="modal-header">
+                <h2 class="modal-title h5 mb-0">Видалити блок?</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>
+            </div>
+            <div class="modal-body">
+                Видалити блок «<strong id="deletePlanningGoodBatchName"></strong>» разом з усіма товарами в ньому?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <button type="submit" class="btn btn-danger">Видалити</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="createPlanningGoodModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form method="post" action="{{ path('admin2_goods_create') }}" class="modal-content">
+            <input type="hidden" name="_token" value="{{ csrf_token('admin2_goods') }}">
+            <input type="hidden" name="view" value="{{ view }}">
+            <div class="modal-header">
+                <h2 class="modal-title h5 mb-0">Новий товар</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label" for="createPlanningGoodBatchId">Блок</label>
+                        <select name="planning_good_batch_id" id="createPlanningGoodBatchId" class="form-select" required>
+                            <option value="" disabled selected>Оберіть блок</option>
+                            {% for batchOption in batches %}
+                                <option value="{{ batchOption.id }}">
+                                    {{ batchOption.recordedDate|date('d.m.Y') }} — {{ batchOption.displayName }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="createPlanningGoodName">Назва</label>
+                        <input type="text" name="name" id="createPlanningGoodName" class="form-control" required maxlength="255">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label" for="createPlanningGoodCreateCount">Кількість</label>
+                        <input type="number" min="1" max="999" name="create_count" id="createPlanningGoodCreateCount" class="form-control" value="1" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="createPlanningGoodWarehouseId">Склад</label>
+                        <select name="warehouse_id" id="createPlanningGoodWarehouseId" class="form-select">
+                            <option value="">— Не обрано —</option>
+                            {% for warehouse in warehouses %}
+                                <option value="{{ warehouse.id }}">{{ warehouse.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="createPlanningGoodPurchasePrice">Ціна закупки</label>
+                        <input type="number" step="0.01" min="0" name="purchase_price" id="createPlanningGoodPurchasePrice" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="createPlanningGoodDeliveryPrice">Доставка</label>
+                        <input type="number" step="0.01" min="0" name="delivery_price" id="createPlanningGoodDeliveryPrice" class="form-control" value="0">
+                    </div>
+                    <div class="col-md-3 js-sale-field">
+                        <label class="form-label" for="createPlanningGoodSalePrice">Ціна продажу</label>
+                        <input type="number" step="0.01" min="0" name="sale_price" id="createPlanningGoodSalePrice" class="form-control">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input js-planning-good-sold-toggle" type="checkbox" name="is_sold" value="1" id="createPlanningGoodIsSold">
+                            <label class="form-check-label fw-semibold" for="createPlanningGoodIsSold">Продано</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <button type="submit" class="btn btn-teal">Додати</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="editPlanningGoodModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form method="post" id="editPlanningGoodForm" action="" class="modal-content">
+            <input type="hidden" name="_token" value="{{ csrf_token('admin2_goods') }}">
+            <input type="hidden" name="view" value="{{ view }}">
+            <div class="modal-header">
+                <h2 class="modal-title h5 mb-0">Редагувати товар</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label" for="editPlanningGoodBatchId">Блок</label>
+                        <select name="planning_good_batch_id" id="editPlanningGoodBatchId" class="form-select" required>
+                            {% for batchOption in batches %}
+                                <option value="{{ batchOption.id }}">
+                                    {{ batchOption.recordedDate|date('d.m.Y') }} — {{ batchOption.displayName }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label" for="editPlanningGoodName">Назва</label>
+                        <input type="text" name="name" id="editPlanningGoodName" class="form-control" required maxlength="255">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="editPlanningGoodWarehouseId">Склад</label>
+                        <select name="warehouse_id" id="editPlanningGoodWarehouseId" class="form-select">
+                            <option value="">— Не обрано —</option>
+                            {% for warehouse in warehouses %}
+                                <option value="{{ warehouse.id }}">{{ warehouse.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="editPlanningGoodPurchasePrice">Ціна закупки</label>
+                        <input type="number" step="0.01" min="0" name="purchase_price" id="editPlanningGoodPurchasePrice" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="editPlanningGoodDeliveryPrice">Доставка</label>
+                        <input type="number" step="0.01" min="0" name="delivery_price" id="editPlanningGoodDeliveryPrice" class="form-control" value="0">
+                    </div>
+                    <div class="col-md-3 js-sale-field">
+                        <label class="form-label" for="editPlanningGoodSalePrice">Ціна продажу</label>
+                        <input type="number" step="0.01" min="0" name="sale_price" id="editPlanningGoodSalePrice" class="form-control">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input js-planning-good-sold-toggle" type="checkbox" name="is_sold" value="1" id="editPlanningGoodIsSold">
+                            <label class="form-check-label fw-semibold" for="editPlanningGoodIsSold">Продано</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <button type="submit" class="btn btn-teal">Зберегти</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="deletePlanningGoodModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" id="deletePlanningGoodForm" action="" class="modal-content">
+            <input type="hidden" name="_token" value="{{ csrf_token('admin2_goods') }}">
+            <input type="hidden" name="view" value="{{ view }}">
+            <div class="modal-header">
+                <h2 class="modal-title h5 mb-0">Видалити товар?</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>
+            </div>
+            <div class="modal-body">
+                Видалити «<strong id="deletePlanningGoodName"></strong>»?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <button type="submit" class="btn btn-danger">Видалити</button>
+            </div>
+        </form>
+    </div>
+</div>

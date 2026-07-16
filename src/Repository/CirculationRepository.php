@@ -155,4 +155,48 @@ class CirculationRepository extends ServiceEntityRepository
             'youOweByCurrency'    => $oweList,
         ];
     }
+
+    /**
+     * @return list<array{id: int, label: string, code: string, balance: int}>
+     */
+    public function getActiveBalancesForChart(int $limit = 20): array
+    {
+        $rows = $this->createQueryBuilder('c')
+            ->select(
+                'c.id AS id',
+                'adminUser.email AS email',
+                'adminUser.name AS name',
+                'currency.code AS currencyCode',
+                '(SELECT COALESCE(SUM(p.sum), 0) FROM ' . CirculationPayment::class
+                . ' p WHERE p.circulation = c) AS balance',
+            )
+            ->addSelect(
+                '(SELECT COALESCE(SUM(p2.sum), 0) FROM ' . CirculationPayment::class
+                . ' p2 WHERE p2.circulation = c) AS HIDDEN balanceSort',
+            )
+            ->leftJoin('c.adminUser', 'adminUser')
+            ->join('c.currency', 'currency')
+            ->andWhere('c.active = :active')
+            ->setParameter('active', true)
+            ->orderBy('balanceSort', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getScalarResult();
+
+        $result = [];
+        foreach ($rows as $row) {
+            $name = trim((string) ($row['name'] ?? ''));
+            $email = trim((string) ($row['email'] ?? ''));
+            $label = $name !== '' ? $name : ($email !== '' ? $email : ('Каса #' . (int) $row['id']));
+
+            $result[] = [
+                'id'      => (int) $row['id'],
+                'label'   => $label,
+                'code'    => (string) $row['currencyCode'],
+                'balance' => (int) $row['balance'],
+            ];
+        }
+
+        return $result;
+    }
 }

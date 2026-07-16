@@ -24,7 +24,7 @@ class CirculationsController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/circulations', name: 'admin2_circulations', methods: ['GET'])]
+    #[Route('/admin/circulations', name: 'admin2_circulations', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -61,7 +61,7 @@ class CirculationsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/circulations/new', name: 'admin2_circulations_new', methods: ['POST'])]
+    #[Route('/admin/circulations/new', name: 'admin2_circulations_new', methods: ['POST'])]
     public function create(Request $request): Response
     {
         $circulation = $this->createCirculation();
@@ -82,7 +82,7 @@ class CirculationsController extends AbstractController
         return $this->redirectToRoute('admin2_circulations');
     }
 
-    #[Route('/admin2/circulations/{id}/delete', name: 'admin2_circulations_delete', methods: ['POST'])]
+    #[Route('/admin/circulations/{id}/delete', name: 'admin2_circulations_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_circulation_action', (string) $request->request->get('_token'))) {

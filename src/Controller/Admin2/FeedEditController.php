@@ -21,7 +21,7 @@ class FeedEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/feeds/new', name: 'admin2_feeds_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/feeds/new', name: 'admin2_feeds_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $feed = new Feed();
@@ -30,7 +30,7 @@ class FeedEditController extends AbstractController
         return $this->handleForm($request, $feed, true);
     }
 
-    #[Route('/admin2/feeds/{id}/edit', name: 'admin2_feeds_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/feeds/{id}/edit', name: 'admin2_feeds_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $feed = $this->feedRepository->find($id);

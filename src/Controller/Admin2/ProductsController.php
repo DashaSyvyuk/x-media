@@ -30,7 +30,7 @@ class ProductsController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/products', name: 'admin2_products', methods: ['GET'])]
+    #[Route('/admin/products', name: 'admin2_products', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -66,25 +66,25 @@ class ProductsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/products/generate/hotline', name: 'admin2_products_generate_hotline', methods: ['POST'])]
+    #[Route('/admin/products/generate/hotline', name: 'admin2_products_generate_hotline', methods: ['POST'])]
     public function generateHotline(Request $request): Response
     {
         return $this->handleGenerate($request, $this->generateHotlineXmlService->execute());
     }
 
-    #[Route('/admin2/products/generate/prom', name: 'admin2_products_generate_prom', methods: ['POST'])]
+    #[Route('/admin/products/generate/prom', name: 'admin2_products_generate_prom', methods: ['POST'])]
     public function generateProm(Request $request): Response
     {
         return $this->handleGenerate($request, $this->generatePromXmlService->execute());
     }
 
-    #[Route('/admin2/products/generate/ekatalog', name: 'admin2_products_generate_ekatalog', methods: ['POST'])]
+    #[Route('/admin/products/generate/ekatalog', name: 'admin2_products_generate_ekatalog', methods: ['POST'])]
     public function generateEkatalog(Request $request): Response
     {
         return $this->handleGenerate($request, $this->generateEkatalogXmlService->execute());
     }
 
-    #[Route('/admin2/products/{id}/clone', name: 'admin2_products_clone', methods: ['POST'])]
+    #[Route('/admin/products/{id}/clone', name: 'admin2_products_clone', methods: ['POST'])]
     public function clone(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_product_action', (string) $request->request->get('_token'))) {
@@ -103,7 +103,7 @@ class ProductsController extends AbstractController
         return $this->redirectToRoute('admin2_products_edit', ['id' => $clone->getId()]);
     }
 
-    #[Route('/admin2/products/{id}/delete', name: 'admin2_products_delete', methods: ['POST'])]
+    #[Route('/admin/products/{id}/delete', name: 'admin2_products_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_product_action', (string) $request->request->get('_token'))) {

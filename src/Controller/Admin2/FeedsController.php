@@ -22,7 +22,7 @@ class FeedsController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/feeds', name: 'admin2_feeds', methods: ['GET'])]
+    #[Route('/admin/feeds', name: 'admin2_feeds', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -58,7 +58,7 @@ class FeedsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/feeds/{id}/delete', name: 'admin2_feeds_delete', methods: ['POST'])]
+    #[Route('/admin/feeds/{id}/delete', name: 'admin2_feeds_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_feed_action', (string) $request->request->get('_token'))) {

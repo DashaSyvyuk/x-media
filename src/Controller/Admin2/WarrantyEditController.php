@@ -21,7 +21,7 @@ class WarrantyEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/warranties/{id}/edit', name: 'admin2_warranties_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/warranties/{id}/edit', name: 'admin2_warranties_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $warranty = $this->warrantyRepository->find($id);

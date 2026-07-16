@@ -72,29 +72,26 @@
         <div class="card-header">Зображення</div>
         <div class="card-body">
             {% set imageBody %}
-            <div class="row g-3 align-items-start">
-                <div class="col-md-8">
-                    {{ form_row(form.images.vars.prototype.file) }}
-                    {{ form_row(form.images.vars.prototype.position) }}
-                </div>
-                <div class="col-md-4" data-image-preview></div>
+            <div class="product-image-fields">
+                <div data-image-preview></div>
+                {{ form_row(form.images.vars.prototype.file) }}
+                {{ form_row(form.images.vars.prototype.position) }}
             </div>
             {% endset %}
             <div id="images-collection"
+                 class="images-collection-grid"
                  data-collapsible-type="image"
                  data-prototype="{{ imageBody|e('html_attr') }}">
                 {% for imageField in form.images %}
                     {% set body %}
-                    <div class="row g-3 align-items-start">
-                        <div class="col-md-8">
-                            {{ form_row(imageField.file) }}
-                            {{ form_row(imageField.position) }}
-                        </div>
-                        <div class="col-md-4" data-image-preview>
+                    <div class="product-image-fields">
+                        <div data-image-preview>
                             {% if imageField.vars.data and imageField.vars.data.imageUri %}
                                 <img src="{{ imageField.vars.data.imageUri }}" alt="" class="product-image-preview">
                             {% endif %}
                         </div>
+                        {{ form_row(imageField.file) }}
+                        {{ form_row(imageField.position) }}
                     </div>
                     {% endset %}
                     {{ collapsible.item('image', body, true) }}

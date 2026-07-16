@@ -24,7 +24,7 @@ class DebtorsController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/debtors', name: 'admin2_debtors', methods: ['GET'])]
+    #[Route('/admin/debtors', name: 'admin2_debtors', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -62,7 +62,7 @@ class DebtorsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/debtors/new', name: 'admin2_debtors_new', methods: ['POST'])]
+    #[Route('/admin/debtors/new', name: 'admin2_debtors_new', methods: ['POST'])]
     public function create(Request $request): Response
     {
         $debtor = $this->createDebtor();
@@ -83,7 +83,7 @@ class DebtorsController extends AbstractController
         return $this->redirectToRoute('admin2_debtors');
     }
 
-    #[Route('/admin2/debtors/{id}/delete', name: 'admin2_debtors_delete', methods: ['POST'])]
+    #[Route('/admin/debtors/{id}/delete', name: 'admin2_debtors_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_debtor_action', (string) $request->request->get('_token'))) {

@@ -13,6 +13,8 @@ final class RozetkaSellerApiClient
     private const TOKEN_TTL = 82800;
     private const STATUS_MAP_CACHE_KEY = 'rozetka_order_status_labels';
     private const STATUS_MAP_TTL = 3600;
+    private const COUNTS_CACHE_KEY = 'rozetka_orders_counts';
+    private const COUNTS_TTL = 60;
 
     /** @var int[] New + in processing */
     public const ACTIVE_TYPES = [4, 2];
@@ -40,7 +42,7 @@ final class RozetkaSellerApiClient
     }
 
     /**
-     * @return array<string, mixed>|null
+     * @return array{new: int, inProgress: int}|null
      */
     public function getCounts(): ?array
     {
@@ -48,15 +50,74 @@ final class RozetkaSellerApiClient
             return null;
         }
 
+        $cacheItem = $this->cache->getItem(self::COUNTS_CACHE_KEY);
+        if ($cacheItem->isHit()) {
+            $cached = $cacheItem->get();
+
+            return is_array($cached) ? $cached : null;
+        }
+
         try {
             $response = $this->request('GET', '/orders/counts');
+            $content = is_array($response['content'] ?? null) ? $response['content'] : [];
+            $normalized = $this->normalizeCounts($content);
+            $cacheItem->set($normalized);
+            $cacheItem->expiresAfter(self::COUNTS_TTL);
+            $this->cache->save($cacheItem);
 
-            return is_array($response['content'] ?? null) ? $response['content'] : null;
+            return $normalized;
         } catch (\Throwable $e) {
             $this->logger->error('Rozetka counts fetch failed.', ['exception' => $e]);
 
             return null;
         }
+    }
+
+    public function countNewOrders(): int
+    {
+        $counts = $this->getCounts();
+
+        return $counts['new'] ?? 0;
+    }
+
+    /**
+     * @param array<string, mixed> $content
+     *
+     * @return array{new: int, inProgress: int}
+     */
+    private function normalizeCounts(array $content): array
+    {
+        $new = $this->extractCount($content, [
+            'new', 'New', 'new_orders', 'newOrders', 'status_1', '1',
+        ]);
+        $inProgress = $this->extractCount($content, [
+            'inProgress', 'in_progress', 'processing', 'in_processing', 'status_26', '26',
+        ]);
+
+        if (isset($content['statuses']) && is_array($content['statuses'])) {
+            $new = max($new, $this->extractCount($content['statuses'], ['1', 1, 'new']));
+            $inProgress = max($inProgress, $this->extractCount($content['statuses'], ['26', 26, '2', 2]));
+        }
+
+        return [
+            'new'        => $new,
+            'inProgress' => $inProgress,
+        ];
+    }
+
+    /**
+     * @param array<array-key, mixed> $data
+     * @param list<array-key>         $keys
+     */
+    private function extractCount(array $data, array $keys): int
+    {
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $data) && is_numeric($data[$key])) {
+                return max(0, (int) $data[$key]);
+            }
+        }
+
+        return 0;
     }
 
     /**
@@ -120,6 +181,45 @@ final class RozetkaSellerApiClient
         usort($orders, static fn (array $a, array $b): int => ($b['id'] ?? 0) <=> ($a['id'] ?? 0));
 
         return $orders;
+    }
+
+    /**
+     * Count marketplace orders placed in the given period (inclusive calendar days).
+     */
+    public function countOrdersCreatedBetween(\DateTimeInterface $from, \DateTimeInterface $to): int
+    {
+        if (! $this->isConfigured()) {
+            return 0;
+        }
+
+        try {
+            $response = $this->request('GET', '/orders/search', [
+                'page'         => 1,
+                'limit'        => 1,
+                'types'        => 1,
+                'created_from' => $from->format('Y-m-d'),
+                'created_to'   => $to->format('Y-m-d'),
+                'sort'         => '-id',
+            ]);
+        } catch (\Throwable $e) {
+            $this->logger->error('Rozetka orders count fetch failed.', [
+                'from'      => $from->format('Y-m-d'),
+                'to'        => $to->format('Y-m-d'),
+                'exception' => $e,
+            ]);
+
+            return 0;
+        }
+
+        $content = is_array($response['content'] ?? null) ? $response['content'] : [];
+        $meta = $content['_meta'] ?? $content['meta'] ?? null;
+        if (is_array($meta) && isset($meta['totalCount'])) {
+            return max(0, (int) $meta['totalCount']);
+        }
+
+        $orders = $content['orders'] ?? [];
+
+        return is_array($orders) ? count($orders) : 0;
     }
 
     /**
@@ -208,7 +308,12 @@ final class RozetkaSellerApiClient
                 continue;
             }
 
-            $map[$id] = $this->extractStatusLabel($status);
+            $label = $this->extractStatusLabel($status);
+            if ($label === '' || str_starts_with($label, 'Статус #')) {
+                continue;
+            }
+
+            $map[$id] = $label;
         }
 
         if ($map !== []) {

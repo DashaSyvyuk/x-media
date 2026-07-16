@@ -8,7 +8,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class RozetkaOrderPresenter
 {
-    /** @var array<int, string> */
+    /**
+     * Preferred seller workflow labels. Used as the primary source of Ukrainian titles.
+     *
+     * @var array<int, string>
+     */
     private const ALLOWED_STATUS_OPTIONS = [
         1  => 'Нове',
         26 => 'Обробляється менеджером',
@@ -69,7 +73,7 @@ final class RozetkaOrderPresenter
             $deliveryService['name'] ?? $delivery['delivery_service_name'] ?? null,
             '—',
         );
-        $list['canEdit'] = (bool) ($apiOrder['is_access_change_order'] ?? true);
+        $list['canEdit'] = $this->canEditOrder($apiOrder);
         $list['statusAvailable'] = $this->presentStatusOptions($apiOrder);
 
         return $list;
@@ -93,7 +97,7 @@ final class RozetkaOrderPresenter
             'status'          => $detail['status'],
             'statusId'        => $detail['statusId'],
             'statusAvailable' => $this->presentStatusOptions($apiOrder),
-            'canEditStatus'   => (bool) ($apiOrder['is_access_change_order'] ?? true),
+            'canEditStatus'   => $this->canEditOrder($apiOrder),
             'statusGroup'     => 'Rozetka',
             'total'           => $detail['total'],
             'phone'           => $detail['phone'],
@@ -115,28 +119,60 @@ final class RozetkaOrderPresenter
         $currentStatus = (int) ($apiOrder['status'] ?? 0);
         $statusData = is_array($apiOrder['status_data'] ?? null) ? $apiOrder['status_data'] : [];
         $labelMap = $this->apiClient->getStatusLabelMap();
+        $optionsById = [];
 
-        $options = [];
-        foreach (self::ALLOWED_STATUS_OPTIONS as $statusId => $defaultLabel) {
-            $options[] = [
+        $addOption = function (
+            int $statusId,
+            ?string $rawLabel = null,
+        ) use (
+            &$optionsById,
+            $currentStatus,
+            $statusData,
+            $labelMap,
+        ): void {
+            if ($statusId <= 0) {
+                return;
+            }
+
+            $optionsById[$statusId] = [
                 'id'    => $statusId,
-                'label' => $this->resolveStatusLabel($statusId, $statusData, $currentStatus, $labelMap, $defaultLabel),
+                'label' => $this->statusLabel(
+                    $statusId,
+                    $currentStatus,
+                    $statusData,
+                    $labelMap,
+                    $rawLabel,
+                ),
             ];
+        };
+
+        // Always seed with known workflow statuses so Ukrainian titles never disappear.
+        foreach (self::ALLOWED_STATUS_OPTIONS as $statusId => $_) {
+            $addOption($statusId);
         }
 
-        return $options;
+        // Only keep the known seller workflow. Extra API ids (often 320/447 without
+        // usable names) only pollute the select as "Статус #…".
+        if ($currentStatus > 0 && ! isset($optionsById[$currentStatus])) {
+            $addOption($currentStatus);
+        }
+
+        return array_values(array_filter(
+            $optionsById,
+            static fn (array $option): bool => ! str_starts_with($option['label'], 'Статус #'),
+        ));
     }
 
     /**
      * @param array<string, mixed> $statusData
-     * @param array<int, string>     $labelMap
+     * @param array<int, string>   $labelMap
      */
-    private function resolveStatusLabel(
+    private function statusLabel(
         int $statusId,
-        array $statusData,
         int $currentStatus,
+        array $statusData,
         array $labelMap,
-        ?string $defaultLabel = null,
+        ?string $rawLabel = null,
     ): string {
         if ($statusId === $currentStatus) {
             $currentLabel = $this->asString(
@@ -148,15 +184,45 @@ final class RozetkaOrderPresenter
             }
         }
 
-        if ($defaultLabel !== null && $defaultLabel !== '') {
-            return $defaultLabel;
+        if (isset(self::ALLOWED_STATUS_OPTIONS[$statusId])) {
+            return self::ALLOWED_STATUS_OPTIONS[$statusId];
         }
 
-        if (isset($labelMap[$statusId]) && $labelMap[$statusId] !== '') {
+        if (
+            isset($labelMap[$statusId])
+            && trim($labelMap[$statusId]) !== ''
+            && ! str_starts_with($labelMap[$statusId], 'Статус #')
+        ) {
             return $labelMap[$statusId];
         }
 
+        if ($rawLabel !== null && trim($rawLabel) !== '' && ! str_starts_with(trim($rawLabel), 'Статус #')) {
+            return trim($rawLabel);
+        }
+
         return 'Статус #' . $statusId;
+    }
+
+    /**
+     * @param array<string, mixed> $apiOrder
+     */
+    private function canEditOrder(array $apiOrder): bool
+    {
+        if (array_key_exists('is_access_change_order', $apiOrder)) {
+            if ((bool) $apiOrder['is_access_change_order']) {
+                return true;
+            }
+        }
+
+        // New Rozetka orders often need a first status change even when edit-flag is false.
+        $available = $apiOrder['status_available'] ?? null;
+        if (is_array($available) && $available !== []) {
+            return true;
+        }
+
+        $currentStatus = (int) ($apiOrder['status'] ?? 0);
+
+        return $currentStatus === 1 || isset(self::ALLOWED_STATUS_OPTIONS[$currentStatus]);
     }
 
     /**

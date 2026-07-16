@@ -73,8 +73,18 @@
                             <td class="text-end">{{ order_macros.money(item.price) }}</td>
                             <td>{{ vendor_macros.status_badge(item.status) }}</td>
                             <td>{{ item.createdAt|date('d.m.Y H:i') }}</td>
-                            <td class="text-end">
+                            <td class="text-end text-nowrap">
                                 <a href="{{ path('admin2_vendor_orders_edit', {id: item.id}) }}" class="btn btn-sm btn-outline-secondary">Редагувати</a>
+                                <form method="post"
+                                      action="{{ path('admin2_vendor_orders_delete', {id: item.id}) ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}"
+                                      class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('vendor_order_action') }}">
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger"
+                                            data-confirm="Видалити замовлення постачальника #{{ item.id }}?">
+                                        Видалити
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     {% else %}
@@ -84,4 +94,16 @@
             </table>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.querySelectorAll('[data-confirm]').forEach((button) => {
+            button.closest('form')?.addEventListener('submit', (event) => {
+                if (!window.confirm(button.dataset.confirm)) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
 {% endblock %}

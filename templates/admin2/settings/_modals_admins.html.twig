@@ -30,6 +30,10 @@
                         <label class="form-label">Телефон</label>
                         <input type="text" name="admin_user_settings[phone]" class="form-control">
                     </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" name="admin_user_settings[active]" value="1" class="form-check-input" id="createAdminActive" checked>
+                        <label class="form-check-label" for="createAdminActive">Активний</label>
+                    </div>
                     <div>
                         <label class="form-label d-block mb-2">Ролі</label>
                         {% for label, role in adminRoles %}
@@ -83,6 +87,10 @@
                     <div class="mb-3">
                         <label class="form-label">Телефон</label>
                         <input type="text" name="admin_user_settings[phone]" id="editAdminUserPhone" class="form-control">
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" name="admin_user_settings[active]" value="1" class="form-check-input" id="editAdminUserActive">
+                        <label class="form-check-label" for="editAdminUserActive">Активний</label>
                     </div>
                     <div>
                         <label class="form-label d-block mb-2">Ролі</label>

@@ -19,13 +19,13 @@ final class SettingsFopProfileController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/settings/fops', name: 'admin2_settings_fops_store', methods: ['POST'])]
+    #[Route('/admin/settings/fops', name: 'admin2_settings_fops_store', methods: ['POST'])]
     public function store(Request $request): Response
     {
         return $this->handleSave($request, new FopProfile(), false);
     }
 
-    #[Route('/admin2/settings/fops/{id}', name: 'admin2_settings_fops_update', methods: ['POST'])]
+    #[Route('/admin/settings/fops/{id}', name: 'admin2_settings_fops_update', methods: ['POST'])]
     public function update(Request $request, int $id): Response
     {
         $profile = $this->entityManager->getRepository(FopProfile::class)->find($id);
@@ -36,7 +36,7 @@ final class SettingsFopProfileController extends AbstractController
         return $this->handleSave($request, $profile, true);
     }
 
-    #[Route('/admin2/settings/fops/{id}/delete', name: 'admin2_settings_fops_delete', methods: ['POST'])]
+    #[Route('/admin/settings/fops/{id}/delete', name: 'admin2_settings_fops_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_settings_fop', (string) $request->request->get('_token'))) {

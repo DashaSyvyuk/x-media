@@ -24,7 +24,7 @@ class CategoryEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/categories/new', name: 'admin2_categories_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/categories/new', name: 'admin2_categories_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $category = new Category();
@@ -38,7 +38,7 @@ class CategoryEditController extends AbstractController
         return $this->handleForm($request, $category, true);
     }
 
-    #[Route('/admin2/categories/{id}/edit', name: 'admin2_categories_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/categories/{id}/edit', name: 'admin2_categories_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $category = $this->categoryRepository->find($id);

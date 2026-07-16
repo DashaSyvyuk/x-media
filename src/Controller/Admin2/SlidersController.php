@@ -21,7 +21,7 @@ class SlidersController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/sliders', name: 'admin2_sliders', methods: ['GET'])]
+    #[Route('/admin/sliders', name: 'admin2_sliders', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -45,7 +45,7 @@ class SlidersController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/sliders/{id}/delete', name: 'admin2_sliders_delete', methods: ['POST'])]
+    #[Route('/admin/sliders/{id}/delete', name: 'admin2_sliders_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_slider_action', (string) $request->request->get('_token'))) {

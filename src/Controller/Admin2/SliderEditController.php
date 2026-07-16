@@ -24,7 +24,7 @@ class SliderEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/sliders/new', name: 'admin2_sliders_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/sliders/new', name: 'admin2_sliders_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $slider = new Slider();
@@ -37,7 +37,7 @@ class SliderEditController extends AbstractController
         return $this->handleForm($request, $slider, true);
     }
 
-    #[Route('/admin2/sliders/{id}/edit', name: 'admin2_sliders_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/sliders/{id}/edit', name: 'admin2_sliders_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $slider = $this->sliderRepository->find($id);

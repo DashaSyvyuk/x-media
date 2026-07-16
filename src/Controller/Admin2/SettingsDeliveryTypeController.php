@@ -26,7 +26,7 @@ class SettingsDeliveryTypeController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/settings/delivery-types/new', name: 'admin2_settings_delivery_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/settings/delivery-types/new', name: 'admin2_settings_delivery_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $this->imageUploadSubscriber->ensureLocalDirFor(DeliveryType::class);
@@ -43,7 +43,7 @@ class SettingsDeliveryTypeController extends AbstractController
     }
 
     #[Route(
-        '/admin2/settings/delivery-types/{id}/edit',
+        '/admin/settings/delivery-types/{id}/edit',
         name: 'admin2_settings_delivery_edit',
         methods: ['GET', 'POST'],
     )]
@@ -59,7 +59,7 @@ class SettingsDeliveryTypeController extends AbstractController
         return $this->handleForm($request, $deliveryType, false);
     }
 
-    #[Route('/admin2/settings/delivery-types/{id}/delete', name: 'admin2_settings_delivery_delete', methods: ['POST'])]
+    #[Route('/admin/settings/delivery-types/{id}/delete', name: 'admin2_settings_delivery_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_settings_delivery', (string) $request->request->get('_token'))) {

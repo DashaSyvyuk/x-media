@@ -26,7 +26,7 @@
     };
 
     async function loadFops() {
-        const response = await fetch('/admin2/invoices/fops', { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+        const response = await fetch('/admin/invoices/fops', { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
         const data = await response.json().catch(() => ({}));
         if (!response.ok) {
             throw new Error(data.error || 'Не вдалося завантажити ФОП');
@@ -84,7 +84,7 @@
 
         generateBtn.disabled = true;
         try {
-            const response = await fetch(`/admin2/orders/${currentOrderId}/invoice`, {
+            const response = await fetch(`/admin/orders/${currentOrderId}/invoice`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -21,7 +21,7 @@ class FilterEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/filters/new', name: 'admin2_filters_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/filters/new', name: 'admin2_filters_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $filter = new Filter();
@@ -49,7 +49,7 @@ class FilterEditController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/filters/{id}/edit', name: 'admin2_filters_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/filters/{id}/edit', name: 'admin2_filters_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $filter = $this->filterRepository->find($id);

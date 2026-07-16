@@ -5,7 +5,7 @@ document.querySelectorAll('.js-edit-payment-type').forEach((button) => {
             return;
         }
 
-        form.action = `/admin2/settings/payment-types/${button.dataset.id}`;
+        form.action = `/admin/settings/payment-types/${button.dataset.id}`;
         document.getElementById('editPaymentTypeTitle').value = button.dataset.title || '';
         document.getElementById('editPaymentTypeCost').value = button.dataset.cost || '0';
         document.getElementById('editPaymentTypeEnabled').checked = button.dataset.enabled === '1';

@@ -1,0 +1,163 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+
+{% block title %}Статистика · Фінанси — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/debtors.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/statistics.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="stats-page stats-page--finance"
+         data-finance='{{ {
+             circulations: {
+                 chart: stats.circulations.chart,
+                 owedToYouByCurrency: stats.circulations.owedToYouByCurrency,
+                 youOweByCurrency: stats.circulations.youOweByCurrency
+             },
+             debtors: stats.debtors ? {
+                 chart: stats.debtors.chart,
+                 owedToYouByCurrency: stats.debtors.owedToYouByCurrency,
+                 youOweByCurrency: stats.debtors.youOweByCurrency
+             } : null
+         }|json_encode|e('html_attr') }}'>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 page-header-row">
+            <div>
+                <h1 class="page-title mb-1">Фінанси</h1>
+                <p class="text-muted mb-0 small">Поточний стан активних кас{% if is_granted('ROLE_SUPER_ADMIN') %} і боргів{% endif %}</p>
+            </div>
+        </div>
+
+        <div class="stats-finance-section mb-4">
+            <div class="d-flex flex-wrap align-items-end justify-content-between gap-2 mb-3">
+                <div>
+                    <h2 class="stats-chart-title mb-0">Активні каси</h2>
+                    <p class="text-muted small mb-0">Позитивний баланс — на рахунку, негативний — у мінусі</p>
+                </div>
+                <a href="{{ path('admin2_circulations') }}" class="stats-finance-link">Обіг →</a>
+            </div>
+            <div class="debt-stat-grid debt-stat-grid--compact">
+                        <div class="debt-stat-card__value">{{ stats.circulations.accounts|number_format(0, '.', ' ') }}</div>
+                    </div>
+                </div>
+                <div class="card debt-stat-card debt-stat-card--positive">
+                    <div class="debt-stat-card__body">
+                        <div class="debt-stat-card__label">На рахунку</div>
+                        {% if stats.circulations.owedToYouByCurrency %}
+                            <div class="debt-stat-card__values">
+                                {% for item in stats.circulations.owedToYouByCurrency %}
+                                    <div class="debt-stat-card__value-line">+{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}</div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="debt-stat-card__value debt-stat-card__value--empty">—</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-xl-7">
+                    <div class="card stats-chart-card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <h3 class="stats-chart-title mb-1">Баланси кас</h3>
+                            <p class="text-muted small mb-3">Активні каси за сумою балансу</p>
+                            <div class="stats-chart-wrap stats-chart-wrap--finance">
+                                <canvas id="statsCirculationBalancesChart" aria-label="Баланси кас"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-5">
+                    <div class="card stats-chart-card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <h3 class="stats-chart-title mb-1">Частка кас</h3>
+                            <p class="text-muted small mb-3">Розподіл коштів між активними касами</p>
+                            <div class="stats-chart-wrap stats-chart-wrap--finance">
+                                <canvas id="statsCirculationShareChart" aria-label="Частка кас"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if is_granted('ROLE_SUPER_ADMIN') and stats.debtors %}
+            <div class="stats-finance-section">
+                <div class="d-flex flex-wrap align-items-end justify-content-between gap-2 mb-3">
+                    <div>
+                        <h2 class="stats-chart-title mb-0">Активні борги</h2>
+                        <p class="text-muted small mb-0">Позитивний баланс — вам винні, негативний — ви винні</p>
+                    </div>
+                    <a href="{{ path('admin2_debtors') }}" class="stats-finance-link">Борги →</a>
+                </div>
+                <div class="debt-stat-grid">
+                    <div class="card debt-stat-card">
+                        <div class="debt-stat-card__body">
+                            <div class="debt-stat-card__label">Контактів</div>
+                            <div class="debt-stat-card__value">{{ stats.debtors.contacts|number_format(0, '.', ' ') }}</div>
+                        </div>
+                    </div>
+                    <div class="card debt-stat-card debt-stat-card--positive">
+                        <div class="debt-stat-card__body">
+                            <div class="debt-stat-card__label">Вам винні</div>
+                            {% if stats.debtors.owedToYouByCurrency %}
+                                <div class="debt-stat-card__values">
+                                    {% for item in stats.debtors.owedToYouByCurrency %}
+                                        <div class="debt-stat-card__value-line">+{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="debt-stat-card__value debt-stat-card__value--empty">—</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card debt-stat-card debt-stat-card--negative">
+                        <div class="debt-stat-card__body">
+                            <div class="debt-stat-card__label">Ви винні</div>
+                            {% if stats.debtors.youOweByCurrency %}
+                                <div class="debt-stat-card__values">
+                                    {% for item in stats.debtors.youOweByCurrency %}
+                                        <div class="debt-stat-card__value-line">{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="debt-stat-card__value debt-stat-card__value--empty">—</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-xl-8">
+                        <div class="card stats-chart-card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <h3 class="stats-chart-title mb-1">Баланси контактів</h3>
+                                <p class="text-muted small mb-3">Активні борги за сумою балансу</p>
+                                <div class="stats-chart-wrap stats-chart-wrap--finance">
+                                    <canvas id="statsDebtorBalancesChart" aria-label="Баланси боргів"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card stats-chart-card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <h3 class="stats-chart-title mb-1">Структура боргів</h3>
+                                <p class="text-muted small mb-3">Вам винні vs ви винні</p>
+                                <div class="stats-chart-wrap">
+                                    <canvas id="statsDebtorStructureChart" aria-label="Структура боргів"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="{{ asset('js/admin2-statistics-finance.js') }}" defer></script>
+{% endblock %}

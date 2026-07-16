@@ -25,7 +25,7 @@ class DebtorShowController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/debtors/{id}', name: 'admin2_debtors_show', methods: ['GET'])]
+    #[Route('/admin/debtors/{id}', name: 'admin2_debtors_show', methods: ['GET'])]
     public function show(int $id): Response
     {
         $debtor = $this->findDebtor($id);
@@ -33,7 +33,7 @@ class DebtorShowController extends AbstractController
         return $this->renderShow($debtor);
     }
 
-    #[Route('/admin2/debtors/{id}/settings', name: 'admin2_debtors_settings', methods: ['POST'])]
+    #[Route('/admin/debtors/{id}/settings', name: 'admin2_debtors_settings', methods: ['POST'])]
     public function updateSettings(Request $request, int $id): Response
     {
         $debtor = $this->findDebtor($id);
@@ -50,7 +50,7 @@ class DebtorShowController extends AbstractController
         return $this->redirectToRoute('admin2_debtors_show', ['id' => $debtor->getId()]);
     }
 
-    #[Route('/admin2/debtors/{id}/payments', name: 'admin2_debtors_payments_create', methods: ['POST'])]
+    #[Route('/admin/debtors/{id}/payments', name: 'admin2_debtors_payments_create', methods: ['POST'])]
     public function createPayment(Request $request, int $id): Response
     {
         $debtor  = $this->findDebtor($id);
@@ -75,7 +75,7 @@ class DebtorShowController extends AbstractController
         return $this->redirectToRoute('admin2_debtors_show', ['id' => $debtor->getId()]);
     }
 
-    #[Route('/admin2/debtors/{id}/payments/{paymentId}/edit', name: 'admin2_debtors_payments_edit', methods: ['POST'])]
+    #[Route('/admin/debtors/{id}/payments/{paymentId}/edit', name: 'admin2_debtors_payments_edit', methods: ['POST'])]
     public function editPayment(Request $request, int $id, int $paymentId): Response
     {
         $debtor  = $this->findDebtor($id);
@@ -95,7 +95,7 @@ class DebtorShowController extends AbstractController
     }
 
     #[Route(
-        '/admin2/debtors/{id}/payments/{paymentId}/delete',
+        '/admin/debtors/{id}/payments/{paymentId}/delete',
         name: 'admin2_debtors_payments_delete',
         methods: ['POST'],
     )]

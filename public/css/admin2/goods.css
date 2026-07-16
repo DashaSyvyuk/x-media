@@ -1,0 +1,304 @@
+.planning-goods-page {
+    padding-bottom: 1.5rem;
+}
+
+.planning-goods-view-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+}
+
+.planning-goods-view-tabs .btn-filter.active {
+    background: #212529;
+    border-color: #212529;
+    color: #fff;
+}
+
+.planning-goods-blocks {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+
+.planning-goods-block {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.85rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    overflow: hidden;
+    align-self: start;
+}
+
+.planning-goods-block.is-sold-out {
+    border-color: #86efac;
+    background: #dcfce7;
+}
+
+.planning-goods-block.is-sold-out .planning-goods-block__toggle:hover {
+    background: #bbf7d0;
+}
+
+.planning-goods-block.is-sold-out .planning-goods-block__date {
+    background: #bbf7d0;
+}
+
+.planning-goods-block.is-sold-out .planning-goods-block__actions {
+    border-left-color: #86efac;
+    background: #dcfce7;
+}
+
+.planning-goods-block.is-sold-out .planning-goods-block__panel-inner {
+    background: #f0fdf4;
+}
+
+.planning-goods-block.is-open {
+    grid-column: 1 / -1;
+}
+
+.planning-goods-block__header {
+    display: flex;
+    align-items: stretch;
+}
+
+.planning-goods-block__toggle {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    padding: 0.85rem 0.75rem 0.85rem 0.85rem;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+}
+
+.planning-goods-block__toggle:hover {
+    background: #f8fafc;
+}
+
+.planning-goods-block__date {
+    text-align: center;
+    padding: 0.35rem 0.25rem;
+    border-radius: 0.65rem;
+    background: #f1f5f9;
+}
+
+.planning-goods-block__day {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #0f172a;
+}
+
+.planning-goods-block__month {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #64748b;
+}
+
+.planning-goods-block__body {
+    min-width: 0;
+}
+
+.planning-goods-block__title {
+    display: block;
+    font-size: 0.95rem;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.planning-goods-block__meta {
+    margin-top: 0.2rem;
+    font-size: 0.78rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.planning-goods-block__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+    padding: 0.45rem 0.65rem;
+    border-left: 1px solid #e2e8f0;
+    background: #fff;
+}
+
+.planning-goods-block__chevron {
+    font-size: 1rem;
+    color: #64748b;
+    transition: transform 0.2s ease;
+}
+
+.planning-goods-block.is-open .planning-goods-block__chevron {
+    transform: rotate(180deg);
+}
+
+.planning-goods-block__panel {
+    display: none;
+    border-top: 1px solid #e2e8f0;
+    background: #fcfdfe;
+}
+
+.planning-goods-block.is-open .planning-goods-block__panel {
+    display: block;
+}
+
+.planning-goods-block__panel-inner {
+    padding: 0.85rem 1rem 1rem;
+}
+
+.planning-goods-block__empty {
+    padding: 1rem 0.25rem 0.5rem;
+    font-size: 0.92rem;
+}
+
+.planning-goods-block__footer {
+    margin-top: 0.75rem;
+}
+
+.planning-goods-table-card {
+    overflow: hidden;
+}
+
+.planning-goods-table thead th {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+.planning-goods-table tfoot td {
+    border-top: 2px solid #cbd5e1;
+}
+
+.planning-goods-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.35em 0.65em;
+}
+
+.planning-goods-badge--sold {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.planning-goods-badge--available {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.planning-goods-grand-total {
+    margin-top: 0.5rem;
+}
+
+.planning-goods-totals-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem 1rem;
+}
+
+.planning-goods-totals-grid--grand {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.planning-goods-total-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.planning-goods-total-item__label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #64748b;
+}
+
+.planning-goods-total-item__value {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+}
+
+@media (max-width: 1199.98px) {
+    .planning-goods-blocks {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767.98px) {
+    .planning-goods-blocks {
+        grid-template-columns: 1fr;
+    }
+
+    .planning-goods-totals-grid,
+    .planning-goods-totals-grid--grand {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .planning-goods-block__toggle {
+        grid-template-columns: 52px minmax(0, 1fr) auto;
+        gap: 0.65rem;
+    }
+}
+
+.planning-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #64748b;
+}
+
+.planning-empty i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.75rem;
+    opacity: 0.55;
+}
+
+.planning-goods-view-tabs .btn-filter {
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+}
+
+.planning-goods-view-tabs .btn-filter.active {
+    background: #0d9488;
+    border-color: #0d9488;
+    color: #fff;
+}
+
+.planning-goods-block__date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    min-height: 56px;
+    border-radius: 12px;
+    background: #f1f5f9;
+}
+
+.planning-goods-block__day {
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #0f172a;
+}

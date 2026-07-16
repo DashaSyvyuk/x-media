@@ -28,28 +28,33 @@ class OrderProcessingController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/orders/processing', name: 'admin2_orders_processing', methods: ['GET'])]
+    #[Route('/admin/orders/processing', name: 'admin2_orders_processing', methods: ['GET'])]
     public function index(): Response
     {
-        $greenOrders = [];
-        $otherOrders = [];
+        $packingOrders = [];
+        $newOrders = [];
+        $processingOrders = [];
 
         foreach ($this->customerBoardProvider->getCustomerOrders($this->isGranted('ROLE_SUPER_ADMIN')) as $order) {
-            if ($this->fulfillmentStatusHelper->isGreenTone((string) ($order['statusTone'] ?? ''))) {
-                $greenOrders[] = $order;
-            } else {
-                $otherOrders[] = $order;
+            $tone = (string) ($order['statusTone'] ?? '');
+            if ($this->fulfillmentStatusHelper->isPackingTone($tone)) {
+                $packingOrders[] = $order;
+            } elseif ($this->fulfillmentStatusHelper->isNewTone($tone)) {
+                $newOrders[] = $order;
+            } elseif ($this->fulfillmentStatusHelper->isProcessingTone($tone)) {
+                $processingOrders[] = $order;
             }
         }
 
         return $this->render('admin2/orders/processing.html.twig', [
-            'greenOrders'     => $greenOrders,
-            'otherOrders'     => $otherOrders,
-            'statusFormRoute' => 'admin2_orders_processing_status',
+            'packingOrders'    => $packingOrders,
+            'newOrders'        => $newOrders,
+            'processingOrders' => $processingOrders,
+            'statusFormRoute'  => 'admin2_orders_processing_status',
         ]);
     }
 
-    #[Route('/admin2/orders/processing/status', name: 'admin2_orders_processing_status', methods: ['POST'])]
+    #[Route('/admin/orders/processing/status', name: 'admin2_orders_processing_status', methods: ['POST'])]
     public function updateStatus(Request $request): Response
     {
         if (! $this->isCsrfTokenValid('fulfillment_action', (string) $request->request->get('_token'))) {

@@ -1,0 +1,63 @@
+<div class="modal fade" id="createPlanModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {{ form_start(createForm, { action: path('admin2_planning_store'), attr: { novalidate: 'novalidate' } }) }}
+                <div class="modal-header">
+                    <h5 class="modal-title">Новий план</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(createForm.scheduledDate) }}
+                    {{ form_row(createForm.assignee) }}
+                    {{ form_row(createForm.title) }}
+                    {{ form_row(createForm.body) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Створити</button>
+                </div>
+            {{ form_end(createForm) }}
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editPlanModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" id="editPlanForm" action="">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редагувати план</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_action') }}">
+                    <input type="hidden" name="show" id="editPlanShow" value="">
+                    <div class="mb-3">
+                        <label class="form-label" for="editPlanDate">Дата</label>
+                        <input type="date" name="admin_plan[scheduledDate]" id="editPlanDate" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="editPlanAssignee">Призначити</label>
+                        <select name="admin_plan[assignee]" id="editPlanAssignee" class="form-select" required>
+                            {% for admin in admins %}
+                                <option value="{{ admin.id }}">{{ admin.name }} {{ admin.surname }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="editPlanTitle">Назва</label>
+                        <input type="text" name="admin_plan[title]" id="editPlanTitle" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="editPlanBody">Текст</label>
+                        <textarea name="admin_plan[body]" id="editPlanBody" class="form-control" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

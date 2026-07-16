@@ -21,7 +21,7 @@ class PromotionsController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/promotions', name: 'admin2_promotions', methods: ['GET'])]
+    #[Route('/admin/promotions', name: 'admin2_promotions', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -51,7 +51,7 @@ class PromotionsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/promotions/{id}/delete', name: 'admin2_promotions_delete', methods: ['POST'])]
+    #[Route('/admin/promotions/{id}/delete', name: 'admin2_promotions_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_promotion_action', (string) $request->request->get('_token'))) {

@@ -21,7 +21,7 @@ class InStockEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/in-stock/new', name: 'admin2_in_stock_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/in-stock/new', name: 'admin2_in_stock_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $stock = new InStock();
@@ -29,7 +29,7 @@ class InStockEditController extends AbstractController
         return $this->handleForm($request, $stock, true);
     }
 
-    #[Route('/admin2/in-stock/{id}/edit', name: 'admin2_in_stock_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/in-stock/{id}/edit', name: 'admin2_in_stock_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $stock = $this->inStockRepository->find($id);

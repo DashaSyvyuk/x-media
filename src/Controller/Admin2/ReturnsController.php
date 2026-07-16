@@ -23,7 +23,7 @@ class ReturnsController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/returns', name: 'admin2_returns', methods: ['GET'])]
+    #[Route('/admin/returns', name: 'admin2_returns', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -57,7 +57,7 @@ class ReturnsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/returns/new', name: 'admin2_returns_new', methods: ['POST'])]
+    #[Route('/admin/returns/new', name: 'admin2_returns_new', methods: ['POST'])]
     public function create(Request $request): Response
     {
         $return = $this->createReturn();
@@ -78,7 +78,7 @@ class ReturnsController extends AbstractController
         return $this->redirectToRoute('admin2_returns');
     }
 
-    #[Route('/admin2/returns/{id}/delete', name: 'admin2_returns_delete', methods: ['POST'])]
+    #[Route('/admin/returns/{id}/delete', name: 'admin2_returns_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_return_action', (string) $request->request->get('_token'))) {

@@ -21,7 +21,7 @@ class PromotionEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/promotions/new', name: 'admin2_promotions_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/promotions/new', name: 'admin2_promotions_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $promotion = new Promotion();
@@ -35,7 +35,7 @@ class PromotionEditController extends AbstractController
         return $this->handleForm($request, $promotion, true);
     }
 
-    #[Route('/admin2/promotions/{id}/edit', name: 'admin2_promotions_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/promotions/{id}/edit', name: 'admin2_promotions_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $promotion = $this->promotionRepository->find($id);

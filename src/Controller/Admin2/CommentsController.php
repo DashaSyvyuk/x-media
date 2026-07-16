@@ -22,7 +22,7 @@ class CommentsController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/comments', name: 'admin2_comments', methods: ['GET'])]
+    #[Route('/admin/comments', name: 'admin2_comments', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $search    = trim((string) $request->query->get('q', ''));
@@ -54,7 +54,7 @@ class CommentsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/comments/{id}/delete', name: 'admin2_comments_delete', methods: ['POST'])]
+    #[Route('/admin/comments/{id}/delete', name: 'admin2_comments_delete', methods: ['POST'])]
     public function delete(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_comment_action', (string) $request->request->get('_token'))) {

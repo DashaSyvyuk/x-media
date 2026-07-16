@@ -158,4 +158,43 @@ class DebtorRepository extends ServiceEntityRepository
             'youOweByCurrency'    => $oweList,
         ];
     }
+
+    /**
+     * @return list<array{id: int, label: string, code: string, balance: int}>
+     */
+    public function getActiveBalancesForChart(int $limit = 20): array
+    {
+        $rows = $this->createQueryBuilder('d')
+            ->select(
+                'd.id AS id',
+                'd.name AS name',
+                'c.code AS currencyCode',
+                '(SELECT COALESCE(SUM(p.sum), 0) FROM ' . DebtorPayment::class
+                . ' p WHERE p.debtor = d) AS balance',
+            )
+            ->addSelect(
+                '(SELECT COALESCE(SUM(p2.sum), 0) FROM ' . DebtorPayment::class
+                . ' p2 WHERE p2.debtor = d) AS HIDDEN balanceSort',
+            )
+            ->join('d.currency', 'c')
+            ->andWhere('d.active = :active')
+            ->setParameter('active', true)
+            ->orderBy('balanceSort', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getScalarResult();
+
+        $result = [];
+        foreach ($rows as $row) {
+            $name = trim((string) ($row['name'] ?? ''));
+            $result[] = [
+                'id'      => (int) $row['id'],
+                'label'   => $name !== '' ? $name : ('Контакт #' . (int) $row['id']),
+                'code'    => (string) $row['currencyCode'],
+                'balance' => (int) $row['balance'],
+            ];
+        }
+
+        return $result;
+    }
 }

@@ -427,7 +427,7 @@
             $btn.prop('disabled', true);
 
             try {
-                const res = await fetch('/admin/control-price/update', {
+                const res = await fetch('/admin2/control-price/update', {
                     method: 'POST',
                     headers: {'Content-Type':'application/json'},
                     body: JSON.stringify(payload),

@@ -21,7 +21,7 @@ class FeedbackEditController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/feedbacks/{id}/edit', name: 'admin2_feedbacks_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/feedbacks/{id}/edit', name: 'admin2_feedbacks_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $feedback = $this->feedbackRepository->find($id);

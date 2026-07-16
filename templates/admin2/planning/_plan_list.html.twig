@@ -1,0 +1,93 @@
+{% if plansByDate is empty %}
+    <div class="planning-empty planning-empty--compact">
+        <i class="bi bi-calendar-x"></i>
+        <p class="mb-0">{{ emptyMessage }}</p>
+    </div>
+{% else %}
+    {% for dateKey, dayPlans in plansByDate %}
+        {% set isToday = dateKey == todayKey %}
+        {% set isPast = dateKey < todayKey %}
+        <section class="planning-date-group">
+            <h3 class="planning-date-label {{ isToday ? 'planning-date-label--today' : (isPast ? 'planning-date-label--past' : '') }}">
+                <i class="bi bi-calendar3"></i>
+                {{ dateKey|date('d.m.Y') }}
+                {% if isToday %}
+                    <span class="badge text-bg-warning">Сьогодні</span>
+                {% elseif isPast %}
+                    <span class="badge text-bg-secondary">Минуле</span>
+                {% endif %}
+            </h3>
+
+            <div class="planning-cards">
+                {% for plan in dayPlans %}
+                    {% set bucket = isToday ? 'today' : (isPast ? 'past' : 'future') %}
+                    <article class="plan-item plan-item--{{ plan.completed ? 'completed' : bucket }}">
+                        <div class="plan-item__body">
+                            <div class="plan-item__badges">
+                                {% if plan.completed %}
+                                    <span class="badge text-bg-success">Виконано</span>
+                                {% endif %}
+                                <span class="badge text-bg-light text-dark border">
+                                    <i class="bi bi-person"></i>
+                                    {{ plan.assignee.name }} {{ plan.assignee.surname }}
+                                </span>
+                            </div>
+                            <h4 class="plan-item__title">{{ plan.title }}</h4>
+                            {% if plan.body %}
+                                <div class="plan-item__description">{{ plan.body|nl2br }}</div>
+                            {% endif %}
+                            {% if plan.completed and plan.completedAt %}
+                                <div class="text-muted small mt-1">
+                                    Виконано {{ plan.completedAt|date('d.m.Y H:i') }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="plan-item__actions">
+                            <form method="post" action="{{ path('admin2_planning_complete', {id: plan.id}) }}" class="d-inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_action') }}">
+                                {% if showCompleted %}
+                                    <input type="hidden" name="show" value="completed">
+                                {% endif %}
+                                {% if plan.completed %}
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary" title="Повернути в активні">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-sm btn-success" title="Позначити виконаним">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                {% endif %}
+                            </form>
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-secondary js-edit-plan"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editPlanModal"
+                                    data-id="{{ plan.id }}"
+                                    data-date="{{ plan.scheduledDate|date('Y-m-d') }}"
+                                    data-assignee-id="{{ plan.assignee.id }}"
+                                    data-assignee-name="{{ (plan.assignee.name ~ ' ' ~ plan.assignee.surname)|e('html_attr') }}"
+                                    data-title="{{ plan.title|e('html_attr') }}"
+                                    data-body="{{ plan.body|default('')|e('html_attr') }}"
+                                    data-show="{{ showCompleted ? 'completed' : '' }}"
+                                    title="Редагувати">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <form method="post" action="{{ path('admin2_planning_delete', {id: plan.id}) }}" class="d-inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_action') }}">
+                                {% if showCompleted %}
+                                    <input type="hidden" name="show" value="completed">
+                                {% endif %}
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-danger"
+                                        data-confirm="Видалити план «{{ plan.title|e('html_attr') }}»?"
+                                        title="Видалити">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+    {% endfor %}
+{% endif %}

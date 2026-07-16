@@ -20,7 +20,7 @@ class OrderReceiptController extends AbstractController
     ) {
     }
 
-    #[Route('/admin2/receipts/data/{type}/{id}', name: 'admin2_receipts_data', methods: ['GET'])]
+    #[Route('/admin/receipts/data/{type}/{id}', name: 'admin2_receipts_data', methods: ['GET'])]
     public function data(string $type, int $id): JsonResponse
     {
         try {
@@ -36,7 +36,7 @@ class OrderReceiptController extends AbstractController
         return $this->json($payload);
     }
 
-    #[Route('/admin2/receipts/amount-words', name: 'admin2_receipts_amount_words', methods: ['GET'])]
+    #[Route('/admin/receipts/amount-words', name: 'admin2_receipts_amount_words', methods: ['GET'])]
     public function amountWords(Request $request): JsonResponse
     {
         $amount = max(0, $request->query->getInt('amount'));
@@ -46,7 +46,7 @@ class OrderReceiptController extends AbstractController
         ]);
     }
 
-    #[Route('/admin2/receipts/generate', name: 'admin2_receipts_generate', methods: ['POST'])]
+    #[Route('/admin/receipts/generate', name: 'admin2_receipts_generate', methods: ['POST'])]
     public function generate(Request $request): Response
     {
         if (! $this->isCsrfTokenValid('receipt_generate', (string) $request->headers->get('X-CSRF-Token'))) {
