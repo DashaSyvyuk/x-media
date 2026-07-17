@@ -259,10 +259,18 @@
                     {% if dash.activeOrders %}
                         <div class="dashboard-order-list">
                             {% for order in dash.activeOrders %}
+                                {% set orderUrl = order.isRozetka|default(false)
+                                    ? path('admin2_rozetka_orders_show', {id: order.id})
+                                    : path('admin2_orders_edit', {id: order.id}) %}
                                 <div class="dashboard-order-row">
                                     <div class="dashboard-order-row__main">
                                         <div class="dashboard-order-row__id">
-                                            <span class="dashboard-order-num">{{ order.orderNumber ?: ('#' ~ order.id) }}</span>
+                                            <span class="dashboard-order-num">
+                                                {{ order.orderNumber ?: ('#' ~ order.id) }}
+                                                {% if order.isRozetka|default(false) %}
+                                                    <span class="dashboard-order-source">RZ</span>
+                                                {% endif %}
+                                            </span>
                                             <span class="dashboard-meta">{{ order.createdAt|date('d.m H:i') }}</span>
                                         </div>
                                         <div class="dashboard-order-row__customer">
@@ -273,9 +281,14 @@
                                         </div>
                                     </div>
                                     <div class="dashboard-order-row__side">
-                                        {{ order_macros.order_status_badge(order.status) }}
+                                        {% if order.isRozetka|default(false) %}
+                                            <span class="order-status-badge" style="--status-color: {{ order.statusColor|default('#00a046') }}">{{ order.statusLabel }}</span>
+                                        {% else %}
+                                            {{ order_macros.order_status_badge(order.status) }}
+                                        {% endif %}
+                                        {{ order_macros.payment_status_badge(order.paymentStatus|default(false)) }}
                                         <span class="dashboard-order-sum">{{ order.total|number_format(0, '.', ' ') }} ₴</span>
-                                        <a href="{{ path('admin2_orders_edit', {id: order.id}) }}" class="dashboard-open-btn" title="Відкрити">
+                                        <a href="{{ orderUrl }}" class="dashboard-open-btn" title="Відкрити">
                                             <i class="bi bi-arrow-right"></i>
                                         </a>
                                     </div>

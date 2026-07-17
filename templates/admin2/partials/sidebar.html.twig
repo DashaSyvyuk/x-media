@@ -9,6 +9,7 @@
     or currentRoute == 'admin2_orders_new'
     or currentRoute starts with 'admin2_orders_edit' %}
 {% set ordersProcessingActive = currentRoute starts with 'admin2_orders_processing' %}
+{% set ordersDeliveringActive = currentRoute starts with 'admin2_orders_delivering' %}
 {% set stockOpen = currentRoute starts with 'admin2_in_stock' or currentRoute starts with 'admin2_warehouse' %}
 {% set supplyOpen = currentRoute starts with 'admin2_vendor_order' or currentRoute starts with 'admin2_supplier' %}
 {% set contentOpen = currentRoute starts with 'admin2_product'
@@ -119,6 +120,11 @@
                     <i class="bi bi-kanban-fill"></i>
                     <span>Обробка</span>
                 </a>
+                <a href="{{ path('admin2_orders_delivering') }}"
+                   class="sidebar-sublink {{ ordersDeliveringActive ? 'active' : '' }}">
+                    <i class="bi bi-truck"></i>
+                    <span>Доставляється</span>
+                </a>
                 <a href="{{ path('admin2_rozetka_orders') }}"
                    class="sidebar-sublink {{ currentRoute starts with 'admin2_rozetka_order' ? 'active' : '' }}">
                     <i class="bi bi-shop-window"></i>
@@ -165,6 +171,11 @@
                    class="sidebar-sublink {{ ordersProcessingActive ? 'active' : '' }}">
                     <i class="bi bi-kanban-fill"></i>
                     <span>Обробка</span>
+                </a>
+                <a href="{{ path('admin2_orders_delivering') }}"
+                   class="sidebar-sublink {{ ordersDeliveringActive ? 'active' : '' }}">
+                    <i class="bi bi-truck"></i>
+                    <span>Доставляється</span>
                 </a>
             </div>
         </div>

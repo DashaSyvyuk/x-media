@@ -52,6 +52,7 @@
                             <th>№ Rozetka</th>
                             <th>Дата</th>
                             <th>Статус</th>
+                            <th>Оплата</th>
                             <th>Клієнт</th>
                             <th>Телефон</th>
                             <th>ТТН</th>
@@ -61,15 +62,20 @@
                     </thead>
                     <tbody>
                         {% if not configured %}
-                            <tr><td colspan="8" class="text-center text-muted py-5">Налаштуйте ROZETKA_SELLER_* у .env.local</td></tr>
+                            <tr><td colspan="9" class="text-center text-muted py-5">Налаштуйте ROZETKA_SELLER_* у .env.local</td></tr>
                         {% elseif orders is empty %}
-                            <tr><td colspan="8" class="text-center text-muted py-5">Активних замовлень немає</td></tr>
+                            <tr><td colspan="9" class="text-center text-muted py-5">Активних замовлень немає</td></tr>
                         {% else %}
                             {% for order in orders %}
                                 <tr>
                                     <td><strong>#{{ order.id }}</strong></td>
                                     <td>{{ order.created|slice(0, 16)|replace({'T': ' '}) }}</td>
-                                    <td><span class="badge bg-warning-subtle text-warning-emphasis">{{ order.status }}</span></td>
+                                    <td>
+                                        <span class="rozetka-status-badge rozetka-status-badge--{{ order.statusTone|default('default') }}">
+                                            {{ order.status }}
+                                        </span>
+                                    </td>
+                                    <td>{{ order_macros.payment_status_badge(order.paymentStatus|default(false)) }}</td>
                                     <td>{{ order.recipient ?: '—' }}</td>
                                     <td>{{ order.phone ?: '—' }}</td>
                                     <td>{{ order.ttn ?: '—' }}</td>

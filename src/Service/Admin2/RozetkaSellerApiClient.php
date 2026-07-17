@@ -16,8 +16,8 @@ final class RozetkaSellerApiClient
     private const COUNTS_CACHE_KEY = 'rozetka_orders_counts';
     private const COUNTS_TTL = 60;
 
-    /** @var int[] New + in processing */
-    public const ACTIVE_TYPES = [4, 2];
+    /** @var int[] New + in processing + delivering */
+    public const ACTIVE_TYPES = [4, 2, 5];
 
     private const ORDER_EXPAND = 'user,delivery,delivery_service,purchases,status_data,status_available,'
         . 'is_access_change_order,total_quantity,item_details';
@@ -220,6 +220,96 @@ final class RozetkaSellerApiClient
         $orders = $content['orders'] ?? [];
 
         return is_array($orders) ? count($orders) : 0;
+    }
+
+    /**
+     * Orders created in period with purchases (for stats / top products).
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function fetchOrdersCreatedBetween(
+        \DateTimeInterface $from,
+        \DateTimeInterface $to,
+        int $maxPages = 15,
+        int $pageSize = 100,
+    ): array {
+        if (! $this->isConfigured()) {
+            return [];
+        }
+
+        $orders = [];
+        $seenIds = [];
+
+        for ($page = 1; $page <= $maxPages; ++$page) {
+            try {
+                $response = $this->request('GET', '/orders/search', [
+                    'page'         => $page,
+                    'limit'        => $pageSize,
+                    'types'        => 1,
+                    'created_from' => $from->format('Y-m-d'),
+                    'created_to'   => $to->format('Y-m-d'),
+                    'sort'         => '-id',
+                    'expand'       => 'purchases,item_details,status_data,seller_comment',
+                ]);
+            } catch (\Throwable $e) {
+                $this->logger->error('Rozetka orders-for-stats fetch failed.', [
+                    'page'      => $page,
+                    'from'      => $from->format('Y-m-d'),
+                    'to'        => $to->format('Y-m-d'),
+                    'exception' => $e,
+                ]);
+                break;
+            }
+
+            $batch = $response['content']['orders'] ?? [];
+            if (! is_array($batch) || $batch === []) {
+                break;
+            }
+
+            foreach ($batch as $order) {
+                if (! is_array($order)) {
+                    continue;
+                }
+
+                $id = (int) ($order['id'] ?? 0);
+                if ($id <= 0 || isset($seenIds[$id])) {
+                    continue;
+                }
+
+                $seenIds[$id] = true;
+                $orders[] = $order;
+            }
+
+            $meta = $response['content']['_meta'] ?? $response['content']['meta'] ?? null;
+            $pageCount = is_array($meta) ? (int) ($meta['pageCount'] ?? 0) : 0;
+            if ($pageCount > 0 && $page >= $pageCount) {
+                break;
+            }
+        }
+
+        return $orders;
+    }
+
+    /**
+     * Lightweight markers for stats charts (created date + status id).
+     *
+     * @return list<array{created: string, status: int}>
+     */
+    public function fetchOrderMarkersCreatedBetween(
+        \DateTimeInterface $from,
+        \DateTimeInterface $to,
+        int $maxPages = 15,
+        int $pageSize = 100,
+    ): array {
+        $markers = [];
+        foreach ($this->fetchOrdersCreatedBetween($from, $to, $maxPages, $pageSize) as $order) {
+            $markers[] = [
+                'created' => (string) ($order['created'] ?? ''),
+                'status'  => (int) ($order['status'] ?? 0),
+            ];
+        }
+
+        return $markers;
     }
 
     /**

@@ -193,51 +193,93 @@
             return;
         }
 
-        const labels = [];
-        const values = [];
-        const colors = [];
-
+        const codeSet = new Set();
         (owed || []).forEach((item) => {
-            labels.push(`Вам винні ${item.code}`);
-            values.push(Number(item.total || 0));
-            colors.push(green);
+            if (item?.code) {
+                codeSet.add(String(item.code));
+            }
         });
         (owe || []).forEach((item) => {
-            labels.push(`Ви винні ${item.code}`);
-            values.push(Number(item.total || 0));
-            colors.push(red);
+            if (item?.code) {
+                codeSet.add(String(item.code));
+            }
         });
+        const codes = Array.from(codeSet).sort((a, b) => a.localeCompare(b, 'uk'));
 
-        if (!values.length) {
-            labels.push('Немає даних');
-            values.push(1);
-            colors.push('#e2e8f0');
+        const owedMap = Object.fromEntries((owed || []).map((item) => [String(item.code), Number(item.total || 0)]));
+        const oweMap = Object.fromEntries((owe || []).map((item) => [String(item.code), Number(item.total || 0)]));
+
+        if (!codes.length) {
+            new Chart(el, {
+                type: 'bar',
+                data: {
+                    labels: ['Немає даних'],
+                    datasets: [{
+                        label: 'Борги',
+                        data: [0],
+                        backgroundColor: '#e2e8f0',
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { beginAtZero: true, grid: { color: 'rgba(148, 163, 184, 0.18)' } },
+                    },
+                },
+            });
+            return;
         }
 
         new Chart(el, {
-            type: 'doughnut',
+            type: 'bar',
             data: {
-                labels,
-                datasets: [{
-                    data: values,
-                    backgroundColor: colors,
-                    borderWidth: 0,
-                    hoverOffset: 6,
-                }],
+                labels: codes,
+                datasets: [
+                    {
+                        label: 'Вам винні',
+                        data: codes.map((code) => owedMap[code] || 0),
+                        backgroundColor: 'rgba(5, 150, 105, 0.85)',
+                        borderRadius: 8,
+                        maxBarThickness: 36,
+                    },
+                    {
+                        label: 'Ви винні',
+                        data: codes.map((code) => oweMap[code] || 0),
+                        backgroundColor: 'rgba(220, 38, 38, 0.85)',
+                        borderRadius: 8,
+                        maxBarThickness: 36,
+                    },
+                ],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '62%',
                 plugins: {
-                    legend: { position: 'bottom' },
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 10 },
+                    },
                     tooltip: {
                         callbacks: {
                             label(ctx) {
-                                if (ctx.label === 'Немає даних') {
-                                    return 'Немає даних';
-                                }
-                                return `${ctx.label}: ${Number(ctx.parsed || 0).toLocaleString('uk-UA')}`;
+                                return `${ctx.dataset.label}: ${money(ctx.parsed.y, ctx.label)}`;
+                            },
+                        },
+                    },
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(148, 163, 184, 0.18)' },
+                        ticks: {
+                            callback(value) {
+                                return Number(value).toLocaleString('uk-UA');
                             },
                         },
                     },

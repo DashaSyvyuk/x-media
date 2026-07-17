@@ -9,6 +9,7 @@ use App\Repository\DebtorRepository;
 use App\Repository\FopProfileRepository;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
 
 final class Admin2DashboardProvider
 {
@@ -34,6 +35,8 @@ final class Admin2DashboardProvider
         private readonly DebtorRepository $debtorRepository,
         private readonly AdminPlanRepository $adminPlanRepository,
         private readonly RozetkaSellerApiClient $rozetkaApiClient,
+        private readonly LoggerInterface $logger,
+        private readonly RozetkaOrderPaymentResolver $rozetkaPaymentResolver,
     ) {
     }
 
@@ -82,10 +85,22 @@ final class Admin2DashboardProvider
         $todayTo = new \DateTimeImmutable('today 23:59:59');
         $monthFrom = $todayFrom->modify('first day of this month')->setTime(0, 0);
 
+        [$rozetkaToday, $rozetkaMonth] = $this->rozetkaOrderCounts($monthFrom, $todayFrom, $todayTo);
+
         return [
             'exchangeRates'    => $this->exchangeRateService->dashboardRates(),
-            'today'            => $this->orderKpi($todayFrom, $todayTo),
-            'month'            => $this->orderMonthKpi($monthFrom, $todayTo),
+            'today'            => $this->orderKpi(
+                $todayFrom,
+                $todayTo,
+                $rozetkaToday['orders'],
+                $rozetkaToday['paid'],
+            ),
+            'month'            => $this->orderMonthKpi(
+                $monthFrom,
+                $todayTo,
+                $rozetkaMonth['orders'],
+                $rozetkaMonth['paid'],
+            ),
             'monthLabel'       => $this->monthLabel($monthFrom),
             'circulationToday' => $this->circulationToday($todayFrom, $todayTo),
             'activeOrders'     => $this->activeOrders(12),
@@ -96,40 +111,102 @@ final class Admin2DashboardProvider
     }
 
     /**
+     * Non-canceled Rozetka orders + paid subset for today / month.
+     *
+     * @return array{0: array{orders: int, paid: int}, 1: array{orders: int, paid: int}}
+     */
+    private function rozetkaOrderCounts(
+        \DateTimeImmutable $monthFrom,
+        \DateTimeImmutable $todayFrom,
+        \DateTimeImmutable $todayTo,
+    ): array {
+        $today = ['orders' => 0, 'paid' => 0];
+        $month = ['orders' => 0, 'paid' => 0];
+        $todayKey = $todayFrom->format('Y-m-d');
+
+        foreach ($this->rozetkaApiClient->fetchOrdersCreatedBetween($monthFrom, $todayTo) as $apiOrder) {
+            if ($this->isRozetkaCanceled($apiOrder)) {
+                continue;
+            }
+
+            ++$month['orders'];
+            $isPaid = $this->rozetkaPaymentResolver->isPaid($apiOrder);
+            if ($isPaid) {
+                ++$month['paid'];
+            }
+
+            $created = substr((string) ($apiOrder['created'] ?? ''), 0, 10);
+            if ($created === $todayKey) {
+                ++$today['orders'];
+                if ($isPaid) {
+                    ++$today['paid'];
+                }
+            }
+        }
+
+        return [$today, $month];
+    }
+
+    /**
+     * @param array<string, mixed> $apiOrder
+     */
+    private function isRozetkaCanceled(array $apiOrder): bool
+    {
+        if ((int) ($apiOrder['status_group'] ?? 0) === 3) {
+            return true;
+        }
+
+        $statusId = (int) ($apiOrder['status'] ?? 0);
+
+        return $statusId >= 13 && $statusId <= 25;
+    }
+
+    /**
      * @return array{orders: int, revenue: int, paid: int}
      */
-    private function orderKpi(\DateTimeImmutable $from, \DateTimeImmutable $to): array
-    {
+    private function orderKpi(
+        \DateTimeImmutable $from,
+        \DateTimeImmutable $to,
+        int $rozetkaOrders = 0,
+        int $rozetkaPaid = 0,
+    ): array {
         $row = $this->connection->fetchAssociative(
             'SELECT
-                COUNT(*) AS orders_count,
+                COALESCE(SUM(CASE WHEN status NOT IN (:canceled) THEN 1 ELSE 0 END), 0) AS orders_count,
                 COALESCE(SUM(CASE WHEN status = :completed THEN total ELSE 0 END), 0) AS revenue,
-                COALESCE(SUM(CASE WHEN payment_status = 1 THEN 1 ELSE 0 END), 0) AS paid_count
+                COALESCE(SUM(
+                    CASE WHEN payment_status = 1 AND status NOT IN (:canceled) THEN 1 ELSE 0 END
+                ), 0) AS paid_count
              FROM orders
              WHERE created_at BETWEEN :from AND :to',
             [
                 'completed' => Order::COMPLETED,
+                'canceled'  => self::CANCELED_STATUSES,
                 'from'      => $from->format('Y-m-d H:i:s'),
                 'to'        => $to->format('Y-m-d H:i:s'),
             ],
+            [
+                'canceled' => ArrayParameterType::STRING,
+            ],
         ) ?: [];
 
-        $localOrders = (int) ($row['orders_count'] ?? 0);
-        $rozetkaOrders = $this->rozetkaApiClient->countOrdersCreatedBetween($from, $to);
-
         return [
-            'orders'  => $localOrders + max(0, $rozetkaOrders),
+            'orders'  => (int) ($row['orders_count'] ?? 0) + max(0, $rozetkaOrders),
             'revenue' => (int) ($row['revenue'] ?? 0),
-            'paid'    => (int) ($row['paid_count'] ?? 0),
+            'paid'    => (int) ($row['paid_count'] ?? 0) + max(0, $rozetkaPaid),
         ];
     }
 
     /**
      * @return array{orders: int, revenue: int, paid: int, cancelRate: float}
      */
-    private function orderMonthKpi(\DateTimeImmutable $from, \DateTimeImmutable $to): array
-    {
-        $base = $this->orderKpi($from, $to);
+    private function orderMonthKpi(
+        \DateTimeImmutable $from,
+        \DateTimeImmutable $to,
+        int $rozetkaOrders = 0,
+        int $rozetkaPaid = 0,
+    ): array {
+        $base = $this->orderKpi($from, $to, $rozetkaOrders, $rozetkaPaid);
         $canceled = (int) $this->connection->fetchOne(
             'SELECT COUNT(*) FROM orders
              WHERE created_at BETWEEN :from AND :to
@@ -144,11 +221,18 @@ final class Admin2DashboardProvider
             ],
         );
 
-        $orders = max(0, $base['orders']);
+        $localOrders = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*) FROM orders WHERE created_at BETWEEN :from AND :to',
+            [
+                'from' => $from->format('Y-m-d H:i:s'),
+                'to'   => $to->format('Y-m-d H:i:s'),
+            ],
+        );
 
         return [
             ...$base,
-            'cancelRate' => $orders > 0 ? round(($canceled / $orders) * 100, 1) : 0.0,
+            // Cancel rate is local-only: Rozetka cancels are not available in the same shape.
+            'cancelRate' => $localOrders > 0 ? round(($canceled / $localOrders) * 100, 1) : 0.0,
         ];
     }
 
@@ -263,17 +347,20 @@ final class Admin2DashboardProvider
      *     status: string,
      *     statusLabel: string,
      *     total: int,
-     *     createdAt: string
+     *     createdAt: string,
+     *     isRozetka: bool,
+     *     statusColor: string
      * }>
      */
     private function activeOrders(int $limit): array
     {
+        $limit = max(1, $limit);
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT id, order_number, name, surname, phone, status, total, created_at
+            'SELECT id, order_number, name, surname, phone, status, total, created_at, payment_status
              FROM orders
              WHERE status IN (:statuses)
              ORDER BY created_at DESC
-             LIMIT ' . max(1, $limit),
+             LIMIT ' . max($limit * 3, 30),
             [
                 'statuses' => self::ACTIVE_ORDER_STATUSES,
             ],
@@ -286,18 +373,68 @@ final class Admin2DashboardProvider
         foreach ($rows as $row) {
             $status = (string) $row['status'];
             $result[] = [
-                'id'          => (int) $row['id'],
-                'orderNumber' => (string) $row['order_number'],
-                'customer'    => trim((string) $row['surname'] . ' ' . (string) $row['name']),
-                'phone'       => (string) ($row['phone'] ?? ''),
-                'status'      => $status,
-                'statusLabel' => Order::STATUSES[$status] ?? $status,
-                'total'       => (int) $row['total'],
-                'createdAt'   => substr((string) $row['created_at'], 0, 16),
+                'id'             => (int) $row['id'],
+                'orderNumber'    => (string) $row['order_number'],
+                'customer'       => trim((string) $row['surname'] . ' ' . (string) $row['name']),
+                'phone'          => (string) ($row['phone'] ?? ''),
+                'status'         => $status,
+                'statusLabel'    => Order::STATUSES[$status] ?? $status,
+                'total'          => (int) $row['total'],
+                'createdAt'      => substr((string) $row['created_at'], 0, 16),
+                'isRozetka'      => false,
+                'statusColor'    => Order::GROUPED_STATUSES[$status]['color'] ?? '#64748b',
+                'paymentStatus'  => (bool) $row['payment_status'],
             ];
         }
 
-        return $result;
+        if ($this->rozetkaApiClient->isConfigured()) {
+            try {
+                foreach ($this->rozetkaApiClient->fetchActiveOrders() as $apiOrder) {
+                    $id = (int) ($apiOrder['id'] ?? 0);
+                    if ($id <= 0) {
+                        continue;
+                    }
+
+                    $delivery = is_array($apiOrder['delivery'] ?? null) ? $apiOrder['delivery'] : [];
+                    $statusData = is_array($apiOrder['status_data'] ?? null) ? $apiOrder['status_data'] : [];
+                    $statusLabel = trim((string) (
+                        $statusData['name_uk']
+                        ?? $statusData['name_ua']
+                        ?? $statusData['name']
+                        ?? $statusData['title']
+                        ?? 'Rozetka'
+                    ));
+                    $created = substr((string) ($apiOrder['created'] ?? ''), 0, 16);
+
+                    $result[] = [
+                        'id'             => $id,
+                        'orderNumber'    => 'RZ ' . $id,
+                        'customer'       => trim((string) ($delivery['recipient_title'] ?? '')),
+                        'phone'          => (string) ($apiOrder['user_phone'] ?? ''),
+                        'status'         => 'rozetka',
+                        'statusLabel'    => $statusLabel !== '' ? $statusLabel : 'Rozetka',
+                        'total'          => (int) round((float) (
+                            $apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0
+                        )),
+                        'createdAt'      => $created,
+                        'isRozetka'      => true,
+                        'statusColor'    => '#00a046',
+                        'paymentStatus'  => $this->rozetkaPaymentResolver->isPaid($apiOrder),
+                    ];
+                }
+            } catch (\Throwable $e) {
+                $this->logger->error('Rozetka active orders failed on dashboard.', [
+                    'exception' => $e,
+                ]);
+            }
+        }
+
+        usort(
+            $result,
+            static fn (array $a, array $b): int => strcmp((string) $b['createdAt'], (string) $a['createdAt']),
+        );
+
+        return array_slice($result, 0, $limit);
     }
 
     /**

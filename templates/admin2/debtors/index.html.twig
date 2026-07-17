@@ -59,6 +59,22 @@
             </div>
         </div>
 
+        <div class="card border-0 shadow-sm mb-4 debtors-currency-chart-card"
+             data-owed='{{ summary.owedToYouByCurrency|default([])|json_encode|e('html_attr') }}'
+             data-owe='{{ summary.youOweByCurrency|default([])|json_encode|e('html_attr') }}'>
+            <div class="card-body p-3 p-md-4">
+                <div class="d-flex flex-wrap align-items-end justify-content-between gap-2 mb-3">
+                    <div>
+                        <h2 class="h6 mb-1">Борги по валютах</h2>
+                        <p class="text-muted small mb-0">Скільки вам винні і скільки винні ви в кожній валюті</p>
+                    </div>
+                </div>
+                <div class="stats-chart-wrap stats-chart-wrap--finance" style="min-height: 260px;">
+                    <canvas id="debtorsCurrencyChart" aria-label="Борги по валютах"></canvas>
+                </div>
+            </div>
+        </div>
+
         <div class="card border-0 shadow-sm products-table-card">
             <div class="card-body p-3 p-md-4 border-bottom">
                 <form method="get" action="{{ path('admin2_debtors') }}" class="products-toolbar">
@@ -207,6 +223,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script>
         document.querySelectorAll('[data-confirm]').forEach((button) => {
             button.closest('form')?.addEventListener('submit', (event) => {
@@ -227,6 +244,70 @@
                     activeLabel.textContent = isActive ? 'Активні' : 'Неактивні';
                 }
                 toolbarForm.requestSubmit();
+            });
+        }
+
+        const chartCard = document.querySelector('.debtors-currency-chart-card');
+        const canvas = document.getElementById('debtorsCurrencyChart');
+        if (chartCard && canvas && typeof Chart !== 'undefined') {
+            let owed = [];
+            let owe = [];
+            try {
+                owed = JSON.parse(chartCard.getAttribute('data-owed') || '[]');
+                owe = JSON.parse(chartCard.getAttribute('data-owe') || '[]');
+            } catch (e) {
+                owed = [];
+                owe = [];
+            }
+
+            const codes = Array.from(new Set([
+                ...owed.map((item) => String(item.code || '')),
+                ...owe.map((item) => String(item.code || '')),
+            ].filter(Boolean))).sort((a, b) => a.localeCompare(b, 'uk'));
+
+            const owedMap = Object.fromEntries(owed.map((item) => [String(item.code), Number(item.total || 0)]));
+            const oweMap = Object.fromEntries(owe.map((item) => [String(item.code), Number(item.total || 0)]));
+
+            new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: codes.length ? codes : ['Немає даних'],
+                    datasets: [
+                        {
+                            label: 'Вам винні',
+                            data: codes.length ? codes.map((code) => owedMap[code] || 0) : [0],
+                            backgroundColor: 'rgba(5, 150, 105, 0.85)',
+                            borderRadius: 8,
+                            maxBarThickness: 36,
+                        },
+                        {
+                            label: 'Ви винні',
+                            data: codes.length ? codes.map((code) => oweMap[code] || 0) : [0],
+                            backgroundColor: 'rgba(220, 38, 38, 0.85)',
+                            borderRadius: 8,
+                            maxBarThickness: 36,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10 } },
+                    },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(148, 163, 184, 0.18)' },
+                            ticks: {
+                                callback(value) {
+                                    return Number(value).toLocaleString('uk-UA');
+                                },
+                            },
+                        },
+                    },
+                },
             });
         }
     </script>

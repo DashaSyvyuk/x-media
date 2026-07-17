@@ -323,6 +323,19 @@ class Order
     public function setStatus(string $status): void
     {
         $this->status = $status;
+
+        if ($status === self::COMPLETED) {
+            $this->paymentStatus = true;
+        }
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function markPaidWhenDelivered(): void
+    {
+        if ($this->status === self::COMPLETED) {
+            $this->paymentStatus = true;
+        }
     }
 
     public function getPaymentStatus(): bool

@@ -20,10 +20,28 @@ final class RozetkaOrderPresenter
         61 => 'Заплановано передачу перевізникові',
     ];
 
+    /** Lower = higher in the Rozetka orders list. */
+    private const STATUS_SORT_ORDER = [
+        1  => 0,  // Нове
+        26 => 1,  // Обробляється менеджером
+        2  => 2,  // Комплектується
+        61 => 3,  // Передано / заплановано перевізнику
+        3  => 3,
+    ];
+
+    private const STATUS_TONE = [
+        1  => 'new',
+        26 => 'processing',
+        2  => 'packing',
+        61 => 'shipping',
+        3  => 'shipping',
+    ];
+
     public function __construct(
         private readonly RozetkaSellerApiClient $apiClient,
         private readonly ProductRepository $productRepository,
         private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly RozetkaOrderPaymentResolver $paymentResolver,
     ) {
     }
 
@@ -37,19 +55,25 @@ final class RozetkaOrderPresenter
         $delivery = is_array($apiOrder['delivery'] ?? null) ? $apiOrder['delivery'] : [];
         $statusData = is_array($apiOrder['status_data'] ?? null) ? $apiOrder['status_data'] : [];
 
+        $statusId = (int) ($apiOrder['status'] ?? 0);
+
         return [
-            'id'        => (int) ($apiOrder['id'] ?? 0),
-            'created'   => (string) ($apiOrder['created'] ?? ''),
-            'status'    => $this->asString(
+            'id'             => (int) ($apiOrder['id'] ?? 0),
+            'created'        => (string) ($apiOrder['created'] ?? ''),
+            'status'         => $this->asString(
                 $statusData['name_uk'] ?? $statusData['name_ua'] ?? $statusData['name'] ?? $statusData['title'] ?? null,
                 '—',
             ),
-            'statusId'  => (int) ($apiOrder['status'] ?? 0),
-            'total'     => (int) round((float) ($apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0)),
-            'phone'     => $this->asString($apiOrder['user_phone'] ?? null),
-            'recipient' => $this->asString($delivery['recipient_title'] ?? null),
-            'ttn'       => $this->asString($apiOrder['ttn'] ?? null),
-            'items'     => $this->presentItems($apiOrder),
+            'statusId'       => $statusId,
+            'statusTone'     => self::STATUS_TONE[$statusId] ?? 'default',
+            'statusSort'     => self::STATUS_SORT_ORDER[$statusId] ?? 50,
+            'total'          => (int) round((float) ($apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0)),
+            'phone'          => $this->asString($apiOrder['user_phone'] ?? null),
+            'recipient'      => $this->asString($delivery['recipient_title'] ?? null),
+            'ttn'            => $this->asString($apiOrder['ttn'] ?? null),
+            'items'          => $this->presentItems($apiOrder),
+            'paymentStatus'  => $this->paymentResolver->isPaid($apiOrder),
+            'sellerComment'  => $this->asString($apiOrder['current_seller_comment'] ?? null),
         ];
     }
 
@@ -68,6 +92,7 @@ final class RozetkaOrderPresenter
         $list['email'] = $this->asString($user['email'] ?? null);
         $list['comment'] = $this->asString($apiOrder['comment'] ?? null);
         $list['sellerComment'] = $this->asString($apiOrder['current_seller_comment'] ?? null);
+        $list['paymentStatus'] = $this->paymentResolver->isPaid($apiOrder);
         $list['address'] = $this->formatAddress($delivery);
         $list['deliveryName'] = $this->asString(
             $deliveryService['name'] ?? $delivery['delivery_service_name'] ?? null,
@@ -104,6 +129,7 @@ final class RozetkaOrderPresenter
             'recipient'       => $detail['recipient'],
             'items'           => $detail['items'],
             'ttn'             => $detail['ttn'],
+            'paymentStatus'   => $detail['paymentStatus'],
             'editUrl'         => null,
             'isRozetka'       => true,
         ];
@@ -253,9 +279,11 @@ final class RozetkaOrderPresenter
     }
 
     /**
+     * Resolve our local product id from a Rozetka purchase line.
+     *
      * @param array<string, mixed> $purchase
      */
-    private function resolveLocalProductId(array $purchase): ?int
+    public function resolveLocalProductId(array $purchase): ?int
     {
         $candidates = [];
 
@@ -268,11 +296,13 @@ final class RozetkaOrderPresenter
             $candidates[] = $nested['price_offer_id'] ?? null;
             $candidates[] = $nested['article'] ?? null;
             $candidates[] = $nested['offer_id'] ?? null;
+            $candidates[] = $nested['id'] ?? null;
         }
 
         $candidates[] = $purchase['price_offer_id'] ?? null;
         $candidates[] = $purchase['article'] ?? null;
         $candidates[] = $purchase['offer_id'] ?? null;
+        $candidates[] = $purchase['item_id'] ?? null;
 
         foreach ($candidates as $candidate) {
             $productId = $this->normalizeProductId($candidate);
@@ -391,20 +421,21 @@ final class RozetkaOrderPresenter
         $grouped = Order::GROUPED_STATUSES[$order->getStatus()] ?? null;
 
         return [
-            'type'        => 'local',
-            'id'          => $order->getId() ?? 0,
-            'key'         => 'order:' . ($order->getId() ?? 0),
-            'label'       => $order->getOrderNumber(),
-            'created'     => $order->getCreatedAt()->format('d.m.Y H:i'),
-            'status'      => Order::STATUSES[$order->getStatus()] ?? $order->getStatus(),
-            'statusGroup' => $grouped['title'] ?? '',
-            'total'       => $order->getTotal(),
-            'phone'       => $order->getPhone(),
-            'recipient'   => trim(sprintf('%s %s', $order->getName(), $order->getSurname() ?? '')),
-            'items'       => $items,
-            'ttn'         => (string) ($order->getTtn() ?? ''),
-            'editUrl'     => null,
-            'isRozetka'   => in_array(Order::LABEL_ROZETKA, $order->getLabels() ?? [], true),
+            'type'           => 'local',
+            'id'             => $order->getId() ?? 0,
+            'key'            => 'order:' . ($order->getId() ?? 0),
+            'label'          => $order->getOrderNumber(),
+            'created'        => $order->getCreatedAt()->format('d.m.Y H:i'),
+            'status'         => Order::STATUSES[$order->getStatus()] ?? $order->getStatus(),
+            'statusGroup'    => $grouped['title'] ?? '',
+            'total'          => $order->getTotal(),
+            'phone'          => $order->getPhone(),
+            'recipient'      => trim(sprintf('%s %s', $order->getName(), $order->getSurname() ?? '')),
+            'items'          => $items,
+            'ttn'            => (string) ($order->getTtn() ?? ''),
+            'paymentStatus'  => $order->getPaymentStatus(),
+            'editUrl'        => null,
+            'isRozetka'      => in_array(Order::LABEL_ROZETKA, $order->getLabels() ?? [], true),
         ];
     }
 }

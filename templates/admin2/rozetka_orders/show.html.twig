@@ -22,7 +22,8 @@
             <div class="d-flex align-items-center gap-2">
                 {{ order_macros.copy_button(copyText|default(null)) }}
                 {{ order_macros.receipt_button('rozetka', order.id) }}
-                <span class="badge bg-warning-subtle text-warning-emphasis fs-6">{{ order.status }}</span>
+                {{ order_macros.payment_status_badge(order.paymentStatus|default(false)) }}
+                <span class="rozetka-status-badge rozetka-status-badge--{{ order.statusTone|default('default') }} fs-6">{{ order.status }}</span>
             </div>
         </div>
 
@@ -42,6 +43,8 @@
                             <dd class="col-sm-8">{{ order.address ?: '—' }}</dd>
                             <dt class="col-sm-4">Коментар</dt>
                             <dd class="col-sm-8">{{ order.comment ?: '—' }}</dd>
+                            <dt class="col-sm-4">Оплата</dt>
+                            <dd class="col-sm-8">{{ order_macros.payment_status_badge(order.paymentStatus|default(false)) }}</dd>
                         </dl>
                     </div>
                 </div>
@@ -112,6 +115,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Коментар продавця</label>
                                 <textarea name="seller_comment" class="form-control" rows="3">{{ order.sellerComment }}</textarea>
+                                <div class="form-text">Якщо в нотатці є слово «Оплачено» — замовлення вважається оплаченим (без наложки).</div>
                             </div>
 
                             <button type="submit" class="btn btn-teal w-100" {{ order.canEdit ? '' : 'disabled' }}>

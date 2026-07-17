@@ -71,6 +71,9 @@
                {{ order.type == 'rozetka' and not order.canEditStatus ? 'disabled' : '' }}>
     </form>
     <div class="fulfillment-card__meta">{{ order.recipient }} · {{ order.phone }}</div>
+    <div class="fulfillment-card__payment mt-1">
+        {{ order_macros.payment_status_badge(order.paymentStatus|default(false)) }}
+    </div>
     <ul class="fulfillment-card__items">
         {% for item in order.items|slice(0, 3) %}
             <li>{{ item.qty }}× {{ item.name|slice(0, 50) }}</li>
