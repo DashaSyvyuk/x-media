@@ -37,6 +37,8 @@
             <div class="card-body">
                 {% if activeTab == 'profile' %}
                     {% include 'admin2/settings/_tab_profile.html.twig' %}
+                {% elseif activeTab == 'notifications' %}
+                    {% include 'admin2/settings/_tab_notifications.html.twig' %}
                 {% elseif activeTab == 'currencies' %}
                     {% include 'admin2/settings/_tab_currencies.html.twig' %}
                 {% elseif activeTab == 'fops' %}
@@ -79,6 +81,8 @@
     </script>
     {% if activeTab == 'currencies' %}
         <script src="{{ asset('js/admin2-settings-currencies.js') }}" defer></script>
+    {% elseif activeTab == 'notifications' %}
+        <script src="{{ asset('js/admin2-settings-notifications.js') }}" defer></script>
     {% elseif activeTab == 'fops' %}
         <script src="{{ asset('js/admin2-order-copy.js') }}" defer></script>
         <script src="{{ asset('js/admin2-settings-fops.js') }}" defer></script>

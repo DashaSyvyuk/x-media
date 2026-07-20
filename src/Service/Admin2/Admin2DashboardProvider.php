@@ -37,6 +37,7 @@ final class Admin2DashboardProvider
         private readonly RozetkaSellerApiClient $rozetkaApiClient,
         private readonly LoggerInterface $logger,
         private readonly RozetkaOrderPaymentResolver $rozetkaPaymentResolver,
+        private readonly OrderFulfillmentStatusHelper $fulfillmentStatusHelper,
     ) {
     }
 
@@ -94,12 +95,14 @@ final class Admin2DashboardProvider
                 $todayTo,
                 $rozetkaToday['orders'],
                 $rozetkaToday['paid'],
+                $rozetkaToday['revenue'],
             ),
             'month'            => $this->orderMonthKpi(
                 $monthFrom,
                 $todayTo,
                 $rozetkaMonth['orders'],
                 $rozetkaMonth['paid'],
+                $rozetkaMonth['revenue'],
             ),
             'monthLabel'       => $this->monthLabel($monthFrom),
             'circulationToday' => $this->circulationToday($todayFrom, $todayTo),
@@ -111,17 +114,20 @@ final class Admin2DashboardProvider
     }
 
     /**
-     * Non-canceled Rozetka orders + paid subset for today / month.
+     * Non-canceled Rozetka orders + paid / delivered revenue for today / month.
      *
-     * @return array{0: array{orders: int, paid: int}, 1: array{orders: int, paid: int}}
+     * @return array{
+     *     0: array{orders: int, paid: int, revenue: int},
+     *     1: array{orders: int, paid: int, revenue: int}
+     * }
      */
     private function rozetkaOrderCounts(
         \DateTimeImmutable $monthFrom,
         \DateTimeImmutable $todayFrom,
         \DateTimeImmutable $todayTo,
     ): array {
-        $today = ['orders' => 0, 'paid' => 0];
-        $month = ['orders' => 0, 'paid' => 0];
+        $today = ['orders' => 0, 'paid' => 0, 'revenue' => 0];
+        $month = ['orders' => 0, 'paid' => 0, 'revenue' => 0];
         $todayKey = $todayFrom->format('Y-m-d');
 
         foreach ($this->rozetkaApiClient->fetchOrdersCreatedBetween($monthFrom, $todayTo) as $apiOrder) {
@@ -134,12 +140,22 @@ final class Admin2DashboardProvider
             if ($isPaid) {
                 ++$month['paid'];
             }
+            if ($this->isRozetkaDelivered($apiOrder)) {
+                $month['revenue'] += (int) round((float) (
+                    $apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0
+                ));
+            }
 
             $created = substr((string) ($apiOrder['created'] ?? ''), 0, 10);
             if ($created === $todayKey) {
                 ++$today['orders'];
                 if ($isPaid) {
                     ++$today['paid'];
+                }
+                if ($this->isRozetkaDelivered($apiOrder)) {
+                    $today['revenue'] += (int) round((float) (
+                        $apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0
+                    ));
                 }
             }
         }
@@ -162,6 +178,18 @@ final class Admin2DashboardProvider
     }
 
     /**
+     * @param array<string, mixed> $apiOrder
+     */
+    private function isRozetkaDelivered(array $apiOrder): bool
+    {
+        if ((int) ($apiOrder['status_group'] ?? 0) === 2) {
+            return true;
+        }
+
+        return in_array((int) ($apiOrder['status'] ?? 0), [40, 50, 57], true);
+    }
+
+    /**
      * @return array{orders: int, revenue: int, paid: int}
      */
     private function orderKpi(
@@ -169,6 +197,7 @@ final class Admin2DashboardProvider
         \DateTimeImmutable $to,
         int $rozetkaOrders = 0,
         int $rozetkaPaid = 0,
+        int $rozetkaRevenue = 0,
     ): array {
         $row = $this->connection->fetchAssociative(
             'SELECT
@@ -192,7 +221,7 @@ final class Admin2DashboardProvider
 
         return [
             'orders'  => (int) ($row['orders_count'] ?? 0) + max(0, $rozetkaOrders),
-            'revenue' => (int) ($row['revenue'] ?? 0),
+            'revenue' => (int) ($row['revenue'] ?? 0) + max(0, $rozetkaRevenue),
             'paid'    => (int) ($row['paid_count'] ?? 0) + max(0, $rozetkaPaid),
         ];
     }
@@ -205,8 +234,9 @@ final class Admin2DashboardProvider
         \DateTimeImmutable $to,
         int $rozetkaOrders = 0,
         int $rozetkaPaid = 0,
+        int $rozetkaRevenue = 0,
     ): array {
-        $base = $this->orderKpi($from, $to, $rozetkaOrders, $rozetkaPaid);
+        $base = $this->orderKpi($from, $to, $rozetkaOrders, $rozetkaPaid, $rozetkaRevenue);
         $canceled = (int) $this->connection->fetchOne(
             'SELECT COUNT(*) FROM orders
              WHERE created_at BETWEEN :from AND :to
@@ -382,7 +412,9 @@ final class Admin2DashboardProvider
                 'total'          => (int) $row['total'],
                 'createdAt'      => substr((string) $row['created_at'], 0, 16),
                 'isRozetka'      => false,
-                'statusColor'    => Order::GROUPED_STATUSES[$status]['color'] ?? '#64748b',
+                'statusColor'    => $this->colorForStatusTone(
+                    $this->fulfillmentStatusHelper->toneForLocal($status),
+                ),
                 'paymentStatus'  => (bool) $row['payment_status'],
             ];
         }
@@ -404,6 +436,8 @@ final class Admin2DashboardProvider
                         ?? $statusData['title']
                         ?? 'Rozetka'
                     ));
+                    $statusId = (int) ($apiOrder['status'] ?? 0);
+                    $statusTone = $this->fulfillmentStatusHelper->toneForRozetka($statusId);
                     $created = substr((string) ($apiOrder['created'] ?? ''), 0, 16);
 
                     $result[] = [
@@ -418,7 +452,7 @@ final class Admin2DashboardProvider
                         )),
                         'createdAt'      => $created,
                         'isRozetka'      => true,
-                        'statusColor'    => '#00a046',
+                        'statusColor'    => $this->colorForStatusTone($statusTone),
                         'paymentStatus'  => $this->rozetkaPaymentResolver->isPaid($apiOrder),
                     ];
                 }
@@ -435,6 +469,19 @@ final class Admin2DashboardProvider
         );
 
         return array_slice($result, 0, $limit);
+    }
+
+    private function colorForStatusTone(string $tone): string
+    {
+        return match ($tone) {
+            'new' => '#059669',
+            'processing' => '#d97706',
+            'packing' => '#0d9488',
+            'shipping' => '#2563eb',
+            'done' => '#0f172a',
+            'canceled' => '#64748b',
+            default => '#64748b',
+        };
     }
 
     /**

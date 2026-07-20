@@ -563,4 +563,41 @@ class ProductRepository extends ServiceEntityRepository
             'productCode' => (string) $product->getProductCode(),
         ];
     }
+
+    /**
+     * Change site price for every product in the category by delta (can be negative).
+     * Resulting price is never below 1. Clears crossed-out when invalid.
+     * Uses a single SQL UPDATE to avoid timeouts on large categories.
+     */
+    public function adjustPriceForCategory(int $categoryId, int $delta): int
+    {
+        if ($delta === 0) {
+            return 0;
+        }
+
+        $connection = $this->getEntityManager()->getConnection();
+        $updated = (int) $connection->executeStatement(
+            'UPDATE product
+             SET
+                crossed_out_price = CASE
+                    WHEN crossed_out_price IS NOT NULL
+                         AND crossed_out_price > 0
+                         AND crossed_out_price <= GREATEST(1, COALESCE(price, 0) + :delta)
+                    THEN NULL
+                    ELSE crossed_out_price
+                END,
+                price = GREATEST(1, COALESCE(price, 0) + :delta),
+                updated_at = :updatedAt
+             WHERE category_id = :categoryId',
+            [
+                'delta'      => $delta,
+                'categoryId' => $categoryId,
+                'updatedAt'  => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+            ],
+        );
+
+        $this->getEntityManager()->clear();
+
+        return $updated;
+    }
 }

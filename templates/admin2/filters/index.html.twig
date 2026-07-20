@@ -16,10 +16,10 @@
         perPage: perPage,
     } %}
 
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 page-header-row">
         <div>
             <h1 class="page-title mb-1">Фільтри</h1>
-            <p class="text-muted mb-0 small">Параметри фільтрації товарів у категоріях</p>
+            <p class="text-muted mb-0 small d-none d-sm-block">Параметри фільтрації товарів у категоріях</p>
         </div>
         <a href="{{ path('admin2_filters_new') }}" class="btn btn-teal">
             <i class="bi bi-plus-lg"></i> Новий фільтр
@@ -36,7 +36,9 @@
                                name="q"
                                value="{{ search }}"
                                class="form-control border-start-0"
-                               placeholder="Назва фільтра або категорія">
+                               placeholder="Назва фільтра або категорія"
+                               inputmode="search"
+                               enterkeyhint="search">
                     </div>
                 </div>
 
@@ -65,7 +67,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table products-table align-middle">
+            <table class="table products-table products-table--mobile-cards align-middle">
                 <thead>
                     <tr>
                         <th>{{ filter_macros.sort_link('ID', 'id', sort, direction, query) }}</th>
@@ -80,22 +82,22 @@
                 <tbody>
                     {% for filter in pagination %}
                         <tr>
-                            <td class="text-muted">#{{ filter.id }}</td>
-                            <td>
+                            <td class="text-muted" data-label="ID">#{{ filter.id }}</td>
+                            <td data-label="Назва">
                                 <div class="product-title">{{ filter.title }}</div>
                                 <div class="product-title__meta">{{ filter.attributes|length }} параметр(ів)</div>
                             </td>
-                            <td class="text-muted small">{{ filter.category ? filter.category.title : '—' }}</td>
-                            <td>{{ filter.priority ?? '—' }}</td>
-                            <td>{{ filter.openedCount }}</td>
-                            <td>
+                            <td class="text-muted small" data-label="Категорія">{{ filter.category ? filter.category.title : '—' }}</td>
+                            <td data-label="Пріоритет">{{ filter.priority ?? '—' }}</td>
+                            <td data-label="Відкритих">{{ filter.openedCount }}</td>
+                            <td data-label="Стан">
                                 {% if filter.isOpened %}
                                     <span class="status-badge status-badge--blocked">Закритий</span>
                                 {% else %}
                                     <span class="status-badge status-badge--active">Відкритий</span>
                                 {% endif %}
                             </td>
-                            <td class="text-end">
+                            <td class="text-end col-actions" data-label="">
                                 <div class="table-actions">
                                     <a href="{{ path('admin2_filters_edit', {id: filter.id}) }}"
                                        class="table-action table-action--teal"
@@ -119,7 +121,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-5">
+                            <td colspan="7" class="text-center text-muted py-4" data-label="">
                                 <i class="bi bi-funnel fs-2 d-block mb-2"></i>
                                 Фільтрів не знайдено
                             </td>

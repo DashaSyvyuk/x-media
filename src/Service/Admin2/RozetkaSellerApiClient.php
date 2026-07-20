@@ -16,7 +16,13 @@ final class RozetkaSellerApiClient
     private const COUNTS_CACHE_KEY = 'rozetka_orders_counts';
     private const COUNTS_TTL = 60;
 
-    /** @var int[] New + in processing + delivering */
+    /** New + in processing — for management / processing boards. */
+    public const MANAGEMENT_TYPES = [4, 2];
+
+    /** Handed to carrier / in transit. */
+    public const DELIVERING_TYPES = [5];
+
+    /** @var int[] Management + delivering (delivering board, dashboard). */
     public const ACTIVE_TYPES = [4, 2, 5];
 
     private const ORDER_EXPAND = 'user,delivery,delivery_service,purchases,status_data,status_available,'
@@ -121,18 +127,24 @@ final class RozetkaSellerApiClient
     }
 
     /**
+     * @param list<int>|null $types API order type filters (defaults to management: new + processing)
+     *
      * @return array<int, array<string, mixed>>
      */
-    public function fetchActiveOrders(int $maxPages = 5, int $pageSize = 50): array
-    {
+    public function fetchActiveOrders(
+        int $maxPages = 5,
+        int $pageSize = 50,
+        ?array $types = null,
+    ): array {
         if (! $this->isConfigured()) {
             return [];
         }
 
         $orders = [];
         $seenIds = [];
+        $types = $types ?? self::MANAGEMENT_TYPES;
 
-        foreach (self::ACTIVE_TYPES as $type) {
+        foreach ($types as $type) {
             for ($page = 1; $page <= $maxPages; ++$page) {
                 try {
                     $response = $this->request('GET', '/orders/search', [

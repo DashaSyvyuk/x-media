@@ -44,12 +44,16 @@ class OrderDeliveringController extends AbstractController
 
         if ($this->rozetkaApiClient->isConfigured()) {
             try {
-                foreach ($this->rozetkaApiClient->fetchActiveOrders() as $apiOrder) {
+                foreach ($this->rozetkaApiClient->fetchActiveOrders(
+                    5,
+                    50,
+                    RozetkaSellerApiClient::ACTIVE_TYPES,
+                ) as $apiOrder) {
                     try {
                         $presented = $this->rozetkaPresenter->presentBoardItem($apiOrder);
                         $statusId = (int) ($presented['statusId'] ?? 0);
                         $ttn = (string) ($presented['ttn'] ?? '');
-                        if (! $this->fulfillmentStatusHelper->isRozetkaCarrierTransfer($statusId, $ttn)) {
+                        if (! $this->fulfillmentStatusHelper->isRozetkaDelivering($statusId, $ttn)) {
                             continue;
                         }
                         $presented['statusTone'] = $this->fulfillmentStatusHelper->toneForRozetka($statusId);

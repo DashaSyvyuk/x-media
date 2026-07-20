@@ -332,6 +332,32 @@
     flex-direction: column;
 }
 
+.dashboard-order-row__side .order-status-badge {
+    display: inline-flex;
+    align-items: center;
+    max-width: 14rem;
+    padding: 0.22rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: color-mix(in srgb, var(--status-color, #64748b) 14%, white);
+    color: var(--status-color, #64748b);
+}
+
+.dashboard-order-row__side .order-status-badge--paid {
+    background: rgba(5, 150, 105, 0.12);
+    color: #059669;
+}
+
+.dashboard-order-row__side .order-status-badge--unpaid {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+}
+
 .dashboard-order-row {
     display: flex;
     flex-wrap: wrap;

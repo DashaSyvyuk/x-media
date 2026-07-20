@@ -39,7 +39,7 @@ final class OrderFulfillmentStatusHelper
             1 => 'new',
             26 => 'processing',
             self::ROZETKA_STATUS_CONFIRMED => 'packing',
-            61, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 => 'shipping',
+            61, 62, 63, 64, 65, 66, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 => 'shipping',
             default => 'default',
         };
     }
@@ -80,6 +80,22 @@ final class OrderFulfillmentStatusHelper
     }
 
     /**
+     * Rozetka order already in delivery / with carrier — hide from management board.
+     */
+    public function isRozetkaDelivering(int $statusId, string $ttn = ''): bool
+    {
+        if ($this->isShippingTone($this->toneForRozetka($statusId))) {
+            return true;
+        }
+
+        if (in_array($statusId, [3, 61, 62, 63, 64, 65, 66], true)) {
+            return true;
+        }
+
+        return $this->isRozetkaCarrierTransfer($statusId, $ttn);
+    }
+
+    /**
      * Rozetka handed to carrier — show on NP column when a waybill exists.
      */
     public function isRozetkaCarrierTransfer(int $statusId, string $ttn): bool
@@ -89,7 +105,7 @@ final class OrderFulfillmentStatusHelper
         }
 
         // 61 — заплановано/передано перевізнику; 3 — передано службі доставки.
-        if (in_array($statusId, [61, 3], true)) {
+        if (in_array($statusId, [61, 3, 62, 63, 64, 65, 66], true)) {
             return true;
         }
 

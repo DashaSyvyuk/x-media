@@ -8,10 +8,12 @@ use App\Entity\DeliveryType;
 use App\Entity\FopProfile;
 use App\Entity\PaymentType;
 use App\Entity\Setting;
+use App\Repository\AdminPushSubscriptionRepository;
 use App\Repository\AdminUserRepository;
 use App\Repository\DeliveryTypeRepository;
 use App\Repository\PaymentTypeRepository;
 use App\Repository\SettingRepository;
+use App\Service\Admin2\AdminWebPushNotifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,6 +30,8 @@ class SettingsController extends AbstractController
         private readonly PaymentTypeRepository $paymentTypeRepository,
         private readonly DeliveryTypeRepository $deliveryTypeRepository,
         private readonly AdminUserRepository $adminUserRepository,
+        private readonly AdminPushSubscriptionRepository $pushSubscriptionRepository,
+        private readonly AdminWebPushNotifier $webPushNotifier,
     ) {
     }
 
@@ -64,6 +68,10 @@ class SettingsController extends AbstractController
             'adminUsers'    => $activeTab === 'admins'
                 ? $this->adminUserRepository->findBy([], ['id' => 'DESC'])
                 : [],
+            'pushConfigured' => $this->webPushNotifier->isConfigured(),
+            'pushDeviceCount' => $activeTab === 'notifications'
+                ? count($this->pushSubscriptionRepository->findByUser($user))
+                : 0,
         ]);
     }
 
@@ -72,7 +80,10 @@ class SettingsController extends AbstractController
      */
     private function buildTabs(): array
     {
-        $tabs = ['profile' => 'Профіль'];
+        $tabs = [
+            'profile'       => 'Профіль',
+            'notifications' => 'Сповіщення',
+        ];
 
         if ($this->isGranted('ROLE_ADMIN')) {
             $tabs['currencies'] = 'Валюти';

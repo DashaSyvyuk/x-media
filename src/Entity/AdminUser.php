@@ -50,6 +50,12 @@ class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $active = true;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    private bool $notifyLocalOrders = true;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    private bool $notifyRozetkaOrders = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -183,6 +189,30 @@ class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function isNotifyLocalOrders(): bool
+    {
+        return $this->notifyLocalOrders;
+    }
+
+    public function setNotifyLocalOrders(bool $notifyLocalOrders): self
+    {
+        $this->notifyLocalOrders = $notifyLocalOrders;
+
+        return $this;
+    }
+
+    public function isNotifyRozetkaOrders(): bool
+    {
+        return $this->notifyRozetkaOrders;
+    }
+
+    public function setNotifyRozetkaOrders(bool $notifyRozetkaOrders): self
+    {
+        $this->notifyRozetkaOrders = $notifyRozetkaOrders;
 
         return $this;
     }

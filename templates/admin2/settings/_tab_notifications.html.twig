@@ -1,0 +1,81 @@
+<div class="row g-4" id="notificationsSettings"
+     data-vapid-url="{{ path('admin2_settings_notifications_vapid') }}"
+     data-subscribe-url="{{ path('admin2_settings_notifications_subscribe') }}"
+     data-unsubscribe-url="{{ path('admin2_settings_notifications_unsubscribe') }}"
+     data-csrf="{{ csrf_token('admin2_notifications') }}"
+     data-device-count="{{ pushDeviceCount }}"
+     data-push-configured="{{ pushConfigured ? '1' : '0' }}">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-2">Сповіщення на цьому пристрої</h2>
+                <p class="text-muted small mb-3">
+                    Увімкніть push на телефоні або компʼютері, щоб отримувати сповіщення про нові замовлення
+                    навіть коли вкладка закрита. Потрібен HTTPS і встановлений PWA / дозвіл браузера.
+                </p>
+
+                {% if not pushConfigured %}
+                    <div class="alert alert-warning mb-3">
+                        Push на сервері ще не налаштовано (немає VAPID-ключів). Додайте
+                        <code>VAPID_PUBLIC_KEY</code> і <code>VAPID_PRIVATE_KEY</code> у <code>.env</code>.
+                    </div>
+                {% endif %}
+
+                <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                    <span class="badge bg-light text-dark border" id="notifPermissionBadge">Дозвіл: …</span>
+                    <span class="badge bg-light text-dark border" id="notifSubscriptionBadge">
+                        Пристроїв: {{ pushDeviceCount }}
+                    </span>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="button" class="btn btn-dark" id="notifEnableBtn" {% if not pushConfigured %}disabled{% endif %}>
+                        <i class="bi bi-bell"></i> Увімкнути на цьому пристрої
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="notifDisableBtn">
+                        <i class="bi bi-bell-slash"></i> Вимкнути на цьому пристрої
+                    </button>
+                </div>
+
+                <p class="text-muted small mt-3 mb-0" id="notifStatusMsg"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-2">Які сповіщення отримувати</h2>
+                <p class="text-muted small mb-3">
+                    Ці прапорці діють для всіх ваших підписаних пристроїв.
+                </p>
+
+                <form method="post" action="{{ path('admin2_settings_notifications_preferences') }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_notifications') }}">
+
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" role="switch"
+                               id="notifyLocalOrders" name="notify_local_orders" value="1"
+                               {% if user.notifyLocalOrders %}checked{% endif %}>
+                        <label class="form-check-label" for="notifyLocalOrders">
+                            Нові замовлення з сайту
+                        </label>
+                    </div>
+
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" role="switch"
+                               id="notifyRozetkaOrders" name="notify_rozetka_orders" value="1"
+                               {% if user.notifyRozetkaOrders %}checked{% endif %}>
+                        <label class="form-check-label" for="notifyRozetkaOrders">
+                            Нові замовлення Rozetka
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-outline-dark">
+                        Зберегти налаштування
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
