@@ -33,6 +33,11 @@
                 <a href="{{ path('admin2_products') }}" class="dashboard-hero__btn">
                     <i class="bi bi-box-seam"></i> Товари
                 </a>
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <a href="{{ path('admin2_vendor_orders') }}" class="dashboard-hero__btn">
+                        <i class="bi bi-truck"></i> Замовлення постачальників
+                    </a>
+                {% endif %}
                 <a href="{{ path('admin2_planning') }}" class="dashboard-hero__btn">
                     <i class="bi bi-calendar-check"></i> Планування
                 </a>

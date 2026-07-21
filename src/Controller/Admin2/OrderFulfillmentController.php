@@ -277,6 +277,7 @@ class OrderFulfillmentController extends AbstractController
             'id'                  => $vendorOrder->getId(),
             'key'                 => 'vendor:' . $vendorOrder->getId(),
             'supplier'            => $vendorOrder->getSupplier()->getTitle(),
+            'supplierAddress'     => trim((string) ($vendorOrder->getSupplier()->getAddress() ?? '')),
             'supplierOrderNumber' => $vendorOrder->getSupplierOrderNumber(),
             'productTitle'        => $vendorOrder->getProductTitle(),
             'items'               => $this->presentVendorItems($vendorOrder),
