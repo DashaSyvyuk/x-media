@@ -55,10 +55,12 @@ final class OrderFulfillmentCustomerBoardProvider
                 foreach ($this->rozetkaApiClient->fetchActiveOrders() as $apiOrder) {
                     try {
                         $presented = $this->presentRozetkaBoardOrder($apiOrder, $withEditLinks);
-                        if ($this->fulfillmentStatusHelper->isRozetkaDelivering(
-                            (int) ($presented['statusId'] ?? 0),
-                            (string) ($presented['ttn'] ?? ''),
-                        )) {
+                        if (
+                            $this->fulfillmentStatusHelper->isRozetkaDelivering(
+                                (int) ($presented['statusId'] ?? 0),
+                                (string) ($presented['ttn'] ?? ''),
+                            )
+                        ) {
                             continue;
                         }
                         $customerOrders[] = $presented;

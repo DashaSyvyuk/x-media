@@ -33,15 +33,26 @@ class SettingsNotificationsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/settings/notifications/subscribe', name: 'admin2_settings_notifications_subscribe', methods: ['POST'])]
+    #[Route(
+        '/admin/settings/notifications/subscribe',
+        name: 'admin2_settings_notifications_subscribe',
+        methods: ['POST'],
+    )]
     public function subscribe(Request $request): JsonResponse
     {
-        if (! $this->isCsrfTokenValid('admin2_notifications', (string) $request->headers->get('X-CSRF-TOKEN'))) {
-            return $this->json(['ok' => false, 'error' => 'Невірний CSRF-токен.'], Response::HTTP_FORBIDDEN);
+        $csrfToken = (string) $request->headers->get('X-CSRF-TOKEN');
+        if (! $this->isCsrfTokenValid('admin2_notifications', $csrfToken)) {
+            return $this->json(
+                ['ok' => false, 'error' => 'Невірний CSRF-токен.'],
+                Response::HTTP_FORBIDDEN,
+            );
         }
 
         if (! $this->notifier->isConfigured()) {
-            return $this->json(['ok' => false, 'error' => 'Push не налаштовано на сервері (VAPID).'], Response::HTTP_BAD_REQUEST);
+            return $this->json(
+                ['ok' => false, 'error' => 'Push не налаштовано на сервері (VAPID).'],
+                Response::HTTP_BAD_REQUEST,
+            );
         }
 
         /** @var AdminUser $user */
@@ -53,7 +64,10 @@ class SettingsNotificationsController extends AbstractController
         $auth = trim((string) ($payload['keys']['auth'] ?? ''));
 
         if ($endpoint === '' || $p256dh === '' || $auth === '') {
-            return $this->json(['ok' => false, 'error' => 'Неповні дані підписки.'], Response::HTTP_BAD_REQUEST);
+            return $this->json(
+                ['ok' => false, 'error' => 'Неповні дані підписки.'],
+                Response::HTTP_BAD_REQUEST,
+            );
         }
 
         $subscription = $this->subscriptionRepository->findOneByEndpoint($endpoint);
@@ -76,11 +90,19 @@ class SettingsNotificationsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/settings/notifications/unsubscribe', name: 'admin2_settings_notifications_unsubscribe', methods: ['POST'])]
+    #[Route(
+        '/admin/settings/notifications/unsubscribe',
+        name: 'admin2_settings_notifications_unsubscribe',
+        methods: ['POST'],
+    )]
     public function unsubscribe(Request $request): JsonResponse
     {
-        if (! $this->isCsrfTokenValid('admin2_notifications', (string) $request->headers->get('X-CSRF-TOKEN'))) {
-            return $this->json(['ok' => false, 'error' => 'Невірний CSRF-токен.'], Response::HTTP_FORBIDDEN);
+        $csrfToken = (string) $request->headers->get('X-CSRF-TOKEN');
+        if (! $this->isCsrfTokenValid('admin2_notifications', $csrfToken)) {
+            return $this->json(
+                ['ok' => false, 'error' => 'Невірний CSRF-токен.'],
+                Response::HTTP_FORBIDDEN,
+            );
         }
 
         /** @var AdminUser $user */
@@ -90,7 +112,9 @@ class SettingsNotificationsController extends AbstractController
 
         if ($endpoint !== '') {
             $subscription = $this->subscriptionRepository->findOneByEndpoint($endpoint);
-            if ($subscription instanceof AdminPushSubscription && $subscription->getUser()->getId() === $user->getId()) {
+            $ownsSubscription = $subscription instanceof AdminPushSubscription
+                && $subscription->getUser()->getId() === $user->getId();
+            if ($ownsSubscription) {
                 $this->entityManager->remove($subscription);
                 $this->entityManager->flush();
             }
@@ -107,10 +131,15 @@ class SettingsNotificationsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/settings/notifications/preferences', name: 'admin2_settings_notifications_preferences', methods: ['POST'])]
+    #[Route(
+        '/admin/settings/notifications/preferences',
+        name: 'admin2_settings_notifications_preferences',
+        methods: ['POST'],
+    )]
     public function preferences(Request $request): Response
     {
-        if (! $this->isCsrfTokenValid('admin2_notifications', (string) $request->request->get('_token'))) {
+        $csrfToken = (string) $request->request->get('_token');
+        if (! $this->isCsrfTokenValid('admin2_notifications', $csrfToken)) {
             $this->addFlash('error', 'Невірний CSRF-токен.');
 
             return $this->redirectToRoute('admin2_settings', ['tab' => 'notifications']);
