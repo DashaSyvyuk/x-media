@@ -77,7 +77,7 @@ final class AdminWebPushNotifier
             return;
         }
 
-        $id = (int) ($order['id'] ?? 0);
+        $id = $order['id'];
         if ($id <= 0) {
             return;
         }
