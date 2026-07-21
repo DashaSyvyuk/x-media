@@ -10,7 +10,7 @@
     --color-slate: #0f172a;
     --font-body: 'Inter', system-ui, sans-serif;
     --app-navbar-base-height: 56px;
-    --app-navbar-height: 56px;
+    --app-navbar-height: calc(var(--app-navbar-base-height) + env(safe-area-inset-top, 0px));
 }
 
 html {
@@ -65,6 +65,7 @@ body.bg-light {
     top: 0;
     z-index: 1040;
     min-height: var(--app-navbar-height);
+    padding-top: env(safe-area-inset-top, 0px);
     background-color: var(--color-slate) !important;
 }
 
