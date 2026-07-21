@@ -40,7 +40,7 @@
             </form>
         </div>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0 products-table">
+            <table class="table table-hover align-middle mb-0 products-table products-table--mobile-cards">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -56,35 +56,34 @@
                 <tbody>
                     {% for item in pagination %}
                         <tr>
-                            <td>{{ item.id }}</td>
-                            <td>{{ item.supplier.title }}</td>
-                            <td>{{ item.supplierOrderNumber }}</td>
-                            <td>
-                                {% for line in item.productTitle|split('\n')|filter(v => v|trim != '')|slice(0, 2) %}
-                                    <div>{{ line|slice(0, 50) }}{% if line|length > 50 %}…{% endif %}</div>
+                            <td data-label="ID">{{ item.id }}</td>
+                            <td data-label="Постачальник">{{ item.supplier.title }}</td>
+                            <td data-label="№ пост.">{{ item.supplierOrderNumber }}</td>
+                            <td data-label="Товар">
+                                {% set productLines = item.productTitle|split('\n')|filter(v => v|trim != '') %}
+                                {% for line in productLines %}
+                                    <div class="product-title product-title--full">{{ line|trim }}</div>
                                 {% else %}
                                     —
                                 {% endfor %}
-                                {% set productLines = item.productTitle|split('\n')|filter(v => v|trim != '') %}
-                                {% if productLines|length > 2 %}
-                                    <div class="text-muted small">+{{ productLines|length - 2 }} ще</div>
-                                {% endif %}
                             </td>
-                            <td class="text-end">{{ order_macros.money(item.price) }}</td>
-                            <td>{{ vendor_macros.status_badge(item.status) }}</td>
-                            <td>{{ item.createdAt|date('d.m.Y H:i') }}</td>
-                            <td class="text-end text-nowrap">
-                                <a href="{{ path('admin2_vendor_orders_edit', {id: item.id}) }}" class="btn btn-sm btn-outline-secondary">Редагувати</a>
-                                <form method="post"
-                                      action="{{ path('admin2_vendor_orders_delete', {id: item.id}) ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}"
-                                      class="d-inline">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('vendor_order_action') }}">
-                                    <button type="submit"
-                                            class="btn btn-sm btn-outline-danger"
-                                            data-confirm="Видалити замовлення постачальника #{{ item.id }}?">
-                                        Видалити
-                                    </button>
-                                </form>
+                            <td data-label="Ціна" class="text-end">{{ order_macros.money(item.price) }}</td>
+                            <td data-label="Статус">{{ vendor_macros.status_badge(item.status) }}</td>
+                            <td data-label="Дата">{{ item.createdAt|date('d.m.Y H:i') }}</td>
+                            <td class="text-end text-nowrap col-actions" data-label="">
+                                <div class="table-actions">
+                                    <a href="{{ path('admin2_vendor_orders_edit', {id: item.id}) }}" class="btn btn-sm btn-outline-secondary">Редагувати</a>
+                                    <form method="post"
+                                          action="{{ path('admin2_vendor_orders_delete', {id: item.id}) ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}"
+                                          class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('vendor_order_action') }}">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                data-confirm="Видалити замовлення постачальника #{{ item.id }}?">
+                                            Видалити
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     {% else %}

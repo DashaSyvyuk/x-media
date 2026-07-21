@@ -63,6 +63,7 @@
     font-weight: 700;
     line-height: 1.15;
     color: #0f172a;
+    white-space: nowrap;
 }
 
 .debt-stat-card--positive {

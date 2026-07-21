@@ -112,7 +112,7 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table products-table align-middle">
+                <table class="table products-table products-table--mobile-cards align-middle">
                     <thead>
                         <tr>
                             <th>{{ debt_macros.sort_link('ID', 'id', sort, direction, query) }}</th>
@@ -128,18 +128,18 @@
                             {% set balance = balances[debtor.id]|default(0) %}
                             {% set symbol = debtor.currency.shortTitle ?: debtor.currency.code %}
                             <tr>
-                                <td class="text-muted">#{{ debtor.id }}</td>
-                                <td><div class="product-title">{{ debtor.name }}</div></td>
-                                <td class="text-muted small">{{ debtor.currency.code }}</td>
-                                <td>{{ debt_macros.money(balance, symbol) }}</td>
-                                <td>
+                                <td data-label="ID" class="text-muted">#{{ debtor.id }}</td>
+                                <td data-label="Ім'я"><div class="product-title product-title--full">{{ debtor.name }}</div></td>
+                                <td data-label="Валюта" class="text-muted small">{{ debtor.currency.code }}</td>
+                                <td data-label="Баланс">{{ debt_macros.money(balance, symbol) }}</td>
+                                <td data-label="Статус">
                                     {% if debtor.active %}
                                         <span class="status-badge status-badge--active">Активний</span>
                                     {% else %}
                                         <span class="status-badge status-badge--blocked">Неактивний</span>
                                     {% endif %}
                                 </td>
-                                <td class="text-end">
+                                <td class="text-end col-actions" data-label="">
                                     <div class="table-actions">
                                         <a href="{{ path('admin2_debtors_show', {id: debtor.id}) }}" class="table-action table-action--teal" title="Деталі">
                                             <i class="bi bi-eye"></i>

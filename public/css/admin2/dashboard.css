@@ -282,6 +282,7 @@
     line-height: 1.15;
     letter-spacing: -0.03em;
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
 }
 
 .dashboard-kpi__unit {
@@ -302,6 +303,7 @@
     color: #3f5166;
     letter-spacing: -0.02em;
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
 }
 
 .dashboard-kpi__value-line.is-positive,
@@ -434,6 +436,7 @@
 .dashboard-order-sum {
     min-width: 5.5rem;
     text-align: right;
+    white-space: nowrap;
 }
 
 .dashboard-open-btn {
@@ -462,11 +465,19 @@
     gap: 0.4rem;
 }
 
+.dashboard-fop-list--wide {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
+    gap: 0.5rem;
+}
+
 .dashboard-fop-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
+    min-width: 0;
+    max-width: 100%;
     padding: 0.75rem 0.85rem;
     border-radius: 12px;
     background: linear-gradient(180deg, #f8fafc, #f1f5f9);
@@ -477,6 +488,16 @@
 .dashboard-fop-item:hover {
     border-color: rgba(13, 148, 136, 0.3);
     transform: translateY(-1px);
+}
+
+a.dashboard-fop-item--link {
+    text-decoration: none;
+    color: inherit;
+}
+
+a.dashboard-fop-item--link:hover {
+    background: #fff;
+    color: inherit;
 }
 
 .dashboard-fop-item__title {
@@ -510,6 +531,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
+    min-width: 0;
+    max-width: 100%;
     padding: 0.75rem 0.85rem;
     border-radius: 12px;
     background: linear-gradient(180deg, #f8fafc, #f1f5f9);
@@ -540,6 +563,7 @@
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
+    white-space: nowrap;
 }
 
 .dashboard-debt-item__sum.is-positive {
@@ -621,36 +645,101 @@
 }
 
 @media (max-width: 767.98px) {
+    .dashboard-page {
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: clip;
+    }
+
     .dashboard-hero {
         padding: 1.35rem 1.25rem;
     }
 
+    .dashboard-panel,
+    .dashboard-kpi-block {
+        min-width: 0;
+        max-width: 100%;
+        padding-left: 0.95rem;
+        padding-right: 0.95rem;
+    }
+
     .exchange-rates-grid,
     .dashboard-kpi-band,
-    .dashboard-cash-grid {
+    .dashboard-cash-grid,
+    .dashboard-fop-list--wide {
         grid-template-columns: 1fr;
     }
 
     .dashboard-kpi-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.45rem;
     }
 
     .dashboard-kpi-grid--4 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.65rem;
+    }
+
+    .dashboard-kpi {
+        min-width: 0;
+        padding: 0.65rem 0.5rem;
+    }
+
+    .dashboard-kpi__value {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: clamp(0.95rem, 3.8vw, 1.2rem);
+    }
+
+    .dashboard-kpi__value-line {
+        white-space: normal;
+        overflow-wrap: anywhere;
+        font-size: 0.95rem;
+    }
+
+    .dashboard-fop-item,
+    .dashboard-debt-item {
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .dashboard-fop-item__title,
+    .dashboard-debt-item__name {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .dashboard-debt-item__sum,
+    .dashboard-order-sum {
+        flex-shrink: 0;
+        max-width: 45%;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .dashboard-payment-row {
-        grid-template-columns: 3rem 1fr auto;
+        grid-template-columns: 3rem minmax(0, 1fr) auto;
+        gap: 0.35rem 0.5rem;
     }
 
+    .dashboard-payment-row__cash,
     .dashboard-payment-row__desc {
         grid-column: 1 / -1;
         white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+    }
+
+    .dashboard-order-row {
+        min-width: 0;
     }
 
     .dashboard-order-row__side {
         width: 100%;
         justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.4rem;
     }
 }
 

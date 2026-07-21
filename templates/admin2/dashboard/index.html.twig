@@ -142,7 +142,114 @@
         </section>
 
         {% if isStaff %}
-            <section class="dashboard-kpi-band dash-reveal dash-reveal--3">
+            <section class="dashboard-panel dash-reveal dash-reveal--3">
+                <div class="dashboard-panel__head">
+                    <h2 class="dashboard-panel__title">ФОПи</h2>
+                    <a href="{{ path('admin2_settings', {tab: 'fops'}) }}" class="dashboard-section-link">Усі →</a>
+                </div>
+
+                {% if dash.fops %}
+                    <div class="dashboard-fop-list dashboard-fop-list--wide">
+                        {% for fop in dash.fops %}
+                            <div class="dashboard-fop-item">
+                                <span class="dashboard-fop-item__title">{{ fop.title }}</span>
+                                {{ order_macros.copy_button(fop.title, 'Скопіювати назву') }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="dashboard-empty mb-0">ФОПів поки немає.</p>
+                {% endif %}
+            </section>
+
+            <section class="dashboard-panel dash-reveal dash-reveal--4">
+                <div class="dashboard-panel__head">
+                    <div>
+                        <h2 class="dashboard-panel__title">Обіг / каси</h2>
+                        <p class="dashboard-panel__desc">Активні каси</p>
+                    </div>
+                    <a href="{{ path('admin2_circulations') }}" class="dashboard-section-link">Усі →</a>
+                </div>
+
+                {% if dash.cashiers %}
+                    <div class="dashboard-fop-list dashboard-fop-list--wide">
+                        {% for cash in dash.cashiers %}
+                            <a href="{{ path('admin2_circulations_show', {id: cash.id}) }}" class="dashboard-fop-item dashboard-fop-item--link">
+                                <span class="dashboard-fop-item__title">{{ cash.title }}</span>
+                                <span class="dashboard-debt-item__sum {{ cash.balance >= 0 ? 'is-positive' : 'is-negative' }}">
+                                    {{ cash.balance > 0 ? '+' : '' }}{{ cash.balance|number_format(0, '.', ' ') }}&nbsp;{{ cash.code }}
+                                </span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="dashboard-empty mb-0">Активних кас немає.</p>
+                {% endif %}
+            </section>
+
+            <section class="dashboard-panel dash-reveal dash-reveal--4">
+                <div class="dashboard-panel__head">
+                    <div>
+                        <h2 class="dashboard-panel__title">Обіг за сьогодні</h2>
+                        <p class="dashboard-panel__desc">Рух по касах · {{ 'now'|date('d.m.Y') }}</p>
+                    </div>
+                    <a href="{{ path('admin2_circulations') }}" class="dashboard-section-link">Обіг →</a>
+                </div>
+
+                <div class="dashboard-cash-grid">
+                    <div class="dashboard-cash dashboard-cash--in">
+                        <div class="dashboard-kpi__label">Надходження</div>
+                        {% if dash.circulationToday.incomeByCurrency %}
+                            {% for item in dash.circulationToday.incomeByCurrency %}
+                                <div class="dashboard-kpi__value-line">+{{ item.total|number_format(0, '.', ' ') }}&nbsp;{{ item.code }}</div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="dashboard-kpi__value dashboard-kpi__value--muted">—</div>
+                        {% endif %}
+                    </div>
+                    <div class="dashboard-cash dashboard-cash--out">
+                        <div class="dashboard-kpi__label">Видатки</div>
+                        {% if dash.circulationToday.expenseByCurrency %}
+                            {% for item in dash.circulationToday.expenseByCurrency %}
+                                <div class="dashboard-kpi__value-line">{{ item.total|number_format(0, '.', ' ') }}&nbsp;{{ item.code }}</div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="dashboard-kpi__value dashboard-kpi__value--muted">—</div>
+                        {% endif %}
+                    </div>
+                    <div class="dashboard-cash">
+                        <div class="dashboard-kpi__label">Сальдо</div>
+                        {% if dash.circulationToday.netByCurrency %}
+                            {% for item in dash.circulationToday.netByCurrency %}
+                                <div class="dashboard-kpi__value-line {{ item.total >= 0 ? 'is-positive' : 'is-negative' }}">
+                                    {{ item.total > 0 ? '+' : '' }}{{ item.total|number_format(0, '.', ' ') }}&nbsp;{{ item.code }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="dashboard-kpi__value dashboard-kpi__value--muted">—</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if dash.circulationToday.payments %}
+                    <div class="dashboard-payment-list">
+                        {% for payment in dash.circulationToday.payments %}
+                            <div class="dashboard-payment-row">
+                                <span class="dashboard-meta dashboard-payment-row__time">{{ payment.createdAt|date('H:i') }}</span>
+                                <span class="dashboard-payment-row__cash">{{ payment.cash }}</span>
+                                <span class="dashboard-payment-row__desc">{{ payment.description ?: payment.note ?: '—' }}</span>
+                                <span class="dashboard-order-sum {{ payment.sum >= 0 ? 'is-positive' : 'is-negative' }}">
+                                    {{ payment.sum > 0 ? '+' : '' }}{{ payment.sum|number_format(0, '.', ' ') }}&nbsp;{{ payment.code }}
+                                </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="dashboard-empty mb-0">Сьогодні рухів по касах ще не було.</p>
+                {% endif %}
+            </section>
+
+            <section class="dashboard-kpi-band dash-reveal dash-reveal--5">
                 <div class="dashboard-kpi-block">
                     <div class="dashboard-kpi-block__head">
                         <h2 class="dashboard-panel__title">Сьогодні</h2>
@@ -155,7 +262,7 @@
                         </div>
                         <div class="dashboard-kpi">
                             <div class="dashboard-kpi__label">Виручка</div>
-                            <div class="dashboard-kpi__value">{{ dash.today.revenue|number_format(0, '.', ' ') }} <span class="dashboard-kpi__unit">₴</span></div>
+                            <div class="dashboard-kpi__value">{{ dash.today.revenue|number_format(0, '.', ' ') }}&nbsp;<span class="dashboard-kpi__unit">₴</span></div>
                         </div>
                         <div class="dashboard-kpi">
                             <div class="dashboard-kpi__label">Оплачено</div>
@@ -175,7 +282,7 @@
                         </div>
                         <div class="dashboard-kpi">
                             <div class="dashboard-kpi__label">Виручка</div>
-                            <div class="dashboard-kpi__value">{{ dash.month.revenue|number_format(0, '.', ' ') }} <span class="dashboard-kpi__unit">₴</span></div>
+                            <div class="dashboard-kpi__value">{{ dash.month.revenue|number_format(0, '.', ' ') }}&nbsp;<span class="dashboard-kpi__unit">₴</span></div>
                         </div>
                         <div class="dashboard-kpi">
                             <div class="dashboard-kpi__label">Оплачено</div>
@@ -189,169 +296,83 @@
                 </div>
             </section>
 
-            <section class="dashboard-panel dash-reveal dash-reveal--4">
+            <section class="dashboard-panel dash-reveal dash-reveal--5">
                 <div class="dashboard-panel__head">
                     <div>
-                        <h2 class="dashboard-panel__title">Обіг за сьогодні</h2>
-                        <p class="dashboard-panel__desc">Рух по касах · {{ 'now'|date('d.m.Y') }}</p>
+                        <h2 class="dashboard-panel__title">Актуальні замовлення</h2>
+                        <p class="dashboard-panel__desc">Нові → в обробці → надіслані</p>
                     </div>
-                    <a href="{{ path('admin2_circulations') }}" class="dashboard-section-link">Обіг →</a>
+                    <a href="{{ path('admin2_orders') }}" class="dashboard-section-link">Усі →</a>
                 </div>
 
-                <div class="dashboard-cash-grid">
-                    <div class="dashboard-cash dashboard-cash--in">
-                        <div class="dashboard-kpi__label">Надходження</div>
-                        {% if dash.circulationToday.incomeByCurrency %}
-                            {% for item in dash.circulationToday.incomeByCurrency %}
-                                <div class="dashboard-kpi__value-line">+{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}</div>
-                            {% endfor %}
-                        {% else %}
-                            <div class="dashboard-kpi__value dashboard-kpi__value--muted">—</div>
-                        {% endif %}
-                    </div>
-                    <div class="dashboard-cash dashboard-cash--out">
-                        <div class="dashboard-kpi__label">Видатки</div>
-                        {% if dash.circulationToday.expenseByCurrency %}
-                            {% for item in dash.circulationToday.expenseByCurrency %}
-                                <div class="dashboard-kpi__value-line">{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}</div>
-                            {% endfor %}
-                        {% else %}
-                            <div class="dashboard-kpi__value dashboard-kpi__value--muted">—</div>
-                        {% endif %}
-                    </div>
-                    <div class="dashboard-cash">
-                        <div class="dashboard-kpi__label">Сальдо</div>
-                        {% if dash.circulationToday.netByCurrency %}
-                            {% for item in dash.circulationToday.netByCurrency %}
-                                <div class="dashboard-kpi__value-line {{ item.total >= 0 ? 'is-positive' : 'is-negative' }}">
-                                    {{ item.total > 0 ? '+' : '' }}{{ item.total|number_format(0, '.', ' ') }} {{ item.code }}
+                {% if dash.activeOrders %}
+                    <div class="dashboard-order-list">
+                        {% for order in dash.activeOrders %}
+                            {% set orderUrl = order.isRozetka|default(false)
+                                ? path('admin2_rozetka_orders_show', {id: order.id})
+                                : path('admin2_orders_edit', {id: order.id}) %}
+                            <div class="dashboard-order-row">
+                                <div class="dashboard-order-row__main">
+                                    <div class="dashboard-order-row__id">
+                                        <span class="dashboard-order-num">
+                                            {{ order.orderNumber ?: ('#' ~ order.id) }}
+                                            {% if order.isRozetka|default(false) %}
+                                                <span class="dashboard-order-source">RZ</span>
+                                            {% endif %}
+                                        </span>
+                                        <span class="dashboard-meta">{{ order.createdAt|date('d.m H:i') }}</span>
+                                    </div>
+                                    <div class="dashboard-order-row__customer">
+                                        <span class="dashboard-order-customer">{{ order.customer ?: '—' }}</span>
+                                        {% if order.phone %}
+                                            <span class="dashboard-meta">{{ order.phone }}</span>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            {% endfor %}
-                        {% else %}
-                            <div class="dashboard-kpi__value dashboard-kpi__value--muted">—</div>
-                        {% endif %}
-                    </div>
-                </div>
-
-                {% if dash.circulationToday.payments %}
-                    <div class="dashboard-payment-list">
-                        {% for payment in dash.circulationToday.payments %}
-                            <div class="dashboard-payment-row">
-                                <span class="dashboard-meta dashboard-payment-row__time">{{ payment.createdAt|date('H:i') }}</span>
-                                <span class="dashboard-payment-row__cash">{{ payment.cash }}</span>
-                                <span class="dashboard-payment-row__desc">{{ payment.description ?: payment.note ?: '—' }}</span>
-                                <span class="dashboard-order-sum {{ payment.sum >= 0 ? 'is-positive' : 'is-negative' }}">
-                                    {{ payment.sum > 0 ? '+' : '' }}{{ payment.sum|number_format(0, '.', ' ') }} {{ payment.code }}
-                                </span>
+                                <div class="dashboard-order-row__side">
+                                    <span class="order-status-badge" style="--status-color: {{ order.statusColor|default('#64748b') }}">
+                                        {{ order.statusLabel|default(order.status) }}
+                                    </span>
+                                    {{ order_macros.payment_status_badge(order.paymentStatus|default(false)) }}
+                                    <span class="dashboard-order-sum">{{ order.total|number_format(0, '.', ' ') }}&nbsp;₴</span>
+                                    <a href="{{ orderUrl }}" class="dashboard-open-btn" title="Відкрити">
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </div>
                             </div>
                         {% endfor %}
                     </div>
                 {% else %}
-                    <p class="dashboard-empty mb-0">Сьогодні рухів по касах ще не було.</p>
+                    <p class="dashboard-empty mb-0">Актуальних замовлень немає.</p>
                 {% endif %}
             </section>
 
-            <div class="dashboard-main-grid dash-reveal dash-reveal--5">
-                <section class="dashboard-panel">
+            {% if isGod %}
+                <section class="dashboard-panel dash-reveal dash-reveal--6">
                     <div class="dashboard-panel__head">
                         <div>
-                            <h2 class="dashboard-panel__title">Актуальні замовлення</h2>
-                            <p class="dashboard-panel__desc">Нові та в роботі</p>
+                            <h2 class="dashboard-panel__title">Борги</h2>
+                            <p class="dashboard-panel__desc">Активні контакти</p>
                         </div>
-                        <a href="{{ path('admin2_orders') }}" class="dashboard-section-link">Усі →</a>
+                        <a href="{{ path('admin2_debtors') }}" class="dashboard-section-link">Усі →</a>
                     </div>
 
-                    {% if dash.activeOrders %}
-                        <div class="dashboard-order-list">
-                            {% for order in dash.activeOrders %}
-                                {% set orderUrl = order.isRozetka|default(false)
-                                    ? path('admin2_rozetka_orders_show', {id: order.id})
-                                    : path('admin2_orders_edit', {id: order.id}) %}
-                                <div class="dashboard-order-row">
-                                    <div class="dashboard-order-row__main">
-                                        <div class="dashboard-order-row__id">
-                                            <span class="dashboard-order-num">
-                                                {{ order.orderNumber ?: ('#' ~ order.id) }}
-                                                {% if order.isRozetka|default(false) %}
-                                                    <span class="dashboard-order-source">RZ</span>
-                                                {% endif %}
-                                            </span>
-                                            <span class="dashboard-meta">{{ order.createdAt|date('d.m H:i') }}</span>
-                                        </div>
-                                        <div class="dashboard-order-row__customer">
-                                            <span class="dashboard-order-customer">{{ order.customer ?: '—' }}</span>
-                                            {% if order.phone %}
-                                                <span class="dashboard-meta">{{ order.phone }}</span>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="dashboard-order-row__side">
-                                        <span class="order-status-badge" style="--status-color: {{ order.statusColor|default('#64748b') }}">
-                                            {{ order.statusLabel|default(order.status) }}
-                                        </span>
-                                        {{ order_macros.payment_status_badge(order.paymentStatus|default(false)) }}
-                                        <span class="dashboard-order-sum">{{ order.total|number_format(0, '.', ' ') }} ₴</span>
-                                        <a href="{{ orderUrl }}" class="dashboard-open-btn" title="Відкрити">
-                                            <i class="bi bi-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
+                    {% if dash.debts %}
+                        <div class="dashboard-debt-list">
+                            {% for debt in dash.debts %}
+                                <a href="{{ path('admin2_debtors_show', {id: debt.id}) }}" class="dashboard-debt-item">
+                                    <span class="dashboard-debt-item__name">{{ debt.name }}</span>
+                                    <span class="dashboard-debt-item__sum {{ debt.balance >= 0 ? 'is-positive' : 'is-negative' }}">
+                                        {{ debt.balance > 0 ? '+' : '' }}{{ debt.balance|number_format(0, '.', ' ') }}&nbsp;{{ debt.code }}
+                                    </span>
+                                </a>
                             {% endfor %}
                         </div>
                     {% else %}
-                        <p class="dashboard-empty mb-0">Актуальних замовлень немає.</p>
+                        <p class="dashboard-empty mb-0">Активних боргів немає.</p>
                     {% endif %}
                 </section>
-
-                <div class="dashboard-side-stack">
-                    <section class="dashboard-panel dashboard-panel--fops">
-                        <div class="dashboard-panel__head">
-                            <h2 class="dashboard-panel__title">ФОПи</h2>
-                            <a href="{{ path('admin2_settings', {tab: 'fops'}) }}" class="dashboard-section-link">Усі →</a>
-                        </div>
-
-                        {% if dash.fops %}
-                            <div class="dashboard-fop-list">
-                                {% for fop in dash.fops %}
-                                    <div class="dashboard-fop-item">
-                                        <span class="dashboard-fop-item__title">{{ fop.title }}</span>
-                                        {{ order_macros.copy_button(fop.title, 'Скопіювати назву') }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <p class="dashboard-empty mb-0">ФОПів поки немає.</p>
-                        {% endif %}
-                    </section>
-
-                    {% if isGod %}
-                        <section class="dashboard-panel dashboard-panel--debts">
-                            <div class="dashboard-panel__head">
-                                <div>
-                                    <h2 class="dashboard-panel__title">Борги</h2>
-                                    <p class="dashboard-panel__desc">Активні контакти</p>
-                                </div>
-                                <a href="{{ path('admin2_debtors') }}" class="dashboard-section-link">Усі →</a>
-                            </div>
-
-                            {% if dash.debts %}
-                                <div class="dashboard-debt-list">
-                                    {% for debt in dash.debts %}
-                                        <a href="{{ path('admin2_debtors_show', {id: debt.id}) }}" class="dashboard-debt-item">
-                                            <span class="dashboard-debt-item__name">{{ debt.name }}</span>
-                                            <span class="dashboard-debt-item__sum {{ debt.balance >= 0 ? 'is-positive' : 'is-negative' }}">
-                                                {{ debt.balance > 0 ? '+' : '' }}{{ debt.balance|number_format(0, '.', ' ') }} {{ debt.code }}
-                                            </span>
-                                        </a>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                <p class="dashboard-empty mb-0">Активних боргів немає.</p>
-                            {% endif %}
-                        </section>
-                    {% endif %}
-                </div>
-            </div>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

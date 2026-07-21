@@ -4,16 +4,18 @@
 
 <nav class="navbar navbar-dark shadow-sm app-navbar sticky-top">
     <div class="container-fluid px-3">
-        <button id="sidebarToggle" class="btn text-white border-0 fs-4 p-0 p-md-2" type="button" aria-label="Меню">
-            <i class="bi bi-list"></i>
-        </button>
+        <div class="app-navbar__side app-navbar__side--start">
+            <button id="sidebarToggle" class="btn text-white border-0 fs-4 p-0 p-md-2" type="button" aria-label="Меню">
+                <i class="bi bi-list"></i>
+            </button>
+        </div>
 
         <a class="navbar-brand fw-bold d-flex align-items-center gap-2 mb-0" href="{{ path('admin2_dashboard') }}">
             <span class="brand-icon"><i class="bi bi-shop"></i></span>
             <span>X-media</span>
         </a>
 
-        <div class="d-flex align-items-center gap-2">
+        <div class="app-navbar__side app-navbar__side--end">
             <div class="dropdown d-none d-md-block">
                 <button class="btn btn-dark dropdown-toggle border-0 d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
                     <span class="user-avatar--initials" style="width:34px;height:34px;font-size:0.75rem;">{{ initials }}</span>

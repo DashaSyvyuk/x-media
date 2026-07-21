@@ -72,7 +72,7 @@
                         <tr>
                             <td data-label="ID" class="text-muted">#{{ stock.id }}</td>
                             <td data-label="Товар">
-                                <div class="product-title">{{ stock.product.title }}</div>
+                                <div class="product-title product-title--full">{{ stock.product.title }}</div>
                                 <div class="product-title__meta">#{{ stock.product.id }}{% if stock.product.productCode %} · {{ stock.product.productCode }}{% endif %}</div>
                             </td>
                             <td data-label="Склад" class="small">{{ stock_macros.warehouse_label(stock.warehouse) }}</td>

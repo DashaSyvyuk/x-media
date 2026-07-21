@@ -82,7 +82,7 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table products-table align-middle">
+                <table class="table products-table products-table--mobile-cards align-middle">
                     <thead>
                         <tr>
                             <th>{{ circ_macros.sort_link('ID', 'id', sort, direction, query) }}</th>
@@ -97,20 +97,20 @@
                         {% for circulation in pagination %}
                             {% set balance = balances[circulation.id]|default(0) %}
                             <tr>
-                                <td class="text-muted">#{{ circulation.id }}</td>
-                                <td>
-                                    <div class="product-title">{{ circulation.adminUser ? circulation.adminUser.email : '—' }}</div>
+                                <td data-label="ID" class="text-muted">#{{ circulation.id }}</td>
+                                <td data-label="Адмін">
+                                    <div class="product-title product-title--full">{{ circulation.adminUser ? circulation.adminUser.email : '—' }}</div>
                                 </td>
-                                <td class="text-muted small">{{ circulation.currency.code }}</td>
-                                <td>{{ circ_macros.money(balance, circulation.currency.code) }}</td>
-                                <td>
+                                <td data-label="Валюта" class="text-muted small">{{ circulation.currency.code }}</td>
+                                <td data-label="Баланс">{{ circ_macros.money(balance, circulation.currency.code) }}</td>
+                                <td data-label="Статус">
                                     {% if circulation.active %}
                                         <span class="status-badge status-badge--active">Активний</span>
                                     {% else %}
                                         <span class="status-badge status-badge--blocked">Неактивний</span>
                                     {% endif %}
                                 </td>
-                                <td class="text-end">
+                                <td class="text-end col-actions" data-label="">
                                     <div class="table-actions">
                                         <a href="{{ path('admin2_circulations_show', {id: circulation.id}) }}" class="table-action table-action--teal" title="Деталі">
                                             <i class="bi bi-eye"></i>
