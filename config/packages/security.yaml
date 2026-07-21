@@ -16,8 +16,9 @@ security:
                 - App\Security\AdminAuthenticator
             remember_me:
                 secret: '%kernel.secret%'
-                lifetime: 2592000
+                lifetime: 2592000 # 30 days
                 path: /
+                name: REMEMBERME_ADMIN
                 always_remember_me: true
             logout:
                 path: app_logout
@@ -33,8 +34,9 @@ security:
                 - App\Security\Admin2Authenticator
             remember_me:
                 secret: '%kernel.secret%'
-                lifetime: 2592000
+                lifetime: 2592000 # 30 days
                 path: /
+                name: REMEMBERME_ADMIN
                 always_remember_me: true
             logout:
                 path: admin2_logout

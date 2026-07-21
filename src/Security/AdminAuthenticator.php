@@ -34,7 +34,7 @@ class AdminAuthenticator extends AbstractLoginFormAuthenticator
             new PasswordCredentials($password),
             [
                 new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
-                new RememberMeBadge(),
+                (new RememberMeBadge())->enable(),
             ]
         );
     }
