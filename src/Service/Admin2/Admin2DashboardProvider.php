@@ -469,7 +469,7 @@ final class Admin2DashboardProvider
         usort(
             $result,
             static function (array $a, array $b): int {
-                $byStatus = ((int) ($a['statusSort'] ?? 9)) <=> ((int) ($b['statusSort'] ?? 9));
+                $byStatus = $a['statusSort'] <=> $b['statusSort'];
                 if ($byStatus !== 0) {
                     return $byStatus;
                 }
