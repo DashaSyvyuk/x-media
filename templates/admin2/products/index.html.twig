@@ -16,12 +16,18 @@
         perPage: perPage,
     } %}
 
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 page-header-row">
         <div>
             <h1 class="page-title mb-1">Товари</h1>
             <p class="text-muted mb-0 small">Керування каталогом інтернет-магазину</p>
         </div>
         <div class="d-flex flex-wrap align-items-center gap-2">
+            <button type="button"
+                    class="btn btn-outline-teal btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#productsBulkPriceModal">
+                <i class="bi bi-tags"></i> Ціна категорії
+            </button>
             <form method="post" action="{{ path('admin2_products_generate_hotline') }}" class="d-inline">
                 <input type="hidden" name="_token" value="{{ csrf_token('admin2_products_generate') }}">
                 {% for key, value in query %}{% if value %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endif %}{% endfor %}
@@ -225,6 +231,15 @@
             </div>
         {% endif %}
     </div>
+
+    {% include 'admin2/partials/category_bulk_price_modal.html.twig' with {
+        modalId: 'productsBulkPriceModal',
+        formAction: path('admin2_products_bulk_price'),
+        csrfTokenId: 'admin2_products_bulk_price',
+        categories: categories,
+        title: 'Зміна ціни для категорії',
+        hint: 'Додатне значення збільшує ціну сайту, від’ємне — зменшує. Мінімум після зміни — 1 ₴.',
+    } %}
 {% endblock %}
 
 {% block javascripts %}
@@ -235,6 +250,17 @@
                     event.preventDefault();
                 }
             });
+        });
+
+        document.getElementById('productsBulkPriceModalForm')?.addEventListener('submit', (event) => {
+            const form = event.currentTarget;
+            const category = form.querySelector('[name="category_id"]');
+            const delta = Number(form.querySelector('[name="delta"]')?.value || 0);
+            const label = category?.selectedOptions?.[0]?.textContent?.trim() || 'категорію';
+            const signed = delta > 0 ? `+${delta}` : `${delta}`;
+            if (!window.confirm(`Змінити ціну на ${signed} ₴ для всіх товарів у «${label}»?`)) {
+                event.preventDefault();
+            }
         });
     </script>
 {% endblock %}

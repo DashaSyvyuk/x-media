@@ -18,6 +18,7 @@
         "guzzlehttp/guzzle": "*",
         "jms/serializer-bundle": "*",
         "knplabs/knp-paginator-bundle": "*",
+        "minishlink/web-push": "^10.1",
         "nesbot/carbon": "*",
         "phpdocumentor/reflection-docblock": "*",
         "phpoffice/phpspreadsheet": "^3.9",

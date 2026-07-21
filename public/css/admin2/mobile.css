@@ -53,18 +53,23 @@
     }
 
     .products-toolbar {
-        flex-direction: column;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
         align-items: stretch;
     }
 
     .products-toolbar__search {
-        max-width: none;
-        flex-basis: auto;
+        grid-column: 1 / -1;
+        max-width: none !important;
+        flex: none !important;
+        width: 100%;
     }
 
     .products-toolbar .form-select,
     .products-toolbar .btn {
         width: 100%;
+        min-width: 0 !important;
     }
 
     .products-footer {
@@ -139,6 +144,14 @@
     .modal-fullscreen-sm-down .modal-content {
         min-height: calc(100dvh - 1rem);
         border-radius: 16px;
+    }
+
+    .app-main.container {
+        padding-top: 0.85rem !important;
+    }
+
+    .products-table-card .card-body.border-bottom {
+        padding: 0.75rem !important;
     }
 }
 

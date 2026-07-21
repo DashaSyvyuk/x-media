@@ -1,0 +1,53 @@
+{#
+  Expects:
+    - modalId
+    - formAction
+    - csrfTokenId
+    - categories (iterable of Category)
+    - title (optional)
+    - hint (optional)
+#}
+{% set modalId = modalId|default('categoryBulkPriceModal') %}
+{% set title = title|default('Зміна ціни для категорії') %}
+{% set hint = hint|default('Додатне значення збільшує ціну, від’ємне — зменшує. Мінімальна ціна після зміни — 1 ₴.') %}
+
+<div class="modal fade" id="{{ modalId }}" tabindex="-1" aria-labelledby="{{ modalId }}Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <form method="post" action="{{ formAction }}" id="{{ modalId }}Form">
+                <input type="hidden" name="_token" value="{{ csrf_token(csrfTokenId) }}">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title" id="{{ modalId }}Label">{{ title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted small mb-3">{{ hint }}</p>
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ modalId }}Category">Категорія</label>
+                        <select class="form-select" name="category_id" id="{{ modalId }}Category" required>
+                            <option value="">Оберіть категорію</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label" for="{{ modalId }}Delta">Зміна ціни, ₴</label>
+                        <input type="number"
+                               class="form-control"
+                               name="delta"
+                               id="{{ modalId }}Delta"
+                               step="1"
+                               required
+                               placeholder="Наприклад 100 або -100">
+                        <div class="form-text">Приклад: <code>100</code> — +100 ₴, <code>-50</code> — −50 ₴</div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">OK</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -16,6 +16,7 @@ parameters:
     # Default value for framework.trusted_proxies when TRUSTED_PROXIES env is unset.
     # See config/packages/framework.yaml.
     default_trusted_proxies: '127.0.0.1,REMOTE_ADDR,private_ranges'
+    vapid_subject_default: 'mailto:x-media@x-media.com.ua'
 
 services:
     # default configuration for services in *this* file
@@ -49,6 +50,10 @@ services:
         resource: '../src/EventListener'
 
     App\EventListener\OrderSubscriber:
+        tags:
+            - name: 'doctrine.orm.entity_listener'
+
+    App\EventListener\OrderNewPushListener:
         tags:
             - name: 'doctrine.orm.entity_listener'
 
@@ -87,3 +92,9 @@ services:
         arguments:
             $username: '%env(default::ROZETKA_SELLER_USERNAME)%'
             $password: '%env(default::ROZETKA_SELLER_PASSWORD)%'
+
+    App\Service\Admin2\AdminWebPushNotifier:
+        arguments:
+            $vapidPublicKey: '%env(default::VAPID_PUBLIC_KEY)%'
+            $vapidPrivateKey: '%env(default::VAPID_PRIVATE_KEY)%'
+            $vapidSubject: '%env(default:vapid_subject_default:VAPID_SUBJECT)%'

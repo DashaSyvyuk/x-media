@@ -3,6 +3,7 @@
 namespace App\Controller\Admin2;
 
 use App\Entity\RozetkaProduct;
+use App\Repository\CategoryRepository;
 use App\Repository\RozetkaProductRepository;
 use App\Service\Admin2\Admin2Paginator;
 use App\Service\GenerateRozetkaXmlService;
@@ -19,6 +20,7 @@ class RozetkaProductsController extends AbstractController
 {
     public function __construct(
         private readonly RozetkaProductRepository $rozetkaProductRepository,
+        private readonly CategoryRepository $categoryRepository,
         private readonly Admin2Paginator $admin2Paginator,
         private readonly GenerateRozetkaXmlService $generateRozetkaXmlService,
         private readonly EntityManagerInterface $entityManager,
@@ -49,6 +51,7 @@ class RozetkaProductsController extends AbstractController
         return $this->render('admin2/rozetka/index.html.twig', [
             'pagination'     => $this->admin2Paginator->paginate($query, $page, $perPage),
             'summary'        => $this->rozetkaProductRepository->getSummaryCounts(),
+            'categories'     => $this->categoryRepository->findBy([], ['title' => 'ASC']),
             'search'         => $search,
             'ready'          => is_string($ready) ? $ready : '',
             'feed'           => is_string($feed) ? $feed : '',
@@ -57,6 +60,47 @@ class RozetkaProductsController extends AbstractController
             'perPage'        => $perPage,
             'perPageOptions' => Admin2Paginator::PER_PAGE_OPTIONS,
         ]);
+    }
+
+    #[Route('/admin/rozetka/bulk-price', name: 'admin2_rozetka_bulk_price', methods: ['POST'])]
+    public function bulkPrice(Request $request): Response
+    {
+        if (! $this->isCsrfTokenValid('admin2_rozetka_bulk_price', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_rozetka');
+        }
+
+        $categoryId = (int) $request->request->get('category_id', 0);
+        $delta = (int) $request->request->get('delta', 0);
+
+        if ($categoryId <= 0 || $delta === 0) {
+            $this->addFlash('error', 'Оберіть категорію та вкажіть зміну ціни (не 0).');
+
+            return $this->redirectToRoute('admin2_rozetka');
+        }
+
+        $category = $this->categoryRepository->find($categoryId);
+        if ($category === null) {
+            $this->addFlash('error', 'Категорію не знайдено.');
+
+            return $this->redirectToRoute('admin2_rozetka');
+        }
+
+        $updated = $this->rozetkaProductRepository->adjustPriceForCategory($categoryId, $delta);
+        $sign = $delta > 0 ? '+' : '';
+        $this->addFlash(
+            'success',
+            sprintf(
+                'Ціну Rozetka змінено на %s%d ₴ для %d товар(ів) у категорії «%s».',
+                $sign,
+                $delta,
+                $updated,
+                $category->getTitle(),
+            ),
+        );
+
+        return $this->redirectToRoute('admin2_rozetka');
     }
 
     #[Route('/admin/rozetka/generate/a', name: 'admin2_rozetka_generate_a', methods: ['POST'])]

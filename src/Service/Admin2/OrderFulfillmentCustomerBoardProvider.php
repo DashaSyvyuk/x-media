@@ -54,7 +54,16 @@ final class OrderFulfillmentCustomerBoardProvider
             try {
                 foreach ($this->rozetkaApiClient->fetchActiveOrders() as $apiOrder) {
                     try {
-                        $customerOrders[] = $this->presentRozetkaBoardOrder($apiOrder, $withEditLinks);
+                        $presented = $this->presentRozetkaBoardOrder($apiOrder, $withEditLinks);
+                        if (
+                            $this->fulfillmentStatusHelper->isRozetkaDelivering(
+                                (int) ($presented['statusId'] ?? 0),
+                                (string) ($presented['ttn'] ?? ''),
+                            )
+                        ) {
+                            continue;
+                        }
+                        $customerOrders[] = $presented;
                     } catch (\Throwable $e) {
                         $this->logger->error('Rozetka fulfillment card failed.', [
                             'rozetkaOrderId' => $apiOrder['id'] ?? null,

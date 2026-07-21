@@ -100,15 +100,27 @@ final class Admin2StatisticsProvider
         $rozetkaMarkersActive = [];
         $rozetkaOrders = 0;
         $rozetkaPaid = 0;
+        $rozetkaRevenue = 0;
+        $rozetkaCompleted = 0;
         foreach ($rozetkaOrdersList as $apiOrder) {
             $marker = [
                 'created' => (string) ($apiOrder['created'] ?? ''),
                 'status'  => (int) ($apiOrder['status'] ?? 0),
+                'revenue' => 0,
             ];
             $rozetkaMarkers[] = $marker;
 
             if ($this->isRozetkaCanceled($apiOrder)) {
                 continue;
+            }
+
+            $total = (int) round((float) (
+                $apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0
+            ));
+            if ($this->isRozetkaDelivered($apiOrder)) {
+                $marker['revenue'] = $total;
+                $rozetkaRevenue += $total;
+                ++$rozetkaCompleted;
             }
 
             $rozetkaMarkersActive[] = $marker;
@@ -123,7 +135,14 @@ final class Admin2StatisticsProvider
             'periodLabel'  => self::PERIODS[$period],
             'from'         => $from,
             'to'           => $to,
-            'kpi'          => $this->buildKpi($from, $to, $rozetkaOrders, $rozetkaPaid),
+            'kpi'          => $this->buildKpi(
+                $from,
+                $to,
+                $rozetkaOrders,
+                $rozetkaPaid,
+                $rozetkaRevenue,
+                $rozetkaCompleted,
+            ),
             'daily'        => $this->buildDailySeries($from, $to, $rozetkaMarkersActive),
             'statusGroups' => $this->buildStatusGroups($from, $to, $rozetkaMarkers),
             'sources'      => $this->buildSources($from, $to, $rozetkaOrders),
@@ -208,6 +227,8 @@ final class Admin2StatisticsProvider
         \DateTimeImmutable $to,
         int $rozetkaOrders = 0,
         int $rozetkaPaid = 0,
+        int $rozetkaRevenue = 0,
+        int $rozetkaCompleted = 0,
     ): array {
         $row = $this->connection->fetchAssociative(
             'SELECT
@@ -233,7 +254,7 @@ final class Admin2StatisticsProvider
 
         $localOrdersTotal = (int) ($row['orders_total'] ?? 0);
         $localOrders = (int) ($row['orders_count'] ?? 0);
-        $revenue = (int) ($row['revenue'] ?? 0);
+        $revenue = (int) ($row['revenue'] ?? 0) + max(0, $rozetkaRevenue);
         $canceled = (int) ($row['canceled_count'] ?? 0);
         $paid = (int) ($row['paid_count'] ?? 0) + max(0, $rozetkaPaid);
         $completedCount = (int) $this->connection->fetchOne(
@@ -243,7 +264,7 @@ final class Admin2StatisticsProvider
                 'to'        => $to->format('Y-m-d H:i:s'),
                 'completed' => Order::COMPLETED,
             ],
-        );
+        ) + max(0, $rozetkaCompleted);
 
         $activeProducts = (int) $this->entityManager->getRepository(Product::class)->count([
             'status' => Product::STATUS_ACTIVE,
@@ -261,7 +282,7 @@ final class Admin2StatisticsProvider
     }
 
     /**
-     * @param list<array{created: string, status: int}> $rozetkaMarkers
+     * @param list<array{created: string, status: int, revenue?: int}> $rozetkaMarkers
      *
      * @return array{labels: list<string>, orders: list<int>, revenue: list<int>}
      */
@@ -270,7 +291,6 @@ final class Admin2StatisticsProvider
         \DateTimeImmutable $to,
         array $rozetkaMarkers = [],
     ): array {
-
         $rows = $this->connection->fetchAllAssociative(
             'SELECT DATE(created_at) AS day,
                     COUNT(*) AS orders_count,
@@ -309,6 +329,7 @@ final class Admin2StatisticsProvider
                 $byDay[$day] = ['orders' => 0, 'revenue' => 0];
             }
             ++$byDay[$day]['orders'];
+            $byDay[$day]['revenue'] += max(0, (int) ($marker['revenue'] ?? 0));
         }
 
         $labels = [];
@@ -420,6 +441,20 @@ final class Admin2StatisticsProvider
         $statusId = (int) ($apiOrder['status'] ?? 0);
 
         return $statusId >= 13 && $statusId <= 25;
+    }
+
+    /**
+     * Successfully completed / delivered marketplace orders (same idea as local "completed").
+     *
+     * @param array<string, mixed> $apiOrder
+     */
+    private function isRozetkaDelivered(array $apiOrder): bool
+    {
+        if ((int) ($apiOrder['status_group'] ?? 0) === 2) {
+            return true;
+        }
+
+        return in_array((int) ($apiOrder['status'] ?? 0), [40, 50, 57], true);
     }
 
     /**

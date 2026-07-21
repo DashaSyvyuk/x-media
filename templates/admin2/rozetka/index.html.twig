@@ -21,6 +21,12 @@
                         <p class="text-muted mb-0">Картки товарів, характеристики та XML-фіди для A / P</p>
                     </div>
                     <div class="d-flex flex-wrap gap-2">
+                        <button type="button"
+                                class="btn btn-outline-teal"
+                                data-bs-toggle="modal"
+                                data-bs-target="#rozetkaBulkPriceModal">
+                            <i class="bi bi-tags"></i> Ціна категорії
+                        </button>
                         <form method="post" action="{{ path('admin2_rozetka_generate_a') }}" class="d-inline">
                             <input type="hidden" name="_token" value="{{ csrf_token('admin2_rozetka_generate') }}">
                             {% for key, value in query %}{% if value %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endif %}{% endfor %}
@@ -159,8 +165,29 @@
     </div>
 
     <meta name="rozetka-toggle-token" content="{{ csrf_token('admin2_rozetka_toggle') }}">
+
+    {% include 'admin2/partials/category_bulk_price_modal.html.twig' with {
+        modalId: 'rozetkaBulkPriceModal',
+        formAction: path('admin2_rozetka_bulk_price'),
+        csrfTokenId: 'admin2_rozetka_bulk_price',
+        categories: categories,
+        title: 'Зміна ціни Rozetka для категорії',
+        hint: 'Додатне значення збільшує ціну Rozetka, від’ємне — зменшує. Мінімум після зміни — 1 ₴.',
+    } %}
 {% endblock %}
 
 {% block javascripts %}
     <script src="{{ asset('js/admin2-rozetka.js') }}" defer></script>
+    <script>
+        document.getElementById('rozetkaBulkPriceModalForm')?.addEventListener('submit', (event) => {
+            const form = event.currentTarget;
+            const category = form.querySelector('[name="category_id"]');
+            const delta = Number(form.querySelector('[name="delta"]')?.value || 0);
+            const label = category?.selectedOptions?.[0]?.textContent?.trim() || 'категорію';
+            const signed = delta > 0 ? `+${delta}` : `${delta}`;
+            if (!window.confirm(`Змінити ціну Rozetka на ${signed} ₴ для всіх товарів у «${label}»?`)) {
+                event.preventDefault();
+            }
+        });
+    </script>
 {% endblock %}

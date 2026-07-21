@@ -27,7 +27,6 @@
 
 body.sidebar-open {
     overflow: hidden;
-    touch-action: none;
 }
 
 .sidebar {
@@ -208,6 +207,14 @@ body.sidebar-open {
         transform: translateX(-100%);
         width: min(280px, 88vw);
         flex: none;
+        height: calc(100dvh - var(--app-navbar-height));
+        max-height: calc(100dvh - var(--app-navbar-height));
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
     }
 
     .sidebar.open {

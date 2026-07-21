@@ -33,6 +33,11 @@
                 <a href="{{ path('admin2_products') }}" class="dashboard-hero__btn">
                     <i class="bi bi-box-seam"></i> Товари
                 </a>
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <a href="{{ path('admin2_vendor_orders') }}" class="dashboard-hero__btn">
+                        <i class="bi bi-truck"></i> Замовлення постачальників
+                    </a>
+                {% endif %}
                 <a href="{{ path('admin2_planning') }}" class="dashboard-hero__btn">
                     <i class="bi bi-calendar-check"></i> Планування
                 </a>
@@ -281,11 +286,9 @@
                                         </div>
                                     </div>
                                     <div class="dashboard-order-row__side">
-                                        {% if order.isRozetka|default(false) %}
-                                            <span class="order-status-badge" style="--status-color: {{ order.statusColor|default('#00a046') }}">{{ order.statusLabel }}</span>
-                                        {% else %}
-                                            {{ order_macros.order_status_badge(order.status) }}
-                                        {% endif %}
+                                        <span class="order-status-badge" style="--status-color: {{ order.statusColor|default('#64748b') }}">
+                                            {{ order.statusLabel|default(order.status) }}
+                                        </span>
                                         {{ order_macros.payment_status_badge(order.paymentStatus|default(false)) }}
                                         <span class="dashboard-order-sum">{{ order.total|number_format(0, '.', ' ') }} ₴</span>
                                         <a href="{{ orderUrl }}" class="dashboard-open-btn" title="Відкрити">

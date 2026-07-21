@@ -165,15 +165,31 @@ final class OrderClipboardFormatter
      */
     private function formatRozetkaAddress(array $delivery): string
     {
+        $isPickup = (int) ($delivery['delivery_method_id'] ?? 0) !== 2;
+        $warehouseNumber = $this->asString(
+            $delivery['place_number']
+            ?? $delivery['warehouse_number']
+            ?? $delivery['recipient_warehouse']
+            ?? $delivery['warehouse']
+            ?? null,
+        );
+
+        $warehouseLabel = '';
+        if ($warehouseNumber !== '' && $isPickup) {
+            $warehouseLabel = preg_match('/^\d+$/u', $warehouseNumber) === 1
+                ? 'Відділення №' . $warehouseNumber
+                : $warehouseNumber;
+        }
+
         $parts = array_values(array_unique(array_filter([
             $this->asString($delivery['city_title'] ?? null),
             $this->asString($delivery['city'] ?? null),
+            $warehouseLabel,
             $this->asString($delivery['place_title'] ?? null),
             $this->asString($delivery['place'] ?? null),
             $this->asString($delivery['place_street'] ?? $delivery['street'] ?? null),
             $this->asString($delivery['place_house'] ?? null),
             $this->asString($delivery['place_flat'] ?? null),
-            $this->asString($delivery['recipient_warehouse'] ?? $delivery['warehouse'] ?? null),
         ], static fn (string $part): bool => $part !== '')));
 
         return implode(', ', $parts);

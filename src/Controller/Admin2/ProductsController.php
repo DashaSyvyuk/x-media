@@ -3,6 +3,7 @@
 namespace App\Controller\Admin2;
 
 use App\Entity\Product;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Service\Admin2\Admin2Paginator;
 use App\Service\Admin2\ProductCloneService;
@@ -21,6 +22,7 @@ class ProductsController extends AbstractController
 {
     public function __construct(
         private readonly ProductRepository $productRepository,
+        private readonly CategoryRepository $categoryRepository,
         private readonly Admin2Paginator $admin2Paginator,
         private readonly ProductCloneService $productCloneService,
         private readonly GenerateHotlineXmlService $generateHotlineXmlService,
@@ -53,6 +55,7 @@ class ProductsController extends AbstractController
 
         return $this->render('admin2/products/index.html.twig', [
             'pagination'      => $pagination,
+            'categories'      => $this->categoryRepository->findBy([], ['title' => 'ASC']),
             'search'          => $search,
             'status'          => is_string($status) ? $status : '',
             'sort'            => $sort,
@@ -64,6 +67,47 @@ class ProductsController extends AbstractController
                 Product::STATUS_BLOCKED  => Product::STATUS_BLOCKED,
             ],
         ]);
+    }
+
+    #[Route('/admin/products/bulk-price', name: 'admin2_products_bulk_price', methods: ['POST'])]
+    public function bulkPrice(Request $request): Response
+    {
+        if (! $this->isCsrfTokenValid('admin2_products_bulk_price', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_products');
+        }
+
+        $categoryId = (int) $request->request->get('category_id', 0);
+        $delta = (int) $request->request->get('delta', 0);
+
+        if ($categoryId <= 0 || $delta === 0) {
+            $this->addFlash('error', 'Оберіть категорію та вкажіть зміну ціни (не 0).');
+
+            return $this->redirectToRoute('admin2_products');
+        }
+
+        $category = $this->categoryRepository->find($categoryId);
+        if ($category === null) {
+            $this->addFlash('error', 'Категорію не знайдено.');
+
+            return $this->redirectToRoute('admin2_products');
+        }
+
+        $updated = $this->productRepository->adjustPriceForCategory($categoryId, $delta);
+        $sign = $delta > 0 ? '+' : '';
+        $this->addFlash(
+            'success',
+            sprintf(
+                'Ціну змінено на %s%d ₴ для %d товар(ів) у категорії «%s».',
+                $sign,
+                $delta,
+                $updated,
+                $category->getTitle(),
+            ),
+        );
+
+        return $this->redirectToRoute('admin2_products');
     }
 
     #[Route('/admin/products/generate/hotline', name: 'admin2_products_generate_hotline', methods: ['POST'])]

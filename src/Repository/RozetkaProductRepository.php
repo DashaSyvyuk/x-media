@@ -102,4 +102,49 @@ class RozetkaProductRepository extends ServiceEntityRepository
                 ->getQuery()->getSingleScalarResult(),
         ];
     }
+
+    /**
+     * Change Rozetka price for cards in the category by delta (can be negative).
+     * Resulting price is never below 1.
+     * Uses a single SQL UPDATE to avoid timeouts on large categories.
+     */
+    public function adjustPriceForCategory(int $categoryId, int $delta): int
+    {
+        if ($delta === 0) {
+            return 0;
+        }
+
+        $connection = $this->getEntityManager()->getConnection();
+        $updated = (int) $connection->executeStatement(
+            'UPDATE rozetka_product rp
+             INNER JOIN product p ON p.id = rp.product_id
+             SET
+                rp.crossed_out_price = CASE
+                    WHEN rp.crossed_out_price IS NOT NULL
+                         AND rp.crossed_out_price > 0
+                         AND rp.crossed_out_price <= GREATEST(1, COALESCE(rp.price, 0) + :delta)
+                    THEN NULL
+                    ELSE rp.crossed_out_price
+                END,
+                rp.promo_price = CASE
+                    WHEN rp.promo_price IS NOT NULL
+                         AND rp.promo_price > 0
+                         AND rp.promo_price >= GREATEST(1, COALESCE(rp.price, 0) + :delta)
+                    THEN NULL
+                    ELSE rp.promo_price
+                END,
+                rp.price = GREATEST(1, COALESCE(rp.price, 0) + :delta),
+                rp.updated_at = :updatedAt
+             WHERE p.category_id = :categoryId',
+            [
+                'delta'      => $delta,
+                'categoryId' => $categoryId,
+                'updatedAt'  => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+            ],
+        );
+
+        $this->getEntityManager()->clear();
+
+        return $updated;
+    }
 }
