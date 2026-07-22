@@ -42,18 +42,10 @@ final class AdminWebPushNotifier
             return;
         }
 
-        $customer = trim(sprintf('%s %s', $order->getName(), $order->getSurname() ?? ''));
-        $bodyParts = array_filter([
-            '№' . $order->getOrderNumber(),
-            $customer !== '' ? $customer : null,
-            $this->formatMoney($order->getTotal()),
-            $order->getPhone() !== '' ? $order->getPhone() : null,
-        ]);
-
         $this->sendToSubscriptions(
             $this->subscriptionRepository->findForLocalOrderNotifications(),
             'Нове замовлення',
-            implode(' · ', $bodyParts),
+            $this->buildItemsBody($this->localOrderItemLines($order), $order->getTotal()),
             $this->urlGenerator->generate(
                 'admin2_orders_edit',
                 ['id' => $order->getId()],
@@ -68,7 +60,8 @@ final class AdminWebPushNotifier
      *     id: int,
      *     recipient?: string,
      *     phone?: string,
-     *     total?: int
+     *     total?: int,
+     *     items?: list<array{name?: string, price?: int}>
      * } $order
      */
     public function notifyNewRozetkaOrder(array $order): void
@@ -82,17 +75,19 @@ final class AdminWebPushNotifier
             return;
         }
 
-        $bodyParts = array_filter([
-            '№' . $id,
-            trim((string) ($order['recipient'] ?? '')) ?: null,
-            isset($order['total']) ? $this->formatMoney((int) $order['total']) : null,
-            trim((string) ($order['phone'] ?? '')) ?: null,
-        ]);
+        $lines = [];
+        foreach ($order['items'] ?? [] as $item) {
+            $name = trim((string) ($item['name'] ?? ''));
+            if ($name === '') {
+                continue;
+            }
+            $lines[] = $this->formatItemLine($name, (int) ($item['price'] ?? 0));
+        }
 
         $this->sendToSubscriptions(
             $this->subscriptionRepository->findForRozetkaOrderNotifications(),
             'Нове замовлення Rozetka',
-            implode(' · ', $bodyParts),
+            $this->buildItemsBody($lines, (int) ($order['total'] ?? 0)),
             $this->urlGenerator->generate(
                 'admin2_rozetka_orders_show',
                 ['id' => $id],
@@ -100,6 +95,41 @@ final class AdminWebPushNotifier
             ),
             'rozetka-order-' . $id,
         );
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function localOrderItemLines(Order $order): array
+    {
+        $lines = [];
+        foreach ($order->getItems() as $item) {
+            $name = trim((string) $item->getProduct()->getTitle());
+            if ($name === '') {
+                continue;
+            }
+            $price = (int) ($item->getPrice() ?: $item->getProduct()->getPrice());
+            $lines[] = $this->formatItemLine($name, $price);
+        }
+
+        return $lines;
+    }
+
+    /**
+     * @param list<string> $lines
+     */
+    private function buildItemsBody(array $lines, int $fallbackTotal): string
+    {
+        if ($lines !== []) {
+            return implode("\n", $lines);
+        }
+
+        return $this->formatItemLine('Замовлення', $fallbackTotal);
+    }
+
+    private function formatItemLine(string $name, int $price): string
+    {
+        return $name . ' - ' . $this->formatMoney($price);
     }
 
     /**

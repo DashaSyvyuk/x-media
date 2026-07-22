@@ -69,6 +69,35 @@ body.bg-light {
     background-color: var(--color-slate) !important;
 }
 
+.app-navbar .container-fluid {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.app-navbar .navbar-brand {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 1;
+    pointer-events: auto;
+}
+
+.app-navbar__side {
+    display: flex;
+    align-items: center;
+    z-index: 2;
+    min-width: 2.75rem;
+}
+
+.app-navbar__side--end {
+    margin-left: auto;
+    justify-content: flex-end;
+}
+
 .brand-icon {
     color: var(--color-teal);
 }

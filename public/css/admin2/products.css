@@ -84,6 +84,44 @@
     overflow: hidden;
 }
 
+.product-title--full {
+    display: block;
+    -webkit-line-clamp: unset;
+    overflow: visible;
+}
+
+.product-media {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.product-media__id {
+    display: none;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 768px) {
+    .product-media__id {
+        display: inline-block;
+    }
+
+    .products-table--mobile-cards tbody td.product-media-cell {
+        justify-content: flex-start;
+        text-align: left !important;
+    }
+
+    .products-table--mobile-cards tbody td.product-media-cell::before {
+        display: none;
+    }
+
+    .products-table--mobile-cards .product-title--full {
+        text-align: left;
+    }
+}
+
 .product-title__meta {
     color: #64748b;
     font-size: 0.75rem;

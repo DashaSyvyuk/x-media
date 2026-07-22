@@ -54,6 +54,13 @@
                             <div class="fulfillment-card__top">
                                 <strong><a href="{{ order.editUrl }}">#{{ order.id }}</a></strong>
                                 <div class="fulfillment-card__top-actions">
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-secondary fulfillment-bg-mark-btn"
+                                            title="Змінити колір фону"
+                                            aria-pressed="false"
+                                            data-bg-mark-toggle>
+                                        <i class="bi bi-palette" aria-hidden="true"></i>
+                                    </button>
                                     {{ order_macros.copy_button(order.copyText|default(null)) }}
                                     <form method="post" action="{{ path('admin2_fulfillment_vendor_complete', {id: order.id}) }}" class="d-inline">
                                         <input type="hidden" name="_token" value="{{ csrf_token('fulfillment_action') }}">

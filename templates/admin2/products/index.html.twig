@@ -111,17 +111,20 @@
                     {% for product in pagination %}
                         {% set image = product.images|first %}
                         <tr>
-                            <td data-label="">
-                                {% if image %}
-                                    <img src="{{ image.imageUri }}" alt="" class="product-thumb">
-                                {% else %}
-                                    <span class="product-thumb product-thumb--empty"><i class="bi bi-image"></i></span>
-                                {% endif %}
+                            <td data-label="" class="product-media-cell">
+                                <div class="product-media">
+                                    {% if image %}
+                                        <img src="{{ image.imageUri }}" alt="" class="product-thumb">
+                                    {% else %}
+                                        <span class="product-thumb product-thumb--empty"><i class="bi bi-image"></i></span>
+                                    {% endif %}
+                                    <span class="product-media__id">#{{ product.id }}</span>
+                                </div>
                             </td>
-                            <td class="text-muted" data-label="ID">#{{ product.id }}</td>
+                            <td class="text-muted d-none d-md-table-cell" data-label="ID">#{{ product.id }}</td>
                             <td data-label="Назва">
-                                <div class="product-title">{{ product.title }}</div>
-                                <div class="product-title__meta">
+                                <div class="product-title product-title--full">{{ product.title }}</div>
+                                <div class="product-title__meta d-none d-md-block">
                                     <a href="/products/{{ product.id }}" target="_blank" class="text-decoration-none">
                                         Переглянути на сайті <i class="bi bi-box-arrow-up-right"></i>
                                     </a>

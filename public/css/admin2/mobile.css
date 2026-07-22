@@ -276,8 +276,25 @@
         text-align: right;
     }
 
+    .products-table--mobile-cards .product-title--full {
+        text-align: left;
+        max-width: none;
+    }
+
+    .products-table--mobile-cards tbody td[data-label="Назва"],
+    .products-table--mobile-cards tbody td[data-label="Товар"] {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+    }
+
+    .products-table--mobile-cards tbody td[data-label="Назва"]::before,
+    .products-table--mobile-cards tbody td[data-label="Товар"]::before {
+        flex: none;
+    }
+
     .products-table--mobile-cards .product-title__meta {
-        text-align: right;
+        text-align: left;
     }
 
     .products-table--mobile-cards .table-actions {

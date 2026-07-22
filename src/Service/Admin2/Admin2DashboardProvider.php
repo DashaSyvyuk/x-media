@@ -4,6 +4,7 @@ namespace App\Service\Admin2;
 
 use App\Entity\FopProfile;
 use App\Entity\Order;
+use App\Entity\VendorOrder;
 use App\Repository\AdminPlanRepository;
 use App\Repository\DebtorRepository;
 use App\Repository\FopProfileRepository;
@@ -76,8 +77,16 @@ final class Admin2DashboardProvider
      *         createdAt: string
      *     }>,
      *     fops: list<array{id: int, title: string}>,
+     *     cashiers: list<array{id: int, title: string, code: string, balance: int}>,
      *     debts: list<array{id: int, name: string, code: string, balance: int}>,
-     *     todayPlans: list<array{id: int, title: string, body: string, assignee: string}>
+     *     todayPlans: list<array{id: int, title: string, body: string, assignee: string}>,
+     *     vendorLastDayOrders: list<array{
+     *         id: int,
+     *         supplier: string,
+     *         supplierOrderNumber: string,
+     *         productTitle: string,
+     *         storageDays: int
+     *     }>
      * }
      */
     public function build(bool $withDebts = false): array
@@ -89,27 +98,29 @@ final class Admin2DashboardProvider
         [$rozetkaToday, $rozetkaMonth] = $this->rozetkaOrderCounts($monthFrom, $todayFrom, $todayTo);
 
         return [
-            'exchangeRates'    => $this->exchangeRateService->dashboardRates(),
-            'today'            => $this->orderKpi(
+            'exchangeRates'       => $this->exchangeRateService->dashboardRates(),
+            'today'               => $this->orderKpi(
                 $todayFrom,
                 $todayTo,
                 $rozetkaToday['orders'],
                 $rozetkaToday['paid'],
                 $rozetkaToday['revenue'],
             ),
-            'month'            => $this->orderMonthKpi(
+            'month'               => $this->orderMonthKpi(
                 $monthFrom,
                 $todayTo,
                 $rozetkaMonth['orders'],
                 $rozetkaMonth['paid'],
                 $rozetkaMonth['revenue'],
             ),
-            'monthLabel'       => $this->monthLabel($monthFrom),
-            'circulationToday' => $this->circulationToday($todayFrom, $todayTo),
-            'activeOrders'     => $this->activeOrders(12),
-            'fops'             => $this->fopNotes(),
-            'debts'            => $withDebts ? $this->activeDebts(12) : [],
-            'todayPlans'       => $this->todayPlans($todayFrom),
+            'monthLabel'          => $this->monthLabel($monthFrom),
+            'circulationToday'    => $this->circulationToday($todayFrom, $todayTo),
+            'activeOrders'        => $this->activeOrders(12),
+            'fops'                => $this->fopNotes(),
+            'cashiers'            => $this->activeCashiers(),
+            'debts'               => $withDebts ? $this->activeDebts(12) : [],
+            'todayPlans'          => $this->todayPlans($todayFrom),
+            'vendorLastDayOrders' => $this->vendorLastDayOrders($todayFrom),
         ];
     }
 
@@ -402,6 +413,7 @@ final class Admin2DashboardProvider
         $result = [];
         foreach ($rows as $row) {
             $status = (string) $row['status'];
+            $statusTone = $this->fulfillmentStatusHelper->toneForLocal($status);
             $result[] = [
                 'id'             => (int) $row['id'],
                 'orderNumber'    => (string) $row['order_number'],
@@ -412,9 +424,8 @@ final class Admin2DashboardProvider
                 'total'          => (int) $row['total'],
                 'createdAt'      => substr((string) $row['created_at'], 0, 16),
                 'isRozetka'      => false,
-                'statusColor'    => $this->colorForStatusTone(
-                    $this->fulfillmentStatusHelper->toneForLocal($status),
-                ),
+                'statusColor'    => $this->colorForStatusTone($statusTone),
+                'statusSort'     => $this->sortRankForTone($statusTone),
                 'paymentStatus'  => (bool) $row['payment_status'],
             ];
         }
@@ -453,6 +464,7 @@ final class Admin2DashboardProvider
                         'createdAt'      => $created,
                         'isRozetka'      => true,
                         'statusColor'    => $this->colorForStatusTone($statusTone),
+                        'statusSort'     => $this->sortRankForTone($statusTone),
                         'paymentStatus'  => $this->rozetkaPaymentResolver->isPaid($apiOrder),
                     ];
                 }
@@ -465,10 +477,28 @@ final class Admin2DashboardProvider
 
         usort(
             $result,
-            static fn (array $a, array $b): int => strcmp((string) $b['createdAt'], (string) $a['createdAt']),
+            static function (array $a, array $b): int {
+                $byStatus = $a['statusSort'] <=> $b['statusSort'];
+                if ($byStatus !== 0) {
+                    return $byStatus;
+                }
+
+                return strcmp((string) $b['createdAt'], (string) $a['createdAt']);
+            },
         );
 
         return array_slice($result, 0, $limit);
+    }
+
+    private function sortRankForTone(string $tone): int
+    {
+        return match ($tone) {
+            'new' => 0,
+            'processing' => 1,
+            'packing' => 2,
+            'shipping' => 3,
+            default => 9,
+        };
     }
 
     private function colorForStatusTone(string $tone): string
@@ -500,6 +530,57 @@ final class Admin2DashboardProvider
             $result[] = [
                 'id'    => $fop->getId(),
                 'title' => $title,
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return list<array{id: int, title: string, code: string, balance: int}>
+     */
+    private function activeCashiers(): array
+    {
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT
+                c.id,
+                cur.code AS currency_code,
+                COALESCE(
+                    (
+                        SELECT SUM(p.sum)
+                        FROM circulation_payments p
+                        WHERE p.circulation_id = c.id
+                    ),
+                    0
+                ) AS balance,
+                COALESCE(
+                    NULLIF(TRIM(au.name), \'\'),
+                    NULLIF(TRIM(au.email), \'\'),
+                    CONCAT(\'Каса #\', c.id)
+                ) AS title
+             FROM circulations c
+             INNER JOIN currency cur ON cur.id = c.currency_id
+             LEFT JOIN admin_user au ON au.id = c.admin_user_id
+             WHERE c.active = 1
+             ORDER BY ABS(
+                COALESCE(
+                    (
+                        SELECT SUM(p2.sum)
+                        FROM circulation_payments p2
+                        WHERE p2.circulation_id = c.id
+                    ),
+                    0
+                )
+             ) DESC, c.id DESC',
+        );
+
+        $result = [];
+        foreach ($rows as $row) {
+            $result[] = [
+                'id'      => (int) $row['id'],
+                'title'   => (string) $row['title'],
+                'code'    => (string) $row['currency_code'],
+                'balance' => (int) $row['balance'],
             ];
         }
 
@@ -548,6 +629,56 @@ final class Admin2DashboardProvider
                 'title'    => $plan->getTitle(),
                 'body'     => trim((string) ($plan->getBody() ?? '')),
                 'assignee' => trim($assignee->getName() . ' ' . $assignee->getSurname()),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Active vendor orders whose storage ends tomorrow (days since create = storageDays - 1).
+     *
+     * @return list<array{
+     *     id: int,
+     *     supplier: string,
+     *     supplierOrderNumber: string,
+     *     productTitle: string,
+     *     storageDays: int
+     * }>
+     */
+    private function vendorLastDayOrders(\DateTimeImmutable $today): array
+    {
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT
+                v.id,
+                v.supplier_order_number,
+                v.product_title,
+                s.title AS supplier_title,
+                s.order_storage_days
+             FROM vendor_orders v
+             INNER JOIN suppliers s ON s.id = v.supplier_id
+             WHERE v.status IN (:statuses)
+               AND s.order_storage_days IS NOT NULL
+               AND s.order_storage_days > 0
+               AND DATEDIFF(:today, DATE(v.created_at)) = (s.order_storage_days - 1)
+             ORDER BY v.created_at ASC, v.id ASC',
+            [
+                'today'    => $today->format('Y-m-d'),
+                'statuses' => VendorOrder::BOARD_STATUSES,
+            ],
+            [
+                'statuses' => ArrayParameterType::STRING,
+            ],
+        );
+
+        $result = [];
+        foreach ($rows as $row) {
+            $result[] = [
+                'id'                  => (int) $row['id'],
+                'supplier'            => (string) $row['supplier_title'],
+                'supplierOrderNumber' => (string) $row['supplier_order_number'],
+                'productTitle'        => (string) $row['product_title'],
+                'storageDays'         => (int) $row['order_storage_days'],
             ];
         }
 
