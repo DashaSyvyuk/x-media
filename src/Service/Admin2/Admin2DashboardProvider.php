@@ -4,6 +4,7 @@ namespace App\Service\Admin2;
 
 use App\Entity\FopProfile;
 use App\Entity\Order;
+use App\Entity\VendorOrder;
 use App\Repository\AdminPlanRepository;
 use App\Repository\DebtorRepository;
 use App\Repository\FopProfileRepository;
@@ -78,7 +79,14 @@ final class Admin2DashboardProvider
      *     fops: list<array{id: int, title: string}>,
      *     cashiers: list<array{id: int, title: string, code: string, balance: int}>,
      *     debts: list<array{id: int, name: string, code: string, balance: int}>,
-     *     todayPlans: list<array{id: int, title: string, body: string, assignee: string}>
+     *     todayPlans: list<array{id: int, title: string, body: string, assignee: string}>,
+     *     vendorLastDayOrders: list<array{
+     *         id: int,
+     *         supplier: string,
+     *         supplierOrderNumber: string,
+     *         productTitle: string,
+     *         storageDays: int
+     *     }>
      * }
      */
     public function build(bool $withDebts = false): array
@@ -90,28 +98,29 @@ final class Admin2DashboardProvider
         [$rozetkaToday, $rozetkaMonth] = $this->rozetkaOrderCounts($monthFrom, $todayFrom, $todayTo);
 
         return [
-            'exchangeRates'    => $this->exchangeRateService->dashboardRates(),
-            'today'            => $this->orderKpi(
+            'exchangeRates'       => $this->exchangeRateService->dashboardRates(),
+            'today'               => $this->orderKpi(
                 $todayFrom,
                 $todayTo,
                 $rozetkaToday['orders'],
                 $rozetkaToday['paid'],
                 $rozetkaToday['revenue'],
             ),
-            'month'            => $this->orderMonthKpi(
+            'month'               => $this->orderMonthKpi(
                 $monthFrom,
                 $todayTo,
                 $rozetkaMonth['orders'],
                 $rozetkaMonth['paid'],
                 $rozetkaMonth['revenue'],
             ),
-            'monthLabel'       => $this->monthLabel($monthFrom),
-            'circulationToday' => $this->circulationToday($todayFrom, $todayTo),
-            'activeOrders'     => $this->activeOrders(12),
-            'fops'             => $this->fopNotes(),
-            'cashiers'         => $this->activeCashiers(),
-            'debts'            => $withDebts ? $this->activeDebts(12) : [],
-            'todayPlans'       => $this->todayPlans($todayFrom),
+            'monthLabel'          => $this->monthLabel($monthFrom),
+            'circulationToday'    => $this->circulationToday($todayFrom, $todayTo),
+            'activeOrders'        => $this->activeOrders(12),
+            'fops'                => $this->fopNotes(),
+            'cashiers'            => $this->activeCashiers(),
+            'debts'               => $withDebts ? $this->activeDebts(12) : [],
+            'todayPlans'          => $this->todayPlans($todayFrom),
+            'vendorLastDayOrders' => $this->vendorLastDayOrders($todayFrom),
         ];
     }
 
@@ -620,6 +629,56 @@ final class Admin2DashboardProvider
                 'title'    => $plan->getTitle(),
                 'body'     => trim((string) ($plan->getBody() ?? '')),
                 'assignee' => trim($assignee->getName() . ' ' . $assignee->getSurname()),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Active vendor orders whose storage ends tomorrow (days since create = storageDays - 1).
+     *
+     * @return list<array{
+     *     id: int,
+     *     supplier: string,
+     *     supplierOrderNumber: string,
+     *     productTitle: string,
+     *     storageDays: int
+     * }>
+     */
+    private function vendorLastDayOrders(\DateTimeImmutable $today): array
+    {
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT
+                v.id,
+                v.supplier_order_number,
+                v.product_title,
+                s.title AS supplier_title,
+                s.order_storage_days
+             FROM vendor_orders v
+             INNER JOIN suppliers s ON s.id = v.supplier_id
+             WHERE v.status IN (:statuses)
+               AND s.order_storage_days IS NOT NULL
+               AND s.order_storage_days > 0
+               AND DATEDIFF(:today, DATE(v.created_at)) = (s.order_storage_days - 1)
+             ORDER BY v.created_at ASC, v.id ASC',
+            [
+                'today'    => $today->format('Y-m-d'),
+                'statuses' => VendorOrder::BOARD_STATUSES,
+            ],
+            [
+                'statuses' => ArrayParameterType::STRING,
+            ],
+        );
+
+        $result = [];
+        foreach ($rows as $row) {
+            $result[] = [
+                'id'                  => (int) $row['id'],
+                'supplier'            => (string) $row['supplier_title'],
+                'supplierOrderNumber' => (string) $row['supplier_order_number'],
+                'productTitle'        => (string) $row['product_title'],
+                'storageDays'         => (int) $row['order_storage_days'],
             ];
         }
 

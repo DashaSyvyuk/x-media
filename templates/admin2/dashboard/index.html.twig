@@ -48,9 +48,10 @@
             <div class="dashboard-panel__head">
                 <div>
                     <h2 class="dashboard-panel__title">Плани на сьогодні</h2>
+                    {% set plansCount = dash.todayPlans|length + dash.vendorLastDayOrders|length %}
                     <p class="dashboard-panel__desc">
-                        {% if dash.todayPlans %}
-                            Активні завдання · {{ dash.todayPlans|length }}
+                        {% if plansCount > 0 %}
+                            Активні завдання · {{ plansCount }}
                         {% else %}
                             Активних завдань немає
                         {% endif %}
@@ -58,8 +59,27 @@
                 </div>
                 <a href="{{ path('admin2_planning') }}" class="dashboard-section-link">Усі →</a>
             </div>
-            {% if dash.todayPlans %}
+            {% if dash.vendorLastDayOrders or dash.todayPlans %}
                 <div class="dashboard-plan-list">
+                    {% for order in dash.vendorLastDayOrders %}
+                        {% set vendorUrl = isGod
+                            ? path('admin2_vendor_orders_edit', {id: order.id})
+                            : (isStaff ? path('admin2_fulfillment') : path('admin2_planning')) %}
+                        <a href="{{ vendorUrl }}" class="dashboard-plan-item dashboard-plan-item--urgent">
+                            <span>
+                                <span class="dashboard-plan-item__title">Останній день</span>
+                                <span class="dashboard-plan-item__meta">
+                                    Замовлення #{{ order.id }}
+                                    · {{ order.supplier }}
+                                    · № {{ order.supplierOrderNumber }}
+                                    {% if order.productTitle %}
+                                        · {{ order.productTitle|striptags|slice(0, 70) }}{% if order.productTitle|length > 70 %}…{% endif %}
+                                    {% endif %}
+                                </span>
+                            </span>
+                            <span class="dashboard-plan-item__badge">Забрати</span>
+                        </a>
+                    {% endfor %}
                     {% for plan in dash.todayPlans %}
                         <a href="{{ path('admin2_planning') }}" class="dashboard-plan-item">
                             <span>

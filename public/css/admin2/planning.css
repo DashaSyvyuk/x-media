@@ -255,6 +255,29 @@
     padding: 0.2rem 0.5rem;
 }
 
+.dashboard-plan-item--urgent {
+    background: #fef2f2;
+    border-color: rgba(220, 38, 38, 0.35);
+}
+
+.dashboard-plan-item--urgent:hover {
+    border-color: rgba(220, 38, 38, 0.55);
+    color: inherit;
+}
+
+.dashboard-plan-item--urgent .dashboard-plan-item__title {
+    color: #b91c1c;
+}
+
+.dashboard-plan-item--urgent .dashboard-plan-item__meta {
+    color: #dc2626;
+}
+
+.dashboard-plan-item--urgent .dashboard-plan-item__badge {
+    color: #b91c1c;
+    background: rgba(220, 38, 38, 0.12);
+}
+
 @media (max-width: 767.98px) {
     .planning-split {
         grid-template-columns: 1fr;

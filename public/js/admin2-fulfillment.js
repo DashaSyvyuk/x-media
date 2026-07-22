@@ -113,4 +113,57 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+    const bgMarkStorageKey = 'admin2.fulfillment.vendorBgMarks';
+    const readBgMarks = () => {
+        try {
+            const raw = localStorage.getItem(bgMarkStorageKey);
+            const parsed = raw ? JSON.parse(raw) : {};
+
+            return parsed && typeof parsed === 'object' ? parsed : {};
+        } catch {
+            return {};
+        }
+    };
+    const writeBgMarks = (marks) => {
+        try {
+            localStorage.setItem(bgMarkStorageKey, JSON.stringify(marks));
+        } catch {
+            // ignore quota / private mode
+        }
+    };
+
+    let bgMarks = readBgMarks();
+
+    document.querySelectorAll('.fulfillment-card--vendor[data-vendor-id]').forEach((card) => {
+        const vendorId = String(card.dataset.vendorId || '');
+        const toggleBtn = card.querySelector('[data-bg-mark-toggle]');
+        if (!vendorId || !toggleBtn) {
+            return;
+        }
+
+        const applyMark = (on) => {
+            card.classList.toggle('fulfillment-card--bg-mark', on);
+            toggleBtn.classList.toggle('is-active', on);
+            toggleBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            toggleBtn.title = on ? 'Повернути звичайний фон' : 'Змінити колір фону';
+        };
+
+        applyMark(Boolean(bgMarks[vendorId]));
+
+        toggleBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const next = !card.classList.contains('fulfillment-card--bg-mark');
+            applyMark(next);
+
+            if (next) {
+                bgMarks[vendorId] = 1;
+            } else {
+                delete bgMarks[vendorId];
+            }
+            writeBgMarks(bgMarks);
+        });
+    });
 });
