@@ -100,19 +100,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    document.querySelectorAll('.fulfillment-card[data-card-key]').forEach((card) => {
-        card.addEventListener('mouseenter', () => {
-            setHover(card.dataset.cardKey || '');
-        });
+    // Sticky :hover on touch devices breaks taps on status selects.
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (canHover) {
+        document.querySelectorAll('.fulfillment-card[data-card-key]').forEach((card) => {
+            card.addEventListener('mouseenter', () => {
+                setHover(card.dataset.cardKey || '');
+            });
 
-        card.addEventListener('mouseleave', () => {
-            window.requestAnimationFrame(() => {
-                if (!activePeers || !isOverAnyPeer(activePeers)) {
-                    clearHover();
-                }
+            card.addEventListener('mouseleave', () => {
+                window.requestAnimationFrame(() => {
+                    if (!activePeers || !isOverAnyPeer(activePeers)) {
+                        clearHover();
+                    }
+                });
             });
         });
-    });
+    }
 
     const bgMarkStorageKey = 'admin2.fulfillment.vendorBgMarks';
     const readBgMarks = () => {
