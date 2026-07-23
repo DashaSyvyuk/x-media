@@ -55,6 +55,24 @@ class OrderFulfillmentController extends AbstractController
             );
         }
 
+        usort(
+            $vendorOrders,
+            static function (array $a, array $b): int {
+                $rank = static fn (string $status): int => match ($status) {
+                    VendorOrder::STATUS_NEW => 0,
+                    VendorOrder::STATUS_WAITING_PICKUP => 1,
+                    default => 9,
+                };
+
+                $byStatus = $rank((string) ($a['statusCode'] ?? '')) <=> $rank((string) ($b['statusCode'] ?? ''));
+                if ($byStatus !== 0) {
+                    return $byStatus;
+                }
+
+                return strcmp((string) ($b['created'] ?? ''), (string) ($a['created'] ?? ''));
+            },
+        );
+
         return $this->render('admin2/fulfillment/index.html.twig', [
             'customerOrders'  => $customerOrders,
             'vendorOrders'    => $vendorOrders,

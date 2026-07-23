@@ -425,7 +425,7 @@ final class Admin2DashboardProvider
                 'createdAt'      => substr((string) $row['created_at'], 0, 16),
                 'isRozetka'      => false,
                 'statusColor'    => $this->colorForStatusTone($statusTone),
-                'statusSort'     => $this->sortRankForTone($statusTone),
+                'statusSort'     => $this->fulfillmentStatusHelper->sortRankForTone($statusTone),
                 'paymentStatus'  => (bool) $row['payment_status'],
             ];
         }
@@ -464,7 +464,7 @@ final class Admin2DashboardProvider
                         'createdAt'      => $created,
                         'isRozetka'      => true,
                         'statusColor'    => $this->colorForStatusTone($statusTone),
-                        'statusSort'     => $this->sortRankForTone($statusTone),
+                        'statusSort'     => $this->fulfillmentStatusHelper->sortRankForTone($statusTone),
                         'paymentStatus'  => $this->rozetkaPaymentResolver->isPaid($apiOrder),
                     ];
                 }
@@ -488,17 +488,6 @@ final class Admin2DashboardProvider
         );
 
         return array_slice($result, 0, $limit);
-    }
-
-    private function sortRankForTone(string $tone): int
-    {
-        return match ($tone) {
-            'new' => 0,
-            'processing' => 1,
-            'packing' => 2,
-            'shipping' => 3,
-            default => 9,
-        };
     }
 
     private function colorForStatusTone(string $tone): string

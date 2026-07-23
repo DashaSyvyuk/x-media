@@ -78,7 +78,18 @@ final class OrderFulfillmentCustomerBoardProvider
             }
         }
 
-        usort($customerOrders, static fn (array $a, array $b): int => strcmp($b['created'] ?? '', $a['created'] ?? ''));
+        usort(
+            $customerOrders,
+            function (array $a, array $b): int {
+                $byStatus = $this->fulfillmentStatusHelper->sortRankForTone((string) ($a['statusTone'] ?? 'default'))
+                    <=> $this->fulfillmentStatusHelper->sortRankForTone((string) ($b['statusTone'] ?? 'default'));
+                if ($byStatus !== 0) {
+                    return $byStatus;
+                }
+
+                return strcmp((string) ($b['created'] ?? ''), (string) ($a['created'] ?? ''));
+            },
+        );
 
         return $customerOrders;
     }
