@@ -39,6 +39,20 @@
     .processing-board__right {
         grid-template-columns: 1fr;
     }
+
+    /* Nested overflow scroll breaks native <select> pickers on iOS/Android. */
+    .fulfillment-column__list {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .fulfillment-status-form .fulfillment-status-select,
+    .fulfillment-status-form .fulfillment-ttn-input,
+    .fulfillment-link-target {
+        width: 100%;
+        max-width: 100%;
+        font-size: 16px;
+    }
 }
 
 .fulfillment-column__header {

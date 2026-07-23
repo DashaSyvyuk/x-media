@@ -26,6 +26,17 @@
         return document.querySelector('.sidebar.open') !== null;
     }
 
+    function isInteractiveTarget(target) {
+        if (!(target instanceof Element)) {
+            return false;
+        }
+
+        return Boolean(target.closest(
+            'select, option, input, textarea, button, a, label, summary,'
+            + ' .form-select, .form-control, .dropdown-menu, [contenteditable="true"]',
+        ));
+    }
+
     function resetIndicator() {
         indicator.classList.remove('pull-refresh--ready', 'pull-refresh--loading', 'pull-refresh--visible');
         indicator.style.setProperty('--pull', '0px');
@@ -40,7 +51,12 @@
     }
 
     document.addEventListener('touchstart', (event) => {
-        if (sidebarOpen() || pageScrollTop() > 1 || event.touches.length !== 1) {
+        if (
+            sidebarOpen()
+            || pageScrollTop() > 1
+            || event.touches.length !== 1
+            || isInteractiveTarget(event.target)
+        ) {
             armed = false;
             return;
         }
@@ -55,14 +71,15 @@
             return;
         }
 
-        if (pageScrollTop() > 1) {
+        if (pageScrollTop() > 1 || isInteractiveTarget(event.target)) {
             armed = false;
             resetIndicator();
             return;
         }
 
         const dy = event.touches[0].clientY - startY;
-        if (dy <= 0) {
+        // Ignore tiny movement so native select/input taps are not blocked.
+        if (dy <= 8) {
             if (pulling) {
                 setPull(0);
             }

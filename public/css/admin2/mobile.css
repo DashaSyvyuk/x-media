@@ -120,6 +120,12 @@
         min-width: 0 !important;
     }
 
+    /* Avoid iOS auto-zoom and flaky native pickers on small font selects. */
+    .form-select,
+    select.form-control {
+        font-size: 16px;
+    }
+
     .products-footer {
         flex-direction: column;
         align-items: stretch;

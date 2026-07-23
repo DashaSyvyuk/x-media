@@ -69,6 +69,20 @@ final class OrderFulfillmentStatusHelper
         return $tone === 'shipping';
     }
 
+    /**
+     * Board / dashboard order: new → processing → packing → shipping.
+     */
+    public function sortRankForTone(string $tone): int
+    {
+        return match ($tone) {
+            'new' => 0,
+            'processing' => 1,
+            'packing' => 2,
+            'shipping' => 3,
+            default => 9,
+        };
+    }
+
     public function isLocalCourierDelivering(string $status): bool
     {
         return $status === Order::COURIER_DELIVERING;
