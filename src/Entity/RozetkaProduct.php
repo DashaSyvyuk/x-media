@@ -168,10 +168,19 @@ class RozetkaProduct
 
     public function getValues(): ArrayCollection|PersistentCollection // @phpstan-ignore-line
     {
+        return $this->values;
+    }
+
+    /**
+     * @return ArrayCollection<int, ProductRozetkaCharacteristicValue>|PersistentCollection<int, ProductRozetkaCharacteristicValue>
+     */
+    public function getActiveValues(): ArrayCollection|PersistentCollection
+    {
         // @phpstan-ignore-next-line
-        return $this->values->filter(function ($value) {
+        return $this->values->filter(static function ($value) {
             $characteristic = $value->getCharacteristic();
-            return $characteristic && $characteristic->getActive();
+
+            return $characteristic !== null && $characteristic->getActive();
         });
     }
 

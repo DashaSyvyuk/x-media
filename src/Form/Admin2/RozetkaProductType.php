@@ -2,11 +2,9 @@
 
 namespace App\Form\Admin2;
 
-use App\Entity\Category;
 use App\Entity\ProductRozetkaCharacteristicValue;
 use App\Entity\RozetkaProduct;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -74,49 +72,86 @@ class RozetkaProductType extends AbstractType
             ])
             ->add('values', CollectionType::class, [
                 'entry_type'     => RozetkaCharacteristicType::class,
-                'entry_options'  => ['category' => $category],
+                'entry_options'  => [
+                    'category' => $category,
+                    'required' => false,
+                ],
                 'allow_add'      => true,
                 'allow_delete'   => true,
                 'by_reference'   => false,
                 'label'          => false,
                 'prototype_name' => '__name__',
+                'required'       => false,
             ])
         ;
 
         if (! $rozetkaProduct->getReady()) {
-            $builder->add('rozetkaProduct', EntityType::class, [
-                'class'         => RozetkaProduct::class,
-                'label'         => 'Товар, з якого копіювати характеристики',
+            $builder->add('copySourceProduct', ProductPickerType::class, [
+                'label'         => 'ID товару, з якого копіювати характеристики',
                 'required'      => false,
-                'placeholder'   => 'Оберіть готовий товар категорії',
-                'choice_label'  => static fn (RozetkaProduct $item): string => (string) $item,
-                'query_builder' => static function ($repository) use ($category) {
-                    $qb = $repository->createQueryBuilder('rp')
-                        ->leftJoin('rp.product', 'p')
-                        ->andWhere('rp.ready = :ready')
-                        ->setParameter('ready', true)
-                        ->orderBy('rp.title', 'ASC');
-
-                    if ($category instanceof Category) {
-                        $qb->andWhere('p.category = :category')
-                            ->setParameter('category', $category);
-                    }
-
-                    return $qb;
-                },
+                'mapped'        => false,
+                'error_bubbling' => false,
             ]);
         }
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (FormEvent $event): void {
-            /** @var RozetkaProduct|null $data */
-            $data = $event->getData();
+        $normalizePrices = static function (?RozetkaProduct $data): void {
             if ($data === null) {
                 return;
             }
 
-            $values = $data->getValues();
-            if ($values->isEmpty()) {
-                $data->addValue(new ProductRozetkaCharacteristicValue());
+            if ($data->getPromoPrice() !== null && $data->getPromoPrice() < 1) {
+                $data->setPromoPrice(null);
+            }
+
+            if ($data->getCrossedOutPrice() !== null && $data->getCrossedOutPrice() < 1) {
+                $data->setCrossedOutPrice(null);
+            }
+        };
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (FormEvent $event) use ($normalizePrices): void {
+            /** @var RozetkaProduct|null $data */
+            $data = $event->getData();
+            $normalizePrices($data);
+        });
+
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, static function (FormEvent $event): void {
+            $submitted = $event->getData();
+            if (! is_array($submitted) || ! isset($submitted['values']) || ! is_array($submitted['values'])) {
+                return;
+            }
+
+            $submitted['values'] = array_values(array_filter(
+                $submitted['values'],
+                static function ($row): bool {
+                    if (! is_array($row)) {
+                        return false;
+                    }
+
+                    $characteristic = $row['characteristic'] ?? null;
+
+                    return $characteristic !== null && $characteristic !== '';
+                },
+            ));
+
+            $event->setData($submitted);
+        });
+
+        $builder->addEventListener(FormEvents::POST_SUBMIT, static function (FormEvent $event) use ($normalizePrices): void {
+            /** @var RozetkaProduct|null $data */
+            $data = $event->getData();
+            $normalizePrices($data);
+
+            if ($data === null) {
+                return;
+            }
+
+            foreach ($data->getValues()->toArray() as $value) {
+                if (! $value instanceof ProductRozetkaCharacteristicValue) {
+                    continue;
+                }
+                if ($value->getCharacteristic() === null) {
+                    $data->removeValue($value);
+                }
             }
         });
     }
@@ -124,8 +159,8 @@ class RozetkaProductType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'          => RozetkaProduct::class,
-            'disable_feed_flags'  => false,
+            'data_class'         => RozetkaProduct::class,
+            'disable_feed_flags' => false,
         ]);
     }
 }

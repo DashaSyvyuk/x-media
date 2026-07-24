@@ -27,30 +27,34 @@ class RozetkaCharacteristicType extends AbstractType
         'Integer' => [
             'type' => IntegerType::class,
             'attributes' => [
-                'label' => 'Значення',
-                'attr'  => ['class' => 'rozetka-characteristics-values'],
+                'label'    => 'Значення',
+                'required' => false,
+                'attr'     => ['class' => 'rozetka-characteristics-values'],
             ],
         ],
         'Decimal' => [
             'type' => NumberType::class,
             'attributes' => [
-                'label' => 'Значення',
-                'scale' => 2,
-                'attr'  => ['class' => 'rozetka-characteristics-values'],
+                'label'    => 'Значення',
+                'required' => false,
+                'scale'    => 2,
+                'attr'     => ['class' => 'rozetka-characteristics-values'],
             ],
         ],
         'TextInput' => [
             'type' => TextType::class,
             'attributes' => [
-                'label' => 'Значення',
-                'attr'  => ['class' => 'rozetka-characteristics-values'],
+                'label'    => 'Значення',
+                'required' => false,
+                'attr'     => ['class' => 'rozetka-characteristics-values'],
             ],
         ],
         'TextArea' => [
             'type' => TextareaType::class,
             'attributes' => [
-                'label' => 'Значення',
-                'attr'  => ['class' => 'rozetka-characteristics-values'],
+                'label'    => 'Значення',
+                'required' => false,
+                'attr'     => ['class' => 'rozetka-characteristics-values'],
             ],
         ],
     ];
@@ -72,7 +76,7 @@ class RozetkaCharacteristicType extends AbstractType
             'placeholder'  => 'Оберіть параметр',
             'choices'      => $characteristics,
             'label'        => 'Параметр',
-            'required'     => true,
+            'required'     => false,
             'attr'         => ['class' => 'characteristic'],
         ]);
 
@@ -96,7 +100,7 @@ class RozetkaCharacteristicType extends AbstractType
                     'placeholder'  => 'Оберіть значення',
                     'choices'      => $attributes,
                     'label'        => 'Значення',
-                    'required'     => true,
+                    'required'     => false,
                     'attr'         => ['class' => 'rozetka-characteristics-values'],
                     'multiple'     => ! in_array($type, self::ONE_VALUE_LIST, true),
                 ]);

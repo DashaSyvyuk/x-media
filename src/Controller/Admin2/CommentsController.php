@@ -15,6 +15,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Security("is_granted('ROLE_USER')")]
 class CommentsController extends AbstractController
 {
+    use Admin2BulkIdsTrait;
+
     public function __construct(
         private readonly CommentRepository $commentRepository,
         private readonly Admin2Paginator $admin2Paginator,
@@ -74,6 +76,37 @@ class CommentsController extends AbstractController
         $this->entityManager->flush();
 
         $this->addFlash('success', sprintf('Коментар #%d видалено.', $id));
+
+        return $this->redirectToRoute('admin2_comments', $request->query->all());
+    }
+
+    #[Route('/admin/comments/bulk-delete', name: 'admin2_comments_bulk_delete', methods: ['POST'])]
+    public function bulkDelete(Request $request): Response
+    {
+        if (! $this->isCsrfTokenValid('admin2_comment_bulk_delete', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_comments', $request->query->all());
+        }
+
+        $ids = $this->parseBulkIds($request);
+        if ($ids === []) {
+            $this->addFlash('error', 'Не вибрано жодного коментаря.');
+
+            return $this->redirectToRoute('admin2_comments', $request->query->all());
+        }
+
+        $deleted = 0;
+        foreach ($ids as $id) {
+            $comment = $this->commentRepository->find($id);
+            if ($comment instanceof Comment) {
+                $this->entityManager->remove($comment);
+                ++$deleted;
+            }
+        }
+        $this->entityManager->flush();
+
+        $this->addFlash('success', sprintf('Видалено коментарів: %d.', $deleted));
 
         return $this->redirectToRoute('admin2_comments', $request->query->all());
     }

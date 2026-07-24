@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\RozetkaProduct;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -30,6 +31,21 @@ class RozetkaProductRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
         $entityManager->refresh($rozetkaProduct);
         $entityManager->flush();
+    }
+
+    public function findOneByProductId(int $productId): ?RozetkaProduct
+    {
+        if ($productId <= 0) {
+            return null;
+        }
+
+        return $this->createQueryBuilder('rp')
+            ->innerJoin('rp.product', 'p')
+            ->andWhere('p.id = :productId')
+            ->setParameter('productId', $productId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function createAdminListQueryBuilder(
@@ -140,6 +156,86 @@ class RozetkaProductRepository extends ServiceEntityRepository
                 'delta'      => $delta,
                 'categoryId' => $categoryId,
                 'updatedAt'  => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+            ],
+        );
+
+        $this->getEntityManager()->clear();
+
+        return $updated;
+    }
+
+    /**
+     * @param list<int> $ids
+     */
+    public function adjustPriceForIds(array $ids, int $delta): int
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+        if ($ids === [] || $delta === 0) {
+            return 0;
+        }
+
+        $connection = $this->getEntityManager()->getConnection();
+        $updated = (int) $connection->executeStatement(
+            'UPDATE rozetka_product
+             SET
+                crossed_out_price = CASE
+                    WHEN crossed_out_price IS NOT NULL
+                         AND crossed_out_price > 0
+                         AND crossed_out_price <= GREATEST(1, COALESCE(price, 0) + :delta)
+                    THEN NULL
+                    ELSE crossed_out_price
+                END,
+                promo_price = CASE
+                    WHEN promo_price IS NOT NULL
+                         AND promo_price > 0
+                         AND promo_price >= GREATEST(1, COALESCE(price, 0) + :delta)
+                    THEN NULL
+                    ELSE promo_price
+                END,
+                price = GREATEST(1, COALESCE(price, 0) + :delta),
+                updated_at = :updatedAt
+             WHERE id IN (:ids)',
+            [
+                'delta'     => $delta,
+                'ids'       => $ids,
+                'updatedAt' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+            ],
+            [
+                'ids' => ArrayParameterType::INTEGER,
+            ],
+        );
+
+        $this->getEntityManager()->clear();
+
+        return $updated;
+    }
+
+    /**
+     * @param list<int> $ids
+     */
+    public function setReadyForIds(array $ids, bool $ready): int
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+        if ($ids === []) {
+            return 0;
+        }
+
+        $connection = $this->getEntityManager()->getConnection();
+        $updated = (int) $connection->executeStatement(
+            'UPDATE rozetka_product
+             SET
+                ready = :ready,
+                active_for_a = CASE WHEN :ready = 0 THEN 0 ELSE active_for_a END,
+                active_for_p = CASE WHEN :ready = 0 THEN 0 ELSE active_for_p END,
+                updated_at = :updatedAt
+             WHERE id IN (:ids)',
+            [
+                'ready'     => $ready ? 1 : 0,
+                'ids'       => $ids,
+                'updatedAt' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+            ],
+            [
+                'ids' => ArrayParameterType::INTEGER,
             ],
         );
 

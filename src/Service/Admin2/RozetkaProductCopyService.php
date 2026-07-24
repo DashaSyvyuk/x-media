@@ -15,22 +15,15 @@ final readonly class RozetkaProductCopyService
 
     public function copyCharacteristics(RozetkaProduct $target, ?RozetkaProduct $source): bool
     {
-        if ($source === null) {
+        if ($source === null || $source->getId() === $target->getId()) {
             return false;
-        }
-
-        $target->setSeries($source->getSeries());
-        $target->setDescription($source->getDescription());
-
-        if ($source->getValues()->isEmpty()) {
-            return true;
         }
 
         foreach ($target->getValues()->toArray() as $value) {
             $target->removeValue($value);
         }
 
-        foreach ($source->getValues() as $value) {
+        foreach ($source->getActiveValues() as $value) {
             $productValue = new ProductRozetkaCharacteristicValue();
             $productValue->setRozetkaProduct($target);
             $productValue->setCharacteristic($value->getCharacteristic());
@@ -47,6 +40,18 @@ final readonly class RozetkaProductCopyService
         return true;
     }
 
+    public function findSourceByProductId(?int $productId): ?RozetkaProduct
+    {
+        if ($productId === null || $productId <= 0) {
+            return null;
+        }
+
+        return $this->rozetkaProductRepository->findOneByProductId($productId);
+    }
+
+    /**
+     * @deprecated Use findSourceByProductId()
+     */
     public function findSource(?int $sourceId): ?RozetkaProduct
     {
         if ($sourceId === null || $sourceId <= 0) {

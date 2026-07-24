@@ -18,6 +18,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')")]
 class RozetkaProductsController extends AbstractController
 {
+    use Admin2BulkIdsTrait;
+
     public function __construct(
         private readonly RozetkaProductRepository $rozetkaProductRepository,
         private readonly CategoryRepository $categoryRepository,
@@ -101,6 +103,66 @@ class RozetkaProductsController extends AbstractController
         );
 
         return $this->redirectToRoute('admin2_rozetka');
+    }
+
+    #[Route('/admin/rozetka/bulk-price-selected', name: 'admin2_rozetka_bulk_price_selected', methods: ['POST'])]
+    public function bulkPriceSelected(Request $request): Response
+    {
+        if (! $this->isCsrfTokenValid('admin2_rozetka_bulk_price_selected', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_rozetka', $request->query->all());
+        }
+
+        $ids = $this->parseBulkIds($request);
+        $delta = (int) $request->request->get('delta', 0);
+
+        if ($ids === [] || $delta === 0) {
+            $this->addFlash('error', 'Виберіть товари та вкажіть зміну ціни (не 0).');
+
+            return $this->redirectToRoute('admin2_rozetka', $request->query->all());
+        }
+
+        $updated = $this->rozetkaProductRepository->adjustPriceForIds($ids, $delta);
+        $sign = $delta > 0 ? '+' : '';
+        $this->addFlash(
+            'success',
+            sprintf('Ціну Rozetka змінено на %s%d ₴ для %d вибраних товар(ів).', $sign, $delta, $updated),
+        );
+
+        return $this->redirectToRoute('admin2_rozetka', $request->query->all());
+    }
+
+    #[Route('/admin/rozetka/bulk-ready', name: 'admin2_rozetka_bulk_ready', methods: ['POST'])]
+    public function bulkReady(Request $request): Response
+    {
+        if (! $this->isCsrfTokenValid('admin2_rozetka_bulk_ready', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_rozetka', $request->query->all());
+        }
+
+        $ids = $this->parseBulkIds($request);
+        $readyRaw = $request->request->get('ready');
+        $ready = filter_var($readyRaw, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+        if ($ids === [] || $ready === null) {
+            $this->addFlash('error', 'Виберіть товари та дію (активні / заблоковані).');
+
+            return $this->redirectToRoute('admin2_rozetka', $request->query->all());
+        }
+
+        $updated = $this->rozetkaProductRepository->setReadyForIds($ids, $ready);
+        $this->addFlash(
+            'success',
+            sprintf(
+                '%s для %d товар(ів) Rozetka.',
+                $ready ? 'Увімкнено «Готовий»' : 'Вимкнено «Готовий» (A/P також скинуто)',
+                $updated,
+            ),
+        );
+
+        return $this->redirectToRoute('admin2_rozetka', $request->query->all());
     }
 
     #[Route('/admin/rozetka/generate/a', name: 'admin2_rozetka_generate_a', methods: ['POST'])]

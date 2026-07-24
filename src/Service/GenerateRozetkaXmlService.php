@@ -115,7 +115,7 @@ class GenerateRozetkaXmlService
 
                 $categoryId = $product->getCategory()->getId();
                 $images = $product->getImages();
-                $characteristics = $rozetkaProduct->getValues();
+                $characteristics = $rozetkaProduct->getActiveValues();
                 $priceParameters = $priceParametersByCategoryId[$categoryId] ?? null;
                 $promoPrice = $rozetkaProduct->getPromoPrice();
                 $hasPromo   = $rozetkaProduct->getPromoPriceActive() && $promoPrice !== null;

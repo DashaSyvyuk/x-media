@@ -118,10 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const bgMarkStorageKey = 'admin2.fulfillment.vendorBgMarks';
-    const readBgMarks = () => {
+    const readBgMarks = (storageKey) => {
         try {
-            const raw = localStorage.getItem(bgMarkStorageKey);
+            const raw = localStorage.getItem(storageKey);
             const parsed = raw ? JSON.parse(raw) : {};
 
             return parsed && typeof parsed === 'object' ? parsed : {};
@@ -129,20 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return {};
         }
     };
-    const writeBgMarks = (marks) => {
+    const writeBgMarks = (storageKey, marks) => {
         try {
-            localStorage.setItem(bgMarkStorageKey, JSON.stringify(marks));
+            localStorage.setItem(storageKey, JSON.stringify(marks));
         } catch {
             // ignore quota / private mode
         }
     };
 
-    let bgMarks = readBgMarks();
-
-    document.querySelectorAll('.fulfillment-card--vendor[data-vendor-id]').forEach((card) => {
-        const vendorId = String(card.dataset.vendorId || '');
+    const bindBgMarkToggle = (card, markId, storageKey, marks) => {
         const toggleBtn = card.querySelector('[data-bg-mark-toggle]');
-        if (!vendorId || !toggleBtn) {
+        if (!markId || !toggleBtn) {
             return;
         }
 
@@ -153,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleBtn.title = on ? 'Повернути звичайний фон' : 'Змінити колір фону';
         };
 
-        applyMark(Boolean(bgMarks[vendorId]));
+        applyMark(Boolean(marks[markId]));
 
         toggleBtn.addEventListener('click', (event) => {
             event.preventDefault();
@@ -163,11 +159,28 @@ document.addEventListener('DOMContentLoaded', () => {
             applyMark(next);
 
             if (next) {
-                bgMarks[vendorId] = 1;
+                marks[markId] = 1;
             } else {
-                delete bgMarks[vendorId];
+                delete marks[markId];
             }
-            writeBgMarks(bgMarks);
+            writeBgMarks(storageKey, marks);
         });
+    };
+
+    const vendorBgMarkKey = 'admin2.fulfillment.vendorBgMarks';
+    const vendorBgMarks = readBgMarks(vendorBgMarkKey);
+    document.querySelectorAll('.fulfillment-card--vendor[data-vendor-id]').forEach((card) => {
+        bindBgMarkToggle(card, String(card.dataset.vendorId || ''), vendorBgMarkKey, vendorBgMarks);
+    });
+
+    const customerBgMarkKey = 'admin2.fulfillment.customerBgMarks';
+    const customerBgMarks = readBgMarks(customerBgMarkKey);
+    document.querySelectorAll('.fulfillment-card[data-customer-type][data-customer-id]:not(.fulfillment-card--vendor)').forEach((card) => {
+        const type = String(card.dataset.customerType || '');
+        const id = String(card.dataset.customerId || '');
+        if (!type || !id) {
+            return;
+        }
+        bindBgMarkToggle(card, `${type}:${id}`, customerBgMarkKey, customerBgMarks);
     });
 });

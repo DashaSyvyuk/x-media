@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin2;
 
+use App\Entity\Product;
 use App\Entity\RozetkaProduct;
 use App\Form\Admin2\RozetkaProductType;
 use App\Repository\RozetkaProductRepository;
@@ -41,20 +42,28 @@ class RozetkaProductEditController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($copyCharacteristics && ! $rozetkaProduct->getReady()) {
-                $sourceId = $form->has('rozetkaProduct')
-                    ? $form->get('rozetkaProduct')->getData()?->getId()
+                /** @var Product|null $sourceProduct */
+                $sourceProduct = $form->has('copySourceProduct')
+                    ? $form->get('copySourceProduct')->getData()
                     : null;
-                $source = $this->rozetkaProductCopyService->findSource($sourceId);
+                $source = $sourceProduct instanceof Product
+                    ? $this->rozetkaProductCopyService->findSourceByProductId($sourceProduct->getId())
+                    : null;
 
                 if ($source === null) {
-                    $this->addFlash('error', 'Оберіть товар-джерело для копіювання характеристик.');
+                    $this->addFlash('error', 'Оберіть ID товару-джерела з готовими характеристиками Rozetka.');
+                } elseif ($source->getId() === $rozetkaProduct->getId()) {
+                    $this->addFlash('error', 'Не можна копіювати характеристики з цього ж товару.');
                 } else {
                     $this->rozetkaProductCopyService->copyCharacteristics($rozetkaProduct, $source);
+                    $this->addFlash('success', 'Характеристики скопійовано (назву не змінено).');
                 }
             }
 
             $this->entityManager->flush();
-            $this->addFlash('success', sprintf('Rozetka товар «%s» збережено.', $rozetkaProduct->getTitle()));
+            if (! $copyCharacteristics) {
+                $this->addFlash('success', sprintf('Rozetka товар «%s» збережено.', $rozetkaProduct->getTitle()));
+            }
 
             return $this->redirectToRoute('admin2_rozetka_edit', ['id' => $rozetkaProduct->getId()]);
         }

@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Promotion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
@@ -593,6 +594,75 @@ class ProductRepository extends ServiceEntityRepository
                 'delta'      => $delta,
                 'categoryId' => $categoryId,
                 'updatedAt'  => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+            ],
+        );
+
+        $this->getEntityManager()->clear();
+
+        return $updated;
+    }
+
+    /**
+     * @param list<int> $ids
+     */
+    public function adjustPriceForIds(array $ids, int $delta): int
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+        if ($ids === [] || $delta === 0) {
+            return 0;
+        }
+
+        $connection = $this->getEntityManager()->getConnection();
+        $updated = (int) $connection->executeStatement(
+            'UPDATE product
+             SET
+                crossed_out_price = CASE
+                    WHEN crossed_out_price IS NOT NULL
+                         AND crossed_out_price > 0
+                         AND crossed_out_price <= GREATEST(1, COALESCE(price, 0) + :delta)
+                    THEN NULL
+                    ELSE crossed_out_price
+                END,
+                price = GREATEST(1, COALESCE(price, 0) + :delta),
+                updated_at = :updatedAt
+             WHERE id IN (:ids)',
+            [
+                'delta'     => $delta,
+                'ids'       => $ids,
+                'updatedAt' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+            ],
+            [
+                'ids' => ArrayParameterType::INTEGER,
+            ],
+        );
+
+        $this->getEntityManager()->clear();
+
+        return $updated;
+    }
+
+    /**
+     * @param list<int> $ids
+     */
+    public function setStatusForIds(array $ids, string $status): int
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+        if ($ids === [] || ! in_array($status, [Product::STATUS_ACTIVE, Product::STATUS_BLOCKED], true)) {
+            return 0;
+        }
+
+        $connection = $this->getEntityManager()->getConnection();
+        $updated = (int) $connection->executeStatement(
+            'UPDATE product
+             SET status = :status, updated_at = :updatedAt
+             WHERE id IN (:ids)',
+            [
+                'status'    => $status,
+                'ids'       => $ids,
+                'updatedAt' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+            ],
+            [
+                'ids' => ArrayParameterType::INTEGER,
             ],
         );
 
