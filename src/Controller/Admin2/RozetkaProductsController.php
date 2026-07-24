@@ -108,10 +108,8 @@ class RozetkaProductsController extends AbstractController
     #[Route('/admin/rozetka/bulk-price-selected', name: 'admin2_rozetka_bulk_price_selected', methods: ['POST'])]
     public function bulkPriceSelected(Request $request): Response
     {
-        if (! $this->isCsrfTokenValid(
-            'admin2_rozetka_bulk_price_selected',
-            (string) $request->request->get('_token'),
-        )) {
+        $token = (string) $request->request->get('_token');
+        if (! $this->isCsrfTokenValid('admin2_rozetka_bulk_price_selected', $token)) {
             $this->addFlash('error', 'Невірний CSRF-токен.');
 
             return $this->redirectToRoute('admin2_rozetka', $request->query->all());
