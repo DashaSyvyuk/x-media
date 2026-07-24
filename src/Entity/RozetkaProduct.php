@@ -49,7 +49,10 @@ class RozetkaProduct
     #[Assert\GreaterThan(propertyPath: "price", message: "Too low value")]
     private ?int $crossedOutPrice = 0;
 
-    /** @var ArrayCollection<int, ProductRozetkaCharacteristicValue>|PersistentCollection<int, ProductRozetkaCharacteristicValue> $values */
+    /**
+     * @var ArrayCollection<int, ProductRozetkaCharacteristicValue>
+     *     |PersistentCollection<int, ProductRozetkaCharacteristicValue> $values
+     */
     #[ORM\OneToMany(
         targetEntity: ProductRozetkaCharacteristicValue::class,
         mappedBy: "rozetkaProduct",
@@ -172,15 +175,18 @@ class RozetkaProduct
     }
 
     /**
-     * @return ArrayCollection<int, ProductRozetkaCharacteristicValue>|PersistentCollection<int, ProductRozetkaCharacteristicValue>
+     * @return ArrayCollection<int, ProductRozetkaCharacteristicValue>
+     *         |PersistentCollection<int, ProductRozetkaCharacteristicValue>
      */
     public function getActiveValues(): ArrayCollection|PersistentCollection
     {
-        return $this->values->filter(static function (ProductRozetkaCharacteristicValue $value): bool {
-            $characteristic = $value->getCharacteristic();
+        return $this->values->filter(
+            static function (ProductRozetkaCharacteristicValue $value): bool {
+                $characteristic = $value->getCharacteristic();
 
-            return $characteristic !== null && $characteristic->getActive();
-        });
+                return $characteristic !== null && $characteristic->getActive();
+            },
+        );
     }
 
     public function setValues(ArrayCollection|PersistentCollection $values): void // @phpstan-ignore-line

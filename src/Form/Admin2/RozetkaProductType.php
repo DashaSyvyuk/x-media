@@ -108,11 +108,14 @@ class RozetkaProductType extends AbstractType
             }
         };
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (FormEvent $event) use ($normalizePrices): void {
-            /** @var RozetkaProduct|null $data */
-            $data = $event->getData();
-            $normalizePrices($data);
-        });
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            static function (FormEvent $event) use ($normalizePrices): void {
+                /** @var RozetkaProduct|null $data */
+                $data = $event->getData();
+                $normalizePrices($data);
+            },
+        );
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, static function (FormEvent $event): void {
             $submitted = $event->getData();
@@ -136,24 +139,27 @@ class RozetkaProductType extends AbstractType
             $event->setData($submitted);
         });
 
-        $builder->addEventListener(FormEvents::POST_SUBMIT, static function (FormEvent $event) use ($normalizePrices): void {
-            /** @var RozetkaProduct|null $data */
-            $data = $event->getData();
-            $normalizePrices($data);
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            static function (FormEvent $event) use ($normalizePrices): void {
+                /** @var RozetkaProduct|null $data */
+                $data = $event->getData();
+                $normalizePrices($data);
 
-            if ($data === null) {
-                return;
-            }
+                if ($data === null) {
+                    return;
+                }
 
-            foreach ($data->getValues()->toArray() as $value) {
-                if (! $value instanceof ProductRozetkaCharacteristicValue) {
-                    continue;
+                foreach ($data->getValues()->toArray() as $value) {
+                    if (! $value instanceof ProductRozetkaCharacteristicValue) {
+                        continue;
+                    }
+                    if ($value->getCharacteristic() === null) {
+                        $data->removeValue($value);
+                    }
                 }
-                if ($value->getCharacteristic() === null) {
-                    $data->removeValue($value);
-                }
-            }
-        });
+            },
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
