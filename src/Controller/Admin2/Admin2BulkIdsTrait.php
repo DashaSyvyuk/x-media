@@ -11,10 +11,8 @@ trait Admin2BulkIdsTrait
      */
     private function parseBulkIds(Request $request): array
     {
+        /** @var array<int|string, mixed> $raw */
         $raw = $request->request->all('ids');
-        if (! is_array($raw)) {
-            return [];
-        }
 
         $ids = [];
         foreach ($raw as $value) {

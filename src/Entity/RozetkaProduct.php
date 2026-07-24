@@ -176,8 +176,7 @@ class RozetkaProduct
      */
     public function getActiveValues(): ArrayCollection|PersistentCollection
     {
-        // @phpstan-ignore-next-line
-        return $this->values->filter(static function ($value) {
+        return $this->values->filter(static function (ProductRozetkaCharacteristicValue $value): bool {
             $characteristic = $value->getCharacteristic();
 
             return $characteristic !== null && $characteristic->getActive();
