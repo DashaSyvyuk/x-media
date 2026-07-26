@@ -4,7 +4,6 @@ namespace App\Form\Admin2;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use App\Entity\ProductImage;
 use App\Form\ProductCharacteristicType;
 use App\Form\ProductImageType;
 use App\Repository\CategoryRepository;
@@ -153,10 +152,6 @@ class ProductType extends AbstractType
             }
 
             foreach ($product->getImages()->toArray() as $image) {
-                if (! $image instanceof ProductImage) {
-                    continue;
-                }
-
                 $hasFile = $image->getFile() !== null;
                 $hasUrl  = $image->getImageUrl() !== null && $image->getImageUrl() !== '';
                 if (! $hasFile && ! $hasUrl) {
