@@ -4,22 +4,32 @@ namespace App\EventListener;
 
 use App\Entity\ProductImage;
 use App\Service\BunnyStorageClient;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
-use Doctrine\ORM\Event\PostFlushEventArgs;
+use Psr\Log\LoggerInterface;
+use Throwable;
 
 class ProductImageUploadSubscriber
 {
     /**
-     * @var array<object>
+     * @var list<ProductImage>
      */
     private array $queue = [];
 
     public function __construct(
         private BunnyStorageClient $bunny,
-        private string $uploadDir
+        private string $uploadDir,
+        private ?LoggerInterface $logger = null,
     ) {
+    }
+
+    public function ensureLocalDir(): void
+    {
+        if (! is_dir($this->uploadDir)) {
+            @mkdir($this->uploadDir, 0775, true);
+        }
     }
 
     public function postPersist(PostPersistEventArgs $args): void
@@ -63,6 +73,8 @@ class ProductImageUploadSubscriber
             return;
         }
 
+        $this->ensureLocalDir();
+
         $localPath  = $this->uploadDir . '/' . $entity->getImageUrl();
         $remotePath = 'products/' . $entity->getImageUrl();
 
@@ -70,8 +82,15 @@ class ProductImageUploadSubscriber
             return;
         }
 
-        $this->bunny->upload($localPath, $remotePath);
-
-        unlink($localPath);
+        try {
+            $this->bunny->upload($localPath, $remotePath);
+            @unlink($localPath);
+        } catch (Throwable $e) {
+            // Keep the local file so the admin can still see/retry; do not break the save response.
+            $this->logger?->error('Product image Bunny upload failed: {message}', [
+                'message' => $e->getMessage(),
+                'file'    => $entity->getImageUrl(),
+            ]);
+        }
     }
 }

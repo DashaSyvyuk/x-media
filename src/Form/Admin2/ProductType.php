@@ -4,8 +4,7 @@ namespace App\Form\Admin2;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use App\Entity\Promotion;
-use App\Entity\PromotionProduct;
+use App\Entity\ProductImage;
 use App\Form\ProductCharacteristicType;
 use App\Form\ProductImageType;
 use App\Repository\CategoryRepository;
@@ -119,18 +118,51 @@ class ProductType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($filterModifier): void {
             /** @var Product|null $product */
             $product = $event->getData();
+            if ($product instanceof Product
+                && $product->getCrossedOutPrice() !== null
+                && $product->getCrossedOutPrice() < 1
+            ) {
+                $product->setCrossedOutPrice(null);
+            }
             $filterModifier($event->getForm(), $product?->getCategory());
         });
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($filterModifier): void {
             $data = $event->getData();
-            $category = null;
+            if (! is_array($data)) {
+                return;
+            }
 
+            $category = null;
             if (! empty($data['category'])) {
                 $category = $this->categoryRepository->find((int) $data['category']);
             }
 
             $filterModifier($event->getForm(), $category instanceof Category ? $category : null);
+        });
+
+        $builder->addEventListener(FormEvents::POST_SUBMIT, static function (FormEvent $event): void {
+            /** @var Product|null $product */
+            $product = $event->getData();
+            if (! $product instanceof Product) {
+                return;
+            }
+
+            if ($product->getCrossedOutPrice() !== null && $product->getCrossedOutPrice() < 1) {
+                $product->setCrossedOutPrice(null);
+            }
+
+            foreach ($product->getImages()->toArray() as $image) {
+                if (! $image instanceof ProductImage) {
+                    continue;
+                }
+
+                $hasFile = $image->getFile() !== null;
+                $hasUrl  = $image->getImageUrl() !== null && $image->getImageUrl() !== '';
+                if (! $hasFile && ! $hasUrl) {
+                    $product->removeImage($image);
+                }
+            }
         });
     }
 
