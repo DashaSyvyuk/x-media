@@ -6,12 +6,13 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin2/moderation.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/bulk-select.css') }}">
 {% endblock %}
 
 {% block body %}
     {% set query = { q: search, status: status, sort: sort, dir: direction, perPage: perPage } %}
 
-    <div class="moderation-page">
+    <div class="moderation-page" data-bulk-root>
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 page-header-row">
             <div>
                 <h1 class="page-title mb-1">Модерація</h1>
@@ -54,6 +55,9 @@
             <table class="table products-table align-middle">
                 <thead>
                     <tr>
+                        <th class="bulk-select-cell">
+                            <input type="checkbox" class="form-check-input" data-bulk-select-all title="Вибрати всі">
+                        </th>
                         <th>{{ comment_macros.sort_link('ID', 'id', sort, direction, query) }}</th>
                         <th>{{ comment_macros.sort_link('Автор', 'author', sort, direction, query) }}</th>
                         <th>Email</th>
@@ -66,6 +70,9 @@
                 <tbody>
                     {% for comment in pagination %}
                         <tr>
+                            <td class="bulk-select-cell">
+                                <input type="checkbox" class="form-check-input" value="{{ comment.id }}" data-bulk-item>
+                            </td>
                             <td class="text-muted">#{{ comment.id }}</td>
                             <td><div class="product-title">{{ comment.author }}</div></td>
                             <td class="text-muted small">{{ comment.email ?: '—' }}</td>
@@ -88,7 +95,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-5">
+                            <td colspan="8" class="text-center text-muted py-5">
                                 <i class="bi bi-chat-left-text fs-2 d-block mb-2"></i>
                                 Коментарів не знайдено
                             </td>
@@ -96,6 +103,19 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+
+        <div class="bulk-actions-bar" data-bulk-bar>
+            <span class="bulk-actions-bar__count">Вибрано: <span data-bulk-count>0</span></span>
+            <form method="post"
+                  action="{{ path('admin2_comments_bulk_delete') ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}"
+                  data-bulk-form
+                  data-confirm="Видалити {count} вибраних коментарів?">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_comment_bulk_delete') }}">
+                <button type="submit" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i> Видалити вибрані
+                </button>
+            </form>
         </div>
 
         {% if pagination.getTotalItemCount() > 0 %}
@@ -134,6 +154,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="{{ asset('js/admin2-bulk-select.js') }}" defer></script>
     <script>
         document.querySelectorAll('[data-confirm]').forEach((button) => {
             button.closest('form')?.addEventListener('submit', (event) => {

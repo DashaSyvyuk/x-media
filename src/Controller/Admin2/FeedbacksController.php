@@ -15,6 +15,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Security("is_granted('ROLE_USER')")]
 class FeedbacksController extends AbstractController
 {
+    use Admin2BulkIdsTrait;
+
     public function __construct(
         private readonly FeedbackRepository $feedbackRepository,
         private readonly Admin2Paginator $admin2Paginator,
@@ -74,6 +76,37 @@ class FeedbacksController extends AbstractController
         $this->entityManager->flush();
 
         $this->addFlash('success', sprintf('Відгук #%d видалено.', $id));
+
+        return $this->redirectToRoute('admin2_feedbacks', $request->query->all());
+    }
+
+    #[Route('/admin/feedbacks/bulk-delete', name: 'admin2_feedbacks_bulk_delete', methods: ['POST'])]
+    public function bulkDelete(Request $request): Response
+    {
+        if (! $this->isCsrfTokenValid('admin2_feedback_bulk_delete', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_feedbacks', $request->query->all());
+        }
+
+        $ids = $this->parseBulkIds($request);
+        if ($ids === []) {
+            $this->addFlash('error', 'Не вибрано жодного відгуку.');
+
+            return $this->redirectToRoute('admin2_feedbacks', $request->query->all());
+        }
+
+        $deleted = 0;
+        foreach ($ids as $id) {
+            $feedback = $this->feedbackRepository->find($id);
+            if ($feedback instanceof Feedback) {
+                $this->entityManager->remove($feedback);
+                ++$deleted;
+            }
+        }
+        $this->entityManager->flush();
+
+        $this->addFlash('success', sprintf('Видалено відгуків: %d.', $deleted));
 
         return $this->redirectToRoute('admin2_feedbacks', $request->query->all());
     }

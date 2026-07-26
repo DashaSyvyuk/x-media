@@ -6,6 +6,7 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/admin2/product-edit.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/product-picker.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin2/rozetka.css') }}">
 {% endblock %}
 
@@ -27,8 +28,11 @@
         </a>
     </div>
 
-    {% if form.vars.errors|length > 0 %}
-        <div class="alert alert-danger">{{ form_errors(form) }}</div>
+    {% if not form.vars.valid %}
+        <div class="alert alert-danger">
+            <div class="fw-semibold mb-1">Форма містить помилки — зміни не збережено.</div>
+            {{ form_errors(form) }}
+        </div>
     {% endif %}
 
     {{ form_start(form, { attr: { class: 'product-edit-form rozetka-edit-form', id: 'rozetka-edit-form' } }) }}
@@ -56,13 +60,16 @@
         </div>
     </div>
 
-    {% if form.rozetkaProduct is defined %}
+    {% if form.copySourceProduct is defined %}
         <div class="card product-edit-section shadow-sm rozetka-copy-card">
             <div class="card-header">Копіювання характеристик</div>
             <div class="card-body">
-                <p class="text-muted small mb-3">Товар ще не готовий — можна скопіювати серію, опис і характеристики з іншого готового товару тієї ж категорії.</p>
+                <p class="text-muted small mb-3">Товар ще не готовий — можна скопіювати лише характеристики з іншого товару (за ID). Назва, серія й опис не змінюються.</p>
                 <div class="row g-3 align-items-end">
-                    <div class="col-md-8">{{ form_row(form.rozetkaProduct) }}</div>
+                    <div class="col-md-8">
+                        {{ form_widget(form.copySourceProduct) }}
+                        {{ form_errors(form.copySourceProduct) }}
+                    </div>
                     <div class="col-md-4">
                         <button type="submit" name="copy_characteristics" value="1" class="btn btn-outline-teal w-100">
                             <i class="bi bi-copy"></i> Копіювати характеристики
@@ -153,5 +160,6 @@
 
 {% block javascripts %}
     <script src="{{ asset('js/admin2-collection.js') }}" defer></script>
+    <script src="{{ asset('js/admin2-product-picker.js') }}" defer></script>
     <script src="{{ asset('js/admin2-rozetka.js') }}" defer></script>
 {% endblock %}

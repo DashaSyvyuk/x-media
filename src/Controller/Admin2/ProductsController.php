@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Security("is_granted('ROLE_USER')")]
 class ProductsController extends AbstractController
 {
+    use Admin2BulkIdsTrait;
+
     public function __construct(
         private readonly ProductRepository $productRepository,
         private readonly CategoryRepository $categoryRepository,
@@ -108,6 +110,62 @@ class ProductsController extends AbstractController
         );
 
         return $this->redirectToRoute('admin2_products');
+    }
+
+    #[Route('/admin/products/bulk-price-selected', name: 'admin2_products_bulk_price_selected', methods: ['POST'])]
+    public function bulkPriceSelected(Request $request): Response
+    {
+        $token = (string) $request->request->get('_token');
+        if (! $this->isCsrfTokenValid('admin2_products_bulk_price_selected', $token)) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_products', $request->query->all());
+        }
+
+        $ids = $this->parseBulkIds($request);
+        $delta = (int) $request->request->get('delta', 0);
+
+        if ($ids === [] || $delta === 0) {
+            $this->addFlash('error', 'Виберіть товари та вкажіть зміну ціни (не 0).');
+
+            return $this->redirectToRoute('admin2_products', $request->query->all());
+        }
+
+        $updated = $this->productRepository->adjustPriceForIds($ids, $delta);
+        $sign = $delta > 0 ? '+' : '';
+        $this->addFlash(
+            'success',
+            sprintf('Ціну змінено на %s%d ₴ для %d вибраних товар(ів).', $sign, $delta, $updated),
+        );
+
+        return $this->redirectToRoute('admin2_products', $request->query->all());
+    }
+
+    #[Route('/admin/products/bulk-status', name: 'admin2_products_bulk_status', methods: ['POST'])]
+    public function bulkStatus(Request $request): Response
+    {
+        if (! $this->isCsrfTokenValid('admin2_products_bulk_status', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_products', $request->query->all());
+        }
+
+        $ids = $this->parseBulkIds($request);
+        $status = (string) $request->request->get('status', '');
+
+        if ($ids === [] || ! in_array($status, [Product::STATUS_ACTIVE, Product::STATUS_BLOCKED], true)) {
+            $this->addFlash('error', 'Виберіть товари та коректний статус.');
+
+            return $this->redirectToRoute('admin2_products', $request->query->all());
+        }
+
+        $updated = $this->productRepository->setStatusForIds($ids, $status);
+        $this->addFlash(
+            'success',
+            sprintf('Статус «%s» застосовано до %d товар(ів).', $status, $updated),
+        );
+
+        return $this->redirectToRoute('admin2_products', $request->query->all());
     }
 
     #[Route('/admin/products/generate/hotline', name: 'admin2_products_generate_hotline', methods: ['POST'])]

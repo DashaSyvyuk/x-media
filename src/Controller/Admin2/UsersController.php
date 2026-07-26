@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin2;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\Admin2\Admin2Paginator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,6 +15,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN')")]
 class UsersController extends AbstractController
 {
+    use Admin2BulkIdsTrait;
+
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly Admin2Paginator $admin2Paginator,
@@ -66,6 +69,37 @@ class UsersController extends AbstractController
         $this->entityManager->flush();
 
         $this->addFlash('success', sprintf('Користувача «%s» видалено.', trim($name)));
+
+        return $this->redirectToRoute('admin2_users', $request->query->all());
+    }
+
+    #[Route('/admin/users/bulk-delete', name: 'admin2_users_bulk_delete', methods: ['POST'])]
+    public function bulkDelete(Request $request): Response
+    {
+        if (! $this->isCsrfTokenValid('admin2_user_bulk_delete', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_users', $request->query->all());
+        }
+
+        $ids = $this->parseBulkIds($request);
+        if ($ids === []) {
+            $this->addFlash('error', 'Не вибрано жодного користувача.');
+
+            return $this->redirectToRoute('admin2_users', $request->query->all());
+        }
+
+        $deleted = 0;
+        foreach ($ids as $id) {
+            $user = $this->userRepository->find($id);
+            if ($user instanceof User) {
+                $this->entityManager->remove($user);
+                ++$deleted;
+            }
+        }
+        $this->entityManager->flush();
+
+        $this->addFlash('success', sprintf('Видалено користувачів: %d.', $deleted));
 
         return $this->redirectToRoute('admin2_users', $request->query->all());
     }

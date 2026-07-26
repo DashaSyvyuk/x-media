@@ -6,6 +6,7 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin2/rozetka.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/bulk-select.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -65,7 +66,7 @@
             </div>
         </div>
 
-        <div class="card border-0 shadow-sm products-table-card">
+        <div class="card border-0 shadow-sm products-table-card" id="rozetkaBulkRoot" data-bulk-root>
             <div class="card-body p-3 p-md-4 border-bottom">
                 <form method="get" action="{{ path('admin2_rozetka') }}" class="products-toolbar">
                     <div class="products-toolbar__search">
@@ -102,6 +103,9 @@
                 <table class="table products-table products-table--mobile-cards align-middle">
                     <thead>
                         <tr>
+                            <th class="bulk-select-cell">
+                                <input type="checkbox" class="form-check-input" data-bulk-select-all title="Вибрати всі">
+                            </th>
                             <th>{{ rozetka_macros.sort_link('ID', 'productId', sort, direction, query) }}</th>
                             <th>{{ rozetka_macros.sort_link('Назва', 'title', sort, direction, query) }}</th>
                             <th>Категорія</th>
@@ -115,6 +119,9 @@
                     <tbody>
                         {% for item in pagination %}
                             <tr>
+                                <td class="bulk-select-cell" data-label="">
+                                    <input type="checkbox" class="form-check-input" value="{{ item.id }}" data-bulk-item>
+                                </td>
                                 <td data-label="ID" class="text-muted">#{{ item.product.id }}</td>
                                 <td data-label="Назва">
                                     <div class="product-title">{{ item.title }}</div>
@@ -130,10 +137,39 @@
                                 </td>
                             </tr>
                         {% else %}
-                            <tr><td colspan="8" class="text-center text-muted py-5">Товарів Rozetka не знайдено</td></tr>
+                            <tr><td colspan="9" class="text-center text-muted py-5">Товарів Rozetka не знайдено</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
+            </div>
+
+            <div class="bulk-actions-bar" data-bulk-bar>
+                <span class="bulk-actions-bar__count">Вибрано: <span data-bulk-count>0</span></span>
+                <button type="button" class="btn btn-sm btn-outline-teal" data-bs-toggle="modal" data-bs-target="#rozetkaSelectedBulkPriceModal">
+                    <i class="bi bi-tags"></i> Змінити ціну
+                </button>
+                <form method="post"
+                      action="{{ path('admin2_rozetka_bulk_ready') ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}"
+                      class="d-inline"
+                      data-bulk-form
+                      data-confirm="Зробити готовими {count} товар(ів) Rozetka?">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_rozetka_bulk_ready') }}">
+                    <input type="hidden" name="ready" value="1">
+                    <button type="submit" class="btn btn-sm btn-outline-success">
+                        <i class="bi bi-check2-circle"></i> Активні
+                    </button>
+                </form>
+                <form method="post"
+                      action="{{ path('admin2_rozetka_bulk_ready') ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}"
+                      class="d-inline"
+                      data-bulk-form
+                      data-confirm="Вимкнути «Готовий» (і A/P) для {count} товар(ів)?">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_rozetka_bulk_ready') }}">
+                    <input type="hidden" name="ready" value="0">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-slash-circle"></i> Заблокувати
+                    </button>
+                </form>
             </div>
 
             {% if pagination.getTotalItemCount() > 0 %}
@@ -174,9 +210,19 @@
         title: 'Зміна ціни Rozetka для категорії',
         hint: 'Додатне значення збільшує ціну Rozetka, від’ємне — зменшує. Мінімум після зміни — 1 ₴.',
     } %}
+
+    {% include 'admin2/partials/selected_bulk_price_modal.html.twig' with {
+        modalId: 'rozetkaSelectedBulkPriceModal',
+        formAction: path('admin2_rozetka_bulk_price_selected') ~ (app.request.queryString ? '?' ~ app.request.queryString : ''),
+        csrfTokenId: 'admin2_rozetka_bulk_price_selected',
+        bulkRootId: 'rozetkaBulkRoot',
+        title: 'Зміна ціни для вибраних Rozetka',
+        hint: 'Додатне значення збільшує ціну Rozetka, від’ємне — зменшує. Мінімум після зміни — 1 ₴.',
+    } %}
 {% endblock %}
 
 {% block javascripts %}
+    <script src="{{ asset('js/admin2-bulk-select.js') }}" defer></script>
     <script src="{{ asset('js/admin2-rozetka.js') }}" defer></script>
     <script>
         document.getElementById('rozetkaBulkPriceModalForm')?.addEventListener('submit', (event) => {

@@ -1,0 +1,69 @@
+/* Bulk row selection toolbar for admin2 list pages */
+
+.bulk-actions-bar {
+    position: sticky;
+    bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    z-index: 30;
+    display: none;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0.75rem 0.85rem 0.85rem;
+    padding: 0.7rem 0.85rem;
+    border-radius: 12px;
+    border: 1px solid rgba(13, 148, 136, 0.28);
+    background: rgba(240, 253, 250, 0.96);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.12);
+    backdrop-filter: blur(8px);
+}
+
+.bulk-actions-bar.is-visible {
+    display: flex;
+}
+
+.bulk-actions-bar__count {
+    margin-right: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0f766e;
+}
+
+.bulk-actions-bar .btn {
+    white-space: nowrap;
+}
+
+.bulk-select-cell {
+    width: 2.25rem;
+    vertical-align: middle !important;
+}
+
+.bulk-select-cell .form-check-input {
+    margin: 0;
+    cursor: pointer;
+}
+
+@media (max-width: 767.98px) {
+    .bulk-actions-bar {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    .products-table--mobile-cards tbody td.bulk-select-cell {
+        display: flex !important;
+        order: -1;
+        width: 100%;
+        justify-content: flex-start;
+        padding-bottom: 0.35rem;
+        border-bottom: 0;
+    }
+
+    .products-table--mobile-cards tbody td.bulk-select-cell::before {
+        content: 'Вибрати';
+        margin-right: auto;
+        color: #94a3b8;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+}
