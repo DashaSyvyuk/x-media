@@ -24,8 +24,8 @@ class ProductImage
     #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private ?int $id = null;
 
-    #[ORM\Column(type: "text")]
-    private ?string $imageUrl;
+    #[ORM\Column(type: "text", nullable: true)]
+    private ?string $imageUrl = null;
 
     #[Vich\UploadableField(mapping: "images", fileNameProperty: "imageUrl")]
     private ?File $file = null;
@@ -46,9 +46,10 @@ class ProductImage
     public function __construct()
     {
         $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -121,17 +122,22 @@ class ProductImage
         $this->updatedAt = $updatedAt;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->imageUrl;
+        return (string) ($this->imageUrl ?? '');
     }
 
     public function getImageUri(): ?string
     {
-        if (! $this->imageUrl) {
+        if ($this->imageUrl === null || $this->imageUrl === '') {
             return null;
         }
 
-        return $_ENV['BUNNY_CDN_URL'] . '/products/' . $this->imageUrl;
+        $cdn = $_ENV['BUNNY_CDN_URL'] ?? $_SERVER['BUNNY_CDN_URL'] ?? '';
+        if ($cdn === '') {
+            return '/images/products/' . $this->imageUrl;
+        }
+
+        return rtrim((string) $cdn, '/') . '/products/' . $this->imageUrl;
     }
 }

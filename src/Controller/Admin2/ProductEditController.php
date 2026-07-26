@@ -3,6 +3,7 @@
 namespace App\Controller\Admin2;
 
 use App\Entity\Product;
+use App\EventListener\ProductImageUploadSubscriber;
 use App\Form\Admin2\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,12 +19,15 @@ class ProductEditController extends AbstractController
     public function __construct(
         private readonly ProductRepository $productRepository,
         private readonly EntityManagerInterface $entityManager,
+        private readonly ProductImageUploadSubscriber $productImageUploadSubscriber,
     ) {
     }
 
     #[Route('/admin/products/new', name: 'admin2_products_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        $this->productImageUploadSubscriber->ensureLocalDir();
+
         $product = new Product();
         $product->setStatus(Product::STATUS_ACTIVE);
         $product->setAvailability(Product::AVAILABILITY_TO_ORDER);
@@ -53,6 +57,8 @@ class ProductEditController extends AbstractController
     #[Route('/admin/products/{id}/edit', name: 'admin2_products_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
+        $this->productImageUploadSubscriber->ensureLocalDir();
+
         $product = $this->productRepository->find($id);
         if (! $product instanceof Product) {
             throw $this->createNotFoundException('Товар не знайдено.');

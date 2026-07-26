@@ -181,6 +181,31 @@
         </div>
     {% endif %}
 
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="sidebar-group {{ supplyOpen ? 'open' : '' }}">
+            <button type="button" class="sidebar-link sidebar-group-toggle {{ supplyOpen ? 'active' : '' }}">
+                <i class="bi bi-truck"></i>
+                <span class="sidebar-text">Постачання</span>
+                <i class="bi bi-chevron-down sidebar-chevron"></i>
+            </button>
+
+            <div class="sidebar-submenu">
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <a href="{{ path('admin2_vendor_orders') }}"
+                       class="sidebar-sublink {{ currentRoute starts with 'admin2_vendor_order' ? 'active' : '' }}">
+                        <i class="bi bi-circle-fill"></i>
+                        <span>Замовлення</span>
+                    </a>
+                {% endif %}
+                <a href="{{ path('admin2_suppliers') }}"
+                   class="sidebar-sublink {{ currentRoute starts with 'admin2_supplier' ? 'active' : '' }}">
+                    <i class="bi bi-circle-fill"></i>
+                    <span>Постачальники</span>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
     {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') %}
         <div class="sidebar-group {{ statsOpen ? 'open' : '' }}">
             <button type="button" class="sidebar-link sidebar-group-toggle {{ statsOpen ? 'active' : '' }}">
@@ -260,31 +285,6 @@
             {% endif %}
         </div>
     </div>
-
-    {% if is_granted('ROLE_ADMIN') %}
-        <div class="sidebar-group {{ supplyOpen ? 'open' : '' }}">
-            <button type="button" class="sidebar-link sidebar-group-toggle {{ supplyOpen ? 'active' : '' }}">
-                <i class="bi bi-truck"></i>
-                <span class="sidebar-text">Постачання</span>
-                <i class="bi bi-chevron-down sidebar-chevron"></i>
-            </button>
-
-            <div class="sidebar-submenu">
-                {% if is_granted('ROLE_SUPER_ADMIN') %}
-                    <a href="{{ path('admin2_vendor_orders') }}"
-                       class="sidebar-sublink {{ currentRoute starts with 'admin2_vendor_order' ? 'active' : '' }}">
-                        <i class="bi bi-circle-fill"></i>
-                        <span>Замовлення</span>
-                    </a>
-                {% endif %}
-                <a href="{{ path('admin2_suppliers') }}"
-                   class="sidebar-sublink {{ currentRoute starts with 'admin2_supplier' ? 'active' : '' }}">
-                    <i class="bi bi-circle-fill"></i>
-                    <span>Постачальники</span>
-                </a>
-            </div>
-        </div>
-    {% endif %}
 
     <div class="sidebar-group {{ feedsOpen ? 'open' : '' }}">
         <button type="button" class="sidebar-link sidebar-group-toggle {{ feedsOpen ? 'active' : '' }}">

@@ -17,14 +17,16 @@ class ProductImageType extends AbstractType
             ->add('file', VichImageType::class, [
                 'constraints' => [
                     new Image([
-                        'mimeTypes' => ['image/jpg', 'image/jpeg', 'image/png'],
-                        'maxSize' => '5M',
-                    ])
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp'],
+                        'maxSize'   => '5M',
+                    ]),
                 ],
                 'download_uri' => false,
-                'required' => false,
+                'required'     => false,
                 'allow_delete' => false,
-                'image_uri' => fn($entity) => $entity->getImageUri(),
+                'image_uri'    => static function ($entity): ?string {
+                    return $entity instanceof ProductImage ? $entity->getImageUri() : null;
+                },
             ])
             ->add('position')
         ;
