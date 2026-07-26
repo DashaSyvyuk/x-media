@@ -117,7 +117,8 @@ class ProductType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($filterModifier): void {
             /** @var Product|null $product */
             $product = $event->getData();
-            if ($product instanceof Product
+            if (
+                $product instanceof Product
                 && $product->getCrossedOutPrice() !== null
                 && $product->getCrossedOutPrice() < 1
             ) {
