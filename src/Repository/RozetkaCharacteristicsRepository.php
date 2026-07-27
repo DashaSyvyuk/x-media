@@ -35,16 +35,18 @@ class RozetkaCharacteristicsRepository extends ServiceEntityRepository
         $characteristics->setActive($data['active']);
         $characteristics->addCategory($data['category']);
 
-        if (!in_array($data['type'], ['TextArea', 'TextInput'])) {
+        if (!in_array($data['type'], ['TextArea', 'TextInput'], true)) {
             foreach ($data['values'] as $value) {
-                $characteristicsValue = $this->valueRepository->findOneBy(['rozetkaId' => $value['rozetkaId']]);
-                if ($characteristicsValue || !$value['title']) {
+                $rozetkaId = (string) $value['rozetkaId'];
+                $title = (string) $value['title'];
+                $characteristicsValue = $this->valueRepository->findOneBy(['rozetkaId' => $rozetkaId]);
+                if ($characteristicsValue || $title === '') {
                     continue;
                 }
                 $characteristicsValue = new RozetkaCharacteristicsValue();
-                $characteristicsValue->setRozetkaId($value['rozetkaId']);
-                $characteristicsValue->setTitle($value['title']);
-                $characteristicsValue->setActive($value['active']);
+                $characteristicsValue->setRozetkaId($rozetkaId);
+                $characteristicsValue->setTitle($title);
+                $characteristicsValue->setActive((bool) $value['active']);
 
                 $characteristics->addValue($characteristicsValue);
             }
@@ -64,9 +66,7 @@ class RozetkaCharacteristicsRepository extends ServiceEntityRepository
 
     public function update(RozetkaCharacteristics $characteristics): void
     {
-        $entityManager = $this->getEntityManager();
-        $entityManager->refresh($characteristics);
-        $entityManager->flush();
+        $this->getEntityManager()->flush();
     }
 
     public function getCharacteristicsForCategory(Category $category): mixed

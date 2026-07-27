@@ -32,18 +32,17 @@ class ProductSubscriber
     public function postUpdate(Product $product): void
     {
         $rozetkaProduct = $product->getRozetka();
-        $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_ROZETKA]);
-        $priceParameters = $feed ?
-            $this->categoryFeedPriceRepository->findOneBy(['feed' => $feed, 'category' => $product->getCategory()]) :
-            null;
+        if ($rozetkaProduct === null) {
+            $this->postPersist($product);
 
-        $rozetkaProduct->setTitle($product->getTitle());
-
-        if (!$rozetkaProduct->getDescription()) {
-            $rozetkaProduct->setDescription($product->getDescription());
+            return;
         }
 
-        // $rozetkaProduct->setPrice($this->getPrice($product, $feed, $priceParameters));
+        $rozetkaProduct->setTitle($this->buildTitle($product));
+
+        if (! $rozetkaProduct->getDescription()) {
+            $rozetkaProduct->setDescription($product->getDescription());
+        }
 
         $this->repository->update($rozetkaProduct);
     }
@@ -53,15 +52,20 @@ class ProductSubscriber
      */
     public function postPersist(Product $product): void
     {
+        if ($product->getRozetka() !== null) {
+            return;
+        }
+
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_ROZETKA]);
-        $priceParameters = $feed ?
-            $this->categoryFeedPriceRepository->findOneBy([
-                'feed' => $feed,
-                'category' => $product->getCategory()
-            ]) : null;
+        $priceParameters = $feed
+            ? $this->categoryFeedPriceRepository->findOneBy([
+                'feed'     => $feed,
+                'category' => $product->getCategory(),
+            ])
+            : null;
 
         $rozetkaProduct = new RozetkaProduct();
-        $rozetkaProduct->setTitle($product->getTitle());
+        $rozetkaProduct->setTitle($this->buildTitle($product));
         $rozetkaProduct->setStockQuantity(0);
         $rozetkaProduct->setSeries('');
         $rozetkaProduct->setDescription($product->getDescription());
@@ -69,5 +73,13 @@ class ProductSubscriber
         $rozetkaProduct->setProduct($product);
 
         $this->repository->create($rozetkaProduct);
+    }
+
+    private function buildTitle(Product $product): string
+    {
+        return RozetkaProduct::formatMarketplaceTitle(
+            $product->getTitle(),
+            $product->getProductCode(),
+        );
     }
 }

@@ -295,4 +295,24 @@ class RozetkaProduct
     {
         return $this->product->getId() . ' - ' . $this->title;
     }
+
+    /**
+     * Marketplace title scheme used in admin and XML feeds: "Name (code)".
+     */
+    public static function formatMarketplaceTitle(?string $title, ?string $productCode): string
+    {
+        $title = trim(strip_tags((string) $title));
+        $code  = trim((string) $productCode);
+
+        if ($code === '') {
+            return $title;
+        }
+
+        $suffix = '(' . $code . ')';
+        if (str_ends_with($title, $suffix)) {
+            return $title;
+        }
+
+        return sprintf('%s (%s)', $title, $code);
+    }
 }

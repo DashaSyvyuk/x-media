@@ -25,6 +25,12 @@
                         <button type="button"
                                 class="btn btn-outline-teal"
                                 data-bs-toggle="modal"
+                                data-bs-target="#rozetkaUploadCharacteristicsModal">
+                            <i class="bi bi-file-earmark-excel"></i> Характеристики
+                        </button>
+                        <button type="button"
+                                class="btn btn-outline-teal"
+                                data-bs-toggle="modal"
                                 data-bs-target="#rozetkaBulkPriceModal">
                             <i class="bi bi-tags"></i> Ціна категорії
                         </button>
@@ -201,6 +207,57 @@
     </div>
 
     <meta name="rozetka-toggle-token" content="{{ csrf_token('admin2_rozetka_toggle') }}">
+
+    <div class="modal fade" id="rozetkaUploadCharacteristicsModal" tabindex="-1" aria-labelledby="rozetkaUploadCharacteristicsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <form method="post"
+                      action="{{ path('admin2_rozetka_upload_characteristics') }}"
+                      enctype="multipart/form-data"
+                      id="rozetkaUploadCharacteristicsForm">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_rozetka_upload_characteristics') }}">
+                    {% for key, value in query %}
+                        {% if value %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endif %}
+                    {% endfor %}
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title" id="rozetkaUploadCharacteristicsModalLabel">Завантаження характеристик</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small mb-3">
+                            Завантажте XLS/XLSX з Rozetka для обраної категорії — як на старій сторінці
+                            <code>/upload-characteristics</code>.
+                        </p>
+                        <div class="mb-3">
+                            <label class="form-label" for="rozetkaUploadCharacteristicsCategory">Категорія</label>
+                            <select class="form-select" name="category" id="rozetkaUploadCharacteristicsCategory" required>
+                                <option value="">Оберіть категорію</option>
+                                {% for category in uploadCategories %}
+                                    <option value="{{ category.id }}">{{ category.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label" for="rozetkaUploadCharacteristicsFile">Файл</label>
+                            <input type="file"
+                                   class="form-control"
+                                   name="file"
+                                   id="rozetkaUploadCharacteristicsFile"
+                                   accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                   required>
+                            <div class="form-text">Формат: <code>.xls</code> або <code>.xlsx</code></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                        <button type="submit" class="btn btn-teal">
+                            <i class="bi bi-upload"></i> Завантажити
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     {% include 'admin2/partials/category_bulk_price_modal.html.twig' with {
         modalId: 'rozetkaBulkPriceModal',

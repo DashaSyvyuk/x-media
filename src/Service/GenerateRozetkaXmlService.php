@@ -144,7 +144,10 @@ class GenerateRozetkaXmlService
                 $writer->writeElement('vendor', (string) $vendorValue);
                 $writer->writeElement(
                     'name',
-                    sprintf('%s (%s)', strip_tags((string) $rozetkaProduct->getTitle()), $product->getProductCode())
+                    RozetkaProduct::formatMarketplaceTitle(
+                        $rozetkaProduct->getTitle(),
+                        $product->getProductCode(),
+                    ),
                 );
                 $writer->startElement('description');
                 $writer->writeCdata(trim(strip_tags((string) $rozetkaProduct->getDescription())));

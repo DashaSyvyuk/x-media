@@ -7,9 +7,11 @@ use App\Repository\CategoryRepository;
 use App\Repository\RozetkaProductRepository;
 use App\Service\Admin2\Admin2Paginator;
 use App\Service\GenerateRozetkaXmlService;
+use App\Service\UploadCharacteristics;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +27,7 @@ class RozetkaProductsController extends AbstractController
         private readonly CategoryRepository $categoryRepository,
         private readonly Admin2Paginator $admin2Paginator,
         private readonly GenerateRozetkaXmlService $generateRozetkaXmlService,
+        private readonly UploadCharacteristics $uploadCharacteristics,
         private readonly EntityManagerInterface $entityManager,
     ) {
     }
@@ -51,17 +54,68 @@ class RozetkaProductsController extends AbstractController
         );
 
         return $this->render('admin2/rozetka/index.html.twig', [
-            'pagination'     => $this->admin2Paginator->paginate($query, $page, $perPage),
-            'summary'        => $this->rozetkaProductRepository->getSummaryCounts(),
-            'categories'     => $this->categoryRepository->findBy([], ['title' => 'ASC']),
-            'search'         => $search,
-            'ready'          => is_string($ready) ? $ready : '',
-            'feed'           => is_string($feed) ? $feed : '',
-            'sort'           => $sort,
-            'direction'      => strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC',
-            'perPage'        => $perPage,
-            'perPageOptions' => Admin2Paginator::PER_PAGE_OPTIONS,
+            'pagination'        => $this->admin2Paginator->paginate($query, $page, $perPage),
+            'summary'           => $this->rozetkaProductRepository->getSummaryCounts(),
+            'categories'        => $this->categoryRepository->findBy([], ['title' => 'ASC']),
+            'uploadCategories'  => $this->categoryRepository->getUploadCharacteristicCategories(),
+            'search'            => $search,
+            'ready'             => is_string($ready) ? $ready : '',
+            'feed'              => is_string($feed) ? $feed : '',
+            'sort'              => $sort,
+            'direction'         => strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC',
+            'perPage'           => $perPage,
+            'perPageOptions'    => Admin2Paginator::PER_PAGE_OPTIONS,
         ]);
+    }
+
+    #[Route('/admin/rozetka/upload-characteristics', name: 'admin2_rozetka_upload_characteristics', methods: ['POST'])]
+    public function uploadCharacteristics(Request $request): Response
+    {
+        $token = (string) $request->request->get('_token');
+        if (! $this->isCsrfTokenValid('admin2_rozetka_upload_characteristics', $token)) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_rozetka', $this->extractListParams($request));
+        }
+
+        $categoryId = (int) $request->request->get('category', 0);
+        $file       = $request->files->get('file');
+
+        if ($categoryId <= 0 || $file === null) {
+            $this->addFlash('error', 'Оберіть категорію та файл .xls / .xlsx.');
+
+            return $this->redirectToRoute('admin2_rozetka', $this->extractListParams($request));
+        }
+
+        $category = $this->categoryRepository->find($categoryId);
+        if ($category === null) {
+            $this->addFlash('error', 'Категорію не знайдено.');
+
+            return $this->redirectToRoute('admin2_rozetka', $this->extractListParams($request));
+        }
+
+        if (! $file instanceof UploadedFile) {
+            $this->addFlash('error', 'Оберіть категорію та файл .xls / .xlsx.');
+
+            return $this->redirectToRoute('admin2_rozetka', $this->extractListParams($request));
+        }
+
+        try {
+            @ini_set('memory_limit', '2048M');
+            @ini_set('max_execution_time', '300');
+            $this->uploadCharacteristics->upload($file, $category);
+            $this->addFlash(
+                'success',
+                sprintf('Характеристики для «%s» завантажено.', $category->getTitle()),
+            );
+        } catch (\Throwable $e) {
+            $this->addFlash(
+                'error',
+                'Не вдалося завантажити характеристики. ' . $e->getMessage(),
+            );
+        }
+
+        return $this->redirectToRoute('admin2_rozetka', $this->extractListParams($request));
     }
 
     #[Route('/admin/rozetka/bulk-price', name: 'admin2_rozetka_bulk_price', methods: ['POST'])]
