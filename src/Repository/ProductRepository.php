@@ -199,6 +199,134 @@ class ProductRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * Lightweight ID list for chunked Rozetka XML generation.
+     *
+     * @return list<int>
+     */
+    public function getProductIdsForRozetka(string $activeFor): array
+    {
+        /** @var list<int|string> $ids */
+        $ids = $this->createQueryBuilder('p')
+            ->select('p.id')
+            ->innerJoin('p.category', 'c')
+            ->innerJoin('p.rozetka', 'rozetka')
+            ->andWhere('c.status = :status')
+            ->andWhere('c.rozetkaCategory IS NOT NULL')
+            ->setParameter('status', 'ACTIVE')
+            ->andWhere('p.status = :product_status')
+            ->setParameter('product_status', Product::STATUS_ACTIVE)
+            ->andWhere('c.showInRozetkaFeed = :showInRozetkaFeed')
+            ->setParameter('showInRozetkaFeed', true)
+            ->andWhere(sprintf('rozetka.%s = :active', $activeFor))
+            ->setParameter('active', true)
+            ->orderBy('p.title', 'ASC')
+            ->getQuery()
+            ->getSingleColumnResult();
+
+        return array_map('intval', $ids);
+    }
+
+    /**
+     * Hydrate a chunk of products with associations needed for Rozetka XML.
+     * Collections are warmed in separate queries to avoid cartesian explosion.
+     *
+     * @param list<int> $ids
+     *
+     * @return list<Product>
+     */
+    public function getProductsForRozetkaByIds(array $ids): array
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+        if ($ids === []) {
+            return [];
+        }
+
+        /** @var list<Product> $products */
+        $products = $this->createQueryBuilder('p')
+            ->addSelect('c', 'rozetka')
+            ->innerJoin('p.category', 'c')
+            ->innerJoin('p.rozetka', 'rozetka')
+            ->andWhere('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        // Warm images into the identity map.
+        $this->createQueryBuilder('p')
+            ->addSelect('images')
+            ->leftJoin('p.images', 'images')
+            ->andWhere('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        // Warm Rozetka characteristic values (+ related titles).
+        $this->createQueryBuilder('p')
+            ->addSelect('rozetka', 'vals', 'characteristic', 'singleValue', 'multiValues')
+            ->innerJoin('p.rozetka', 'rozetka')
+            ->leftJoin('rozetka.values', 'vals')
+            ->leftJoin('vals.characteristic', 'characteristic')
+            ->leftJoin('vals.value', 'singleValue')
+            ->leftJoin('vals.values', 'multiValues')
+            ->andWhere('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $byId = [];
+        foreach ($products as $product) {
+            $byId[$product->getId()] = $product;
+        }
+
+        $ordered = [];
+        foreach ($ids as $id) {
+            if (isset($byId[$id])) {
+                $ordered[] = $byId[$id];
+            }
+        }
+
+        return $ordered;
+    }
+
+    /**
+     * Vendor titles keyed by product id (Марка / Виробник).
+     *
+     * @param list<int> $ids
+     *
+     * @return array<int, string>
+     */
+    public function getRozetkaVendorsByProductIds(array $ids): array
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+        if ($ids === []) {
+            return [];
+        }
+
+        /** @var list<array{productId: int|string, vendor: string}> $rows */
+        $rows = $this->getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(pfa.product) AS productId', 'attr.value AS vendor')
+            ->from(\App\Entity\ProductFilterAttribute::class, 'pfa')
+            ->innerJoin('pfa.filter', 'filter')
+            ->innerJoin('pfa.filterAttribute', 'attr')
+            ->andWhere('IDENTITY(pfa.product) IN (:ids)')
+            ->andWhere('filter.title IN (:titles)')
+            ->setParameter('ids', $ids)
+            ->setParameter('titles', ['Марка', 'Виробник'])
+            ->getQuery()
+            ->getArrayResult();
+
+        $vendors = [];
+        foreach ($rows as $row) {
+            $productId = (int) $row['productId'];
+            if (! isset($vendors[$productId]) && $row['vendor'] !== '') {
+                $vendors[$productId] = (string) $row['vendor'];
+            }
+        }
+
+        return $vendors;
+    }
+
     public function findByPromotionAndVendor(
         Promotion $promotion,
         ?Category $category,

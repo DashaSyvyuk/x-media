@@ -59,6 +59,13 @@ class BunnyStorageClient
             @unlink($localPath);
         }
 
+        return $this->getPublicUrl($folder, $fileName);
+    }
+
+    public function getPublicUrl(string $folder, string $fileName): string
+    {
+        $remotePath = trim($folder, '/') . '/' . $fileName;
+
         return rtrim($this->cdnUrl, '/') . '/' . $remotePath;
     }
 

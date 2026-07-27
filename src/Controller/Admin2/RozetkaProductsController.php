@@ -277,19 +277,16 @@ class RozetkaProductsController extends AbstractController
             return $this->redirectToRoute('admin2_rozetka', $this->extractListParams($request));
         }
 
-        $url = $this->generateRozetkaXmlService->execute($mode);
+        $url = $this->generateRozetkaXmlService->startBackground($mode);
 
-        if ($url === null) {
-            $this->addFlash('error', 'Не вдалося згенерувати XML. Перевірте логи.');
-        } else {
-            $this->addFlash(
-                'success',
-                sprintf(
-                    'XML згенеровано: <a href="%s" target="_blank" class="alert-link">відкрити файл</a>',
-                    htmlspecialchars($url),
-                ),
-            );
-        }
+        $this->addFlash(
+            'success',
+            sprintf(
+                'Генерацію XML запущено у фоні. Після завершення файл буде доступний: '
+                . '<a href="%s" target="_blank" class="alert-link">відкрити файл</a>',
+                htmlspecialchars($url),
+            ),
+        );
 
         return $this->redirectToRoute('admin2_rozetka', $this->extractListParams($request));
     }
