@@ -31,7 +31,7 @@ class RozetkaProductRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    public function findOneByProductId(int $productId): ?RozetkaProduct
+    public function findByAttachedProductId(int $productId): ?RozetkaProduct
     {
         if ($productId <= 0) {
             return null;
