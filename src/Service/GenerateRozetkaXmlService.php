@@ -105,7 +105,7 @@ class GenerateRozetkaXmlService
     {
         $candidates = [];
 
-        if (\defined('PHP_BINARY') && PHP_BINARY !== '') {
+        if (\defined('PHP_BINARY')) {
             $binary = PHP_BINARY;
             $candidates[] = $binary;
             if (str_contains(basename($binary), 'php-fpm')) {
