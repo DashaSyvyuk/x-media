@@ -6,7 +6,7 @@ use App\Entity\Category;
 use App\Entity\RozetkaCharacteristicsValue;
 use App\Repository\RozetkaCharacteristicsRepository;
 use App\Repository\RozetkaCharacteristicsValueRepository;
-use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadCharacteristics
@@ -22,7 +22,7 @@ class UploadCharacteristics
         $rows = $this->readFile($file);
 
         foreach ($rows as $row) {
-            if ($characteristics = $this->rozetkaCharacteristicsRepository->findOneBy(['rozetkaId' => $row[0]])) {
+            if ($characteristics = $this->rozetkaCharacteristicsRepository->findOneBy(['rozetkaId' => (int) $row[0]])) {
                 $characteristicsValue = $this->valueRepository->findOneBy(['rozetkaId' => $row[5]]);
 
                 if (
@@ -41,8 +41,8 @@ class UploadCharacteristics
                     $characteristics->setEndToEndParameter($row[7] === 'Так');
                     $characteristics->addCategory($category);
 
-                    if (!in_array($row[2], ['TextArea', 'TextInput'])) {
-                        if ($row[6]) {
+                    if (!in_array($row[2], ['TextArea', 'TextInput'], true)) {
+                        if ($row[6] !== '') {
                             if (!$characteristicsValue) {
                                 $characteristicsValue = new RozetkaCharacteristicsValue();
                                 $characteristicsValue->setRozetkaId($row[5]);
@@ -83,32 +83,58 @@ class UploadCharacteristics
     }
 
     /**
-     * @param UploadedFile $file
-     *
-     * @return array<int, array<int, string>>
+     * @return list<array{0: string, 1: string, 2: string, 3: string, 4: string, 5: string, 6: string, 7: string}>
      */
-    private function readFile(UploadedFile $file): iterable
+    private function readFile(UploadedFile $file): array
     {
-        $xlsxReader = new Xlsx();
-        $xlsxReader->setReadDataOnly(true);
-        $spreadsheet = $xlsxReader->load($file);
+        $path = $file->getPathname();
+        $reader = IOFactory::createReaderForFile($path);
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load($path);
 
         $worksheet = $spreadsheet->getActiveSheet();
 
         $result = [];
         foreach ($worksheet->getRowIterator() as $key => $row) {
-            if ($key > 2) {
-                $cellIterator = $row->getCellIterator();
-                $cellIterator->setIterateOnlyExistingCells(false);
-                $data = [];
-                foreach ($cellIterator as $cell) {
-                    $data[] = $cell->getValue();
-                }
-
-                $result[] = $data;
+            if ($key <= 2) {
+                continue;
             }
+
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+            $data = [];
+            foreach ($cellIterator as $cell) {
+                $data[] = $this->normalizeCell($cell->getValue());
+            }
+
+            // Skip completely empty trailing rows
+            if ($data[0] === '' && $data[1] === '') {
+                continue;
+            }
+
+            $result[] = $data;
         }
 
         return $result;
+    }
+
+    private function normalizeCell(mixed $value): string
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_int($value) || is_float($value)) {
+            // Avoid scientific notation for Excel numeric IDs
+            return is_float($value) && floor($value) === $value
+                ? (string) (int) $value
+                : (string) $value;
+        }
+
+        return trim((string) $value);
     }
 }

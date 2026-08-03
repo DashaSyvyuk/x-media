@@ -46,7 +46,7 @@ final readonly class RozetkaProductCopyService
             return null;
         }
 
-        return $this->rozetkaProductRepository->findOneByProductId($productId);
+        return $this->rozetkaProductRepository->findByAttachedProductId($productId);
     }
 
     /**

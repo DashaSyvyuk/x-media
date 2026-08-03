@@ -28,12 +28,10 @@ class RozetkaProductRepository extends ServiceEntityRepository
 
     public function update(RozetkaProduct $rozetkaProduct): void
     {
-        $entityManager = $this->getEntityManager();
-        $entityManager->refresh($rozetkaProduct);
-        $entityManager->flush();
+        $this->getEntityManager()->flush();
     }
 
-    public function findOneByProductId(int $productId): ?RozetkaProduct
+    public function findByAttachedProductId(int $productId): ?RozetkaProduct
     {
         if ($productId <= 0) {
             return null;
