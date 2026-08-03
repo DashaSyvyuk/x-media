@@ -47,8 +47,20 @@ class GenerateRozetkaXmlService
     public function startBackground(string $activeFor = 'active_for_a'): string
     {
         $feedArg = $activeFor === 'active_for_p' ? 'rozetka-p' : 'rozetka-a';
+        $publicUrl = $this->getPublicUrl($activeFor);
+
+        if (! $this->canSpawnBackgroundProcess()) {
+            $this->logger->warning(
+                'Cannot spawn background process for Rozetka XML; running inline.',
+                ['feed' => $feedArg],
+            );
+            $this->execute($activeFor);
+
+            return $publicUrl;
+        }
+
         $console = $this->projectDir . '/bin/console';
-        $php = PHP_BINARY !== '' ? PHP_BINARY : 'php';
+        $php = $this->resolvePhpCliBinary();
         $logFile = $this->projectDir . '/var/log/rozetka-feed-' . $feedArg . '.log';
 
         if (! is_dir(dirname($logFile))) {
@@ -68,10 +80,63 @@ class GenerateRozetkaXmlService
 
         $this->logger->info('Rozetka XML background generation started.', [
             'feed' => $feedArg,
+            'php'  => $php,
             'log'  => $logFile,
         ]);
 
-        return $this->getPublicUrl($activeFor);
+        return $publicUrl;
+    }
+
+    private function canSpawnBackgroundProcess(): bool
+    {
+        if (! \function_exists('exec')) {
+            return false;
+        }
+
+        $disabled = array_map('trim', explode(',', (string) ini_get('disable_functions')));
+
+        return ! in_array('exec', $disabled, true);
+    }
+
+    /**
+     * Prefer a real CLI php binary — under php-fpm, PHP_BINARY is often php-fpm itself.
+     */
+    private function resolvePhpCliBinary(): string
+    {
+        $candidates = [];
+
+        if (\defined('PHP_BINARY') && PHP_BINARY !== '') {
+            $binary = PHP_BINARY;
+            $candidates[] = $binary;
+            if (str_contains(basename($binary), 'php-fpm')) {
+                $dir = dirname($binary);
+                $candidates[] = $dir . '/php';
+                $candidates[] = dirname($dir) . '/bin/php';
+            }
+        }
+
+        $which = '';
+        if (\function_exists('shell_exec')) {
+            $which = trim((string) shell_exec('command -v php 2>/dev/null'));
+        }
+        if ($which !== '') {
+            $candidates[] = $which;
+        }
+
+        $candidates[] = '/usr/local/bin/php';
+        $candidates[] = '/usr/bin/php';
+        $candidates[] = 'php';
+
+        foreach ($candidates as $candidate) {
+            if ($candidate === 'php') {
+                return $candidate;
+            }
+            if (is_executable($candidate) && ! str_contains(basename($candidate), 'php-fpm')) {
+                return $candidate;
+            }
+        }
+
+        return 'php';
     }
 
     public function execute(string $activeFor = 'active_for_a'): ?string
@@ -84,11 +149,11 @@ class GenerateRozetkaXmlService
         $productIds = $this->productRepository->getProductIdsForRozetka($activeForInCamelCase);
         $feed = $this->feedRepository->findOneBy(['type' => Feed::FEED_ROZETKA]);
         $ignoredBrands = $this->getIgnoredBrandsLookup($feed);
+        $cutCharacteristics = (bool) ($feed?->getCutCharacteristics() ?? false);
         $priceParametersByCategoryId = $feed
             ? $this->categoryFeedPriceRepository->findByFeedIndexedByCategoryId($feed)
             : [];
-        // Detach price params / feed scalars only — clear() between chunks must not
-        // force re-queries for these already-read values.
+        // Snapshot scalars before clear(); price-parameter entities stay readable when detached.
         $folder    = sprintf('rozetka_for_%s', substr($activeFor, -1));
         $localPath = $this->projectDir . '/public/' . $folder . '/' . self::FILE_NAME;
         $localDir  = dirname($localPath);
@@ -192,7 +257,10 @@ class GenerateRozetkaXmlService
                     /** @var ProductRozetkaCharacteristicValue $characteristic */
                     foreach ($characteristics as $characteristic) {
                         $values = $this->getCharacteristicValue($characteristic);
-                        $paramName = $this->convertString($characteristic->getCharacteristic()?->getTitle() ?? '', $feed);
+                        $paramName = $this->convertString(
+                            $characteristic->getCharacteristic()?->getTitle() ?? '',
+                            $cutCharacteristics,
+                        );
 
                         if (is_array($values)) {
                             $writer->startElement('param');
@@ -206,7 +274,7 @@ class GenerateRozetkaXmlService
 
                         $writer->startElement('param');
                         $writer->writeAttribute('name', $paramName);
-                        $writer->text($this->convertString($values, $feed));
+                        $writer->text($this->convertString($values, $cutCharacteristics));
                         $writer->endElement();
                     }
                     $writer->endElement();
@@ -229,11 +297,11 @@ class GenerateRozetkaXmlService
         }
     }
 
-    private function convertString(string $text, ?Feed $feed): string
+    private function convertString(string $text, bool $cutCharacteristics): string
     {
         $text = strip_tags($text);
 
-        if ($feed && $feed->getCutCharacteristics()) {
+        if ($cutCharacteristics) {
             $text = mb_substr($text, 0, 255, 'UTF-8');
         }
 
