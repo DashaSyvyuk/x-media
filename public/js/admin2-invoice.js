@@ -14,7 +14,7 @@
     const generateBtn = document.getElementById('invoiceGenerateBtn');
 
     let currentOrderId = null;
-    let currentOrderType = 'local';
+    let currentInvoiceUrl = null;
 
     const showError = (message) => {
         errorBox.textContent = message;
@@ -26,8 +26,18 @@
         errorBox.classList.add('d-none');
     };
 
-    const invoiceUrl = (type, id) => {
-        if (type === 'rozetka') {
+    const resolveInvoiceUrl = (btn) => {
+        if (btn.dataset.invoiceUrl) {
+            return btn.dataset.invoiceUrl;
+        }
+
+        const id = btn.dataset.orderId;
+        if (!id) {
+            return null;
+        }
+
+        // Fallback for older markup / cached pages.
+        if ((btn.dataset.orderType || 'local') === 'rozetka') {
             return `/admin/rozetka-orders/${id}/invoice`;
         }
 
@@ -62,8 +72,8 @@
         btn.addEventListener('click', async () => {
             clearError();
             currentOrderId = btn.dataset.orderId || null;
-            currentOrderType = btn.dataset.orderType || 'local';
-            if (!currentOrderId) {
+            currentInvoiceUrl = resolveInvoiceUrl(btn);
+            if (!currentOrderId || !currentInvoiceUrl) {
                 return;
             }
 
@@ -82,7 +92,7 @@
 
     generateBtn?.addEventListener('click', async () => {
         clearError();
-        if (!currentOrderId) {
+        if (!currentOrderId || !currentInvoiceUrl) {
             return;
         }
 
@@ -94,7 +104,7 @@
 
         generateBtn.disabled = true;
         try {
-            const response = await fetch(invoiceUrl(currentOrderType, currentOrderId), {
+            const response = await fetch(currentInvoiceUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
