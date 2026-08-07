@@ -101,7 +101,6 @@ final class Admin2StatisticsProvider
         $rozetkaOrders = 0;
         $rozetkaPaid = 0;
         $rozetkaRevenue = 0;
-        $rozetkaCompleted = 0;
         foreach ($rozetkaOrdersList as $apiOrder) {
             $marker = [
                 'created' => (string) ($apiOrder['created'] ?? ''),
@@ -117,11 +116,8 @@ final class Admin2StatisticsProvider
             $total = (int) round((float) (
                 $apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0
             ));
-            if ($this->isRozetkaDelivered($apiOrder)) {
-                $marker['revenue'] = $total;
-                $rozetkaRevenue += $total;
-                ++$rozetkaCompleted;
-            }
+            $marker['revenue'] = $total;
+            $rozetkaRevenue += $total;
 
             $rozetkaMarkersActive[] = $marker;
             ++$rozetkaOrders;
@@ -141,7 +137,6 @@ final class Admin2StatisticsProvider
                 $rozetkaOrders,
                 $rozetkaPaid,
                 $rozetkaRevenue,
-                $rozetkaCompleted,
             ),
             'daily'        => $this->buildDailySeries($from, $to, $rozetkaMarkersActive),
             'statusGroups' => $this->buildStatusGroups($from, $to, $rozetkaMarkers),
@@ -228,13 +223,12 @@ final class Admin2StatisticsProvider
         int $rozetkaOrders = 0,
         int $rozetkaPaid = 0,
         int $rozetkaRevenue = 0,
-        int $rozetkaCompleted = 0,
     ): array {
         $row = $this->connection->fetchAssociative(
             'SELECT
                 COUNT(*) AS orders_total,
                 COALESCE(SUM(CASE WHEN status NOT IN (:canceled) THEN 1 ELSE 0 END), 0) AS orders_count,
-                COALESCE(SUM(CASE WHEN status = :completed THEN total ELSE 0 END), 0) AS revenue,
+                COALESCE(SUM(CASE WHEN status NOT IN (:canceled) THEN total ELSE 0 END), 0) AS revenue,
                 COALESCE(SUM(CASE WHEN status IN (:canceled) THEN 1 ELSE 0 END), 0) AS canceled_count,
                 COALESCE(SUM(
                     CASE WHEN payment_status = 1 AND status NOT IN (:canceled) THEN 1 ELSE 0 END
@@ -242,10 +236,9 @@ final class Admin2StatisticsProvider
              FROM orders
              WHERE created_at BETWEEN :from AND :to',
             [
-                'completed' => Order::COMPLETED,
-                'canceled'  => self::CANCELED_STATUSES,
-                'from'      => $from->format('Y-m-d H:i:s'),
-                'to'        => $to->format('Y-m-d H:i:s'),
+                'canceled' => self::CANCELED_STATUSES,
+                'from'     => $from->format('Y-m-d H:i:s'),
+                'to'       => $to->format('Y-m-d H:i:s'),
             ],
             [
                 'canceled' => ArrayParameterType::STRING,
@@ -254,26 +247,19 @@ final class Admin2StatisticsProvider
 
         $localOrdersTotal = (int) ($row['orders_total'] ?? 0);
         $localOrders = (int) ($row['orders_count'] ?? 0);
+        $orders = $localOrders + max(0, $rozetkaOrders);
         $revenue = (int) ($row['revenue'] ?? 0) + max(0, $rozetkaRevenue);
         $canceled = (int) ($row['canceled_count'] ?? 0);
         $paid = (int) ($row['paid_count'] ?? 0) + max(0, $rozetkaPaid);
-        $completedCount = (int) $this->connection->fetchOne(
-            'SELECT COUNT(*) FROM orders WHERE created_at BETWEEN :from AND :to AND status = :completed',
-            [
-                'from'      => $from->format('Y-m-d H:i:s'),
-                'to'        => $to->format('Y-m-d H:i:s'),
-                'completed' => Order::COMPLETED,
-            ],
-        ) + max(0, $rozetkaCompleted);
 
         $activeProducts = (int) $this->entityManager->getRepository(Product::class)->count([
             'status' => Product::STATUS_ACTIVE,
         ]);
 
         return [
-            'orders'         => $localOrders + max(0, $rozetkaOrders),
+            'orders'         => $orders,
             'revenue'        => $revenue,
-            'avgCheck'       => $completedCount > 0 ? (int) round($revenue / $completedCount) : 0,
+            'avgCheck'       => $orders > 0 ? (int) round($revenue / $orders) : 0,
             // Cancel rate is local-only: Rozetka cancels are not available in the same shape.
             'cancelRate'     => $localOrdersTotal > 0 ? round(($canceled / $localOrdersTotal) * 100, 1) : 0.0,
             'paid'           => $paid,
@@ -294,17 +280,16 @@ final class Admin2StatisticsProvider
         $rows = $this->connection->fetchAllAssociative(
             'SELECT DATE(created_at) AS day,
                     COUNT(*) AS orders_count,
-                    COALESCE(SUM(CASE WHEN status = :completed THEN total ELSE 0 END), 0) AS revenue
+                    COALESCE(SUM(total), 0) AS revenue
              FROM orders
              WHERE created_at BETWEEN :from AND :to
                AND status NOT IN (:canceled)
              GROUP BY DATE(created_at)
              ORDER BY day ASC',
             [
-                'completed' => Order::COMPLETED,
-                'canceled'  => self::CANCELED_STATUSES,
-                'from'      => $from->format('Y-m-d H:i:s'),
-                'to'        => $to->format('Y-m-d H:i:s'),
+                'canceled' => self::CANCELED_STATUSES,
+                'from'     => $from->format('Y-m-d H:i:s'),
+                'to'       => $to->format('Y-m-d H:i:s'),
             ],
             [
                 'canceled' => ArrayParameterType::STRING,
@@ -441,20 +426,6 @@ final class Admin2StatisticsProvider
         $statusId = (int) ($apiOrder['status'] ?? 0);
 
         return $statusId >= 13 && $statusId <= 25;
-    }
-
-    /**
-     * Successfully completed / delivered marketplace orders (same idea as local "completed").
-     *
-     * @param array<string, mixed> $apiOrder
-     */
-    private function isRozetkaDelivered(array $apiOrder): bool
-    {
-        if ((int) ($apiOrder['status_group'] ?? 0) === 2) {
-            return true;
-        }
-
-        return in_array((int) ($apiOrder['status'] ?? 0), [40, 50, 57], true);
     }
 
     /**

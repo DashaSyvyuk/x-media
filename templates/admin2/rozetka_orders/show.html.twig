@@ -22,6 +22,7 @@
             <div class="d-flex align-items-center gap-2">
                 {{ order_macros.copy_button(copyText|default(null)) }}
                 {{ order_macros.receipt_button('rozetka', order.id) }}
+                {{ order_macros.invoice_button(order.id, 'Рахунок + видаткова', 'rozetka') }}
                 {{ order_macros.payment_status_badge(order.paymentStatus|default(false)) }}
                 <span class="rozetka-status-badge rozetka-status-badge--{{ order.statusTone|default('default') }} fs-6">{{ order.status }}</span>
             </div>

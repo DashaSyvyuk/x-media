@@ -76,7 +76,7 @@ final class Admin2DashboardProvider
      *         total: int,
      *         createdAt: string
      *     }>,
-     *     fops: list<array{id: int, title: string}>,
+     *     fops: list<array{id: int, title: string, copyText: string}>,
      *     cashiers: list<array{id: int, title: string, code: string, balance: int}>,
      *     debts: list<array{id: int, name: string, code: string, balance: int}>,
      *     todayPlans: list<array{id: int, title: string, body: string, assignee: string}>,
@@ -125,7 +125,7 @@ final class Admin2DashboardProvider
     }
 
     /**
-     * Non-canceled Rozetka orders + paid / delivered revenue for today / month.
+     * Non-canceled Rozetka orders + totals for today / month.
      *
      * @return array{
      *     0: array{orders: int, paid: int, revenue: int},
@@ -146,27 +146,23 @@ final class Admin2DashboardProvider
                 continue;
             }
 
+            $total = (int) round((float) (
+                $apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0
+            ));
+
             ++$month['orders'];
+            $month['revenue'] += $total;
             $isPaid = $this->rozetkaPaymentResolver->isPaid($apiOrder);
             if ($isPaid) {
                 ++$month['paid'];
-            }
-            if ($this->isRozetkaDelivered($apiOrder)) {
-                $month['revenue'] += (int) round((float) (
-                    $apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0
-                ));
             }
 
             $created = substr((string) ($apiOrder['created'] ?? ''), 0, 10);
             if ($created === $todayKey) {
                 ++$today['orders'];
+                $today['revenue'] += $total;
                 if ($isPaid) {
                     ++$today['paid'];
-                }
-                if ($this->isRozetkaDelivered($apiOrder)) {
-                    $today['revenue'] += (int) round((float) (
-                        $apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0
-                    ));
                 }
             }
         }
@@ -189,18 +185,6 @@ final class Admin2DashboardProvider
     }
 
     /**
-     * @param array<string, mixed> $apiOrder
-     */
-    private function isRozetkaDelivered(array $apiOrder): bool
-    {
-        if ((int) ($apiOrder['status_group'] ?? 0) === 2) {
-            return true;
-        }
-
-        return in_array((int) ($apiOrder['status'] ?? 0), [40, 50, 57], true);
-    }
-
-    /**
      * @return array{orders: int, revenue: int, paid: int}
      */
     private function orderKpi(
@@ -213,17 +197,16 @@ final class Admin2DashboardProvider
         $row = $this->connection->fetchAssociative(
             'SELECT
                 COALESCE(SUM(CASE WHEN status NOT IN (:canceled) THEN 1 ELSE 0 END), 0) AS orders_count,
-                COALESCE(SUM(CASE WHEN status = :completed THEN total ELSE 0 END), 0) AS revenue,
+                COALESCE(SUM(CASE WHEN status NOT IN (:canceled) THEN total ELSE 0 END), 0) AS revenue,
                 COALESCE(SUM(
                     CASE WHEN payment_status = 1 AND status NOT IN (:canceled) THEN 1 ELSE 0 END
                 ), 0) AS paid_count
              FROM orders
              WHERE created_at BETWEEN :from AND :to',
             [
-                'completed' => Order::COMPLETED,
-                'canceled'  => self::CANCELED_STATUSES,
-                'from'      => $from->format('Y-m-d H:i:s'),
-                'to'        => $to->format('Y-m-d H:i:s'),
+                'canceled' => self::CANCELED_STATUSES,
+                'from'     => $from->format('Y-m-d H:i:s'),
+                'to'       => $to->format('Y-m-d H:i:s'),
             ],
             [
                 'canceled' => ArrayParameterType::STRING,
@@ -504,7 +487,7 @@ final class Admin2DashboardProvider
     }
 
     /**
-     * @return list<array{id: int, title: string}>
+     * @return list<array{id: int, title: string, copyText: string}>
      */
     private function fopNotes(): array
     {
@@ -517,8 +500,9 @@ final class Admin2DashboardProvider
                 continue;
             }
             $result[] = [
-                'id'    => $fop->getId(),
-                'title' => $title,
+                'id'       => $fop->getId(),
+                'title'    => $title,
+                'copyText' => $fop->getClipboardText(),
             ];
         }
 

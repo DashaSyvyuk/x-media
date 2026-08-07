@@ -70,10 +70,11 @@
     </button>
 {% endmacro %}
 
-{% macro invoice_button(id, title) %}
+{% macro invoice_button(id, title, type = 'local') %}
     <button type="button"
             class="btn btn-sm btn-outline-secondary order-invoice-btn"
             data-order-id="{{ id }}"
+            data-order-type="{{ type }}"
             title="{{ title|default('Рахунок + видаткова') }}">
         <i class="bi bi-file-earmark-text"></i>
     </button>

@@ -14,6 +14,7 @@
     const generateBtn = document.getElementById('invoiceGenerateBtn');
 
     let currentOrderId = null;
+    let currentOrderType = 'local';
 
     const showError = (message) => {
         errorBox.textContent = message;
@@ -23,6 +24,14 @@
     const clearError = () => {
         errorBox.textContent = '';
         errorBox.classList.add('d-none');
+    };
+
+    const invoiceUrl = (type, id) => {
+        if (type === 'rozetka') {
+            return `/admin/rozetka-orders/${id}/invoice`;
+        }
+
+        return `/admin/orders/${id}/invoice`;
     };
 
     async function loadFops() {
@@ -53,6 +62,7 @@
         btn.addEventListener('click', async () => {
             clearError();
             currentOrderId = btn.dataset.orderId || null;
+            currentOrderType = btn.dataset.orderType || 'local';
             if (!currentOrderId) {
                 return;
             }
@@ -84,7 +94,7 @@
 
         generateBtn.disabled = true;
         try {
-            const response = await fetch(`/admin/orders/${currentOrderId}/invoice`, {
+            const response = await fetch(invoiceUrl(currentOrderType, currentOrderId), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -115,4 +125,3 @@
         }
     });
 })();
-

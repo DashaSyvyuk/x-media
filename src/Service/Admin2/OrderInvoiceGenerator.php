@@ -12,6 +12,7 @@ final class OrderInvoiceGenerator
 {
     public function __construct(
         private readonly string $invoiceTemplatesDir,
+        private readonly RozetkaSellerApiClient $rozetkaApiClient,
     ) {
     }
 
@@ -20,15 +21,62 @@ final class OrderInvoiceGenerator
      */
     public function generate(Order $order, FopProfile $fop, string $receiverName, string $receiverRequisites): array
     {
+        return $this->generateDocuments(
+            $order->getOrderNumber(),
+            $this->buildItemsFromOrder($order),
+            $fop,
+            $receiverName,
+            $receiverRequisites,
+        );
+    }
+
+    /**
+     * @return array{invoiceDocx: string, deliveryDocx: string}
+     */
+    public function generateForRozetka(
+        int $rozetkaOrderId,
+        FopProfile $fop,
+        string $receiverName,
+        string $receiverRequisites,
+    ): array {
+        if (! $this->rozetkaApiClient->isConfigured()) {
+            throw new \RuntimeException('Rozetka API не налаштовано.');
+        }
+
+        $apiOrder = $this->rozetkaApiClient->fetchOrderDetails($rozetkaOrderId);
+        if ($apiOrder === null) {
+            throw new \RuntimeException('Замовлення Rozetka не знайдено.');
+        }
+
+        return $this->generateDocuments(
+            (string) ($apiOrder['id'] ?? $rozetkaOrderId),
+            $this->buildItemsFromRozetka($apiOrder),
+            $fop,
+            $receiverName,
+            $receiverRequisites,
+        );
+    }
+
+    /**
+     * @param list<array{no: int, title: string, qty: int, price: int, sum: int}> $items
+     *
+     * @return array{invoiceDocx: string, deliveryDocx: string}
+     */
+    private function generateDocuments(
+        string $orderNumber,
+        array $items,
+        FopProfile $fop,
+        string $receiverName,
+        string $receiverRequisites,
+    ): array {
         $workDir = sys_get_temp_dir() . '/xmedia-invoices/' . bin2hex(random_bytes(8));
         (new Filesystem())->mkdir($workDir);
 
         $invoicePath = $workDir . '/invoice.docx';
         $deliveryPath = $workDir . '/delivery-note.docx';
 
-        $items = $this->buildItems($order);
         $total = array_sum(array_column($items, 'sum'));
-        $values = $this->buildValues($order, $fop, $receiverName, $receiverRequisites, $items, $total);
+        $values = $this->buildValues($orderNumber, $fop, $receiverName, $receiverRequisites, $items, $total);
 
         $this->fillTemplate($this->templatePath('invoice.docx'), $invoicePath, $values, $items, false);
         $this->fillTemplate($this->templatePath('delivery-note.docx'), $deliveryPath, $values, $items, true);
@@ -83,7 +131,7 @@ final class OrderInvoiceGenerator
     /**
      * @return list<array{no: int, title: string, qty: int, price: int, sum: int}>
      */
-    private function buildItems(Order $order): array
+    private function buildItemsFromOrder(Order $order): array
     {
         $items = [];
         $no = 0;
@@ -100,6 +148,45 @@ final class OrderInvoiceGenerator
             ];
         }
 
+        return $this->ensureItems($items);
+    }
+
+    /**
+     * @param array<string, mixed> $apiOrder
+     *
+     * @return list<array{no: int, title: string, qty: int, price: int, sum: int}>
+     */
+    private function buildItemsFromRozetka(array $apiOrder): array
+    {
+        $items = [];
+        $no = 0;
+
+        foreach ($apiOrder['purchases'] ?? [] as $purchase) {
+            if (! is_array($purchase)) {
+                continue;
+            }
+
+            $qty = max(1, (int) ($purchase['quantity'] ?? $purchase['count'] ?? 1));
+            $price = (int) round((float) ($purchase['price'] ?? $purchase['cost'] ?? 0));
+            $items[] = [
+                'no'    => ++$no,
+                'title' => trim((string) ($purchase['item_name'] ?? $purchase['name'] ?? '—')),
+                'qty'   => $qty,
+                'price' => $price,
+                'sum'   => $qty * $price,
+            ];
+        }
+
+        return $this->ensureItems($items);
+    }
+
+    /**
+     * @param list<array{no: int, title: string, qty: int, price: int, sum: int}> $items
+     *
+     * @return list<array{no: int, title: string, qty: int, price: int, sum: int}>
+     */
+    private function ensureItems(array $items): array
+    {
         if ($items === []) {
             $items[] = [
                 'no'    => 1,
@@ -119,7 +206,7 @@ final class OrderInvoiceGenerator
      * @return array<string, string>
      */
     private function buildValues(
-        Order $order,
+        string $orderNumber,
         FopProfile $fop,
         string $receiverName,
         string $receiverRequisites,
@@ -130,21 +217,21 @@ final class OrderInvoiceGenerator
         $totalFormatted = $this->formatMoney($total);
 
         return [
-            'payee_name'        => $fop->getTitle(),
-            'payee_edrpou'      => $fop->getEdrpou(),
-            'payee_account'     => $fop->getBankAccount(),
-            'invoice_number'    => $order->getOrderNumber(),
-            'invoice_date'      => $today,
-            'supplier_name'     => $fop->getTitle(),
-            'supplier_account'  => $fop->getBankAccount(),
-            'supplier_edrpou'   => $fop->getEdrpou(),
-            'supplier_address'  => $fop->getAddress(),
-            'buyer_name'        => $receiverName,
-            'buyer_details'     => $receiverRequisites,
-            'items_count'       => (string) count($items),
-            'total_sum'         => $totalFormatted,
-            'total_words'       => $this->amountInWords($total),
-            'table_total'       => $totalFormatted,
+            'payee_name'       => $fop->getTitle(),
+            'payee_edrpou'     => $fop->getEdrpou(),
+            'payee_account'    => $fop->getBankAccount(),
+            'invoice_number'   => $orderNumber,
+            'invoice_date'     => $today,
+            'supplier_name'    => $fop->getTitle(),
+            'supplier_account' => $fop->getBankAccount(),
+            'supplier_edrpou'  => $fop->getEdrpou(),
+            'supplier_address' => $fop->getAddress(),
+            'buyer_name'       => $receiverName,
+            'buyer_details'    => $receiverRequisites,
+            'items_count'      => (string) count($items),
+            'total_sum'        => $totalFormatted,
+            'total_words'      => $this->amountInWords($total),
+            'table_total'      => $totalFormatted,
         ];
     }
 
