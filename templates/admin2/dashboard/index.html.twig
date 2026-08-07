@@ -173,7 +173,7 @@
                         {% for fop in dash.fops %}
                             <div class="dashboard-fop-item">
                                 <span class="dashboard-fop-item__title">{{ fop.title }}</span>
-                                {{ order_macros.copy_button(fop.title, 'Скопіювати назву') }}
+                                {{ order_macros.copy_button(fop.copyText, 'Скопіювати реквізити ФОП') }}
                             </div>
                         {% endfor %}
                     </div>

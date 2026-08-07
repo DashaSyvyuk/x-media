@@ -97,4 +97,18 @@ class FopProfile
         $note = $note !== null ? trim($note) : null;
         $this->note = $note !== '' ? $note : null;
     }
+
+    /**
+     * Clipboard payload for payment details:
+     * title / ЄДРПОУ / bank account.
+     */
+    public function getClipboardText(): string
+    {
+        return sprintf(
+            "%s\nЄДРПОУ: %s\n%s",
+            $this->title,
+            $this->edrpou,
+            $this->bankAccount,
+        );
+    }
 }

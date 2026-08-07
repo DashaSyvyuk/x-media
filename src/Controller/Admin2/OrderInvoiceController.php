@@ -31,7 +31,7 @@ final class OrderInvoiceController extends AbstractController
         $items = [];
         foreach ($this->entityManager->getRepository(FopProfile::class)->findBy([], ['id' => 'DESC']) as $fop) {
             $items[] = [
-                'id' => $fop->getId(),
+                'id'    => $fop->getId(),
                 'title' => $fop->getTitle(),
             ];
         }
@@ -40,14 +40,14 @@ final class OrderInvoiceController extends AbstractController
     }
 
     #[Route('/admin/orders/{id}/invoice', name: 'admin2_orders_invoice_generate', methods: ['POST'])]
-    public function generate(Request $request, int $id): Response
+    public function generateLocal(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('invoice_generate', (string) $request->headers->get('X-CSRF-Token'))) {
             return $this->json(['error' => 'Невірний CSRF-токен.'], Response::HTTP_FORBIDDEN);
         }
 
-        $payload = json_decode((string) $request->getContent(), true);
-        if (! is_array($payload)) {
+        $payload = $this->decodePayload($request);
+        if ($payload === null) {
             return $this->json(['error' => 'Невірні дані.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -56,43 +56,103 @@ final class OrderInvoiceController extends AbstractController
             return $this->json(['error' => 'Замовлення не знайдено.'], Response::HTTP_NOT_FOUND);
         }
 
-        $fopId = (int) ($payload['fopId'] ?? 0);
-        $receiverName = trim((string) ($payload['receiverName'] ?? ''));
-        $receiverReq = trim((string) ($payload['receiverRequisites'] ?? ''));
-
-        if ($fopId <= 0 || $receiverName === '' || $receiverReq === '') {
-            return $this->json(['error' => 'Заповніть усі поля.'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $fop = $this->entityManager->getRepository(FopProfile::class)->find($fopId);
-        if (! $fop instanceof FopProfile) {
-            return $this->json(['error' => 'ФОП не знайдено.'], Response::HTTP_BAD_REQUEST);
+        [$fop, $receiverName, $receiverReq, $error] = $this->resolveInvoiceInput($payload);
+        if ($error !== null) {
+            return $this->json(['error' => $error], Response::HTTP_BAD_REQUEST);
         }
 
         try {
             $paths = $this->invoiceGenerator->generate($order, $fop, $receiverName, $receiverReq);
 
-            $zipPath = sys_get_temp_dir() . '/xmedia-invoices/' . bin2hex(random_bytes(8)) . '.zip';
-            @mkdir(dirname($zipPath), 0777, true);
-            $zip = new ZipArchive();
-            if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {
-                throw new \RuntimeException('Не вдалося створити ZIP.');
-            }
-
-            $zip->addFile($paths['invoiceDocx'], sprintf('Рахунок_%s.docx', $order->getOrderNumber()));
-            $zip->addFile($paths['deliveryDocx'], sprintf('Видаткова_%s.docx', $order->getOrderNumber()));
-            $zip->close();
-
-            $response = new Response((string) file_get_contents($zipPath));
-            $response->headers->set('Content-Type', 'application/zip');
-            $response->headers->set(
-                'Content-Disposition',
-                'attachment; filename="invoice_' . $order->getOrderNumber() . '.zip"',
-            );
-
-            return $response;
+            return $this->zipResponse($paths, $order->getOrderNumber());
         } catch (\Throwable $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    #[Route('/admin/rozetka-orders/{id}/invoice', name: 'admin2_rozetka_orders_invoice_generate', methods: ['POST'])]
+    public function generateRozetka(Request $request, int $id): Response
+    {
+        if (! $this->isCsrfTokenValid('invoice_generate', (string) $request->headers->get('X-CSRF-Token'))) {
+            return $this->json(['error' => 'Невірний CSRF-токен.'], Response::HTTP_FORBIDDEN);
+        }
+
+        $payload = $this->decodePayload($request);
+        if ($payload === null) {
+            return $this->json(['error' => 'Невірні дані.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        [$fop, $receiverName, $receiverReq, $error] = $this->resolveInvoiceInput($payload);
+        if ($error !== null) {
+            return $this->json(['error' => $error], Response::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            $paths = $this->invoiceGenerator->generateForRozetka($id, $fop, $receiverName, $receiverReq);
+
+            return $this->zipResponse($paths, (string) $id);
+        } catch (\Throwable $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function decodePayload(Request $request): ?array
+    {
+        $payload = json_decode((string) $request->getContent(), true);
+
+        return is_array($payload) ? $payload : null;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array{0: ?FopProfile, 1: string, 2: string, 3: ?string}
+     */
+    private function resolveInvoiceInput(array $payload): array
+    {
+        $fopId = (int) ($payload['fopId'] ?? 0);
+        $receiverName = trim((string) ($payload['receiverName'] ?? ''));
+        $receiverReq = trim((string) ($payload['receiverRequisites'] ?? ''));
+
+        if ($fopId <= 0 || $receiverName === '' || $receiverReq === '') {
+            return [null, '', '', 'Заповніть усі поля.'];
+        }
+
+        $fop = $this->entityManager->getRepository(FopProfile::class)->find($fopId);
+        if (! $fop instanceof FopProfile) {
+            return [null, '', '', 'ФОП не знайдено.'];
+        }
+
+        return [$fop, $receiverName, $receiverReq, null];
+    }
+
+    /**
+     * @param array{invoiceDocx: string, deliveryDocx: string} $paths
+     */
+    private function zipResponse(array $paths, string $orderNumber): Response
+    {
+        $zipPath = sys_get_temp_dir() . '/xmedia-invoices/' . bin2hex(random_bytes(8)) . '.zip';
+        @mkdir(dirname($zipPath), 0777, true);
+        $zip = new ZipArchive();
+        if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {
+            throw new \RuntimeException('Не вдалося створити ZIP.');
+        }
+
+        $safeNumber = preg_replace('/[^\w\-]+/u', '_', $orderNumber) ?: 'order';
+        $zip->addFile($paths['invoiceDocx'], sprintf('Рахунок_%s.docx', $safeNumber));
+        $zip->addFile($paths['deliveryDocx'], sprintf('Видаткова_%s.docx', $safeNumber));
+        $zip->close();
+
+        $response = new Response((string) file_get_contents($zipPath));
+        $response->headers->set('Content-Type', 'application/zip');
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename="invoice_' . $safeNumber . '.zip"',
+        );
+
+        return $response;
     }
 }

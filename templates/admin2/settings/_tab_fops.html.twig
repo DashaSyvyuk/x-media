@@ -30,7 +30,7 @@
                     <td class="small text-muted">{{ fop.address }}</td>
                     <td class="small">{{ fop.note ?: '—' }}</td>
                     <td class="text-end text-nowrap">
-                        {{ order_macros.copy_button(fop.note|default(null), 'Скопіювати нотатку') }}
+                        {{ order_macros.copy_button(fop.clipboardText, 'Скопіювати реквізити ФОП') }}
                         <button type="button"
                                 class="btn btn-sm btn-outline-teal js-edit-fop"
                                 data-bs-toggle="modal"
