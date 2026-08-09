@@ -58,6 +58,11 @@ class OrderFulfillmentController extends AbstractController
         usort(
             $vendorOrders,
             static function (array $a, array $b): int {
+                $byLinked = ((bool) ($a['isLinked'] ?? false) <=> (bool) ($b['isLinked'] ?? false));
+                if ($byLinked !== 0) {
+                    return $byLinked;
+                }
+
                 $rank = static fn (string $status): int => match ($status) {
                     VendorOrder::STATUS_NEW => 0,
                     VendorOrder::STATUS_WAITING_PICKUP => 1,

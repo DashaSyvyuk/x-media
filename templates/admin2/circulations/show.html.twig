@@ -120,6 +120,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <form method="post" id="editPaymentForm" action="">
+                    <input type="hidden" name="circulation_payment_entry[_token]" value="{{ csrf_token('circulation_payment_entry') }}">
                     <div class="modal-header">
                         <h5 class="modal-title">Редагувати операцію</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>

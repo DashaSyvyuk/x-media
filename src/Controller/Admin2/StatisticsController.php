@@ -20,12 +20,27 @@ class StatisticsController extends AbstractController
     #[Route('/admin/statistics', name: 'admin2_statistics', methods: ['GET'])]
     public function orders(Request $request): Response
     {
-        $period = $this->statisticsProvider->normalizePeriod(
-            (string) $request->query->get('period', Admin2StatisticsProvider::PERIOD_30),
+        $customRange = $this->statisticsProvider->parseCustomRange(
+            $request->query->get('from'),
+            $request->query->get('to'),
         );
 
+        if ($customRange !== null) {
+            [$from, $to] = $customRange;
+            $stats = $this->statisticsProvider->buildOrders(
+                Admin2StatisticsProvider::PERIOD_CUSTOM,
+                $from,
+                $to,
+            );
+        } else {
+            $period = $this->statisticsProvider->normalizePeriod(
+                (string) $request->query->get('period', Admin2StatisticsProvider::PERIOD_30),
+            );
+            $stats = $this->statisticsProvider->buildOrders($period);
+        }
+
         return $this->render('admin2/statistics/orders.html.twig', [
-            'stats'   => $this->statisticsProvider->buildOrders($period),
+            'stats'   => $stats,
             'periods' => Admin2StatisticsProvider::PERIODS,
         ]);
     }

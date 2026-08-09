@@ -21,13 +21,35 @@
                     {{ stats.from|date('d.m.Y') }} — {{ stats.to|date('d.m.Y') }} · {{ stats.periodLabel }}
                 </p>
             </div>
-            <div class="stats-period-switch" role="group" aria-label="Період">
-                {% for value, label in periods %}
-                    <a href="{{ path('admin2_statistics', {period: value}) }}"
-                       class="stats-period-btn {{ stats.period == value ? 'is-active' : '' }}">
-                        {{ label }}
-                    </a>
-                {% endfor %}
+            <div class="stats-period-tools">
+                <div class="stats-period-switch" role="group" aria-label="Період">
+                    {% for value, label in periods %}
+                        <a href="{{ path('admin2_statistics', {period: value}) }}"
+                           class="stats-period-btn {{ stats.period == value ? 'is-active' : '' }}">
+                            {{ label }}
+                        </a>
+                    {% endfor %}
+                </div>
+                <form method="get" action="{{ path('admin2_statistics') }}" class="stats-date-range" aria-label="Довільний період">
+                    <label class="visually-hidden" for="statsFrom">Від</label>
+                    <input type="date"
+                           id="statsFrom"
+                           name="from"
+                           class="stats-date-input"
+                           value="{{ stats.from|date('Y-m-d') }}"
+                           required>
+                    <span class="stats-date-sep" aria-hidden="true">—</span>
+                    <label class="visually-hidden" for="statsTo">До</label>
+                    <input type="date"
+                           id="statsTo"
+                           name="to"
+                           class="stats-date-input"
+                           value="{{ stats.to|date('Y-m-d') }}"
+                           required>
+                    <button type="submit" class="stats-period-btn {{ stats.period == 'custom' ? 'is-active' : '' }}">
+                        Показати
+                    </button>
+                </form>
             </div>
         </div>
 

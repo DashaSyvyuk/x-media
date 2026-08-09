@@ -15,6 +15,52 @@
     border-radius: 999px;
 }
 
+.stats-period-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.65rem;
+}
+
+.stats-date-range {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+}
+
+.stats-date-input {
+    min-height: 2rem;
+    padding: 0.2rem 0.65rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--stats-slate);
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.stats-date-input:focus {
+    outline: none;
+    background: var(--stats-teal-soft);
+}
+
+.stats-date-sep {
+    color: var(--stats-muted);
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.stats-date-range .stats-period-btn {
+    border: 0;
+    cursor: pointer;
+}
+
 .stats-period-btn {
     display: inline-flex;
     align-items: center;
@@ -156,6 +202,16 @@
 
     .stats-kpi-card__value {
         font-size: 1.2rem;
+    }
+
+    .stats-period-tools,
+    .stats-date-range,
+    .stats-period-switch {
+        width: 100%;
+    }
+
+    .stats-date-range {
+        border-radius: 12px;
     }
 
     .stats-chart-wrap,
