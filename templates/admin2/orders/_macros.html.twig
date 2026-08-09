@@ -70,12 +70,16 @@
     </button>
 {% endmacro %}
 
-{% macro invoice_button(id, title, type = 'local') %}
+{% macro invoice_button(id, title = 'Рахунок + видаткова', type = 'local') %}
+    {% set invoiceUrl = type == 'rozetka'
+        ? path('admin2_rozetka_orders_invoice_generate', {id: id})
+        : path('admin2_orders_invoice_generate', {id: id}) %}
     <button type="button"
             class="btn btn-sm btn-outline-secondary order-invoice-btn"
             data-order-id="{{ id }}"
             data-order-type="{{ type }}"
-            title="{{ title|default('Рахунок + видаткова') }}">
+            data-invoice-url="{{ invoiceUrl }}"
+            title="{{ title }}">
         <i class="bi bi-file-earmark-text"></i>
     </button>
 {% endmacro %}

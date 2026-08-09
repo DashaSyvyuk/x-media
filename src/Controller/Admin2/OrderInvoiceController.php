@@ -53,12 +53,27 @@ final class OrderInvoiceController extends AbstractController
 
         $order = $this->orderRepository->find($id);
         if (! $order instanceof Order) {
-            return $this->json(['error' => 'Замовлення не знайдено.'], Response::HTTP_NOT_FOUND);
+            // Stale clients may POST Rozetka ids to the local endpoint.
+            [$fop, $receiverName, $receiverReq, $error] = $this->resolveInvoiceInput($payload);
+            if ($error !== null || ! $fop instanceof FopProfile) {
+                return $this->json(
+                    ['error' => $error ?? 'Замовлення не знайдено.'],
+                    $error !== null ? Response::HTTP_BAD_REQUEST : Response::HTTP_NOT_FOUND,
+                );
+            }
+
+            try {
+                $paths = $this->invoiceGenerator->generateForRozetka($id, $fop, $receiverName, $receiverReq);
+
+                return $this->zipResponse($paths, (string) $id);
+            } catch (\Throwable $e) {
+                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            }
         }
 
         [$fop, $receiverName, $receiverReq, $error] = $this->resolveInvoiceInput($payload);
-        if ($error !== null) {
-            return $this->json(['error' => $error], Response::HTTP_BAD_REQUEST);
+        if ($error !== null || ! $fop instanceof FopProfile) {
+            return $this->json(['error' => $error ?? 'ФОП не знайдено.'], Response::HTTP_BAD_REQUEST);
         }
 
         try {
@@ -83,8 +98,8 @@ final class OrderInvoiceController extends AbstractController
         }
 
         [$fop, $receiverName, $receiverReq, $error] = $this->resolveInvoiceInput($payload);
-        if ($error !== null) {
-            return $this->json(['error' => $error], Response::HTTP_BAD_REQUEST);
+        if ($error !== null || ! $fop instanceof FopProfile) {
+            return $this->json(['error' => $error ?? 'ФОП не знайдено.'], Response::HTTP_BAD_REQUEST);
         }
 
         try {

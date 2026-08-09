@@ -18,6 +18,7 @@ final class Admin2StatisticsProvider
     public const PERIOD_30 = '30';
     public const PERIOD_90 = '90';
     public const PERIOD_365 = '365';
+    public const PERIOD_CUSTOM = 'custom';
 
     public const PERIODS = [
         self::PERIOD_TODAY => 'Сьогодні',
@@ -52,6 +53,31 @@ final class Admin2StatisticsProvider
         }
 
         return self::PERIOD_30;
+    }
+
+    /**
+     * @return array{0: \DateTimeImmutable, 1: \DateTimeImmutable}|null
+     */
+    public function parseCustomRange(?string $from, ?string $to): ?array
+    {
+        if ($from === null || $to === null || $from === '' || $to === '') {
+            return null;
+        }
+
+        $fromDate = \DateTimeImmutable::createFromFormat('!Y-m-d', $from);
+        $toDate = \DateTimeImmutable::createFromFormat('!Y-m-d', $to);
+        if (! $fromDate instanceof \DateTimeImmutable || ! $toDate instanceof \DateTimeImmutable) {
+            return null;
+        }
+
+        if ($fromDate > $toDate) {
+            [$fromDate, $toDate] = [$toDate, $fromDate];
+        }
+
+        return [
+            $fromDate->setTime(0, 0),
+            $toDate->setTime(23, 59, 59),
+        ];
     }
 
     /**
@@ -91,10 +117,17 @@ final class Admin2StatisticsProvider
      *     topProducts: array{labels: list<string>, values: list<int>}
      * }
      */
-    public function buildOrders(string $period): array
+    public function buildOrders(string $period, ?\DateTimeImmutable $from = null, ?\DateTimeImmutable $to = null): array
     {
-        $period = $this->normalizePeriod($period);
-        [$from, $to] = $this->resolvePeriodRange($period);
+        if ($from instanceof \DateTimeImmutable && $to instanceof \DateTimeImmutable) {
+            $period = self::PERIOD_CUSTOM;
+            $periodLabel = sprintf('%s — %s', $from->format('d.m.Y'), $to->format('d.m.Y'));
+        } else {
+            $period = $this->normalizePeriod($period);
+            [$from, $to] = $this->resolvePeriodRange($period);
+            $periodLabel = self::PERIODS[$period];
+        }
+
         $rozetkaOrdersList = $this->rozetkaApiClient->fetchOrdersCreatedBetween($from, $to);
         $rozetkaMarkers = [];
         $rozetkaMarkersActive = [];
@@ -128,7 +161,7 @@ final class Admin2StatisticsProvider
 
         return [
             'period'       => $period,
-            'periodLabel'  => self::PERIODS[$period],
+            'periodLabel'  => $periodLabel,
             'from'         => $from,
             'to'           => $to,
             'kpi'          => $this->buildKpi(
@@ -406,11 +439,11 @@ final class Admin2StatisticsProvider
     {
         return match ($statusId) {
             1 => 'Нове',
-            26, 2, 3, 4, 5 => 'В процесі',
-            61, 62, 63, 64, 65, 66 => 'Відправлено',
+            26, 2 => 'В процесі',
+            61, 62, 63, 64, 65, 66, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 => 'Відправлено',
             40, 50, 57 => 'Доставлено',
             13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 => 'Відмінено',
-            default => 'В процесі',
+            default => 'Інше',
         };
     }
 
