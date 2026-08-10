@@ -55,6 +55,18 @@ body.bg-light {
     color: var(--color-teal-dark);
 }
 
+form[data-submitting="1"] {
+    pointer-events: none;
+}
+
+form[data-submitting="1"] button[type="submit"],
+form[data-submitting="1"] input[type="submit"],
+button.is-submitting,
+input.is-submitting {
+    opacity: 0.72;
+    cursor: wait;
+}
+
 .navbar-dark,
 .sidebar {
     background: var(--color-slate) !important;

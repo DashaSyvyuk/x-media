@@ -14,14 +14,15 @@
              sources: stats.sources,
              topProducts: stats.topProducts
          }|json_encode|e('html_attr') }}'>
-        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 page-header-row">
-            <div>
+        <div class="mb-4">
+            <div class="mb-3">
                 <h1 class="page-title mb-1">Замовлення</h1>
                 <p class="text-muted mb-0 small">
                     {{ stats.from|date('d.m.Y') }} — {{ stats.to|date('d.m.Y') }} · {{ stats.periodLabel }}
                 </p>
             </div>
-            <div class="stats-period-tools">
+
+            <div class="stats-filters">
                 <div class="stats-period-switch" role="group" aria-label="Період">
                     {% for value, label in periods %}
                         <a href="{{ path('admin2_statistics', {period: value}) }}"
@@ -30,23 +31,30 @@
                         </a>
                     {% endfor %}
                 </div>
+
                 <form method="get" action="{{ path('admin2_statistics') }}" class="stats-date-range" aria-label="Довільний період">
-                    <label class="visually-hidden" for="statsFrom">Від</label>
-                    <input type="date"
-                           id="statsFrom"
-                           name="from"
-                           class="stats-date-input"
-                           value="{{ stats.from|date('Y-m-d') }}"
-                           required>
-                    <span class="stats-date-sep" aria-hidden="true">—</span>
-                    <label class="visually-hidden" for="statsTo">До</label>
-                    <input type="date"
-                           id="statsTo"
-                           name="to"
-                           class="stats-date-input"
-                           value="{{ stats.to|date('Y-m-d') }}"
-                           required>
-                    <button type="submit" class="stats-period-btn {{ stats.period == 'custom' ? 'is-active' : '' }}">
+                    <div class="stats-date-fields">
+                        <label class="stats-date-field" for="statsFrom">
+                            <span class="stats-date-label">Від</span>
+                            <input type="date"
+                                   id="statsFrom"
+                                   name="from"
+                                   class="form-control stats-date-input"
+                                   value="{{ stats.from|date('Y-m-d') }}"
+                                   required>
+                        </label>
+                        <label class="stats-date-field" for="statsTo">
+                            <span class="stats-date-label">До</span>
+                            <input type="date"
+                                   id="statsTo"
+                                   name="to"
+                                   class="form-control stats-date-input"
+                                   value="{{ stats.to|date('Y-m-d') }}"
+                                   required>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-teal stats-date-submit {{ stats.period == 'custom' ? 'is-active' : '' }}">
+                        <i class="bi bi-calendar3" aria-hidden="true"></i>
                         Показати
                     </button>
                 </form>
