@@ -55,9 +55,12 @@ class VendorOrderRepository extends ServiceEntityRepository
     }
 
     /**
+     * Active supplier orders for the fulfillment board (new + waiting pickup).
+     * No limit: these statuses must always stay visible.
+     *
      * @return VendorOrder[]
      */
-    public function findActiveForBoard(int $limit = 100): array
+    public function findActiveForBoard(): array
     {
         return $this->createQueryBuilder('v')
             ->leftJoin('v.supplier', 'supplier')->addSelect('supplier')
@@ -65,7 +68,6 @@ class VendorOrderRepository extends ServiceEntityRepository
             ->where('v.status IN (:statuses)')
             ->setParameter('statuses', VendorOrder::BOARD_STATUSES)
             ->orderBy('v.createdAt', 'DESC')
-            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
