@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[OrderStatus]
-#[OrderAddress]
+#[OrderAddress(groups: ['checkout'])]
 class Order
 {
     use DateStorageTrait;

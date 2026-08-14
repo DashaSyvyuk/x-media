@@ -98,11 +98,6 @@ class PriceControlController extends AbstractController
             return new JsonResponse(['ok' => false, 'error' => 'CSRF invalid'], 403);
         }
 
-        $product = $this->productRepository->find($id);
-        if ($product === null) {
-            return new JsonResponse(['ok' => false, 'error' => 'Product not found'], 404);
-        }
-
         $status = (string) ($data['status'] ?? '');
         if (! in_array($status, [Product::STATUS_ACTIVE, Product::STATUS_BLOCKED], true)) {
             return new JsonResponse(['ok' => false, 'error' => 'Invalid status'], 400);
@@ -125,19 +120,52 @@ class PriceControlController extends AbstractController
             return new JsonResponse(['ok' => false, 'error' => 'Price must be >= 0'], 400);
         }
 
+        $product = $this->productRepository->createQueryBuilder('p')
+            ->leftJoin('p.rozetka', 'rozetka')->addSelect('rozetka')
+            ->where('p.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (! $product instanceof Product) {
+            return new JsonResponse(['ok' => false, 'error' => 'Product not found'], 404);
+        }
+
         $product->setStatus($status);
         $product->setPrice($price);
         $product->setCrossedOutPrice($oldPrice);
 
-        $rozetka = $this->rozetkaProductRepository->findOneBy(['product' => $product]);
+        $rozetka = $product->getRozetka()
+            ?? $this->rozetkaProductRepository->findByAttachedProductId($product->getId());
+
         if ($rozetka !== null) {
+            if ($product->getRozetka() === null) {
+                $product->setRozetka($rozetka);
+            }
             $rozetka->setPrice($rzPrice);
             $rozetka->setCrossedOutPrice($rzOld);
         }
 
         $this->entityManager->flush();
 
-        return new JsonResponse(['ok' => true]);
+        // Resolve again: ProductSubscriber may create Rozetka on flush.
+        $rozetka = $product->getRozetka()
+            ?? $this->rozetkaProductRepository->findByAttachedProductId($product->getId());
+
+        if ($rozetka !== null) {
+            $rozetka->setPrice($rzPrice);
+            $rozetka->setCrossedOutPrice($rzOld);
+            $product->setCrossedOutPrice($oldPrice);
+            $this->entityManager->flush();
+        }
+
+        return new JsonResponse([
+            'ok'                        => true,
+            'price'                     => $product->getPrice(),
+            'crossed_out_price'         => $product->getCrossedOutPrice(),
+            'rozetka_price'             => $rozetka?->getPrice(),
+            'rozetka_crossed_out_price' => $rozetka?->getCrossedOutPrice(),
+        ]);
     }
 
     #[Route('/admin/price-control/xkom-url', name: 'admin2_price_control_xkom_url', methods: ['POST'])]

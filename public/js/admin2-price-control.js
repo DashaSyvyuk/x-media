@@ -160,6 +160,20 @@
                 throw new Error(json.error || 'save failed');
             }
 
+            const applyValue = (field, value) => {
+                const input = row.querySelector(`[data-field="${field}"] input`);
+                if (!input) {
+                    return;
+                }
+                input.value = value === null || value === undefined ? '' : String(value);
+            };
+
+            applyValue('price', json.price);
+            applyValue('crossed_out_price', json.crossed_out_price);
+            applyValue('rozetka_price', json.rozetka_price);
+            applyValue('rozetka_crossed_out_price', json.rozetka_crossed_out_price);
+            validateRow(row);
+
             clearRowState(row);
             row.classList.add('is-saved');
             setButtonState(button, 'ok');

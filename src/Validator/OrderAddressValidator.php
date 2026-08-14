@@ -22,19 +22,19 @@ class OrderAddressValidator extends ConstraintValidator
         }
 
         if ($value->getDeltype()?->getIsNovaPoshta() && ! $value->getNovaPoshtaCity()) {
-            $this->context->buildViolation('Поле обов\'язкове')->atPath('city')->addViolation();
+            $this->context->buildViolation('order.field.required')->atPath('city')->addViolation();
 
             return false;
         }
 
         if ($value->getDeltype()?->getIsNovaPoshta() && ! $value->getNovaPoshtaOffice()) {
-            $this->context->buildViolation('Поле обов\'язкове')->atPath('office')->addViolation();
+            $this->context->buildViolation('order.field.required')->atPath('office')->addViolation();
 
             return false;
         }
 
         if ($value->getDeltype()?->getNeedAddressField() && ! $value->getAddress()) {
-            $this->context->buildViolation('Поле обов\'язкове')->atPath('address')->addViolation();
+            $this->context->buildViolation('order.field.required')->atPath('address')->addViolation();
 
             return false;
         }

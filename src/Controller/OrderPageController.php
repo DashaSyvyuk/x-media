@@ -99,7 +99,7 @@ class OrderPageController extends BaseController
                 'sendNotification' => true,
             ]);
 
-            $errors = $validator->validate($order);
+            $errors = $validator->validate($order, null, ['Default', 'checkout']);
 
             if (count($errors) > 0 || in_array($consent, ['0', 0, false])) {
                 $messages = [];
