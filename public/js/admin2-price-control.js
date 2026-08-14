@@ -4,20 +4,21 @@
         return;
     }
 
-    const updateUrl = table.dataset.updateUrl;
-    const xkomUrlUpdateUrl = table.dataset.xkomUrlUpdateUrl;
-    const token = table.dataset.updateToken;
+    const updateUrl = table.dataset.updateUrl || '';
+    const xkomUrlUpdateUrl = table.dataset.xkomUrlUpdateUrl || '';
+    const token = table.dataset.updateToken || '';
     const xkomModalEl = document.getElementById('xkomUrlModal');
     const xkomProductIdEl = document.getElementById('xkomUrlProductId');
     const xkomUrlInputEl = document.getElementById('xkomUrlInput');
     const xkomSaveBtn = document.getElementById('xkomUrlSaveBtn');
     const xkomModal = xkomModalEl && window.bootstrap?.Modal ? new window.bootstrap.Modal(xkomModalEl) : null;
 
-    // Idle autosave only as a backup; primary triggers are blur / Enter / status / button.
-    const IDLE_SAVE_MS = 2500;
+    // Pause while typing, then save. Blur / Enter / status / button save immediately.
+    const DEBOUNCE_MS = 900;
     const saveTimers = new WeakMap();
     const saveControllers = new WeakMap();
-    const saveTokens = new WeakMap();
+    const saveRequestIds = new WeakMap();
+    const lastSavedKeys = new WeakMap();
 
     function numVal(value) {
         if (value === null || value === undefined) {
@@ -121,29 +122,25 @@
         }
     }
 
-    function scheduleIdleSave(row) {
+    function scheduleSave(row) {
         cancelScheduledSave(row);
         const timer = window.setTimeout(() => {
             saveTimers.delete(row);
-            // Only save if the user is no longer typing in this row.
-            if (row.contains(document.activeElement)) {
-                scheduleIdleSave(row);
-                return;
-            }
             void saveRow(row);
-        }, IDLE_SAVE_MS);
+        }, DEBOUNCE_MS);
         saveTimers.set(row, timer);
+    }
+
+    function saveNow(row) {
+        cancelScheduledSave(row);
+        void saveRow(row);
     }
 
     function applyServerValues(row, json) {
         const active = document.activeElement;
         const applyValue = (field, value) => {
             const input = fieldInput(row, field);
-            if (!input) {
-                return;
-            }
-            // Never clobber the field the user is still editing.
-            if (active === input) {
+            if (!input || active === input) {
                 return;
             }
             input.value = value === null || value === undefined ? '' : String(value);
@@ -158,11 +155,15 @@
 
     async function saveRow(row) {
         const button = row.querySelector('.js-price-save');
-        if (!row || !updateUrl || !token || !button) {
+        if (!row || !button) {
             return;
         }
 
-        if (!row.classList.contains('is-dirty') && button.disabled) {
+        if (!updateUrl || !token) {
+            clearRowState(row);
+            row.classList.add('is-error');
+            setButtonState(button, 'err');
+            button.disabled = false;
             return;
         }
 
@@ -174,7 +175,12 @@
             return;
         }
 
-        cancelScheduledSave(row);
+        const payload = readPayload(row);
+        const sentKey = payloadKey(payload);
+
+        if (lastSavedKeys.get(row) === sentKey && !row.classList.contains('is-dirty')) {
+            return;
+        }
 
         const previous = saveControllers.get(row);
         if (previous) {
@@ -184,14 +190,12 @@
         const controller = new AbortController();
         saveControllers.set(row, controller);
 
-        const tokenValue = (saveTokens.get(row) || 0) + 1;
-        saveTokens.set(row, tokenValue);
-
-        const payload = readPayload(row);
-        const sentKey = payloadKey(payload);
+        const requestId = (saveRequestIds.get(row) || 0) + 1;
+        saveRequestIds.set(row, requestId);
 
         button.disabled = true;
         setButtonState(button, 'saving');
+        row.classList.remove('is-saved', 'is-error');
         row.classList.add('is-dirty');
 
         try {
@@ -199,32 +203,33 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
                 },
                 body: JSON.stringify(payload),
                 signal: controller.signal,
+                credentials: 'same-origin',
             });
 
             const json = await response.json().catch(() => ({}));
             if (!response.ok || !json.ok) {
-                throw new Error(json.error || 'save failed');
+                throw new Error(json.error || ('HTTP ' + response.status));
             }
 
-            // A newer edit started another save — ignore this response.
-            if (saveTokens.get(row) !== tokenValue) {
+            // Superseded by a newer save attempt.
+            if (saveRequestIds.get(row) !== requestId) {
                 return;
             }
 
             const currentKey = payloadKey(readPayload(row));
             if (currentKey !== sentKey) {
-                // User kept typing while the request was in flight.
+                // User typed more while request was in flight — save again.
                 markDirty(row);
-                if (!row.contains(document.activeElement)) {
-                    scheduleIdleSave(row);
-                }
+                scheduleSave(row);
                 return;
             }
 
+            lastSavedKeys.set(row, sentKey);
             applyServerValues(row, json);
             clearRowState(row);
             row.classList.add('is-saved');
@@ -240,6 +245,10 @@
                 return;
             }
 
+            if (saveRequestIds.get(row) !== requestId) {
+                return;
+            }
+
             clearRowState(row);
             row.classList.add('is-error');
             setButtonState(button, 'err');
@@ -251,7 +260,10 @@
         }
     }
 
-    table.querySelectorAll('tbody tr').forEach((row) => validateRow(row));
+    table.querySelectorAll('tbody tr').forEach((row) => {
+        validateRow(row);
+        lastSavedKeys.set(row, payloadKey(readPayload(row)));
+    });
 
     table.addEventListener('input', (event) => {
         const input = event.target;
@@ -266,10 +278,11 @@
 
         validateRow(row);
         markDirty(row);
-        // Do not save on every pause mid-number — only arm a long idle backup.
-        scheduleIdleSave(row);
+        scheduleSave(row);
     });
 
+    // After leaving a price field: save soon. Delay lets focus move to another
+    // cell / Save button without double-firing awkwardly.
     table.addEventListener('focusout', (event) => {
         const input = event.target;
         if (!(input instanceof HTMLInputElement) || !input.closest('[data-field]')) {
@@ -281,15 +294,23 @@
             return;
         }
 
-        // Leaving the row entirely → save now. Moving to another price cell in
-        // the same row waits until blur of the row (relatedTarget check).
-        const next = event.relatedTarget;
-        if (next instanceof Node && row.contains(next)) {
-            return;
-        }
+        window.setTimeout(() => {
+            if (!row.classList.contains('is-dirty')) {
+                return;
+            }
 
-        cancelScheduledSave(row);
-        void saveRow(row);
+            const active = document.activeElement;
+            if (
+                active instanceof HTMLInputElement
+                && active.closest('[data-field]')
+                && row.contains(active)
+            ) {
+                // Still editing another price cell in this row — debounce handles it.
+                return;
+            }
+
+            saveNow(row);
+        }, 50);
     });
 
     table.addEventListener('keydown', (event) => {
@@ -307,10 +328,9 @@
             return;
         }
 
-        input.blur();
-        cancelScheduledSave(row);
         markDirty(row);
-        void saveRow(row);
+        saveNow(row);
+        input.blur();
     });
 
     table.addEventListener('change', (event) => {
@@ -326,13 +346,34 @@
 
         row.dataset.status = input.checked ? 'Активний' : 'Заблокований';
         markDirty(row);
-        cancelScheduledSave(row);
-        void saveRow(row);
+        saveNow(row);
+    });
+
+    // pointerdown fires before input blur/focus changes — more reliable than click.
+    table.addEventListener('pointerdown', (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) {
+            return;
+        }
+
+        const button = target.closest('.js-price-save');
+        if (!button || button.disabled) {
+            return;
+        }
+
+        const row = button.closest('tr');
+        if (!row) {
+            return;
+        }
+
+        event.preventDefault();
+        markDirty(row);
+        saveNow(row);
     });
 
     table.addEventListener('click', (event) => {
         const target = event.target;
-        if (!(target instanceof HTMLElement)) {
+        if (!(target instanceof Element)) {
             return;
         }
 
@@ -345,22 +386,7 @@
                 xkomModal?.show();
                 xkomUrlInputEl.focus();
             }
-            return;
         }
-
-        const button = target.closest('.js-price-save');
-        if (!button) {
-            return;
-        }
-
-        const row = button.closest('tr');
-        if (!row) {
-            return;
-        }
-
-        cancelScheduledSave(row);
-        markDirty(row);
-        void saveRow(row);
     });
 
     xkomSaveBtn?.addEventListener('click', async () => {
@@ -380,9 +406,11 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
                 },
                 body: JSON.stringify({ id, xkom_url: url, _token: token }),
+                credentials: 'same-origin',
             });
 
             const json = await response.json().catch(() => ({}));
