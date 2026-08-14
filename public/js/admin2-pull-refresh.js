@@ -4,6 +4,19 @@
         return;
     }
 
+    // Custom pull-to-refresh calls preventDefault on touchmove, which breaks
+    // native <select> pickers on iOS (and often Android) PWAs until reload.
+    const ua = navigator.userAgent || '';
+    const isAppleTouch = /iPad|iPhone|iPod/.test(ua)
+        || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+        || window.matchMedia('(display-mode: fullscreen)').matches
+        || (('standalone' in navigator) && navigator.standalone === true);
+
+    if (isAppleTouch || isStandalone) {
+        return;
+    }
+
     const THRESHOLD = 72;
     const MAX_PULL = 120;
 

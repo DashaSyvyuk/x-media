@@ -55,16 +55,15 @@ body.bg-light {
     color: var(--color-teal-dark);
 }
 
-form[data-submitting="1"] {
-    pointer-events: none;
-}
-
+/* Do not set pointer-events:none on the whole form — after bfcache restore
+   (common in iOS/Android PWA) selects stay dead until a full reload. */
 form[data-submitting="1"] button[type="submit"],
 form[data-submitting="1"] input[type="submit"],
 button.is-submitting,
 input.is-submitting {
     opacity: 0.72;
     cursor: wait;
+    pointer-events: none;
 }
 
 .navbar-dark,

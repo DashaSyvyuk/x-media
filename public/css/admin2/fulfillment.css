@@ -55,6 +55,23 @@
     }
 }
 
+/* Touch / PWA: keep selects outside nested scrollers even on wide phones. */
+@media (hover: none) and (pointer: coarse) {
+    .fulfillment-column__list {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .fulfillment-status-form .fulfillment-status-select,
+    .fulfillment-status-form .fulfillment-ttn-input,
+    .fulfillment-link-target,
+    .form-select,
+    select.form-control {
+        font-size: 16px;
+        touch-action: manipulation;
+    }
+}
+
 .fulfillment-column__header {
     display: flex;
     align-items: center;
@@ -308,6 +325,17 @@
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+}
+
+/* Touch devices keep :hover sticky after tap — hide tip overlays there. */
+@media (hover: none) {
+    .fulfillment-supplier-tip:hover::after,
+    .fulfillment-supplier-tip:focus::after,
+    .fulfillment-supplier-tip:focus-visible::after {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(4px);
+    }
 }
 
 .fulfillment-card__product {
