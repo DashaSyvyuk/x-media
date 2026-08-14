@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use ZipArchive;
 
-#[Security("is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN')")]
+#[Security("is_granted('ROLE_USER')")]
 final class OrderInvoiceController extends AbstractController
 {
     public function __construct(
