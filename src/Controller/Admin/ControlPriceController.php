@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\RozetkaProduct;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Repository\RozetkaProductRepository;
@@ -92,24 +91,19 @@ class ControlPriceController extends AbstractController
             return new JsonResponse(['ok' => false, 'error' => 'Rozetka crossed price must be >= 0'], 400);
         }
 
-        $rozetka = $rozetkaRepository->findOneBy(['product' => $product]);
-
-//        if (!$rozetka && ($rzPrice !== null || $rzOld !== null)) {
-//            $rozetka = new RozetkaProduct();
-//            $rozetka->setProduct($product);
-//            $em->persist($rozetka);
-//        }
-
         $product->setStatus($status);
         $product->setPrice($price);
         $product->setCrossedOutPrice($oldPrice);
+        $em->flush();
+
+        $rozetka = $product->getRozetka()
+            ?? $rozetkaRepository->findByAttachedProductId($product->getId());
 
         if ($rozetka) {
             $rozetka->setPrice($rzPrice);
             $rozetka->setCrossedOutPrice($rzOld);
+            $em->flush();
         }
-
-        $em->flush();
 
         return new JsonResponse(['ok' => true]);
     }

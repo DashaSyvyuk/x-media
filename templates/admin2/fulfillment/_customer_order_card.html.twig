@@ -28,6 +28,7 @@
             </button>
             {{ order_macros.copy_button(order.copyText|default(null)) }}
             {{ order_macros.receipt_button(order.type, order.id) }}
+            {{ order_macros.invoice_button(order.id, 'Рахунок + видаткова', order.type == 'rozetka' ? 'rozetka' : 'local') }}
             {% if order.isRozetka or order.type == 'rozetka' %}
                 <span class="badge bg-success-subtle text-success-emphasis">Rozetka</span>
             {% endif %}

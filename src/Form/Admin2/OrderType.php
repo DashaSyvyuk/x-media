@@ -97,9 +97,11 @@ class OrderType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'      => Order::class,
-            'status_choices'  => Order::STATUSES,
-            'is_edit'         => false,
+            'data_class'         => Order::class,
+            'status_choices'     => Order::STATUSES,
+            'is_edit'            => false,
+            // Skip checkout-only NP city/office rules: admin form has no those fields.
+            'validation_groups'  => ['Default'],
         ]);
 
         $resolver->setAllowedTypes('status_choices', 'array');
