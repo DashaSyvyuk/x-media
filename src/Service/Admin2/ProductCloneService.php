@@ -30,13 +30,15 @@ readonly class ProductCloneService
         $clone->setAvailability($source->getAvailability());
         $clone->setPrice($source->getPrice());
         $clone->setCrossedOutPrice($source->getCrossedOutPrice());
-        $clone->setDescription($source->getDescription());
+        $clone->setDescription((string) ($source->getDescription() ?? ''));
         $clone->setNote($source->getNote());
-        $clone->setMetaKeyword($source->getMetaKeyword());
-        $clone->setMetaDescription($source->getMetaDescription());
+        $clone->setMetaKeyword((string) ($source->getMetaKeyword() ?? ''));
+        $clone->setMetaDescription((string) ($source->getMetaDescription() ?? ''));
         $clone->setProductCode($source->getProductCode());
         $clone->setProductCode2($source->getProductCode2());
         $clone->setOlx($source->getOlx());
+        $clone->setXkomUrl($source->getXkomUrl());
+        $clone->setRozetka(null);
         $clone->setCreatedAt(new DateTime('now'));
         $clone->setUpdatedAt(new DateTime('now'));
 
@@ -53,9 +55,15 @@ readonly class ProductCloneService
         }
 
         foreach ($source->getFilterAttributes() as $filterAttribute) {
+            $filter = $filterAttribute->getFilter();
+            $attribute = $filterAttribute->getFilterAttribute();
+            if ($filter === null || $attribute === null) {
+                continue;
+            }
+
             $copy = new ProductFilterAttribute();
-            $copy->setFilter($filterAttribute->getFilter());
-            $copy->setFilterAttribute($filterAttribute->getFilterAttribute());
+            $copy->setFilter($filter);
+            $copy->setFilterAttribute($attribute);
             $clone->addFilterAttribute($copy);
         }
 
