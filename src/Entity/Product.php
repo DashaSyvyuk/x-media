@@ -109,7 +109,7 @@ class Product
         cascade: ["remove"],
         orphanRemoval: true
     )]
-    private ?RozetkaProduct $rozetka;
+    private ?RozetkaProduct $rozetka = null;
 
     /** @var ArrayCollection<int, Comment>|PersistentCollection<int, Comment> $comments */
     #[ORM\OneToMany(
@@ -145,7 +145,7 @@ class Product
     private ?string $productCode2 = "";
 
     #[ORM\Column(type: "string", nullable: true)]
-    private ?string $olx;
+    private ?string $olx = null;
 
     #[ORM\Column(type: "string", length: 2048, nullable: true)]
     private ?string $xkomUrl = null;
