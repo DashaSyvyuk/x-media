@@ -64,6 +64,14 @@ final class OrderFulfillmentStatusHelper
         return $tone === 'processing';
     }
 
+    /**
+     * Management board shows only new / in-progress customer orders.
+     */
+    public function isCustomerManagementTone(string $tone): bool
+    {
+        return $this->isNewTone($tone) || $this->isProcessingTone($tone);
+    }
+
     public function isShippingTone(string $tone): bool
     {
         return $tone === 'shipping';

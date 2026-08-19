@@ -180,7 +180,13 @@ document.querySelectorAll('[data-collection-add]').forEach((button) => {
 
         button.dataset.busy = '1';
 
-        const index = holder.querySelectorAll('.collection-item').length;
+        const usedIndexes = Array.from(holder.querySelectorAll('[name]')).map((el) => {
+            const match = String(el.getAttribute('name') || '').match(/\[(\d+)\]/);
+            return match ? Number(match[1]) : -1;
+        });
+        const index = usedIndexes.length
+            ? Math.max(...usedIndexes) + 1
+            : holder.querySelectorAll('.collection-item').length;
         const inner = holder.dataset.prototype.replace(/__name__/g, String(index));
         const collapsibleType = holder.dataset.collapsibleType;
 

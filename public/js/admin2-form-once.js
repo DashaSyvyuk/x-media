@@ -28,7 +28,19 @@
         });
     };
 
-    const lockForm = (form) => {
+    const lockForm = (form, submitter) => {
+        if (
+            submitter
+            && submitter.name
+            && (submitter instanceof HTMLButtonElement || submitter instanceof HTMLInputElement)
+        ) {
+            const hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = submitter.name;
+            hidden.value = submitter.value;
+            form.appendChild(hidden);
+        }
+
         form.dataset.submitting = '1';
         form.setAttribute('aria-busy', 'true');
 
@@ -49,7 +61,7 @@
             return;
         }
 
-        lockForm(form);
+        lockForm(form, event.submitter);
     });
 
     // PWA / Safari often restores pages from bfcache with locked forms.

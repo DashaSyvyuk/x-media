@@ -11,6 +11,7 @@ use App\Repository\VendorOrderRepository;
 use App\Service\Admin2\OrderClipboardFormatter;
 use App\Service\Admin2\OrderFulfillmentCustomerBoardProvider;
 use App\Service\Admin2\OrderFulfillmentService;
+use App\Service\Admin2\OrderFulfillmentStatusHelper;
 use App\Service\Admin2\OrderStatusHelper;
 use App\Service\Admin2\RozetkaSellerApiClient;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,6 +30,7 @@ class OrderFulfillmentController extends AbstractController
         private readonly OrderFulfillmentLinkRepository $linkRepository,
         private readonly OrderFulfillmentService $fulfillmentService,
         private readonly OrderFulfillmentCustomerBoardProvider $customerBoardProvider,
+        private readonly OrderFulfillmentStatusHelper $fulfillmentStatusHelper,
         private readonly OrderStatusHelper $orderStatusHelper,
         private readonly RozetkaSellerApiClient $rozetkaApiClient,
         private readonly OrderClipboardFormatter $clipboardFormatter,
@@ -39,7 +41,33 @@ class OrderFulfillmentController extends AbstractController
     #[Route('/admin/fulfillment', name: 'admin2_fulfillment', methods: ['GET'])]
     public function index(): Response
     {
-        $customerOrders = $this->customerBoardProvider->getCustomerOrders(true);
+        $linkColors = $this->linkRepository->buildLinkColorMap();
+        $customerOrders = array_values(array_filter(
+            $this->customerBoardProvider->getCustomerOrders(true),
+            fn (array $order): bool => $this->fulfillmentStatusHelper->isCustomerManagementTone(
+                (string) ($order['statusTone'] ?? ''),
+            ),
+        ));
+
+        usort(
+            $customerOrders,
+            function (array $a, array $b) use ($linkColors): int {
+                $aLinked = isset($linkColors[(string) ($a['key'] ?? '')]);
+                $bLinked = isset($linkColors[(string) ($b['key'] ?? '')]);
+                $byLinked = ((int) $aLinked) <=> ((int) $bLinked);
+                if ($byLinked !== 0) {
+                    return $byLinked;
+                }
+
+                $byStatus = $this->fulfillmentStatusHelper->sortRankForTone((string) ($a['statusTone'] ?? 'default'))
+                    <=> $this->fulfillmentStatusHelper->sortRankForTone((string) ($b['statusTone'] ?? 'default'));
+                if ($byStatus !== 0) {
+                    return $byStatus;
+                }
+
+                return strcmp((string) ($b['created'] ?? ''), (string) ($a['created'] ?? ''));
+            },
+        );
 
         $linksByVendorId = [];
         foreach ($this->linkRepository->findAllLinks() as $link) {
@@ -81,7 +109,7 @@ class OrderFulfillmentController extends AbstractController
         return $this->render('admin2/fulfillment/index.html.twig', [
             'customerOrders'  => $customerOrders,
             'vendorOrders'    => $vendorOrders,
-            'linkColors'      => $this->linkRepository->buildLinkColorMap(),
+            'linkColors'      => $linkColors,
             'linkPeerMap'     => $this->linkRepository->buildLinkPeerMap(),
             'statusFormRoute' => 'admin2_fulfillment_customer_status',
         ]);

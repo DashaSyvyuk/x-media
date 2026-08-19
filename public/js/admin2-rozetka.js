@@ -51,32 +51,23 @@
         });
     }
 
-    function guardFormDoubleSubmit(form) {
-        if (!form || form.dataset.doubleSubmitBound === '1') {
+    function expandCollapsedInvalid(form) {
+        if (!(form instanceof HTMLFormElement)) {
             return;
         }
 
-        form.dataset.doubleSubmitBound = '1';
-        form.addEventListener('submit', (event) => {
-            if (form.dataset.submitting === '1') {
-                event.preventDefault();
+        form.addEventListener('invalid', (event) => {
+            const field = event.target;
+            if (!(field instanceof HTMLElement)) {
                 return;
             }
 
-            form.dataset.submitting = '1';
-
-            const submitter = event.submitter;
-            form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach((button) => {
-                if (submitter && button === submitter && submitter.name) {
-                    const hidden = document.createElement('input');
-                    hidden.type = 'hidden';
-                    hidden.name = submitter.name;
-                    hidden.value = submitter.value;
-                    form.appendChild(hidden);
-                }
-                button.disabled = true;
-            });
-        });
+            const item = field.closest('[data-collapsible]');
+            if (item?.classList.contains('is-collapsed')) {
+                item.classList.remove('is-collapsed');
+                item.querySelector('[data-collapsible-toggle]')?.setAttribute('aria-expanded', 'true');
+            }
+        }, true);
     }
 
     document.querySelectorAll('.js-rozetka-toggle').forEach((input) => {
@@ -261,6 +252,6 @@
         window.setTimeout(syncUsedCharacteristics, 0);
     });
 
-    guardFormDoubleSubmit(document.getElementById('rozetka-edit-form'));
+    expandCollapsedInvalid(document.getElementById('rozetka-edit-form'));
     syncUsedCharacteristics();
 })();
