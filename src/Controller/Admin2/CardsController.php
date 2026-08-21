@@ -57,7 +57,12 @@ final class CardsController extends AbstractController
 
     // ---------- Operations CRUD ----------
 
-    #[Route('/admin/cards/{id}/operations', name: 'admin2_cards_operations_store', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route(
+        '/admin/cards/{id}/operations',
+        name: 'admin2_cards_operations_store',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
     public function storeOperation(Request $request, int $id): Response
     {
         $card = $this->cardRepository->find($id);
@@ -88,7 +93,12 @@ final class CardsController extends AbstractController
         return $this->redirectToRoute('admin2_cards_show', ['id' => $id]);
     }
 
-    #[Route('/admin/cards/operations/{opId}/edit', name: 'admin2_cards_operations_update', methods: ['POST'], requirements: ['opId' => '\d+'])]
+    #[Route(
+        '/admin/cards/operations/{opId}/edit',
+        name: 'admin2_cards_operations_update',
+        methods: ['POST'],
+        requirements: ['opId' => '\d+'],
+    )]
     public function updateOperation(Request $request, int $opId): Response
     {
         $op = $this->operationRepository->find($opId);
@@ -119,7 +129,12 @@ final class CardsController extends AbstractController
         return $this->redirectToRoute('admin2_cards_show', ['id' => $op->getCard()->getId()]);
     }
 
-    #[Route('/admin/cards/operations/{opId}/done', name: 'admin2_cards_operations_done', methods: ['POST'], requirements: ['opId' => '\d+'])]
+    #[Route(
+        '/admin/cards/operations/{opId}/done',
+        name: 'admin2_cards_operations_done',
+        methods: ['POST'],
+        requirements: ['opId' => '\d+'],
+    )]
     public function doneOperation(Request $request, int $opId): Response
     {
         $op = $this->operationRepository->find($opId);
@@ -137,7 +152,12 @@ final class CardsController extends AbstractController
         return new JsonResponse(['ok' => true, 'done' => $op->isDone()]);
     }
 
-    #[Route('/admin/cards/operations/{opId}/delete', name: 'admin2_cards_operations_delete', methods: ['POST'], requirements: ['opId' => '\d+'])]
+    #[Route(
+        '/admin/cards/operations/{opId}/delete',
+        name: 'admin2_cards_operations_delete',
+        methods: ['POST'],
+        requirements: ['opId' => '\d+'],
+    )]
     public function deleteOperation(Request $request, int $opId): Response
     {
         $op = $this->operationRepository->find($opId);
