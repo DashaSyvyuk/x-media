@@ -36,7 +36,7 @@ class CommentEditController extends AbstractController
             $this->entityManager->flush();
             $this->addFlash('success', sprintf('Коментар #%d збережено.', $comment->getId()));
 
-            return $this->redirectToRoute('admin2_comments_edit', ['id' => $comment->getId()]);
+            return $this->redirectToRoute('admin2_comments');
         }
 
         return $this->render('admin2/comments/edit.html.twig', [

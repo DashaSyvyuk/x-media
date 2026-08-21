@@ -36,7 +36,7 @@ class FeedbackEditController extends AbstractController
             $this->entityManager->flush();
             $this->addFlash('success', sprintf('Відгук #%d збережено.', $feedback->getId()));
 
-            return $this->redirectToRoute('admin2_feedbacks_edit', ['id' => $feedback->getId()]);
+            return $this->redirectToRoute('admin2_feedbacks');
         }
 
         return $this->render('admin2/feedbacks/edit.html.twig', [

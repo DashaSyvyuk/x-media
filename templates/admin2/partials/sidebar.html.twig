@@ -19,7 +19,7 @@
     or currentRoute starts with 'admin2_slider'
     or currentRoute starts with 'admin2_promotion' %}
 {% set moderationOpen = currentRoute starts with 'admin2_comment' or currentRoute starts with 'admin2_feedback' %}
-{% set financeOpen = currentRoute starts with 'admin2_debtor' or currentRoute starts with 'admin2_circulation' %}
+{% set financeOpen = currentRoute starts with 'admin2_debtor' or currentRoute starts with 'admin2_circulation' or currentRoute starts with 'admin2_cards' %}
 {% set statsOpen = currentRoute starts with 'admin2_statistics' %}
 {% set planningActive = currentRoute starts with 'admin2_planning' %}
 {% set feedsOpen = currentRoute starts with 'admin2_feeds'
@@ -258,6 +258,11 @@
                    class="sidebar-sublink {{ currentRoute starts with 'admin2_circulation' ? 'active' : '' }}">
                     <i class="bi bi-circle-fill"></i>
                     <span>Обіг</span>
+                </a>
+                <a href="{{ path('admin2_cards') }}"
+                   class="sidebar-sublink {{ currentRoute starts with 'admin2_cards' ? 'active' : '' }}">
+                    <i class="bi bi-credit-card"></i>
+                    <span>Картки</span>
                 </a>
             </div>
         </div>

@@ -80,7 +80,7 @@ class OrderEditController extends AbstractController
             $this->entityManager->flush();
             $this->addFlash('success', sprintf('Замовлення #%s збережено.', $order->getOrderNumber()));
 
-            return $this->redirectToRoute('admin2_orders_edit', ['id' => $order->getId()]);
+            return $this->redirectToRoute('admin2_orders');
         }
 
         return $this->render('admin2/orders/edit.html.twig', [

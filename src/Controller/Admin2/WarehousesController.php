@@ -89,7 +89,7 @@ class WarehousesController extends AbstractController
 
             $this->addFlash('success', sprintf('Склад «%s» збережено.', $warehouse->getTitle()));
 
-            return $this->redirectToRoute('admin2_warehouses_edit', ['id' => $warehouse->getId()]);
+            return $this->redirectToRoute('admin2_warehouses');
         }
 
         return $this->render('admin2/warehouses/edit.html.twig', [

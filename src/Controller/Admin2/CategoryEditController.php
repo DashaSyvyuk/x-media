@@ -72,7 +72,7 @@ class CategoryEditController extends AbstractController
                     : sprintf('Категорію «%s» збережено.', $category->getTitle()),
             );
 
-            return $this->redirectToRoute('admin2_categories_edit', ['id' => $category->getId()]);
+            return $this->redirectToRoute('admin2_categories');
         }
 
         return $this->render('admin2/categories/edit.html.twig', [

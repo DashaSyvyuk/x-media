@@ -1,0 +1,76 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+
+{% block title %}Всі операції — Картки — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/cards.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="cards-page">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <a href="{{ path('admin2_cards') }}" class="text-muted small d-flex align-items-center gap-1 mb-1">
+                <i class="bi bi-chevron-left"></i> Картки
+            </a>
+            <h1 class="page-title mb-1">Всі операції</h1>
+            <p class="text-muted mb-0 small">{{ operations|length }} операцій по всіх картках</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table products-table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Картка</th>
+                        <th>Власник</th>
+                        <th class="text-end">Сума (€)</th>
+                        <th>Нотатка</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for op in operations %}
+                        <tr class="{{ op.isDone ? 'text-muted' : '' }}">
+                            <td class="text-nowrap">{{ op.operatedAt|date('d.m.Y') }}</td>
+                            <td>
+                                <a href="{{ path('admin2_cards_show', {id: op.card.id}) }}" class="fw-semibold text-decoration-none">
+                                    {{ op.card.title }}
+                                </a>
+                            </td>
+                            <td class="small">{{ op.card.holderName }}</td>
+                            <td class="text-end fw-semibold text-nowrap">{{ op.amountFloat|number_format(2, '.', ' ') }}</td>
+                            <td class="small text-muted">{{ op.note ?: '—' }}</td>
+                            <td>
+                                {% if op.isDone %}
+                                    <span class="badge bg-success">Виконано</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Активна</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">Операцій ще немає</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                {% if operations|length > 0 %}
+                    {% set total = 0 %}
+                    {% for op in operations %}{% set total = total + op.amountFloat %}{% endfor %}
+                    <tfoot>
+                        <tr class="table-light fw-semibold">
+                            <td colspan="3">Всього</td>
+                            <td class="text-end">{{ total|number_format(2, '.', ' ') }}</td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tfoot>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

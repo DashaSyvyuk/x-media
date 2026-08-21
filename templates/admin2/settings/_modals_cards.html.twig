@@ -1,0 +1,97 @@
+<div class="modal fade" id="createCardModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="{{ path('admin2_settings_cards_store') }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_card') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Нова картка</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Назва</label>
+                        <input type="text" name="card[title]" class="form-control" placeholder="Наприклад: Monobank USD" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ім'я і прізвище</label>
+                        <input type="text" name="card[holderName]" class="form-control" placeholder="IVAN PETRENKO" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Номер карти</label>
+                        <input type="text" name="card[cardNumber]" class="form-control js-card-number-input"
+                               placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Термін дії (дд/мм)</label>
+                        <input type="text" name="card[expiry]" class="form-control" placeholder="09/27" maxlength="5" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editCardModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" id="editCardForm" action="">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_card') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редагувати картку</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Назва</label>
+                        <input type="text" name="card[title]" id="editCardTitle" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ім'я і прізвище</label>
+                        <input type="text" name="card[holderName]" id="editCardHolderName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Номер карти</label>
+                        <input type="text" name="card[cardNumber]" id="editCardNumber" class="form-control js-card-number-input"
+                               maxlength="19" inputmode="numeric" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Термін дії (дд/мм)</label>
+                        <input type="text" name="card[expiry]" id="editCardExpiry" class="form-control" maxlength="5" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Auto-format card number with spaces every 4 digits
+    document.querySelectorAll('.js-card-number-input').forEach((input) => {
+        input.addEventListener('input', () => {
+            let v = input.value.replace(/\D/g, '').slice(0, 16);
+            input.value = v.replace(/(.{4})/g, '$1 ').trim();
+        });
+    });
+
+    // Populate edit modal
+    document.querySelectorAll('.js-edit-card').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const form = document.getElementById('editCardForm');
+            form.action = `/admin/settings/cards/${btn.dataset.id}`;
+            document.getElementById('editCardTitle').value      = btn.dataset.title;
+            document.getElementById('editCardHolderName').value = btn.dataset.holderName;
+            document.getElementById('editCardNumber').value     = btn.dataset.cardNumber;
+            document.getElementById('editCardExpiry').value     = btn.dataset.expiry;
+        });
+    });
+});
+</script>

@@ -55,6 +55,20 @@ body.bg-light {
     color: var(--color-teal-dark);
 }
 
+/*
+ * Touch-action: manipulation on all interactive controls prevents the 300ms
+ * tap delay on iOS/Android without needing fastclick, and also ensures the
+ * native select picker is not swallowed by our pull-refresh gesture recogniser.
+ */
+select,
+input,
+textarea,
+button,
+label,
+a {
+    touch-action: manipulation;
+}
+
 /* Do not set pointer-events:none on the whole form — after bfcache restore
    (common in iOS/Android PWA) selects stay dead until a full reload. */
 form[data-submitting="1"] button[type="submit"],

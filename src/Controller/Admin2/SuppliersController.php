@@ -82,7 +82,7 @@ class SuppliersController extends AbstractController
 
             $this->addFlash('success', sprintf('Постачальника «%s» збережено.', $supplier->getTitle()));
 
-            return $this->redirectToRoute('admin2_suppliers_edit', ['id' => $supplier->getId()]);
+            return $this->redirectToRoute('admin2_suppliers');
         }
 
         return $this->render('admin2/suppliers/edit.html.twig', [

@@ -1,5 +1,5 @@
 /* X-media Admin service worker — icons live under /admin2/pwa/icons/ */
-const CACHE_VERSION = 'admin-v12';
+const CACHE_VERSION = 'admin-v14';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PRECACHE_URLS = [
     '/admin/',
@@ -11,6 +11,7 @@ const PRECACHE_URLS = [
     '/css/admin2/product-edit.css',
     '/css/admin2/fulfillment.css',
     '/css/admin2/price-control.css',
+    '/css/admin2/cards.css',
     '/js/admin2-sidebar.js',
     '/js/admin2-pwa.js',
     '/js/admin2-pull-refresh.js',
