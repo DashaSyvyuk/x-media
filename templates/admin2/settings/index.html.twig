@@ -43,6 +43,8 @@
                     {% include 'admin2/settings/_tab_currencies.html.twig' %}
                 {% elseif activeTab == 'fops' %}
                     {% include 'admin2/settings/_tab_fops.html.twig' %}
+                {% elseif activeTab == 'cards' %}
+                    {% include 'admin2/settings/_tab_cards.html.twig' %}
                 {% elseif activeTab == 'shop' %}
                     {% include 'admin2/settings/_tab_shop.html.twig' %}
                 {% elseif activeTab == 'delivery' %}
@@ -60,6 +62,8 @@
         {% include 'admin2/settings/_modals_currencies.html.twig' %}
     {% elseif activeTab == 'fops' %}
         {% include 'admin2/settings/_modals_fops.html.twig' %}
+    {% elseif activeTab == 'cards' %}
+        {% include 'admin2/settings/_modals_cards.html.twig' %}
     {% elseif activeTab == 'shop' %}
         {% include 'admin2/settings/_modals_shop.html.twig' %}
     {% elseif activeTab == 'payment' %}

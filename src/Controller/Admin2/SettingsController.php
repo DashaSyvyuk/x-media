@@ -5,6 +5,7 @@ namespace App\Controller\Admin2;
 use App\Entity\AdminUser;
 use App\Entity\Currency;
 use App\Entity\DeliveryType;
+use App\Entity\Card;
 use App\Entity\FopProfile;
 use App\Entity\PaymentType;
 use App\Entity\Setting;
@@ -56,6 +57,9 @@ class SettingsController extends AbstractController
             'fops'          => $activeTab === 'fops'
                 ? $this->entityManager->getRepository(FopProfile::class)->findBy([], ['id' => 'DESC'])
                 : [],
+            'cards'         => $activeTab === 'cards'
+                ? $this->entityManager->getRepository(Card::class)->findBy([], ['id' => 'DESC'])
+                : [],
             'shopSettings'  => $activeTab === 'shop'
                 ? $this->settingRepository->findBy([], ['id' => 'DESC'])
                 : [],
@@ -88,6 +92,7 @@ class SettingsController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) {
             $tabs['currencies'] = 'Валюти';
             $tabs['fops']       = 'ФОП';
+            $tabs['cards']      = 'Картки';
             $tabs['delivery']   = 'Доставка';
             $tabs['payment']    = 'Оплата';
             $tabs['admins']     = 'Адміни';

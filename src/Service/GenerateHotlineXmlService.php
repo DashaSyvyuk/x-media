@@ -25,6 +25,7 @@ class GenerateHotlineXmlService
         private readonly BunnyStorageClient $bunny,
         private readonly EntityManagerInterface $entityManager,
         private readonly LoggerInterface $logger,
+        private readonly string $cdnUrl,
     ) {
     }
 
@@ -123,7 +124,7 @@ class GenerateHotlineXmlService
                 foreach ($images as $image) {
                     $writer->writeElement(
                         'image',
-                        sprintf('https://x-media.com.ua/images/products/%s', $image->getImageUrl())
+                        rtrim($this->cdnUrl, '/') . '/products/' . $image->getImageUrl()
                     );
                 }
 

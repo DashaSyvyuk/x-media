@@ -170,7 +170,7 @@ class VendorOrdersController extends AbstractController
 
             $this->addFlash('success', 'Замовлення постачальника збережено.');
 
-            return $this->redirectToRoute('admin2_vendor_orders_edit', ['id' => $order->getId()]);
+            return $this->redirectToRoute('admin2_vendor_orders');
         }
 
         return $this->render('admin2/vendor_orders/edit.html.twig', [

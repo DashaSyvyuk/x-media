@@ -70,7 +70,7 @@ class WarrantiesController extends AbstractController
 
             $this->addFlash('success', sprintf('Гарантія #%d створена.', $warranty->getId()));
 
-            return $this->redirectToRoute('admin2_warranties_edit', ['id' => $warranty->getId()]);
+            return $this->redirectToRoute('admin2_warranties');
         }
 
         $this->addFlash('error', 'Не вдалося створити гарантію. Перевірте форму.');

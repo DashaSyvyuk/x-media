@@ -100,7 +100,7 @@ class SettingsDeliveryTypeController extends AbstractController
                     : sprintf('Спосіб доставки «%s» збережено.', $deliveryType->getTitle()),
             );
 
-            return $this->redirectToRoute('admin2_settings_delivery_edit', ['id' => $deliveryType->getId()]);
+            return $this->redirectToRoute('admin2_settings', ['tab' => 'delivery']);
         }
 
         return $this->render('admin2/settings/delivery_edit.html.twig', [

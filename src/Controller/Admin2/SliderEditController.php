@@ -69,7 +69,7 @@ class SliderEditController extends AbstractController
                     : sprintf('Слайд «%s» збережено.', $slider->getTitle() ?: '#' . $slider->getId()),
             );
 
-            return $this->redirectToRoute('admin2_sliders_edit', ['id' => $slider->getId()]);
+            return $this->redirectToRoute('admin2_sliders');
         }
 
         return $this->render('admin2/sliders/edit.html.twig', [

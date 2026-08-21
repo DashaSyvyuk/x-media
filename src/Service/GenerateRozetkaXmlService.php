@@ -30,6 +30,7 @@ class GenerateRozetkaXmlService
         private readonly LoggerInterface $logger,
         private readonly string $projectDir,
         private readonly string $environment,
+        private readonly string $cdnUrl,
     ) {
     }
 
@@ -237,7 +238,7 @@ class GenerateRozetkaXmlService
                     foreach ($images as $image) {
                         $writer->writeElement(
                             'picture',
-                            sprintf('https://x-media.com.ua/images/products/%s', $image->getImageUrl())
+                            rtrim($this->cdnUrl, '/') . '/products/' . $image->getImageUrl()
                         );
                     }
                     $writer->writeElement('vendor', (string) $vendorValue);

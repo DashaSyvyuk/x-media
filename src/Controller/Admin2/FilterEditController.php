@@ -39,7 +39,7 @@ class FilterEditController extends AbstractController
 
             $this->addFlash('success', sprintf('Фільтр «%s» створено.', $filter->getTitle()));
 
-            return $this->redirectToRoute('admin2_filters_edit', ['id' => $filter->getId()]);
+            return $this->redirectToRoute('admin2_filters');
         }
 
         return $this->render('admin2/filters/edit.html.twig', [
@@ -64,7 +64,7 @@ class FilterEditController extends AbstractController
             $this->entityManager->flush();
             $this->addFlash('success', sprintf('Фільтр «%s» збережено.', $filter->getTitle()));
 
-            return $this->redirectToRoute('admin2_filters_edit', ['id' => $filter->getId()]);
+            return $this->redirectToRoute('admin2_filters');
         }
 
         return $this->render('admin2/filters/edit.html.twig', [

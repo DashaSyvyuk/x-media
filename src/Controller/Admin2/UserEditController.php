@@ -36,7 +36,7 @@ class UserEditController extends AbstractController
             $this->entityManager->flush();
             $this->addFlash('success', sprintf('Користувача #%d збережено.', $user->getId()));
 
-            return $this->redirectToRoute('admin2_users_edit', ['id' => $user->getId()]);
+            return $this->redirectToRoute('admin2_users');
         }
 
         return $this->render('admin2/users/edit.html.twig', [

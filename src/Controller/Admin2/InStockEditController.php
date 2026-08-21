@@ -53,7 +53,7 @@ class InStockEditController extends AbstractController
             $this->entityManager->flush();
             $this->addFlash('success', $isNew ? 'Запис наявності створено.' : 'Запис наявності збережено.');
 
-            return $this->redirectToRoute('admin2_in_stock_edit', ['id' => $stock->getId()]);
+            return $this->redirectToRoute('admin2_in_stock');
         }
 
         return $this->render('admin2/in_stock/edit.html.twig', [

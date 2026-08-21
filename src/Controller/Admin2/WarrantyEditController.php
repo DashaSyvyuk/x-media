@@ -36,7 +36,7 @@ class WarrantyEditController extends AbstractController
             $this->entityManager->flush();
             $this->addFlash('success', sprintf('Гарантію #%d збережено.', $warranty->getId()));
 
-            return $this->redirectToRoute('admin2_warranties_edit', ['id' => $warranty->getId()]);
+            return $this->redirectToRoute('admin2_warranties');
         }
 
         return $this->render('admin2/warranties/edit.html.twig', [

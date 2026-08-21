@@ -1,0 +1,62 @@
+{% import 'admin2/orders/_macros.html.twig' as order_macros %}
+
+<div class="settings-tab-toolbar">
+    <h2 class="h5 mb-0">Картки</h2>
+    <button type="button" class="btn btn-teal btn-sm" data-bs-toggle="modal" data-bs-target="#createCardModal">
+        <i class="bi bi-plus-lg"></i> Додати картку
+    </button>
+</div>
+
+<div class="settings-table-scroll">
+    <table class="table products-table align-middle mb-0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Назва</th>
+                <th>Ім'я і прізвище</th>
+                <th>Номер карти</th>
+                <th>Термін</th>
+                <th class="text-end">Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for card in cards %}
+                <tr>
+                    <td class="text-muted">#{{ card.id }}</td>
+                    <td class="fw-semibold">{{ card.title }}</td>
+                    <td>{{ card.holderName }}</td>
+                    <td><code>{{ card.cardNumberFormatted }}</code></td>
+                    <td>{{ card.expiry }}</td>
+                    <td class="text-end text-nowrap">
+                        {{ order_macros.copy_button(card.clipboardText, 'Скопіювати реквізити картки') }}
+                        <button type="button"
+                                class="btn btn-sm btn-outline-teal js-edit-card"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editCardModal"
+                                data-id="{{ card.id }}"
+                                data-title="{{ card.title|e('html_attr') }}"
+                                data-holder-name="{{ card.holderName|e('html_attr') }}"
+                                data-card-number="{{ card.cardNumber|e('html_attr') }}"
+                                data-expiry="{{ card.expiry|e('html_attr') }}">
+                            Редагувати
+                        </button>
+                        <form method="post"
+                              action="{{ path('admin2_settings_cards_delete', {id: card.id}) }}"
+                              class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin2_settings_card') }}">
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    data-confirm="Видалити картку «{{ card.title|e('html_attr') }}»?">
+                                Видалити
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">Картки ще не додані</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

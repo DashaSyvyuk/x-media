@@ -1,0 +1,225 @@
+{% extends 'admin2/layouts/base.html.twig' %}
+{% import 'admin2/orders/_macros.html.twig' as order_macros %}
+
+{% block title %}{{ card.title }} — Картки — X-media Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin2/products.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/cards.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="cards-page">
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <a href="{{ path('admin2_cards') }}" class="text-muted small d-flex align-items-center gap-1 mb-1">
+                <i class="bi bi-chevron-left"></i> Картки
+            </a>
+            <h1 class="page-title mb-0">{{ card.title }}</h1>
+            <p class="text-muted mb-0 small">{{ card.holderName }} · {{ card.cardNumberFormatted }} · {{ card.expiry }}</p>
+        </div>
+        <div class="d-flex gap-2">
+            {{ order_macros.copy_button(card.clipboardText, 'Скопіювати реквізити') }}
+            <button type="button"
+                    class="btn btn-teal btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addOpModal">
+                <i class="bi bi-plus-lg"></i> Додати операцію
+            </button>
+        </div>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible fade show">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+    {% endfor %}
+
+    {% if months is empty %}
+        <div class="text-center text-muted py-5">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            Операцій ще немає
+        </div>
+    {% else %}
+        {% for monthKey, ops in months %}
+            {% set parts = monthKey|split('-') %}
+            {% set monthLabel = ['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'][parts[1]|number_format - 1] %}
+            {% set monthTotal = 0 %}
+            {% for op in ops %}{% set monthTotal = monthTotal + op.amountFloat %}{% endfor %}
+
+            <div class="cards-month-block">
+                <div class="cards-month-header">
+                    <span class="cards-month-label">{{ monthLabel }} {{ parts[0] }}</span>
+                    <span class="cards-month-total text-muted small">{{ ops|length }} опер. · {{ monthTotal|number_format(2, '.', ' ') }} €</span>
+                </div>
+
+                {% if ops is empty %}
+                    <div class="text-muted small py-2 px-3">— операцій немає —</div>
+                {% else %}
+                    <div class="cards-ops-list">
+                        {% for op in ops %}
+                            <div class="cards-op-row {{ op.isDone ? 'cards-op-row--done' : '' }}" data-op-id="{{ op.id }}">
+                                <div class="cards-op-row__date text-muted small">{{ op.operatedAt|date('d.m.Y') }}</div>
+                                <div class="cards-op-row__amount fw-semibold">{{ op.amountFloat|number_format(2, '.', ' ') }} €</div>
+                                <div class="cards-op-row__note text-muted small">{{ op.note ?: '' }}</div>
+                                <div class="cards-op-row__status">
+                                    {% if op.isDone %}
+                                        <span class="badge bg-success">Виконано</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Активна</span>
+                                    {% endif %}
+                                </div>
+                                <div class="cards-op-row__actions">
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-secondary js-op-done"
+                                            data-op-id="{{ op.id }}"
+                                            data-csrf="{{ csrf_token('admin2_card_op') }}"
+                                            title="{{ op.isDone ? 'Скасувати виконання' : 'Позначити виконаною' }}">
+                                        <i class="bi bi-{{ op.isDone ? 'x-circle' : 'check-circle' }}"></i>
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-teal js-op-edit"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editOpModal"
+                                            data-op-id="{{ op.id }}"
+                                            data-amount="{{ op.amountFloat }}"
+                                            data-note="{{ op.note|default('')|e('html_attr') }}"
+                                            data-date="{{ op.operatedAt|date('Y-m-d') }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <form method="post"
+                                          action="{{ path('admin2_cards_operations_delete', {opId: op.id}) }}"
+                                          class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('admin2_card_op') }}">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                data-confirm="Видалити операцію на {{ op.amountFloat|number_format(2) }} €?">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{# Add operation modal #}
+<div class="modal fade" id="addOpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form method="post" action="{{ path('admin2_cards_operations_store', {id: card.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_card_op') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Нова операція</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Сума TaxFree</label>
+                        <div class="input-group">
+                            <input type="number" name="amount" class="form-control" step="0.01" min="0"
+                                   placeholder="0.00" required autofocus>
+                            <span class="input-group-text">€</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label">Нотатка</label>
+                        <input type="text" name="note" class="form-control">
+                    </div>
+                    <div class="mt-2 text-muted small">
+                        <i class="bi bi-calendar3"></i> Дата: <strong>{{ 'now'|date('d.m.Y') }}</strong>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Додати</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# Edit operation modal #}
+<div class="modal fade" id="editOpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form method="post" id="editOpForm" action="">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_card_op') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редагувати операцію</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Сума TaxFree</label>
+                        <div class="input-group">
+                            <input type="number" name="amount" id="editOpAmount" class="form-control" step="0.01" min="0" required>
+                            <span class="input-group-text">€</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Нотатка</label>
+                        <input type="text" name="note" id="editOpNote" class="form-control">
+                    </div>
+                    <div>
+                        <label class="form-label">Дата</label>
+                        <input type="date" name="operated_at" id="editOpDate" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Edit modal populate
+    document.querySelectorAll('.js-op-edit').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            document.getElementById('editOpForm').action = `/admin/cards/operations/${btn.dataset.opId}/edit`;
+            document.getElementById('editOpAmount').value = btn.dataset.amount;
+            document.getElementById('editOpNote').value   = btn.dataset.note;
+            document.getElementById('editOpDate').value   = btn.dataset.date;
+        });
+    });
+
+    // Toggle done via AJAX
+    document.querySelectorAll('.js-op-done').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+            const opId = btn.dataset.opId;
+            const csrf = btn.dataset.csrf;
+            const body = new URLSearchParams({ _token: csrf });
+            const res  = await fetch(`/admin/cards/operations/${opId}/done`, { method: 'POST', body });
+            if (!res.ok) return;
+            const data = await res.json();
+            const row  = btn.closest('.cards-op-row');
+            row.classList.toggle('cards-op-row--done', data.done);
+            const badge = row.querySelector('.badge');
+            badge.className     = `badge bg-${data.done ? 'success' : 'secondary'}`;
+            badge.textContent   = data.done ? 'Виконано' : 'Активна';
+            btn.title           = data.done ? 'Скасувати виконання' : 'Позначити виконаною';
+            btn.querySelector('i').className = `bi bi-${data.done ? 'x-circle' : 'check-circle'}`;
+        });
+    });
+
+    // Confirm delete
+    document.querySelectorAll('[data-confirm]').forEach((btn) => {
+        btn.closest('form')?.addEventListener('submit', (e) => {
+            if (!confirm(btn.dataset.confirm)) e.preventDefault();
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -54,7 +54,7 @@ class FeedEditController extends AbstractController
             $this->entityManager->flush();
             $this->addFlash('success', $isNew ? 'Feed створено.' : 'Feed збережено.');
 
-            return $this->redirectToRoute('admin2_feeds_edit', ['id' => $feed->getId()]);
+            return $this->redirectToRoute('admin2_feeds');
         }
 
         return $this->render('admin2/feeds/edit.html.twig', [
