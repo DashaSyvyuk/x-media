@@ -7,7 +7,6 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table('cards', indexes: [
     new ORM\Index(columns: ['title']),
@@ -40,10 +39,10 @@ class Card
     #[ORM\Column(type: 'datetime')]
     public DateTime $updatedAt;
 
-    /** @var ArrayCollection<int, CardOperation>|PersistentCollection<int, CardOperation> */
+    /** @var Collection<int, CardOperation> */
     #[ORM\OneToMany(targetEntity: CardOperation::class, mappedBy: 'card', cascade: ['all'], orphanRemoval: true)]
     #[ORM\OrderBy(['operatedAt' => 'DESC'])]
-    private ArrayCollection|PersistentCollection $operations;
+    private Collection $operations;
 
     public function __construct()
     {
