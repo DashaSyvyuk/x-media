@@ -34,10 +34,23 @@
         </div>
     {% else %}
         <div class="cards-grid">
-            {% for card in cards %}
+            {% for item in cards %}
+                {% set card = item.card %}
+                {% set activeCount = item.activeCount %}
                 <div class="card-item">
                     <div class="card-item__header">
-                        <div class="card-item__title">{{ card.title }}</div>
+                        <div class="card-item__title-wrap">
+                            <div class="card-item__title">{{ card.title }}</div>
+                            {% if activeCount > 0 %}
+                                <span class="card-item__active-badge" title="Активні операції">
+                                    {{ activeCount }} активн.
+                                </span>
+                            {% else %}
+                                <span class="card-item__active-badge card-item__active-badge--empty">
+                                    немає активних
+                                </span>
+                            {% endif %}
+                        </div>
                         <div class="card-item__actions">
                             {{ order_macros.copy_button(card.clipboardText, 'Скопіювати реквізити') }}
                             <a href="{{ path('admin2_cards_show', {id: card.id}) }}" class="btn btn-sm btn-outline-teal">
@@ -84,7 +97,7 @@
                         <div class="input-group">
                             <input type="number" name="amount" class="form-control" step="0.01" min="0"
                                    placeholder="0.00" required autofocus>
-                            <span class="input-group-text">€</span>
+                            <span class="input-group-text">zł</span>
                         </div>
                     </div>
                     <div>
@@ -106,6 +119,7 @@
 {% endblock %}
 
 {% block javascripts %}
+<script src="{{ asset('js/admin2-order-copy.js') }}" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('addOpModal');

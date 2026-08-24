@@ -10,6 +10,7 @@
 {% block body %}
     <div class="stats-page stats-page--finance"
          data-finance='{{ {
+             dailyTurnover: stats.dailyTurnover,
              circulations: {
                  chart: stats.circulations.chart,
                  owedToYouByCurrency: stats.circulations.owedToYouByCurrency,
@@ -21,10 +22,92 @@
                  youOweByCurrency: stats.debtors.youOweByCurrency
              } : null
          }|json_encode|e('html_attr') }}'>
-        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 page-header-row">
-            <div>
+        <div class="mb-4">
+            <div class="mb-3">
                 <h1 class="page-title mb-1">Фінанси</h1>
-                <p class="text-muted mb-0 small">Поточний стан активних кас{% if is_granted('ROLE_SUPER_ADMIN') %} і боргів{% endif %}</p>
+                <p class="text-muted mb-0 small">
+                    {{ stats.from|date('d.m.Y') }} — {{ stats.to|date('d.m.Y') }} · {{ stats.periodLabel }}
+                </p>
+            </div>
+
+            <div class="stats-filters">
+                <div class="stats-period-switch" role="group" aria-label="Період">
+                    {% for value, label in periods %}
+                        <a href="{{ path('admin2_statistics_finance', {period: value}) }}"
+                           class="stats-period-btn {{ stats.period == value ? 'is-active' : '' }}">
+                            {{ label }}
+                        </a>
+                    {% endfor %}
+                </div>
+
+                <form method="get" action="{{ path('admin2_statistics_finance') }}" class="stats-date-range" aria-label="Довільний період">
+                    <div class="stats-date-fields">
+                        <label class="stats-date-field" for="statsFinanceFrom">
+                            <span class="stats-date-label">Від</span>
+                            <input type="date"
+                                   id="statsFinanceFrom"
+                                   name="from"
+                                   class="form-control stats-date-input"
+                                   value="{{ stats.from|date('Y-m-d') }}"
+                                   required>
+                        </label>
+                        <label class="stats-date-field" for="statsFinanceTo">
+                            <span class="stats-date-label">До</span>
+                            <input type="date"
+                                   id="statsFinanceTo"
+                                   name="to"
+                                   class="form-control stats-date-input"
+                                   value="{{ stats.to|date('Y-m-d') }}"
+                                   required>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-teal stats-date-submit {{ stats.period == 'custom' ? 'is-active' : '' }}">
+                        <i class="bi bi-calendar3" aria-hidden="true"></i>
+                        Показати
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="stats-finance-section mb-4">
+            <div class="d-flex flex-wrap align-items-end justify-content-between gap-2 mb-3">
+                <div>
+                    <h2 class="stats-chart-title mb-0">Обіг по касах</h2>
+                    <p class="text-muted small mb-0">Прихід і видаток за обраний період</p>
+                </div>
+                <a href="{{ path('admin2_circulations') }}" class="stats-finance-link">Обіг →</a>
+            </div>
+
+            {% if stats.dailyTurnover.totals %}
+                <div class="debt-stat-grid debt-stat-grid--compact mb-3" style="grid-template-columns: repeat({{ [stats.dailyTurnover.totals|length, 3]|min }}, minmax(0, 1fr));">
+                    {% for total in stats.dailyTurnover.totals %}
+                        <div class="card debt-stat-card">
+                            <div class="debt-stat-card__body">
+                                <div class="debt-stat-card__label">Обіг · {{ total.code }}</div>
+                                <div class="debt-stat-card__value">{{ total.turnover|number_format(0, '.', ' ') }}</div>
+                                <div class="debt-stat-card__hint text-muted small mt-1">
+                                    <span class="text-success">+{{ total.income|number_format(0, '.', ' ') }}</span>
+                                    ·
+                                    <span class="text-danger">−{{ total.expense|number_format(0, '.', ' ') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="card stats-chart-card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                        <div>
+                            <h3 class="stats-chart-title mb-0">Динаміка обігу</h3>
+                            <p class="text-muted small mb-0">Операції по касах за день</p>
+                        </div>
+                    </div>
+                    <div class="stats-chart-wrap stats-chart-wrap--tall">
+                        <canvas id="statsCirculationDailyChart" aria-label="Обіг по касах за день"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -32,9 +115,8 @@
             <div class="d-flex flex-wrap align-items-end justify-content-between gap-2 mb-3">
                 <div>
                     <h2 class="stats-chart-title mb-0">Активні каси</h2>
-                    <p class="text-muted small mb-0">Сумарний баланс усіх активних кас</p>
+                    <p class="text-muted small mb-0">Поточний стан активних кас</p>
                 </div>
-                <a href="{{ path('admin2_circulations') }}" class="stats-finance-link">Обіг →</a>
             </div>
             <div class="debt-stat-grid debt-stat-grid--2 debt-stat-grid--compact">
                 <div class="card debt-stat-card">

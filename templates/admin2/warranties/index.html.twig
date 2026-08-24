@@ -125,23 +125,36 @@
     <div class="modal fade" id="createWarrantyModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-fullscreen-sm-down">
             <div class="modal-content">
-                {{ form_start(createForm, { action: path('admin2_warranties_new'), method: 'POST' }) }}
+                {{ form_start(createForm, {
+                    action: path('admin2_warranties_new'),
+                    method: 'POST',
+                    attr: { class: 'modal-form' }
+                }) }}
                 <div class="modal-header">
                     <h5 class="modal-title">Нова гарантія</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row g-3">
-                        <div class="col-md-6">{{ form_row(createForm.name) }}</div>
+                        <div class="col-12">{{ form_row(createForm.name, { label: "Ім'я і прізвище" }) }}</div>
                         <div class="col-md-6">{{ form_row(createForm.phone) }}</div>
+                        <div class="col-md-6">{{ form_row(createForm.email) }}</div>
                         <div class="col-md-6">{{ form_row(createForm.product) }}</div>
                         <div class="col-md-6">{{ form_row(createForm.orderNumber) }}</div>
+                        <div class="col-12">{{ form_row(createForm.reason) }}</div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
                     <button type="submit" class="btn btn-teal">Створити</button>
                 </div>
+                {% do createForm.status.setRendered() %}
+                {% do createForm.surname.setRendered() %}
+                {% do createForm.fromClientTtn.setRendered() %}
+                {% do createForm.toClientTtn.setRendered() %}
+                {% do createForm.supplierOrderNumber.setRendered() %}
+                {% do createForm.supplier.setRendered() %}
+                {% do createForm.expenses.setRendered() %}
                 {{ form_end(createForm) }}
             </div>
         </div>

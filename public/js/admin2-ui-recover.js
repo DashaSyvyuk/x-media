@@ -1,29 +1,27 @@
 (function () {
-    /**
-     * Returns true when there is a leftover modal backdrop or body lock that
-     * has no matching open modal — happens after bfcache restore or app
-     * backgrounding on iOS/Android.
-     */
     const hasOrphanOverlay = () => {
         const bodyLocked = document.body.classList.contains('modal-open')
             || document.body.classList.contains('sidebar-open');
-        const backdrop   = document.querySelector('.modal-backdrop');
-        const openModal  = document.querySelector('.modal.show');
-        return Boolean((bodyLocked || backdrop) && !openModal);
+        const backdrop = document.querySelector('.modal-backdrop, .sidebar-backdrop.show');
+        const openModal = document.querySelector('.modal.show');
+        const openSidebar = document.querySelector('.sidebar.open');
+
+        return Boolean(
+            ((bodyLocked || backdrop) && !openModal && !openSidebar)
+            || (document.querySelector('.modal-backdrop') && !openModal),
+        );
     };
 
     const recoverUi = () => {
-        // ---- body class / style locks ----
-        document.body.classList.remove('modal-open', 'sidebar-open');
+        document.body.classList.remove('modal-open');
         document.body.style.removeProperty('overflow');
         document.body.style.removeProperty('overflow-y');
         document.body.style.removeProperty('padding-right');
         document.body.style.removeProperty('touch-action');
+        document.documentElement.style.removeProperty('overflow');
 
-        // ---- orphan backdrops ----
         document.querySelectorAll('.modal-backdrop').forEach((el) => el.remove());
 
-        // ---- stale open modals ----
         document.querySelectorAll('.modal.show').forEach((modalEl) => {
             modalEl.classList.remove('show');
             modalEl.style.display = 'none';
@@ -32,7 +30,13 @@
             modalEl.removeAttribute('role');
         });
 
-        // ---- unlock locked forms (bfcache leaves them disabled) ----
+        // Sticky sidebar lock also blocks scrolling / taps after backgrounding.
+        if (document.body.classList.contains('sidebar-open') && !document.querySelector('.sidebar.open')) {
+            document.body.classList.remove('sidebar-open');
+            document.getElementById('sidebarBackdrop')?.classList.remove('show');
+            document.getElementById('sidebarBackdrop')?.setAttribute('aria-hidden', 'true');
+        }
+
         document.querySelectorAll('form[data-submitting="1"]').forEach((form) => {
             delete form.dataset.submitting;
             form.removeAttribute('aria-busy');
@@ -42,22 +46,36 @@
             });
         });
 
-        // ---- pointer-events that may linger on any element ----
-        document.querySelectorAll('[style*="pointer-events"]').forEach((el) => {
-            // Only clear if it was set to none and the element is not intentionally hidden.
-            if (window.getComputedStyle(el).pointerEvents === 'none' && !el.disabled) {
-                el.style.removeProperty('pointer-events');
+        // Re-enable selects that some WebViews leave inert after overlay/bfcache.
+        document.querySelectorAll('select').forEach((select) => {
+            if (select.style.pointerEvents === 'none') {
+                select.style.removeProperty('pointer-events');
             }
+            select.style.removeProperty('touch-action');
         });
     };
 
-    // Run on every bfcache restore (persisted=true) and on normal page load.
     window.addEventListener('pageshow', recoverUi);
 
-    // Run when the tab becomes visible again (app switch on mobile).
     document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible' && hasOrphanOverlay()) {
-            recoverUi();
+        if (document.visibilityState === 'visible') {
+            // Always recover on return — orphan check alone misses some freezes.
+            if (hasOrphanOverlay() || document.querySelector('.modal-backdrop')) {
+                recoverUi();
+            }
         }
     });
+
+    // Safety: if user taps a select and something still blocks it, clear overlays.
+    document.addEventListener('pointerdown', (event) => {
+        const select = event.target instanceof Element
+            ? event.target.closest('select, .form-select')
+            : null;
+        if (!select) {
+            return;
+        }
+        if (hasOrphanOverlay() || document.querySelector('.modal-backdrop:not(.show)')) {
+            recoverUi();
+        }
+    }, true);
 })();

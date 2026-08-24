@@ -180,6 +180,15 @@ final class Admin2StatisticsProvider
 
     /**
      * @return array{
+     *     period: string,
+     *     periodLabel: string,
+     *     from: \DateTimeImmutable,
+     *     to: \DateTimeImmutable,
+     *     dailyTurnover: array{
+     *         labels: list<string>,
+     *         datasets: list<array{label: string, code: string, kind: string, data: list<int>}>,
+     *         totals: list<array{code: string, income: int, expense: int, turnover: int}>
+     *     },
      *     circulations: array{
      *         accounts: int,
      *         balanceByCurrency: list<array{code: string, total: int}>,
@@ -195,8 +204,21 @@ final class Admin2StatisticsProvider
      *     }|null
      * }
      */
-    public function buildFinance(bool $includeDebts = false): array
-    {
+    public function buildFinance(
+        bool $includeDebts = false,
+        string $period = self::PERIOD_30,
+        ?\DateTimeImmutable $from = null,
+        ?\DateTimeImmutable $to = null,
+    ): array {
+        if ($from instanceof \DateTimeImmutable && $to instanceof \DateTimeImmutable) {
+            $period = self::PERIOD_CUSTOM;
+            $periodLabel = sprintf('%s — %s', $from->format('d.m.Y'), $to->format('d.m.Y'));
+        } else {
+            $period = $this->normalizePeriod($period);
+            [$from, $to] = $this->resolvePeriodRange($period);
+            $periodLabel = self::PERIODS[$period];
+        }
+
         $circulations = $this->circulationRepository->getFinanceSummary(true);
         $circulationRows = $this->circulationRepository->getActiveBalancesForChart(24);
 
@@ -211,11 +233,127 @@ final class Admin2StatisticsProvider
         }
 
         return [
-            'circulations' => [
+            'period'        => $period,
+            'periodLabel'   => $periodLabel,
+            'from'          => $from,
+            'to'            => $to,
+            'dailyTurnover' => $this->buildCirculationDailyTurnover($from, $to),
+            'circulations'  => [
                 ...$circulations,
                 'chart' => $this->rowsToChart($circulationRows),
             ],
             'debtors' => $debtors,
+        ];
+    }
+
+    /**
+     * Daily cash-register turnover (income / expense) grouped by currency.
+     *
+     * @return array{
+     *     labels: list<string>,
+     *     datasets: list<array{label: string, code: string, kind: string, data: list<int>}>,
+     *     totals: list<array{code: string, income: int, expense: int, turnover: int}>
+     * }
+     */
+    private function buildCirculationDailyTurnover(
+        \DateTimeImmutable $from,
+        \DateTimeImmutable $to,
+    ): array {
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT DATE(p.created_at) AS day,
+                    cur.code AS currency_code,
+                    COALESCE(SUM(CASE WHEN p.sum > 0 THEN p.sum ELSE 0 END), 0) AS income,
+                    COALESCE(SUM(CASE WHEN p.sum < 0 THEN ABS(p.sum) ELSE 0 END), 0) AS expense
+             FROM circulation_payments p
+             INNER JOIN circulations c ON c.id = p.circulation_id
+             INNER JOIN currency cur ON cur.id = c.currency_id
+             WHERE p.created_at BETWEEN :from AND :to
+             GROUP BY DATE(p.created_at), cur.code
+             ORDER BY day ASC, currency_code ASC',
+            [
+                'from' => $from->format('Y-m-d H:i:s'),
+                'to'   => $to->format('Y-m-d H:i:s'),
+            ],
+        );
+
+        /** @var array<string, array<string, array{income: int, expense: int}>> $byDayCode */
+        $byDayCode = [];
+        /** @var array<string, array{income: int, expense: int}> $totalsByCode */
+        $totalsByCode = [];
+
+        foreach ($rows as $row) {
+            $day = (string) $row['day'];
+            $code = (string) $row['currency_code'];
+            $income = (int) $row['income'];
+            $expense = (int) $row['expense'];
+
+            $byDayCode[$day][$code] = [
+                'income'  => $income,
+                'expense' => $expense,
+            ];
+
+            if (! isset($totalsByCode[$code])) {
+                $totalsByCode[$code] = ['income' => 0, 'expense' => 0];
+            }
+            $totalsByCode[$code]['income'] += $income;
+            $totalsByCode[$code]['expense'] += $expense;
+        }
+
+        $codes = array_keys($totalsByCode);
+        sort($codes, SORT_STRING);
+
+        $labels = [];
+        $days = [];
+        $cursor = $from;
+        while ($cursor <= $to) {
+            $key = $cursor->format('Y-m-d');
+            $days[] = $key;
+            $labels[] = $cursor->format('d.m');
+            $cursor = $cursor->modify('+1 day');
+        }
+
+        $datasets = [];
+        foreach ($codes as $code) {
+            $incomeData = [];
+            $expenseData = [];
+            foreach ($days as $day) {
+                $incomeData[] = $byDayCode[$day][$code]['income'] ?? 0;
+                $expenseData[] = $byDayCode[$day][$code]['expense'] ?? 0;
+            }
+
+            $incomeLabel = count($codes) === 1 ? 'Прихід' : sprintf('Прихід · %s', $code);
+            $expenseLabel = count($codes) === 1 ? 'Видаток' : sprintf('Видаток · %s', $code);
+
+            $datasets[] = [
+                'label' => $incomeLabel,
+                'code'  => $code,
+                'kind'  => 'income',
+                'data'  => $incomeData,
+            ];
+            $datasets[] = [
+                'label' => $expenseLabel,
+                'code'  => $code,
+                'kind'  => 'expense',
+                'data'  => $expenseData,
+            ];
+        }
+
+        $totals = [];
+        foreach ($codes as $code) {
+            $income = $totalsByCode[$code]['income'];
+            $expense = $totalsByCode[$code]['expense'];
+            $totals[] = [
+                'code'     => $code,
+                'income'   => $income,
+                'expense'  => $expense,
+                'turnover' => $income + $expense,
+            ];
+        }
+
+        return [
+            'labels'   => $labels,
+            'datasets' => $datasets,
+            'totals'   => $totals,
         ];
     }
 

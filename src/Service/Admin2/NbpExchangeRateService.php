@@ -54,6 +54,19 @@ final class NbpExchangeRateService
         return rtrim(rtrim(number_format($value, $decimals, '.', ' '), '0'), '.');
     }
 
+    /** PLN → UAH mid rate from the same source as the dashboard. */
+    public function getPlnToUahRate(): ?float
+    {
+        $rates = $this->dashboardRates();
+        foreach ($rates['pairs'] as $pair) {
+            if (($pair['from'] ?? '') === 'PLN' && ($pair['to'] ?? '') === 'UAH') {
+                return is_numeric($pair['value'] ?? null) ? (float) $pair['value'] : null;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * @return array{
      *     updated_at: ?string,

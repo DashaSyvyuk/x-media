@@ -150,7 +150,10 @@ body.sidebar-open {
 }
 
 .sidebar-sublink i {
-    font-size: 0.5rem;
+    font-size: 0.95rem;
+    width: 1.1rem;
+    flex-shrink: 0;
+    text-align: center;
 }
 
 .sidebar-sublink .sidebar-badge,

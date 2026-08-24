@@ -125,7 +125,11 @@
     <div class="modal fade" id="createReturnModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-fullscreen-sm-down">
             <div class="modal-content">
-                {{ form_start(createForm, { action: path('admin2_returns_new'), method: 'POST' }) }}
+                {{ form_start(createForm, {
+                    action: path('admin2_returns_new'),
+                    method: 'POST',
+                    attr: { class: 'modal-form' }
+                }) }}
                 <div class="modal-header">
                     <h5 class="modal-title">Нове повернення</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -142,6 +146,12 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
                     <button type="submit" class="btn btn-teal">Створити</button>
                 </div>
+                {% do createForm.status.setRendered() %}
+                {% do createForm.surname.setRendered() %}
+                {% do createForm.email.setRendered() %}
+                {% do createForm.ttn.setRendered() %}
+                {% do createForm.supplier.setRendered() %}
+                {% do createForm.reason.setRendered() %}
                 {{ form_end(createForm) }}
             </div>
         </div>

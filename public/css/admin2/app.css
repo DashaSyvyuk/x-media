@@ -17,9 +17,21 @@ html {
     background-color: var(--color-slate);
 }
 
-body {
-    font-family: var(--font-body);
-    overscroll-behavior-y: contain;
+/* Keep modal forms usable when they wrap header/body/footer */
+.modal-content > form.modal-form {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.modal-content > form.modal-form .modal-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+
+.modal-content > form.modal-form .modal-footer {
+    flex-shrink: 0;
 }
 
 body.bg-light {
@@ -56,17 +68,22 @@ body.bg-light {
 }
 
 /*
- * Touch-action: manipulation on all interactive controls prevents the 300ms
- * tap delay on iOS/Android without needing fastclick, and also ensures the
- * native select picker is not swallowed by our pull-refresh gesture recogniser.
+ * Do NOT set touch-action:manipulation on <select> — some Android/iOS WebViews
+ * then fail to open the native picker after a while. Keep it on other controls.
  */
-select,
 input,
 textarea,
 button,
 label,
 a {
     touch-action: manipulation;
+}
+
+select,
+select.form-select,
+select.form-control {
+    touch-action: auto;
+    font-size: 16px; /* avoid iOS zoom that can leave controls stuck */
 }
 
 /* Do not set pointer-events:none on the whole form — after bfcache restore
