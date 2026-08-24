@@ -59,8 +59,8 @@ final class NbpExchangeRateService
     {
         $rates = $this->dashboardRates();
         foreach ($rates['pairs'] as $pair) {
-            if (($pair['from'] ?? '') === 'PLN' && ($pair['to'] ?? '') === 'UAH') {
-                return is_numeric($pair['value'] ?? null) ? (float) $pair['value'] : null;
+            if ($pair['from'] === 'PLN' && $pair['to'] === 'UAH') {
+                return is_numeric($pair['value']) ? (float) $pair['value'] : null;
             }
         }
 
