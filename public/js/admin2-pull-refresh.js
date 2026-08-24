@@ -4,8 +4,12 @@
         return;
     }
 
-    const THRESHOLD = 72;
-    const MAX_PULL  = 120;
+    // Pull-to-refresh only starts from the top chrome zone so mid-page
+    // selects / forms never compete with preventDefault.
+    const PULL_ZONE_PX = 96;
+    const ARM_DEAD_ZONE = 24;
+    const THRESHOLD = 80;
+    const MAX_PULL = 130;
 
     const indicator = document.createElement('div');
     indicator.className = 'pull-refresh';
@@ -13,49 +17,36 @@
     indicator.innerHTML = '<div class="pull-refresh__inner"><i class="bi bi-arrow-down"></i></div>';
     document.body.prepend(indicator);
 
-    let startY     = 0;
-    let armed      = false;
-    let pulling    = false;
+    let startY = 0;
+    let armed = false;
+    let pulling = false;
+    let blocked = false;
     let currentPull = 0;
-    // Track whether the initial touch was on or inside a <select>.
-    // If so, we must NEVER call preventDefault — iOS kills the picker.
-    let touchOnSelect = false;
 
     function pageScrollTop() {
         return window.scrollY || document.documentElement.scrollTop || 0;
     }
 
     function sidebarOpen() {
-        return document.querySelector('.sidebar.open') !== null;
+        return document.body.classList.contains('sidebar-open')
+            || document.querySelector('.sidebar.open') !== null;
     }
 
-    /**
-     * Returns true when the touch started on any element that has its own
-     * native gesture — select, input, textarea, contenteditable, scrollable
-     * containers, etc.  We arm pull-to-refresh only when this is false.
-     */
-    function isInteractiveOrScrollable(target) {
-        if (!(target instanceof Element)) {
-            return false;
-        }
+    function modalOpen() {
+        return document.body.classList.contains('modal-open')
+            || document.querySelector('.modal.show') !== null;
+    }
 
-        // Explicit interactive elements — never preventDefault near these.
-        if (target.closest('select, input, textarea, [contenteditable="true"]')) {
+    function isUnsafeTarget(target) {
+        if (!(target instanceof Element)) {
             return true;
         }
 
-        // Scrollable containers (overflow scroll/auto) that are not the root.
-        let el = target;
-        while (el && el !== document.body) {
-            const style = window.getComputedStyle(el);
-            const oy = style.overflowY;
-            if ((oy === 'scroll' || oy === 'auto') && el.scrollHeight > el.clientHeight + 2) {
-                return true;
-            }
-            el = el.parentElement;
-        }
-
-        return false;
+        return Boolean(target.closest(
+            'select, option, input, textarea, button, a, label, summary,'
+            + ' .form-select, .form-control, .dropdown-menu, .modal,'
+            + ' [contenteditable="true"], [role="listbox"], [role="combobox"]',
+        ));
     }
 
     function resetIndicator() {
@@ -71,74 +62,71 @@
         indicator.classList.toggle('pull-refresh--ready', currentPull >= THRESHOLD);
     }
 
+    function disarm() {
+        armed = false;
+        pulling = false;
+        blocked = true;
+        resetIndicator();
+    }
+
     document.addEventListener('touchstart', (event) => {
-        touchOnSelect = false;
+        blocked = false;
+        armed = false;
+        pulling = false;
+        resetIndicator();
 
         if (
             sidebarOpen()
-            || pageScrollTop() > 1
+            || modalOpen()
+            || pageScrollTop() > 0
             || event.touches.length !== 1
         ) {
-            armed = false;
             return;
         }
 
-        const target = event.target;
-        if (isInteractiveOrScrollable(target)) {
-            touchOnSelect = true;
-            armed = false;
+        const touch = event.touches[0];
+        if (touch.clientY > PULL_ZONE_PX || isUnsafeTarget(event.target)) {
             return;
         }
 
-        startY  = event.touches[0].clientY;
-        armed   = true;
-        pulling = false;
-    }, { passive: true });
+        startY = touch.clientY;
+        armed = true;
+    }, { passive: true, capture: true });
 
     document.addEventListener('touchmove', (event) => {
-        // CRITICAL: never interfere when a select/input was touched.
-        if (touchOnSelect) {
+        if (blocked || !armed || sidebarOpen() || modalOpen() || event.touches.length !== 1) {
             return;
         }
 
-        if (!armed || sidebarOpen() || event.touches.length !== 1) {
-            return;
-        }
-
-        // Re-check mid-gesture: user may have scrolled into an element.
-        if (pageScrollTop() > 1) {
-            armed = false;
-            resetIndicator();
+        if (pageScrollTop() > 0 || isUnsafeTarget(event.target)) {
+            disarm();
             return;
         }
 
         const dy = event.touches[0].clientY - startY;
-
-        // Small movement — don't block, might still be a tap.
-        if (dy <= 8) {
+        if (dy <= ARM_DEAD_ZONE) {
             if (pulling) {
                 setPull(0);
             }
             return;
         }
 
-        // Only call preventDefault when we are clearly pulling down and we
-        // know the touch did NOT start on an interactive element.
+        // Confirmed pull-down from the top zone — block native scroll bounce only now.
         pulling = true;
         event.preventDefault();
-        setPull(dy * 0.55);
-    }, { passive: false });
+        setPull((dy - ARM_DEAD_ZONE) * 0.55);
+    }, { passive: false, capture: true });
 
     document.addEventListener('touchend', () => {
-        touchOnSelect = false;
-
         if (!armed) {
+            blocked = false;
             return;
         }
 
         const shouldReload = pulling && currentPull >= THRESHOLD;
-        armed   = false;
+        armed = false;
         pulling = false;
+        blocked = false;
 
         if (shouldReload) {
             indicator.classList.add('pull-refresh--loading', 'pull-refresh--visible');
@@ -148,12 +136,18 @@
         }
 
         resetIndicator();
-    }, { passive: true });
+    }, { passive: true, capture: true });
 
     document.addEventListener('touchcancel', () => {
-        touchOnSelect = false;
-        armed   = false;
-        pulling = false;
-        resetIndicator();
-    }, { passive: true });
+        disarm();
+        blocked = false;
+    }, { passive: true, capture: true });
+
+    // If a native picker opens, immediately abort any pending pull.
+    document.addEventListener('focusin', (event) => {
+        if (event.target instanceof HTMLSelectElement || event.target instanceof HTMLInputElement) {
+            disarm();
+            blocked = false;
+        }
+    }, true);
 })();

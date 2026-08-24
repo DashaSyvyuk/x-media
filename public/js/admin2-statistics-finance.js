@@ -288,7 +288,105 @@
         });
     };
 
+    const renderDailyTurnoverChart = (canvasId, daily) => {
+        const el = document.getElementById(canvasId);
+        if (!el) {
+            return;
+        }
+
+        const labels = daily?.labels || [];
+        const sourceDatasets = daily?.datasets || [];
+
+        if (!labels.length || !sourceDatasets.length) {
+            new Chart(el, {
+                type: 'bar',
+                data: {
+                    labels: ['Немає даних'],
+                    datasets: [{
+                        label: 'Обіг',
+                        data: [0],
+                        backgroundColor: '#e2e8f0',
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { beginAtZero: true, grid: { color: 'rgba(148, 163, 184, 0.18)' } },
+                    },
+                },
+            });
+            return;
+        }
+
+        const incomePalette = ['rgba(5, 150, 105, 0.85)', 'rgba(13, 148, 136, 0.75)', 'rgba(16, 185, 129, 0.7)'];
+        const expensePalette = ['rgba(220, 38, 38, 0.85)', 'rgba(234, 88, 12, 0.8)', 'rgba(244, 63, 94, 0.75)'];
+        let incomeIdx = 0;
+        let expenseIdx = 0;
+
+        const datasets = sourceDatasets.map((item) => {
+            const isIncome = item.kind === 'income';
+            const color = isIncome
+                ? incomePalette[incomeIdx++ % incomePalette.length]
+                : expensePalette[expenseIdx++ % expensePalette.length];
+
+            return {
+                label: item.label,
+                data: item.data || [],
+                backgroundColor: color,
+                borderRadius: 6,
+                maxBarThickness: 28,
+            };
+        });
+
+        new Chart(el, {
+            type: 'bar',
+            data: {
+                labels,
+                datasets,
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: { boxWidth: 10 },
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label(ctx) {
+                                const meta = sourceDatasets[ctx.datasetIndex] || {};
+                                return `${ctx.dataset.label}: ${money(ctx.parsed.y, meta.code || '')}`;
+                            },
+                        },
+                    },
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { maxRotation: 0, autoSkipPadding: 12 },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(148, 163, 184, 0.18)' },
+                        ticks: {
+                            callback(value) {
+                                return Number(value).toLocaleString('uk-UA');
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    };
+
     const circulations = payload.circulations || {};
+    renderDailyTurnoverChart('statsCirculationDailyChart', payload.dailyTurnover);
     renderHorizontalBars('statsCirculationBalancesChart', circulations.chart, 'cash');
     renderCashShareChart('statsCirculationShareChart', circulations.chart);
 

@@ -18,6 +18,9 @@
             </a>
             <h1 class="page-title mb-0">{{ card.title }}</h1>
             <p class="text-muted mb-0 small">{{ card.holderName }} · {{ card.cardNumberFormatted }} · {{ card.expiry }}</p>
+            {% if plnUahRate %}
+                <p class="text-muted mb-0 small">Курс PLN→UAH: {{ plnUahRate|number_format(4, '.', ' ') }}</p>
+            {% endif %}
         </div>
         <div class="d-flex gap-2">
             {{ order_macros.copy_button(card.clipboardText, 'Скопіювати реквізити') }}
@@ -52,7 +55,7 @@
             <div class="cards-month-block">
                 <div class="cards-month-header">
                     <span class="cards-month-label">{{ monthLabel }} {{ parts[0] }}</span>
-                    <span class="cards-month-total text-muted small">{{ ops|length }} опер. · {{ monthTotal|number_format(2, '.', ' ') }} €</span>
+                    <span class="cards-month-total text-muted small">{{ ops|length }} опер. · {{ monthTotal|number_format(2, '.', ' ') }} zł</span>
                 </div>
 
                 {% if ops is empty %}
@@ -60,9 +63,13 @@
                 {% else %}
                     <div class="cards-ops-list">
                         {% for op in ops %}
+                            {% set uah = plnUahRate ? (op.amountFloat * plnUahRate) : null %}
                             <div class="cards-op-row {{ op.isDone ? 'cards-op-row--done' : '' }}" data-op-id="{{ op.id }}">
                                 <div class="cards-op-row__date text-muted small">{{ op.operatedAt|date('d.m.Y') }}</div>
-                                <div class="cards-op-row__amount fw-semibold">{{ op.amountFloat|number_format(2, '.', ' ') }} €</div>
+                                <div class="cards-op-row__amount fw-semibold">{{ op.amountFloat|number_format(2, '.', ' ') }} zł</div>
+                                <div class="cards-op-row__uah text-muted small">
+                                    {% if uah is not null %}~{{ uah|number_format(0, '.', ' ') }} грн{% else %}—{% endif %}
+                                </div>
                                 <div class="cards-op-row__note text-muted small">{{ op.note ?: '' }}</div>
                                 <div class="cards-op-row__status">
                                     {% if op.isDone %}
@@ -95,7 +102,7 @@
                                         <input type="hidden" name="_token" value="{{ csrf_token('admin2_card_op') }}">
                                         <button type="submit"
                                                 class="btn btn-sm btn-outline-danger"
-                                                data-confirm="Видалити операцію на {{ op.amountFloat|number_format(2) }} €?">
+                                                data-confirm="Видалити операцію на {{ op.amountFloat|number_format(2) }} zł?">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
@@ -106,6 +113,16 @@
                 {% endif %}
             </div>
         {% endfor %}
+
+        <div class="cards-active-total">
+            <div class="cards-active-total__label">Активні операції</div>
+            <div class="cards-active-total__values">
+                <span class="fw-semibold">{{ activeTotal|number_format(2, '.', ' ') }} zł</span>
+                {% if plnUahRate %}
+                    <span class="text-muted">· ~{{ (activeTotal * plnUahRate)|number_format(0, '.', ' ') }} грн</span>
+                {% endif %}
+            </div>
+        </div>
     {% endif %}
 </div>
 
@@ -125,7 +142,7 @@
                         <div class="input-group">
                             <input type="number" name="amount" class="form-control" step="0.01" min="0"
                                    placeholder="0.00" required autofocus>
-                            <span class="input-group-text">€</span>
+                            <span class="input-group-text">zł</span>
                         </div>
                     </div>
                     <div>
@@ -160,7 +177,7 @@
                         <label class="form-label fw-semibold">Сума TaxFree</label>
                         <div class="input-group">
                             <input type="number" name="amount" id="editOpAmount" class="form-control" step="0.01" min="0" required>
-                            <span class="input-group-text">€</span>
+                            <span class="input-group-text">zł</span>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -183,9 +200,9 @@
 {% endblock %}
 
 {% block javascripts %}
+<script src="{{ asset('js/admin2-order-copy.js') }}" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Edit modal populate
     document.querySelectorAll('.js-op-edit').forEach((btn) => {
         btn.addEventListener('click', () => {
             document.getElementById('editOpForm').action = `/admin/cards/operations/${btn.dataset.opId}/edit`;
@@ -195,7 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Toggle done via AJAX
     document.querySelectorAll('.js-op-done').forEach((btn) => {
         btn.addEventListener('click', async () => {
             const opId = btn.dataset.opId;
@@ -214,7 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Confirm delete
     document.querySelectorAll('[data-confirm]').forEach((btn) => {
         btn.closest('form')?.addEventListener('submit', (e) => {
             if (!confirm(btn.dataset.confirm)) e.preventDefault();

@@ -80,7 +80,7 @@ class Warranty
     private ?Product $product = null;
 
     #[ORM\Column(type: "integer")]
-    #[Assert\GreaterThanOrEqual(value: "1", message: "Too low value")]
+    #[Assert\GreaterThanOrEqual(value: "0", message: "Too low value")]
     private int $expenses = 0;
 
     #[ORM\Column(type: "text", nullable: true)]

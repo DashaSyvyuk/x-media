@@ -156,7 +156,7 @@
 {% block javascripts %}
     <script src="{{ asset('js/admin2-bulk-select.js') }}" defer></script>
     <script>
-        document.querySelectorAll('[data-confirm]').forEach((button) => {
+        document.querySelectorAll('button[data-confirm]').forEach((button) => {
             button.closest('form')?.addEventListener('submit', (event) => {
                 if (!window.confirm(button.dataset.confirm)) event.preventDefault();
             });

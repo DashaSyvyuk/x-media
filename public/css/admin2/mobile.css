@@ -200,6 +200,23 @@
         border-radius: 16px;
     }
 
+    /* form wrapping header/body/footer breaks Bootstrap flex — restore it */
+    .modal-content > form.modal-form {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: inherit;
+    }
+
+    .modal-content > form.modal-form .modal-body {
+        flex: 1 1 auto;
+        overflow-y: auto;
+    }
+
+    .modal-content > form.modal-form .modal-footer {
+        flex-shrink: 0;
+    }
+
     .app-main.container {
         padding-top: 0.85rem !important;
     }

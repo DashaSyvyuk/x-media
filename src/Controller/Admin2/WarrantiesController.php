@@ -65,6 +65,7 @@ class WarrantiesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->splitFullName($warranty);
             $this->entityManager->persist($warranty);
             $this->entityManager->flush();
 
@@ -109,5 +110,19 @@ class WarrantiesController extends AbstractController
         $warranty->setExpenses(0);
 
         return $warranty;
+    }
+
+    /** Split "Ім'я Прізвище …" from the create modal into name + surname. */
+    private function splitFullName(Warranty $warranty): void
+    {
+        $full = trim($warranty->getName());
+        if ($full === '') {
+            return;
+        }
+
+        $parts = preg_split('/\s+/u', $full, 2) ?: [];
+        $warranty->setName($parts[0] ?? '');
+        $surname = isset($parts[1]) ? trim($parts[1]) : '';
+        $warranty->setSurname($surname !== '' ? $surname : null);
     }
 }

@@ -46,12 +46,32 @@ class StatisticsController extends AbstractController
     }
 
     #[Route('/admin/statistics/finance', name: 'admin2_statistics_finance', methods: ['GET'])]
-    public function finance(): Response
+    public function finance(Request $request): Response
     {
+        $includeDebts = $this->isGranted('ROLE_SUPER_ADMIN');
+        $customRange  = $this->statisticsProvider->parseCustomRange(
+            $request->query->get('from'),
+            $request->query->get('to'),
+        );
+
+        if ($customRange !== null) {
+            [$from, $to] = $customRange;
+            $stats = $this->statisticsProvider->buildFinance(
+                $includeDebts,
+                Admin2StatisticsProvider::PERIOD_CUSTOM,
+                $from,
+                $to,
+            );
+        } else {
+            $period = $this->statisticsProvider->normalizePeriod(
+                (string) $request->query->get('period', Admin2StatisticsProvider::PERIOD_30),
+            );
+            $stats = $this->statisticsProvider->buildFinance($includeDebts, $period);
+        }
+
         return $this->render('admin2/statistics/finance.html.twig', [
-            'stats' => $this->statisticsProvider->buildFinance(
-                $this->isGranted('ROLE_SUPER_ADMIN'),
-            ),
+            'stats'   => $stats,
+            'periods' => Admin2StatisticsProvider::PERIODS,
         ]);
     }
 }

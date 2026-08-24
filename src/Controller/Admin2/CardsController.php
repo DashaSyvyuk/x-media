@@ -6,6 +6,7 @@ use App\Entity\Card;
 use App\Entity\CardOperation;
 use App\Repository\CardOperationRepository;
 use App\Repository\CardRepository;
+use App\Service\Admin2\NbpExchangeRateService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -22,6 +23,7 @@ final class CardsController extends AbstractController
         private readonly CardRepository $cardRepository,
         private readonly CardOperationRepository $operationRepository,
         private readonly EntityManagerInterface $entityManager,
+        private readonly NbpExchangeRateService $exchangeRateService,
     ) {
     }
 
@@ -29,15 +31,19 @@ final class CardsController extends AbstractController
     public function index(): Response
     {
         return $this->render('admin2/cards/index.html.twig', [
-            'cards' => $this->cardRepository->findBy([], ['id' => 'ASC']),
+            'cards' => $this->cardRepository->findAllWithActiveOperationCounts(),
         ]);
     }
 
     #[Route('/admin/cards/all-operations', name: 'admin2_cards_all_operations', methods: ['GET'])]
     public function allOperations(): Response
     {
+        $operations = $this->operationRepository->findAllOrderedDesc();
+
         return $this->render('admin2/cards/all_operations.html.twig', [
-            'operations' => $this->operationRepository->findAllOrderedDesc(),
+            'operations'  => $operations,
+            'plnUahRate'  => $this->exchangeRateService->getPlnToUahRate(),
+            'activeTotal' => $this->sumActiveAmounts($operations),
         ]);
     }
 
@@ -49,10 +55,35 @@ final class CardsController extends AbstractController
             throw $this->createNotFoundException('Картку не знайдено.');
         }
 
+        $months = $this->operationRepository->findGroupedByMonth($card);
+        $flat   = [];
+        foreach ($months as $ops) {
+            foreach ($ops as $op) {
+                $flat[] = $op;
+            }
+        }
+
         return $this->render('admin2/cards/show.html.twig', [
-            'card'   => $card,
-            'months' => $this->operationRepository->findGroupedByMonth($card),
+            'card'        => $card,
+            'months'      => $months,
+            'plnUahRate'  => $this->exchangeRateService->getPlnToUahRate(),
+            'activeTotal' => $this->sumActiveAmounts($flat),
         ]);
+    }
+
+    /**
+     * @param CardOperation[] $operations
+     */
+    private function sumActiveAmounts(array $operations): float
+    {
+        $total = 0.0;
+        foreach ($operations as $op) {
+            if (! $op->isDone()) {
+                $total += $op->getAmountFloat();
+            }
+        }
+
+        return $total;
     }
 
     // ---------- Operations CRUD ----------
