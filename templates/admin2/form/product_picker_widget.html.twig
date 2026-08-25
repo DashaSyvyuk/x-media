@@ -7,15 +7,48 @@
 
 {% block product_picker_widget %}
 {% set showUrl = show_url_template|replace({'/0': '/__ID__'}) %}
+{% set editUrlTemplate = path('admin2_products_edit', {id: 0})|replace({'/0/edit': '/__ID__/edit'}) %}
+{% set selectedTitle = selected_product.title|default('') %}
+{% set selectedCode = selected_product.productCode|default('') %}
+{% set selectedEditUrl = selected_product ? path('admin2_products_edit', {id: selected_product.id}) : '' %}
 <div class="admin2-product-picker"
      data-search-url="{{ search_url }}"
-     data-show-url-template="{{ showUrl }}">
+     data-show-url-template="{{ showUrl }}"
+     data-edit-url-template="{{ editUrlTemplate }}">
     <input type="hidden" {{ block('widget_attributes') }}{% if value is not empty %} value="{{ value }}"{% endif %}>
 
     <div class="admin2-product-picker__selected{% if not selected_product %} d-none{% endif %}">
         <div class="admin2-product-picker__selected-main">
-            <span class="admin2-product-picker__id-badge">#{{ selected_product.id|default('') }}</span>
-            <span class="admin2-product-picker__title">{{ selected_product.title|default('') }}</span>
+            <div class="admin2-product-picker__id-row">
+                <span class="admin2-product-picker__id-badge">#{{ selected_product.id|default('') }}</span>
+                <a href="{{ selectedEditUrl ?: '#' }}"
+                   class="btn btn-sm btn-outline-teal admin2-product-picker__open{% if not selectedEditUrl %} d-none{% endif %}"
+                   target="_blank"
+                   rel="noopener"
+                   title="Відкрити товар">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+            </div>
+            <div class="admin2-product-picker__title-row">
+                <span class="admin2-product-picker__title">{{ selectedTitle }}</span>
+                <button type="button"
+                        class="btn btn-sm btn-outline-secondary order-copy-btn admin2-product-picker__copy{% if selectedTitle is empty %} d-none{% endif %}"
+                        data-copy-text="{{ selectedTitle|json_encode|e('html_attr') }}"
+                        data-copy-title="Скопіювати назву"
+                        title="Скопіювати назву">
+                    <i class="bi bi-type"></i>
+                </button>
+            </div>
+            <div class="admin2-product-picker__code-row{% if selectedCode is empty %} d-none{% endif %}">
+                <span class="admin2-product-picker__code">{{ selectedCode }}</span>
+                <button type="button"
+                        class="btn btn-sm btn-outline-secondary order-copy-btn admin2-product-picker__copy-code{% if selectedCode is empty %} d-none{% endif %}"
+                        data-copy-text="{{ selectedCode|json_encode|e('html_attr') }}"
+                        data-copy-title="Скопіювати код"
+                        title="Скопіювати код продукту">
+                    <i class="bi bi-upc"></i>
+                </button>
+            </div>
         </div>
         <button type="button" class="admin2-product-picker__clear" title="Змінити товар" aria-label="Змінити товар">
             <i class="bi bi-x-lg"></i>

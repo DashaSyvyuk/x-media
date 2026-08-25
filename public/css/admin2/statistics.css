@@ -203,6 +203,10 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.stats-finance-section .debt-stat-grid--turnover {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
 .stats-finance-link {
     color: var(--stats-teal);
     font-size: 0.8125rem;

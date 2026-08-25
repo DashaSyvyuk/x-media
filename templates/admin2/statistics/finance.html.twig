@@ -79,7 +79,7 @@
             </div>
 
             {% if stats.dailyTurnover.totals %}
-                <div class="debt-stat-grid debt-stat-grid--compact mb-3" style="grid-template-columns: repeat({{ min(stats.dailyTurnover.totals|length, 3) }}, minmax(0, 1fr));">
+                <div class="debt-stat-grid debt-stat-grid--compact debt-stat-grid--turnover mb-3">
                     {% for total in stats.dailyTurnover.totals %}
                         <div class="card debt-stat-card">
                             <div class="debt-stat-card__body">

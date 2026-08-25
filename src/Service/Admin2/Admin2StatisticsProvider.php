@@ -259,22 +259,32 @@ final class Admin2StatisticsProvider
         \DateTimeImmutable $from,
         \DateTimeImmutable $to,
     ): array {
-        $rows = $this->connection->fetchAllAssociative(
-            'SELECT DATE(p.created_at) AS day,
-                    cur.code AS currency_code,
-                    COALESCE(SUM(CASE WHEN p.sum > 0 THEN p.sum ELSE 0 END), 0) AS income,
-                    COALESCE(SUM(CASE WHEN p.sum < 0 THEN ABS(p.sum) ELSE 0 END), 0) AS expense
-             FROM circulation_payments p
-             INNER JOIN circulations c ON c.id = p.circulation_id
-             INNER JOIN currency cur ON cur.id = c.currency_id
-             WHERE p.created_at BETWEEN :from AND :to
-             GROUP BY DATE(p.created_at), cur.code
-             ORDER BY day ASC, currency_code ASC',
-            [
-                'from' => $from->format('Y-m-d H:i:s'),
-                'to'   => $to->format('Y-m-d H:i:s'),
-            ],
-        );
+        $empty = [
+            'labels'   => [],
+            'datasets' => [],
+            'totals'   => [],
+        ];
+
+        try {
+            $rows = $this->connection->fetchAllAssociative(
+                'SELECT DATE(p.created_at) AS payment_day,
+                        cur.code AS currency_code,
+                        COALESCE(SUM(CASE WHEN p.sum > 0 THEN p.sum ELSE 0 END), 0) AS income,
+                        COALESCE(SUM(CASE WHEN p.sum < 0 THEN ABS(p.sum) ELSE 0 END), 0) AS expense
+                 FROM circulation_payments p
+                 INNER JOIN circulations c ON c.id = p.circulation_id
+                 INNER JOIN currency cur ON cur.id = c.currency_id
+                 WHERE p.created_at BETWEEN :from AND :to
+                 GROUP BY DATE(p.created_at), cur.id, cur.code
+                 ORDER BY DATE(p.created_at) ASC, cur.code ASC',
+                [
+                    'from' => $from->format('Y-m-d H:i:s'),
+                    'to'   => $to->format('Y-m-d H:i:s'),
+                ],
+            );
+        } catch (\Throwable) {
+            return $empty;
+        }
 
         /** @var array<string, array<string, array{income: int, expense: int}>> $byDayCode */
         $byDayCode = [];
@@ -282,7 +292,16 @@ final class Admin2StatisticsProvider
         $totalsByCode = [];
 
         foreach ($rows as $row) {
-            $day = (string) $row['day'];
+            $dayRaw = $row['payment_day'] ?? null;
+            if ($dayRaw instanceof \DateTimeInterface) {
+                $day = $dayRaw->format('Y-m-d');
+            } else {
+                $day = substr((string) $dayRaw, 0, 10);
+            }
+            if ($day === '' || ! preg_match('/^\d{4}-\d{2}-\d{2}$/', $day)) {
+                continue;
+            }
+
             $code = (string) $row['currency_code'];
             $income = (int) $row['income'];
             $expense = (int) $row['expense'];
@@ -305,11 +324,15 @@ final class Admin2StatisticsProvider
         $labels = [];
         $days = [];
         $cursor = $from;
-        while ($cursor <= $to) {
+        // Cap custom ranges so a huge interval cannot blow memory/time.
+        $maxDays = 400;
+        $dayCount = 0;
+        while ($cursor <= $to && $dayCount < $maxDays) {
             $key = $cursor->format('Y-m-d');
             $days[] = $key;
             $labels[] = $cursor->format('d.m');
             $cursor = $cursor->modify('+1 day');
+            ++$dayCount;
         }
 
         $datasets = [];

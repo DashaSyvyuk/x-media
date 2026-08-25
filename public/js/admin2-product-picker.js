@@ -24,7 +24,7 @@
         }
 
         box.innerHTML = items.map((item) => `
-            <button type="button" class="admin2-product-picker__option" data-id="${item.id}" data-price="${item.price}">
+            <button type="button" class="admin2-product-picker__option" data-id="${item.id}" data-price="${item.price}" data-product-code="${escapeHtml(item.productCode || '')}">
                 <span class="admin2-product-picker__option-id">#${item.id}</span>
                 <span class="admin2-product-picker__option-title">${escapeHtml(item.title)}</span>
                 ${item.productCode ? `<span class="admin2-product-picker__option-code">${escapeHtml(item.productCode)}</span>` : ''}
@@ -46,12 +46,35 @@
         return `${Number(value || 0).toLocaleString('uk-UA')} ₴`;
     }
 
+    function setCopyButton(button, text, title) {
+        if (!button) {
+            return;
+        }
+
+        const value = (text || '').trim();
+        if (!value) {
+            button.classList.add('d-none');
+            button.removeAttribute('data-copy-text');
+            return;
+        }
+
+        button.classList.remove('d-none');
+        button.setAttribute('data-copy-text', JSON.stringify(value));
+        button.setAttribute('data-copy-title', title);
+        button.setAttribute('title', title);
+    }
+
     function setSelected(picker, product, autoFillPrice = true) {
         const hidden = picker.querySelector('input[type="hidden"]');
         const selected = picker.querySelector('.admin2-product-picker__selected');
         const panel = picker.querySelector('.admin2-product-picker__panel');
         const idBadge = picker.querySelector('.admin2-product-picker__id-badge');
         const title = picker.querySelector('.admin2-product-picker__title');
+        const code = picker.querySelector('.admin2-product-picker__code');
+        const codeRow = picker.querySelector('.admin2-product-picker__code-row');
+        const openLink = picker.querySelector('.admin2-product-picker__open');
+        const copyTitleBtn = picker.querySelector('.admin2-product-picker__copy');
+        const copyCodeBtn = picker.querySelector('.admin2-product-picker__copy-code');
         const results = picker.querySelector('.admin2-product-picker__results');
         const queryInput = picker.querySelector('.admin2-product-picker__query-input');
 
@@ -59,9 +82,26 @@
             return;
         }
 
+        const productTitle = product.title || '';
+        const productCode = product.productCode || '';
+        const editTemplate = picker.dataset.editUrlTemplate || '/admin/products/__ID__/edit';
+        const editUrl = editTemplate.replace('__ID__', String(product.id));
+
         hidden.value = product.id;
         idBadge.textContent = `#${product.id}`;
-        title.textContent = product.title;
+        if (title) {
+            title.textContent = productTitle;
+        }
+        if (code) {
+            code.textContent = productCode;
+        }
+        if (openLink) {
+            openLink.href = editUrl;
+            openLink.classList.remove('d-none');
+        }
+        codeRow?.classList.toggle('d-none', !productCode);
+        setCopyButton(copyTitleBtn, productTitle, 'Скопіювати назву');
+        setCopyButton(copyCodeBtn, productCode, 'Скопіювати код продукту');
         selected.classList.remove('d-none');
         panel.classList.add('d-none');
         results?.classList.remove('is-open');
@@ -165,6 +205,7 @@
             setSelected(picker, {
                 id: parseInt(option.dataset.id, 10),
                 title: option.querySelector('.admin2-product-picker__option-title')?.textContent || '',
+                productCode: option.dataset.productCode || '',
                 price: parseInt(option.dataset.price, 10) || 0,
             });
         });
