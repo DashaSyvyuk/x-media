@@ -116,7 +116,10 @@ class WarrantiesController extends AbstractController
             'direction'       => strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC',
             'perPage'         => $perPage,
             'perPageOptions'  => Admin2Paginator::PER_PAGE_OPTIONS,
-            'createForm'      => $createFormView ?? $this->createForm(WarrantyType::class, $this->createWarranty())->createView(),
+            'createForm'      => $createFormView ?? $this->createForm(
+                WarrantyType::class,
+                $this->createWarranty(),
+            )->createView(),
             'openCreateModal' => $openCreateModal,
         ]);
     }
