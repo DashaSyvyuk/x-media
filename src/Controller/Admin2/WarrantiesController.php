@@ -9,6 +9,7 @@ use App\Service\Admin2\Admin2Paginator;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,35 +27,7 @@ class WarrantiesController extends AbstractController
     #[Route('/admin/warranties', name: 'admin2_warranties', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $search    = trim((string) $request->query->get('q', ''));
-        $status    = (string) $request->query->get('status', '');
-        $sort      = (string) $request->query->get('sort', 'id');
-        $direction = (string) $request->query->get('dir', 'DESC');
-        $page      = $request->query->getInt('page', 1);
-        $perPage = $this->admin2Paginator->normalizePerPage(
-            $request->query->getInt('perPage', Admin2Paginator::DEFAULT_PER_PAGE),
-        );
-
-        $query = $this->warrantyRepository->createAdminListQueryBuilder(
-            $search,
-            $status !== '' ? $status : null,
-            $sort,
-            $direction,
-        );
-        $pagination = $this->admin2Paginator->paginate($query, $page, $perPage);
-
-        return $this->render('admin2/warranties/index.html.twig', [
-            'pagination'     => $pagination,
-            'summary'          => $this->warrantyRepository->getStatusSummary($status !== '' ? $status : null),
-            'search'         => $search,
-            'status'         => $status,
-            'statusChoices'  => Warranty::STATUSES,
-            'sort'           => $sort,
-            'direction'      => strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC',
-            'perPage'        => $perPage,
-            'perPageOptions' => Admin2Paginator::PER_PAGE_OPTIONS,
-            'createForm'     => $this->createForm(WarrantyType::class, $this->createWarranty())->createView(),
-        ]);
+        return $this->renderWarrantyIndex($request);
     }
 
     #[Route('/admin/warranties/new', name: 'admin2_warranties_new', methods: ['POST'])]
@@ -73,9 +46,7 @@ class WarrantiesController extends AbstractController
             return $this->redirectToRoute('admin2_warranties');
         }
 
-        $this->addFlash('error', 'Не вдалося створити гарантію. Перевірте форму.');
-
-        return $this->redirectToRoute('admin2_warranties');
+        return $this->renderWarrantyIndex($request, $form->createView(), true);
     }
 
     #[Route('/admin/warranties/{id}/delete', name: 'admin2_warranties_delete', methods: ['POST'])]
@@ -106,8 +77,47 @@ class WarrantiesController extends AbstractController
     {
         $warranty = new Warranty();
         $warranty->setStatus(Warranty::STATUS_NEW);
+        $warranty->setName('');
+        $warranty->setPhone('');
         $warranty->setExpenses(0);
 
         return $warranty;
+    }
+
+    private function renderWarrantyIndex(
+        Request $request,
+        ?FormView $createFormView = null,
+        bool $openCreateModal = false,
+    ): Response {
+        $search    = trim((string) $request->query->get('q', ''));
+        $status    = (string) $request->query->get('status', '');
+        $sort      = (string) $request->query->get('sort', 'id');
+        $direction = (string) $request->query->get('dir', 'DESC');
+        $page      = $request->query->getInt('page', 1);
+        $perPage = $this->admin2Paginator->normalizePerPage(
+            $request->query->getInt('perPage', Admin2Paginator::DEFAULT_PER_PAGE),
+        );
+
+        $query = $this->warrantyRepository->createAdminListQueryBuilder(
+            $search,
+            $status !== '' ? $status : null,
+            $sort,
+            $direction,
+        );
+        $pagination = $this->admin2Paginator->paginate($query, $page, $perPage);
+
+        return $this->render('admin2/warranties/index.html.twig', [
+            'pagination'      => $pagination,
+            'summary'         => $this->warrantyRepository->getStatusSummary($status !== '' ? $status : null),
+            'search'          => $search,
+            'status'          => $status,
+            'statusChoices'   => Warranty::STATUSES,
+            'sort'            => $sort,
+            'direction'       => strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC',
+            'perPage'         => $perPage,
+            'perPageOptions'  => Admin2Paginator::PER_PAGE_OPTIONS,
+            'createForm'      => $createFormView ?? $this->createForm(WarrantyType::class, $this->createWarranty())->createView(),
+            'openCreateModal' => $openCreateModal,
+        ]);
     }
 }

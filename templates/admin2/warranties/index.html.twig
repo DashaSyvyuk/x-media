@@ -135,13 +135,24 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                    {% if createForm.vars.submitted and not createForm.vars.valid %}
+                        <div class="alert alert-danger py-2">
+                            Перевірте форму. Обовʼязкове поле — ID товару.
+                        </div>
+                    {% endif %}
                     <div class="row g-3">
-                        <div class="col-md-6">{{ form_row(createForm.name) }}</div>
-                        <div class="col-md-6">{{ form_row(createForm.surname) }}</div>
-                        <div class="col-md-6">{{ form_row(createForm.phone) }}</div>
-                        <div class="col-md-6">{{ form_row(createForm.email) }}</div>
+                        <div class="col-md-4">{{ form_row(createForm.status) }}</div>
+                        <div class="col-md-4">{{ form_row(createForm.name) }}</div>
+                        <div class="col-md-4">{{ form_row(createForm.surname) }}</div>
+                        <div class="col-md-4">{{ form_row(createForm.phone) }}</div>
+                        <div class="col-md-4">{{ form_row(createForm.email) }}</div>
+                        <div class="col-md-4">{{ form_row(createForm.orderNumber) }}</div>
+                        <div class="col-md-6">{{ form_row(createForm.fromClientTtn) }}</div>
+                        <div class="col-md-6">{{ form_row(createForm.toClientTtn) }}</div>
+                        <div class="col-md-6">{{ form_row(createForm.supplier) }}</div>
+                        <div class="col-md-6">{{ form_row(createForm.supplierOrderNumber) }}</div>
                         <div class="col-md-6">{{ form_row(createForm.product) }}</div>
-                        <div class="col-md-6">{{ form_row(createForm.orderNumber) }}</div>
+                        <div class="col-md-6">{{ form_row(createForm.expenses) }}</div>
                         <div class="col-12">{{ form_row(createForm.reason) }}</div>
                     </div>
                 </div>
@@ -149,12 +160,6 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
                     <button type="submit" class="btn btn-teal">Створити</button>
                 </div>
-                {% do createForm.status.setRendered() %}
-                {% do createForm.fromClientTtn.setRendered() %}
-                {% do createForm.toClientTtn.setRendered() %}
-                {% do createForm.supplierOrderNumber.setRendered() %}
-                {% do createForm.supplier.setRendered() %}
-                {% do createForm.expenses.setRendered() %}
                 {{ form_end(createForm) }}
             </div>
         </div>
@@ -168,5 +173,14 @@
                 if (!window.confirm(button.dataset.confirm)) event.preventDefault();
             });
         });
+
+        {% if openCreateModal|default(false) %}
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalEl = document.getElementById('createWarrantyModal');
+            if (modalEl && window.bootstrap?.Modal) {
+                window.bootstrap.Modal.getOrCreateInstance(modalEl).show();
+            }
+        });
+        {% endif %}
     </script>
 {% endblock %}

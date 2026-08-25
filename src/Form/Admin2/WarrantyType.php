@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class WarrantyType extends AbstractType
 {
@@ -22,12 +23,20 @@ class WarrantyType extends AbstractType
                 'label'   => 'Статус',
                 'choices' => array_flip(Warranty::STATUSES),
             ])
-            ->add('name', TextType::class, ['label' => 'Ім\'я'])
+            ->add('name', TextType::class, [
+                'label'      => 'Ім\'я',
+                'required'   => false,
+                'empty_data' => '',
+            ])
             ->add('surname', TextType::class, [
                 'label'    => 'Прізвище',
                 'required' => false,
             ])
-            ->add('phone', TextType::class, ['label' => 'Телефон'])
+            ->add('phone', TextType::class, [
+                'label'      => 'Телефон',
+                'required'   => false,
+                'empty_data' => '',
+            ])
             ->add('email', TextType::class, [
                 'label'    => 'Email',
                 'required' => false,
@@ -53,12 +62,24 @@ class WarrantyType extends AbstractType
                 'label'        => 'Постачальник',
                 'choice_label' => 'title',
                 'required'     => false,
+                'placeholder'  => '—',
             ])
-            ->add('product', ProductEntityIdType::class, ['label' => 'ID товару'])
-            ->add('expenses', IntegerType::class, ['label' => 'Витрати (грн)'])
+            ->add('product', ProductEntityIdType::class, [
+                'label'       => 'ID товару',
+                'required'    => true,
+                'constraints' => [
+                    new NotNull(message: 'Вкажіть ID товару.'),
+                ],
+            ])
+            ->add('expenses', IntegerType::class, [
+                'label'      => 'Витрати (грн)',
+                'required'   => false,
+                'empty_data' => 0,
+            ])
             ->add('reason', TextareaType::class, [
                 'label'    => 'Причина',
                 'required' => false,
+                'attr'     => ['rows' => 3],
             ])
         ;
     }
