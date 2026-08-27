@@ -5,6 +5,7 @@ namespace App\Controller\Admin2;
 use App\Entity\VendorOrder;
 use App\Entity\VendorOrderItem;
 use App\Form\Admin2\VendorOrderType;
+use App\Repository\OrderFulfillmentLinkRepository;
 use App\Repository\SupplierRepository;
 use App\Repository\VendorOrderRepository;
 use App\Service\Admin2\Admin2Paginator;
@@ -22,6 +23,7 @@ class VendorOrdersController extends AbstractController
     public function __construct(
         private readonly VendorOrderRepository $vendorOrderRepository,
         private readonly SupplierRepository $supplierRepository,
+        private readonly OrderFulfillmentLinkRepository $fulfillmentLinkRepository,
         private readonly Admin2Paginator $admin2Paginator,
         private readonly OrderClipboardFormatter $clipboardFormatter,
         private readonly EntityManagerInterface $entityManager,
@@ -156,10 +158,11 @@ class VendorOrdersController extends AbstractController
                 $this->addFlash('error', 'Додайте хоча б один товар.');
 
                 return $this->render('admin2/vendor_orders/edit.html.twig', [
-                    'vendorOrder' => $order,
-                    'form'        => $form,
-                    'isNew'       => $isNew,
-                    'copyText'    => $isNew ? null : $this->clipboardFormatter->formatVendorOrder($order),
+                    'vendorOrder'     => $order,
+                    'form'            => $form,
+                    'isNew'           => $isNew,
+                    'copyText'        => $isNew ? null : $this->clipboardFormatter->formatVendorOrder($order),
+                    'linkedCustomers' => $this->presentLinkedCustomers($order, $isNew),
                 ]);
             }
 
@@ -174,11 +177,45 @@ class VendorOrdersController extends AbstractController
         }
 
         return $this->render('admin2/vendor_orders/edit.html.twig', [
-            'vendorOrder' => $order,
-            'form'        => $form,
-            'isNew'       => $isNew,
-            'copyText'    => $isNew ? null : $this->clipboardFormatter->formatVendorOrder($order),
+            'vendorOrder'     => $order,
+            'form'            => $form,
+            'isNew'           => $isNew,
+            'copyText'        => $isNew ? null : $this->clipboardFormatter->formatVendorOrder($order),
+            'linkedCustomers' => $this->presentLinkedCustomers($order, $isNew),
         ]);
+    }
+
+    /**
+     * @return list<array{type: string, id: int, label: string, url: string|null}>
+     */
+    private function presentLinkedCustomers(VendorOrder $order, bool $isNew): array
+    {
+        if ($isNew || $order->getId() <= 0) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($this->fulfillmentLinkRepository->findByVendorOrderId($order->getId()) as $link) {
+            if ($link->getOrder() !== null) {
+                $customerOrder = $link->getOrder();
+                $result[] = [
+                    'type'  => 'local',
+                    'id'    => $customerOrder->getId(),
+                    'label' => $customerOrder->getOrderNumber(),
+                    'url'   => $this->generateUrl('admin2_orders_edit', ['id' => $customerOrder->getId()]),
+                ];
+            } elseif ($link->getRozetkaOrderId() !== null) {
+                $rozetkaId = $link->getRozetkaOrderId();
+                $result[] = [
+                    'type'  => 'rozetka',
+                    'id'    => $rozetkaId,
+                    'label' => 'RZ ' . $rozetkaId,
+                    'url'   => $this->generateUrl('admin2_rozetka_orders_show', ['id' => $rozetkaId]),
+                ];
+            }
+        }
+
+        return $result;
     }
 
     private function redirectBack(Request $request): Response

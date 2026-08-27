@@ -11,6 +11,7 @@ use App\Service\Admin2\RozetkaSellerApiClient;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -58,9 +59,7 @@ class OrderProcessingController extends AbstractController
     public function updateStatus(Request $request): Response
     {
         if (! $this->isCsrfTokenValid('fulfillment_action', (string) $request->request->get('_token'))) {
-            $this->addFlash('error', 'Невірний CSRF-токен.');
-
-            return $this->redirectToRoute('admin2_orders_processing');
+            return $this->statusResponse($request, false, 'Невірний CSRF-токен.');
         }
 
         $customerType = (string) $request->request->get('customer_type', '');
@@ -69,45 +68,113 @@ class OrderProcessingController extends AbstractController
         $ttn = trim((string) $request->request->get('ttn', ''));
 
         if ($customerId <= 0 || $status === '') {
-            $this->addFlash('error', 'Невірні дані для зміни статусу.');
-
-            return $this->redirectToRoute('admin2_orders_processing');
+            return $this->statusResponse($request, false, 'Невірні дані для зміни статусу.');
         }
 
         try {
-            if ($customerType === 'local') {
-                $order = $this->orderRepository->find($customerId);
-                if (! $order instanceof Order) {
-                    throw new \RuntimeException('Локальне замовлення не знайдено.');
-                }
+            $customer = $this->applyStatus(
+                $customerType,
+                $customerId,
+                $status,
+                $ttn,
+                $request->request->has('ttn'),
+            );
 
-                if ($order->getStatus() !== $status) {
-                    $this->orderStatusHelper->changeStatus($order, $status);
-                }
-                if ($request->request->has('ttn')) {
-                    $order->setTtn($ttn);
-                }
-                $this->entityManager->flush();
-            } elseif ($customerType === 'rozetka') {
-                if (! $this->rozetkaApiClient->isConfigured()) {
-                    throw new \RuntimeException('Rozetka API не налаштовано.');
-                }
-
-                $payload = ['status' => (int) $status];
-                if ($ttn !== '') {
-                    $payload['ttn'] = $ttn;
-                }
-
-                $this->rozetkaApiClient->updateOrder($customerId, $payload);
-            } else {
-                throw new \RuntimeException('Невідомий тип замовлення.');
-            }
-
-            $this->addFlash('success', 'Замовлення оновлено.');
+            return $this->statusResponse($request, true, 'Замовлення оновлено.', [
+                'customer' => $customer,
+            ]);
         } catch (\Throwable $e) {
-            $this->addFlash('error', $e->getMessage());
+            return $this->statusResponse($request, false, $e->getMessage());
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $extra
+     */
+    private function statusResponse(
+        Request $request,
+        bool $ok,
+        string $message,
+        array $extra = [],
+    ): Response {
+        if (
+            $request->isXmlHttpRequest()
+            || str_contains((string) $request->headers->get('Accept', ''), 'application/json')
+        ) {
+            return new JsonResponse([
+                'ok'      => $ok,
+                'message' => $message,
+                ...$extra,
+            ], $ok ? 200 : 400);
         }
 
+        $this->addFlash($ok ? 'success' : 'error', $message);
+
         return $this->redirectToRoute('admin2_orders_processing');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function applyStatus(
+        string $customerType,
+        int $customerId,
+        string $status,
+        string $ttn,
+        bool $hasTtnField,
+    ): array {
+        if ($customerType === 'local') {
+            $order = $this->orderRepository->find($customerId);
+            if (! $order instanceof Order) {
+                throw new \RuntimeException('Локальне замовлення не знайдено.');
+            }
+
+            if ($order->getStatus() !== $status) {
+                $this->orderStatusHelper->changeStatus($order, $status);
+            }
+            if ($hasTtnField) {
+                $order->setTtn($ttn);
+            }
+            $this->entityManager->flush();
+
+            $statusCode = $order->getStatus();
+            $ttnValue = trim((string) ($order->getTtn() ?? ''));
+
+            return [
+                'type'          => 'local',
+                'id'            => $order->getId(),
+                'statusCode'    => $statusCode,
+                'status'        => Order::STATUSES[$statusCode] ?? $statusCode,
+                'statusTone'    => $this->fulfillmentStatusHelper->toneForLocal($statusCode),
+                'statusChoices' => $this->orderStatusHelper->getAvailableStatuses($order),
+                'ttn'           => $ttnValue,
+                'hasTtn'        => $ttnValue !== '',
+            ];
+        }
+
+        if ($customerType === 'rozetka') {
+            if (! $this->rozetkaApiClient->isConfigured()) {
+                throw new \RuntimeException('Rozetka API не налаштовано.');
+            }
+
+            $statusId = (int) $status;
+            $payload = ['status' => $statusId];
+            if ($ttn !== '') {
+                $payload['ttn'] = $ttn;
+            }
+
+            $this->rozetkaApiClient->updateOrder($customerId, $payload);
+
+            return [
+                'type'       => 'rozetka',
+                'id'         => $customerId,
+                'statusId'   => $statusId,
+                'statusTone' => $this->fulfillmentStatusHelper->toneForRozetka($statusId),
+                'ttn'        => $ttn,
+                'hasTtn'     => $ttn !== '',
+            ];
+        }
+
+        throw new \RuntimeException('Невідомий тип замовлення.');
     }
 }

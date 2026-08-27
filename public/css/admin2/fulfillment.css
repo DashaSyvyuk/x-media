@@ -1,5 +1,8 @@
 .fulfillment-page {
     --fulfillment-teal: #0d9488;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
 }
 
 .fulfillment-board {
@@ -7,6 +10,13 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.25rem;
     align-items: start;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.fulfillment-column {
+    min-width: 0;
+    max-width: 100%;
 }
 
 .processing-board {
@@ -46,12 +56,27 @@
         overflow: visible;
     }
 
+    .fulfillment-column__header,
+    .fulfillment-column__list {
+        min-width: 0;
+        max-width: 100%;
+    }
+
     .fulfillment-status-form .fulfillment-status-select,
     .fulfillment-status-form .fulfillment-ttn-input,
     .fulfillment-link-target {
         width: 100%;
         max-width: 100%;
         font-size: 16px;
+    }
+
+    .fulfillment-card__top {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .fulfillment-card__top-actions {
+        justify-content: flex-start;
     }
 }
 
@@ -110,6 +135,9 @@
     padding: 0.85rem 1rem;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
     transition: box-shadow 0.15s ease, border-color 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
 }
 
 .fulfillment-board--link-hover .fulfillment-card:not(.fulfillment-card--linked-hover) {
@@ -241,10 +269,16 @@
 
 .fulfillment-card__top {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 0.5rem;
     margin-bottom: 0.25rem;
+    min-width: 0;
+}
+
+.fulfillment-card__top > strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .fulfillment-card__top a {
@@ -259,8 +293,12 @@
 .fulfillment-card__top-actions {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 0.35rem;
-    flex-shrink: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .fulfillment-card__status {
@@ -286,6 +324,8 @@
 .fulfillment-card__product {
     font-size: 0.82rem;
     color: #64748b;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .fulfillment-supplier-tip {
@@ -349,6 +389,11 @@
     margin: 0.5rem 0;
     font-size: 0.78rem;
     color: #475569;
+}
+
+.fulfillment-card__items li {
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .fulfillment-card__footer {
@@ -426,5 +471,37 @@
     .delivering-board {
         grid-template-columns: 1fr;
     }
+}
+
+.fulfillment-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 1.25rem;
+    z-index: 1080;
+    transform: translateX(-50%) translateY(120%);
+    opacity: 0;
+    pointer-events: none;
+    max-width: min(92vw, 28rem);
+    padding: 0.7rem 1rem;
+    border-radius: 12px;
+    background: #0f172a;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.28);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.fulfillment-toast.is-visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.fulfillment-toast--error {
+    background: #b91c1c;
+}
+
+.fulfillment-toast--success {
+    background: #0f766e;
 }
 

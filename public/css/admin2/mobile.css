@@ -20,6 +20,21 @@
     padding-bottom: calc(1.5rem + var(--app-safe-bottom));
 }
 
+@media (max-width: 768px) {
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: clip;
+    }
+
+    .app-shell,
+    .app-main {
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: clip;
+    }
+}
+
 .pull-refresh {
     position: fixed;
     top: calc(var(--app-navbar-height, 56px) - 4px);

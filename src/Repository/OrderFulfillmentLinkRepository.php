@@ -22,8 +22,24 @@ class OrderFulfillmentLinkRepository extends ServiceEntityRepository
     public function findByVendorOrderId(int $vendorOrderId): array
     {
         return $this->createQueryBuilder('l')
+            ->leftJoin('l.order', 'o')->addSelect('o')
             ->andWhere('l.vendorOrder = :vendorOrderId')
             ->setParameter('vendorOrderId', $vendorOrderId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return OrderFulfillmentLink[]
+     */
+    public function findByLocalOrderId(int $orderId): array
+    {
+        return $this->createQueryBuilder('l')
+            ->leftJoin('l.vendorOrder', 'vendorOrder')->addSelect('vendorOrder')
+            ->leftJoin('vendorOrder.supplier', 'supplier')->addSelect('supplier')
+            ->andWhere('l.order = :orderId')
+            ->setParameter('orderId', $orderId)
+            ->orderBy('l.id', 'ASC')
             ->getQuery()
             ->getResult();
     }

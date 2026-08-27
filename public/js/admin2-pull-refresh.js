@@ -4,12 +4,10 @@
         return;
     }
 
-    // Pull-to-refresh only starts from the top chrome zone so mid-page
-    // selects / forms never compete with preventDefault.
-    const PULL_ZONE_PX = 96;
-    const ARM_DEAD_ZONE = 24;
-    const THRESHOLD = 80;
-    const MAX_PULL = 130;
+    // Arm only when already at the top of the page. Form controls never start a pull.
+    const ARM_DEAD_ZONE = 36;
+    const THRESHOLD = 84;
+    const MAX_PULL = 140;
 
     const indicator = document.createElement('div');
     indicator.className = 'pull-refresh';
@@ -18,13 +16,17 @@
     document.body.prepend(indicator);
 
     let startY = 0;
+    let startX = 0;
     let armed = false;
     let pulling = false;
     let blocked = false;
     let currentPull = 0;
 
     function pageScrollTop() {
-        return window.scrollY || document.documentElement.scrollTop || 0;
+        return window.scrollY
+            || document.documentElement.scrollTop
+            || document.body.scrollTop
+            || 0;
     }
 
     function sidebarOpen() {
@@ -45,7 +47,8 @@
         return Boolean(target.closest(
             'select, option, input, textarea, button, a, label, summary,'
             + ' .form-select, .form-control, .dropdown-menu, .modal,'
-            + ' [contenteditable="true"], [role="listbox"], [role="combobox"]',
+            + ' .sidebar, .sidebar-backdrop, [contenteditable="true"],'
+            + ' [role="listbox"], [role="combobox"], [data-bs-toggle]',
         ));
     }
 
@@ -69,6 +72,16 @@
         resetIndicator();
     }
 
+    function abortPull() {
+        armed = false;
+        pulling = false;
+        blocked = false;
+        resetIndicator();
+    }
+
+    // Allow ui-recover / selects to cancel a stuck pull gesture.
+    window.__admin2AbortPullRefresh = abortPull;
+
     document.addEventListener('touchstart', (event) => {
         blocked = false;
         armed = false;
@@ -78,18 +91,16 @@
         if (
             sidebarOpen()
             || modalOpen()
-            || pageScrollTop() > 0
+            || pageScrollTop() > 2
             || event.touches.length !== 1
+            || isUnsafeTarget(event.target)
         ) {
             return;
         }
 
         const touch = event.touches[0];
-        if (touch.clientY > PULL_ZONE_PX || isUnsafeTarget(event.target)) {
-            return;
-        }
-
         startY = touch.clientY;
+        startX = touch.clientX;
         armed = true;
     }, { passive: true, capture: true });
 
@@ -98,12 +109,21 @@
             return;
         }
 
-        if (pageScrollTop() > 0 || isUnsafeTarget(event.target)) {
+        if (pageScrollTop() > 2 || isUnsafeTarget(event.target)) {
             disarm();
             return;
         }
 
-        const dy = event.touches[0].clientY - startY;
+        const touch = event.touches[0];
+        const dy = touch.clientY - startY;
+        const dx = Math.abs(touch.clientX - startX);
+
+        // Horizontal swipe / page pan — never hijack.
+        if (dx > dy && dx > 18) {
+            disarm();
+            return;
+        }
+
         if (dy <= ARM_DEAD_ZONE) {
             if (pulling) {
                 setPull(0);
@@ -111,7 +131,7 @@
             return;
         }
 
-        // Confirmed pull-down from the top zone — block native scroll bounce only now.
+        // Confirmed vertical pull from top — block bounce only after dead zone.
         pulling = true;
         event.preventDefault();
         setPull((dy - ARM_DEAD_ZONE) * 0.55);
@@ -139,15 +159,16 @@
     }, { passive: true, capture: true });
 
     document.addEventListener('touchcancel', () => {
-        disarm();
-        blocked = false;
+        abortPull();
     }, { passive: true, capture: true });
 
-    // If a native picker opens, immediately abort any pending pull.
     document.addEventListener('focusin', (event) => {
-        if (event.target instanceof HTMLSelectElement || event.target instanceof HTMLInputElement) {
-            disarm();
-            blocked = false;
+        if (
+            event.target instanceof HTMLSelectElement
+            || event.target instanceof HTMLInputElement
+            || event.target instanceof HTMLTextAreaElement
+        ) {
+            abortPull();
         }
     }, true);
 })();
