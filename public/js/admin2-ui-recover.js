@@ -13,12 +13,19 @@
     };
 
     const recoverUi = () => {
+        if (typeof window.__admin2AbortPullRefresh === 'function') {
+            window.__admin2AbortPullRefresh();
+        }
+
         document.body.classList.remove('modal-open');
         document.body.style.removeProperty('overflow');
         document.body.style.removeProperty('overflow-y');
+        document.body.style.removeProperty('overflow-x');
         document.body.style.removeProperty('padding-right');
         document.body.style.removeProperty('touch-action');
         document.documentElement.style.removeProperty('overflow');
+        document.documentElement.style.removeProperty('overflow-x');
+        document.documentElement.style.removeProperty('touch-action');
 
         document.querySelectorAll('.modal-backdrop').forEach((el) => el.remove());
 
@@ -37,6 +44,12 @@
             document.getElementById('sidebarBackdrop')?.setAttribute('aria-hidden', 'true');
         }
 
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+        if (sidebarBackdrop && !document.querySelector('.sidebar.open')) {
+            sidebarBackdrop.classList.remove('show');
+            sidebarBackdrop.setAttribute('aria-hidden', 'true');
+        }
+
         document.querySelectorAll('form[data-submitting="1"]').forEach((form) => {
             delete form.dataset.submitting;
             form.removeAttribute('aria-busy');
@@ -46,36 +59,46 @@
             });
         });
 
-        // Re-enable selects that some WebViews leave inert after overlay/bfcache.
+        // Re-enable selects that some WebViews leave inert after overlay/bfcache/AJAX.
         document.querySelectorAll('select').forEach((select) => {
             if (select.style.pointerEvents === 'none') {
                 select.style.removeProperty('pointer-events');
             }
             select.style.removeProperty('touch-action');
+            // Transient AJAX lock without an in-flight marker — unlock.
+            if (select.disabled && select.dataset.ajaxLock === '1' && !select.dataset.ajaxPending) {
+                select.disabled = false;
+                delete select.dataset.ajaxLock;
+            }
         });
     };
+
+    window.__admin2RecoverUi = recoverUi;
 
     window.addEventListener('pageshow', recoverUi);
 
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') {
-            // Always recover on return — orphan check alone misses some freezes.
-            if (hasOrphanOverlay() || document.querySelector('.modal-backdrop')) {
-                recoverUi();
-            }
+            // Always recover on return — orphan check alone misses freezes.
+            recoverUi();
         }
     });
 
     // Safety: if user taps a select and something still blocks it, clear overlays.
-    document.addEventListener('pointerdown', (event) => {
+    const onSelectIntent = (event) => {
         const select = event.target instanceof Element
             ? event.target.closest('select, .form-select')
             : null;
         if (!select) {
             return;
         }
-        if (hasOrphanOverlay() || document.querySelector('.modal-backdrop:not(.show)')) {
+        if (hasOrphanOverlay() || document.querySelector('.modal-backdrop')) {
             recoverUi();
+        } else if (typeof window.__admin2AbortPullRefresh === 'function') {
+            window.__admin2AbortPullRefresh();
         }
-    }, true);
+    };
+
+    document.addEventListener('pointerdown', onSelectIntent, true);
+    document.addEventListener('touchstart', onSelectIntent, true);
 })();

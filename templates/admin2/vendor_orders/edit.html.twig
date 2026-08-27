@@ -75,6 +75,30 @@
             {{ form_end(form) }}
 
             {% if not isNew %}
+                <div class="vendor-linked-customers mt-4">
+                    <h2 class="h6 mb-2">Привʼязані замовлення клієнтів</h2>
+                    {% if linkedCustomers|default([]) is empty %}
+                        <p class="text-muted small mb-0">Немає привʼязок в управлінні замовленнями</p>
+                    {% else %}
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for linked in linkedCustomers %}
+                                {% if linked.url %}
+                                    <a href="{{ linked.url }}" class="badge text-bg-light border text-decoration-none px-3 py-2">
+                                        {% if linked.type == 'rozetka' %}
+                                            <span class="text-success">Rozetka</span>
+                                        {% else %}
+                                            Наше
+                                        {% endif %}
+                                        · <strong>{{ linked.label }}</strong>
+                                    </a>
+                                {% else %}
+                                    <span class="badge text-bg-light border px-3 py-2">{{ linked.label }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
                 <form method="post"
                       action="{{ path('admin2_vendor_orders_delete', {id: vendorOrder.id}) }}"
                       class="mt-3 text-end">

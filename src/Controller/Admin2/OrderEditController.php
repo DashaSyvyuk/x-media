@@ -3,7 +3,9 @@
 namespace App\Controller\Admin2;
 
 use App\Entity\Order;
+use App\Entity\VendorOrder;
 use App\Form\Admin2\OrderType;
+use App\Repository\OrderFulfillmentLinkRepository;
 use App\Repository\OrderRepository;
 use App\Service\Admin2\OrderClipboardFormatter;
 use App\Service\Admin2\OrderStatusHelper;
@@ -20,6 +22,7 @@ class OrderEditController extends AbstractController
 {
     public function __construct(
         private readonly OrderRepository $orderRepository,
+        private readonly OrderFulfillmentLinkRepository $fulfillmentLinkRepository,
         private readonly OrderStatusHelper $orderStatusHelper,
         private readonly OrderClipboardFormatter $clipboardFormatter,
         private readonly OrderNumber $orderNumber,
@@ -84,11 +87,51 @@ class OrderEditController extends AbstractController
         }
 
         return $this->render('admin2/orders/edit.html.twig', [
-            'order'    => $order,
-            'form'     => $form,
-            'isNew'    => false,
-            'copyText' => $this->clipboardFormatter->formatLocalOrder($order),
+            'order'              => $order,
+            'form'               => $form,
+            'isNew'              => false,
+            'copyText'           => $this->clipboardFormatter->formatLocalOrder($order),
+            'linkedVendorOrders' => $this->presentLinkedVendorOrders($order),
         ]);
+    }
+
+    /**
+     * @return list<array{
+     *     id: int,
+     *     supplier: string,
+     *     supplierOrderNumber: string,
+     *     status: string,
+     *     statusLabel: string,
+     *     productTitle: string,
+     *     price: int,
+     *     editUrl: string|null
+     * }>
+     */
+    private function presentLinkedVendorOrders(Order $order): array
+    {
+        $canOpenVendor = $this->isGranted('ROLE_SUPER_ADMIN');
+        $result = [];
+
+        foreach ($this->fulfillmentLinkRepository->findByLocalOrderId($order->getId()) as $link) {
+            $vendorOrder = $link->getVendorOrder();
+            $status = $vendorOrder->getStatus();
+            $supplierNumber = trim($vendorOrder->getSupplierOrderNumber());
+
+            $result[] = [
+                'id'                  => $vendorOrder->getId(),
+                'supplier'            => $vendorOrder->getSupplier()->getTitle(),
+                'supplierOrderNumber' => $supplierNumber,
+                'status'              => $status,
+                'statusLabel'         => VendorOrder::STATUSES[$status] ?? $status,
+                'productTitle'        => $vendorOrder->getProductTitle(),
+                'price'               => $vendorOrder->getPrice(),
+                'editUrl'             => $canOpenVendor
+                    ? $this->generateUrl('admin2_vendor_orders_edit', ['id' => $vendorOrder->getId()])
+                    : null,
+            ];
+        }
+
+        return $result;
     }
 
     private function recalculateTotal(Order $order): void

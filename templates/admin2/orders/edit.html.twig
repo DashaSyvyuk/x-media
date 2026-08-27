@@ -1,5 +1,6 @@
 {% extends 'admin2/layouts/base.html.twig' %}
 {% import 'admin2/orders/_macros.html.twig' as order_macros %}
+{% import 'admin2/vendor_orders/_macros.html.twig' as vendor_macros %}
 
 {% block title %}{{ isNew|default(false) ? 'Нове замовлення' : 'Замовлення #' ~ order.orderNumber }} — X-media Admin{% endblock %}
 
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/admin2/product-edit.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin2/product-picker.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin2/orders.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin2/vendor-orders.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -133,6 +135,54 @@
                 </div>
 
                 {% if not isNew|default(false) %}
+                    <div class="card product-edit-section shadow-sm">
+                        <div class="card-header">Замовлення постачальника</div>
+                        <div class="card-body">
+                            {% if linkedVendorOrders|default([]) is empty %}
+                                <p class="text-muted small mb-0">Не привʼязано в управлінні замовленнями</p>
+                            {% else %}
+                                <div class="order-linked-vendors">
+                                    {% for vendor in linkedVendorOrders %}
+                                        <div class="order-linked-vendor">
+                                            <div class="order-linked-vendor__head">
+                                                {% if vendor.editUrl %}
+                                                    <a href="{{ vendor.editUrl }}" class="order-linked-vendor__title">
+                                                        #{{ vendor.id }}
+                                                        {% if vendor.supplierOrderNumber %}
+                                                            · {{ vendor.supplierOrderNumber }}
+                                                        {% endif %}
+                                                    </a>
+                                                {% else %}
+                                                    <strong class="order-linked-vendor__title">
+                                                        #{{ vendor.id }}
+                                                        {% if vendor.supplierOrderNumber %}
+                                                            · {{ vendor.supplierOrderNumber }}
+                                                        {% endif %}
+                                                    </strong>
+                                                {% endif %}
+                                                {{ vendor_macros.status_badge(vendor.status) }}
+                                            </div>
+                                            <div class="order-linked-vendor__meta text-muted small">
+                                                {{ vendor.supplier }}
+                                            </div>
+                                            {% if vendor.productTitle %}
+                                                <div class="order-linked-vendor__product small">
+                                                    {{ vendor.productTitle|slice(0, 90) }}{% if vendor.productTitle|length > 90 %}…{% endif %}
+                                                </div>
+                                            {% endif %}
+                                            <div class="order-linked-vendor__footer">
+                                                <strong>{{ order_macros.money(vendor.price) }}</strong>
+                                                {% if vendor.editUrl %}
+                                                    <a href="{{ vendor.editUrl }}" class="small">Відкрити →</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
                     <div class="card product-edit-section shadow-sm">
                         <div class="card-header">Деталі</div>
                         <div class="card-body small">

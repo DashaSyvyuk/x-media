@@ -17,7 +17,10 @@
             <p class="text-muted mb-0 small">Замовлення клієнтів (наші + Rozetka) та постачальників. Пов'язуйте картки однаковим кольором.</p>
         </div>
 
-        <div class="fulfillment-board" data-link-peers="{{ linkPeerMap|json_encode|e('html_attr') }}">
+        <div class="fulfillment-board"
+             data-link-peers="{{ linkPeerMap|json_encode|e('html_attr') }}"
+             data-unlink-url="{{ path('admin2_fulfillment_unlink') }}"
+             data-csrf-token="{{ csrf_token('fulfillment_action') }}">
             <div class="fulfillment-column">
                 <div class="fulfillment-column__header">
                     <h2>Клієнтські замовлення</h2>
