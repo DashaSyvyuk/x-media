@@ -4,7 +4,6 @@
         return;
     }
 
-    const isManagementBoard = Boolean(board.querySelector('.fulfillment-card--vendor'));
     const unlinkUrl = board.dataset.unlinkUrl || '/admin/fulfillment/unlink';
     const csrfToken = board.dataset.csrfToken || '';
 
@@ -47,6 +46,38 @@
         };
     })();
 
+    // Keep list order frozen after AJAX — only colors/labels change until manual refresh.
+    const withStableScroll = (fn) => {
+        const windowX = window.scrollX;
+        const windowY = window.scrollY;
+        const lists = [...document.querySelectorAll('.fulfillment-column__list')].map((list) => ({
+            list,
+            top: list.scrollTop,
+            left: list.scrollLeft,
+        }));
+
+        const result = fn();
+
+        const restore = () => {
+            lists.forEach(({ list, top, left }) => {
+                list.scrollTop = top;
+                list.scrollLeft = left;
+            });
+            window.scrollTo(windowX, windowY);
+        };
+
+        if (result && typeof result.then === 'function') {
+            return result.finally(() => {
+                restore();
+                window.requestAnimationFrame(restore);
+            });
+        }
+
+        restore();
+        window.requestAnimationFrame(restore);
+        return result;
+    };
+
     const postForm = async (url, formOrData) => {
         const body = formOrData instanceof FormData
             ? formOrData
@@ -60,6 +91,7 @@
                 'X-Requested-With': 'XMLHttpRequest',
             },
             credentials: 'same-origin',
+            redirect: 'follow',
         });
 
         let payload = {};
@@ -88,7 +120,7 @@
                 if (!dot) {
                     dot = document.createElement('span');
                     dot.className = 'fulfillment-card__link-dot';
-                    card.prepend(dot);
+                    card.appendChild(dot);
                 }
                 dot.style.background = color;
             } else {
@@ -193,15 +225,7 @@
 
         const hasTtn = Boolean(customer.hasTtn ?? (customer.ttn || '').trim());
         card.classList.toggle('fulfillment-card--has-ttn', hasTtn);
-
-        // Management board only keeps new/processing — leave others until manual refresh.
-        if (isManagementBoard
-            && customer.statusTone
-            && customer.statusTone !== 'new'
-            && customer.statusTone !== 'processing'
-        ) {
-            // keep card; user asked not to re-sort / reshuffle immediately
-        }
+        // Never move/remove cards on status change — order updates only on manual refresh.
     };
 
     const escapeHtml = (text) => String(text)
@@ -322,16 +346,18 @@
             select.dataset.ajaxPending = '1';
             select.disabled = true;
             try {
-                const payload = await postForm(form.action, data);
-                const vendorCard = findVendorCard(select.dataset.vendorId);
-                if (vendorCard && payload.linked) {
-                    addLinkedCustomerRow(vendorCard, {
-                        ...payload.linked,
-                        vendorId: select.dataset.vendorId,
-                    });
-                }
-                applyBoardState(payload.board);
-                toast(payload.message || 'Пов\'язано');
+                await withStableScroll(async () => {
+                    const payload = await postForm(form.action, data);
+                    const vendorCard = findVendorCard(select.dataset.vendorId);
+                    if (vendorCard && payload.linked) {
+                        addLinkedCustomerRow(vendorCard, {
+                            ...payload.linked,
+                            vendorId: select.dataset.vendorId,
+                        });
+                    }
+                    applyBoardState(payload.board);
+                    toast(payload.message || 'Пов\'язано');
+                });
             } catch (error) {
                 toast(error.message || 'Не вдалося пов\'язати', 'error');
             } finally {
@@ -349,6 +375,7 @@
         const unlinkBtn = event.target.closest('.fulfillment-unlink-btn');
         if (unlinkBtn) {
             event.preventDefault();
+            event.stopPropagation();
             const form = unlinkBtn.closest('form');
             const vendorId = unlinkBtn.dataset.vendorId
                 || form?.querySelector('[name="vendor_order_id"]')?.value
@@ -368,13 +395,15 @@
 
             unlinkBtn.disabled = true;
             try {
-                const payload = await postForm(form?.action || unlinkUrl, data);
-                const vendorCard = findVendorCard(vendorId);
-                if (vendorCard && payload.unlinked) {
-                    removeLinkedCustomerRow(vendorCard, payload.unlinked);
-                }
-                applyBoardState(payload.board);
-                toast(payload.message || 'Прив\'язку знято');
+                await withStableScroll(async () => {
+                    const payload = await postForm(form?.action || unlinkUrl, data);
+                    const vendorCard = findVendorCard(vendorId);
+                    if (vendorCard && payload.unlinked) {
+                        removeLinkedCustomerRow(vendorCard, payload.unlinked);
+                    }
+                    applyBoardState(payload.board);
+                    toast(payload.message || 'Прив\'язку знято');
+                });
             } catch (error) {
                 toast(error.message || 'Не вдалося відв\'язати', 'error');
             } finally {
@@ -386,6 +415,7 @@
         const completeBtn = event.target.closest('.fulfillment-complete-btn');
         if (completeBtn) {
             event.preventDefault();
+            event.stopPropagation();
             const form = completeBtn.closest('form');
             if (!form) {
                 return;
@@ -393,16 +423,19 @@
 
             completeBtn.disabled = true;
             try {
-                const payload = await postForm(form.action, form);
-                const vendorCard = completeBtn.closest('.fulfillment-card--vendor');
-                const column = vendorCard?.closest('.fulfillment-column');
-                vendorCard?.remove();
-                updateColumnBadge(column);
-                (payload.updatedCustomers || []).forEach(applyCustomerState);
-                applyBoardState(payload.board);
-                refreshCardIndex();
-                toast(payload.message || 'Закрито');
-                (payload.warnings || []).forEach((warning) => toast(warning, 'error'));
+                await withStableScroll(async () => {
+                    const payload = await postForm(form.action, form);
+                    const vendorCard = completeBtn.closest('.fulfillment-card--vendor');
+                    const column = vendorCard?.closest('.fulfillment-column');
+                    // Only the completed vendor card leaves the board; customer cards stay put.
+                    vendorCard?.remove();
+                    updateColumnBadge(column);
+                    (payload.updatedCustomers || []).forEach(applyCustomerState);
+                    applyBoardState(payload.board);
+                    refreshCardIndex();
+                    toast(payload.message || 'Закрито');
+                    (payload.warnings || []).forEach((warning) => toast(warning, 'error'));
+                });
             } catch (error) {
                 toast(error.message || 'Не вдалося закрити', 'error');
             } finally {
@@ -417,11 +450,13 @@
         }
         form.dataset.submitting = '1';
         try {
-            const payload = await postForm(form.action, form);
-            if (payload.customer) {
-                applyCustomerState(payload.customer);
-            }
-            toast(payload.message || 'Оновлено');
+            await withStableScroll(async () => {
+                const payload = await postForm(form.action, form);
+                if (payload.customer) {
+                    applyCustomerState(payload.customer);
+                }
+                toast(payload.message || 'Оновлено');
+            });
         } catch (error) {
             toast(error.message || 'Не вдалося оновити', 'error');
         } finally {

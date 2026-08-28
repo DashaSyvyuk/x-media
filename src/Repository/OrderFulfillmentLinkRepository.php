@@ -64,14 +64,13 @@ class OrderFulfillmentLinkRepository extends ServiceEntityRepository
         $links = $this->findAllLinks();
         $map = [];
         $palette = ['#0d9488', '#2563eb', '#d97706', '#7c3aed', '#db2777', '#059669', '#dc2626', '#0891b2'];
-        $paletteIndex = 0;
         $groupColors = [];
 
         foreach ($links as $link) {
             $group = $link->getLinkGroup();
             if (! isset($groupColors[$group])) {
-                $groupColors[$group] = $palette[$paletteIndex % count($palette)];
-                ++$paletteIndex;
+                // Stable color per group — adding/removing other links must not reshuffle colors.
+                $groupColors[$group] = $palette[abs(crc32($group)) % count($palette)];
             }
 
             $color = $groupColors[$group];

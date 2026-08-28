@@ -18,6 +18,23 @@
     border: 1px solid #e2e8f0;
     border-radius: 12px;
     background: #f8fafc;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.admin2-product-picker__id-row,
+.admin2-product-picker__title-row,
+.admin2-product-picker__code-row {
+    min-width: 0;
+    max-width: 100%;
+}
+
+@media (max-width: 992px) {
+    .admin2-product-picker__title-row,
+    .admin2-product-picker__id-row,
+    .admin2-product-picker__code-row {
+        flex-wrap: wrap;
+    }
 }
 
 .admin2-product-picker__selected-main {

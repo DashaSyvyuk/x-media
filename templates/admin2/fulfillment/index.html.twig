@@ -65,9 +65,9 @@
                                         <i class="bi bi-palette" aria-hidden="true"></i>
                                     </button>
                                     {{ order_macros.copy_button(order.copyText|default(null)) }}
-                                    <form method="post" action="{{ path('admin2_fulfillment_vendor_complete', {id: order.id}) }}" class="d-inline">
+                                    <form method="post" action="{{ path('admin2_fulfillment_vendor_complete', {id: order.id}) }}" class="d-inline" onsubmit="return false;">
                                         <input type="hidden" name="_token" value="{{ csrf_token('fulfillment_action') }}">
-                                        <button type="submit" class="btn btn-sm btn-outline-success fulfillment-complete-btn" title="Привезено — закрити">
+                                        <button type="button" class="btn btn-sm btn-outline-success fulfillment-complete-btn" title="Привезено — закрити">
                                             <i class="bi bi-check-lg"></i>
                                         </button>
                                     </form>
@@ -103,12 +103,17 @@
                                         {% for linked in order.linkedCustomers %}
                                             <div class="fulfillment-link-current">
                                                 <span class="small text-muted"><strong>{{ linked.label }}</strong></span>
-                                                <form method="post" action="{{ path('admin2_fulfillment_unlink') }}" class="d-inline">
+                                                <form method="post" action="{{ path('admin2_fulfillment_unlink') }}" class="d-inline" onsubmit="return false;">
                                                     <input type="hidden" name="_token" value="{{ csrf_token('fulfillment_action') }}">
                                                     <input type="hidden" name="vendor_order_id" value="{{ order.id }}">
                                                     <input type="hidden" name="customer_type" value="{{ linked.type }}">
                                                     <input type="hidden" name="customer_id" value="{{ linked.id }}">
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger fulfillment-unlink-btn" title="Відв'язати">
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-outline-danger fulfillment-unlink-btn"
+                                                            title="Відв'язати"
+                                                            data-vendor-id="{{ order.id }}"
+                                                            data-customer-type="{{ linked.type }}"
+                                                            data-customer-id="{{ linked.id }}">
                                                         <i class="bi bi-x-lg"></i>
                                                     </button>
                                                 </form>
