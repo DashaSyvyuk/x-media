@@ -83,3 +83,33 @@
         <i class="bi bi-file-earmark-text"></i>
     </button>
 {% endmacro %}
+
+{% macro phone_call_link(phone, title) %}
+    {% set raw = phone|default('')|trim %}
+    {% if raw %}
+        {% set tel = raw|replace({' ': '', '-': '', '(': '', ')': ''}) %}
+        {% if tel starts with '0' %}
+            {% set tel = '+38' ~ tel %}
+        {% elseif not (tel starts with '+') %}
+            {% set tel = '+' ~ tel %}
+        {% endif %}
+        <a href="tel:{{ tel|e('html_attr') }}"
+           class="btn btn-sm btn-outline-teal order-phone-call-btn"
+           title="{{ title|default('Зателефонувати') }}"
+           aria-label="{{ title|default('Зателефонувати') }} {{ raw|e('html_attr') }}">
+            <i class="bi bi-telephone" aria-hidden="true"></i>
+        </a>
+    {% endif %}
+{% endmacro %}
+
+{% macro phone_with_call(phone, title) %}
+    {% set raw = phone|default('')|trim %}
+    {% if raw %}
+        <span class="order-phone-inline">
+            <span>{{ raw }}</span>
+            {{ _self.phone_call_link(raw, title) }}
+        </span>
+    {% else %}
+        —
+    {% endif %}
+{% endmacro %}
