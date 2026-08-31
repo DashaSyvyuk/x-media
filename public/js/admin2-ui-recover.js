@@ -73,18 +73,48 @@
         });
     };
 
+    const softRecoverSelects = () => {
+        if (typeof window.__admin2AbortPullRefresh === 'function') {
+            window.__admin2AbortPullRefresh();
+        }
+
+        document.querySelectorAll('select').forEach((select) => {
+            if (select.style.pointerEvents === 'none') {
+                select.style.removeProperty('pointer-events');
+            }
+            select.style.removeProperty('touch-action');
+            if (select.disabled && select.dataset.ajaxLock === '1' && !select.dataset.ajaxPending) {
+                select.disabled = false;
+                delete select.dataset.ajaxLock;
+            }
+        });
+    };
+
     window.__admin2RecoverUi = recoverUi;
 
-    window.addEventListener('pageshow', recoverUi);
-
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-            // Always recover on return — orphan check alone misses freezes.
+    window.addEventListener('pageshow', (event) => {
+        // Full recover only after bfcache restore or when overlays are stuck.
+        if (event.persisted || hasOrphanOverlay()) {
             recoverUi();
+        } else {
+            softRecoverSelects();
         }
     });
 
-    // Safety: if user taps a select and something still blocks it, clear overlays.
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState !== 'visible') {
+            return;
+        }
+        // Never tear down an open invoice/receipt modal just because the app resumed.
+        if (hasOrphanOverlay()) {
+            recoverUi();
+        } else {
+            softRecoverSelects();
+        }
+    });
+
+    // Safety: if user taps a select and a stuck overlay blocks it, clear orphans only.
+    // Do NOT close a legitimately open Bootstrap modal (it also has .modal-backdrop).
     const onSelectIntent = (event) => {
         const select = event.target instanceof Element
             ? event.target.closest('select, .form-select')
@@ -92,10 +122,10 @@
         if (!select) {
             return;
         }
-        if (hasOrphanOverlay() || document.querySelector('.modal-backdrop')) {
+        if (hasOrphanOverlay()) {
             recoverUi();
-        } else if (typeof window.__admin2AbortPullRefresh === 'function') {
-            window.__admin2AbortPullRefresh();
+        } else {
+            softRecoverSelects();
         }
     };
 
