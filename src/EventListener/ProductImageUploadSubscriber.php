@@ -9,6 +9,7 @@ use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
 
 class ProductImageUploadSubscriber
@@ -22,6 +23,7 @@ class ProductImageUploadSubscriber
         private BunnyStorageClient $bunny,
         private string $uploadDir,
         private ?LoggerInterface $logger = null,
+        private ?RequestStack $requestStack = null,
     ) {
     }
 
@@ -91,6 +93,24 @@ class ProductImageUploadSubscriber
                 'message' => $e->getMessage(),
                 'file'    => $entity->getImageUrl(),
             ]);
+            $this->flashBunnyFailure($entity->getImageUrl(), $e->getMessage());
         }
+    }
+
+    private function flashBunnyFailure(?string $fileName, string $message): void
+    {
+        $request = $this->requestStack?->getCurrentRequest();
+        if ($request === null || ! $request->hasSession()) {
+            return;
+        }
+
+        $request->getSession()->getFlashBag()->add(
+            'warning',
+            sprintf(
+                'Зображення «%s» збережено, але не вдалося завантажити на CDN (%s). Локальна копія залишена для повторної спроби.',
+                $fileName ?: 'файл',
+                $message
+            )
+        );
     }
 }

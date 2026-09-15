@@ -11,6 +11,8 @@ use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use Psr\Log\LoggerInterface;
+use Throwable;
 
 class ImageUploadSubscriber
 {
@@ -36,7 +38,8 @@ class ImageUploadSubscriber
     public function __construct(
         private BunnyStorageClient $bunny,
         private string $publicImagesDir,
-        private string $cdnUrl
+        private string $cdnUrl,
+        private ?LoggerInterface $logger = null,
     ) {
     }
 
@@ -148,12 +151,15 @@ class ImageUploadSubscriber
 
         try {
             $this->bunny->upload($localPath, $remotePath);
-        } finally {
-            // Always remove the local copy: the file is git-ignored, lives
-            // only as a temporary staging area for EasyAdmin's upload, and
-            // must not be served from the app server. `@unlink` keeps the
-            // listener silent if e.g. another worker already purged it.
+            // Remove local staging copy only after a successful CDN upload.
+            // On failure keep the file so admin preview / retry still works.
             @unlink($localPath);
+        } catch (Throwable $e) {
+            $this->logger?->error('Entity image Bunny upload failed: {message}', [
+                'message' => $e->getMessage(),
+                'file'    => $fileName,
+                'folder'  => $config['folder'],
+            ]);
         }
     }
 

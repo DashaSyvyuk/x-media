@@ -133,9 +133,17 @@ class ProductImage
             return null;
         }
 
+        $localRelative = '/images/products/' . $this->imageUrl;
+        // Prefer local staging file when Bunny upload failed or is still pending.
+        // DOCUMENT_ROOT is public/ under nginx/php-fpm.
+        $documentRoot = (string) ($_SERVER['DOCUMENT_ROOT'] ?? '');
+        if ($documentRoot !== '' && is_file($documentRoot . $localRelative)) {
+            return $localRelative;
+        }
+
         $cdn = $_ENV['BUNNY_CDN_URL'] ?? $_SERVER['BUNNY_CDN_URL'] ?? '';
         if ($cdn === '') {
-            return '/images/products/' . $this->imageUrl;
+            return $localRelative;
         }
 
         return rtrim((string) $cdn, '/') . '/products/' . $this->imageUrl;
