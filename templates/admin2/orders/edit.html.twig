@@ -69,7 +69,7 @@
                                     <div class="order-phone-field__row">
                                         {{ form_widget(form.phone) }}
                                         {% if not isNew|default(false) %}
-                                            {{ order_macros.phone_call_link(order.phone) }}
+                                            {{ order_macros.phone_actions(order.phone) }}
                                         {% endif %}
                                     </div>
                                     {{ form_errors(form.phone) }}

@@ -102,12 +102,37 @@
     {% endif %}
 {% endmacro %}
 
+{% macro phone_copy_button(phone, title) %}
+    {% set raw = phone|default('')|trim %}
+    {% if raw %}
+        {% set copyTitle = title|default('Копіювати номер') %}
+        <button type="button"
+                class="btn btn-sm btn-outline-secondary order-phone-call-btn order-copy-btn"
+                data-copy-text="{{ raw|json_encode|e('html_attr') }}"
+                data-copy-title="{{ copyTitle|e('html_attr') }}"
+                title="{{ copyTitle }}"
+                aria-label="{{ copyTitle }} {{ raw|e('html_attr') }}">
+            <i class="bi bi-clipboard" aria-hidden="true"></i>
+        </button>
+    {% endif %}
+{% endmacro %}
+
+{% macro phone_actions(phone, callTitle, copyTitle) %}
+    {% set raw = phone|default('')|trim %}
+    {% if raw %}
+        <span class="order-phone-actions">
+            {{ _self.phone_call_link(raw, callTitle) }}
+            {{ _self.phone_copy_button(raw, copyTitle) }}
+        </span>
+    {% endif %}
+{% endmacro %}
+
 {% macro phone_with_call(phone, title) %}
     {% set raw = phone|default('')|trim %}
     {% if raw %}
         <span class="order-phone-inline">
             <span>{{ raw }}</span>
-            {{ _self.phone_call_link(raw, title) }}
+            {{ _self.phone_actions(raw, title) }}
         </span>
     {% else %}
         —
