@@ -637,6 +637,13 @@ a.order-linked-vendor__title:hover {
     padding: 0;
 }
 
+.order-phone-actions {
+    display: inline-flex;
+    align-items: stretch;
+    flex-shrink: 0;
+    gap: 0.35rem;
+}
+
 .order-phone-inline {
     display: inline-flex;
     align-items: center;
