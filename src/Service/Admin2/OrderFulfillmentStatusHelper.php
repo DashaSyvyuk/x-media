@@ -39,7 +39,8 @@ final class OrderFulfillmentStatusHelper
             1 => 'new',
             26 => 'processing',
             self::ROZETKA_STATUS_CONFIRMED => 'packing',
-            61, 62, 63, 64, 65, 66, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 => 'shipping',
+            // In transit only — completed statuses (6–12, 40…) must not look like "shipping".
+            61, 62, 63, 64, 65, 66, 3, 4, 5 => 'shipping',
             default => 'default',
         };
     }

@@ -22,7 +22,10 @@
         <div class="card-body p-3 border-bottom">
             <form method="get" class="products-toolbar">
                 <div class="products-toolbar__search">
-                    <input type="search" name="q" value="{{ search }}" class="form-control" placeholder="Номер, товар, постачальник...">
+                    <input type="search" name="q" value="{{ search }}" class="form-control" placeholder="ID, № постачальника, товар, постачальник...">
+                    <input type="hidden" name="sort" value="{{ sort }}">
+                    <input type="hidden" name="dir" value="{{ direction }}">
+                    <input type="hidden" name="perPage" value="{{ perPage }}">
                 </div>
                 <select name="status" class="form-select" style="width:auto; min-width:180px;">
                     <option value="">Усі статуси</option>

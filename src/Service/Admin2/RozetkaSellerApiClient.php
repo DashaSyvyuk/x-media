@@ -303,9 +303,9 @@ final class RozetkaSellerApiClient
     }
 
     /**
-     * Lightweight markers for stats charts (created date + status id).
+     * Lightweight markers for stats charts (created date + status id + group).
      *
-     * @return list<array{created: string, status: int}>
+     * @return list<array{created: string, status: int, statusGroup: int}>
      */
     public function fetchOrderMarkersCreatedBetween(
         \DateTimeInterface $from,
@@ -316,8 +316,9 @@ final class RozetkaSellerApiClient
         $markers = [];
         foreach ($this->fetchOrdersCreatedBetween($from, $to, $maxPages, $pageSize) as $order) {
             $markers[] = [
-                'created' => (string) ($order['created'] ?? ''),
-                'status'  => (int) ($order['status'] ?? 0),
+                'created'     => (string) ($order['created'] ?? ''),
+                'status'      => (int) ($order['status'] ?? 0),
+                'statusGroup' => (int) ($order['status_group'] ?? 0),
             ];
         }
 

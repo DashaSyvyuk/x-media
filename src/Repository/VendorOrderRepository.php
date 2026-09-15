@@ -27,12 +27,26 @@ class VendorOrderRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('v')
             ->leftJoin('v.supplier', 'supplier')->addSelect('supplier');
 
-        $search = trim($search);
+        $search = ltrim(trim($search), '#');
         if ($search !== '') {
-            $qb->andWhere(
-                'LOWER(v.supplierOrderNumber) LIKE :search OR LOWER(v.productTitle) LIKE :search '
-                . 'OR LOWER(supplier.title) LIKE :search',
-            )->setParameter('search', '%' . mb_strtolower($search) . '%');
+            // Join items only for filtering — do not select them (breaks KNP distinct pages).
+            $qb->leftJoin('v.items', 'items');
+
+            $orX = $qb->expr()->orX(
+                $qb->expr()->like('LOWER(v.supplierOrderNumber)', ':searchText'),
+                $qb->expr()->like('LOWER(v.productTitle)', ':searchText'),
+                $qb->expr()->like('LOWER(supplier.title)', ':searchText'),
+                $qb->expr()->like('LOWER(items.title)', ':searchText'),
+            );
+
+            if (ctype_digit($search)) {
+                $orX->add($qb->expr()->eq('v.id', ':searchId'));
+                $qb->setParameter('searchId', (int) $search);
+            }
+
+            $qb->andWhere($orX)
+                ->setParameter('searchText', '%' . mb_strtolower($search) . '%')
+                ->distinct();
         }
 
         if ($status !== null && $status !== '') {
@@ -44,12 +58,20 @@ class VendorOrderRepository extends ServiceEntityRepository
         }
 
         $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
-        $allowedSorts = ['id', 'supplierOrderNumber', 'productTitle', 'price', 'status', 'createdAt'];
-        if (! in_array($sort, $allowedSorts, true)) {
+        $allowedSorts = [
+            'id'                  => 'v.id',
+            'supplierOrderNumber' => 'v.supplierOrderNumber',
+            'productTitle'        => 'v.productTitle',
+            'price'               => 'v.price',
+            'status'              => 'v.status',
+            'createdAt'           => 'v.createdAt',
+        ];
+        if (! isset($allowedSorts[$sort])) {
             $sort = 'id';
         }
 
-        $qb->orderBy('v.' . $sort, $direction);
+        // Always use aliased fields — bare "id" breaks KnpPaginator ("no component field [id]").
+        $qb->orderBy($allowedSorts[$sort], $direction);
 
         return $qb;
     }

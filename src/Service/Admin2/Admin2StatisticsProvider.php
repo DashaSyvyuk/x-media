@@ -136,9 +136,10 @@ final class Admin2StatisticsProvider
         $rozetkaRevenue = 0;
         foreach ($rozetkaOrdersList as $apiOrder) {
             $marker = [
-                'created' => (string) ($apiOrder['created'] ?? ''),
-                'status'  => (int) ($apiOrder['status'] ?? 0),
-                'revenue' => 0,
+                'created'      => (string) ($apiOrder['created'] ?? ''),
+                'status'       => (int) ($apiOrder['status'] ?? 0),
+                'statusGroup'  => (int) ($apiOrder['status_group'] ?? 0),
+                'revenue'      => 0,
             ];
             $rozetkaMarkers[] = $marker;
 
@@ -462,7 +463,7 @@ final class Admin2StatisticsProvider
     }
 
     /**
-     * @param list<array{created: string, status: int, revenue?: int}> $rozetkaMarkers
+     * @param list<array{created: string, status: int, statusGroup?: int, revenue?: int}> $rozetkaMarkers
      *
      * @return array{labels: list<string>, orders: list<int>, revenue: list<int>}
      */
@@ -531,7 +532,7 @@ final class Admin2StatisticsProvider
     }
 
     /**
-     * @param list<array{created: string, status: int}> $rozetkaMarkers
+     * @param list<array{created: string, status: int, statusGroup?: int}> $rozetkaMarkers
      *
      * @return array{labels: list<string>, values: list<int>, colors: list<string>}
      */
@@ -570,7 +571,10 @@ final class Admin2StatisticsProvider
         }
 
         foreach ($rozetkaMarkers as $marker) {
-            $title = $this->rozetkaStatusGroupTitle((int) $marker['status']);
+            $title = $this->rozetkaStatusGroupTitle(
+                (int) $marker['status'],
+                (int) ($marker['statusGroup'] ?? 0),
+            );
             if (! isset($groups[$title])) {
                 $groups[$title] = ['count' => 0, 'color' => '#64748b'];
             }
@@ -596,14 +600,26 @@ final class Admin2StatisticsProvider
         ];
     }
 
-    private function rozetkaStatusGroupTitle(int $statusId): string
+    /**
+     * Prefer Rozetka status_group when present:
+     * 2 = successfully completed, 3 = canceled/unsuccessful.
+     * Status IDs alone used to dump many completed orders into «Відправлено».
+     */
+    private function rozetkaStatusGroupTitle(int $statusId, int $statusGroup = 0): string
     {
+        if ($statusGroup === 3 || ($statusId >= 13 && $statusId <= 25)) {
+            return 'Відмінено';
+        }
+
+        if ($statusGroup === 2 || in_array($statusId, [6, 7, 8, 9, 10, 11, 12, 40, 50, 57], true)) {
+            return 'Доставлено';
+        }
+
         return match ($statusId) {
             1 => 'Нове',
             26, 2 => 'В процесі',
-            61, 62, 63, 64, 65, 66, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 => 'Відправлено',
-            40, 50, 57 => 'Доставлено',
-            13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 => 'Відмінено',
+            // In transit / handed to carrier / waiting at pickup.
+            3, 4, 5, 61, 62, 63, 64, 65, 66 => 'Відправлено',
             default => 'Інше',
         };
     }
