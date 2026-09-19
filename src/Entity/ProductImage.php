@@ -35,7 +35,7 @@ class ProductImage
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "images")]
-    private Product $product;
+    private ?Product $product = null;
 
     #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
@@ -61,10 +61,14 @@ class ProductImage
 
     public function getProduct(): Product
     {
+        if (! $this->product instanceof Product) {
+            throw new \LogicException('ProductImage is not attached to a Product.');
+        }
+
         return $this->product;
     }
 
-    public function setProduct(Product $product): void
+    public function setProduct(?Product $product): void
     {
         $this->product = $product;
     }
@@ -133,9 +137,17 @@ class ProductImage
             return null;
         }
 
+        $localRelative = '/images/products/' . $this->imageUrl;
+        // Prefer local staging file when Bunny upload failed or is still pending.
+        // DOCUMENT_ROOT is public/ under nginx/php-fpm.
+        $documentRoot = (string) ($_SERVER['DOCUMENT_ROOT'] ?? '');
+        if ($documentRoot !== '' && is_file($documentRoot . $localRelative)) {
+            return $localRelative;
+        }
+
         $cdn = $_ENV['BUNNY_CDN_URL'] ?? $_SERVER['BUNNY_CDN_URL'] ?? '';
         if ($cdn === '') {
-            return '/images/products/' . $this->imageUrl;
+            return $localRelative;
         }
 
         return rtrim((string) $cdn, '/') . '/products/' . $this->imageUrl;

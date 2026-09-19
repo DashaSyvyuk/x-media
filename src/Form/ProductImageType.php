@@ -18,7 +18,8 @@ class ProductImageType extends AbstractType
                 'constraints' => [
                     new Image([
                         'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp'],
-                        'maxSize'   => '5M',
+                        // Keep in sync with docker/php/uploads.ini + nginx client_max_body_size.
+                        'maxSize'   => '12M',
                     ]),
                 ],
                 'download_uri' => false,

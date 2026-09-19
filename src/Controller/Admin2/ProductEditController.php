@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Throwable;
 
 #[Security("is_granted('ROLE_USER')")]
 class ProductEditController extends AbstractController
@@ -39,8 +40,20 @@ class ProductEditController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($product);
-            $this->entityManager->flush();
+            $this->scrubEmptyImages($product);
+
+            try {
+                $this->entityManager->persist($product);
+                $this->entityManager->flush();
+            } catch (Throwable $e) {
+                $this->addFlash('error', 'Не вдалося зберегти товар: ' . $e->getMessage());
+
+                return $this->render('admin2/products/edit.html.twig', [
+                    'product' => $product,
+                    'form'    => $form,
+                    'isNew'   => true,
+                ]);
+            }
 
             $this->addFlash('success', sprintf('Товар #%d створено.', $product->getId()));
 
@@ -68,7 +81,20 @@ class ProductEditController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->flush();
+            $this->scrubEmptyImages($product);
+
+            try {
+                $this->entityManager->flush();
+            } catch (Throwable $e) {
+                $this->addFlash('error', 'Не вдалося зберегти товар: ' . $e->getMessage());
+
+                return $this->render('admin2/products/edit.html.twig', [
+                    'product' => $product,
+                    'form'    => $form,
+                    'isNew'   => false,
+                ]);
+            }
+
             $this->addFlash('success', sprintf('Товар #%d збережено.', $product->getId()));
 
             return $this->redirectToRoute('admin2_products_edit', ['id' => $product->getId()]);
@@ -79,5 +105,16 @@ class ProductEditController extends AbstractController
             'form'    => $form,
             'isNew'   => false,
         ]);
+    }
+
+    private function scrubEmptyImages(Product $product): void
+    {
+        foreach ($product->getImages()->toArray() as $image) {
+            $hasFile = $image->getFile() !== null;
+            $hasUrl  = $image->getImageUrl() !== null && $image->getImageUrl() !== '';
+            if (! $hasFile && ! $hasUrl) {
+                $product->removeImage($image);
+            }
+        }
     }
 }

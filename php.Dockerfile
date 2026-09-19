@@ -40,6 +40,9 @@ RUN docker-php-ext-install \
     zip \
     intl
 
+# Upload limits for product / admin images (also mounted in docker-compose for local).
+COPY docker/php/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+
 # Install Redis
 RUN pecl install redis && docker-php-ext-enable redis
 
