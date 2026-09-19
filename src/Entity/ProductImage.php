@@ -35,7 +35,7 @@ class ProductImage
 
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "images")]
-    private Product $product;
+    private ?Product $product = null;
 
     #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
@@ -61,10 +61,14 @@ class ProductImage
 
     public function getProduct(): Product
     {
+        if (! $this->product instanceof Product) {
+            throw new \LogicException('ProductImage is not attached to a Product.');
+        }
+
         return $this->product;
     }
 
-    public function setProduct(Product $product): void
+    public function setProduct(?Product $product): void
     {
         $this->product = $product;
     }

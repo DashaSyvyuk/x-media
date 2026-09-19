@@ -300,15 +300,17 @@ class Product
 
     public function addImage(ProductImage $image): void
     {
-        $image->setProduct($this);
-        $this->images[] = $image;
+        if (! $this->images->contains($image)) {
+            $image->setProduct($this);
+            $this->images->add($image);
+        }
     }
 
     public function removeImage(ProductImage $image): void
     {
-        if ($this->images->contains($image)) {
-            $this->images->removeElement($image);
-        }
+        // Do not clear $image->product here: with orphanRemoval Doctrine deletes
+        // the row. Nulling the owning FK first can hit product_id NOT NULL.
+        $this->images->removeElement($image);
     }
 
     /**
