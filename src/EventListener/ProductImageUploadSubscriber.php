@@ -10,6 +10,7 @@ use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Throwable;
 
 class ProductImageUploadSubscriber
@@ -104,7 +105,12 @@ class ProductImageUploadSubscriber
             return;
         }
 
-        $request->getSession()->getFlashBag()->add(
+        $session = $request->getSession();
+        if (! $session instanceof FlashBagAwareSessionInterface) {
+            return;
+        }
+
+        $session->getFlashBag()->add(
             'warning',
             sprintf(
                 'Зображення «%s» збережено, але не вдалося завантажити на CDN (%s). Локальна копія залишена для повторної спроби.',

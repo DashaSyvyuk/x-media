@@ -3,7 +3,6 @@
 namespace App\Controller\Admin2;
 
 use App\Entity\Product;
-use App\Entity\ProductImage;
 use App\EventListener\ProductImageUploadSubscriber;
 use App\Form\Admin2\ProductType;
 use App\Repository\ProductRepository;
@@ -111,10 +110,6 @@ class ProductEditController extends AbstractController
     private function scrubEmptyImages(Product $product): void
     {
         foreach ($product->getImages()->toArray() as $image) {
-            if (! $image instanceof ProductImage) {
-                continue;
-            }
-
             $hasFile = $image->getFile() !== null;
             $hasUrl  = $image->getImageUrl() !== null && $image->getImageUrl() !== '';
             if (! $hasFile && ! $hasUrl) {
