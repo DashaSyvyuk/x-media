@@ -63,9 +63,11 @@ class RozetkaProductEditController extends AbstractController
             $this->entityManager->flush();
             if (! $copyCharacteristics) {
                 $this->addFlash('success', sprintf('Rozetka товар «%s» збережено.', $rozetkaProduct->getTitle()));
+
+                return $this->redirectToRoute('admin2_rozetka');
             }
 
-            return $this->redirectToRoute('admin2_rozetka');
+            return $this->redirectToRoute('admin2_rozetka_edit', ['id' => $rozetkaProduct->getId()]);
         }
 
         return $this->render('admin2/rozetka/edit.html.twig', [

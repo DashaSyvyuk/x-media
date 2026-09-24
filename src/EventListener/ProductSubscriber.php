@@ -54,7 +54,7 @@ class ProductSubscriber
 
         $description = (string) ($product->getDescription() ?? '');
         if ($rozetkaProduct->getDescription() === '' && $description !== '') {
-            $rozetkaProduct->setDescription($description);
+            $rozetkaProduct->setDescription($this->descriptionWithoutImages($description));
             $this->syncScheduled = true;
         }
     }
@@ -117,7 +117,9 @@ class ProductSubscriber
         $rozetkaProduct->setTitle($this->buildTitle($product));
         $rozetkaProduct->setStockQuantity(0);
         $rozetkaProduct->setSeries('');
-        $rozetkaProduct->setDescription((string) ($product->getDescription() ?? ''));
+        $rozetkaProduct->setDescription(
+            $this->descriptionWithoutImages((string) ($product->getDescription() ?? ''))
+        );
         $rozetkaProduct->setPrice((int) $this->getPrice($product, $feed, $priceParameters));
         $rozetkaProduct->setProduct($product);
         $product->setRozetka($rozetkaProduct);
@@ -131,5 +133,21 @@ class ProductSubscriber
             $product->getTitle(),
             $product->getProductCode(),
         );
+    }
+
+    /**
+     * Rozetka feed description should not embed product gallery images from the site HTML.
+     */
+    private function descriptionWithoutImages(string $html): string
+    {
+        $stripped = preg_replace('/<img\b[^>]*>/i', '', $html);
+        if (! is_string($stripped)) {
+            return $html;
+        }
+
+        // Drop empty figure wrappers left after removing images.
+        $stripped = preg_replace('/<figure\b[^>]*>\s*<\/figure>/i', '', $stripped) ?? $stripped;
+
+        return $stripped;
     }
 }
