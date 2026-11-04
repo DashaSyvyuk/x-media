@@ -55,7 +55,11 @@ class HomePageController extends BaseController
                 10
             ),
             'totalCount' => $_COOKIE['totalCount'] ?? 0,
-            'feedbacks'  => $this->feedbackRepository->findBy(['status' => 'CONFIRMED'], ['createdAt' => 'DESC']),
+            'feedbacks'  => $this->feedbackRepository->findBy(
+                ['status' => 'CONFIRMED'],
+                ['createdAt' => 'DESC'],
+                20
+            ),
             'order'      => $this->orderRepository->findOneBy(['user' => $user], ['createdAt' => 'DESC']),
             'user'       => $user,
             'promotions' => $this->promotionRepository->getActivePromotions(),

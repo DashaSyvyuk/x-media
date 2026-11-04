@@ -207,6 +207,15 @@
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
+.stats-finance-section--turnover {
+    width: 100%;
+}
+
+.stats-finance-section--turnover .stats-chart-card,
+.stats-finance-section--turnover .debt-stat-grid--turnover {
+    width: 100%;
+}
+
 .stats-finance-link {
     color: var(--stats-teal);
     font-size: 0.8125rem;
@@ -274,5 +283,15 @@
     .stats-chart-wrap--products,
     .stats-chart-wrap--finance {
         height: 260px;
+        min-height: 220px;
+        width: 100%;
+    }
+
+    .stats-finance-section .debt-stat-grid--turnover {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-finance-section--turnover .stats-chart-wrap--tall {
+        height: 280px;
     }
 }

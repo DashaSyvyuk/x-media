@@ -31,8 +31,22 @@ class InStockRepository extends ServiceEntityRepository
         $search = ltrim(trim($search), '#');
         if ($search !== '') {
             $orX = $qb->expr()->orX();
-            $orX->add($qb->expr()->like('LOWER(product.title)', ':searchText'));
+            $words = preg_split('/\s+/u', $search) ?: [];
+            $words = array_values(array_filter($words, static fn (string $word): bool => $word !== ''));
+
+            // Multi-word title match: each word must appear (order-independent).
+            if ($words !== []) {
+                $titleAnd = $qb->expr()->andX();
+                foreach ($words as $index => $word) {
+                    $param = 'titleWord' . $index;
+                    $titleAnd->add($qb->expr()->like('LOWER(product.title)', ':' . $param));
+                    $qb->setParameter($param, '%' . mb_strtolower($word) . '%');
+                }
+                $orX->add($titleAnd);
+            }
+
             $orX->add($qb->expr()->like('LOWER(product.productCode)', ':searchText'));
+            $orX->add($qb->expr()->like('LOWER(product.productCode2)', ':searchText'));
             $orX->add($qb->expr()->like('LOWER(warehouse.title)', ':searchText'));
             $orX->add($qb->expr()->like('LOWER(warehouse.city)', ':searchText'));
             $qb->setParameter('searchText', '%' . mb_strtolower($search) . '%');
@@ -45,7 +59,7 @@ class InStockRepository extends ServiceEntityRepository
                 $qb->setParameter('searchStockId', $searchId);
             }
 
-            $qb->andWhere($orX);
+            $qb->andWhere($orX)->distinct();
         }
 
         if ($warehouseId !== null && $warehouseId > 0) {
