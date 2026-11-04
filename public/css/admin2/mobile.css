@@ -162,7 +162,9 @@
 
     /* Avoid iOS auto-zoom and flaky native pickers on small font selects. */
     .form-select,
-    select.form-control {
+    select.form-control,
+    .products-toolbar input.form-control,
+    .products-toolbar input[type="search"] {
         font-size: 16px;
     }
 
@@ -377,6 +379,6 @@
     }
 
     .order-stat-grid--compact-5 {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
     }
 }

@@ -24,40 +24,72 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
+     * Build the category tree with active-product counts.
+     *
+     * Loads all active categories + one GROUP BY count query instead of the old
+     * recursive approach that ran N+1 queries and hydrated every Product just to
+     * call ->count() (multi-second / 100MB+ on every storefront page).
+     *
      * @return list<array<string, mixed>>
      */
     public function getCategoriesTree(?int $parent = null): array
     {
-        $result = [];
-        $query = $this->createQueryBuilder('c');
-
-        if ($parent) {
-            $query = $query
-                ->andWhere('c.parent = :parent')
-                ->setParameter('parent', $parent);
-        } else {
-            $query = $query->andWhere('c.parent is NULL');
-        }
-
-        $categories = $query->andWhere('c.status = :status')
+        /** @var list<Category> $categories */
+        $categories = $this->createQueryBuilder('c')
+            ->leftJoin('c.parent', 'parent')->addSelect('parent')
+            ->andWhere('c.status = :status')
             ->setParameter('status', Category::ACTIVE)
             ->orderBy('c.position', 'ASC')
+            ->addOrderBy('c.id', 'ASC')
             ->getQuery()
             ->getResult();
 
-        foreach ($categories as $category) {
-            $categoryArray['id'] = $category->getId();
-            $categoryArray['title'] = $category->getTitle();
-            $categoryArray['image'] = $category->getImage();
-            $categoryArray['imageUri'] = $category->getImageUri();
-            $categoryArray['slug'] = $category->getSlug();
-            $categoryArray['showInHeader'] = $category->getShowInHeader();
-            $categoryArray['children'] = $this->getCategoriesTree($category->getId());
-            $categoryArray['productsCount'] = $category->getActiveProducts()->count();
-            $result[] = $categoryArray;
+        $countRows = $this->getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(p.category) AS categoryId', 'COUNT(p.id) AS productsCount')
+            ->from(Product::class, 'p')
+            ->andWhere('p.status = :productStatus')
+            ->andWhere('p.category IS NOT NULL')
+            ->setParameter('productStatus', Product::STATUS_ACTIVE)
+            ->groupBy('p.category')
+            ->getQuery()
+            ->getScalarResult();
+
+        /** @var array<int, int> $productCounts */
+        $productCounts = [];
+        foreach ($countRows as $row) {
+            $productCounts[(int) $row['categoryId']] = (int) $row['productsCount'];
         }
 
-        return $result;
+        /** @var array<string, list<Category>> $byParent */
+        $byParent = [];
+        foreach ($categories as $category) {
+            $parentId = $category->getParent()?->getId();
+            $key = $parentId === null ? 'root' : (string) $parentId;
+            $byParent[$key][] = $category;
+        }
+
+        $build = function (?int $parentId) use (&$build, $byParent, $productCounts): array {
+            $key = $parentId === null ? 'root' : (string) $parentId;
+            $result = [];
+
+            foreach ($byParent[$key] ?? [] as $category) {
+                $id = $category->getId();
+                $result[] = [
+                    'id'            => $id,
+                    'title'         => $category->getTitle(),
+                    'image'         => $category->getImage(),
+                    'imageUri'      => $category->getImageUri(),
+                    'slug'          => $category->getSlug(),
+                    'showInHeader'  => $category->getShowInHeader(),
+                    'children'      => $build($id),
+                    'productsCount' => $productCounts[$id] ?? 0,
+                ];
+            }
+
+            return $result;
+        };
+
+        return $build($parent);
     }
 
     /**

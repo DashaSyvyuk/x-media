@@ -84,7 +84,7 @@
     </div>
     <ul class="fulfillment-card__items">
         {% for item in order.items|slice(0, 3) %}
-            <li>{{ item.qty }}× {{ item.name|slice(0, 50) }}</li>
+            <li>{{ item.qty }}× {{ item.name }}</li>
         {% endfor %}
     </ul>
     <div class="fulfillment-card__footer">

@@ -399,4 +399,14 @@
             debtors.youOweByCurrency,
         );
     }
+
+    // PWA / mobile: canvas parent may get final width after layout; force redraw.
+    window.requestAnimationFrame(() => {
+        document.querySelectorAll('.stats-page--finance canvas').forEach((canvas) => {
+            const chart = typeof Chart.getChart === 'function' ? Chart.getChart(canvas) : null;
+            if (chart && typeof chart.resize === 'function') {
+                chart.resize();
+            }
+        });
+    });
 })();

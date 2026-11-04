@@ -68,10 +68,24 @@ class FilterRepository extends ServiceEntityRepository
             ->leftJoin('f.category', 'category')
             ->addSelect('category');
 
-        $search = trim($search);
+        $search = ltrim(trim($search), '#');
         if ($search !== '') {
-            $qb->andWhere('LOWER(f.title) LIKE :search OR LOWER(category.title) LIKE :search')
-                ->setParameter('search', '%' . mb_strtolower($search) . '%');
+            $qb->leftJoin('f.attributes', 'attributes');
+
+            $orX = $qb->expr()->orX(
+                $qb->expr()->like('LOWER(f.title)', ':searchText'),
+                $qb->expr()->like('LOWER(category.title)', ':searchText'),
+                $qb->expr()->like('LOWER(attributes.value)', ':searchText'),
+            );
+
+            if (ctype_digit($search)) {
+                $orX->add($qb->expr()->eq('f.id', ':searchId'));
+                $qb->setParameter('searchId', (int) $search);
+            }
+
+            $qb->andWhere($orX)
+                ->setParameter('searchText', '%' . mb_strtolower($search) . '%')
+                ->distinct();
         }
 
         if ($categoryId !== null && $categoryId > 0) {
