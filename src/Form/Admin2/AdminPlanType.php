@@ -7,6 +7,7 @@ use App\Entity\AdminUser;
 use App\Repository\AdminUserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -41,11 +42,25 @@ class AdminPlanType extends AbstractType
         }
 
         $builder
+            ->add('title', TextType::class, [
+                'label'       => 'Назва',
+                'constraints' => [new NotBlank()],
+            ])
+            ->add('body', TextareaType::class, [
+                'label'    => 'Опис',
+                'required' => false,
+                'attr'     => ['rows' => 4],
+            ])
             ->add('scheduledDate', DateType::class, [
                 'label'    => 'Дата',
                 'widget'   => 'single_text',
                 'input'    => 'datetime',
-                'required' => true,
+                'required' => false,
+                'help'     => 'Якщо дата задана і статус не «Завершено» — картка з’явиться на головній',
+            ])
+            ->add('status', ChoiceType::class, [
+                'label'   => 'Статус',
+                'choices' => array_flip(AdminPlan::STATUSES),
             ])
             ->add('assignee', EntityType::class, [
                 'label'        => 'Призначити',
@@ -56,16 +71,8 @@ class AdminPlanType extends AbstractType
 
                     return $label !== '' ? $label : (string) $user->getEmail();
                 },
-                'required'     => true,
-            ])
-            ->add('title', TextType::class, [
-                'label'       => 'Назва',
-                'constraints' => [new NotBlank()],
-            ])
-            ->add('body', TextareaType::class, [
-                'label'    => 'Текст',
-                'required' => false,
-                'attr'     => ['rows' => 4],
+                'required'     => false,
+                'placeholder'  => 'Без виконавця',
             ]);
     }
 

@@ -47,13 +47,13 @@
         <section class="dashboard-panel dash-reveal dash-reveal--2">
             <div class="dashboard-panel__head">
                 <div>
-                    <h2 class="dashboard-panel__title">Плани на сьогодні</h2>
+                    <h2 class="dashboard-panel__title">Планування</h2>
                     {% set plansCount = dash.todayPlans|length + dash.vendorLastDayOrders|length %}
                     <p class="dashboard-panel__desc">
                         {% if plansCount > 0 %}
-                            Активні завдання · {{ plansCount }}
+                            З датою · незавершені · {{ plansCount }}
                         {% else %}
-                            Активних завдань немає
+                            Незавершених планів з датою немає
                         {% endif %}
                     </p>
                 </div>
@@ -81,17 +81,25 @@
                         </a>
                     {% endfor %}
                     {% for plan in dash.todayPlans %}
-                        <a href="{{ path('admin2_planning') }}" class="dashboard-plan-item">
+                        {% set badge = plan.bucket == 'today' ? 'Сьогодні' : (plan.bucket == 'past' ? 'Прострочено' : plan.dateLabel) %}
+                        {% set itemClass = plan.bucket == 'past' ? 'dashboard-plan-item--overdue' : ('dashboard-plan-item--' ~ plan.status) %}
+                        <a href="{{ path('admin2_planning', {board: plan.boardId}) }}"
+                           class="dashboard-plan-item {{ itemClass }}">
                             <span>
                                 <span class="dashboard-plan-item__title">{{ plan.title }}</span>
-                                <span class="dashboard-plan-item__meta">{{ plan.assignee }}{% if plan.body %} · {{ plan.body|striptags|slice(0, 80) }}{% if plan.body|length > 80 %}…{% endif %}{% endif %}</span>
+                                <span class="dashboard-plan-item__meta">
+                                    {{ plan.statusLabel }}
+                                    · {{ plan.boardTitle }}
+                                    {% if plan.assignee %} · {{ plan.assignee }}{% endif %}
+                                    {% if plan.body %} · {{ plan.body|striptags|slice(0, 60) }}{% if plan.body|length > 60 %}…{% endif %}{% endif %}
+                                </span>
                             </span>
-                            <span class="dashboard-plan-item__badge">Сьогодні</span>
+                            <span class="dashboard-plan-item__badge">{{ badge }}</span>
                         </a>
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="text-muted mb-0 small">На сьогодні активних планів немає.</p>
+                <p class="text-muted mb-0 small">Незавершених планів з датою немає.</p>
             {% endif %}
         </section>
 

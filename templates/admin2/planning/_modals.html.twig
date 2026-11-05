@@ -1,15 +1,18 @@
+{# Create card #}
 <div class="modal fade" id="createPlanModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             {{ form_start(createForm, { action: path('admin2_planning_store'), attr: { novalidate: 'novalidate' } }) }}
+                <input type="hidden" name="board_id" value="{{ activeBoard.id }}">
                 <div class="modal-header">
-                    <h5 class="modal-title">Новий план</h5>
+                    <h5 class="modal-title">Нова картка · {{ activeBoard.title }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    {{ form_row(createForm.scheduledDate) }}
-                    {{ form_row(createForm.assignee) }}
                     {{ form_row(createForm.title) }}
+                    {{ form_row(createForm.scheduledDate) }}
+                    {{ form_row(createForm.status) }}
+                    {{ form_row(createForm.assignee) }}
                     {{ form_row(createForm.body) }}
                 </div>
                 <div class="modal-footer">
@@ -21,41 +24,134 @@
     </div>
 </div>
 
+{# Edit card #}
 <div class="modal fade" id="editPlanModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="post" id="editPlanForm" action="">
                 <div class="modal-header">
-                    <h5 class="modal-title">Редагувати план</h5>
+                    <h5 class="modal-title">Редагувати картку</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_action') }}">
-                    <input type="hidden" name="show" id="editPlanShow" value="">
+                    <input type="hidden" name="board" id="editPlanBoard" value="{{ activeBoard.id }}">
+                    <div class="mb-3">
+                        <label class="form-label" for="editPlanTitle">Назва</label>
+                        <input type="text" name="admin_plan[title]" id="editPlanTitle" class="form-control" required>
+                    </div>
                     <div class="mb-3">
                         <label class="form-label" for="editPlanDate">Дата</label>
-                        <input type="date" name="admin_plan[scheduledDate]" id="editPlanDate" class="form-control" required>
+                        <input type="date" name="admin_plan[scheduledDate]" id="editPlanDate" class="form-control">
+                        <div class="form-text">Порожня дата — картка лише в плануванні, не на головній</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="editPlanStatus">Статус</label>
+                        <select name="admin_plan[status]" id="editPlanStatus" class="form-select" required>
+                            {% for key, label in statusLabels %}
+                                <option value="{{ key }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="editPlanAssignee">Призначити</label>
-                        <select name="admin_plan[assignee]" id="editPlanAssignee" class="form-select" required>
+                        <select name="admin_plan[assignee]" id="editPlanAssignee" class="form-select">
+                            <option value="">Без виконавця</option>
                             {% for admin in admins %}
                                 <option value="{{ admin.id }}">{{ admin.name }} {{ admin.surname }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="editPlanTitle">Назва</label>
-                        <input type="text" name="admin_plan[title]" id="editPlanTitle" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="editPlanBody">Текст</label>
+                        <label class="form-label" for="editPlanBody">Опис</label>
                         <textarea name="admin_plan[body]" id="editPlanBody" class="form-control" rows="4"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
                     <button type="submit" class="btn btn-teal">Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# Create board #}
+<div class="modal fade" id="createBoardModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form method="post" action="{{ path('admin2_planning_board_store') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Нова дошка</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_board') }}">
+                    <div class="mb-3">
+                        <label class="form-label" for="createBoardTitle">Назва</label>
+                        <input type="text" name="title" id="createBoardTitle" class="form-control" required maxlength="120" placeholder="Наприклад: Маркетинг">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Колір</label>
+                        <div class="planning-color-picker">
+                            {% for key, hex in boardColors %}
+                                <label class="planning-color-option" title="{{ key }}">
+                                    <input type="radio" name="color" value="{{ key }}" {% if key == 'teal' %}checked{% endif %}>
+                                    <span style="background: {{ hex }}"></span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Створити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# Edit board #}
+<div class="modal fade" id="editBoardModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form method="post" id="editBoardForm" action="">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редагувати дошку</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_board') }}">
+                    <div class="mb-3">
+                        <label class="form-label" for="editBoardTitle">Назва</label>
+                        <input type="text" name="title" id="editBoardTitle" class="form-control" required maxlength="120">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Колір</label>
+                        <div class="planning-color-picker" id="editBoardColors">
+                            {% for key, hex in boardColors %}
+                                <label class="planning-color-option" title="{{ key }}">
+                                    <input type="radio" name="color" value="{{ key }}">
+                                    <span style="background: {{ hex }}"></span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="submit"
+                            formaction=""
+                            formmethod="post"
+                            id="deleteBoardBtn"
+                            class="btn btn-outline-danger"
+                            data-confirm="Видалити дошку разом з усіма картками?">
+                        Видалити
+                    </button>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                        <button type="submit" class="btn btn-teal">Зберегти</button>
+                    </div>
                 </div>
             </form>
         </div>

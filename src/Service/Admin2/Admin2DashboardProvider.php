@@ -79,7 +79,19 @@ final class Admin2DashboardProvider
      *     fops: list<array{id: int, title: string, copyText: string}>,
      *     cashiers: list<array{id: int, title: string, code: string, balance: int}>,
      *     debts: list<array{id: int, name: string, code: string, balance: int}>,
-     *     todayPlans: list<array{id: int, title: string, body: string, assignee: string}>,
+     *     todayPlans: list<array{
+     *         id: int,
+     *         title: string,
+     *         body: string,
+     *         assignee: string,
+     *         status: string,
+     *         statusLabel: string,
+     *         date: string,
+     *         dateLabel: string,
+     *         boardId: int,
+     *         boardTitle: string,
+     *         bucket: 'today'|'past'|'future'|null
+     *     }>,
      *     vendorLastDayOrders: list<array{
      *         id: int,
      *         supplier: string,
@@ -590,18 +602,46 @@ final class Admin2DashboardProvider
     }
 
     /**
-     * @return list<array{id: int, title: string, body: string, assignee: string}>
+     * Dated incomplete plans for the dashboard planning block.
+     *
+     * @return list<array{
+     *     id: int,
+     *     title: string,
+     *     body: string,
+     *     assignee: string,
+     *     status: string,
+     *     statusLabel: string,
+     *     date: string,
+     *     dateLabel: string,
+     *     boardId: int,
+     *     boardTitle: string,
+     *     bucket: 'today'|'past'|'future'|null
+     * }>
      */
     private function todayPlans(\DateTimeImmutable $today): array
     {
         $result = [];
-        foreach ($this->adminPlanRepository->findTodayPending($today) as $plan) {
+        foreach ($this->adminPlanRepository->findDashboardPlans() as $plan) {
             $assignee = $plan->getAssignee();
+            $assigneeName = $assignee
+                ? trim($assignee->getName() . ' ' . $assignee->getSurname())
+                : '';
+            $date = $plan->getScheduledDate();
+            $board = $plan->getBoard();
+            $bucket = $plan->getDayBucket($today);
+
             $result[] = [
-                'id'       => (int) $plan->getId(),
-                'title'    => $plan->getTitle(),
-                'body'     => trim((string) ($plan->getBody() ?? '')),
-                'assignee' => trim($assignee->getName() . ' ' . $assignee->getSurname()),
+                'id'          => (int) $plan->getId(),
+                'title'       => $plan->getTitle(),
+                'body'        => trim((string) ($plan->getBody() ?? '')),
+                'assignee'    => $assigneeName,
+                'status'      => $plan->getStatus(),
+                'statusLabel' => $plan->getStatusLabel(),
+                'date'        => $date ? $date->format('Y-m-d') : '',
+                'dateLabel'   => $date ? $date->format('d.m.Y') : '',
+                'boardId'     => (int) $board->getId(),
+                'boardTitle'  => $board->getTitle(),
+                'bucket'      => $bucket,
             ];
         }
 

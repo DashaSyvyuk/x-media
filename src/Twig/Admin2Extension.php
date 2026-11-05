@@ -105,7 +105,7 @@ final class Admin2Extension extends AbstractExtension
             return 0;
         }
 
-        return $this->adminPlanRepository->countTodayPending(new \DateTimeImmutable('today'));
+        return $this->adminPlanRepository->countDashboardPending();
     }
 
     private function canSeeOrdersMenu(): bool
