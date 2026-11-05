@@ -1,0 +1,103 @@
+{% set dateKey = plan.scheduledDate ? plan.scheduledDate|date('Y-m-d') : null %}
+{% set dayBucket = plan.getDayBucket(today) %}
+{% set assignee = plan.assignee %}
+{% set assigneeName = assignee ? ((assignee.name ~ ' ' ~ assignee.surname)|trim) : '' %}
+
+<article class="plan-card plan-card--{{ statusKey }} {{ dayBucket ? 'plan-card--' ~ dayBucket : 'plan-card--nodate' }}">
+    <div class="plan-card__top">
+        <span class="plan-card__status" style="--status-color: {{ plan.statusColor }}">
+            {{ plan.statusLabel }}
+        </span>
+        <div class="plan-card__reorder">
+            <form method="post" action="{{ path('admin2_planning_move', {id: plan.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_action') }}">
+                <input type="hidden" name="board" value="{{ boardId }}">
+                <input type="hidden" name="direction" value="up">
+                <button type="submit" class="plan-card__arrow" title="Вище" {% if isFirst %}disabled{% endif %}>
+                    <i class="bi bi-chevron-up"></i>
+                </button>
+            </form>
+            <form method="post" action="{{ path('admin2_planning_move', {id: plan.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_action') }}">
+                <input type="hidden" name="board" value="{{ boardId }}">
+                <input type="hidden" name="direction" value="down">
+                <button type="submit" class="plan-card__arrow" title="Нижче" {% if isLast %}disabled{% endif %}>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <h4 class="plan-card__title">{{ plan.title }}</h4>
+
+    {% if plan.body %}
+        <div class="plan-card__body">{{ plan.body|nl2br }}</div>
+    {% endif %}
+
+    <div class="plan-card__meta">
+        {% if dateKey %}
+            <span class="plan-card__chip plan-card__chip--date {{ dayBucket == 'past' ? 'is-overdue' : (dayBucket == 'today' ? 'is-today' : '') }}">
+                <i class="bi bi-calendar3"></i>
+                {{ plan.scheduledDate|date('d.m.Y') }}
+                {% if dayBucket == 'today' %}· сьогодні{% elseif dayBucket == 'past' %}· прострочено{% endif %}
+            </span>
+        {% else %}
+            <span class="plan-card__chip plan-card__chip--muted">
+                <i class="bi bi-calendar-minus"></i> Без дати
+            </span>
+        {% endif %}
+
+        {% if assigneeName %}
+            <span class="plan-card__chip">
+                <i class="bi bi-person"></i> {{ assigneeName }}
+            </span>
+        {% endif %}
+    </div>
+
+    <div class="plan-card__actions">
+        <div class="plan-card__status-moves">
+            {% for nextStatus, nextLabel in statusLabels %}
+                {% if nextStatus != statusKey %}
+                    <form method="post" action="{{ path('admin2_planning_status', {id: plan.id}) }}" class="d-inline">
+                        <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_action') }}">
+                        <input type="hidden" name="board" value="{{ boardId }}">
+                        <input type="hidden" name="status" value="{{ nextStatus }}">
+                        <button type="submit"
+                                class="plan-card__move-btn"
+                                style="--move-color: {{ statusColors[nextStatus] }}"
+                                title="→ {{ nextLabel }}">
+                            {{ nextLabel }}
+                        </button>
+                    </form>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="plan-card__tools">
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary js-edit-plan"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editPlanModal"
+                    data-id="{{ plan.id }}"
+                    data-board="{{ boardId }}"
+                    data-date="{{ dateKey|default('') }}"
+                    data-status="{{ plan.status }}"
+                    data-assignee-id="{{ assignee ? assignee.id : '' }}"
+                    data-assignee-name="{{ assigneeName|e('html_attr') }}"
+                    data-title="{{ plan.title|e('html_attr') }}"
+                    data-body="{{ plan.body|default('')|e('html_attr') }}"
+                    title="Редагувати">
+                <i class="bi bi-pencil"></i>
+            </button>
+            <form method="post" action="{{ path('admin2_planning_delete', {id: plan.id}) }}" class="d-inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_action') }}">
+                <input type="hidden" name="board" value="{{ boardId }}">
+                <button type="submit"
+                        class="btn btn-sm btn-outline-danger"
+                        data-confirm="Видалити картку «{{ plan.title|e('html_attr') }}»?"
+                        title="Видалити">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</article>

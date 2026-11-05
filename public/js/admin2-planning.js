@@ -1,18 +1,4 @@
 (function () {
-    document.querySelectorAll('[data-planning-tab]').forEach((button) => {
-        button.addEventListener('click', () => {
-            const tab = button.dataset.planningTab;
-            document.querySelectorAll('[data-planning-tab]').forEach((item) => {
-                const active = item === button;
-                item.classList.toggle('is-active', active);
-                item.setAttribute('aria-selected', active ? 'true' : 'false');
-            });
-            document.querySelectorAll('[data-planning-panel]').forEach((panel) => {
-                panel.classList.toggle('is-active', panel.dataset.planningPanel === tab);
-            });
-        });
-    });
-
     document.querySelectorAll('.js-edit-plan').forEach((button) => {
         button.addEventListener('click', () => {
             const form = document.getElementById('editPlanForm');
@@ -21,7 +7,12 @@
             }
 
             form.action = '/admin/planning/' + button.dataset.id;
+            document.getElementById('editPlanBoard').value = button.dataset.board || '';
             document.getElementById('editPlanDate').value = button.dataset.date || '';
+            document.getElementById('editPlanStatus').value = button.dataset.status || 'new';
+            document.getElementById('editPlanTitle').value = button.dataset.title || '';
+            document.getElementById('editPlanBody').value = button.dataset.body || '';
+
             const assigneeSelect = document.getElementById('editPlanAssignee');
             const assigneeId = button.dataset.assigneeId || '';
             if (assigneeId && !assigneeSelect.querySelector('option[value="' + assigneeId + '"]')) {
@@ -31,17 +22,37 @@
                 assigneeSelect.appendChild(option);
             }
             assigneeSelect.value = assigneeId;
-            document.getElementById('editPlanTitle').value = button.dataset.title || '';
-            document.getElementById('editPlanBody').value = button.dataset.body || '';
-            document.getElementById('editPlanShow').value = button.dataset.show || '';
         });
     });
 
-    document.querySelectorAll('[data-confirm]').forEach((button) => {
-        button.closest('form')?.addEventListener('submit', (event) => {
-            if (!window.confirm(button.dataset.confirm)) {
-                event.preventDefault();
+    document.querySelectorAll('.js-edit-board').forEach((button) => {
+        button.addEventListener('click', () => {
+            const form = document.getElementById('editBoardForm');
+            const deleteBtn = document.getElementById('deleteBoardBtn');
+            if (!form) {
+                return;
             }
+
+            const id = button.dataset.id;
+            form.action = '/admin/planning/boards/' + id;
+            if (deleteBtn) {
+                deleteBtn.setAttribute('formaction', '/admin/planning/boards/' + id + '/delete');
+            }
+            document.getElementById('editBoardTitle').value = button.dataset.title || '';
+            const color = button.dataset.color || 'teal';
+            form.querySelectorAll('input[name="color"]').forEach((input) => {
+                input.checked = input.value === color;
+            });
         });
+    });
+
+    document.addEventListener('submit', (event) => {
+        const submitter = event.submitter;
+        if (!submitter || !submitter.hasAttribute('data-confirm')) {
+            return;
+        }
+        if (!window.confirm(submitter.dataset.confirm)) {
+            event.preventDefault();
+        }
     });
 })();

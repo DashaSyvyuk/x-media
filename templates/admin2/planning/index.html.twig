@@ -7,74 +7,137 @@
 {% endblock %}
 
 {% block body %}
+    {% set boardColor = activeBoard.colorHex %}
     {% set todayKey = today|date('Y-m-d') %}
 
-    <div class="planning-page">
+    <div class="planning-page" style="--board-accent: {{ boardColor }}">
         <div class="planning-page-header">
             <div>
                 <h1 class="page-title mb-1">Планування</h1>
-                <p class="text-muted mb-0 small">Завдання за датою з призначенням на адміна</p>
+                <p class="text-muted mb-0 small">Дошки · картки · статуси. З датою — на головній, без дати — лише тут.</p>
             </div>
             <div class="d-flex flex-wrap gap-2">
-                {% if showCompleted %}
-                    <a href="{{ path('admin2_planning') }}" class="btn btn-outline-secondary">Активні</a>
-                {% else %}
-                    <a href="{{ path('admin2_planning', {show: 'completed'}) }}" class="btn btn-outline-secondary">Виконані</a>
-                {% endif %}
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#createBoardModal">
+                    <i class="bi bi-layout-sidebar"></i> Нова дошка
+                </button>
                 <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#createPlanModal">
-                    <i class="bi bi-plus-lg"></i> Додати план
+                    <i class="bi bi-plus-lg"></i> Нова картка
                 </button>
             </div>
         </div>
 
-        <div class="planning-mobile-tabs d-md-none">
-            <div class="planning-mobile-tabs__nav" role="tablist">
-                <button type="button" class="planning-mobile-tabs__btn is-active" data-planning-tab="left" role="tab" aria-selected="true">
-                    <i class="bi bi-calendar-day"></i>
-                    Сьогодні / минулі
-                    <span class="planning-mobile-tabs__count">{{ leftCount }}</span>
-                </button>
-                <button type="button" class="planning-mobile-tabs__btn" data-planning-tab="right" role="tab" aria-selected="false">
-                    <i class="bi bi-calendar-range"></i>
-                    Майбутні
-                    <span class="planning-mobile-tabs__count">{{ rightCount }}</span>
-                </button>
+        <div class="planning-shell">
+            <aside class="planning-boards">
+                <div class="planning-boards__head">
+                    <span>Дошки</span>
+                    <button type="button"
+                            class="btn btn-sm btn-link planning-boards__add"
+                            data-bs-toggle="modal"
+                            data-bs-target="#createBoardModal"
+                            title="Нова дошка">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                </div>
+                <nav class="planning-boards__list" aria-label="Дошки">
+                    {% for board in boards %}
+                        {% set isActive = board.id == activeBoard.id %}
+                        <div class="planning-board-item {{ isActive ? 'is-active' : '' }}" style="--board-color: {{ board.colorHex }}">
+                            <a href="{{ path('admin2_planning', {board: board.id}) }}"
+                               class="planning-board-item__link"
+                               {% if isActive %}aria-current="page"{% endif %}>
+                                <span class="planning-board-item__dot"></span>
+                                <span class="planning-board-item__title">{{ board.title }}</span>
+                            </a>
+                            <div class="planning-board-item__actions">
+                                <form method="post" action="{{ path('admin2_planning_board_move', {id: board.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_board') }}">
+                                    <input type="hidden" name="direction" value="up">
+                                    <button type="submit" class="btn btn-sm btn-link p-0" title="Вище" {% if loop.first %}disabled{% endif %}>
+                                        <i class="bi bi-chevron-up"></i>
+                                    </button>
+                                </form>
+                                <form method="post" action="{{ path('admin2_planning_board_move', {id: board.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_board') }}">
+                                    <input type="hidden" name="direction" value="down">
+                                    <button type="submit" class="btn btn-sm btn-link p-0" title="Нижче" {% if loop.last %}disabled{% endif %}>
+                                        <i class="bi bi-chevron-down"></i>
+                                    </button>
+                                </form>
+                                {% if isActive %}
+                                    <button type="button"
+                                            class="btn btn-sm btn-link p-0 js-edit-board"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editBoardModal"
+                                            data-id="{{ board.id }}"
+                                            data-title="{{ board.title|e('html_attr') }}"
+                                            data-color="{{ board.color }}"
+                                            title="Редагувати дошку">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </nav>
+            </aside>
+
+            <div class="planning-main">
+                <div class="planning-main__head">
+                    <div class="planning-main__title-wrap">
+                        <span class="planning-main__accent"></span>
+                        <div>
+                            <h2 class="planning-main__title">{{ activeBoard.title }}</h2>
+                            <p class="planning-main__hint mb-0">
+                                {% set totalCards = columns['new']|length + columns['in_progress']|length + columns['completed']|length %}
+                                {{ totalCards }} {{ totalCards == 1 ? 'картка' : 'карток' }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="planning-top-tabs d-md-none">
+                        {% for board in boards %}
+                            <a href="{{ path('admin2_planning', {board: board.id}) }}"
+                               class="planning-top-tab {{ board.id == activeBoard.id ? 'is-active' : '' }}"
+                               style="--board-color: {{ board.colorHex }}">
+                                {{ board.title }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="planning-kanban">
+                    {% for statusKey, statusLabel in statusLabels %}
+                        {% set colPlans = columns[statusKey] %}
+                        {% set colColor = statusColors[statusKey] %}
+                        <section class="planning-column" style="--col-color: {{ colColor }}">
+                            <header class="planning-column__head">
+                                <span class="planning-column__dot"></span>
+                                <h3 class="planning-column__title">{{ statusLabel }}</h3>
+                                <span class="planning-column__count">{{ colPlans|length }}</span>
+                            </header>
+
+                            <div class="planning-column__cards">
+                                {% if colPlans is empty %}
+                                    <div class="planning-column__empty">Порожньо</div>
+                                {% else %}
+                                    {% for plan in colPlans %}
+                                        {% include 'admin2/planning/_card.html.twig' with {
+                                            plan: plan,
+                                            statusKey: statusKey,
+                                            statusLabels: statusLabels,
+                                            statusColors: statusColors,
+                                            today: today,
+                                            todayKey: todayKey,
+                                            isFirst: loop.first,
+                                            isLast: loop.last,
+                                            boardId: activeBoard.id
+                                        } %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </section>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-
-        <div class="planning-split">
-            <section class="planning-split__col planning-split__col--left is-active" data-planning-panel="left">
-                <h2 class="planning-split__heading">
-                    <i class="bi bi-calendar-day"></i>
-                    Сьогодні і минулі
-                    <span class="planning-split__count">{{ leftCount }}</span>
-                </h2>
-                <div class="text-muted small planning-split__subheading">{{ todayLabel }}</div>
-
-                {% include 'admin2/planning/_plan_list.html.twig' with {
-                    plansByDate: leftByDate,
-                    todayKey: todayKey,
-                    showCompleted: showCompleted,
-                    emptyMessage: 'На сьогодні та в минулому планів немає.',
-                    hideTodayHeader: false
-                } %}
-            </section>
-
-            <section class="planning-split__col planning-split__col--right" data-planning-panel="right">
-                <h2 class="planning-split__heading">
-                    <i class="bi bi-calendar-range"></i>
-                    Майбутні
-                    <span class="planning-split__count">{{ rightCount }}</span>
-                </h2>
-
-                {% include 'admin2/planning/_plan_list.html.twig' with {
-                    plansByDate: rightByDate,
-                    todayKey: todayKey,
-                    showCompleted: showCompleted,
-                    emptyMessage: 'Майбутніх планів немає.',
-                    hideTodayHeader: false
-                } %}
-            </section>
         </div>
     </div>
 
