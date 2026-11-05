@@ -109,7 +109,12 @@ class PlanningController extends AbstractController
         return $this->redirectToRoute('admin2_planning', ['board' => $board->getId()]);
     }
 
-    #[Route('/admin/planning/boards/{id}', name: 'admin2_planning_board_update', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route(
+        '/admin/planning/boards/{id}',
+        name: 'admin2_planning_board_update',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
     public function updateBoard(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_plan_board', (string) $request->request->get('_token'))) {
@@ -134,7 +139,12 @@ class PlanningController extends AbstractController
         return $this->redirectToRoute('admin2_planning', ['board' => $board->getId()]);
     }
 
-    #[Route('/admin/planning/boards/{id}/delete', name: 'admin2_planning_board_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route(
+        '/admin/planning/boards/{id}/delete',
+        name: 'admin2_planning_board_delete',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
     public function deleteBoard(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_plan_board', (string) $request->request->get('_token'))) {
@@ -159,7 +169,12 @@ class PlanningController extends AbstractController
         return $this->redirectToRoute('admin2_planning');
     }
 
-    #[Route('/admin/planning/boards/{id}/move', name: 'admin2_planning_board_move', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route(
+        '/admin/planning/boards/{id}/move',
+        name: 'admin2_planning_board_move',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
     public function moveBoard(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_plan_board', (string) $request->request->get('_token'))) {
@@ -288,7 +303,12 @@ class PlanningController extends AbstractController
         return $this->redirectToPlanning($request, $plan->getBoard()->getId());
     }
 
-    #[Route('/admin/planning/{id}/status', name: 'admin2_planning_status', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route(
+        '/admin/planning/{id}/status',
+        name: 'admin2_planning_status',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
     public function changeStatus(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_plan_action', (string) $request->request->get('_token'))) {
@@ -314,7 +334,12 @@ class PlanningController extends AbstractController
         return $this->redirectToPlanning($request, $plan->getBoard()->getId());
     }
 
-    #[Route('/admin/planning/{id}/move', name: 'admin2_planning_move', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route(
+        '/admin/planning/{id}/move',
+        name: 'admin2_planning_move',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
     public function moveCard(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_plan_action', (string) $request->request->get('_token'))) {
