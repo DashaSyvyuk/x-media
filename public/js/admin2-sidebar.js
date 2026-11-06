@@ -8,7 +8,7 @@
             return;
         }
 
-        const mobileQuery = window.matchMedia('(max-width: 768px)');
+        const mobileQuery = window.matchMedia('(max-width: 992px)');
 
         function isMobile() {
             return mobileQuery.matches;
