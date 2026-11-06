@@ -22,7 +22,6 @@
     min-width: 0;
     max-width: 100%;
     width: 100%;
-    overflow-x: hidden;
 }
 
 .processing-board {
@@ -63,8 +62,9 @@
 
     /* Nested overflow scroll breaks native <select> pickers on iOS/Android. */
     .fulfillment-column__list {
-        max-height: none;
-        overflow: visible;
+        max-height: none !important;
+        height: auto;
+        overflow: visible !important;
         padding: 0.75rem;
     }
 
@@ -80,7 +80,15 @@
 /* Touch / PWA: keep selects outside nested scrollers even on wide phones. */
 @media (hover: none) and (pointer: coarse) {
     .fulfillment-column__list {
-        max-height: none;
+        max-height: none !important;
+        height: auto;
+        overflow: visible !important;
+    }
+
+    .fulfillment-card {
+        flex: 0 0 auto;
+        height: auto;
+        min-height: auto;
         overflow: visible;
     }
 
@@ -120,13 +128,27 @@
     border-top: 0;
     border-radius: 0 0 14px 14px;
     min-height: 420px;
-    max-height: calc(100vh - 220px);
-    overflow-y: auto;
     overflow-anchor: none;
+}
+
+/* Desktop only: scroll the column. On mobile this + flex shrink crushes card height. */
+@media (min-width: 993px) {
+    .fulfillment-column {
+        overflow-x: hidden;
+    }
+
+    .fulfillment-column__list {
+        max-height: calc(100vh - 220px);
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
 }
 
 .fulfillment-card {
     position: relative;
+    flex: 0 0 auto;
+    height: auto;
+    min-height: auto;
     background: #fff;
     border: 1px solid rgba(15, 23, 42, 0.08);
     border-left: 4px solid transparent;
@@ -136,6 +158,7 @@
     transition: box-shadow 0.15s ease, border-color 0.15s ease, opacity 0.15s ease, background 0.15s ease;
     min-width: 0;
     max-width: 100%;
+    overflow: visible;
     overflow-wrap: anywhere;
     overflow-anchor: none;
 }
@@ -495,16 +518,21 @@
     }
 
     .fulfillment-column__list {
-        max-height: none;
-        overflow: visible;
+        max-height: none !important;
+        height: auto;
+        overflow: visible !important;
     }
 
     .fulfillment-card {
+        flex: 0 0 auto;
         width: 100%;
         max-width: 100%;
         min-width: 0;
+        height: auto !important;
+        min-height: auto;
         box-sizing: border-box;
-        overflow: visible;
+        overflow: visible !important;
+        padding: 1rem;
     }
 
     .fulfillment-card__top {
