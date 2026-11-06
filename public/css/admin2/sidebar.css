@@ -200,7 +200,8 @@ body.sidebar-open {
     margin-bottom: 0;
 }
 
-@media (max-width: 768px) {
+/* Match fulfillment board mobile breakpoint so cards get full width. */
+@media (max-width: 992px) {
     .sidebar {
         position: fixed;
         top: var(--app-navbar-height);

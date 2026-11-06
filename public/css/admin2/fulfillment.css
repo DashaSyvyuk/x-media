@@ -47,8 +47,12 @@
     }
 }
 
+/* Board stacking only — card/select mobile overrides live at file end
+   so they win over base .fulfillment-card* rules below. */
 @media (max-width: 992px) {
-    .fulfillment-board {
+    .fulfillment-board,
+    .processing-board,
+    .delivering-board {
         grid-template-columns: minmax(0, 1fr);
         gap: 1rem;
     }
@@ -70,60 +74,6 @@
         max-width: 100%;
         width: 100%;
         box-sizing: border-box;
-    }
-
-    .fulfillment-card {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        overflow-x: hidden;
-    }
-
-    .fulfillment-status-form .fulfillment-status-select,
-    .fulfillment-status-form .fulfillment-ttn-input,
-    .fulfillment-link-target {
-        width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box;
-        font-size: 16px;
-    }
-
-    .fulfillment-card__top {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .fulfillment-card__top-actions {
-        justify-content: flex-start;
-        width: 100%;
-    }
-
-    .fulfillment-card__top-actions .btn,
-    .fulfillment-card__top-actions .badge {
-        flex: 0 0 auto;
-    }
-
-    .fulfillment-card .vendor-status,
-    .fulfillment-card .order-status-badge {
-        max-width: 100%;
-        white-space: normal;
-    }
-
-    /* Absolute tooltips expand iOS scroll width even when invisible. */
-    .fulfillment-supplier-tip::after {
-        content: none !important;
-        display: none !important;
-    }
-
-    .fulfillment-link-current {
-        max-width: 100%;
-        min-width: 0;
-    }
-
-    .fulfillment-link-current .small {
-        min-width: 0;
-        overflow-wrap: anywhere;
-        word-break: break-word;
     }
 }
 
@@ -345,7 +295,7 @@
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: 0.35rem;
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-width: 0;
     max-width: 100%;
 }
@@ -370,12 +320,6 @@
     font-size: 0.78rem;
 }
 
-@media (max-width: 992px) {
-    .fulfillment-status-form .fulfillment-status-select,
-    .fulfillment-status-form .fulfillment-ttn-input {
-        width: 100%;
-    }
-}
 
 .fulfillment-card__meta,
 .fulfillment-card__product {
@@ -530,9 +474,102 @@
     color: #0f766e;
 }
 
+/* Mobile card layout — must stay after base .fulfillment-card* rules. */
 @media (max-width: 992px) {
-    .delivering-board {
-        grid-template-columns: 1fr;
+    .fulfillment-board,
+    .processing-board,
+    .delivering-board,
+    .processing-board__right {
+        grid-template-columns: minmax(0, 1fr) !important;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .fulfillment-column,
+    .fulfillment-column__header,
+    .fulfillment-column__list {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .fulfillment-column__list {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .fulfillment-card {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        overflow: visible;
+    }
+
+    .fulfillment-card__top {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.55rem;
+    }
+
+    .fulfillment-card__top > strong {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .fulfillment-card__top-actions {
+        flex: 0 0 auto;
+        justify-content: flex-start;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .fulfillment-card__top-actions .btn,
+    .fulfillment-card__top-actions .badge {
+        flex: 0 0 auto;
+    }
+
+    .fulfillment-status-form .fulfillment-status-select,
+    .fulfillment-status-form .fulfillment-ttn-input,
+    .fulfillment-link-target {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+
+    .fulfillment-card .vendor-status,
+    .fulfillment-card .order-status-badge {
+        max-width: 100%;
+        white-space: normal;
+    }
+
+    .fulfillment-card__items,
+    .fulfillment-card__meta,
+    .fulfillment-card__product,
+    .fulfillment-card__footer {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    /* Absolute tooltips expand iOS scroll width even when invisible. */
+    .fulfillment-supplier-tip::after {
+        content: none !important;
+        display: none !important;
+    }
+
+    .fulfillment-link-current {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .fulfillment-link-current .small {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 }
 
