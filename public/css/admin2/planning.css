@@ -193,7 +193,7 @@
 
 .planning-kanban {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 0.85rem;
     align-items: start;
 }
@@ -224,9 +224,24 @@
 
 .planning-column__title {
     margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
     font-size: 0.85rem;
     font-weight: 700;
     color: #334155;
+}
+
+.planning-column__done-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #059669;
+    background: rgba(5, 150, 105, 0.12);
+    border-radius: 999px;
+    padding: 0.1rem 0.4rem;
 }
 
 .planning-column__count {
@@ -240,6 +255,25 @@
     font-weight: 700;
     text-align: center;
     border: 1px solid #e2e8f0;
+}
+
+.planning-column__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+}
+
+.planning-column__actions .btn-link {
+    color: #94a3b8 !important;
+    line-height: 1;
+}
+
+.planning-column__actions .btn-link:hover {
+    color: #0f172a !important;
+}
+
+.planning-column__actions .btn-link:disabled {
+    opacity: 0.3;
 }
 
 .planning-column__cards {

@@ -3,11 +3,11 @@
 namespace App\Form\Admin2;
 
 use App\Entity\AdminPlan;
+use App\Entity\AdminPlanColumn;
 use App\Entity\AdminUser;
 use App\Repository\AdminUserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,6 +26,8 @@ class AdminPlanType extends AbstractType
     {
         /** @var AdminUser|null $currentUser */
         $currentUser = $options['current_user'];
+        /** @var list<AdminPlanColumn> $columns */
+        $columns = $options['columns'];
         $choices = $this->adminUserRepository->findActiveOrderedByName();
 
         if ($currentUser instanceof AdminUser) {
@@ -56,11 +58,14 @@ class AdminPlanType extends AbstractType
                 'widget'   => 'single_text',
                 'input'    => 'datetime',
                 'required' => false,
-                'help'     => 'Якщо дата задана і статус не «Завершено» — картка з’явиться на головній',
+                'help'     => 'З датою і незавершеним стовпцем — на головній',
             ])
-            ->add('status', ChoiceType::class, [
-                'label'   => 'Статус',
-                'choices' => array_flip(AdminPlan::STATUSES),
+            ->add('planColumn', EntityType::class, [
+                'label'        => 'Стовпець',
+                'class'        => AdminPlanColumn::class,
+                'choices'      => $columns,
+                'choice_label' => 'title',
+                'constraints'  => [new NotBlank()],
             ])
             ->add('assignee', EntityType::class, [
                 'label'        => 'Призначити',
@@ -81,7 +86,9 @@ class AdminPlanType extends AbstractType
         $resolver->setDefaults([
             'data_class'   => AdminPlan::class,
             'current_user' => null,
+            'columns'      => [],
         ]);
         $resolver->setAllowedTypes('current_user', ['null', AdminUser::class]);
+        $resolver->setAllowedTypes('columns', ['array']);
     }
 }

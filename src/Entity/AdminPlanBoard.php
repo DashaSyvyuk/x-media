@@ -42,6 +42,11 @@ class AdminPlanBoard
     #[ORM\OrderBy(['position' => 'ASC', 'id' => 'ASC'])]
     private Collection $plans;
 
+    /** @var Collection<int, AdminPlanColumn> */
+    #[ORM\OneToMany(mappedBy: 'board', targetEntity: AdminPlanColumn::class, orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => 'ASC', 'id' => 'ASC'])]
+    private Collection $columns;
+
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $createdAt;
 
@@ -52,6 +57,7 @@ class AdminPlanBoard
     {
         $now = new \DateTime();
         $this->plans = new ArrayCollection();
+        $this->columns = new ArrayCollection();
         $this->createdAt = $now;
         $this->updatedAt = $now;
     }
@@ -108,6 +114,14 @@ class AdminPlanBoard
     public function getPlans(): Collection
     {
         return $this->plans;
+    }
+
+    /**
+     * @return Collection<int, AdminPlanColumn>
+     */
+    public function getColumns(): Collection
+    {
+        return $this->columns;
     }
 
     public function getCreatedAt(): \DateTimeInterface

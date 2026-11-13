@@ -9,16 +9,23 @@
 {% block body %}
     {% set boardColor = activeBoard.colorHex %}
     {% set todayKey = today|date('Y-m-d') %}
+    {% set totalCards = 0 %}
+    {% for colPlans in columns %}
+        {% set totalCards = totalCards + colPlans|length %}
+    {% endfor %}
 
     <div class="planning-page" style="--board-accent: {{ boardColor }}">
         <div class="planning-page-header">
             <div>
                 <h1 class="page-title mb-1">Планування</h1>
-                <p class="text-muted mb-0 small">Дошки · картки · статуси. З датою — на головній, без дати — лише тут.</p>
+                <p class="text-muted mb-0 small">Дошки · стовпці · картки. З датою і незавершеним стовпцем — на головній.</p>
             </div>
             <div class="d-flex flex-wrap gap-2">
                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#createBoardModal">
                     <i class="bi bi-layout-sidebar"></i> Нова дошка
+                </button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#createColumnModal">
+                    <i class="bi bi-layout-three-columns"></i> Новий стовпець
                 </button>
                 <button type="button" class="btn btn-teal" data-bs-toggle="modal" data-bs-target="#createPlanModal">
                     <i class="bi bi-plus-lg"></i> Нова картка
@@ -88,8 +95,8 @@
                         <div>
                             <h2 class="planning-main__title">{{ activeBoard.title }}</h2>
                             <p class="planning-main__hint mb-0">
-                                {% set totalCards = columns['new']|length + columns['in_progress']|length + columns['completed']|length %}
                                 {{ totalCards }} {{ totalCards == 1 ? 'картка' : 'карток' }}
+                                · {{ boardColumns|length }} {{ boardColumns|length == 1 ? 'стовпець' : 'стовпців' }}
                             </p>
                         </div>
                     </div>
@@ -104,15 +111,51 @@
                     </div>
                 </div>
 
-                <div class="planning-kanban">
-                    {% for statusKey, statusLabel in statusLabels %}
-                        {% set colPlans = columns[statusKey] %}
-                        {% set colColor = statusColors[statusKey] %}
-                        <section class="planning-column" style="--col-color: {{ colColor }}">
+                <div class="planning-kanban"
+                     data-csrf="{{ csrf_token('admin2_plan_action') }}"
+                     data-columns="{{ columnMeta|json_encode|e('html_attr') }}">
+                    {% for column in boardColumns %}
+                        {% set colPlans = columns[column.id]|default([]) %}
+                        <section class="planning-column"
+                                 data-status="{{ column.id }}"
+                                 data-column-id="{{ column.id }}"
+                                 style="--col-color: {{ column.colorHex }}">
                             <header class="planning-column__head">
                                 <span class="planning-column__dot"></span>
-                                <h3 class="planning-column__title">{{ statusLabel }}</h3>
+                                <h3 class="planning-column__title">
+                                    {{ column.title }}
+                                    {% if column.isDone %}
+                                        <span class="planning-column__done-tag">готово</span>
+                                    {% endif %}
+                                </h3>
                                 <span class="planning-column__count">{{ colPlans|length }}</span>
+                                <div class="planning-column__actions">
+                                    <form method="post" action="{{ path('admin2_planning_column_move', {id: column.id}) }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_column') }}">
+                                        <input type="hidden" name="direction" value="up">
+                                        <button type="submit" class="btn btn-sm btn-link p-0" title="Ліворуч" {% if loop.first %}disabled{% endif %}>
+                                            <i class="bi bi-chevron-left"></i>
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{{ path('admin2_planning_column_move', {id: column.id}) }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_column') }}">
+                                        <input type="hidden" name="direction" value="down">
+                                        <button type="submit" class="btn btn-sm btn-link p-0" title="Праворуч" {% if loop.last %}disabled{% endif %}>
+                                            <i class="bi bi-chevron-right"></i>
+                                        </button>
+                                    </form>
+                                    <button type="button"
+                                            class="btn btn-sm btn-link p-0 js-edit-column"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editColumnModal"
+                                            data-id="{{ column.id }}"
+                                            data-title="{{ column.title|e('html_attr') }}"
+                                            data-color="{{ column.color }}"
+                                            data-done="{{ column.isDone ? '1' : '0' }}"
+                                            title="Редагувати стовпець">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                </div>
                             </header>
 
                             <div class="planning-column__cards">
@@ -122,9 +165,8 @@
                                     {% for plan in colPlans %}
                                         {% include 'admin2/planning/_card.html.twig' with {
                                             plan: plan,
-                                            statusKey: statusKey,
-                                            statusLabels: statusLabels,
-                                            statusColors: statusColors,
+                                            column: column,
+                                            boardColumns: boardColumns,
                                             today: today,
                                             todayKey: todayKey,
                                             isFirst: loop.first,

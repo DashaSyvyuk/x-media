@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\AdminPlanBoard;
+use App\Entity\AdminPlanColumn;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -53,9 +54,25 @@ class AdminPlanBoardRepository extends ServiceEntityRepository
             ->setColor('teal')
             ->setPosition(0);
 
-        $this->getEntityManager()->persist($board);
-        $this->getEntityManager()->flush();
+        $em = $this->getEntityManager();
+        $em->persist($board);
+        $this->seedDefaultColumns($board);
+        $em->flush();
 
         return $board;
+    }
+
+    public function seedDefaultColumns(AdminPlanBoard $board): void
+    {
+        $em = $this->getEntityManager();
+        foreach (AdminPlanColumn::DEFAULTS as $index => $defaults) {
+            $column = (new AdminPlanColumn())
+                ->setBoard($board)
+                ->setTitle($defaults['title'])
+                ->setColor($defaults['color'])
+                ->setIsDone($defaults['isDone'])
+                ->setPosition($index);
+            $em->persist($column);
+        }
     }
 }

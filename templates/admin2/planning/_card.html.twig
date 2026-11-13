@@ -2,14 +2,20 @@
 {% set dayBucket = plan.getDayBucket(today) %}
 {% set assignee = plan.assignee %}
 {% set assigneeName = assignee ? ((assignee.name ~ ' ' ~ assignee.surname)|trim) : '' %}
+{% set columnId = column.id %}
 
-<article class="plan-card plan-card--{{ statusKey }} {{ dayBucket ? 'plan-card--' ~ dayBucket : 'plan-card--nodate' }}">
+<article class="plan-card {{ column.isDone ? 'plan-card--completed' : '' }} {{ dayBucket ? 'plan-card--' ~ dayBucket : 'plan-card--nodate' }}"
+         data-plan-id="{{ plan.id }}"
+         data-status="{{ columnId }}"
+         data-column-id="{{ columnId }}">
     <div class="plan-card__top">
-        <span class="plan-card__status" style="--status-color: {{ plan.statusColor }}">
-            {{ plan.statusLabel }}
+        <span class="plan-card__status" style="--status-color: {{ column.colorHex }}">
+            {{ column.title }}
         </span>
         <div class="plan-card__reorder">
-            <form method="post" action="{{ path('admin2_planning_move', {id: plan.id}) }}">
+            <form method="post"
+                  action="{{ path('admin2_planning_move', {id: plan.id}) }}"
+                  class="js-plan-move">
                 <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_action') }}">
                 <input type="hidden" name="board" value="{{ boardId }}">
                 <input type="hidden" name="direction" value="up">
@@ -17,7 +23,9 @@
                     <i class="bi bi-chevron-up"></i>
                 </button>
             </form>
-            <form method="post" action="{{ path('admin2_planning_move', {id: plan.id}) }}">
+            <form method="post"
+                  action="{{ path('admin2_planning_move', {id: plan.id}) }}"
+                  class="js-plan-move">
                 <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_action') }}">
                 <input type="hidden" name="board" value="{{ boardId }}">
                 <input type="hidden" name="direction" value="down">
@@ -56,17 +64,19 @@
 
     <div class="plan-card__actions">
         <div class="plan-card__status-moves">
-            {% for nextStatus, nextLabel in statusLabels %}
-                {% if nextStatus != statusKey %}
-                    <form method="post" action="{{ path('admin2_planning_status', {id: plan.id}) }}" class="d-inline">
+            {% for nextColumn in boardColumns %}
+                {% if nextColumn.id != columnId %}
+                    <form method="post"
+                          action="{{ path('admin2_planning_status', {id: plan.id}) }}"
+                          class="d-inline js-plan-status">
                         <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_action') }}">
                         <input type="hidden" name="board" value="{{ boardId }}">
-                        <input type="hidden" name="status" value="{{ nextStatus }}">
+                        <input type="hidden" name="status" value="{{ nextColumn.id }}">
                         <button type="submit"
                                 class="plan-card__move-btn"
-                                style="--move-color: {{ statusColors[nextStatus] }}"
-                                title="→ {{ nextLabel }}">
-                            {{ nextLabel }}
+                                style="--move-color: {{ nextColumn.colorHex }}"
+                                title="→ {{ nextColumn.title }}">
+                            {{ nextColumn.title }}
                         </button>
                     </form>
                 {% endif %}
@@ -80,7 +90,7 @@
                     data-id="{{ plan.id }}"
                     data-board="{{ boardId }}"
                     data-date="{{ dateKey|default('') }}"
-                    data-status="{{ plan.status }}"
+                    data-status="{{ columnId }}"
                     data-assignee-id="{{ assignee ? assignee.id : '' }}"
                     data-assignee-name="{{ assigneeName|e('html_attr') }}"
                     data-title="{{ plan.title|e('html_attr') }}"

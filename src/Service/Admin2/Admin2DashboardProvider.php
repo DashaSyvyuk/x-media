@@ -630,13 +630,14 @@ final class Admin2DashboardProvider
             $board = $plan->getBoard();
             $bucket = $plan->getDayBucket($today);
 
+            $column = $plan->getPlanColumn();
             $result[] = [
                 'id'          => (int) $plan->getId(),
                 'title'       => $plan->getTitle(),
                 'body'        => trim((string) ($plan->getBody() ?? '')),
                 'assignee'    => $assigneeName,
-                'status'      => $plan->getStatus(),
-                'statusLabel' => $plan->getStatusLabel(),
+                'status'      => (string) $column->getId(),
+                'statusLabel' => $column->getTitle(),
                 'date'        => $date ? $date->format('Y-m-d') : '',
                 'dateLabel'   => $date ? $date->format('d.m.Y') : '',
                 'boardId'     => (int) $board->getId(),

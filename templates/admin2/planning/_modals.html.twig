@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     {{ form_row(createForm.title) }}
                     {{ form_row(createForm.scheduledDate) }}
-                    {{ form_row(createForm.status) }}
+                    {{ form_row(createForm.planColumn) }}
                     {{ form_row(createForm.assignee) }}
                     {{ form_row(createForm.body) }}
                 </div>
@@ -46,10 +46,10 @@
                         <div class="form-text">Порожня дата — картка лише в плануванні, не на головній</div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="editPlanStatus">Статус</label>
-                        <select name="admin_plan[status]" id="editPlanStatus" class="form-select" required>
-                            {% for key, label in statusLabels %}
-                                <option value="{{ key }}">{{ label }}</option>
+                        <label class="form-label" for="editPlanStatus">Стовпець</label>
+                        <select name="admin_plan[planColumn]" id="editPlanStatus" class="form-select" required>
+                            {% for column in boardColumns %}
+                                <option value="{{ column.id }}">{{ column.title }}{% if column.isDone %} · готово{% endif %}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -146,6 +146,100 @@
                             id="deleteBoardBtn"
                             class="btn btn-outline-danger"
                             data-confirm="Видалити дошку разом з усіма картками?">
+                        Видалити
+                    </button>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                        <button type="submit" class="btn btn-teal">Зберегти</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# Create column #}
+<div class="modal fade" id="createColumnModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form method="post" action="{{ path('admin2_planning_column_store', {boardId: activeBoard.id}) }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Новий стовпець</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_column') }}">
+                    <div class="mb-3">
+                        <label class="form-label" for="createColumnTitle">Назва</label>
+                        <input type="text" name="title" id="createColumnTitle" class="form-control" required maxlength="120" placeholder="Наприклад: На перевірку">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Колір</label>
+                        <div class="planning-color-picker">
+                            {% for key, hex in columnColors %}
+                                <label class="planning-color-option" title="{{ key }}">
+                                    <input type="radio" name="color" value="{{ key }}" {% if key == 'blue' %}checked{% endif %}>
+                                    <span style="background: {{ hex }}"></span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" name="isDone" id="createColumnDone">
+                        <label class="form-check-label" for="createColumnDone">
+                            Завершений стовпець (картки з датою не на головній)
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-teal">Створити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# Edit column #}
+<div class="modal fade" id="editColumnModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form method="post" id="editColumnForm" action="">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редагувати стовпець</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_plan_column') }}">
+                    <div class="mb-3">
+                        <label class="form-label" for="editColumnTitle">Назва</label>
+                        <input type="text" name="title" id="editColumnTitle" class="form-control" required maxlength="120">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Колір</label>
+                        <div class="planning-color-picker" id="editColumnColors">
+                            {% for key, hex in columnColors %}
+                                <label class="planning-color-option" title="{{ key }}">
+                                    <input type="radio" name="color" value="{{ key }}">
+                                    <span style="background: {{ hex }}"></span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" name="isDone" id="editColumnDone">
+                        <label class="form-check-label" for="editColumnDone">
+                            Завершений стовпець (картки з датою не на головній)
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="submit"
+                            formaction=""
+                            formmethod="post"
+                            id="deleteColumnBtn"
+                            class="btn btn-outline-danger"
+                            data-confirm="Видалити стовпець? Картки мають бути порожні.">
                         Видалити
                     </button>
                     <div class="d-flex gap-2">
