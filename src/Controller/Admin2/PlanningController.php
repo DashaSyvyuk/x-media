@@ -443,8 +443,11 @@ class PlanningController extends AbstractController
         $body = trim((string) ($payload['body'] ?? ''));
 
         $column = $this->columnRepository->find($columnId);
-        if ($title === '' || ! $column instanceof AdminPlanColumn
-            || $column->getBoard()->getId() !== $plan->getBoard()->getId()) {
+        if (
+            $title === ''
+            || ! $column instanceof AdminPlanColumn
+            || $column->getBoard()->getId() !== $plan->getBoard()->getId()
+        ) {
             $this->addFlash('error', 'Перевірте поля картки.');
 
             return $this->redirectToPlanning($request, $plan->getBoard()->getId());
@@ -512,8 +515,10 @@ class PlanningController extends AbstractController
             $columnId = $request->request->getInt('column_id');
         }
         $column = $this->columnRepository->find($columnId);
-        if (! $column instanceof AdminPlanColumn
-            || $column->getBoard()->getId() !== $plan->getBoard()->getId()) {
+        if (
+            ! $column instanceof AdminPlanColumn
+            || $column->getBoard()->getId() !== $plan->getBoard()->getId()
+        ) {
             if ($this->wantsJson($request)) {
                 return $this->jsonError('Невірний стовпець.');
             }
