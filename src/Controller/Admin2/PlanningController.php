@@ -4,14 +4,17 @@ namespace App\Controller\Admin2;
 
 use App\Entity\AdminPlan;
 use App\Entity\AdminPlanBoard;
+use App\Entity\AdminPlanColumn;
 use App\Entity\AdminUser;
 use App\Form\Admin2\AdminPlanType;
 use App\Repository\AdminPlanBoardRepository;
+use App\Repository\AdminPlanColumnRepository;
 use App\Repository\AdminPlanRepository;
 use App\Repository\AdminUserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,6 +25,7 @@ class PlanningController extends AbstractController
     public function __construct(
         private readonly AdminPlanRepository $adminPlanRepository,
         private readonly AdminPlanBoardRepository $boardRepository,
+        private readonly AdminPlanColumnRepository $columnRepository,
         private readonly AdminUserRepository $adminUserRepository,
         private readonly EntityManagerInterface $entityManager,
     ) {
@@ -45,36 +49,47 @@ class PlanningController extends AbstractController
         }
         $activeBoard ??= $boards[0];
 
-        $columns = [
-            AdminPlan::STATUS_NEW         => [],
-            AdminPlan::STATUS_IN_PROGRESS => [],
-            AdminPlan::STATUS_COMPLETED   => [],
-        ];
+        $boardColumns = $this->columnRepository->ensureDefaultsForBoard($activeBoard);
+        $columns = [];
+        $columnMeta = [];
+        foreach ($boardColumns as $column) {
+            $columns[$column->getId()] = [];
+            $columnMeta[$column->getId()] = [
+                'id'       => $column->getId(),
+                'title'    => $column->getTitle(),
+                'color'    => $column->getColor(),
+                'colorHex' => $column->getColorHex(),
+                'isDone'   => $column->isDone(),
+            ];
+        }
+
         foreach ($this->adminPlanRepository->findForBoard($activeBoard) as $plan) {
-            $status = $plan->getStatus();
-            if (! isset($columns[$status])) {
-                $status = AdminPlan::STATUS_NEW;
+            $columnId = $plan->getPlanColumn()->getId();
+            if (! isset($columns[$columnId])) {
+                $columnId = $boardColumns[0]->getId();
             }
-            $columns[$status][] = $plan;
+            $columns[$columnId][] = $plan;
         }
 
         /** @var AdminUser $user */
         $user = $this->getUser();
         $plan = new AdminPlan();
         $plan->setBoard($activeBoard);
-        $plan->setStatus(AdminPlan::STATUS_NEW);
+        $plan->setPlanColumn($boardColumns[0]);
         $plan->setAssignee($user);
 
         return $this->render('admin2/planning/index.html.twig', [
             'boards'       => $boards,
             'activeBoard'  => $activeBoard,
+            'boardColumns' => $boardColumns,
             'columns'      => $columns,
-            'statusLabels' => AdminPlan::STATUSES,
-            'statusColors' => AdminPlan::STATUS_COLORS,
+            'columnMeta'   => $columnMeta,
             'boardColors'  => AdminPlanBoard::COLORS,
+            'columnColors' => AdminPlanColumn::COLORS,
             'today'        => new \DateTimeImmutable('today'),
             'createForm'   => $this->createForm(AdminPlanType::class, $plan, [
                 'current_user' => $user,
+                'columns'      => $boardColumns,
             ])->createView(),
             'admins'       => $this->adminUserRepository->findActiveOrderedByName(),
         ]);
@@ -103,6 +118,7 @@ class PlanningController extends AbstractController
             ->setPosition($this->boardRepository->getNextPosition());
 
         $this->entityManager->persist($board);
+        $this->boardRepository->seedDefaultColumns($board);
         $this->entityManager->flush();
         $this->addFlash('success', sprintf('Дошку «%s» створено.', $board->getTitle()));
 
@@ -209,6 +225,166 @@ class PlanningController extends AbstractController
         return $this->redirectToRoute('admin2_planning', ['board' => $id]);
     }
 
+    #[Route(
+        '/admin/planning/boards/{boardId}/columns',
+        name: 'admin2_planning_column_store',
+        methods: ['POST'],
+        requirements: ['boardId' => '\d+'],
+    )]
+    public function storeColumn(Request $request, int $boardId): Response
+    {
+        if (! $this->isCsrfTokenValid('admin2_plan_column', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+        }
+
+        $board = $this->findBoard($boardId);
+        $title = trim((string) $request->request->get('title', ''));
+        $color = trim((string) $request->request->get('color', 'blue'));
+        $isDone = $request->request->getBoolean('isDone');
+        if ($title === '') {
+            $this->addFlash('error', 'Вкажіть назву стовпця.');
+
+            return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+        }
+
+        $column = (new AdminPlanColumn())
+            ->setBoard($board)
+            ->setTitle($title)
+            ->setColor($color)
+            ->setIsDone($isDone)
+            ->setPosition($this->columnRepository->getNextPosition($board));
+
+        $this->entityManager->persist($column);
+        $this->entityManager->flush();
+        $this->addFlash('success', sprintf('Стовпець «%s» створено.', $column->getTitle()));
+
+        return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+    }
+
+    #[Route(
+        '/admin/planning/columns/{id}',
+        name: 'admin2_planning_column_update',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
+    public function updateColumn(Request $request, int $id): Response
+    {
+        $column = $this->findColumn($id);
+        $boardId = $column->getBoard()->getId();
+
+        if (! $this->isCsrfTokenValid('admin2_plan_column', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+        }
+
+        $title = trim((string) $request->request->get('title', ''));
+        $color = trim((string) $request->request->get('color', $column->getColor()));
+        $isDone = $request->request->getBoolean('isDone');
+        if ($title === '') {
+            $this->addFlash('error', 'Вкажіть назву стовпця.');
+
+            return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+        }
+
+        $column->setTitle($title)->setColor($color)->setIsDone($isDone);
+        foreach ($column->getPlans() as $plan) {
+            $plan->setPlanColumn($column);
+        }
+        $this->entityManager->flush();
+        $this->addFlash('success', 'Стовпець оновлено.');
+
+        return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+    }
+
+    #[Route(
+        '/admin/planning/columns/{id}/delete',
+        name: 'admin2_planning_column_delete',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
+    public function deleteColumn(Request $request, int $id): Response
+    {
+        $column = $this->findColumn($id);
+        $board = $column->getBoard();
+        $boardId = $board->getId();
+
+        if (! $this->isCsrfTokenValid('admin2_plan_column', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+        }
+
+        $columns = $this->columnRepository->findForBoard($board);
+        if (count($columns) <= 1) {
+            $this->addFlash('error', 'Не можна видалити останній стовпець.');
+
+            return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+        }
+
+        if ($this->adminPlanRepository->countForColumn($column) > 0) {
+            $this->addFlash(
+                'error',
+                'Спочатку перемістіть або видаліть картки зі стовпця.',
+            );
+
+            return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+        }
+
+        $title = $column->getTitle();
+        $this->entityManager->remove($column);
+        $this->entityManager->flush();
+        $this->addFlash('success', sprintf('Стовпець «%s» видалено.', $title));
+
+        return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+    }
+
+    #[Route(
+        '/admin/planning/columns/{id}/move',
+        name: 'admin2_planning_column_move',
+        methods: ['POST'],
+        requirements: ['id' => '\d+'],
+    )]
+    public function moveColumn(Request $request, int $id): Response
+    {
+        $column = $this->findColumn($id);
+        $board = $column->getBoard();
+        $boardId = $board->getId();
+
+        if (! $this->isCsrfTokenValid('admin2_plan_column', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+        }
+
+        $direction = (string) $request->request->get('direction', '');
+        $columns = $this->columnRepository->findForBoard($board);
+        $index = null;
+        foreach ($columns as $i => $item) {
+            if ($item->getId() === $id) {
+                $index = $i;
+                break;
+            }
+        }
+        if ($index === null) {
+            throw $this->createNotFoundException('Стовпець не знайдено.');
+        }
+
+        $swapWith = $direction === 'up' ? $index - 1 : ($direction === 'down' ? $index + 1 : -1);
+        if ($swapWith >= 0 && $swapWith < count($columns)) {
+            $a = $columns[$index];
+            $b = $columns[$swapWith];
+            $posA = $a->getPosition();
+            $a->setPosition($b->getPosition());
+            $b->setPosition($posA);
+            $this->entityManager->flush();
+        }
+
+        return $this->redirectToRoute('admin2_planning', ['board' => $boardId]);
+    }
+
     #[Route('/admin/planning', name: 'admin2_planning_store', methods: ['POST'])]
     public function store(Request $request): Response
     {
@@ -216,18 +392,28 @@ class PlanningController extends AbstractController
         $user = $this->getUser();
         $boardId = $request->request->getInt('board_id');
         $board = $this->findBoard($boardId);
+        $boardColumns = $this->columnRepository->ensureDefaultsForBoard($board);
 
         $plan = new AdminPlan();
         $plan->setBoard($board);
+        $plan->setPlanColumn($boardColumns[0]);
         $plan->setCreatedBy($user);
         $plan->setAssignee($user);
 
-        $form = $this->createForm(AdminPlanType::class, $plan, ['current_user' => $user]);
+        $form = $this->createForm(AdminPlanType::class, $plan, [
+            'current_user' => $user,
+            'columns'      => $boardColumns,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($plan->getPlanColumn()->getBoard()->getId() !== $board->getId()) {
+                $this->addFlash('error', 'Невірний стовпець.');
+
+                return $this->redirectToRoute('admin2_planning', ['board' => $board->getId()]);
+            }
             $plan->setPosition(
-                $this->adminPlanRepository->getNextPosition($board, $plan->getStatus())
+                $this->adminPlanRepository->getNextPosition($plan->getPlanColumn())
             );
             $this->entityManager->persist($plan);
             $this->entityManager->flush();
@@ -252,11 +438,16 @@ class PlanningController extends AbstractController
         $payload = $request->request->all('admin_plan');
         $title = trim((string) ($payload['title'] ?? ''));
         $dateRaw = trim((string) ($payload['scheduledDate'] ?? ''));
-        $status = trim((string) ($payload['status'] ?? AdminPlan::STATUS_NEW));
+        $columnId = (int) ($payload['planColumn'] ?? 0);
         $assigneeId = (int) ($payload['assignee'] ?? 0);
         $body = trim((string) ($payload['body'] ?? ''));
 
-        if ($title === '' || ! isset(AdminPlan::STATUSES[$status])) {
+        $column = $this->columnRepository->find($columnId);
+        if (
+            $title === ''
+            || ! $column instanceof AdminPlanColumn
+            || $column->getBoard()->getId() !== $plan->getBoard()->getId()
+        ) {
             $this->addFlash('error', 'Перевірте поля картки.');
 
             return $this->redirectToPlanning($request, $plan->getBoard()->getId());
@@ -284,17 +475,15 @@ class PlanningController extends AbstractController
             }
         }
 
-        $oldStatus = $plan->getStatus();
+        $oldColumnId = $plan->getPlanColumn()->getId();
         $plan->setTitle($title);
         $plan->setScheduledDate($date);
         $plan->setAssignee($assignee);
         $plan->setBody($body !== '' ? $body : null);
-        $plan->setStatus($status);
+        $plan->setPlanColumn($column);
 
-        if ($oldStatus !== $status) {
-            $plan->setPosition(
-                $this->adminPlanRepository->getNextPosition($plan->getBoard(), $status)
-            );
+        if ($oldColumnId !== $column->getId()) {
+            $plan->setPosition($this->adminPlanRepository->getNextPosition($column));
         }
 
         $this->entityManager->flush();
@@ -312,24 +501,45 @@ class PlanningController extends AbstractController
     public function changeStatus(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_plan_action', (string) $request->request->get('_token'))) {
+            if ($this->wantsJson($request)) {
+                return $this->jsonError('Невірний CSRF-токен.');
+            }
             $this->addFlash('error', 'Невірний CSRF-токен.');
 
             return $this->redirectToPlanning($request);
         }
 
         $plan = $this->findPlan($id);
-        $status = trim((string) $request->request->get('status', ''));
-        if (! isset(AdminPlan::STATUSES[$status])) {
-            $this->addFlash('error', 'Невірний статус.');
+        $columnId = $request->request->getInt('status');
+        if ($columnId <= 0) {
+            $columnId = $request->request->getInt('column_id');
+        }
+        $column = $this->columnRepository->find($columnId);
+        if (
+            ! $column instanceof AdminPlanColumn
+            || $column->getBoard()->getId() !== $plan->getBoard()->getId()
+        ) {
+            if ($this->wantsJson($request)) {
+                return $this->jsonError('Невірний стовпець.');
+            }
+            $this->addFlash('error', 'Невірний стовпець.');
 
             return $this->redirectToPlanning($request, $plan->getBoard()->getId());
         }
 
-        $plan->setStatus($status);
-        $plan->setPosition(
-            $this->adminPlanRepository->getNextPosition($plan->getBoard(), $status)
-        );
+        $plan->setPlanColumn($column);
+        $plan->setPosition($this->adminPlanRepository->getNextPosition($column));
         $this->entityManager->flush();
+
+        if ($this->wantsJson($request)) {
+            return $this->jsonOk([
+                'id'          => $plan->getId(),
+                'status'      => (string) $column->getId(),
+                'statusLabel' => $column->getTitle(),
+                'statusColor' => $column->getColorHex(),
+                'isDone'      => $column->isDone(),
+            ]);
+        }
 
         return $this->redirectToPlanning($request, $plan->getBoard()->getId());
     }
@@ -343,6 +553,9 @@ class PlanningController extends AbstractController
     public function moveCard(Request $request, int $id): Response
     {
         if (! $this->isCsrfTokenValid('admin2_plan_action', (string) $request->request->get('_token'))) {
+            if ($this->wantsJson($request)) {
+                return $this->jsonError('Невірний CSRF-токен.');
+            }
             $this->addFlash('error', 'Невірний CSRF-токен.');
 
             return $this->redirectToPlanning($request);
@@ -359,6 +572,7 @@ class PlanningController extends AbstractController
             }
         }
 
+        $moved = false;
         if ($index !== null) {
             $swapWith = $direction === 'up' ? $index - 1 : ($direction === 'down' ? $index + 1 : -1);
             if ($swapWith >= 0 && $swapWith < count($neighbors)) {
@@ -367,36 +581,17 @@ class PlanningController extends AbstractController
                 $plan->setPosition($other->getPosition());
                 $other->setPosition($posA);
                 $this->entityManager->flush();
+                $moved = true;
             }
         }
 
-        return $this->redirectToPlanning($request, $plan->getBoard()->getId());
-    }
-
-    #[Route(
-        '/admin/planning/{id}/complete',
-        name: 'admin2_planning_complete',
-        methods: ['POST'],
-        requirements: ['id' => '\d+'],
-    )]
-    public function complete(Request $request, int $id): Response
-    {
-        if (! $this->isCsrfTokenValid('admin2_plan_action', (string) $request->request->get('_token'))) {
-            $this->addFlash('error', 'Невірний CSRF-токен.');
-
-            return $this->redirectToPlanning($request);
+        if ($this->wantsJson($request)) {
+            return $this->jsonOk([
+                'id'        => $plan->getId(),
+                'direction' => $direction,
+                'moved'     => $moved,
+            ]);
         }
-
-        $plan = $this->findPlan($id);
-        if ($plan->isCompleted()) {
-            $plan->setStatus(AdminPlan::STATUS_IN_PROGRESS);
-        } else {
-            $plan->setStatus(AdminPlan::STATUS_COMPLETED);
-        }
-        $plan->setPosition(
-            $this->adminPlanRepository->getNextPosition($plan->getBoard(), $plan->getStatus())
-        );
-        $this->entityManager->flush();
 
         return $this->redirectToPlanning($request, $plan->getBoard()->getId());
     }
@@ -445,6 +640,16 @@ class PlanningController extends AbstractController
         return $board;
     }
 
+    private function findColumn(int $id): AdminPlanColumn
+    {
+        $column = $this->columnRepository->find($id);
+        if (! $column instanceof AdminPlanColumn) {
+            throw $this->createNotFoundException('Стовпець не знайдено.');
+        }
+
+        return $column;
+    }
+
     private function redirectToPlanning(Request $request, ?int $boardId = null): Response
     {
         $board = $boardId
@@ -455,5 +660,24 @@ class PlanningController extends AbstractController
             'admin2_planning',
             $board > 0 ? ['board' => $board] : []
         );
+    }
+
+    private function wantsJson(Request $request): bool
+    {
+        return $request->isXmlHttpRequest()
+            || str_contains((string) $request->headers->get('Accept', ''), 'application/json');
+    }
+
+    /**
+     * @param array<string, mixed> $extra
+     */
+    private function jsonOk(array $extra = []): JsonResponse
+    {
+        return new JsonResponse(['ok' => true] + $extra);
+    }
+
+    private function jsonError(string $message, int $status = 400): JsonResponse
+    {
+        return new JsonResponse(['ok' => false, 'message' => $message], $status);
     }
 }

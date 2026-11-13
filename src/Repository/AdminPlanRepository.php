@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\AdminPlan;
 use App\Entity\AdminPlanBoard;
+use App\Entity\AdminPlanColumn;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,9 +26,10 @@ class AdminPlanRepository extends ServiceEntityRepository
         /** @var list<AdminPlan> $plans */
         $plans = $this->createQueryBuilder('p')
             ->leftJoin('p.assignee', 'a')->addSelect('a')
+            ->leftJoin('p.planColumn', 'c')->addSelect('c')
             ->andWhere('p.board = :board')
             ->setParameter('board', $board)
-            ->orderBy('p.status', 'ASC')
+            ->orderBy('c.position', 'ASC')
             ->addOrderBy('p.position', 'ASC')
             ->addOrderBy('p.id', 'ASC')
             ->getQuery()
@@ -36,18 +38,26 @@ class AdminPlanRepository extends ServiceEntityRepository
         return $plans;
     }
 
-    public function getNextPosition(AdminPlanBoard $board, string $status): int
+    public function getNextPosition(AdminPlanColumn $column): int
     {
         $max = $this->createQueryBuilder('p')
             ->select('MAX(p.position)')
-            ->andWhere('p.board = :board')
-            ->andWhere('p.status = :status')
-            ->setParameter('board', $board)
-            ->setParameter('status', $status)
+            ->andWhere('p.planColumn = :column')
+            ->setParameter('column', $column)
             ->getQuery()
             ->getSingleScalarResult();
 
         return ((int) $max) + 1;
+    }
+
+    public function countForColumn(AdminPlanColumn $column): int
+    {
+        return (int) $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->andWhere('p.planColumn = :column')
+            ->setParameter('column', $column)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -61,9 +71,9 @@ class AdminPlanRepository extends ServiceEntityRepository
         $plans = $this->createQueryBuilder('p')
             ->leftJoin('p.assignee', 'a')->addSelect('a')
             ->leftJoin('p.board', 'b')->addSelect('b')
+            ->leftJoin('p.planColumn', 'c')->addSelect('c')
             ->andWhere('p.scheduledDate IS NOT NULL')
-            ->andWhere('p.status != :completed')
-            ->setParameter('completed', AdminPlan::STATUS_COMPLETED)
+            ->andWhere('c.isDone = false')
             ->orderBy('p.scheduledDate', 'ASC')
             ->addOrderBy('p.position', 'ASC')
             ->addOrderBy('p.id', 'ASC')
@@ -88,9 +98,9 @@ class AdminPlanRepository extends ServiceEntityRepository
     {
         return (int) $this->createQueryBuilder('p')
             ->select('COUNT(p.id)')
+            ->leftJoin('p.planColumn', 'c')
             ->andWhere('p.scheduledDate IS NOT NULL')
-            ->andWhere('p.status != :completed')
-            ->setParameter('completed', AdminPlan::STATUS_COMPLETED)
+            ->andWhere('c.isDone = false')
             ->getQuery()
             ->getSingleScalarResult();
     }
@@ -110,10 +120,8 @@ class AdminPlanRepository extends ServiceEntityRepository
     {
         /** @var list<AdminPlan> $plans */
         $plans = $this->createQueryBuilder('p')
-            ->andWhere('p.board = :board')
-            ->andWhere('p.status = :status')
-            ->setParameter('board', $plan->getBoard())
-            ->setParameter('status', $plan->getStatus())
+            ->andWhere('p.planColumn = :column')
+            ->setParameter('column', $plan->getPlanColumn())
             ->orderBy('p.position', 'ASC')
             ->addOrderBy('p.id', 'ASC')
             ->getQuery()

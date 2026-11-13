@@ -82,7 +82,7 @@
                     {% endfor %}
                     {% for plan in dash.todayPlans %}
                         {% set badge = plan.bucket == 'today' ? 'Сьогодні' : (plan.bucket == 'past' ? 'Прострочено' : plan.dateLabel) %}
-                        {% set itemClass = plan.bucket == 'past' ? 'dashboard-plan-item--overdue' : ('dashboard-plan-item--' ~ plan.status) %}
+                        {% set itemClass = plan.bucket == 'past' ? 'dashboard-plan-item--overdue' : (plan.bucket == 'today' ? 'dashboard-plan-item--in_progress' : 'dashboard-plan-item--new') %}
                         <a href="{{ path('admin2_planning', {board: plan.boardId}) }}"
                            class="dashboard-plan-item {{ itemClass }}">
                             <span>
