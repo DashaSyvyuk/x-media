@@ -216,27 +216,49 @@
         });
     });
 
-    document.querySelectorAll('.js-edit-column').forEach((button) => {
-        button.addEventListener('click', () => {
-            const form = document.getElementById('editColumnForm');
-            const deleteBtn = document.getElementById('deleteColumnBtn');
-            if (!form) {
-                return;
-            }
+    const fillColumnEditForm = (button) => {
+        const form = document.getElementById('editColumnForm');
+        if (!form || !button) {
+            return;
+        }
 
-            const id = button.dataset.id;
-            form.action = '/admin/planning/columns/' + id;
-            if (deleteBtn) {
-                deleteBtn.setAttribute('formaction', '/admin/planning/columns/' + id + '/delete');
-            }
-            document.getElementById('editColumnTitle').value = button.dataset.title || '';
-            document.getElementById('editColumnDone').checked = button.dataset.done === '1';
-            const color = button.dataset.color || 'blue';
-            form.querySelectorAll('input[name="color"]').forEach((input) => {
-                input.checked = input.value === color;
-            });
+        const id = button.dataset.id;
+        if (!id) {
+            return;
+        }
+
+        form.action = '/admin/planning/columns/' + id;
+        document.getElementById('editColumnTitle').value = button.dataset.title || '';
+        document.getElementById('editColumnDone').checked = button.dataset.done === '1';
+        const color = button.dataset.color || 'blue';
+        form.querySelectorAll('input[name="color"]').forEach((input) => {
+            input.checked = input.value === color;
         });
+    };
+
+    document.querySelectorAll('.js-edit-column').forEach((button) => {
+        button.addEventListener('click', () => fillColumnEditForm(button));
     });
+
+    const editColumnModal = document.getElementById('editColumnModal');
+    if (editColumnModal) {
+        editColumnModal.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget;
+            if (button && button.classList.contains('js-edit-column')) {
+                fillColumnEditForm(button);
+            }
+        });
+    }
+
+    const editColumnForm = document.getElementById('editColumnForm');
+    if (editColumnForm) {
+        editColumnForm.addEventListener('submit', (event) => {
+            if (!editColumnForm.action || editColumnForm.action.endsWith('/columns/0')) {
+                event.preventDefault();
+                window.alert('Спочатку оберіть стовпець для редагування.');
+            }
+        });
+    }
 
     document.addEventListener('submit', (event) => {
         const form = event.target;
