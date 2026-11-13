@@ -51,9 +51,9 @@
                     {% set plansCount = dash.todayPlans|length + dash.vendorLastDayOrders|length %}
                     <p class="dashboard-panel__desc">
                         {% if plansCount > 0 %}
-                            З датою · незавершені · {{ plansCount }}
+                            Незавершені · {{ plansCount }}
                         {% else %}
-                            Незавершених планів з датою немає
+                            Незавершених планів немає
                         {% endif %}
                     </p>
                 </div>
@@ -99,7 +99,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="text-muted mb-0 small">Незавершених планів з датою немає.</p>
+                <p class="text-muted mb-0 small">Незавершених планів немає.</p>
             {% endif %}
         </section>
 
