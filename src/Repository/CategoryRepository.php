@@ -125,14 +125,18 @@ class CategoryRepository extends ServiceEntityRepository
     public function getCategoriesForHotline(): mixed
     {
         return $this->createQueryBuilder('c')
-            ->leftJoin('c.products', 'p')
             ->andWhere('c.status = :status')
             ->andWhere('c.hotlineCategory IS NOT NULL')
             ->setParameter('status', 'ACTIVE')
-            ->andWhere('p.status = :product_status')
-            ->setParameter('product_status', Product::STATUS_ACTIVE)
             ->andWhere('c.showInHotlineFeed = :showInHotlineFeed')
             ->setParameter('showInHotlineFeed', true)
+            ->andWhere(
+                'EXISTS (
+                    SELECT 1 FROM App\Entity\Product p
+                    WHERE p.category = c AND p.status = :product_status
+                )'
+            )
+            ->setParameter('product_status', Product::STATUS_ACTIVE)
             ->orderBy('c.title', 'ASC')
             ->getQuery()
             ->getResult()

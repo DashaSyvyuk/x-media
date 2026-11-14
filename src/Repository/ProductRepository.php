@@ -158,6 +158,86 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
+     * Lightweight ID list for chunked Hotline XML generation.
+     *
+     * @return list<int>
+     */
+    public function getProductIdsForHotline(): array
+    {
+        /** @var list<int|string> $ids */
+        $ids = $this->createQueryBuilder('p')
+            ->select('p.id')
+            ->innerJoin('p.category', 'c')
+            ->andWhere('c.status = :status')
+            ->andWhere('c.hotlineCategory IS NOT NULL')
+            ->setParameter('status', 'ACTIVE')
+            ->andWhere('p.status = :product_status')
+            ->setParameter('product_status', Product::STATUS_ACTIVE)
+            ->andWhere('c.showInHotlineFeed = :showInHotlineFeed')
+            ->setParameter('showInHotlineFeed', true)
+            ->orderBy('p.title', 'ASC')
+            ->getQuery()
+            ->getSingleColumnResult();
+
+        return array_map('intval', $ids);
+    }
+
+    /**
+     * Hydrate a chunk of products with associations needed for Hotline XML.
+     * Collections are warmed in separate queries to avoid cartesian explosion.
+     *
+     * @param list<int> $ids
+     *
+     * @return list<Product>
+     */
+    public function getProductsForHotlineByIds(array $ids): array
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+        if ($ids === []) {
+            return [];
+        }
+
+        /** @var list<Product> $products */
+        $products = $this->createQueryBuilder('p')
+            ->addSelect('c')
+            ->innerJoin('p.category', 'c')
+            ->andWhere('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $this->createQueryBuilder('p')
+            ->addSelect('images')
+            ->leftJoin('p.images', 'images')
+            ->andWhere('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $this->createQueryBuilder('p')
+            ->addSelect('characteristics')
+            ->leftJoin('p.characteristics', 'characteristics')
+            ->andWhere('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $byId = [];
+        foreach ($products as $product) {
+            $byId[$product->getId()] = $product;
+        }
+
+        $ordered = [];
+        foreach ($ids as $id) {
+            if (isset($byId[$id])) {
+                $ordered[] = $byId[$id];
+            }
+        }
+
+        return $ordered;
+    }
+
+    /**
      * @return iterable<Product>
      */
     public function getProductsForEkatalog(): iterable
@@ -296,7 +376,7 @@ class ProductRepository extends ServiceEntityRepository
      *
      * @return array<int, string>
      */
-    public function getRozetkaVendorsByProductIds(array $ids): array
+    public function getVendorsByProductIds(array $ids): array
     {
         $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
         if ($ids === []) {
@@ -325,6 +405,16 @@ class ProductRepository extends ServiceEntityRepository
         }
 
         return $vendors;
+    }
+
+    /**
+     * @param list<int> $ids
+     *
+     * @return array<int, string>
+     */
+    public function getRozetkaVendorsByProductIds(array $ids): array
+    {
+        return $this->getVendorsByProductIds($ids);
     }
 
     public function findByPromotionAndVendor(
@@ -797,5 +887,133 @@ class ProductRepository extends ServiceEntityRepository
         $this->getEntityManager()->clear();
 
         return $updated;
+    }
+
+    /**
+     * Same filters as createPriceControlQueryBuilder (search / status / category).
+     */
+    public function hasPriceControlFilters(
+        string $search = '',
+        ?string $status = null,
+        ?int $categoryId = null,
+    ): bool {
+        return trim($search) !== ''
+            || ($status !== null && $status !== '')
+            || ($categoryId !== null && $categoryId > 0);
+    }
+
+    /**
+     * Change site price for every product matching Price Control filters.
+     * Resulting price is never below 1. Clears crossed-out when invalid.
+     */
+    public function adjustPriceForPriceControlFilters(
+        string $search,
+        ?string $status,
+        ?int $categoryId,
+        int $delta,
+    ): int {
+        if ($delta === 0 || ! $this->hasPriceControlFilters($search, $status, $categoryId)) {
+            return 0;
+        }
+
+        $params = [
+            'delta'     => $delta,
+            'updatedAt' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+        ];
+        $where = $this->buildPriceControlFilterSql($search, $status, $categoryId, $params);
+
+        $connection = $this->getEntityManager()->getConnection();
+        $updated = (int) $connection->executeStatement(
+            'UPDATE product p
+             SET
+                p.crossed_out_price = CASE
+                    WHEN p.crossed_out_price IS NOT NULL
+                         AND p.crossed_out_price > 0
+                         AND p.crossed_out_price <= GREATEST(1, COALESCE(p.price, 0) + :delta)
+                    THEN NULL
+                    ELSE p.crossed_out_price
+                END,
+                p.price = GREATEST(1, COALESCE(p.price, 0) + :delta),
+                p.updated_at = :updatedAt
+             WHERE ' . $where,
+            $params,
+        );
+
+        $this->getEntityManager()->clear();
+
+        return $updated;
+    }
+
+    /**
+     * Set status for every product matching Price Control filters.
+     */
+    public function setStatusForPriceControlFilters(
+        string $search,
+        ?string $statusFilter,
+        ?int $categoryId,
+        string $status,
+    ): int {
+        if (
+            ! in_array($status, [Product::STATUS_ACTIVE, Product::STATUS_BLOCKED], true)
+            || ! $this->hasPriceControlFilters($search, $statusFilter, $categoryId)
+        ) {
+            return 0;
+        }
+
+        $params = [
+            'newStatus' => $status,
+            'updatedAt' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+        ];
+        $where = $this->buildPriceControlFilterSql($search, $statusFilter, $categoryId, $params);
+
+        $connection = $this->getEntityManager()->getConnection();
+        $updated = (int) $connection->executeStatement(
+            'UPDATE product p
+             SET p.status = :newStatus, p.updated_at = :updatedAt
+             WHERE ' . $where,
+            $params,
+        );
+
+        $this->getEntityManager()->clear();
+
+        return $updated;
+    }
+
+    /**
+     * @param array<string, mixed> $params
+     */
+    private function buildPriceControlFilterSql(
+        string $search,
+        ?string $status,
+        ?int $categoryId,
+        array &$params,
+    ): string {
+        $parts = ['1 = 1'];
+
+        $search = trim($search);
+        if ($search !== '') {
+            $or = [];
+            if (ctype_digit($search)) {
+                $or[] = 'p.id = :searchId';
+                $params['searchId'] = (int) $search;
+            }
+            $or[] = 'LOWER(p.product_code) LIKE :searchText';
+            $or[] = 'LOWER(p.product_code2) LIKE :searchText';
+            $or[] = 'LOWER(p.title) LIKE :searchText';
+            $params['searchText'] = '%' . mb_strtolower($search) . '%';
+            $parts[] = '(' . implode(' OR ', $or) . ')';
+        }
+
+        if ($status !== null && $status !== '') {
+            $parts[] = 'p.status = :statusFilter';
+            $params['statusFilter'] = $status;
+        }
+
+        if ($categoryId !== null && $categoryId > 0) {
+            $parts[] = 'p.category_id = :categoryId';
+            $params['categoryId'] = $categoryId;
+        }
+
+        return implode(' AND ', $parts);
     }
 }

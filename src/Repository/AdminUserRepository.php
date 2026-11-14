@@ -57,6 +57,33 @@ class AdminUserRepository extends ServiceEntityRepository implements PasswordUpg
     }
 
     /**
+     * Active admins who opted in to local new-order notifications (email + push).
+     *
+     * @return list<string>
+     */
+    public function findEmailsForLocalOrderNotifications(): array
+    {
+        /** @var list<string> $emails */
+        $emails = $this->createQueryBuilder('u')
+            ->select('u.email')
+            ->andWhere('u.active = true')
+            ->andWhere('u.notifyLocalOrders = true')
+            ->getQuery()
+            ->getSingleColumnResult();
+
+        $unique = [];
+        foreach ($emails as $email) {
+            $email = trim($email);
+            if ($email === '') {
+                continue;
+            }
+            $unique[strtolower($email)] = $email;
+        }
+
+        return array_values($unique);
+    }
+
+    /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void

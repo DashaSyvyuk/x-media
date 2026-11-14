@@ -260,15 +260,23 @@ class ProductCrudController extends AbstractCrudController
 
     public function hotlineXmlAction(AdminContext $adminContext): RedirectResponse
     {
-        $url = $this->generateHotlineXmlService->execute();
+        $url = $this->generateHotlineXmlService->startBackground();
 
-        $this->addFlash('success', $this->buildGeneratedFlash($url));
+        $this->addFlash('success', $this->buildStartedFlash($url));
 
         return $this->redirect(
             $this->adminUrlGenerator
                 ->setController(ProductCrudController::class)
                 ->setAction(Action::INDEX)
                 ->generateUrl()
+        );
+    }
+
+    private function buildStartedFlash(string $url): string
+    {
+        return sprintf(
+            'XML generation started in background. File will be available <a href="%s" target="_blank">here</a>',
+            htmlspecialchars($url),
         );
     }
 

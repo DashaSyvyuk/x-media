@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\InStock;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,32 +22,35 @@ class InStockRepository extends ServiceEntityRepository
         ?int $warehouseId = null,
         string $sort = 'warehouse',
         string $direction = 'ASC',
-    ): \Doctrine\ORM\QueryBuilder {
+    ): QueryBuilder {
         $qb = $this->createQueryBuilder('stock')
             ->leftJoin('stock.product', 'product')
             ->addSelect('product')
             ->leftJoin('stock.warehouse', 'warehouse')
             ->addSelect('warehouse');
 
+        // Same #ID normalization as filters / product picker.
         $search = ltrim(trim($search), '#');
         if ($search !== '') {
-            $orX = $qb->expr()->orX();
             $words = preg_split('/\s+/u', $search) ?: [];
-            $words = array_values(array_filter($words, static fn (string $word): bool => $word !== ''));
+            $orX = $qb->expr()->orX();
 
-            // Multi-word title match: each word must appear (order-independent).
-            if ($words !== []) {
-                $titleAnd = $qb->expr()->andX();
-                foreach ($words as $index => $word) {
-                    $param = 'titleWord' . $index;
-                    $titleAnd->add($qb->expr()->like('LOWER(product.title)', ':' . $param));
-                    $qb->setParameter($param, '%' . mb_strtolower($word) . '%');
+            // Match products list: each word must appear (order-independent) per field.
+            foreach (['title', 'productCode', 'productCode2'] as $field) {
+                $andX = $qb->expr()->andX();
+                foreach ($words as $k => $word) {
+                    if ($word === '') {
+                        continue;
+                    }
+                    $paramName = sprintf('%s_word%d', $field, $k);
+                    $andX->add($qb->expr()->like("LOWER(product.$field)", ':' . $paramName));
+                    $qb->setParameter($paramName, '%' . mb_strtolower($word) . '%');
                 }
-                $orX->add($titleAnd);
+                if ($andX->count() > 0) {
+                    $orX->add($andX);
+                }
             }
 
-            $orX->add($qb->expr()->like('LOWER(product.productCode)', ':searchText'));
-            $orX->add($qb->expr()->like('LOWER(product.productCode2)', ':searchText'));
             $orX->add($qb->expr()->like('LOWER(warehouse.title)', ':searchText'));
             $orX->add($qb->expr()->like('LOWER(warehouse.city)', ':searchText'));
             $qb->setParameter('searchText', '%' . mb_strtolower($search) . '%');
@@ -59,7 +63,9 @@ class InStockRepository extends ServiceEntityRepository
                 $qb->setParameter('searchStockId', $searchId);
             }
 
-            $qb->andWhere($orX)->distinct();
+            // Do not call distinct() here: there is no to-many join, and QB distinct()
+            // combined with KNP distinct + ORDER BY joined fields can return empty pages.
+            $qb->andWhere($orX);
         }
 
         if ($warehouseId !== null && $warehouseId > 0) {
@@ -79,6 +85,8 @@ class InStockRepository extends ServiceEntityRepository
         }
         $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
 
-        return $qb->orderBy($allowedSorts[$sort], $direction);
+        return $qb
+            ->orderBy($allowedSorts[$sort], $direction)
+            ->addOrderBy('stock.id', 'ASC');
     }
 }

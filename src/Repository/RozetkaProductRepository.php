@@ -209,6 +209,87 @@ class RozetkaProductRepository extends ServiceEntityRepository
     }
 
     /**
+     * Change Rozetka price for cards whose product matches Price Control filters.
+     * Same filter semantics as ProductRepository::createPriceControlQueryBuilder.
+     */
+    public function adjustPriceForPriceControlFilters(
+        string $search,
+        ?string $status,
+        ?int $categoryId,
+        int $delta,
+    ): int {
+        if ($delta === 0) {
+            return 0;
+        }
+
+        $search = trim($search);
+        $hasFilters = $search !== ''
+            || ($status !== null && $status !== '')
+            || ($categoryId !== null && $categoryId > 0);
+        if (! $hasFilters) {
+            return 0;
+        }
+
+        $params = [
+            'delta'     => $delta,
+            'updatedAt' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+        ];
+        $parts = ['1 = 1'];
+
+        if ($search !== '') {
+            $or = [];
+            if (ctype_digit($search)) {
+                $or[] = 'p.id = :searchId';
+                $params['searchId'] = (int) $search;
+            }
+            $or[] = 'LOWER(p.product_code) LIKE :searchText';
+            $or[] = 'LOWER(p.product_code2) LIKE :searchText';
+            $or[] = 'LOWER(p.title) LIKE :searchText';
+            $params['searchText'] = '%' . mb_strtolower($search) . '%';
+            $parts[] = '(' . implode(' OR ', $or) . ')';
+        }
+
+        if ($status !== null && $status !== '') {
+            $parts[] = 'p.status = :statusFilter';
+            $params['statusFilter'] = $status;
+        }
+
+        if ($categoryId !== null && $categoryId > 0) {
+            $parts[] = 'p.category_id = :categoryId';
+            $params['categoryId'] = $categoryId;
+        }
+
+        $connection = $this->getEntityManager()->getConnection();
+        $updated = (int) $connection->executeStatement(
+            'UPDATE rozetka_product rp
+             INNER JOIN product p ON p.id = rp.product_id
+             SET
+                rp.crossed_out_price = CASE
+                    WHEN rp.crossed_out_price IS NOT NULL
+                         AND rp.crossed_out_price > 0
+                         AND rp.crossed_out_price <= GREATEST(1, COALESCE(rp.price, 0) + :delta)
+                    THEN NULL
+                    ELSE rp.crossed_out_price
+                END,
+                rp.promo_price = CASE
+                    WHEN rp.promo_price IS NOT NULL
+                         AND rp.promo_price > 0
+                         AND rp.promo_price >= GREATEST(1, COALESCE(rp.price, 0) + :delta)
+                    THEN NULL
+                    ELSE rp.promo_price
+                END,
+                rp.price = GREATEST(1, COALESCE(rp.price, 0) + :delta),
+                rp.updated_at = :updatedAt
+             WHERE ' . implode(' AND ', $parts),
+            $params,
+        );
+
+        $this->getEntityManager()->clear();
+
+        return $updated;
+    }
+
+    /**
      * @param list<int> $ids
      */
     public function setReadyForIds(array $ids, bool $ready): int

@@ -171,7 +171,24 @@ class ProductsController extends AbstractController
     #[Route('/admin/products/generate/hotline', name: 'admin2_products_generate_hotline', methods: ['POST'])]
     public function generateHotline(Request $request): Response
     {
-        return $this->handleGenerate($request, $this->generateHotlineXmlService->execute());
+        if (! $this->isCsrfTokenValid('admin2_products_generate', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_products', $this->extractListParams($request));
+        }
+
+        $url = $this->generateHotlineXmlService->startBackground();
+
+        $this->addFlash(
+            'success',
+            sprintf(
+                'Генерацію XML запущено у фоні. Після завершення файл буде доступний: '
+                . '<a href="%s" target="_blank" class="alert-link">відкрити файл</a>',
+                htmlspecialchars($url),
+            ),
+        );
+
+        return $this->redirectToRoute('admin2_products', $this->extractListParams($request));
     }
 
     #[Route('/admin/products/generate/prom', name: 'admin2_products_generate_prom', methods: ['POST'])]

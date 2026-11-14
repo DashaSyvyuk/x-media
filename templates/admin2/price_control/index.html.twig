@@ -17,6 +17,9 @@
         dir: direction,
         perPage: perPage,
     } %}
+    {% set hasSearchFilters = search or status or categoryId %}
+    {% set resultCount = pagination.getTotalItemCount() %}
+    {% set querySuffix = app.request.queryString ? '?' ~ app.request.queryString : '' %}
 
     <div class="price-control-page">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
@@ -24,9 +27,48 @@
                 <h1 class="page-title mb-1">Контроль цін</h1>
                 <p class="text-muted mb-0 small">Швидке редагування цін сайту та Rozetka прямо в таблиці</p>
             </div>
-            <a href="{{ path('admin2_products') }}" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-box-seam"></i> До товарів
-            </a>
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <button type="button"
+                        class="btn btn-outline-teal btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#priceControlBulkPriceModal">
+                    <i class="bi bi-tags"></i> Ціна категорії
+                </button>
+                <button type="button"
+                        class="btn btn-outline-teal btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#priceControlSearchBulkPriceModal"
+                        {% if not hasSearchFilters or resultCount == 0 %}disabled title="Спочатку задайте фільтри з результатами"{% endif %}>
+                    <i class="bi bi-search"></i> Ціна пошуку
+                </button>
+                <form method="post"
+                      action="{{ path('admin2_price_control_bulk_status_search') ~ querySuffix }}"
+                      class="d-inline"
+                      data-confirm="Зробити активними {{ resultCount }} товар(ів) з поточного результату пошуку?">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_price_control_bulk_status_search') }}">
+                    <input type="hidden" name="status" value="{{ constant('App\\Entity\\Product::STATUS_ACTIVE') }}">
+                    <button type="submit"
+                            class="btn btn-sm btn-outline-success"
+                            {% if not hasSearchFilters or resultCount == 0 %}disabled{% endif %}>
+                        <i class="bi bi-check2-circle"></i> Активні
+                    </button>
+                </form>
+                <form method="post"
+                      action="{{ path('admin2_price_control_bulk_status_search') ~ querySuffix }}"
+                      class="d-inline"
+                      data-confirm="Заблокувати {{ resultCount }} товар(ів) з поточного результату пошуку?">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin2_price_control_bulk_status_search') }}">
+                    <input type="hidden" name="status" value="{{ constant('App\\Entity\\Product::STATUS_BLOCKED') }}">
+                    <button type="submit"
+                            class="btn btn-sm btn-outline-danger"
+                            {% if not hasSearchFilters or resultCount == 0 %}disabled{% endif %}>
+                        <i class="bi bi-slash-circle"></i> Заблокувати
+                    </button>
+                </form>
+                <a href="{{ path('admin2_products') }}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-box-seam"></i> До товарів
+                </a>
+            </div>
         </div>
 
         <div class="card border-0 shadow-sm products-table-card mb-4">
@@ -202,7 +244,56 @@
 {% endblock %}
 
 {% block javascripts %}
+    {% include 'admin2/partials/category_bulk_price_modal.html.twig' with {
+        modalId: 'priceControlBulkPriceModal',
+        formAction: path('admin2_price_control_bulk_price'),
+        csrfTokenId: 'admin2_price_control_bulk_price',
+        categories: categories,
+        title: 'Зміна ціни для категорії',
+        hint: 'Додатне значення збільшує ціну сайту та Rozetka, від’ємне — зменшує. Мінімум після зміни — 1 ₴.',
+    } %}
+
+    {% include 'admin2/partials/filtered_bulk_price_modal.html.twig' with {
+        modalId: 'priceControlSearchBulkPriceModal',
+        formAction: path('admin2_price_control_bulk_price_search') ~ querySuffix,
+        csrfTokenId: 'admin2_price_control_bulk_price_search',
+        resultCount: resultCount,
+        title: 'Зміна ціни для результату пошуку',
+        hint: 'Додатне значення збільшує ціну сайту та Rozetka для всіх товарів за поточними фільтрами. Мінімум після зміни — 1 ₴.',
+    } %}
+
     <script src="{{ asset('js/admin2-price-control.js') }}" defer></script>
+    <script>
+        document.querySelectorAll('form[data-confirm]').forEach((form) => {
+            form.addEventListener('submit', (event) => {
+                if (!window.confirm(form.dataset.confirm)) {
+                    event.preventDefault();
+                }
+            });
+        });
+
+        document.getElementById('priceControlBulkPriceModalForm')?.addEventListener('submit', (event) => {
+            const form = event.currentTarget;
+            const category = form.querySelector('[name="category_id"]');
+            const delta = Number(form.querySelector('[name="delta"]')?.value || 0);
+            const label = category?.selectedOptions?.[0]?.textContent?.trim() || 'категорію';
+            const signed = delta > 0 ? `+${delta}` : `${delta}`;
+            if (!window.confirm(`Змінити ціну на ${signed} ₴ (сайт + Rozetka) для всіх товарів у «${label}»?`)) {
+                event.preventDefault();
+            }
+        });
+
+        document.getElementById('priceControlSearchBulkPriceModalForm')?.addEventListener('submit', (event) => {
+            const form = event.currentTarget;
+            const delta = Number(form.querySelector('[name="delta"]')?.value || 0);
+            const signed = delta > 0 ? `+${delta}` : `${delta}`;
+            const template = form.dataset.confirmTemplate || '';
+            const message = template.replace('{delta}', signed);
+            if (!window.confirm(message)) {
+                event.preventDefault();
+            }
+        });
+    </script>
 
     <div class="modal fade" id="xkomUrlModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">

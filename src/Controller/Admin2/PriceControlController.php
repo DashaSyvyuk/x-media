@@ -168,6 +168,146 @@ class PriceControlController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/price-control/bulk-price', name: 'admin2_price_control_bulk_price', methods: ['POST'])]
+    public function bulkPrice(Request $request): Response
+    {
+        if (! $this->isCsrfTokenValid('admin2_price_control_bulk_price', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_price_control');
+        }
+
+        $categoryId = (int) $request->request->get('category_id', 0);
+        $delta = (int) $request->request->get('delta', 0);
+
+        if ($categoryId <= 0 || $delta === 0) {
+            $this->addFlash('error', 'Оберіть категорію та вкажіть зміну ціни (не 0).');
+
+            return $this->redirectToRoute('admin2_price_control');
+        }
+
+        $category = $this->categoryRepository->find($categoryId);
+        if ($category === null) {
+            $this->addFlash('error', 'Категорію не знайдено.');
+
+            return $this->redirectToRoute('admin2_price_control');
+        }
+
+        $updatedSite = $this->productRepository->adjustPriceForCategory($categoryId, $delta);
+        $updatedRozetka = $this->rozetkaProductRepository->adjustPriceForCategory($categoryId, $delta);
+        $sign = $delta > 0 ? '+' : '';
+        $this->addFlash(
+            'success',
+            sprintf(
+                'Ціни змінено на %s%d ₴ у категорії «%s»: сайт — %d, Rozetka — %d.',
+                $sign,
+                $delta,
+                $category->getTitle(),
+                $updatedSite,
+                $updatedRozetka,
+            ),
+        );
+
+        return $this->redirectToRoute('admin2_price_control');
+    }
+
+    #[Route('/admin/price-control/bulk-price-search', name: 'admin2_price_control_bulk_price_search', methods: ['POST'])]
+    public function bulkPriceSearch(Request $request): Response
+    {
+        $listParams = $this->extractListParams($request);
+
+        if (! $this->isCsrfTokenValid('admin2_price_control_bulk_price_search', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_price_control', $listParams);
+        }
+
+        $search = trim((string) ($listParams['q'] ?? ''));
+        $status = isset($listParams['status']) && is_string($listParams['status']) ? $listParams['status'] : null;
+        $categoryId = $this->toNullableInt($listParams['category'] ?? null);
+        $delta = (int) $request->request->get('delta', 0);
+
+        if (! $this->productRepository->hasPriceControlFilters($search, $status, $categoryId)) {
+            $this->addFlash('error', 'Спочатку задайте пошук, статус або категорію у фільтрах.');
+
+            return $this->redirectToRoute('admin2_price_control', $listParams);
+        }
+
+        if ($delta === 0) {
+            $this->addFlash('error', 'Вкажіть зміну ціни (не 0).');
+
+            return $this->redirectToRoute('admin2_price_control', $listParams);
+        }
+
+        $updatedSite = $this->productRepository->adjustPriceForPriceControlFilters(
+            $search,
+            $status,
+            $categoryId,
+            $delta,
+        );
+        $updatedRozetka = $this->rozetkaProductRepository->adjustPriceForPriceControlFilters(
+            $search,
+            $status,
+            $categoryId,
+            $delta,
+        );
+        $sign = $delta > 0 ? '+' : '';
+        $this->addFlash(
+            'success',
+            sprintf(
+                'Ціни змінено на %s%d ₴ для поточного результату пошуку: сайт — %d, Rozetka — %d.',
+                $sign,
+                $delta,
+                $updatedSite,
+                $updatedRozetka,
+            ),
+        );
+
+        return $this->redirectToRoute('admin2_price_control', $listParams);
+    }
+
+    #[Route('/admin/price-control/bulk-status-search', name: 'admin2_price_control_bulk_status_search', methods: ['POST'])]
+    public function bulkStatusSearch(Request $request): Response
+    {
+        $listParams = $this->extractListParams($request);
+
+        if (! $this->isCsrfTokenValid('admin2_price_control_bulk_status_search', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_price_control', $listParams);
+        }
+
+        $search = trim((string) ($listParams['q'] ?? ''));
+        $statusFilter = isset($listParams['status']) && is_string($listParams['status']) ? $listParams['status'] : null;
+        $categoryId = $this->toNullableInt($listParams['category'] ?? null);
+        $status = (string) $request->request->get('status', '');
+
+        if (! $this->productRepository->hasPriceControlFilters($search, $statusFilter, $categoryId)) {
+            $this->addFlash('error', 'Спочатку задайте пошук, статус або категорію у фільтрах.');
+
+            return $this->redirectToRoute('admin2_price_control', $listParams);
+        }
+
+        if (! in_array($status, [Product::STATUS_ACTIVE, Product::STATUS_BLOCKED], true)) {
+            $this->addFlash('error', 'Некоректний статус.');
+
+            return $this->redirectToRoute('admin2_price_control', $listParams);
+        }
+
+        $updated = $this->productRepository->setStatusForPriceControlFilters(
+            $search,
+            $statusFilter,
+            $categoryId,
+            $status,
+        );
+        $this->addFlash(
+            'success',
+            sprintf('Статус «%s» застосовано до %d товар(ів) з поточного результату пошуку.', $status, $updated),
+        );
+
+        return $this->redirectToRoute('admin2_price_control', $listParams);
+    }
+
     #[Route('/admin/price-control/xkom-url', name: 'admin2_price_control_xkom_url', methods: ['POST'])]
     public function updateXkomUrl(Request $request): JsonResponse
     {
@@ -221,5 +361,52 @@ class PriceControlController extends AbstractController
         }
 
         return (int) $value;
+    }
+
+    /**
+     * @return array{q?: string, status?: string, category?: int, sort?: string, dir?: string, perPage?: int, page?: int}
+     */
+    private function extractListParams(Request $request): array
+    {
+        $source = $request->isMethod('POST') && $request->query->count() === 0
+            ? $request->request
+            : $request->query;
+
+        $params = [];
+
+        $search = trim((string) $source->get('q', $request->query->get('q', '')));
+        if ($search !== '') {
+            $params['q'] = $search;
+        }
+
+        $status = $source->get('status', $request->query->get('status'));
+        if (is_string($status) && $status !== '') {
+            $params['status'] = $status;
+        }
+
+        $category = $this->toNullableInt($source->get('category', $request->query->get('category')));
+        if ($category !== null && $category > 0) {
+            $params['category'] = $category;
+        }
+
+        $sort = (string) $source->get('sort', $request->query->get('sort', 'id'));
+        if ($sort !== '') {
+            $params['sort'] = $sort;
+        }
+
+        $direction = strtoupper((string) $source->get('dir', $request->query->get('dir', 'DESC')));
+        $params['dir'] = $direction === 'ASC' ? 'ASC' : 'DESC';
+
+        $perPage = $this->toNullableInt($source->get('perPage', $request->query->get('perPage')));
+        if ($perPage !== null) {
+            $params['perPage'] = $this->admin2Paginator->normalizePerPage($perPage);
+        }
+
+        $page = $this->toNullableInt($source->get('page', $request->query->get('page')));
+        if ($page !== null && $page > 1) {
+            $params['page'] = $page;
+        }
+
+        return $params;
     }
 }
