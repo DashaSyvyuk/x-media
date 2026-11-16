@@ -4,6 +4,7 @@ namespace App\Tests\Unit\Service\Order;
 
 use App\Entity\Order;
 use App\Entity\Setting;
+use App\Repository\AdminUserRepository;
 use App\Repository\SettingRepository;
 use App\Service\Order\CreateService;
 use PHPUnit\Framework\Constraint\Callback;
@@ -30,6 +31,8 @@ class OrderCreateServiceTest extends TestCase
     private CreateService $service;
     /** @var SettingRepository&\PHPUnit\Framework\MockObject\MockObject */
     private SettingRepository $settingRepository;
+    /** @var AdminUserRepository&\PHPUnit\Framework\MockObject\MockObject */
+    private AdminUserRepository $adminUserRepository;
     /** @var MailerInterface&\PHPUnit\Framework\MockObject\MockObject */
     private MailerInterface $mailer;
     /** @var Environment&\PHPUnit\Framework\MockObject\MockObject */
@@ -47,6 +50,7 @@ class OrderCreateServiceTest extends TestCase
 
         // Mock dependencies
         $this->settingRepository = $this->createMock(SettingRepository::class);
+        $this->adminUserRepository = $this->createMock(AdminUserRepository::class);
         $this->mailer = $this->createMock(MailerInterface::class);
         $this->twig = $this->createMock(Environment::class);
 
@@ -58,6 +62,9 @@ class OrderCreateServiceTest extends TestCase
         $this->phoneSetting = new Setting();
         $this->phoneSetting->setSlug('phone_number');
         $this->phoneSetting->setValue('+380501234567');
+
+        $this->adminUserRepository->method('findEmailsForLocalOrderNotifications')
+            ->willReturn(['admin@example.com']);
 
         // Setup environment variables for TurboSms stub
         // The stub is loaded in tests/bootstrap.php and doesn't make real HTTP requests
@@ -72,6 +79,7 @@ class OrderCreateServiceTest extends TestCase
         $this->service = new CreateService(
             $this->twig,
             $this->settingRepository,
+            $this->adminUserRepository,
             $this->mailer
         );
     }
@@ -96,6 +104,7 @@ class OrderCreateServiceTest extends TestCase
             $this->service,
             $this->container,
             $this->settingRepository,
+            $this->adminUserRepository,
             $this->mailer,
             $this->twig,
             $this->emailSetting,
@@ -300,14 +309,54 @@ class OrderCreateServiceTest extends TestCase
         // Assert - verify both emails are rendered with correct data
         $this->assertCount(2, $renderCalls);
 
-        // First call: customer email
-        $this->assertEquals('emails/client-orders.html.twig', $renderCalls[0]['template']);
+        // First call: manager/admin email (sent before customer)
+        $this->assertEquals('emails/manager-order.html.twig', $renderCalls[0]['template']);
         $this->assertArrayHasKey('order', $renderCalls[0]['context']);
+        $this->assertArrayHasKey('mainUrl', $renderCalls[0]['context']);
 
-        // Second call: manager email
-        $this->assertEquals('emails/manager-order.html.twig', $renderCalls[1]['template']);
+        // Second call: customer email
+        $this->assertEquals('emails/client-orders.html.twig', $renderCalls[1]['template']);
         $this->assertArrayHasKey('order', $renderCalls[1]['context']);
-        $this->assertArrayHasKey('mainUrl', $renderCalls[1]['context']);
+    }
+
+    /**
+     * Manager mail includes setting email and opted-in AdminUser addresses.
+     *
+     * @group email
+     * @group manager
+     */
+    public function testManagerEmailIncludesAdminUserRecipients(): void
+    {
+        $order = $this->createOrderWithoutEmail();
+
+        $this->setupSettingRepositoryMock();
+        $this->setupTwigMock();
+
+        $this->adminUserRepository = $this->createMock(AdminUserRepository::class);
+        $this->adminUserRepository->expects($this->once())
+            ->method('findEmailsForLocalOrderNotifications')
+            ->willReturn(['admin@example.com', 'second@example.com']);
+
+        $this->service = new CreateService(
+            $this->twig,
+            $this->settingRepository,
+            $this->adminUserRepository,
+            $this->mailer
+        );
+
+        $this->mailer->expects($this->once())
+            ->method('send')
+            ->with($this->callback(function (Email $email) {
+                $to = array_map(
+                    static fn ($address) => $address->getAddress(),
+                    $email->getTo()
+                );
+                sort($to);
+
+                return $to === ['admin@example.com', 'manager@xmedia.com', 'second@example.com'];
+            }));
+
+        $this->service->run($order, 'xmedia.com');
     }
 
     /**
@@ -344,16 +393,15 @@ class OrderCreateServiceTest extends TestCase
         // Act
         $this->service->run($order, 'xmedia.com');
 
-        // Assert - verify customer email has phoneNumber
+        // Assert - manager email first, then customer with phoneNumber
         $this->assertCount(2, $renderCalls);
-        $this->assertEquals('emails/client-orders.html.twig', $renderCalls[0]['template']);
-        $this->assertArrayHasKey('phoneNumber', $renderCalls[0]['context']);
+        $this->assertEquals('emails/manager-order.html.twig', $renderCalls[0]['template']);
         $this->assertArrayHasKey('order', $renderCalls[0]['context']);
+        $this->assertArrayHasKey('mainUrl', $renderCalls[0]['context']);
 
-        // Assert - verify manager email has expected keys (but not phoneNumber)
-        $this->assertEquals('emails/manager-order.html.twig', $renderCalls[1]['template']);
+        $this->assertEquals('emails/client-orders.html.twig', $renderCalls[1]['template']);
+        $this->assertArrayHasKey('phoneNumber', $renderCalls[1]['context']);
         $this->assertArrayHasKey('order', $renderCalls[1]['context']);
-        $this->assertArrayHasKey('mainUrl', $renderCalls[1]['context']);
     }
 
     // ========================================
