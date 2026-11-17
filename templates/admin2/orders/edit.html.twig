@@ -36,6 +36,15 @@
             {% if not isNew|default(false) %}
                 <div class="order-edit-hero__actions d-flex align-items-center gap-2">
                     {{ order_macros.copy_button(copyText|default(null)) }}
+                    <form method="post" action="{{ path('admin2_orders_clone', {id: order.id}) }}" class="d-inline">
+                        <input type="hidden" name="_token" value="{{ csrf_token('admin2_order_action') }}">
+                        <button type="submit"
+                                class="btn btn-outline-teal btn-sm"
+                                title="Копіювати замовлення"
+                                data-confirm="Скопіювати замовлення #{{ order.orderNumber|e('html_attr') }}?">
+                            <i class="bi bi-copy"></i> Копіювати
+                        </button>
+                    </form>
                     {{ order_macros.receipt_button('local', order.id) }}
                     {{ order_macros.invoice_button(order.id) }}
                     <div class="order-edit-hero__total">
@@ -294,4 +303,13 @@
         }
     </script>
     <script src="{{ asset('js/admin2-order-copy.js') }}" defer></script>
+    <script>
+        document.querySelectorAll('[data-confirm]').forEach((button) => {
+            button.closest('form')?.addEventListener('submit', (event) => {
+                if (!window.confirm(button.dataset.confirm)) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
 {% endblock %}
