@@ -24,6 +24,7 @@ final class OrderClipboardFormatter
             ! $order->getPaymentStatus(),
             $order->getTotal(),
             false,
+            (string) ($order->getComment() ?? ''),
         );
     }
 
@@ -68,6 +69,7 @@ final class OrderClipboardFormatter
             ! $this->rozetkaPaymentResolver->isPaid($apiOrder),
             (int) round((float) ($apiOrder['cost_with_discount'] ?? $apiOrder['cost'] ?? 0)),
             true,
+            $this->asString($apiOrder['current_seller_comment'] ?? null),
         );
     }
 
@@ -206,6 +208,7 @@ final class OrderClipboardFormatter
         bool $isCod,
         int $total,
         bool $isRozetkaSource,
+        string $notes = '',
     ): string {
         $lines = $productLines;
         $lines[] = 'Отримувач:';
@@ -232,6 +235,12 @@ final class OrderClipboardFormatter
         }
 
         $lines[] = $checkLine;
+
+        $notes = trim($notes);
+        if ($notes !== '') {
+            $lines[] = '';
+            $lines[] = $notes;
+        }
 
         return implode("\n", $lines);
     }
