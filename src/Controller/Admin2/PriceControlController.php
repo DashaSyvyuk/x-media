@@ -211,12 +211,17 @@ class PriceControlController extends AbstractController
         return $this->redirectToRoute('admin2_price_control');
     }
 
-    #[Route('/admin/price-control/bulk-price-search', name: 'admin2_price_control_bulk_price_search', methods: ['POST'])]
+    #[Route(
+        '/admin/price-control/bulk-price-search',
+        name: 'admin2_price_control_bulk_price_search',
+        methods: ['POST'],
+    )]
     public function bulkPriceSearch(Request $request): Response
     {
         $listParams = $this->extractListParams($request);
+        $csrfToken = (string) $request->request->get('_token');
 
-        if (! $this->isCsrfTokenValid('admin2_price_control_bulk_price_search', (string) $request->request->get('_token'))) {
+        if (! $this->isCsrfTokenValid('admin2_price_control_bulk_price_search', $csrfToken)) {
             $this->addFlash('error', 'Невірний CSRF-токен.');
 
             return $this->redirectToRoute('admin2_price_control', $listParams);
@@ -266,12 +271,17 @@ class PriceControlController extends AbstractController
         return $this->redirectToRoute('admin2_price_control', $listParams);
     }
 
-    #[Route('/admin/price-control/bulk-status-search', name: 'admin2_price_control_bulk_status_search', methods: ['POST'])]
+    #[Route(
+        '/admin/price-control/bulk-status-search',
+        name: 'admin2_price_control_bulk_status_search',
+        methods: ['POST'],
+    )]
     public function bulkStatusSearch(Request $request): Response
     {
         $listParams = $this->extractListParams($request);
+        $csrfToken = (string) $request->request->get('_token');
 
-        if (! $this->isCsrfTokenValid('admin2_price_control_bulk_status_search', (string) $request->request->get('_token'))) {
+        if (! $this->isCsrfTokenValid('admin2_price_control_bulk_status_search', $csrfToken)) {
             $this->addFlash('error', 'Невірний CSRF-токен.');
 
             return $this->redirectToRoute('admin2_price_control', $listParams);
@@ -364,7 +374,15 @@ class PriceControlController extends AbstractController
     }
 
     /**
-     * @return array{q?: string, status?: string, category?: int, sort?: string, dir?: string, perPage?: int, page?: int}
+     * @return array{
+     *     q?: string,
+     *     status?: string,
+     *     category?: int,
+     *     sort?: string,
+     *     dir?: string,
+     *     perPage?: int,
+     *     page?: int
+     * }
      */
     private function extractListParams(Request $request): array
     {
