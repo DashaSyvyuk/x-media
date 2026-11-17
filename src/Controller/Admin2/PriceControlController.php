@@ -223,7 +223,7 @@ class PriceControlController extends AbstractController
         }
 
         $search = trim((string) ($listParams['q'] ?? ''));
-        $status = isset($listParams['status']) && is_string($listParams['status']) ? $listParams['status'] : null;
+        $status = $listParams['status'] ?? null;
         $categoryId = $this->toNullableInt($listParams['category'] ?? null);
         $delta = (int) $request->request->get('delta', 0);
 
@@ -278,7 +278,7 @@ class PriceControlController extends AbstractController
         }
 
         $search = trim((string) ($listParams['q'] ?? ''));
-        $statusFilter = isset($listParams['status']) && is_string($listParams['status']) ? $listParams['status'] : null;
+        $statusFilter = $listParams['status'] ?? null;
         $categoryId = $this->toNullableInt($listParams['category'] ?? null);
         $status = (string) $request->request->get('status', '');
 
