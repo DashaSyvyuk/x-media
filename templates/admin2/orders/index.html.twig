@@ -152,6 +152,17 @@
                                 <td class="small text-muted" data-label="Дата">{{ order.createdAt|date('d.m.Y H:i') }}</td>
                                 <td class="text-end col-actions" data-label="">
                                     <div class="table-actions">
+                                        <form method="post"
+                                              action="{{ path('admin2_orders_clone', {id: order.id}) ~ (app.request.queryString ? '?' ~ app.request.queryString : '') }}"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('admin2_order_action') }}">
+                                            <button type="submit"
+                                                    class="table-action table-action--teal"
+                                                    title="Копіювати"
+                                                    data-confirm="Скопіювати замовлення #{{ order.orderNumber|e('html_attr') }}?">
+                                                <i class="bi bi-copy"></i>
+                                            </button>
+                                        </form>
                                         <a href="{{ path('admin2_orders_edit', {id: order.id}) }}" class="table-action table-action--teal" title="Редагувати">
                                             <i class="bi bi-pencil"></i>
                                         </a>

@@ -5,6 +5,7 @@ namespace App\Controller\Admin2;
 use App\Entity\Order;
 use App\Repository\OrderRepository;
 use App\Service\Admin2\Admin2Paginator;
+use App\Service\Admin2\OrderCloneService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +19,7 @@ class OrdersController extends AbstractController
     public function __construct(
         private readonly OrderRepository $orderRepository,
         private readonly Admin2Paginator $admin2Paginator,
+        private readonly OrderCloneService $orderCloneService,
         private readonly EntityManagerInterface $entityManager,
     ) {
     }
@@ -63,6 +65,30 @@ class OrdersController extends AbstractController
             'perPage'        => $perPage,
             'perPageOptions' => Admin2Paginator::PER_PAGE_OPTIONS,
         ]);
+    }
+
+    #[Route('/admin/orders/{id}/clone', name: 'admin2_orders_clone', methods: ['POST'])]
+    public function clone(Request $request, int $id): Response
+    {
+        if (! $this->isCsrfTokenValid('admin2_order_action', (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Невірний CSRF-токен.');
+
+            return $this->redirectToRoute('admin2_orders', $request->query->all());
+        }
+
+        $clone = $this->orderCloneService->clone($id);
+        if ($clone === null) {
+            $this->addFlash('error', 'Замовлення не знайдено.');
+
+            return $this->redirectToRoute('admin2_orders', $request->query->all());
+        }
+
+        $this->addFlash(
+            'success',
+            sprintf('Замовлення скопійовано як #%s.', $clone->getOrderNumber()),
+        );
+
+        return $this->redirectToRoute('admin2_orders_edit', ['id' => $clone->getId()]);
     }
 
     #[Route('/admin/orders/{id}/delete', name: 'admin2_orders_delete', methods: ['POST'])]
