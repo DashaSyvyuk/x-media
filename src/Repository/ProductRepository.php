@@ -159,14 +159,16 @@ class ProductRepository extends ServiceEntityRepository
 
     /**
      * Lightweight ID list for chunked Hotline XML generation.
+     * For identical productCode keep only the cheapest product (lowest id on ties).
+     * Empty codes are not grouped — each such product stays in the feed.
      *
      * @return list<int>
      */
     public function getProductIdsForHotline(): array
     {
-        /** @var list<int|string> $ids */
-        $ids = $this->createQueryBuilder('p')
-            ->select('p.id')
+        /** @var list<array{id: int|string, productCode: string, price: int|string, title: string}> $rows */
+        $rows = $this->createQueryBuilder('p')
+            ->select('p.id', 'p.productCode', 'p.price', 'p.title')
             ->innerJoin('p.category', 'c')
             ->andWhere('c.status = :status')
             ->andWhere('c.hotlineCategory IS NOT NULL')
@@ -176,10 +178,63 @@ class ProductRepository extends ServiceEntityRepository
             ->andWhere('c.showInHotlineFeed = :showInHotlineFeed')
             ->setParameter('showInHotlineFeed', true)
             ->orderBy('p.title', 'ASC')
+            ->addOrderBy('p.id', 'ASC')
             ->getQuery()
-            ->getSingleColumnResult();
+            ->getArrayResult();
 
-        return array_map('intval', $ids);
+        return $this->pickCheapestHotlineProductIds($rows);
+    }
+
+    /**
+     * @param list<array{id: int|string, productCode: string, price: int|string, title?: string}> $rows
+     *
+     * @return list<int>
+     */
+    private function pickCheapestHotlineProductIds(array $rows): array
+    {
+        /** @var array<string, array{id: int, price: int}> $bestByCode */
+        $bestByCode = [];
+        $idsWithoutCode = [];
+
+        foreach ($rows as $row) {
+            $id = (int) $row['id'];
+            $price = (int) $row['price'];
+            $code = trim((string) $row['productCode']);
+
+            if ($code === '') {
+                $idsWithoutCode[] = $id;
+                continue;
+            }
+
+            if (! isset($bestByCode[$code])) {
+                $bestByCode[$code] = ['id' => $id, 'price' => $price];
+                continue;
+            }
+
+            $current = $bestByCode[$code];
+            if ($price < $current['price'] || ($price === $current['price'] && $id < $current['id'])) {
+                $bestByCode[$code] = ['id' => $id, 'price' => $price];
+            }
+        }
+
+        $selected = [];
+        foreach ($bestByCode as $best) {
+            $selected[$best['id']] = true;
+        }
+        foreach ($idsWithoutCode as $id) {
+            $selected[$id] = true;
+        }
+
+        $orderedIds = [];
+        foreach ($rows as $row) {
+            $id = (int) $row['id'];
+            if (isset($selected[$id])) {
+                $orderedIds[] = $id;
+                unset($selected[$id]);
+            }
+        }
+
+        return $orderedIds;
     }
 
     /**
